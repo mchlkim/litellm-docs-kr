@@ -28,7 +28,7 @@ litellm_settings:
 
 **2단계:** 아래 OTLP 환경 변수를 설정합니다.
 
-프로세스 환경, `.env` 파일 또는 `config.yaml`의 프록시 **`environment_variables`** 블록([구성 필드](/docs/proxy/configs))에서 로드할 수 있습니다.
+프로세스 환경, `.env` 파일 또는 `config.yaml`의 프록시 **`environment_variables`** 블록([구성 필드](/litellm-docs-kr/docs/proxy/configs))에서 로드할 수 있습니다.
 
 | 목적 | 변수 |
 |--------|----------|
@@ -56,7 +56,7 @@ litellm --config /path/to/config.yaml
 
 1. Splunk Observability Cloud에서 **APM** / **Traces**를 엽니다(제품 이름은 버전에 따라 다를 수 있음).
 2. 서비스 이름으로 필터링합니다(`OTEL_SERVICE_NAME`, 설정하지 않은 경우 기본값 `litellm`).
-3. 필요하면 LiteLLM 환경에서 `OTEL_DEBUG=True`를 설정해 exporter 문제를 로그에 표시합니다([OpenTelemetry 문제 해결](/docs/observability/opentelemetry_integration#not-seeing-traces-land-on-integration) 참고).
+3. 필요하면 LiteLLM 환경에서 `OTEL_DEBUG=True`를 설정해 exporter 문제를 로그에 표시합니다([OpenTelemetry 문제 해결](/litellm-docs-kr/docs/observability/opentelemetry_integration#not-seeing-traces-land-on-integration) 참고).
 
 ## 함께 보기 {#see-also}
 

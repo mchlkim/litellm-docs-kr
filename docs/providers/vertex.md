@@ -12,7 +12,7 @@ import TabItem from '@theme/TabItem';
 | LiteLLM provider 경로 | `vertex_ai/` |
 | Provider 문서 링크 | [Vertex AI ↗](https://cloud.google.com/vertex-ai) |
 | Base URL | 1. 리전 엔드포인트<br/>`https://{vertex_location}-aiplatform.googleapis.com/`<br/>2. 전역 엔드포인트(제한적 제공)<br/>`https://aiplatform.googleapis.com/`|
-| 지원 작업 | [`/chat/completions`](#sample-usage), `/completions`, [`/embeddings`](/docs/providers/vertex#embedding-models), [`/audio/speech`](/docs/providers/vertex#text-to-speech-apis), [`/fine_tuning`](/docs/providers/vertex#fine-tuning-apis), [`/batches`](/docs/providers/vertex#batch-apis), [`/files`](/docs/providers/vertex#batch-apis), [`/images`](/docs/providers/vertex#image-generation-models), [`/rerank`](/docs/providers/vertex#rerank-api) |
+| 지원 작업 | [`/chat/completions`](#sample-usage), `/completions`, [`/embeddings`](/litellm-docs-kr/docs/providers/vertex#embedding-models), [`/audio/speech`](/litellm-docs-kr/docs/providers/vertex#text-to-speech-apis), [`/fine_tuning`](/litellm-docs-kr/docs/providers/vertex#fine-tuning-apis), [`/batches`](/litellm-docs-kr/docs/providers/vertex#batch-apis), [`/files`](/litellm-docs-kr/docs/providers/vertex#batch-apis), [`/images`](/litellm-docs-kr/docs/providers/vertex#image-generation-models), [`/rerank`](/litellm-docs-kr/docs/providers/vertex#rerank-api) |
 
 :::tip Vertex AI와 Gemini API 비교
 | 모델 형식 | Provider | 필요한 인증 |
@@ -1515,7 +1515,7 @@ WIF credential JSON의 **top level**에 `aws_*` key를 추가하세요(`type`, `
 | `aws_sts_endpoint` | 아니요 | custom STS endpoint URL |
 | `aws_external_id` | 아니요 | cross-account AssumeRole용 external ID |
 
-explicit AWS credentials를 사용할 때 `aws_region_name`은 항상 필요합니다. 다른 매개변수는 [Bedrock AWS auth](/docs/providers/bedrock#authentication)와 같은 authentication flow를 따릅니다. role assumption, static key, profile, web identity token을 사용할 수 있습니다.
+explicit AWS credentials를 사용할 때 `aws_region_name`은 항상 필요합니다. 다른 매개변수는 [Bedrock AWS auth](/litellm-docs-kr/docs/providers/bedrock#authentication)와 같은 authentication flow를 따릅니다. role assumption, static key, profile, web identity token을 사용할 수 있습니다.
 
 <Tabs>
 <TabItem value="sdk" label="SDK">

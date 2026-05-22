@@ -185,6 +185,6 @@ Because they make up everything!
 
 ## 학습 더 보기
 
-- [xAI Realtime API](/docs/providers/xai_realtime)
+- [xAI Realtime API](/litellm-docs-kr/docs/providers/xai_realtime)
 - [LiveKit xAI Plugin](https://docs.livekit.io/agents/models/realtime/plugins/xai/)
-- [LiteLLM Realtime API](/docs/realtime)
+- [LiteLLM Realtime API](/litellm-docs-kr/docs/realtime)

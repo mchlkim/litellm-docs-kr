@@ -364,6 +364,6 @@ print(f"Deleted: {deleted_file.deleted}")
 
 ## 관련 문서
 
-- [LiteLLM Responses API](/docs/response_api)
-- [LiteLLM Files API](/docs/proxy/litellm_managed_files)
+- [LiteLLM Responses API](/litellm-docs-kr/docs/response_api)
+- [LiteLLM Files API](/litellm-docs-kr/docs/proxy/litellm_managed_files)
 - [Manus OpenAI 호환성](https://open.manus.im/docs/openai-compatibility)

@@ -597,7 +597,7 @@ curl -X 'GET' \
 
 `litellm.completion()`으로 들어오는 `gpt-5.4+` 요청에 `reasoning_effort`와 `tools`가 모두 포함되어 있으면 LiteLLM은 요청을 Responses API bridge로 **자동 라우팅**합니다. 이는 **OpenAI**(`openai/gpt-5.4`)와 **Azure**(`azure/gpt-5.4`) provider 모두에서 동작하며, 추가 설정은 필요하지 않습니다.
 
-`openai/responses/gpt-5.4` 또는 `azure/responses/gpt-5.4`로 명시적으로 라우팅할 수도 있습니다. 자세한 내용은 [Responses API Bridge](/docs/providers/openai#openai-chat-completion-to-responses-api-bridge)를 참고하세요.
+`openai/responses/gpt-5.4` 또는 `azure/responses/gpt-5.4`로 명시적으로 라우팅할 수도 있습니다. 자세한 내용은 [Responses API Bridge](/litellm-docs-kr/docs/providers/openai#openai-chat-completion-to-responses-api-bridge)를 참고하세요.
 
 **Azure custom deployment name:** 자동 라우팅은 deployment 이름이 `gpt-5.4*` 패턴과 일치하는지에 의존합니다. custom deployment 이름(예: `"my-reasoning-model"`)을 사용한다면 다음 방식으로 라우팅을 활성화하세요.
 

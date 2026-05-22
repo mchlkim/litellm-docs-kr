@@ -515,11 +515,11 @@ print(response)
 | :---               | :---                                                  |
 | `text-embedding-004` | `embedding(model="gemini/text-embedding-004", input)` |
 | gemini-embedding-2-preview | `embedding(model="gemini/gemini-embedding-2-preview", input)` | [Multimodal 문서](#gemini-embedding-2-preview-multimodal) |
-| gemini-embedding-2 *(GA)* | `embedding(model="gemini/gemini-embedding-2", input)` | [Multimodal 문서](#gemini-embedding-2-preview-multimodal) · [GA 참고 사항](/blog/gemini_embedding_2_ga) |
+| gemini-embedding-2 *(GA)* | `embedding(model="gemini/gemini-embedding-2", input)` | [Multimodal 문서](#gemini-embedding-2-preview-multimodal) · [GA 참고 사항](/litellm-docs-kr/blog/gemini_embedding_2_ga) |
 
 ### Gemini Embedding 2 Preview (멀티모달) {#gemini-embedding-2-preview-multimodal}
 
-`gemini-embedding-2-preview`는 단일 요청에서 text, images, audio, video, PDF를 처리하는 **multimodal embedding**을 지원합니다. 자세한 내용은 [블로그 게시물](/blog/gemini_embedding_2_multimodal)을 참고하세요. GA 모델 ID `gemini-embedding-2`도 같은 동작을 제공하므로 아래 예제에서 모델 이름만 바꾸면 됩니다. 비용 매핑 범위와 가격 참고 사항은 [GA 블로그](/blog/gemini_embedding_2_ga)를 참고하세요.
+`gemini-embedding-2-preview`는 단일 요청에서 text, images, audio, video, PDF를 처리하는 **multimodal embedding**을 지원합니다. 자세한 내용은 [블로그 게시물](/litellm-docs-kr/blog/gemini_embedding_2_multimodal)을 참고하세요. GA 모델 ID `gemini-embedding-2`도 같은 동작을 제공하므로 아래 예제에서 모델 이름만 바꾸면 됩니다. 비용 매핑 범위와 가격 참고 사항은 [GA 블로그](/litellm-docs-kr/blog/gemini_embedding_2_ga)를 참고하세요.
 
 :::info 응답 형태
 

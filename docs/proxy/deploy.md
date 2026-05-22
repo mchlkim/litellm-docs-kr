@@ -403,7 +403,7 @@ litellm_settings:
     host: your-redis-host
 ```
 
-자세한 내용은 [DB deadlock 해결](/docs/proxy/db_deadlocks)를 참고하세요.
+자세한 내용은 [DB deadlock 해결](/litellm-docs-kr/docs/proxy/db_deadlocks)를 참고하세요.
 
 :::
 

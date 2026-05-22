@@ -232,7 +232,7 @@ const sidebars = {
       items: [
         { type: "doc", id: "index", label: "빠른 시작" },
         { type: "link", label: "모델 및 가격", href: "https://models.litellm.ai" },
-        { type: "link", label: "변경 이력", href: "/release_notes" },
+        { type: "link", label: "변경 이력", href: "/litellm-docs-kr/release_notes" },
       ],
     },
 
@@ -243,7 +243,7 @@ const sidebars = {
         {
           type: "link",
           label: "빠른 시작",
-          href: "/docs/#litellm-python-sdk",
+          href: "/litellm-docs-kr/docs/#litellm-python-sdk",
         },
         {
           type: "category",
@@ -358,7 +358,7 @@ const sidebars = {
                 {
                   type: "link",
                   label: "MCP 문제 해결 가이드",
-                  href: "/docs/mcp_troubleshoot"
+                  href: "/litellm-docs-kr/docs/mcp_troubleshoot"
                 },
               ],
             },
@@ -433,7 +433,7 @@ const sidebars = {
                 {
                   type: "link",
                   label: "역할 기반 접근 제어(RBAC) →",
-                  href: "/docs/proxy/access_control"
+                  href: "/litellm-docs-kr/docs/proxy/access_control"
                 },
                 "proxy/self_serve",
                 "proxy/public_teams",
@@ -533,7 +533,7 @@ const sidebars = {
             {
               type: "link",
               label: "프로바이더 →",
-              href: "/docs/guardrail_providers",
+              href: "/litellm-docs-kr/docs/guardrail_providers",
             },
             {
               type: "category",
@@ -655,7 +655,7 @@ const sidebars = {
         {
           type: "link",
           label: "/a2a - A2A 에이전트 Gateway",
-          href: "/docs/a2a",
+          href: "/litellm-docs-kr/docs/a2a",
         },
         "assistants",
         "audio_transcription",
@@ -1414,12 +1414,12 @@ const learnSidebar = {
         {
           type: "link",
           label: "에이전트 SDK 및 프레임워크",
-          href: "/docs/agent_sdks",
+          href: "/litellm-docs-kr/docs/agent_sdks",
         },
         {
           type: "link",
           label: "AI 코딩 도구",
-          href: "/docs/ai_tools",
+          href: "/litellm-docs-kr/docs/ai_tools",
         },
         {
           type: "category",

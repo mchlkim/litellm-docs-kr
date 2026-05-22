@@ -131,8 +131,8 @@ print(response.usage)
 
 운영 환경에서 비용을 체계적으로 추적해야 한다면 SDK callback 또는 Proxy의 spend tracking을 사용합니다.
 
-- [Cost Tracking](/docs/proxy/cost_tracking)
-- [Integrations](/docs/integrations)
+- [Cost Tracking](/litellm-docs-kr/docs/proxy/cost_tracking)
+- [Integrations](/litellm-docs-kr/docs/integrations)
 
 ## 언제 SDK만 쓰면 좋은가
 

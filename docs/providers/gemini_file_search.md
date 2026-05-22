@@ -408,6 +408,6 @@ await litellm.vector_stores.asearch(...)
 ## 관련 자료
 
 - [Gemini 파일 검색 공식 문서](https://ai.google.dev/gemini-api/docs/file-search)
-- [LiteLLM RAG 수집 API](/docs/rag_ingest)
-- [LiteLLM 벡터 저장소 검색](/docs/vector_stores/search)
-- [채팅에서 벡터 저장소 사용](/docs/completion/knowledgebase)
+- [LiteLLM RAG 수집 API](/litellm-docs-kr/docs/rag_ingest)
+- [LiteLLM 벡터 저장소 검색](/litellm-docs-kr/docs/vector_stores/search)
+- [채팅에서 벡터 저장소 사용](/litellm-docs-kr/docs/completion/knowledgebase)

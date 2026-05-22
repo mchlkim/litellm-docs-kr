@@ -10,7 +10,7 @@ provider로 `openai`를 선택하면 upstream
 
 이 라이브러리는 모든 요청에 대해 `api_key` 파라미터 또는 `OPENAI_API_KEY` environment variable을 통한 API 키가 **필수**입니다.
 
-각 요청마다 더미 API 키를 제공하고 싶지 않다면 [`hosted_vllm`](/docs/providers/vllm) 또는 [`llamafile`](/docs/providers/llamafile)처럼 OpenAI 호환 엔드포인트와 직접 맞는 provider를 사용하는 방식을 고려하세요.
+각 요청마다 더미 API 키를 제공하고 싶지 않다면 [`hosted_vllm`](/litellm-docs-kr/docs/providers/vllm) 또는 [`llamafile`](/litellm-docs-kr/docs/providers/llamafile)처럼 OpenAI 호환 엔드포인트와 직접 맞는 provider를 사용하는 방식을 고려하세요.
 
 :::
 

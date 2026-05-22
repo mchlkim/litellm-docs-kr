@@ -86,5 +86,5 @@
 
 ## 함께 보기 {#see-also}
 
-- [Debugging](/docs/proxy/debugging) - 자세한 요청/응답 정보를 확인할 수 있도록 debug log를 활성화합니다
-- [Exception Mapping](/docs/exception_mapping) - LiteLLM exception type 전체 목록입니다
+- [Debugging](/litellm-docs-kr/docs/proxy/debugging) - 자세한 요청/응답 정보를 확인할 수 있도록 debug log를 활성화합니다
+- [Exception Mapping](/litellm-docs-kr/docs/exception_mapping) - LiteLLM exception type 전체 목록입니다

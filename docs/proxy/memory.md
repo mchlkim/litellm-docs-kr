@@ -180,4 +180,4 @@ curl "http://localhost:4000/v1/memory?key_prefix=slack:T024BE7LD:" \
 
 ## API 참조 {#api-reference}
 
-전체 요청/응답 스키마, 파라미터, 오류 코드는 [/memory endpoint reference](/docs/memory_management)를 참고하세요.
+전체 요청/응답 스키마, 파라미터, 오류 코드는 [/memory endpoint reference](/litellm-docs-kr/docs/memory_management)를 참고하세요.

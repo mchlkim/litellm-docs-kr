@@ -7,7 +7,7 @@ import TabItem from '@theme/TabItem';
 
 OpenAI는 Assistants API를 지원 종료 대상으로 지정했습니다. **2026년 8월 26일**에 종료됩니다.
 
-대신 [Responses API](/docs/response_api)로 마이그레이션하는 것을 고려하세요. 자세한 내용은 [OpenAI의 마이그레이션 가이드](https://platform.openai.com/docs/guides/responses-vs-assistants)를 참고하세요.
+대신 [Responses API](/litellm-docs-kr/docs/response_api)로 마이그레이션하는 것을 고려하세요. 자세한 내용은 [OpenAI의 마이그레이션 가이드](https://platform.openai.com/docs/guides/responses-vs-assistants)를 참고하세요.
 
 :::
 

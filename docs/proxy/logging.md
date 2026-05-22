@@ -741,7 +741,7 @@ Langfuse Metadata에서 `raw_request`를 볼 수 있습니다. 이는 LiteLLM에
 
 :::tip
 
-전체 OpenTelemetry 참조(span 계층, 내보내는 모든 span과 attribute, metric, semconv mode, 문제 해결)는 [관측성 → OpenTelemetry Integration](/docs/observability/opentelemetry_integration)에 있습니다. 아래 섹션은 Proxy 중심 빠른 시작입니다.
+전체 OpenTelemetry 참조(span 계층, 내보내는 모든 span과 attribute, metric, semconv mode, 문제 해결)는 [관측성 → OpenTelemetry Integration](/litellm-docs-kr/docs/observability/opentelemetry_integration)에 있습니다. 아래 섹션은 Proxy 중심 빠른 시작입니다.
 
 :::
 

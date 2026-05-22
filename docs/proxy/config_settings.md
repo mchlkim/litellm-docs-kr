@@ -195,26 +195,26 @@ router_settings:
 | LITELLM_DISABLE_STOP_SEQUENCE_LIMIT | stop sequence 제한 검증을 비활성화합니다. 기본 제한은 4입니다. |  
 | redact_user_api_key_info | boolean | `true`이면 로그에서 사용자 API key 정보(hashed token, user_id, team id 등)를 마스킹합니다. [Proxy Logging](logging#redacting-userapikeyinfo) |
 | mcp_aliases | object | 더 쉬운 도구 접근을 위해 alias를 MCP server 이름에 매핑합니다. 각 server의 첫 번째 alias만 사용됩니다. [MCP Aliases](../mcp#mcp-aliases) |
-| langfuse_default_tags | 문자열 배열 | Langfuse Logging 기본 tag입니다. LiteLLM proxy가 어떤 LiteLLM 전용 필드를 tag로 기록할지 제어할 때 사용합니다. 기본적으로 LiteLLM Proxy는 LiteLLM 전용 필드를 tag로 기록하지 않습니다. [추가 문서](/docs/proxy/logging#litellm-specific-tags-on-langfuse---cache_hit-cache_key) |
+| langfuse_default_tags | 문자열 배열 | Langfuse Logging 기본 tag입니다. LiteLLM proxy가 어떤 LiteLLM 전용 필드를 tag로 기록할지 제어할 때 사용합니다. 기본적으로 LiteLLM Proxy는 LiteLLM 전용 필드를 tag로 기록하지 않습니다. [추가 문서](/litellm-docs-kr/docs/proxy/logging#litellm-specific-tags-on-langfuse---cache_hit-cache_key) |
 | set_verbose | boolean | [사용 중단됨 - debugging 문서 참고](./debugging) 대신 `--debug`, `--detailed_debug` CLI flag를 사용하거나 `LITELLM_LOG` env var를 "INFO", "DEBUG", "ERROR" 중 하나로 설정하세요. |
 | json_logs | boolean | `true`이면 로그가 JSON 형식으로 기록됩니다. 로그를 JSON으로 저장해야 한다면 `litellm.json_logs = True`를 설정하세요. 현재는 litellm의 raw POST request를 JSON으로 로깅합니다. [추가 문서](./debugging) |
-| default_fallbacks | 문자열 배열 | 특정 model group이 잘못 구성되었거나 실패할 때 사용할 fallback model 목록입니다. [추가 문서](/docs/proxy/reliability#default-fallbacks) |
+| default_fallbacks | 문자열 배열 | 특정 model group이 잘못 구성되었거나 실패할 때 사용할 fallback model 목록입니다. [추가 문서](/litellm-docs-kr/docs/proxy/reliability#default-fallbacks) |
 | request_timeout | integer | 요청 timeout(초)입니다. 설정하지 않으면 기본값은 `6000 seconds`입니다. [참고로 OpenAI Python SDK 기본값은 `600 seconds`입니다.](https://github.com/openai/openai-python/blob/main/src/openai/_constants.py) |
 | force_ipv4 | boolean | `true`이면 litellm이 모든 LLM 요청에 ipv4를 강제합니다. 일부 사용자는 ipv6와 Anthropic API 조합에서 httpx ConnectionError를 경험했습니다. |
 | content_policy_fallbacks | array of objects | ContentPolicyViolationError 발생 시 사용할 fallback입니다. [추가 문서](./reliability#content-policy-fallbacks) |
 | context_window_fallbacks | array of objects | ContextWindowExceededError 발생 시 사용할 fallback입니다. [추가 문서](./reliability#context-window-fallbacks) |
 | cache | boolean | `true`이면 caching을 활성화합니다. [추가 문서](./caching) |
-| cache_params | object | cache 파라미터입니다. [추가 문서](/docs/proxy/caching#supported-cache_params-on-proxy-configyaml) |
+| cache_params | object | cache 파라미터입니다. [추가 문서](/litellm-docs-kr/docs/proxy/caching#supported-cache_params-on-proxy-configyaml) |
 | enable_redis_auth_cache | boolean | `true`이면 virtual-key auth payload를 Redis(response caching과 같은 client)에 저장해 모든 worker/pod가 cached auth lookup을 공유합니다. cache miss 시 반복 데이터베이스 read가 줄어듭니다. **`cache: true`와 `cache_params.type: redis`가 필요합니다**(Redis 또는 Redis Cluster). 선택 사항으로 `general_settings.user_api_key_cache_ttl`을 설정하면 memory와 Redis에 TTL이 일관되게 적용됩니다. [추가 문서](./caching#virtual-key-authentication-cache-redis) |
 | disable_end_user_cost_tracking | boolean | `true`이면 proxy에서 Prometheus metrics와 litellm spend logs table의 최종 사용자 비용 추적을 끕니다. |
-| enable_end_user_cost_tracking_prometheus_only | boolean | `true`이면 Prometheus metrics에 `end_user` label을 포함합니다. Prometheus cardinality를 제한하기 위해 기본값은 비활성화입니다. [추가 문서](/docs/proxy/prometheus#tracking-end_user-on-prometheus) |
+| enable_end_user_cost_tracking_prometheus_only | boolean | `true`이면 Prometheus metrics에 `end_user` label을 포함합니다. Prometheus cardinality를 제한하기 위해 기본값은 비활성화입니다. [추가 문서](/litellm-docs-kr/docs/proxy/prometheus#tracking-end_user-on-prometheus) |
 | cost_discount_config | object | cost 계산에 적용할 provider별 percentage discount입니다. `litellm_settings` 아래에 구성합니다. [추가 문서](./provider_discounts) |
 | cost_margin_config | object | cost 계산에 적용할 provider별 또는 global percentage/fixed margin입니다. `litellm_settings` 아래에 구성합니다. [추가 문서](./provider_margins) |
 | key_generation_settings | object | key를 생성할 수 있는 주체를 제한합니다. [추가 문서](./virtual_keys.md#restricting-key-generation) |
 | disable_add_transform_inline_image_block | boolean | Fireworks AI model용 설정입니다. `true`이면 model이 vision model이 아닐 때 image_url에 `#transform=inline`을 자동 추가하지 않습니다. |
 | use_chat_completions_url_for_anthropic_messages | boolean | `true`이면 OpenAI `/v1/messages` 요청을 Responses API 대신 chat/completions로 라우팅합니다. `LITELLM_USE_CHAT_COMPLETIONS_URL_FOR_ANTHROPIC_MESSAGES=true` env var로도 설정할 수 있습니다. |
 | route_all_chat_openai_to_responses | boolean | `true`이면 모든 OpenAI `/chat/completions` 요청을 Responses API bridge로 라우팅합니다. OpenAI model에는 권장됩니다. `LITELLM_ROUTE_ALL_CHAT_OPENAI_TO_RESPONSES=true` env var로도 설정할 수 있습니다. |
-| skip_system_message_in_guardrail | boolean | `true`이면 unified guardrail이 **chat completions**와 **Anthropic `/v1/messages`**에서만 스캔 입력의 `role: system`을 생략합니다. LLM에는 전체 메시지가 계속 전달됩니다. guardrail별 override는 각 guardrail의 `litellm_params.skip_system_message_in_guardrail`로 설정합니다. [가드레일 quick start](/docs/proxy/guardrails/quick_start#skip-system-messages-in-guardrail-evaluation) |
+| skip_system_message_in_guardrail | boolean | `true`이면 unified guardrail이 **chat completions**와 **Anthropic `/v1/messages`**에서만 스캔 입력의 `role: system`을 생략합니다. LLM에는 전체 메시지가 계속 전달됩니다. guardrail별 override는 각 guardrail의 `litellm_params.skip_system_message_in_guardrail`로 설정합니다. [가드레일 quick start](/litellm-docs-kr/docs/proxy/guardrails/quick_start#skip-system-messages-in-guardrail-evaluation) |
 | disable_hf_tokenizer_download | boolean | `true`이면 모든 model(huggingface model 포함)에 openai tokenizer를 기본으로 사용합니다. |
 | enable_json_schema_validation | boolean | `true`이면 모든 요청에 json schema validation을 활성화합니다. |
 | enable_key_alias_format_validation | boolean | `true`이면 `/key/generate`와 `/key/update`에서 `key_alias` 형식을 검증합니다. 2-255자, 시작/끝은 alphanumeric, 허용 문자는 `a-zA-Z0-9_-/.@`입니다. 기본값은 `false`입니다. |
@@ -244,7 +244,7 @@ router_settings:
 | database_url | string | 데이터베이스 연결 URL입니다. [가상 키 설정](virtual_keys) |
 | database_connection_pool_limit | integer | 데이터베이스 연결 pool limit입니다. [DB Connection Pool limit 설정](#configure-db-pool-limits--connection-timeouts) |
 | database_connection_timeout | integer | 데이터베이스 연결 timeout(초)입니다. [DB Connection Pool limit/timeout 설정](#configure-db-pool-limits--connection-timeouts) |
-| allow_requests_on_db_unavailable | boolean | `true`이면 DB에 도달할 수 없어도 요청 성공을 허용합니다. **LiteLLM을 VPC에서 실행할 때만 사용하세요.** LiteLLM이 DB에 연결해 Virtual Key를 검증할 수 없을 때도 요청이 동작할 수 있습니다. [DB unavailable graceful handling 문서](/docs/proxy/prod#5-if-running-litellm-on-vpc-gracefully-handle-db-unavailability) |
+| allow_requests_on_db_unavailable | boolean | `true`이면 DB에 도달할 수 없어도 요청 성공을 허용합니다. **LiteLLM을 VPC에서 실행할 때만 사용하세요.** LiteLLM이 DB에 연결해 Virtual Key를 검증할 수 없을 때도 요청이 동작할 수 있습니다. [DB unavailable graceful handling 문서](/litellm-docs-kr/docs/proxy/prod#5-if-running-litellm-on-vpc-gracefully-handle-db-unavailability) |
 | custom_auth | string | 직접 작성한 사용자 정의 인증 logic입니다. [Custom Auth 문서](virtual_keys#custom-auth) |
 | max_parallel_requests | integer | deployment별 허용되는 최대 parallel request 수입니다. |
 | global_max_parallel_requests | integer | proxy 전체에서 허용되는 최대 parallel request 수입니다. |
@@ -277,7 +277,7 @@ router_settings:
 | allowed_ips | List[str] | proxy 접근을 허용할 IP 목록입니다. 설정하지 않으면 모든 IP가 허용됩니다. |
 | embedding_model | str | embedding에 사용할 기본 model입니다. 요청에 설정된 model은 무시합니다. |
 | default_team_disabled | boolean | `true`이면 사용자가 team_id 없는 `personal` key를 만들 수 없습니다. |
-| alert_to_webhook_url | Dict[str] | [각 alert type별 webhook URL을 지정합니다.](/docs/proxy/alerting#set-specific-slack-channels-per-alert-type) |
+| alert_to_webhook_url | Dict[str] | [각 alert type별 webhook URL을 지정합니다.](/litellm-docs-kr/docs/proxy/alerting#set-specific-slack-channels-per-alert-type) |
 | key_management_settings | List[Dict[str, Any]] | key management system 설정입니다(예: AWS KMS, Azure Key Vault). [key management 문서](../secret.md) |
 | allow_user_auth | boolean | (Deprecated) user authentication의 이전 방식입니다. |
 | user_api_key_cache_ttl | int | user api key를 memory에 cache할 시간(초)입니다. |
@@ -292,7 +292,7 @@ router_settings:
 | spend_report_frequency | str | Spend Report를 보낼 주기를 지정합니다(예: `"1d"`, `"2d"`, `"30d"`). [관련 문서](./alerting.md#spend-report-frequency) |
 | ui_access_mode | Literal["admin_only"] | 설정하면 admin 사용자만 UI에 접근할 수 있습니다. [문서](./ui.md#restrict-ui-access) |
 | litellm_jwtauth | Dict[str, Any] | JWT authentication 설정입니다. [문서](./token_auth.md) |
-| litellm_license | str | proxy license key입니다. [문서](/docs/enterprise#how-does-deployment-with-enterprise-license-work) |
+| litellm_license | str | proxy license key입니다. [문서](/litellm-docs-kr/docs/enterprise#how-does-deployment-with-enterprise-license-work) |
 | oauth2_config_mappings | Dict[str, str] | OAuth2 config mapping을 정의합니다. | 
 | pass_through_endpoints | List[Dict[str, Any]] | pass-through endpoint를 정의합니다. [문서](./pass_through) |
 | enable_oauth2_proxy_auth | boolean | (엔터프라이즈 Feature) `true`이면 oauth2.0 authentication을 활성화합니다. |
@@ -883,10 +883,10 @@ router_settings:
 | LITELLM_LOG_FILE | LiteLLM log를 기록할 file path입니다. 설정하면 console과 지정 file 양쪽에 log가 기록됩니다.
 | LITELLM_LOGGER_NAME | OTEL logger name입니다.
 | LITELLM_METER_NAME | OTEL Meter name입니다.
-| LITELLM_OTEL_INTEGRATION_ENABLE_EVENTS | OTEL용 semantic log(`gen_ai.content.prompt`/`gen_ai.content.completion`, 또는 semconv mode의 `gen_ai.client.inference.operation.details`)를 선택적으로 활성화합니다. 기본값은 `false`입니다. [OpenTelemetry](/docs/observability/opentelemetry_integration#configuration-reference)를 참고하세요.
-| LITELLM_OTEL_INTEGRATION_ENABLE_METRICS | OTEL용 semantic metric(TTFT, TPOT, response duration, cost, token usage)을 선택적으로 활성화합니다. 기본값은 `false`입니다. [OpenTelemetry](/docs/observability/opentelemetry_integration#metrics-reference)를 참고하세요.
+| LITELLM_OTEL_INTEGRATION_ENABLE_EVENTS | OTEL용 semantic log(`gen_ai.content.prompt`/`gen_ai.content.completion`, 또는 semconv mode의 `gen_ai.client.inference.operation.details`)를 선택적으로 활성화합니다. 기본값은 `false`입니다. [OpenTelemetry](/litellm-docs-kr/docs/observability/opentelemetry_integration#configuration-reference)를 참고하세요.
+| LITELLM_OTEL_INTEGRATION_ENABLE_METRICS | OTEL용 semantic metric(TTFT, TPOT, response duration, cost, token usage)을 선택적으로 활성화합니다. 기본값은 `false`입니다. [OpenTelemetry](/litellm-docs-kr/docs/observability/opentelemetry_integration#metrics-reference)를 참고하세요.
 | LITELLM_ENABLE_PYROSCOPE | true이면 Pyroscope CPU profiling을 활성화합니다. profile은 `PYROSCOPE_SERVER_ADDRESS`로 전송됩니다. 기본값은 off입니다. [Pyroscope profiling](/proxy/pyroscope_profiling)을 참고하세요.
-| LITELLM_ENABLE_TEAM_STALE_ALIAS_BYPASS | `true`이면 team의 legacy `model_aliases` entry가 public model name을 internal `model_name_<team_id>_<uuid>` deployment로 매핑하더라도, public name의 team-scoped sibling deployment가 있을 때 pre-call 처리에서 rewrite를 건너뛸 수 있습니다. 따라서 sibling 간 load balancing / `order`가 적용됩니다. backward compatibility를 위해 기본값은 `false`입니다. [Team-scoped model과 legacy alias](/docs/proxy/load_balancing#team-scoped-models-and-legacy-model_aliases)를 참고하세요. stale alias가 감지되고 이 flag가 off이면 proxy가 one-time warning을 기록할 수 있습니다.
+| LITELLM_ENABLE_TEAM_STALE_ALIAS_BYPASS | `true`이면 team의 legacy `model_aliases` entry가 public model name을 internal `model_name_<team_id>_<uuid>` deployment로 매핑하더라도, public name의 team-scoped sibling deployment가 있을 때 pre-call 처리에서 rewrite를 건너뛸 수 있습니다. 따라서 sibling 간 load balancing / `order`가 적용됩니다. backward compatibility를 위해 기본값은 `false`입니다. [Team-scoped model과 legacy alias](/litellm-docs-kr/docs/proxy/load_balancing#team-scoped-models-and-legacy-model_aliases)를 참고하세요. stale alias가 감지되고 이 flag가 off이면 proxy가 one-time warning을 기록할 수 있습니다.
 | PYROSCOPE_APP_NAME | Pyroscope에 보고할 application name입니다. `LITELLM_ENABLE_PYROSCOPE`가 true일 때 필요합니다. 기본값은 없습니다.
 | PYROSCOPE_SERVER_ADDRESS | profile을 전송할 Pyroscope server URL입니다. `LITELLM_ENABLE_PYROSCOPE`가 true일 때 필요합니다. 기본값은 없습니다.
 | PYROSCOPE_SAMPLE_RATE | Pyroscope profiling sample rate입니다(integer). 기본값은 없으며, 설정하지 않으면 pyroscope-io library 기본값을 사용합니다.
@@ -994,7 +994,7 @@ router_settings:
 | OTEL_IGNORE_CONTEXT_PROPAGATION | true이면 parent span context propagation(inbound `traceparent` headers 및 active span)을 무시해 모든 LiteLLM trace가 자체 root가 됩니다. 기본값은 `false`입니다.
 | OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT | prompt와 completion을 OpenTelemetry trace에 캡처할지 제어합니다. `NO_CONTENT`(spec 기본값), `SPAN_ONLY`, `EVENT_ONLY`, `SPAN_AND_EVENT`, 또는 boolean 형식(`true`는 `EVENT_ONLY`, `false`는 `NO_CONTENT`)을 허용합니다.
 | OTEL_SEMCONV_STABILITY_OPT_IN | 최신 [OpenTelemetry GenAI semantic conventions](https://opentelemetry.io/docs/specs/semconv/gen-ai/gen-ai-spans/)를 따르는 span을 emit하려면 `gen_ai_latest_experimental`로 설정합니다. LLM-call span을 `{operation} {model}`로 rename하고, `raw_gen_ai_request`를 억제하며, `gen_ai.provider.name`을 추가하고 event를 통합합니다. OTEL spec에 따라 comma-separated로 설정할 수 있습니다.
-| USE_OTEL_LITELLM_REQUEST_SPAN | `true`이면 proxy가 LLM call마다 `Received Proxy Server Request` span의 child로 별도 `litellm_request` span을 emit합니다. 기본값은 `false`입니다(v1.81.0 이후). LLM-call attribute는 proxy root span에 직접 설정됩니다. [왜 `litellm_request` span이 보이지 않나요?](/docs/observability/opentelemetry_integration#why-dont-i-see-a-litellm_request-span)를 참고하세요.
+| USE_OTEL_LITELLM_REQUEST_SPAN | `true`이면 proxy가 LLM call마다 `Received Proxy Server Request` span의 child로 별도 `litellm_request` span을 emit합니다. 기본값은 `false`입니다(v1.81.0 이후). LLM-call attribute는 proxy root span에 직접 설정됩니다. [왜 `litellm_request` span이 보이지 않나요?](/litellm-docs-kr/docs/observability/opentelemetry_integration#why-dont-i-see-a-litellm_request-span)를 참고하세요.
 | OTEL_DEBUG | `true`이면 exporter와 span creation diagnostics를 stderr에 출력합니다. trace가 backend에 도달하지 않을 때 유용합니다. 기본값은 `false`입니다.
 | DEBUG_OTEL | `OTEL_DEBUG`의 alias입니다.
 | PAGERDUTY_API_KEY | PagerDuty Alerting용 API key입니다.

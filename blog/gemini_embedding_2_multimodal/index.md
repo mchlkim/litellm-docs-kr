@@ -201,4 +201,4 @@ embedding(
 )
 ```
 
-하나의 entity가 여러 모달리티를 가지는 멀티모달 retrieval에 유용합니다. 자세한 내용은 [임베딩 문서](../../docs/embedding/supported_embedding#combined-multimodal-embeddings)를 참고하세요. Vertex AI에서는 모든 요청이 이미 하나의 결합 vector를 반환하므로 이 opt-in이 필요 없습니다.
+하나의 entity가 여러 모달리티를 가지는 멀티모달 retrieval에 유용합니다. 자세한 내용은 [임베딩 문서](/litellm-docs-kr/docs/embedding/supported_embedding#combined-multimodal-embeddings)를 참고하세요. Vertex AI에서는 모든 요청이 이미 하나의 결합 vector를 반환하므로 이 opt-in이 필요 없습니다.

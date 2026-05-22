@@ -80,7 +80,7 @@ print(response)
 | `text-embedding-preview-0409` | `embedding(model="vertex_ai/text-embedding-preview-0409", input)` |
 | `text-multilingual-embedding-preview-0409` | `embedding(model="vertex_ai/text-multilingual-embedding-preview-0409", input)` | 
 | `gemini-embedding-2-preview` | `embedding(model="vertex_ai/gemini-embedding-2-preview", input)` | [멀티모달 문서](#gemini-embedding-2-preview-multimodal) |
-| `gemini-embedding-2` *(GA)* | `embedding(model="vertex_ai/gemini-embedding-2", input)` | [멀티모달 문서](#gemini-embedding-2-preview-multimodal) · [GA 참고 사항](/blog/gemini_embedding_2_ga) |
+| `gemini-embedding-2` *(GA)* | `embedding(model="vertex_ai/gemini-embedding-2", input)` | [멀티모달 문서](#gemini-embedding-2-preview-multimodal) · [GA 참고 사항](/litellm-docs-kr/blog/gemini_embedding_2_ga) |
 | 파인튜닝 또는 사용자 지정 Embedding 모델 | `embedding(model="vertex_ai/<your-model-id>", input)` | 
 
 ### 지원되는 OpenAI(Unified) 파라미터
@@ -262,9 +262,9 @@ model_list:
 ### Gemini Embedding 2 Preview(멀티모달)
 
 `gemini-embedding-2-preview`는 텍스트, 이미지, 오디오, 비디오, PDF를 단일 요청에서 처리하는 **통합 멀티모달 embedding**을 지원합니다.
-자세한 내용은 [블로그 글](/blog/gemini_embedding_2_multimodal)을 확인하세요.
+자세한 내용은 [블로그 글](/litellm-docs-kr/blog/gemini_embedding_2_multimodal)을 확인하세요.
 GA 모델 ID인 `gemini-embedding-2`도 동일한 동작을 제공하므로, 아래 예제의 모델 이름만 교체하면 됩니다.
-비용 맵 적용 범위와 가격 참고 사항은 [GA 블로그](/blog/gemini_embedding_2_ga)를 확인하세요.
+비용 맵 적용 범위와 가격 참고 사항은 [GA 블로그](/litellm-docs-kr/blog/gemini_embedding_2_ga)를 확인하세요.
 
 :::warning 응답 형태 — Vertex는 결합된 벡터 하나를 반환합니다
 

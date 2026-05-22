@@ -271,7 +271,7 @@ guardrail endpoint로 두 종류의 header를 보낼 수 있습니다.
       - x-custom-auth
   ```
 
-이는 [MCP static and extra headers](/docs/mcp#forwarding-custom-headers-to-mcp-servers) 동작과 같습니다.
+이는 [MCP static and extra headers](/litellm-docs-kr/docs/mcp#forwarding-custom-headers-to-mcp-servers) 동작과 같습니다.
 
 ### 예제: Pillar Security {#example-pillar-security}
 

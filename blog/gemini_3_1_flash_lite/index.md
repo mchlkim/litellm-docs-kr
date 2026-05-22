@@ -142,8 +142,8 @@ LiteLLM은 Gemini 3.1 Flash Lite Preview에 대해 다음 엔드포인트에서 
 
 - ✅ `/v1/chat/completions` - OpenAI 호환 chat completions 엔드포인트
 - ✅ `/v1/responses` - OpenAI Responses API 엔드포인트(streaming 및 non-streaming)
-- ✅ [`/v1/messages`](../../docs/anthropic_unified) - Anthropic 호환 messages 엔드포인트
-- ✅ `/v1/generateContent` - [Google Gemini API](../../docs/generateContent) 호환 엔드포인트
+- ✅ [`/v1/messages`](/litellm-docs-kr/docs/anthropic_unified) - Anthropic 호환 messages 엔드포인트
+- ✅ `/v1/generateContent` - [Google Gemini API](/litellm-docs-kr/docs/generateContent) 호환 엔드포인트
 
 모든 엔드포인트는 다음을 지원합니다.
 - Streaming 및 non-streaming 응답

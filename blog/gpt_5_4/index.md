@@ -87,4 +87,4 @@ print(response.choices[0].message.content)
 
 - 이 모델의 비용 추적을 적용하려면 container를 재시작하세요.
 - 더 나은 모델 성능을 위해 `/responses`를 사용하세요.
-- GPT-5.4는 reasoning, function calling, vision, tool-use를 지원합니다. 고급 사용법은 [OpenAI 제공자 문서](../../docs/providers/openai)를 참고하세요.
+- GPT-5.4는 reasoning, function calling, vision, tool-use를 지원합니다. 고급 사용법은 [OpenAI 제공자 문서](/litellm-docs-kr/docs/providers/openai)를 참고하세요.

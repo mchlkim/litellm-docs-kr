@@ -104,5 +104,5 @@ print(response.choices[0].message.content)
 
 ## 참고
 
-- 두 모델 모두 function calling, vision, tool-use를 지원합니다. 고급 사용법은 [OpenAI 제공자 문서](../../docs/providers/openai)를 참고하세요.
+- 두 모델 모두 function calling, vision, tool-use를 지원합니다. 고급 사용법은 [OpenAI 제공자 문서](/litellm-docs-kr/docs/providers/openai)를 참고하세요.
 - GPT-5.4-nano는 단순 작업에 가장 비용 효율적인 선택지이고, GPT-5.4-mini는 속도와 성능의 균형을 제공합니다.

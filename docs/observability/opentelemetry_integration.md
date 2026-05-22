@@ -80,7 +80,7 @@ OTEL_EXPORTER_OTLP_HEADERS="X-SF-Token=<your-ingest-access-token>"
 OTEL_SERVICE_NAME="litellm-proxy"
 ```
 
-**LiteLLM Proxy** 설정, 수집 토큰 패턴, trace 검증은 **[Splunk 관측성 Cloud (OpenTelemetry)](/docs/observability/splunk_observability_cloud)**를 참고하세요.
+**LiteLLM Proxy** 설정, 수집 토큰 패턴, trace 검증은 **[Splunk 관측성 Cloud (OpenTelemetry)](/litellm-docs-kr/docs/observability/splunk_observability_cloud)**를 참고하세요.
 
 </TabItem>
 

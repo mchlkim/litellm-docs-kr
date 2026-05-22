@@ -4,7 +4,7 @@ title: "Model Provider로 통합하기"
 
 ## OpenAI 호환 Provider 빠른 시작
 
-API가 OpenAI와 호환된다면 단일 JSON 파일만 수정해 지원을 추가할 수 있습니다. 간단한 방식은 [OpenAI 호환 Provider 추가](/docs/contributing/adding_openai_compatible_providers)를 참고하세요.
+API가 OpenAI와 호환된다면 단일 JSON 파일만 수정해 지원을 추가할 수 있습니다. 간단한 방식은 [OpenAI 호환 Provider 추가](/litellm-docs-kr/docs/contributing/adding_openai_compatible_providers)를 참고하세요.
 
 ---
 

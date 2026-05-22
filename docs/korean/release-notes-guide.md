@@ -31,7 +31,7 @@ LiteLLM은 프로바이더, 모델, Proxy 기능, 보안 패치가 자주 바뀌
 
 ## 릴리즈 노트 위치
 
-- [릴리즈 노트](/release_notes)
+- [릴리즈 노트](/litellm-docs-kr/release_notes)
 - [공식 GitHub 저장소](https://github.com/BerriAI/litellm)
 - [공식 문서 사이트](https://docs.litellm.ai/docs/)
 

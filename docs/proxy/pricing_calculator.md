@@ -88,7 +88,7 @@ Pricing Calculator에는 다음 항목이 표시됩니다.
 | **Total Cost** | 구성된 margin을 포함한 전체 비용 |
 | **Input Cost** | 입력/프롬프트 토큰 비용 |
 | **Output Cost** | 출력/completion 토큰 비용 |
-| **Margin/Fee** | 구성된 [provider margins](/docs/proxy/provider_margins) |
+| **Margin/Fee** | 구성된 [provider margins](/litellm-docs-kr/docs/proxy/provider_margins) |
 | **Token Pricing** | 토큰당 요율($/1M tokens로 표시) |
 
 ## API Endpoint {#api-endpoint}
@@ -136,6 +136,6 @@ curl -X POST "http://localhost:4000/cost/estimate" \
 
 ## 관련 기능 {#related-features}
 
-- [Provider Margins](/docs/proxy/provider_margins) - LLM 비용에 수수료 또는 margin 추가
-- [Provider Discounts](/docs/proxy/provider_discounts) - provider 비용에 할인 적용
-- [Cost Tracking](/docs/proxy/cost_tracking) - LLM 지출 추적 및 모니터링
+- [Provider Margins](/litellm-docs-kr/docs/proxy/provider_margins) - LLM 비용에 수수료 또는 margin 추가
+- [Provider Discounts](/litellm-docs-kr/docs/proxy/provider_discounts) - provider 비용에 할인 적용
+- [Cost Tracking](/litellm-docs-kr/docs/proxy/cost_tracking) - LLM 지출 추적 및 모니터링

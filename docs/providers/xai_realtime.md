@@ -297,8 +297,8 @@ if event['type'] in ['session.created', 'conversation.created']:
 
 ## 관련 문서
 
-- [xAI Chat/Text 모델](/docs/providers/xai)
-- [LiteLLM Realtime API 개요](/docs/realtime)
+- [xAI Chat/Text 모델](/litellm-docs-kr/docs/providers/xai)
+- [LiteLLM Realtime API 개요](/litellm-docs-kr/docs/realtime)
 - [xAI 공식 문서](https://docs.x.ai/docs)
 
 ## 지원 {#support}

@@ -94,7 +94,7 @@ docker run \
 - 만료 시간
 - 태그와 metadata
 
-자세한 설정은 [가상 키](/docs/proxy/virtual_keys)를 참고합니다.
+자세한 설정은 [가상 키](/litellm-docs-kr/docs/proxy/virtual_keys)를 참고합니다.
 
 ## 관리자 UI
 
@@ -106,7 +106,7 @@ docker run \
 - 로그 조회
 - 팀과 프로젝트 관리
 
-자세한 내용은 [관리자 UI](/docs/proxy/ui)를 참고합니다.
+자세한 내용은 [관리자 UI](/litellm-docs-kr/docs/proxy/ui)를 참고합니다.
 
 ## 운영 체크리스트
 

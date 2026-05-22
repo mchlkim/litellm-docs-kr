@@ -13,8 +13,8 @@ import TabItem from '@theme/TabItem';
 | 로깅 | ✅ | 모든 통합에서 작동 |
 | 최종 사용자 추적 | ✅ | |
 | 지원 LLM 제공자(OpenAI `/vector_stores` API) | **OpenAI** | 제공자 전반에서 전체 벡터 저장소 API 지원 |
-| 지원 LLM 제공자(Passthrough API) | [**Azure AI**](/docs/providers/azure_ai/azure_ai_vector_stores_passthrough) | 제공자 전반에서 전체 벡터 저장소 API 지원 |
-| 지원 LLM 제공자(데이터셋 관리) | [**RAGFlow**](/docs/providers/ragflow_vector_store.md) | 데이터셋 생성 및 관리(검색은 지원되지 않음) |
+| 지원 LLM 제공자(Passthrough API) | [**Azure AI**](/litellm-docs-kr/docs/providers/azure_ai/azure_ai_vector_stores_passthrough) | 제공자 전반에서 전체 벡터 저장소 API 지원 |
+| 지원 LLM 제공자(데이터셋 관리) | [**RAGFlow**](/litellm-docs-kr/docs/providers/ragflow_vector_store.md) | 데이터셋 생성 및 관리(검색은 지원되지 않음) |
 
 ## 사용법
 

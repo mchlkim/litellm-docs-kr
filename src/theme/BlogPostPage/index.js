@@ -1,16 +1,17 @@
 import React, {useEffect} from 'react';
+import Link from '@docusaurus/Link';
 import OriginalBlogPostPage from '@theme-original/BlogPostPage';
 import styles from './styles.module.css';
 
 function BackLink() {
   return (
     <div className={styles.backOuter}>
-      <a href="/blog" className={styles.backLink}>
+      <Link to="/blog" className={styles.backLink}>
         <svg className={styles.backArrow} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16l-4-4m0 0l4-4m-4 4h18" />
         </svg>
         블로그
-      </a>
+      </Link>
     </div>
   );
 }

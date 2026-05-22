@@ -50,4 +50,4 @@ LiteLLM 릴리즈 버전 이름이 변경됩니다. 이번 변경은 두 가지 
 
 - **`litellm-dev`** - 임시 빌드와 일회성 빌드(예: 수정 사항이 정식 릴리즈에 들어가기 전에 테스트하는 빌드)를 위한 별도의 `litellm-dev` PyPI 패키지와 `*-dev` Docker image 계열이 있습니다. **프로덕션 용도가 아닙니다.** 표준 `litellm` 패키지나 `ghcr.io/berriai/litellm:*` Docker 태그에 고정한 환경은 실수로 `litellm-dev` 빌드를 가져오지 않습니다.
 - **`:latest` Docker tag**는 각 registry의 최신 stable 릴리즈를 가리키며, 새 stable이 배포되면 자동으로 이동합니다. 프로덕션 배포에서는 재현 가능한 배포를 위해 여전히 콘텐츠 태그(예: `:1.84.0`)에 고정하는 방식을 권장합니다.
-- **Image signing**([cosign verify](/blog/ci-cd-v2-improvements#verify-docker-image-signatures))과 검증 명령은 새 태그 형식에서도 변경 없이 계속 동작합니다.
+- **Image signing**([cosign verify](/litellm-docs-kr/blog/ci-cd-v2-improvements#verify-docker-image-signatures))과 검증 명령은 새 태그 형식에서도 변경 없이 계속 동작합니다.

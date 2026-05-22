@@ -359,4 +359,4 @@ aws configure
 
 - [OpenAI Realtime API 문서](https://platform.openai.com/docs/guides/realtime)
 - [Amazon Bedrock Nova Sonic 문서](https://docs.aws.amazon.com/bedrock/latest/userguide/nova-sonic.html)
-- [LiteLLM Realtime API 문서](/docs/realtime)
+- [LiteLLM Realtime API 문서](/litellm-docs-kr/docs/realtime)

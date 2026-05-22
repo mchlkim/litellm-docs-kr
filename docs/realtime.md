@@ -8,7 +8,7 @@ Azure, OpenAI, xAI 등 여러 provider 사이에서 realtime 요청을 load bala
 지원 프로바이더:
 - OpenAI
 - Azure
-- xAI ([전체 문서 보기](/docs/providers/xai_realtime))
+- xAI ([전체 문서 보기](/litellm-docs-kr/docs/providers/xai_realtime))
 - `Google AI Studio (Gemini)`
 - Vertex AI
 - Bedrock
@@ -60,7 +60,7 @@ model_list:
       mode: realtime
 ```
 
-**[전체 xAI Realtime 문서 보기 →](/docs/providers/xai_realtime)**
+**[전체 xAI Realtime 문서 보기 →](/litellm-docs-kr/docs/providers/xai_realtime)**
 
 </TabItem>
 </Tabs>

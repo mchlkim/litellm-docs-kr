@@ -8,7 +8,7 @@ title: /containers/files
 Code Interpreter 컨테이너 안의 파일을 관리합니다. code interpreter가 차트, CSV, 이미지 같은 출력물을 생성하면 파일이 자동으로 만들어집니다.
 
 :::tip
-Code Interpreter 사용 방법을 찾고 있다면 [Code Interpreter 가이드](/docs/guides/code_interpreter)를 참고하세요.
+Code Interpreter 사용 방법을 찾고 있다면 [Code Interpreter 가이드](/litellm-docs-kr/docs/guides/code_interpreter)를 참고하세요.
 :::
 
 | 기능 | 지원 여부 |
@@ -380,5 +380,5 @@ curl -X DELETE "http://localhost:4000/v1/containers/cntr_123.../files/cfile_456.
 
 ## 관련 문서
 
-- [Containers API](/docs/containers) - 컨테이너 관리
-- [Code Interpreter 가이드](/docs/guides/code_interpreter) - LiteLLM에서 Code Interpreter 사용
+- [Containers API](/litellm-docs-kr/docs/containers) - 컨테이너 관리
+- [Code Interpreter 가이드](/litellm-docs-kr/docs/guides/code_interpreter) - LiteLLM에서 Code Interpreter 사용

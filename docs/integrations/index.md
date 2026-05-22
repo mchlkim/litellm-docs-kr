@@ -20,60 +20,60 @@ items={[
     icon: "🪢",
     title: "Langfuse",
     description: "LLM 관측성과 분석.",
-    to: "/docs/observability/langfuse_integration",
+    to: "/litellm-docs-kr/docs/observability/langfuse_integration",
   },
   {
     icon: "🐶",
     title: "Datadog",
     description: "메트릭, trace, 대시보드.",
-    to: "/docs/observability/datadog",
+    to: "/litellm-docs-kr/docs/observability/datadog",
   },
   {
     icon: "📡",
     title: "OpenTelemetry",
     description: "벤더 중립 trace.",
-    to: "/docs/observability/opentelemetry_integration",
+    to: "/litellm-docs-kr/docs/observability/opentelemetry_integration",
   },
   {
     icon: "🔗",
     title: "LangSmith",
     description: "LLM 디버깅과 평가.",
-    to: "/docs/observability/langsmith_integration",
+    to: "/litellm-docs-kr/docs/observability/langsmith_integration",
   },
   {
     icon: "🔥",
     title: "Arize / Phoenix",
     description: "ML 관측성과 평가.",
-    to: "/docs/observability/arize_integration",
+    to: "/litellm-docs-kr/docs/observability/arize_integration",
   },
   {
     icon: "🌀",
     title: "Helicone",
     description: "LLM 요청 로깅과 분석.",
-    to: "/docs/observability/helicone_integration",
+    to: "/litellm-docs-kr/docs/observability/helicone_integration",
   },
   {
     icon: "📊",
     title: "MLflow",
     description: "실험 추적.",
-    to: "/docs/observability/mlflow",
+    to: "/litellm-docs-kr/docs/observability/mlflow",
   },
   {
     icon: "🏋️",
     title: "Weights & Biases",
     description: "ML 실험 추적.",
-    to: "/docs/observability/wandb_integration",
+    to: "/litellm-docs-kr/docs/observability/wandb_integration",
   },
   {
     icon: "📉",
     title: "PostHog",
     description: "제품 분석.",
-    to: "/docs/observability/posthog_integration",
+    to: "/litellm-docs-kr/docs/observability/posthog_integration",
   },
 ]}
 />
 
-[관측성 통합 전체 보기 →](/docs/integrations/observability_integrations)
+[관측성 통합 전체 보기 →](/litellm-docs-kr/docs/integrations/observability_integrations)
 
 ---
 
@@ -124,42 +124,42 @@ items={[
     icon: "🛡️",
     title: "Lakera AI",
     description: "Prompt injection 탐지.",
-    to: "/docs/proxy/guardrails/lakera_ai",
+    to: "/litellm-docs-kr/docs/proxy/guardrails/lakera_ai",
   },
   {
     icon: "☁️",
     title: "Azure Content Safety",
     description: "콘텐츠 moderation.",
-    to: "/docs/proxy/guardrails/azure_content_guardrail",
+    to: "/litellm-docs-kr/docs/proxy/guardrails/azure_content_guardrail",
   },
   {
     icon: "🛏️",
     title: "Bedrock 가드레일",
     description: "AWS Bedrock 안전성 검사.",
-    to: "/docs/proxy/guardrails/bedrock",
+    to: "/litellm-docs-kr/docs/proxy/guardrails/bedrock",
   },
   {
     icon: "🤖",
     title: "OpenAI Moderation",
     description: "OpenAI 콘텐츠 정책.",
-    to: "/docs/proxy/guardrails/openai_moderation",
+    to: "/litellm-docs-kr/docs/proxy/guardrails/openai_moderation",
   },
   {
     icon: "🔐",
     title: "Secret Detection",
     description: "인증 정보 유출 방지.",
-    to: "/docs/proxy/guardrails/secret_detection",
+    to: "/litellm-docs-kr/docs/proxy/guardrails/secret_detection",
   },
   {
     icon: "🕵️",
     title: "PII Masking",
     description: "민감 데이터 마스킹.",
-    to: "/docs/proxy/guardrails/pii_masking_v2",
+    to: "/litellm-docs-kr/docs/proxy/guardrails/pii_masking_v2",
   },
 ]}
 />
 
-[가드레일 프로바이더 전체 보기 →](/docs/guardrail_providers)
+[가드레일 프로바이더 전체 보기 →](/litellm-docs-kr/docs/guardrail_providers)
 
 ---
 

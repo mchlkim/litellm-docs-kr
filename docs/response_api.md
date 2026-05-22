@@ -1717,7 +1717,7 @@ curl -X POST "http://localhost:4000/v1/responses" \
 
 전체 `file_search` 사용법(native + emulated fallback), SDK/Proxy 예제, 아키텍처 다이어그램, Q&A는 다음 문서를 참고하세요.
 
-- [`File Search in the Responses API - E2E Testing Guide`](/docs/tutorials/file_search_responses_api)
+- [`File Search in the Responses API - E2E Testing Guide`](/litellm-docs-kr/docs/tutorials/file_search_responses_api)
 
 ## Session Management
 

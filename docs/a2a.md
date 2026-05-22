@@ -49,7 +49,7 @@ URL은 A2A 에이전트의 호출 URL이어야 합니다(예: `http://localhost:
 
 ### Azure AI Foundry 에이전트 추가 {#azure-ai-foundry-agent}
 
-[이 가이드](/docs/providers/azure_ai_agents#litellm-a2a-gateway)에 따라 Azure AI Foundry 에이전트를 LiteLLM Agent Gateway에 추가하세요.
+[이 가이드](/litellm-docs-kr/docs/providers/azure_ai_agents#litellm-a2a-gateway)에 따라 Azure AI Foundry 에이전트를 LiteLLM Agent Gateway에 추가하세요.
 
 ### Vertex AI Agent Engine 추가 {#vertex-ai-agent-engine}
 
@@ -57,15 +57,15 @@ URL은 A2A 에이전트의 호출 URL이어야 합니다(예: `http://localhost:
 
 ### Bedrock AgentCore 에이전트 추가 {#bedrock-agentcore-agent}
 
-[이 가이드](/docs/providers/bedrock_agentcore#litellm-a2a-gateway)에 따라 Bedrock AgentCore 에이전트를 LiteLLM Agent Gateway에 추가하세요.
+[이 가이드](/litellm-docs-kr/docs/providers/bedrock_agentcore#litellm-a2a-gateway)에 따라 Bedrock AgentCore 에이전트를 LiteLLM Agent Gateway에 추가하세요.
 
 ### LangGraph 에이전트 추가 {#langgraph-agent}
 
-[이 가이드](/docs/providers/langgraph#litellm-a2a-gateway)에 따라 LangGraph 에이전트를 LiteLLM Agent Gateway에 추가하세요.
+[이 가이드](/litellm-docs-kr/docs/providers/langgraph#litellm-a2a-gateway)에 따라 LangGraph 에이전트를 LiteLLM Agent Gateway에 추가하세요.
 
 ### Pydantic AI 에이전트 추가 {#pydantic-ai-agent}
 
-[이 가이드](/docs/providers/pydantic_ai_agent#litellm-a2a-gateway)에 따라 Pydantic AI 에이전트를 LiteLLM Agent Gateway에 추가하세요.
+[이 가이드](/litellm-docs-kr/docs/providers/pydantic_ai_agent#litellm-a2a-gateway)에 따라 Pydantic AI 에이전트를 LiteLLM Agent Gateway에 추가하세요.
 
 ## 에이전트 호출 {#agent-invocation}
 

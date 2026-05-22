@@ -10,7 +10,7 @@ import NavigationCards from '@site/src/components/NavigationCards';
 import Image from '@theme/IdealImage';
 
 :::note 보안 업데이트
-Trivy 공급망 침해 이슈는 조치가 완료되었습니다 :tada: . 영향을 받은 패키지는 모두 삭제되었고, 현재 릴리스에는 침해된 코드나 컴포넌트가 포함되어 있지 않습니다. 자세한 배경은 [Security Townhall](/blog/security-townhall-updates)을 참고하고, 이후 개선 방향은 [CI/CD v2](/blog/ci-cd-v2-improvements)에서 확인하세요.
+Trivy 공급망 침해 이슈는 조치가 완료되었습니다 :tada: . 영향을 받은 패키지는 모두 삭제되었고, 현재 릴리스에는 침해된 코드나 컴포넌트가 포함되어 있지 않습니다. 자세한 배경은 [Security Townhall](/litellm-docs-kr/blog/security-townhall-updates)을 참고하고, 이후 개선 방향은 [CI/CD v2](/litellm-docs-kr/blog/ci-cd-v2-improvements)에서 확인하세요.
 :::
 
 <Image style={{padding: '10px', margin: '0 0 2.5rem'}} img={require('../img/hero.png')} />
@@ -211,9 +211,9 @@ print(response.choices[0].message.content)
 
 ## LiteLLM이 처음인가요?
 
-**빠르게 시작하고 싶다면** [튜토리얼](/docs/tutorials)에서 AI 코딩 도구, 에이전트 SDK, 프록시 설정 등을 단계별로 따라 할 수 있습니다.
+**빠르게 시작하고 싶다면** [튜토리얼](/litellm-docs-kr/docs/tutorials)에서 AI 코딩 도구, 에이전트 SDK, 프록시 설정 등을 단계별로 따라 할 수 있습니다.
 
-**특정 기능을 이해해야 한다면** [가이드](/docs/guides)에서 스트리밍, 함수 호출, 프롬프트 캐싱 등 기능별 사용법을 확인하세요.
+**특정 기능을 이해해야 한다면** [가이드](/litellm-docs-kr/docs/guides)에서 스트리밍, 함수 호출, 프롬프트 캐싱 등 기능별 사용법을 확인하세요.
 
 ---
 
@@ -306,7 +306,7 @@ response = litellm.completion(
 )
 ```
 
-📖 [전체 관측성 연동 보기 →](/docs/observability/agentops_integration)
+📖 [전체 관측성 연동 보기 →](/litellm-docs-kr/docs/observability/agentops_integration)
 
 ### 비용 추적 및 사용법
 
@@ -408,13 +408,13 @@ items={[
 icon: "🔗",
 title: "A2A Agents",
 description: "LiteLLM gateway를 통해 A2A agent를 추가하고 호출합니다.",
-to: "/docs/a2a",
+to: "/litellm-docs-kr/docs/a2a",
 },
 {
 icon: "🛠️",
 title: "MCP Gateway",
 description: "key별 접근 제어가 포함된 중앙 MCP endpoint입니다.",
-to: "/docs/mcp",
+to: "/litellm-docs-kr/docs/mcp",
 },
 ]}
 />
@@ -430,37 +430,37 @@ items={[
 icon: "🔀",
 title: "라우팅 및 부하 분산",
 description: "여러 deployment에 load balancing을 적용하고 자동 fallback을 설정합니다.",
-to: "/docs/routing-load-balancing",
+to: "/litellm-docs-kr/docs/routing-load-balancing",
 },
 {
 icon: "🔑",
 title: "가상 키",
 description: "team 또는 user별 접근, budget, rate limit을 관리합니다.",
-to: "/docs/proxy/virtual_keys",
+to: "/litellm-docs-kr/docs/proxy/virtual_keys",
 },
 {
 icon: "📊",
 title: "비용 추적",
 description: "모든 provider에서 key, team, user별 비용을 추적합니다.",
-to: "/docs/proxy/cost_tracking",
+to: "/litellm-docs-kr/docs/proxy/cost_tracking",
 },
 {
 icon: "🛡️",
 title: "가드레일",
 description: "content filtering, PII masking, safety check를 추가합니다.",
-to: "/docs/proxy/guardrails/quick_start",
+to: "/litellm-docs-kr/docs/proxy/guardrails/quick_start",
 },
 {
 icon: "📡",
 title: "관측성",
 description: "Langfuse, MLflow, Helicone 등과 연동합니다.",
-to: "/docs/observability/agentops_integration",
+to: "/litellm-docs-kr/docs/observability/agentops_integration",
 },
 {
 icon: "🏭",
 title: "엔터프라이즈",
 description: "production용 SSO/SAML, audit log, 고급 security 기능을 제공합니다.",
-to: "/docs/enterprise",
+to: "/litellm-docs-kr/docs/enterprise",
 },
 ]}
 />

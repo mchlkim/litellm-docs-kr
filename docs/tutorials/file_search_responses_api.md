@@ -237,6 +237,6 @@ validate_file_search_response(response)
 
 ## 다음에 확인할 항목
 
-- [Responses API docs의 File Search reference](/docs/response_api#file-search-vector-stores) — 전체 API reference
-- [Vector Store 관리](/docs/vector_store_files) — vector store 생성 및 관리
-- [Managed vector stores](/docs/providers/bedrock_vector_store) — provider-specific setup
+- [Responses API docs의 File Search reference](/litellm-docs-kr/docs/response_api#file-search-vector-stores) — 전체 API reference
+- [Vector Store 관리](/litellm-docs-kr/docs/vector_store_files) — vector store 생성 및 관리
+- [Managed vector stores](/litellm-docs-kr/docs/providers/bedrock_vector_store) — provider-specific setup

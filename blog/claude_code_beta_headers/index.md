@@ -164,5 +164,5 @@ curl -X POST "https://your-proxy-url/reload/anthropic_beta_headers" \
 
 ## 관련 문서
 
-- [Anthropic Beta Headers 관리](../../docs/proxy/sync_anthropic_beta_headers) - 전체 설정 가이드
+- [Anthropic Beta Headers 관리](/litellm-docs-kr/docs/proxy/sync_anthropic_beta_headers) - 전체 설정 가이드
 - [`anthropic_beta_headers_config.json`](https://github.com/BerriAI/litellm/blob/main/litellm/anthropic_beta_headers_config.json) - 현재 설정 파일

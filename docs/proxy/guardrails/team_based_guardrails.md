@@ -2,7 +2,7 @@ import Image from '@theme/IdealImage';
 
 # 팀 Bring-Your-Own 가드레일 {#team-bring-your-own-guardrails}
 
-팀 기반 가드레일을 사용하면 **개발자**가 API를 통해 자신의 팀용 가드레일을 등록할 수 있습니다. 이후 **관리자**가 LiteLLM UI에서 이를 검토하고 승인하거나 거부합니다. 이 방식으로는 [Generic Guardrail API](/docs/adding_provider/generic_guardrail_api) 가드레일만 등록할 수 있습니다.
+팀 기반 가드레일을 사용하면 **개발자**가 API를 통해 자신의 팀용 가드레일을 등록할 수 있습니다. 이후 **관리자**가 LiteLLM UI에서 이를 검토하고 승인하거나 거부합니다. 이 방식으로는 [Generic Guardrail API](/litellm-docs-kr/docs/adding_provider/generic_guardrail_api) 가드레일만 등록할 수 있습니다.
 
 ## 개요
 
@@ -16,7 +16,7 @@ import Image from '@theme/IdealImage';
 ### 사전 준비
 
 - **team-scoped** API 키. 이 키는 팀에 연결되어 있어야 합니다. 팀이 없는 키로는 가드레일을 등록할 수 없습니다.
-- 가드레일은 [Generic Guardrail API](/docs/adding_provider/generic_guardrail_api) 계약과 구성을 따라야 합니다.
+- 가드레일은 [Generic Guardrail API](/litellm-docs-kr/docs/adding_provider/generic_guardrail_api) 계약과 구성을 따라야 합니다.
 
 ### 요청 {#request}
 
@@ -29,7 +29,7 @@ import Image from '@theme/IdealImage';
 | 필드 | 타입 | 필수 여부 | 설명 |
 |-------|------|----------|-------------|
 | `guardrail_name` | string | 예 | 가드레일의 고유 이름입니다. |
-| `litellm_params` | object | 예 | `guardrail: "generic_guardrail_api"`, `mode`(예: `pre_call`, `post_call`), `api_base`를 반드시 포함해야 합니다. [Generic Guardrail API](/docs/adding_provider/generic_guardrail_api#litellm-configuration)를 참고하세요. |
+| `litellm_params` | object | 예 | `guardrail: "generic_guardrail_api"`, `mode`(예: `pre_call`, `post_call`), `api_base`를 반드시 포함해야 합니다. [Generic Guardrail API](/litellm-docs-kr/docs/adding_provider/generic_guardrail_api#litellm-configuration)를 참고하세요. |
 | `guardrail_info` | object | 아니요 | 선택적 메타데이터입니다(예: `description`). |
 
 ### `litellm_params` 요구 사항 {#requirements-for-litellm_params}
@@ -134,4 +134,4 @@ proxy 대시보드에서 **가드레일**로 이동합니다(사이드바 또는
 | **개발자** | team-scoped 키와 `generic_guardrail_api` 구성으로 `POST /guardrails/register`를 호출합니다. 제출 항목은 `pending_review` 상태가 됩니다. |
 | **관리자** | UI에서 **가드레일 → Team 가드레일**을 열거나 submissions API를 사용한 뒤, 각 제출 항목을 **Approve** 또는 **Reject**합니다. 승인된 가드레일은 활성화됩니다. |
 
-`litellm_params.guardrail: "generic_guardrail_api"`인 가드레일만 등록할 수 있습니다. 전체 계약과 구성 옵션은 [Generic Guardrail API](/docs/adding_provider/generic_guardrail_api)를 참고하세요.
+`litellm_params.guardrail: "generic_guardrail_api"`인 가드레일만 등록할 수 있습니다. 전체 계약과 구성 옵션은 [Generic Guardrail API](/litellm-docs-kr/docs/adding_provider/generic_guardrail_api)를 참고하세요.

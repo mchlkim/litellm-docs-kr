@@ -431,5 +431,5 @@ response = video_generation(
 - [OpenAI Video 생성](../openai/videos.md)
 - [Azure Video 생성](../azure/videos.md)
 - [Vertex AI Video 생성](../vertex_ai/videos.md)
-- [Video 생성 API Reference](/docs/videos)
-- [Veo Pass-through Endpoints](/docs/pass_through/google_ai_studio#example-4-video-generation-with-veo)
+- [Video 생성 API Reference](/litellm-docs-kr/docs/videos)
+- [Veo Pass-through Endpoints](/litellm-docs-kr/docs/pass_through/google_ai_studio#example-4-video-generation-with-veo)

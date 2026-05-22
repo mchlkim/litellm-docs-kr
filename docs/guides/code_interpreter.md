@@ -163,6 +163,6 @@ for file in files.data:
 
 ## 관련 문서 {#related}
 
-- [Containers API](/docs/containers) - 컨테이너 관리
-- [Container Files API](/docs/container_files) - 컨테이너 내 파일 관리
+- [Containers API](/litellm-docs-kr/docs/containers) - 컨테이너 관리
+- [Container Files API](/litellm-docs-kr/docs/container_files) - 컨테이너 내 파일 관리
 - [OpenAI Code Interpreter 문서](https://platform.openai.com/docs/guides/tools-code-interpreter) - 공식 OpenAI 문서

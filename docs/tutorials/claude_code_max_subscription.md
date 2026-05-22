@@ -351,7 +351,7 @@ curl "http://localhost:4000/v1/models" \
 
 ## 관련 문서
 
-- [Forward Client Headers](/docs/proxy/forward_client_headers) - 자세한 header forwarding 설정
-- [Claude Code 빠른 시작](/docs/tutorials/claude_responses_api) - 기본 Claude Code + LiteLLM setup
-- [가상 키](/docs/proxy/virtual_keys) - API key 생성 및 관리
-- [Budgets & Rate Limits](/docs/proxy/users) - usage control 설정
+- [Forward Client Headers](/litellm-docs-kr/docs/proxy/forward_client_headers) - 자세한 header forwarding 설정
+- [Claude Code 빠른 시작](/litellm-docs-kr/docs/tutorials/claude_responses_api) - 기본 Claude Code + LiteLLM setup
+- [가상 키](/litellm-docs-kr/docs/proxy/virtual_keys) - API key 생성 및 관리
+- [Budgets & Rate Limits](/litellm-docs-kr/docs/proxy/users) - usage control 설정

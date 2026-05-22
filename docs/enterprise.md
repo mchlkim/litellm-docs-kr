@@ -56,7 +56,7 @@ LiteLLM OSS는 OpenAI-compatible gateway, virtual key, spend tracking, budget, f
 ### 관측성 및 Compliance
 
 - **[Team-Based Logging](./proxy/team_logging.md)** - 각 team의 log를 해당 team의 Langfuse project 또는 callback으로 routing
-- **[Team별 logging 비활성화](/docs/proxy/team_logging#disable-logging-for-a-team)** - Team level GDPR-friendly opt-out
+- **[Team별 logging 비활성화](/litellm-docs-kr/docs/proxy/team_logging#disable-logging-for-a-team)** - Team level GDPR-friendly opt-out
 - **[GCS / Azure Blob으로 log export](./observability/gcs_bucket_integration.md)** - Compliance를 위한 durable storage
 - **[Key/team별 guardrail](#guardrails---secret-detectionredaction)** - Secret redaction, content moderation, banned keyword
 - **필수 param 강제** - 필수 metadata가 없는 요청 거부

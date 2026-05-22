@@ -3,7 +3,7 @@
 격리된 환경에서 코드를 실행하기 위한 OpenAI code interpreter 컨테이너(세션)를 관리합니다.
 
 :::tip
-Code Interpreter 사용 방법을 찾고 있다면 [Code Interpreter 가이드](/docs/guides/code_interpreter)를 확인하세요.
+Code Interpreter 사용 방법을 찾고 있다면 [Code Interpreter 가이드](/litellm-docs-kr/docs/guides/code_interpreter)를 확인하세요.
 :::
 
 | 기능 | 지원 여부 | 
@@ -469,5 +469,5 @@ print(f"Deleted: {result.deleted}")
 
 ## 관련 문서 {#related}
 
-- [Container Files API](/docs/container_files) - 컨테이너 내부 파일 관리
-- [Code Interpreter Guide](/docs/guides/code_interpreter) - LiteLLM에서 Code Interpreter 사용
+- [Container Files API](/litellm-docs-kr/docs/container_files) - 컨테이너 내부 파일 관리
+- [Code Interpreter Guide](/litellm-docs-kr/docs/guides/code_interpreter) - LiteLLM에서 Code Interpreter 사용

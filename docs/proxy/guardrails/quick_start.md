@@ -74,7 +74,7 @@ guardrails:
         plr_scanners: true
 ```
 
-Generic Guardrail API에서는 **정적 헤더**(`headers`: 모든 요청에 전송되는 key/value)와 **동적 헤더**(`extra_headers`: 전달할 클라이언트 헤더 이름 목록)도 설정할 수 있습니다. 자세한 내용은 [Generic Guardrail API - 정적 및 동적 헤더](/docs/adding_provider/generic_guardrail_api#static-and-dynamic-headers)를 참고하세요.
+Generic Guardrail API에서는 **정적 헤더**(`headers`: 모든 요청에 전송되는 key/value)와 **동적 헤더**(`extra_headers`: 전달할 클라이언트 헤더 이름 목록)도 설정할 수 있습니다. 자세한 내용은 [Generic Guardrail API - 정적 및 동적 헤더](/litellm-docs-kr/docs/adding_provider/generic_guardrail_api#static-and-dynamic-headers)를 참고하세요.
 
 ### `mode` 지원 값(Event Hooks)
 

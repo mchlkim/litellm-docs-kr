@@ -24,6 +24,6 @@ LiteLLM은 빠르고 결정적인 검사를 위한 내장 가드레일을 제공
 
 Akto는 **sync mode** 또는 **async mode**로 실행할 수 있습니다. sync mode는 LLM 호출 전에 위반을 차단하고, async mode는 지연 시간을 추가하지 않고 로그와 알림을 남깁니다. 기존 proxy에 callback으로 설정하면 되며 앱 코드는 바꿀 필요가 없습니다.
 
-**시작하기:** [Akto guardrail 설정 가이드](../../docs/proxy/guardrails/akto)
+**시작하기:** [Akto guardrail 설정 가이드](/litellm-docs-kr/docs/proxy/guardrails/akto)
 
 **전체 발표문**은 [Akto 블로그 →](https://www.akto.io/blog/akto-partners-litellm-ai-gateway-security-agents)에서 확인할 수 있습니다.

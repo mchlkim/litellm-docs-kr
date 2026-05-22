@@ -264,4 +264,4 @@ print(response.usage)  # {"duration_seconds": 5.0}
 - [OpenAI 비디오 생성](../openai/videos.md)
 - [Azure 비디오 생성](../azure/videos.md)
 - [Gemini 비디오 생성](../gemini/videos.md)
-- [비디오 생성 API 참조](/docs/videos)
+- [비디오 생성 API 참조](/litellm-docs-kr/docs/videos)

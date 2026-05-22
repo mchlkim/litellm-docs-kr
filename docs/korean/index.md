@@ -65,8 +65,8 @@ uv tool install 'litellm[proxy]'
 
 Docker 기반 운영을 검토한다면 공식 Proxy 빠른 시작 문서도 함께 참고합니다.
 
-- [Proxy Docker 빠른 시작](/docs/proxy/docker_quick_start)
-- [Proxy 빠른 시작](/docs/proxy/quick_start)
+- [Proxy Docker 빠른 시작](/litellm-docs-kr/docs/proxy/docker_quick_start)
+- [Proxy 빠른 시작](/litellm-docs-kr/docs/proxy/quick_start)
 
 ## 최소 호출 예시
 

@@ -27,7 +27,7 @@ import TabItem from '@theme/TabItem';
 | 입력 예제 | Claude Opus 4.5, Sonnet 4.5 |
 | effort parameter | Claude Opus 4.5 전용 |
 
-지원 프로바이더: [Anthropic](../../docs/providers/anthropic), [Bedrock](../../docs/providers/bedrock), [Vertex AI](../../docs/providers/vertex_partner#vertex-ai---anthropic-claude), [Azure AI](../../docs/providers/azure_ai).
+지원 프로바이더: [Anthropic](/litellm-docs-kr/docs/providers/anthropic), [Bedrock](/litellm-docs-kr/docs/providers/bedrock), [Vertex AI](/litellm-docs-kr/docs/providers/vertex_partner#vertex-ai---anthropic-claude), [Azure AI](/litellm-docs-kr/docs/providers/azure_ai).
 
 ## 사용법
 
@@ -117,7 +117,7 @@ curl --location 'http://0.0.0.0:4000/v1/messages' \
 
 LiteLLM은 Bedrock 인증에 boto3 라이브러리를 사용합니다.
 
-Bedrock 인증 방식은 [Bedrock 문서](../../docs/providers/bedrock#authentication)를 참고하세요.
+Bedrock 인증 방식은 [Bedrock 문서](/litellm-docs-kr/docs/providers/bedrock#authentication)를 참고하세요.
 
 :::
 

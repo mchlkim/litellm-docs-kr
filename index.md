@@ -11,15 +11,15 @@ LiteLLM은 OpenAI 호환 형식으로 여러 LLM 프로바이더를 호출하고
 
 ## 바로가기
 
-- [한국어 핵심 가이드](/docs/korean/)
-- [빠른 시작](/docs/)
-- [Python SDK](/docs/#litellm-python-sdk)
-- [AI Gateway / Proxy](/docs/simple_proxy)
-- [지원 모델 및 프로바이더](/docs/providers)
-- [라우팅 및 부하 분산](/docs/routing-load-balancing)
-- [통합](/docs/integrations)
-- [블로그](/blog)
-- [릴리즈 노트](/release_notes)
+- [한국어 핵심 가이드](/litellm-docs-kr/docs/korean/)
+- [빠른 시작](/litellm-docs-kr/docs/)
+- [Python SDK](/litellm-docs-kr/docs/#litellm-python-sdk)
+- [AI Gateway / Proxy](/litellm-docs-kr/docs/simple_proxy)
+- [지원 모델 및 프로바이더](/litellm-docs-kr/docs/providers)
+- [라우팅 및 부하 분산](/litellm-docs-kr/docs/routing-load-balancing)
+- [통합](/litellm-docs-kr/docs/integrations)
+- [블로그](/litellm-docs-kr/blog)
+- [릴리즈 노트](/litellm-docs-kr/release_notes)
 
 ## 원본
 

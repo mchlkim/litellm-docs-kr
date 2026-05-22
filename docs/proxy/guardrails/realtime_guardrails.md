@@ -3,7 +3,7 @@ import TabItem from '@theme/TabItem';
 
 # Realtime API 가드레일
 
-[Realtime API](/docs/realtime)의 음성 대화를 보호합니다. LLM이 응답하기 **전에** 음성 전사 내용을 가로채 검사합니다.
+[Realtime API](/litellm-docs-kr/docs/realtime)의 음성 대화를 보호합니다. LLM이 응답하기 **전에** 음성 전사 내용을 가로채 검사합니다.
 
 ## 동작 방식 {#how-it-works}
 

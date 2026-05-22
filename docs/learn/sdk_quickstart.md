@@ -24,7 +24,7 @@ uv add 'litellm==1.82.6'
 - Bedrock: 표준 AWS credentials
 - Vertex AI: `VERTEXAI_PROJECT`, `VERTEXAI_LOCATION`
 
-아직 프로바이더를 정하지 않았다면 [지원 프로바이더 전체 목록](/docs/providers)을 먼저 확인하세요.
+아직 프로바이더를 정하지 않았다면 [지원 프로바이더 전체 목록](/litellm-docs-kr/docs/providers)을 먼저 확인하세요.
 
 ## 3. 첫 호출 실행
 
@@ -125,9 +125,9 @@ ModelResponse(
 
 `id`, `created`, 토큰 수, 메시지 텍스트는 요청마다 달라질 수 있습니다.
 
-OpenAI 기반 모델을 호출하면 `system_fingerprint`, `service_tier`, `tool_calls`, `function_call`, `annotations`, `provider_specific_fields`, 상세 토큰 사용량 같은 추가 필드가 보일 수 있습니다. 전체 출력 형식은 [completion output](/docs/completion/output)을 참고하세요.
+OpenAI 기반 모델을 호출하면 `system_fingerprint`, `service_tier`, `tool_calls`, `function_call`, `annotations`, `provider_specific_fields`, 상세 토큰 사용량 같은 추가 필드가 보일 수 있습니다. 전체 출력 형식은 [completion output](/litellm-docs-kr/docs/completion/output)을 참고하세요.
 
-프로바이더별 예제가 더 필요하면 기본 [시작하기](/docs/#quick-start) 페이지를 확인하세요.
+프로바이더별 예제가 더 필요하면 기본 [시작하기](/litellm-docs-kr/docs/#quick-start) 페이지를 확인하세요.
 
 ## 5. 다음 단계 선택
 
@@ -138,31 +138,31 @@ items={[
 icon: "⚡",
 title: "응답 스트리밍",
 description: "stream=True로 토큰을 순차적으로 받습니다.",
-to: "/docs/completion/stream",
+to: "/litellm-docs-kr/docs/completion/stream",
 },
 {
 icon: "🧰",
 title: "도구 사용",
 description: "프로바이더와 무관한 방식으로 function calling을 추가합니다.",
-to: "/docs/completion/function_call",
+to: "/litellm-docs-kr/docs/completion/function_call",
 },
 {
 icon: "📦",
 title: "JSON 반환",
 description: "응답을 구조화된 JSON 출력으로 제한합니다.",
-to: "/docs/completion/json_mode",
+to: "/litellm-docs-kr/docs/completion/json_mode",
 },
 {
 icon: "🔀",
 title: "라우팅 추가",
 description: "애플리케이션 코드에서 재시도, fallback, 부하 분산을 사용합니다.",
-to: "/docs/routing",
+to: "/litellm-docs-kr/docs/routing",
 },
 {
 icon: "🌐",
 title: "프로바이더 선택",
 description: "프로바이더별 인증, 모델 이름, 파라미터를 확인합니다.",
-to: "/docs/providers",
+to: "/litellm-docs-kr/docs/providers",
 },
 ]}
 />
@@ -171,4 +171,4 @@ to: "/docs/providers",
 
 중앙 인증, 가상 키, 비용 추적, 공통 로깅, 여러 앱이 공유하는 OpenAI 호환 엔드포인트가 필요하면 LiteLLM Gateway를 사용하세요.
 
-[Gateway 빠른 시작으로 이동 →](/docs/learn/gateway_quickstart)
+[Gateway 빠른 시작으로 이동 →](/litellm-docs-kr/docs/learn/gateway_quickstart)

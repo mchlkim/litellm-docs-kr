@@ -921,8 +921,8 @@ for model in models:
 ## 리소스
 
 - [Letta 문서](https://docs.letta.com/)
-- [LiteLLM Proxy 문서](/docs/simple_proxy)
-- [LiteLLM SDK 문서](/docs/#litellm-python-sdk)
-- [Function Calling 가이드](/docs/completion/function_call)
-- [관측성 설정](/docs/integrations/observability_integrations)
-- [Router 설정](/docs/routing)
+- [LiteLLM Proxy 문서](/litellm-docs-kr/docs/simple_proxy)
+- [LiteLLM SDK 문서](/litellm-docs-kr/docs/#litellm-python-sdk)
+- [Function Calling 가이드](/litellm-docs-kr/docs/completion/function_call)
+- [관측성 설정](/litellm-docs-kr/docs/integrations/observability_integrations)
+- [Router 설정](/litellm-docs-kr/docs/routing)

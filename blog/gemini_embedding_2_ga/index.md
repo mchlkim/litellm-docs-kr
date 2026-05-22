@@ -17,7 +17,7 @@ import TabItem from '@theme/TabItem';
 LiteLLM은 이제 Gemini Embedding 2 GA를 완전히 지원합니다.
 
 :::info
-엔드투엔드 동작, 입력 형태, MIME type은 [Gemini Embedding 2 Preview 안내](/blog/gemini_embedding_2_multimodal)를 참고하세요. 이 글은 **GA 이름 체계**와 **비용 맵** 적용 범위에 집중합니다.
+엔드투엔드 동작, 입력 형태, MIME type은 [Gemini Embedding 2 Preview 안내](/litellm-docs-kr/blog/gemini_embedding_2_multimodal)를 참고하세요. 이 글은 **GA 이름 체계**와 **비용 맵** 적용 범위에 집중합니다.
 :::
 
 {/* truncate */}

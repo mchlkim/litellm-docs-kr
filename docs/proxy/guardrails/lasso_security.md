@@ -360,7 +360,7 @@ guardrails:
 
 ### 대체 설정: Generic Guardrail API
 
-Lasso는 [Generic Guardrail API](/docs/adding_provider/generic_guardrail_api) 형식으로도 구성할 수 있습니다.
+Lasso는 [Generic Guardrail API](/litellm-docs-kr/docs/adding_provider/generic_guardrail_api) 형식으로도 구성할 수 있습니다.
 
 ```yaml
 guardrails:

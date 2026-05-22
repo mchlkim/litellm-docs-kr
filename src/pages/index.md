@@ -2,7 +2,7 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
 :::note 보안 업데이트
-Trivy 공급망 침해는 차단되었습니다 :tada: . 영향을 받은 모든 패키지는 삭제되었으며, 현재 릴리스에는 손상된 코드/컴포넌트가 포함되어 있지 않습니다. 문제를 더 깊이 이해하려면 [Security Townhall](/blog/security-townhall-updates)을, 앞으로의 개선 방향은 [CI/CD v2](/blog/ci-cd-v2-improvements)를 참고하세요.
+Trivy 공급망 침해는 차단되었습니다 :tada: . 영향을 받은 모든 패키지는 삭제되었으며, 현재 릴리스에는 손상된 코드/컴포넌트가 포함되어 있지 않습니다. 문제를 더 깊이 이해하려면 [Security Townhall](/litellm-docs-kr/blog/security-townhall-updates)을, 앞으로의 개선 방향은 [CI/CD v2](/litellm-docs-kr/blog/ci-cd-v2-improvements)를 참고하세요.
 :::
 
 # LiteLLM - 시작하기
