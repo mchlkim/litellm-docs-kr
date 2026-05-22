@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://docs.litellm.ai/sitemap.xml
+Sitemap: https://mchlkim.github.io/litellm-docs-kr/sitemap.xml
