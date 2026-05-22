@@ -2,6 +2,7 @@
 
 이 디렉터리는 공식 LiteLLM 문서 사이트를 한국어로 보기 위한 로컬 Docusaurus 프로젝트입니다.
 
+- 공개 사이트: <https://mchlkim.github.io/litellm-docs-kr/>
 - 원본 문서 저장소: <https://github.com/BerriAI/litellm-docs>
 - 메인 제품 저장소: <https://github.com/BerriAI/litellm>
 - 게시된 공식 문서: <https://docs.litellm.ai/docs/>
