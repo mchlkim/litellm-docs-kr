@@ -1,3 +1,16 @@
+---
+title: LiteLLM 한국어 문서
+description: 한국어 사용자를 위해 LiteLLM 공식 문서를 바탕으로 정리한 비공식 한국어 번역본입니다. LiteLLM Proxy, Python SDK, LLM Gateway, 모델 공급자와 통합 가이드를 한국어로 확인할 수 있습니다.
+keywords:
+  - LiteLLM
+  - LiteLLM 한국어
+  - LiteLLM 문서
+  - LiteLLM Proxy
+  - LLM Gateway
+  - Python SDK
+  - OpenAI 호환 API
+---
+
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 

@@ -8,8 +8,8 @@ const darkCodeTheme = require('prism-react-renderer/themes/nightOwl');
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'liteLLM',
-  tagline: 'LLM API 호출을 단순하게',
+  title: 'LiteLLM 한국어 문서',
+  tagline: '한국어 사용자를 위한 LiteLLM 공식 문서 기반 비공식 번역본',
   favicon: 'img/favicon.ico', 
 
   // Set the production url of your site here
