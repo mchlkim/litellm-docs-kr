@@ -171,14 +171,6 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
-      announcementBar: {
-        id: 'may_townhall_2026_ko',
-        content:
-          '📅 <strong>LiteLLM 5월 타운홀</strong> — 5월 18일 월요일 오전 7:30(PST). 제품 업데이트, 로드맵, Q&A를 확인하세요. <a href="https://forms.gle/rVeiTtpY96EKLT9i9" target="_blank" rel="noopener noreferrer">등록하기 →</a>',
-        backgroundColor: '#0078d4',
-        textColor: '#ffffff',
-        isCloseable: false,
-      },
       // Replace with your project's social card
       image: 'img/docusaurus-social-card.png',
       navbar: {
