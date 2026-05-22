@@ -1,8 +1,8 @@
-# Arize Phoenix Prompt Management
+# Arize Phoenix 프롬프트 관리 {#arize-phoenix-prompt-management}
 
-Use prompt versions from [Arize Phoenix](https://phoenix.arize.com/) with LiteLLM SDK and Proxy.
+[Arize Phoenix](https://phoenix.arize.com/)의 프롬프트 버전을 LiteLLM SDK 및 Proxy와 함께 사용합니다.
 
-## Quick Start
+## 빠른 시작
 
 ### SDK
 
@@ -21,7 +21,7 @@ response = litellm.completion(
 
 ### Proxy
 
-**1. Add prompt to config**
+**1. config에 프롬프트 추가**
 
 ```yaml
 prompts:
@@ -35,7 +35,7 @@ prompts:
       ignore_prompt_manager_optional_params: true # optional: ignore temp, max_tokens from prompt
 ```
 
-**2. Make request**
+**2. 요청 보내기**
 
 ```bash
 curl -X POST 'http://0.0.0.0:4000/chat/completions' \
@@ -50,39 +50,39 @@ curl -X POST 'http://0.0.0.0:4000/chat/completions' \
   }'
 ```
 
-## Configuration
+## 설정
 
-### Get Arize Phoenix Credentials
+### Arize Phoenix 인증 정보 가져오기 {#get-arize-phoenix-credentials}
 
-1. **API Token**: Get from [Arize Phoenix Settings](https://app.phoenix.arize.com/)
+1. **API Token**: [Arize Phoenix Settings](https://app.phoenix.arize.com/)에서 가져옵니다.
 2. **Workspace URL**: `https://app.phoenix.arize.com/s/{your-workspace}`
-3. **Prompt ID**: Found in prompt version URL
+3. **Prompt ID**: 프롬프트 버전 URL에서 확인합니다.
 
-**Set environment variable**:
+**환경 변수 설정**:
 ```bash
 export PHOENIX_API_KEY="your-token"
 ```
 
-### SDK + PROXY Options
+### SDK + PROXY 옵션 {#sdk--proxy-options}
 
-| Parameter | Required | Description |
+| 매개변수 | 필수 여부 | 설명 |
 |-----------|----------|-------------|
-| `prompt_id` | Yes | Arize Phoenix prompt version ID |
-| `prompt_integration` | Yes | Set to `"arize_phoenix"` |
-| `api_base` | Yes | Workspace URL |
-| `api_key` | Yes | Access token |
-| `prompt_variables` | No | Variables for template |
+| `prompt_id` | 예 | Arize Phoenix 프롬프트 버전 ID |
+| `prompt_integration` | 예 | `"arize_phoenix"`로 설정합니다. |
+| `api_base` | 예 | Workspace URL |
+| `api_key` | 예 | 액세스 토큰 |
+| `prompt_variables` | 아니요 | 템플릿에 사용할 변수 |
 
-### Proxy-only Options
+### Proxy 전용 옵션 {#proxy-only-options}
 
-| Parameter | Description |
+| 매개변수 | 설명 |
 |-----------|-------------|
-| `ignore_prompt_manager_model` | Use config model instead of prompt's model |
-| `ignore_prompt_manager_optional_params` | Ignore temperature, max_tokens from prompt |
+| `ignore_prompt_manager_model` | 프롬프트의 모델 대신 config 모델을 사용합니다. |
+| `ignore_prompt_manager_optional_params` | 프롬프트의 temperature, max_tokens를 무시합니다. |
 
-## Variable Templates
+## 변수 템플릿 {#variable-templates}
 
-Arize Phoenix uses Mustache/Handlebars syntax:
+Arize Phoenix는 Mustache/Handlebars 문법을 사용합니다.
 
 ```python
 # Template: "Hello {{name}}, question: {{question}}"
@@ -94,7 +94,7 @@ prompt_variables = {
 ```
 
 
-## Combine with Additional Messages
+## 추가 메시지와 함께 사용 {#combine-with-additional-messages}
 
 ```python
 response = litellm.completion(
@@ -110,7 +110,7 @@ response = litellm.completion(
 ```
 
 
-## Error Handling
+## 오류 처리 {#error-handling}
 
 ```python
 try:
@@ -127,8 +127,7 @@ except Exception as e:
     # 403: Access denied
 ```
 
-## Support
+## 지원 {#support}
 
 - [LiteLLM GitHub Issues](https://github.com/BerriAI/litellm/issues)
-- [Arize Phoenix Docs](https://docs.arize.com/phoenix)
-
+- [Arize Phoenix 문서](https://docs.arize.com/phoenix)

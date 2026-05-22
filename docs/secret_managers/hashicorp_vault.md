@@ -4,29 +4,29 @@ import Image from '@theme/IdealImage';
 
 :::info
 
-✨ **This is an Enterprise Feature**
+✨ **엔터프라이즈 기능입니다**
 
-[Enterprise Pricing](https://www.litellm.ai/#pricing)
+[엔터프라이즈 가격](https://www.litellm.ai/#pricing)
 
-[Contact us here to get a free trial](https://enterprise.litellm.ai/demo)
+[무료 체험을 받으려면 여기로 문의하세요](https://enterprise.litellm.ai/demo)
 
 :::
 
-| Feature | Support | Description |
+| 기능 | 지원 | 설명 |
 |---------|----------|-------------|
-| Reading Secrets | ✅ | Read secrets e.g `OPENAI_API_KEY` |
-| Writing Secrets | ✅ | Store secrets e.g `Virtual Keys` |
-| Authentication Methods to Hashicorp Vault | ✅ | AppRole, TLS Certificate, Token |
+| 시크릿 읽기 | ✅ | 시크릿을 읽습니다. 예: `OPENAI_API_KEY` |
+| 시크릿 쓰기 | ✅ | 시크릿을 저장합니다. 예: `가상 키` |
+| Hashicorp Vault 인증 방법 | ✅ | AppRole, TLS Certificate, Token |
 
-Read secrets from [Hashicorp Vault](https://developer.hashicorp.com/vault/docs/secrets/kv/kv-v2)
+[Hashicorp Vault](https://developer.hashicorp.com/vault/docs/secrets/kv/kv-v2)에서 시크릿을 읽습니다.
 
-**Step 1.** Add Hashicorp Vault details in your environment
+**1단계.** 환경에 Hashicorp Vault 세부 정보를 추가합니다.
 
-LiteLLM supports three methods of authentication:
+LiteLLM은 세 가지 인증 방법을 지원합니다.
 
-1. AppRole authentication (recommended) - `HCP_VAULT_APPROLE_ROLE_ID` and `HCP_VAULT_APPROLE_SECRET_ID`
-2. TLS cert authentication - `HCP_VAULT_CLIENT_CERT` and `HCP_VAULT_CLIENT_KEY`
-3. Token authentication - `HCP_VAULT_TOKEN`
+1. AppRole 인증(권장) - `HCP_VAULT_APPROLE_ROLE_ID` 및 `HCP_VAULT_APPROLE_SECRET_ID`
+2. TLS 인증서 인증 - `HCP_VAULT_CLIENT_CERT` 및 `HCP_VAULT_CLIENT_KEY`
+3. 토큰 인증 - `HCP_VAULT_TOKEN`
 
 ```bash
 HCP_VAULT_ADDR="https://test-cluster-public-vault-0f98180c.e98296b2.z1.hashicorp.cloud:8200"
@@ -51,7 +51,7 @@ HCP_VAULT_MOUNT_NAME="secret" # OPTIONAL. defaults to "secret", set this if your
 HCP_VAULT_PATH_PREFIX="litellm" # OPTIONAL. defaults to None, set this if your secrets live under a custom prefix like secret/data/litellm/OPENAI_API_KEY
 ```
 
-**Step 2.** Add to proxy config.yaml
+**2단계.** 프록시 `config.yaml`에 추가합니다.
 
 ```yaml
 general_settings:
@@ -64,33 +64,33 @@ general_settings:
     access_mode: "read_and_write" # Literal["read_only", "write_only", "read_and_write"]
 ```
 
-**Step 3.** Start + test proxy
+**3단계.** 프록시를 시작하고 테스트합니다.
 
 ```
 $ litellm --config /path/to/config.yaml
 ```
 
-[Quick Test Proxy](../proxy/user_keys)
+[프록시 빠른 테스트](../proxy/user_keys)
 
 
-## Authentication Methods
+## 인증 방법 {#인증-methods}
 
-LiteLLM supports three authentication methods for Hashicorp Vault, with the following priority:
+LiteLLM은 Hashicorp Vault에 대해 세 가지 인증 방법을 지원하며, 우선순위는 다음과 같습니다.
 
-1. **AppRole** - Recommended for production applications
-2. **TLS Certificate** - For certificate-based authentication
-3. **Token** - Direct token authentication
+1. **AppRole** - 프로덕션 애플리케이션에 권장됩니다.
+2. **TLS Certificate** - 인증서 기반 인증에 사용합니다.
+3. **Token** - 직접 토큰 인증에 사용합니다.
 
-### 1. AppRole Authentication
+### 1. AppRole 인증
 
-To set up AppRole authentication:
+AppRole 인증을 설정하려면 다음을 수행합니다.
 
-1. Enable AppRole auth in Vault:
+1. Vault에서 AppRole 인증을 활성화합니다.
 ```bash
 vault auth enable approle
 ```
 
-2. Create a policy and role for LiteLLM:
+2. LiteLLM용 정책과 역할을 생성합니다.
 ```bash
 # Create a policy file (litellm-policy.hcl)
 path "secret/data/*" {
@@ -107,7 +107,7 @@ vault write auth/approle/role/litellm \
     token_max_ttl=32d
 ```
 
-3. Get your Role ID and Secret ID:
+3. Role ID와 Secret ID를 가져옵니다.
 ```bash
 # Get Role ID
 vault read auth/approle/role/litellm/role-id
@@ -116,64 +116,64 @@ vault read auth/approle/role/litellm/role-id
 vault write -f auth/approle/role/litellm/secret-id
 ```
 
-4. Set the environment variables:
+4. 환경 변수를 설정합니다.
 ```bash
 export HCP_VAULT_APPROLE_ROLE_ID="your-role-id"
 export HCP_VAULT_APPROLE_SECRET_ID="your-secret-id"
 ```
 
-### 2. TLS Certificate Authentication
+### 2. TLS 인증서 인증 {#2-tls-certificate-인증}
 
-TLS Certificate authentication uses client certificates for mutual TLS authentication with Vault.
+TLS 인증서 인증은 Vault와의 상호 TLS 인증에 클라이언트 인증서를 사용합니다.
 
-**Environment Variables:**
+**환경 변수:**
 ```bash
 export HCP_VAULT_CLIENT_CERT="path/to/client.pem"
 export HCP_VAULT_CLIENT_KEY="path/to/client.key"
 export HCP_VAULT_CERT_ROLE="your-cert-role"  # Optional
 ```
 
-**How it works:**
-- LiteLLM uses the client certificate and key for mutual TLS authentication
-- Vault validates the certificate and issues a temporary token
-- The token is cached for the duration of its lease
+**동작 방식:**
+- LiteLLM은 상호 TLS 인증에 클라이언트 인증서와 키를 사용합니다.
+- Vault는 인증서를 검증하고 임시 토큰을 발급합니다.
+- 토큰은 리스 기간 동안 캐시됩니다.
 
-### 3. Token Authentication
+### 3. 토큰 인증 {#3-token-인증}
 
-Direct token authentication uses a static Vault token.
+직접 토큰 인증은 정적 Vault 토큰을 사용합니다.
 
-**Environment Variables:**
+**환경 변수:**
 ```bash
 export HCP_VAULT_TOKEN="hvs.CAESIG52gL6ljBSdmq*****"
 ```
 
-## How it works
+## 동작 방식
 
-**Reading Secrets**
+**시크릿 읽기**
 
-LiteLLM reads secrets from Hashicorp Vault's KV v2 engine using the following URL format:
+LiteLLM은 다음 URL 형식을 사용해 Hashicorp Vault의 KV v2 엔진에서 시크릿을 읽습니다.
 ```
 {VAULT_ADDR}/v1/{NAMESPACE}/{MOUNT_NAME}/data/{PATH_PREFIX}/{SECRET_NAME}
 ```
 
-For example, if you have:
+예를 들어 다음 값이 있는 경우:
 - `HCP_VAULT_ADDR="https://vault.example.com:8200"`
 - `HCP_VAULT_NAMESPACE="admin"`
 - `HCP_VAULT_MOUNT_NAME="secret"`
 - `HCP_VAULT_PATH_PREFIX="litellm"`
-- Secret name: `AZURE_API_KEY`
+- 시크릿 이름: `AZURE_API_KEY`
 
 
-LiteLLM will look up:
+LiteLLM은 다음 위치를 조회합니다.
 ```
 https://vault.example.com:8200/v1/admin/secret/data/litellm/AZURE_API_KEY
 ```
 
-### Expected Secret Format
+### 예상 시크릿 형식 {#expected-secret-format}
 
-LiteLLM expects all secrets to be stored as a JSON object with a `key` field containing the secret value.
+LiteLLM은 모든 시크릿이 시크릿 값을 포함하는 `key` 필드가 있는 JSON 객체로 저장되어 있다고 가정합니다.
 
-For example, for `AZURE_API_KEY`, the secret should be stored as:
+예를 들어 `AZURE_API_KEY`의 경우 시크릿은 다음과 같이 저장되어야 합니다.
 
 ```json
 {
@@ -183,28 +183,28 @@ For example, for `AZURE_API_KEY`, the secret should be stored as:
 
 <Image img={require('../../img/hcorp.png')} />
 
-**Writing Secrets**
+**시크릿 쓰기**
 
-When a Virtual Key is Created / Deleted on LiteLLM, LiteLLM will automatically create / delete the secret in Hashicorp Vault.
+LiteLLM에서 가상 키가 생성되거나 삭제되면 LiteLLM은 Hashicorp Vault에서 해당 시크릿을 자동으로 생성하거나 삭제합니다.
 
-- Create Virtual Key on LiteLLM either through the LiteLLM Admin UI or API
+- LiteLLM 관리자 UI 또는 API를 통해 LiteLLM에서 가상 키를 생성합니다.
 
 <Image img={require('../../img/hcorp_create_virtual_key.png')} />
 
 
-- Check Hashicorp Vault for secret
+- Hashicorp Vault에서 시크릿을 확인합니다.
 
-LiteLLM stores secret under the `prefix_for_stored_virtual_keys` path (default: `litellm/`)
+LiteLLM은 `prefix_for_stored_virtual_keys` 경로 아래에 시크릿을 저장합니다(기본값: `litellm/`).
 
 <Image img={require('../../img/hcorp_virtual_key.png')} />
 
-### Team-specific overrides
+### 팀별 재정의 {#team-specific-overrides}
 
-When running the LiteLLM proxy you can override the Vault location per team. Use the [Team-Level Secret Manager Settings](./overview.md#team-level-secret-manager-settings) flow in the dashboard and configure the panel shown below:
+LiteLLM 프록시를 실행할 때 팀별로 Vault 위치를 재정의할 수 있습니다. 대시보드에서 [팀 수준 시크릿 관리자 설정](./overview.md#team-level-secret-manager-settings) 흐름을 사용하고 아래에 표시된 패널을 구성합니다.
 
 <Image img={require('../../img/secret_manager_hashicorp_vault_settings.png')} />
 
-Use the following structure for the JSON payload:
+JSON 페이로드에는 다음 구조를 사용합니다.
 
 ```json
 {
@@ -215,9 +215,9 @@ Use the following structure for the JSON payload:
 }
 ```
 
-- `namespace` – overrides the `X-Vault-Namespace` header.
-- `mount` – which KV engine mount to use (defaults to `secret`).
-- `path_prefix` – additional path segments between the mount and the secret name.
-- `data` – the field name inside the KV payload (defaults to `key`).
+- `namespace` - `X-Vault-Namespace` 헤더를 재정의합니다.
+- `mount` - 사용할 KV 엔진 마운트입니다(기본값: `secret`).
+- `path_prefix` - 마운트와 시크릿 이름 사이에 추가할 경로 세그먼트입니다.
+- `data` - KV 페이로드 내부의 필드 이름입니다(기본값: `key`).
 
-Whenever LiteLLM stores or deletes virtual keys for that team, these overrides are applied so you can keep each team’s credentials in its own namespace, mount, or field layout without changing the global Vault configuration.
+LiteLLM이 해당 팀의 가상 키를 저장하거나 삭제할 때마다 이러한 재정의가 적용됩니다. 따라서 전역 Vault 구성을 변경하지 않고도 각 팀의 자격 증명을 자체 namespace, mount 또는 필드 레이아웃에 보관할 수 있습니다.

@@ -1,35 +1,35 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# A2A Agent Authentication Headers
+# A2A Agent 인증 Headers
 
-Forward authentication credentials (Bearer tokens, API keys, etc.) from clients to backend A2A agents.
+client에서 backend A2A agent로 인증 credential(Bearer token, API key 등)을 전달합니다.
 
-## Overview
+## 개요
 
-When LiteLLM proxies a request to a backend A2A agent, the agent may require its own authentication headers. There are three ways to supply them:
+LiteLLM이 backend A2A agent로 request를 proxy할 때, agent 자체 인증 header가 필요할 수 있습니다. 이를 제공하는 방법은 세 가지입니다.
 
-| Method | Who configures | How it works |
+| 방식 | 설정 주체 | 동작 방식 |
 |---|---|---|
-| **Static headers** | Admin (UI / API) | Always sent, regardless of client request |
-| **Forward client headers** | Admin (UI / API) | Header names to extract from client request and forward |
-| **Convention-based** | Client (no admin config) | Client sends `x-a2a-{agent_name}-{header}` — automatically routed |
+| **Static headers** | Admin(UI / API) | client request와 관계없이 항상 전송 |
+| **Forward client headers** | Admin(UI / API) | client request에서 추출해 전달할 header 이름 |
+| **Convention-based** | Client(admin 설정 없음) | client가 `x-a2a-{agent_name}-{header}`를 보내면 자동 routing |
 
-All three methods can be combined. **Static headers always win** on key conflicts.
+세 가지 방법은 함께 사용할 수 있습니다. key가 충돌하면 **Static headers가 항상 우선**합니다.
 
 ---
 
-## Method 1 — Static Headers
+## 방법 1 - Static Headers
 
-Admin-configured headers that are always sent to the backend agent. Use this for server-to-server tokens or internal credentials that clients should never see or override.
+Admin이 설정하며 backend agent로 항상 전송되는 header입니다. client가 보거나 override해서는 안 되는 `server-to-server` token 또는 내부 credential에 사용하세요.
 
 <Tabs>
 <TabItem value="ui" label="UI">
 
-1. Go to **Agents** in the LiteLLM dashboard.
-2. Create or edit an agent.
-3. Open the **Authentication Headers** panel.
-4. Under **Static Headers**, click **Add Static Header** and fill in the header name and value.
+1. LiteLLM dashboard에서 **Agents**로 이동합니다.
+2. agent를 생성하거나 편집합니다.
+3. Open the **인증 Headers** panel.
+4. **Static Headers**에서 **Add Static Header**를 클릭하고 header 이름과 값을 입력합니다.
 
 </TabItem>
 <TabItem value="api" label="REST API">
@@ -48,7 +48,7 @@ curl -X POST http://localhost:4000/v1/agents \
   }'
 ```
 
-To update an existing agent:
+기존 agent를 업데이트하려면 다음을 사용합니다.
 
 ```bash
 curl -X PATCH http://localhost:4000/v1/agents/{agent_id} \
@@ -64,7 +64,7 @@ curl -X PATCH http://localhost:4000/v1/agents/{agent_id} \
 </TabItem>
 </Tabs>
 
-**Client call — no special headers needed:**
+**Client call - 별도 header 불필요:**
 
 ```bash
 curl -X POST http://localhost:4000/a2a/my-agent \
@@ -76,21 +76,21 @@ curl -X POST http://localhost:4000/a2a/my-agent \
   }'
 ```
 
-The backend agent receives `Authorization: Bearer internal-server-token` without the client ever knowing the value.
+backend agent는 client가 값을 알지 못한 상태로 `Authorization: Bearer internal-server-token`을 받습니다.
 
 ---
 
-## Method 2 — Forward Client Headers
+## 방법 2 - Forward Client Headers
 
-Admin specifies a list of header **names**. When the client sends a request that includes those headers, LiteLLM extracts their values and forwards them to the backend agent. The client controls the values; the admin controls which headers are eligible to be forwarded.
+Admin은 header **이름** 목록을 지정합니다. client가 해당 header를 포함해 request를 보내면 LiteLLM이 값을 추출해 backend agent로 전달합니다. client는 값을 제어하고, admin은 어떤 header를 전달할 수 있는지 제어합니다.
 
 <Tabs>
 <TabItem value="ui" label="UI">
 
-1. Go to **Agents** in the LiteLLM dashboard.
-2. Create or edit an agent.
-3. Open the **Authentication Headers** panel.
-4. Under **Forward Client Headers**, type header names and press **Enter** (e.g. `x-api-key`, `Authorization`).
+1. LiteLLM dashboard에서 **Agents**로 이동합니다.
+2. agent를 생성하거나 편집합니다.
+3. Open the **인증 Headers** panel.
+4. **Forward Client Headers**에서 header 이름을 입력하고 **Enter**를 누릅니다(예: `x-api-key`, `Authorization`).
 
 </TabItem>
 <TabItem value="api" label="REST API">
@@ -109,7 +109,7 @@ curl -X POST http://localhost:4000/v1/agents \
 </TabItem>
 </Tabs>
 
-**Client call — include the forwarded headers:**
+**Client call - 전달할 header 포함:**
 
 ```bash
 curl -X POST http://localhost:4000/a2a/my-agent \
@@ -119,27 +119,27 @@ curl -X POST http://localhost:4000/a2a/my-agent \
   -d '{ ... }'
 ```
 
-The backend agent receives `x-api-key: user-secret-value`.
+backend agent는 `x-api-key: user-secret-value`를 받습니다.
 
 :::note
-Header name matching is **case-insensitive**. If the client sends `X-API-Key` and `extra_headers` lists `x-api-key`, they match.
+Header 이름 매칭은 **대소문자를 구분하지 않습니다**. client가 `X-API-Key`를 보내고 `extra_headers`에 `x-api-key`가 있으면 서로 일치합니다.
 :::
 
 ---
 
-## Method 3 — Convention-Based Forwarding
+## 방법 3 - Convention-Based Forwarding
 
-Clients can forward headers to a specific agent without any admin pre-configuration by using the naming convention:
+client는 naming convention을 사용해 admin 사전 설정 없이 특정 agent로 header를 전달할 수 있습니다.
 
 ```
 x-a2a-{agent_name_or_id}-{header_name}: value
 ```
 
-LiteLLM parses these headers automatically and routes them to the matching agent only.
+LiteLLM은 이러한 header를 자동으로 parse하고 일치하는 agent에만 route합니다.
 
-**Examples:**
+**예제:**
 
-| Client header sent | Agent name/ID | Forwarded as |
+| client가 보낸 header | Agent name/ID | 전달되는 형태 |
 |---|---|---|
 | `x-a2a-my-agent-authorization: Bearer tok` | `my-agent` | `authorization: Bearer tok` |
 | `x-a2a-my-agent-x-api-key: secret` | `my-agent` | `x-api-key: secret` |
@@ -153,35 +153,35 @@ curl -X POST http://localhost:4000/a2a/my-agent \
   -d '{ ... }'
 ```
 
-The `x-a2a-other-agent-authorization` header sent in the same request is **not** forwarded to `my-agent` — it is silently ignored.
+같은 request에 포함된 `x-a2a-other-agent-authorization` header는 `my-agent`로 **전달되지 않으며**, 조용히 무시됩니다.
 
-:::tip Matches both agent name and agent ID
-Both the human-readable name (e.g. `my-agent`) and the UUID (e.g. `abc123-...`) are valid. Use whichever is convenient for the client.
+:::tip agent name과 agent ID 모두 매칭
+사람이 읽기 쉬운 이름(예: `my-agent`)과 UUID(예: `abc123-...`)가 모두 유효합니다. client에 편한 값을 사용하세요.
 :::
 
 ---
 
-## Merge Precedence
+## 병합 우선순위
 
-When multiple methods supply the same header name, **static headers win**:
+여러 방법이 같은 header 이름을 제공하면 **static headers가 우선**합니다.
 
 ```
 dynamic (forwarded/convention)  →  merged  ←  static (overlays, wins)
 ```
 
-Example:
+예제:
 
-| Source | `Authorization` value |
+| Source | `Authorization` 값 |
 |---|---|
-| Client sends (via `extra_headers` or convention) | `Bearer client-token` |
-| Admin-configured `static_headers` | `Bearer server-token` |
-| **What the backend agent receives** | **`Bearer server-token`** |
+| client 전송(`extra_headers` 또는 convention 사용) | `Bearer client-token` |
+| Admin이 설정한 `static_headers` | `Bearer server-token` |
+| **backend agent가 받는 값** | **`Bearer server-token`** |
 
-This ensures admin-controlled credentials cannot be overridden by client requests.
+이를 통해 admin이 제어하는 credential이 client request에 의해 override되지 않도록 보장합니다.
 
 ---
 
-## Combining All Three Methods
+## 세 가지 방법 함께 사용하기
 
 ```bash
 # Register agent with static + forwarded headers
@@ -206,7 +206,7 @@ curl -X POST http://localhost:4000/a2a/my-agent \
   -d '{ ... }'
 ```
 
-The backend agent receives:
+backend agent는 다음을 받습니다.
 
 ```
 X-Internal-Token: secret123          ← static header (always)
@@ -218,9 +218,9 @@ X-LiteLLM-Agent-Id: <agent-id>       ← LiteLLM internal
 
 ---
 
-## Header Isolation
+## Header 격리
 
-Each agent invocation uses an isolated HTTP connection. Headers configured for agent A are **never** sent to agent B, even if both agents are running and receiving requests simultaneously.
+각 agent invocation은 격리된 HTTP connection을 사용합니다. 두 agent가 동시에 실행되고 request를 받더라도 agent A에 설정된 header는 agent B로 **절대 전송되지 않습니다**.
 
 ---
 
@@ -228,14 +228,14 @@ Each agent invocation uses an isolated HTTP connection. Headers configured for a
 
 ### `POST /v1/agents` / `PATCH /v1/agents/{agent_id}`
 
-| Field | Type | Description |
+| Field | Type | 설명 |
 |---|---|---|
-| `static_headers` | `object` | `{"Header-Name": "value"}` — always forwarded |
-| `extra_headers` | `string[]` | Header names to extract from client request and forward |
+| `static_headers` | `object` | `{"Header-Name": "value"}` - 항상 전달 |
+| `extra_headers` | `string[]` | client request에서 추출해 전달할 header 이름 |
 
 ### Agent Response
 
-Both fields are returned in `GET /v1/agents` and `GET /v1/agents/{agent_id}`:
+두 field는 `GET /v1/agents`와 `GET /v1/agents/{agent_id}`에서 반환됩니다.
 
 ```json
 {
@@ -248,5 +248,5 @@ Both fields are returned in `GET /v1/agents` and `GET /v1/agents/{agent_id}`:
 ```
 
 :::caution
-`static_headers` values are stored in the database and returned by the API. Treat them as you would any credential — do not store sensitive long-lived tokens here if your API is publicly accessible. Consider using short-lived tokens or environment-injected secrets instead.
+`static_headers` 값은 database에 저장되고 API에서 반환됩니다. 일반 credential처럼 취급하세요. API가 공개적으로 접근 가능하다면 민감한 long-lived token을 여기에 저장하지 마세요. 대신 short-lived token 또는 environment에서 주입되는 secret 사용을 고려하세요.
 :::

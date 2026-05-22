@@ -1,27 +1,27 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Batching Completion()
-LiteLLM allows you to:
-* Send many completion calls to 1 model
-* Send 1 completion call to many models: Return Fastest Response
-* Send 1 completion call to many models: Return All Responses
+# `Batching Completion()` {#batching-completion}
+LiteLLM에서는 다음 작업을 수행할 수 있습니다.
+* 여러 completion 호출을 하나의 모델로 전송
+* 하나의 completion 호출을 여러 모델로 전송: 가장 빠른 응답 반환
+* 하나의 completion 호출을 여러 모델로 전송: 모든 응답 반환
 
 :::info
 
-Trying to do batch completion on LiteLLM Proxy ? Go here: https://docs.litellm.ai/docs/proxy/user_keys#beta-batch-completions---pass-model-as-list
+LiteLLM Proxy에서 batch completion을 수행하려면 여기를 참고하세요: https://docs.litellm.ai/docs/proxy/user_keys#beta-batch-completions---pass-model-as-list
 
 :::
 
-## Send multiple completion calls to 1 model
+## 여러 completion 호출을 하나의 모델로 전송 {#send-multiple-completion-calls-to-1-model}
 
-In the batch_completion method, you provide a list of `messages` where each sub-list of messages is passed to `litellm.completion()`, allowing you to process multiple prompts efficiently in a single API call.
+`batch_completion` 메서드에는 `messages` 목록을 전달합니다. 각 하위 메시지 목록은 `litellm.completion()`에 전달되며, 단일 API 호출에서 여러 프롬프트를 효율적으로 처리할 수 있습니다.
 
 <a target="_blank" href="https://colab.research.google.com/github/BerriAI/litellm/blob/main/cookbook/LiteLLM_batch_completion.ipynb">
   <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
 </a>
 
-### Example Code
+### 예제 코드 {#example-code}
 ```python
 import litellm
 import os
@@ -49,15 +49,15 @@ responses = batch_completion(
 )
 ```
 
-## Send 1 completion call to many models: Return Fastest Response
-This makes parallel calls to the specified `models` and returns the first response 
+## 하나의 completion 호출을 여러 모델로 전송: 가장 빠른 응답 반환 {#send-1-completion-call-to-many-models-return-fastest-response}
+지정된 `models`에 병렬 호출을 보내고 첫 번째 응답을 반환합니다.
 
-Use this to reduce latency
+지연 시간을 줄이는 데 사용할 수 있습니다.
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
 
-### Example Code
+### 예제 Code
 ```python
 import litellm
 import os
@@ -79,9 +79,9 @@ print(result)
 </TabItem>
 <TabItem value="proxy" label="PROXY">
 
-[how to setup proxy config](#example-setup)
+[프록시 config 설정 방법](#example-setup)
 
-Just pass a comma-separated string of model names and the flag `fastest_response=True`.
+쉼표로 구분된 모델 이름 문자열과 `fastest_response=True` 플래그를 전달하기만 하면 됩니다.
 
 <Tabs>
 <TabItem value="curl" label="curl">
@@ -136,7 +136,7 @@ print(response)
 
 ---
 
-### Example Setup: 
+### 예제 설정 {#example-setup}
 
 ```yaml 
 model_list: 
@@ -159,8 +159,8 @@ litellm --config /path/to/config.yaml
 </TabItem>
 </Tabs>
 
-### Output
-Returns the first response in OpenAI format. Cancels other LLM API calls. 
+### 출력 {#output}
+OpenAI 형식의 첫 번째 응답을 반환합니다. 다른 LLM API 호출은 취소합니다.
 ```json
 {
   "object": "chat.completion",
@@ -187,12 +187,12 @@ Returns the first response in OpenAI format. Cancels other LLM API calls.
 ```
 
 
-## Send 1 completion call to many models: Return All Responses
-This makes parallel calls to the specified models and returns all responses
+## 하나의 completion 호출을 여러 모델로 전송: 모든 응답 반환 {#send-1-completion-call-to-many-models-return-all-responses}
+지정된 모델에 병렬 호출을 보내고 모든 응답을 반환합니다.
 
-Use this to process requests concurrently and get responses from multiple models.
+요청을 동시에 처리하고 여러 모델의 응답을 받아야 할 때 사용합니다.
 
-### Example Code
+### 예제 코드 {#example-code-1}
 ```python
 import litellm
 import os
@@ -210,7 +210,7 @@ print(responses)
 
 ```
 
-### Output
+### 출력 {#output-1}
 
 ```json
 [<ModelResponse chat.completion id=chatcmpl-e673ec8e-4e8f-4c9e-bf26-bf9fa7ee52b9 at 0x103a62160> JSON: {

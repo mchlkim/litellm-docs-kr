@@ -1,16 +1,16 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Oracle Cloud Infrastructure (OCI)
-LiteLLM supports the following models for OCI on-demand GenAI API.
+# Oracle Cloud Infrastructure (OCI) 사용
+LiteLLM은 OCI 온디맨드 GenAI API에서 다음 모델을 지원합니다.
 
-Check the [OCI Models List](https://docs.oracle.com/en-us/iaas/Content/generative-ai/pretrained-models.htm) to see if the model is available for your region.
+[OCI 모델 목록](https://docs.oracle.com/en-us/iaas/Content/generative-ai/pretrained-models.htm)에서 해당 모델이 사용 중인 리전에서 제공되는지 확인하세요.
 
-## Supported Models
+## 지원 모델
 
-### Chat / Text Generation
+### 채팅 / 텍스트 생성
 
-#### Meta Llama Models
+#### Meta Llama 모델
 - `meta.llama-4-maverick-17b-128e-instruct-fp8`
 - `meta.llama-4-scout-17b-16e-instruct`
 - `meta.llama-3.3-70b-instruct`
@@ -20,7 +20,7 @@ Check the [OCI Models List](https://docs.oracle.com/en-us/iaas/Content/generativ
 - `meta.llama-3.1-405b-instruct`
 - `meta.llama-3.1-70b-instruct`
 
-#### xAI Grok Models
+#### xAI Grok 모델
 - `xai.grok-4.20`
 - `xai.grok-4.20-multi-agent`
 - `xai.grok-4`
@@ -32,7 +32,7 @@ Check the [OCI Models List](https://docs.oracle.com/en-us/iaas/Content/generativ
 - `xai.grok-3-mini-fast`
 - `xai.grok-code-fast-1`
 
-#### Cohere Models
+#### Cohere 모델
 - `cohere.command-latest`
 - `cohere.command-a-03-2025`
 - `cohere.command-a-reasoning-08-2025`
@@ -42,55 +42,55 @@ Check the [OCI Models List](https://docs.oracle.com/en-us/iaas/Content/generativ
 - `cohere.command-r-08-2024`
 - `cohere.command-r-plus-08-2024`
 
-#### Google Gemini Models (via OCI)
+#### Google Gemini 모델(OCI 경유)
 - `google.gemini-2.5-pro`
 - `google.gemini-2.5-flash`
 - `google.gemini-2.5-flash-lite`
 
-### Embedding Models
-- `cohere.embed-english-v3.0` (1024 dimensions)
-- `cohere.embed-english-light-v3.0` (384 dimensions)
-- `cohere.embed-multilingual-v3.0` (1024 dimensions)
-- `cohere.embed-multilingual-light-v3.0` (384 dimensions)
-- `cohere.embed-english-image-v3.0` (1024 dimensions, multimodal)
-- `cohere.embed-english-light-image-v3.0` (384 dimensions, multimodal)
-- `cohere.embed-multilingual-light-image-v3.0` (384 dimensions, multimodal)
-- `cohere.embed-v4.0` (1536 dimensions, multimodal)
+### 임베딩 모델
+- `cohere.embed-english-v3.0`(1024차원)
+- `cohere.embed-english-light-v3.0`(384차원)
+- `cohere.embed-multilingual-v3.0`(1024차원)
+- `cohere.embed-multilingual-light-v3.0`(384차원)
+- `cohere.embed-english-image-v3.0`(1024차원, 멀티모달)
+- `cohere.embed-english-light-image-v3.0`(384차원, 멀티모달)
+- `cohere.embed-multilingual-light-image-v3.0`(384차원, 멀티모달)
+- `cohere.embed-v4.0`(1536차원, 멀티모달)
 
-## Authentication
+## 인증
 
-LiteLLM supports two authentication methods for OCI:
+LiteLLM은 OCI에 대해 두 가지 인증 방식을 지원합니다.
 
-### Method 1: Manual Credentials
-Provide individual OCI credentials directly to LiteLLM. Follow the [official Oracle tutorial](https://docs.oracle.com/en-us/iaas/Content/API/Concepts/apisigningkey.htm) to create a signing key and obtain the following parameters:
+### 방법 1: 수동 자격 증명
+개별 OCI 자격 증명을 LiteLLM에 직접 제공합니다. [Oracle 공식 튜토리얼](https://docs.oracle.com/en-us/iaas/Content/API/Concepts/apisigningkey.htm)에 따라 서명 키를 만들고 다음 매개변수를 확보하세요.
 
 - `user`
 - `fingerprint`
 - `tenancy`
 - `region`
-- `key_file` or `key`
+- `key_file` 또는 `key`
 - `compartment_id`
 
-This is the default method for LiteLLM AI Gateway (LLM Proxy) access to OCI GenAI models.
+LiteLLM AI Gateway(LLM Proxy)가 OCI GenAI 모델에 액세스할 때 사용하는 기본 방식입니다.
 
-### Method 2: OCI SDK Signer
-Use an OCI SDK `Signer` object for authentication. This method:
-- Leverages the official [OCI SDK for signing](https://docs.oracle.com/en-us/iaas/tools/python/latest/api/signing.html)
-- Supports additional authentication methods (instance principals, workload identity, etc.)
+### 방법 2: OCI SDK Signer
+인증에 OCI SDK `Signer` 객체를 사용합니다. 이 방식은 다음을 제공합니다.
+- 공식 [OCI SDK 서명 기능](https://docs.oracle.com/en-us/iaas/tools/python/latest/api/signing.html)을 활용합니다.
+- 추가 인증 방식(인스턴스 주체, 워크로드 ID 등)을 지원합니다.
 
-To use this method, install the OCI SDK:
+이 방식을 사용하려면 OCI SDK를 설치하세요.
 ```bash
 uv add oci
 ```
 
-This method is an alternative when using the LiteLLM SDK on Oracle Cloud Infrastructure (instances or Oracle Kubernetes Engine).
+Oracle Cloud Infrastructure(인스턴스 또는 Oracle Kubernetes Engine)에서 LiteLLM SDK를 사용할 때 선택할 수 있는 대안 방식입니다.
 
-## Usage
+## 사용법
 
 <Tabs>
-<TabItem value="manual" label="Manual Credentials" default>
+<TabItem value="manual" label="수동 자격 증명" default>
 
-Input the parameters obtained from the OCI signing key creation process into the `completion` function:
+OCI 서명 키 생성 과정에서 얻은 매개변수를 `completion` 함수에 입력합니다.
 
 ```python
 from litellm import completion
@@ -117,7 +117,7 @@ print(response)
 </TabItem>
 <TabItem value="oci-sdk" label="OCI SDK Signer">
 
-Use the OCI SDK `Signer` for authentication:
+인증에 OCI SDK `Signer`를 사용합니다.
 
 ```python
 from litellm import completion
@@ -144,9 +144,9 @@ response = completion(
 print(response)
 ```
 
-**Alternative: Use OCI Config File**
+**대안: OCI 구성 파일 사용**
 
-The OCI SDK can automatically load credentials from `~/.oci/config`:
+OCI SDK는 `~/.oci/config`에서 자격 증명을 자동으로 로드할 수 있습니다.
 
 ```python
 from litellm import completion
@@ -174,9 +174,9 @@ response = completion(
 print(response)
 ```
 
-**Instance Principal Authentication**
+**Instance Principal 인증**
 
-For applications running on OCI compute instances:
+OCI 컴퓨트 인스턴스에서 실행되는 애플리케이션의 경우:
 
 ```python
 from litellm import completion
@@ -196,9 +196,9 @@ response = completion(
 print(response)
 ```
 
-**Workload Identity Authentication**
+**Workload Identity 인증**
 
-For applications running in Oracle Kubernetes Engine (OKE):
+Oracle Kubernetes Engine(OKE)에서 실행되는 애플리케이션의 경우:
 
 ```python
 from litellm import completion
@@ -220,11 +220,11 @@ print(response)
 </TabItem>
 </Tabs>
 
-## Usage - Streaming
-Just set `stream=True` when calling completion.
+## 사용법 - 스트리밍
+completion 호출 시 `stream=True`만 설정하면 됩니다.
 
 <Tabs>
-<TabItem value="manual-stream" label="Manual Credentials" default>
+<TabItem value="manual-stream" label="수동 자격 증명" default>
 
 ```python
 from litellm import completion
@@ -280,12 +280,12 @@ for chunk in response:
 </TabItem>
 </Tabs>
 
-## Usage Examples by Model Type
+## 모델 유형별 사용 예제
 
-### Using Cohere Models
+### Cohere 모델 사용
 
 <Tabs>
-<TabItem value="cohere-manual" label="Manual Credentials" default>
+<TabItem value="cohere-manual" label="수동 자격 증명" default>
 
 ```python
 from litellm import completion
@@ -332,12 +332,12 @@ print(response)
 </TabItem>
 </Tabs>
 
-## Using Dedicated Endpoints
+## 전용 엔드포인트 사용
 
-OCI supports dedicated endpoints for hosting models. Use the `oci_serving_mode="DEDICATED"` parameter along with `oci_endpoint_id` to specify the endpoint ID.
+OCI는 모델 호스팅을 위한 전용 엔드포인트를 지원합니다. `oci_endpoint_id`와 함께 `oci_serving_mode="DEDICATED"` 매개변수를 사용해 엔드포인트 ID를 지정하세요.
 
 <Tabs>
-<TabItem value="dedicated-manual" label="Manual Credentials" default>
+<TabItem value="dedicated-manual" label="수동 자격 증명" default>
 
 ```python
 from litellm import completion
@@ -388,13 +388,13 @@ print(response)
 </TabItem>
 </Tabs>
 
-**Important:** When using `oci_serving_mode="DEDICATED"`:
-- The `model` parameter **must match the type of model hosted on your dedicated endpoint** (e.g., use `"oci/cohere.command-latest"` for Cohere models, `"oci/xai.grok-4"` for Grok models)
-- The model name determines the API format and vendor-specific handling (Cohere vs Generic)
-- The `oci_endpoint_id` parameter specifies your dedicated endpoint's OCID
-- If `oci_endpoint_id` is not provided, the `model` parameter will be used as the endpoint ID (for backward compatibility)
+**중요:** `oci_serving_mode="DEDICATED"`를 사용할 때:
+- `model` 매개변수는 **전용 엔드포인트에서 호스팅되는 모델 유형과 일치해야 합니다**(예: Cohere 모델은 `"oci/cohere.command-latest"`, Grok 모델은 `"oci/xai.grok-4"` 사용).
+- 모델 이름은 API 형식과 공급업체별 처리 방식(Cohere vs Generic)을 결정합니다.
+- `oci_endpoint_id` 매개변수는 전용 엔드포인트의 OCID를 지정합니다.
+- `oci_endpoint_id`를 제공하지 않으면 이전 버전과의 호환성을 위해 `model` 매개변수가 엔드포인트 ID로 사용됩니다.
 
-**Example with Cohere Dedicated Endpoint:**
+**Cohere 전용 엔드포인트 예제:**
 ```python
 # For a dedicated endpoint hosting a Cohere model
 response = completion(
@@ -411,27 +411,27 @@ response = completion(
 )
 ```
 
-## Optional Parameters
+## 선택적 매개변수
 
-| Parameter | Type | Default | Description |
+| 매개변수 | 유형 | 기본값 | 설명 |
 |-----------|------|---------|-------------|
-| `oci_region` | string | `us-ashburn-1` | OCI region where the GenAI service is deployed |
-| `oci_serving_mode` | string | `ON_DEMAND` | Service mode: `ON_DEMAND` for managed models or `DEDICATED` for dedicated endpoints |
-| `oci_endpoint_id` | string | Same as `model` | (For DEDICATED mode) The OCID of your dedicated endpoint |
-| `oci_compartment_id` | string | **Required** | The OCID of the OCI compartment containing your resources |
-| `oci_user` | string | - | (Manual auth) The OCID of the OCI user |
-| `oci_fingerprint` | string | - | (Manual auth) The fingerprint of the API signing key |
-| `oci_tenancy` | string | - | (Manual auth) The OCID of your OCI tenancy |
-| `oci_key` | string | - | (Manual auth) The private key content as a string |
-| `oci_key_file` | string | - | (Manual auth) Path to the private key file |
-| `oci_signer` | object | - | (SDK auth) OCI SDK Signer object for authentication |
+| `oci_region` | string | `us-ashburn-1` | GenAI 서비스가 배포된 OCI 리전 |
+| `oci_serving_mode` | string | `ON_DEMAND` | 서비스 모드: 관리형 모델은 `ON_DEMAND`, 전용 엔드포인트는 `DEDICATED` |
+| `oci_endpoint_id` | string | `model`과 동일 | (`DEDICATED` 모드용) 전용 엔드포인트의 OCID |
+| `oci_compartment_id` | string | **필수** | 리소스가 포함된 OCI 컴파트먼트의 OCID |
+| `oci_user` | string | - | (수동 인증) OCI 사용자의 OCID |
+| `oci_fingerprint` | string | - | (수동 인증) API 서명 키의 지문 |
+| `oci_tenancy` | string | - | (수동 인증) OCI 테넌시의 OCID |
+| `oci_key` | string | - | (수동 인증) 문자열 형태의 프라이빗 키 내용 |
+| `oci_key_file` | string | - | (수동 인증) 프라이빗 키 파일 경로 |
+| `oci_signer` | object | - | (SDK 인증) 인증용 OCI SDK Signer 객체 |
 
-## Embeddings
+## 임베딩
 
-LiteLLM supports OCI Generative AI embedding models. These models use the same authentication methods described above.
+LiteLLM은 OCI Generative AI 임베딩 모델을 지원합니다. 이러한 모델은 위에서 설명한 것과 동일한 인증 방식을 사용합니다.
 
 <Tabs>
-<TabItem value="embed-manual" label="Manual Credentials" default>
+<TabItem value="embed-manual" label="수동 자격 증명" default>
 
 ```python
 from litellm import embedding
@@ -476,14 +476,14 @@ print(response)
 </TabItem>
 </Tabs>
 
-### Embedding Optional Parameters
+### 임베딩 선택적 매개변수
 
-| Parameter | Type | Default | Description |
+| 매개변수 | 유형 | 기본값 | 설명 |
 |-----------|------|---------|-------------|
-| `input_type` | string | - | The type of input: `search_document`, `search_query`, `classification`, `clustering` |
-| `truncate` | string | `END` | Truncation strategy when input exceeds max tokens: `END` or `START` |
+| `input_type` | string | - | 입력 유형: `search_document`, `search_query`, `classification`, `clustering` |
+| `truncate` | string | `END` | 입력이 최대 토큰 수를 초과할 때의 자르기 전략: `END` 또는 `START` |
 
-### Using Dedicated Embedding Endpoints
+### 전용 임베딩 엔드포인트 사용
 
 ```python
 response = embedding(

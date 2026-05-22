@@ -1,85 +1,85 @@
 ---
 slug: sub-millisecond-proxy-overhead
-title: "Achieving Sub-Millisecond Proxy Overhead"
+title: "밀리초 미만 proxy overhead 달성"
 date: 2026-02-02T10:00:00
 authors:
   - alexsander
   - krrish
   - ishaan-alt
-description: "Our Q1 performance target and architectural direction for achieving sub-millisecond proxy overhead on modest hardware."
-tags: [performance, architecture]
+description: "보급형 hardware에서 밀리초 미만 proxy overhead를 달성하기 위한 Q1 성능 목표와 architecture 방향."
+tags: [성능, architecture]
 hide_table_of_contents: false
 ---
 
-![Sidecar architecture: Python control plane vs. sidecar hot path](https://raw.githubusercontent.com/AlexsanderHamir/assets/main/Screenshot%202026-02-02%20172554.png)
+![Sidecar architecture: Python control plane과 sidecar hot path 비교](https://raw.githubusercontent.com/AlexsanderHamir/assets/main/Screenshot%202026-02-02%20172554.png)
 
-# Achieving Sub-Millisecond Proxy Overhead
+# 밀리초 미만 proxy overhead 달성
 
-## Introduction
+## 소개
 
-Our Q1 performance target is to aggressively move toward sub-millisecond proxy overhead on a single instance with 4 CPUs and 8 GB of RAM, and to continue pushing that boundary over time. Our broader goal is to make LiteLLM inexpensive to deploy, lightweight, and fast. This post outlines the architectural direction behind that effort.
+Q1 성능 목표는 4 CPU, 8 GB RAM 단일 instance에서 밀리초 미만 proxy overhead에 공격적으로 가까워지고, 시간이 지나면서 그 한계를 계속 밀어붙이는 것입니다. 더 큰 목표는 LiteLLM을 저렴하게 배포할 수 있고, 가볍고, 빠르게 만드는 것입니다. 이 글은 그 작업의 architecture 방향을 설명합니다.
 
-Proxy overhead refers to the latency introduced by LiteLLM itself, independent of the upstream provider.
+Proxy overhead는 upstream provider와 무관하게 LiteLLM 자체가 추가하는 latency를 의미합니다.
 
-To measure it, we run the same workload directly against the provider and through LiteLLM at identical QPS (for example, 1,000 QPS) and compare the latency delta. To reduce noise, the load generator, LiteLLM, and a mock LLM endpoint all run on the same machine, ensuring the difference reflects proxy overhead rather than network latency.
+이를 측정하기 위해 동일한 workload를 provider에 직접 보내는 경우와 LiteLLM을 거치는 경우에 동일한 QPS(예: 1,000 QPS)로 실행하고 latency 차이를 비교합니다. 노이즈를 줄이기 위해 load generator, LiteLLM, mock LLM endpoint를 모두 같은 machine에서 실행해, 차이가 network latency가 아니라 proxy overhead를 반영하도록 합니다.
 
 {/* truncate */}
 
 ---
 
-## Where We're Coming From
+## 현재 기준선
 
-Under the same benchmark originally conducted by [TensorZero](https://www.tensorzero.com/docs/gateway/benchmarks), LiteLLM previously failed at around 1,000 QPS.
+[TensorZero](https://www.tensorzero.com/docs/gateway/benchmarks)가 원래 수행한 것과 동일한 benchmark에서, LiteLLM은 이전에 약 1,000 QPS 부근에서 실패했습니다.
 
-That is no longer the case. Today, LiteLLM can be stress-tested at 1,000 QPS with no failures and can scale up to 5,000 QPS without failures on a 4-CPU, 8-GB RAM single instance setup.
+이제는 그렇지 않습니다. 현재 LiteLLM은 4 CPU, 8 GB RAM 단일 instance 구성에서 1,000 QPS stress test를 실패 없이 통과하며, 5,000 QPS까지도 실패 없이 scale할 수 있습니다.
 
-This establishes a more up to date baseline and provides useful context as we continue working on proxy overhead and overall performance.
-
----
-
-## Design Choice
-
-Achieving sub-millisecond proxy overhead with a Python-based system requires being deliberate about where work happens.
-
-Python is a strong fit for flexibility and extensibility: provider abstraction, configuration-driven routing, and a rich callback ecosystem. These are areas where development velocity and correctness matter more than raw throughput.
-
-At higher request rates, however, certain classes of work become expensive when executed inside the Python process on every request. Rather than rewriting LiteLLM or introducing complex deployment requirements, we adopt an optional **sidecar architecture**.
-
-This architectural change is how we intend to make LiteLLM **permanently fast**. While it supports our near-term performance targets, it is a long-term investment.
-
-Python continues to own:
-
-- Request validation and normalization
-- Model and provider selection
-- Callbacks and integrations
-
-The sidecar owns **performance-critical execution**, such as:
-
-- Efficient request forwarding
-- Connection reuse and pooling
-- Enforcing timeouts and limits
-- Aggregating high-frequency metrics
-
-This separation allows each component to focus on what it does best: Python acts as the control plane, while the sidecar handles the hot path.
+이는 더 최신의 기준선을 세우며, proxy overhead와 전체 성능 개선을 계속하는 데 유용한 context를 제공합니다.
 
 ---
 
-### Why the Sidecar Is Optional
+## 설계 선택
 
-The sidecar is intentionally **optional**.
+Python 기반 system에서 밀리초 미만 proxy overhead를 달성하려면 어떤 작업을 어디에서 수행할지 신중하게 정해야 합니다.
 
-This allows us to ship it incrementally, validate it under real-world workloads, and avoid making it a hard dependency before it is fully battle-tested across all LiteLLM features.
+Python은 유연성과 확장성이 중요한 영역에 잘 맞습니다. provider abstraction, configuration-driven routing, 풍부한 callback ecosystem이 그 예입니다. 이런 영역에서는 raw throughput보다 개발 속도와 정확성이 더 중요합니다.
 
-Just as importantly, this ensures that self-hosting LiteLLM remains simple. The sidecar is bundled and started automatically, requires no additional infrastructure, and can be disabled entirely. From a user's perspective, LiteLLM continues to behave like a single service.
+하지만 request rate가 높아지면, 일부 작업은 모든 요청마다 Python process 안에서 실행될 때 비용이 커집니다. LiteLLM을 다시 작성하거나 복잡한 배포 요구사항을 추가하는 대신, optional **sidecar architecture**를 채택합니다.
 
-As of today, the sidecar is an optimization, not a requirement.
+이 architecture 변경은 LiteLLM을 **장기적으로 빠르게** 만들기 위한 방식입니다. 단기 성능 목표를 지원하지만, 본질적으로 장기 투자입니다.
+
+Python은 계속 다음을 담당합니다.
+
+- request validation 및 normalization
+- model 및 provider 선택
+- callback 및 integration
+
+Sidecar는 다음과 같은 **성능 핵심 실행 경로**를 담당합니다.
+
+- 효율적인 request forwarding
+- connection reuse 및 pooling
+- timeout 및 limit 적용
+- 고빈도 metric 집계
+
+이 분리는 각 component가 가장 잘하는 일에 집중하게 합니다. Python은 control plane으로 동작하고, sidecar는 hot path를 처리합니다.
 
 ---
 
-## Conclusion
+### Sidecar가 optional인 이유
 
-Sub-millisecond proxy overhead is not achieved through a single optimization, but through architectural changes.
+Sidecar는 의도적으로 **optional**입니다.
 
-By keeping Python focused on orchestration and extensibility, and offloading performance-critical execution to a sidecar, we establish a foundation for making LiteLLM **permanently fast over time**—even on modest hardware such as a 1-CPU, 2-GB RAM instance, while keeping deployment and self-hosting simple.
+이를 통해 sidecar를 점진적으로 배포하고, 실제 workload에서 검증하며, 모든 LiteLLM 기능 전반에서 충분히 battle-test되기 전에 hard dependency로 만들지 않을 수 있습니다.
 
-This work extends beyond Q1, and we will continue sharing benchmarks and updates as the architecture evolves.
+마찬가지로 중요한 점은 LiteLLM self-hosting이 계속 단순하게 유지된다는 것입니다. Sidecar는 bundled되어 자동으로 시작되고, 추가 infrastructure가 필요 없으며, 완전히 비활성화할 수 있습니다. 사용자 관점에서 LiteLLM은 계속 단일 service처럼 동작합니다.
+
+현재 sidecar는 요구사항이 아니라 최적화입니다.
+
+---
+
+## 결론
+
+밀리초 미만 proxy overhead는 단일 최적화가 아니라 architecture 변경을 통해 달성됩니다.
+
+Python은 orchestration과 extensibility에 집중시키고, 성능 핵심 실행은 sidecar로 offload함으로써 LiteLLM을 **시간이 지나도 계속 빠르게** 만들 기반을 마련합니다. 1 CPU, 2 GB RAM instance 같은 보급형 hardware에서도 이를 목표로 하며, 배포와 self-hosting은 단순하게 유지합니다.
+
+이 작업은 Q1을 넘어 계속되며, architecture가 발전함에 따라 benchmark와 update를 계속 공유하겠습니다.

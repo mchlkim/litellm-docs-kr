@@ -3,7 +3,7 @@ import TabItem from '@theme/TabItem';
 
 # /embeddings
 
-## Quick Start
+## 빠른 시작
 ```python
 from litellm import embedding
 import os
@@ -11,9 +11,9 @@ os.environ['OPENAI_API_KEY'] = ""
 response = embedding(model='text-embedding-ada-002', input=["good morning from litellm"])
 ```
 
-## Async Usage - `aembedding()`
+## 비동기 사용법 - `aembedding()` {#async-usage-aembedding}
 
-LiteLLM provides an asynchronous version of the `embedding` function called `aembedding`:
+LiteLLM은 `embedding` 함수의 비동기 버전인 `aembedding`을 제공합니다.
 
 ```python
 from litellm import aembedding
@@ -30,15 +30,15 @@ response = asyncio.run(get_embedding())
 print(response)
 ```
 
-## Proxy Usage 
+## 프록시 사용법 {#proxy-usage}
 
-**NOTE**
-For `vertex_ai`,
+**참고**
+`vertex_ai`의 경우:
 ```bash
 export GOOGLE_APPLICATION_CREDENTIALS="absolute/path/to/service_account.json"
 ```
 
-### Add model to config 
+### config에 모델 추가 {#add-models-to-config}
 
 ```yaml
 model_list:
@@ -50,7 +50,7 @@ general_settings:
   master_key: sk-1234
 ```
 
-### Start proxy 
+### 프록시 시작 {#start-proxy}
 
 ```bash
 litellm --config /path/to/config.yaml 
@@ -58,7 +58,7 @@ litellm --config /path/to/config.yaml
 # RUNNING on http://0.0.0.0:4000
 ```
 
-### Test 
+### 테스트
 
 <Tabs>
 <TabItem value="curl" label="Curl">
@@ -71,7 +71,7 @@ curl --location 'http://0.0.0.0:4000/embeddings' \
 ```
 
 </TabItem>
-<TabItem value="openai" label="OpenAI (python)">
+<TabItem value="openai" label="OpenAI (Python)">
 
 ```python
 from openai import OpenAI
@@ -87,7 +87,7 @@ client.embeddings.create(
 )
 ```
 </TabItem>
-<TabItem value="langchain" label="Langchain Embeddings">
+<TabItem value="langchain" label="LangChain 임베딩">
 
 ```python
 from langchain_openai import OpenAIEmbeddings
@@ -105,9 +105,9 @@ print(query_result[:5])
 </Tabs>
 
 
-## Image Embeddings
+## 이미지 Embedding {#image-embedding}
 
-For models that support image embeddings, you can pass in a base64 encoded image string to the `input` param.
+이미지 embedding을 지원하는 모델에서는 base64로 인코딩된 이미지 문자열을 `input` 파라미터에 전달할 수 있습니다.
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -123,9 +123,9 @@ response = embedding(model="cohere/embed-english-v3.0", input=["<base64 encoded 
 ```
 
 </TabItem>
-<TabItem value="proxy" label="PROXY">
+<TabItem value="proxy" label="프록시">
 
-1. Setup config.yaml 
+1. config.yaml 설정
 
 ```yaml
 model_list:
@@ -136,7 +136,7 @@ model_list:
 ```
 
 
-2. Start proxy
+2. 프록시 시작
 
 ```bash
 litellm --config /path/to/config.yaml 
@@ -144,7 +144,7 @@ litellm --config /path/to/config.yaml
 # RUNNING on http://0.0.0.0:4000
 ```
 
-3. Test it!
+3. 테스트
 
 ```bash
 curl -X POST 'http://0.0.0.0:4000/v1/embeddings' \
@@ -158,46 +158,46 @@ curl -X POST 'http://0.0.0.0:4000/v1/embeddings' \
 </TabItem>
 </Tabs>
 
-## Input Params for `litellm.embedding()`
+## `litellm.embedding()` 입력 파라미터
 
 
 :::info
 
-Any non-openai params, will be treated as provider-specific params, and sent in the request body as kwargs to the provider.
+OpenAI가 아닌 모든 파라미터는 provider별 파라미터로 처리되며, provider에 보내는 request body의 kwargs로 전달됩니다.
 
-[**See Reserved Params**](https://github.com/BerriAI/litellm/blob/2f5f85cb52f36448d1f8bbfbd3b8af8167d0c4c8/litellm/main.py#L3130)
+[**예약 파라미터 보기**](https://github.com/BerriAI/litellm/blob/2f5f85cb52f36448d1f8bbfbd3b8af8167d0c4c8/litellm/main.py#L3130)
 
-[**See Example**](#example)
+[**예제 보기**](#example)
 :::
 
-### Required Fields
+### 필수 필드
 
-- `model`: *string* - ID of the model to use. `model='text-embedding-ada-002'`
+- `model`: *string* - 사용할 모델의 ID입니다. `model='text-embedding-ada-002'`
 
-- `input`: *string or array* - Input text to embed, encoded as a string or array of tokens. To embed multiple inputs in a single request, pass an array of strings or array of token arrays. The input must not exceed the max input tokens for the model (8192 tokens for text-embedding-ada-002), cannot be an empty string, and any array must be 2048 dimensions or less. 
+- `input`: *string or array* - embedding할 입력 text입니다. string 또는 token array로 인코딩됩니다. 단일 요청에서 여러 입력을 embedding하려면 string array나 token array의 array를 전달하세요. 입력은 모델의 최대 입력 token 수(text-embedding-ada-002의 경우 8192 token)를 넘을 수 없고, 빈 string일 수 없으며, 모든 array는 2048 dimensions 이하여야 합니다.
 ```python
 input=["good morning from litellm"]
 ```
 
-### Optional LiteLLM Fields
+### 선택 LiteLLM 필드
 
-- `user`: *string (optional)* A unique identifier representing your end-user, 
+- `user`: *string (optional)* 최종 사용자를 나타내는 고유 identifier입니다.
 
-- `dimensions`: *integer (Optional)* The number of dimensions the resulting output embeddings should have. Only supported in OpenAI/Azure text-embedding-3 and later models.
+- `dimensions`: *integer (Optional)* 결과 output embedding이 가져야 할 dimension 수입니다. OpenAI/Azure text-embedding-3 및 이후 모델에서만 지원됩니다.
 
-- `encoding_format`: *string (Optional)* The format to return the embeddings in. Can be either `"float"` or `"base64"`. Defaults to `encoding_format="float"`
+- `encoding_format`: *string (Optional)* embedding을 반환할 format입니다. `"float"` 또는 `"base64"`를 사용할 수 있습니다. 기본값은 `encoding_format="float"`입니다.
 
-- `timeout`: *integer (Optional)* - The maximum time, in seconds, to wait for the API to respond. Defaults to 600 seconds (10 minutes).
+- `timeout`: *integer (Optional)* - API 응답을 기다릴 최대 시간(초)입니다. 기본값은 600초(10분)입니다.
 
-- `api_base`: *string (optional)* - The api endpoint you want to call the model with
+- `api_base`: *string (optional)* - 모델 호출에 사용할 API endpoint입니다.
 
-- `api_version`: *string (optional)* - (Azure-specific) the api version for the call
+- `api_version`: *string (optional)* - (Azure-specific) 호출에 사용할 API version입니다.
 
-- `api_key`: *string (optional)* - The API key to authenticate and authorize requests. If not provided, the default API key is used.
+- `api_key`: *string (optional)* - 요청 인증과 권한 부여에 사용할 API key입니다. 제공하지 않으면 기본 API key가 사용됩니다.
 
-- `api_type`: *string (optional)* - The type of API to use.
+- `api_type`: *string (optional)* - 사용할 API type입니다.
 
-### Output from `litellm.embedding()`
+### `litellm.embedding()` 출력
 
 ```json
 {
@@ -224,9 +224,9 @@ input=["good morning from litellm"]
 }
 ```
 
-## OpenAI Embedding Models
+## OpenAI Embedding 모델
 
-### Usage
+### 사용법
 ```python
 from litellm import embedding
 import os
@@ -239,18 +239,18 @@ response = embedding(
 )
 ```
 
-| Model Name           | Function Call                               | Required OS Variables                |
+| 모델 이름           | 함수 호출                               | 필수 OS 변수                |
 |----------------------|---------------------------------------------|--------------------------------------|
-| text-embedding-3-small | `embedding('text-embedding-3-small', input)` | `os.environ['OPENAI_API_KEY']`       |
-| text-embedding-3-large | `embedding('text-embedding-3-large', input)` | `os.environ['OPENAI_API_KEY']`       |
-| text-embedding-ada-002 | `embedding('text-embedding-ada-002', input)` | `os.environ['OPENAI_API_KEY']`       |
+| `text-embedding-3-small` | `embedding('text-embedding-3-small', input)` | `os.environ['OPENAI_API_KEY']`       |
+| `text-embedding-3-large` | `embedding('text-embedding-3-large', input)` | `os.environ['OPENAI_API_KEY']`       |
+| `text-embedding-ada-002` | `embedding('text-embedding-ada-002', input)` | `os.environ['OPENAI_API_KEY']`       |
 
-## OpenAI Compatible Embedding Models
-Use this for calling `/embedding` endpoints on OpenAI Compatible Servers, example https://github.com/xorbitsai/inference
+## OpenAI 호환 Embedding 모델 {#openai-compatible-embedding-models}
+OpenAI 호환 서버의 `/embedding` 엔드포인트를 호출할 때 사용합니다. 예: https://github.com/xorbitsai/inference
 
-**Note add `openai/` prefix to model so litellm knows to route to OpenAI**
+**참고: litellm이 OpenAI로 route해야 함을 알 수 있도록 모델 앞에 `openai/` prefix를 추가하세요.**
 
-### Usage
+### 사용법
 ```python
 from litellm import embedding
 response = embedding(
@@ -260,10 +260,10 @@ response = embedding(
 )
 ```
 
-## Bedrock Embedding
+## Bedrock Embedding {#bedrock-embedding}
 
-### API keys
-This can be set as env variables or passed as **params to litellm.embedding()**
+### API key
+환경 변수로 설정하거나 **litellm.embedding()의 파라미터**로 전달할 수 있습니다.
 ```python
 import os
 os.environ["AWS_ACCESS_KEY_ID"] = ""  # Access key
@@ -271,7 +271,7 @@ os.environ["AWS_SECRET_ACCESS_KEY"] = "" # Secret access key
 os.environ["AWS_REGION_NAME"] = "" # us-east-1, us-east-2, us-west-1, us-west-2
 ```
 
-### Usage
+### 사용법
 ```python
 from litellm import embedding
 response = embedding(
@@ -281,20 +281,20 @@ response = embedding(
 print(response)
 ```
 
-| Model Name           | Function Call                               |
+| 모델 이름           | 함수 호출                               |
 |----------------------|---------------------------------------------|
-| Amazon Nova Multimodal Embeddings | `embedding(model="bedrock/amazon.nova-2-multimodal-embeddings-v1:0", input=input)` | [Nova Docs](../providers/bedrock_embedding#amazon-nova-multimodal-embeddings) |
-| Amazon Nova (Async) | `embedding(model="bedrock/async_invoke/amazon.nova-2-multimodal-embeddings-v1:0", input=input, input_type="text", output_s3_uri="s3://bucket/")` | [Nova Async Docs](../providers/bedrock_embedding#asynchronous-embeddings-with-segmentation) |
-| Titan Embeddings - G1 | `embedding(model="amazon.titan-embed-text-v1", input=input)` |
-| Cohere Embeddings - English | `embedding(model="cohere.embed-english-v3", input=input)` |
-| Cohere Embeddings - Multilingual | `embedding(model="cohere.embed-multilingual-v3", input=input)` |
-| TwelveLabs Marengo (Async) | `embedding(model="bedrock/async_invoke/us.twelvelabs.marengo-embed-2-7-v1:0", input=input, input_type="text")` | [Async Invoke Docs](../providers/bedrock_embedding#async-invoke-embedding) |
+| Amazon Nova Multimodal Embeddings | `embedding(model="bedrock/amazon.nova-2-multimodal-embeddings-v1:0", input=input)` | [Nova 문서](../providers/bedrock_embedding#amazon-nova-multimodal-embeddings) |
+| Amazon Nova (Async) | `embedding(model="bedrock/async_invoke/amazon.nova-2-multimodal-embeddings-v1:0", input=input, input_type="text", output_s3_uri="s3://bucket/")` | [Nova Async 문서](../providers/bedrock_embedding) |
+| `Titan Embeddings - G1` | `embedding(model="amazon.titan-embed-text-v1", input=input)` |
+| Cohere Embeddings - 영어 | `embedding(model="cohere.embed-english-v3", input=input)` |
+| Cohere Embeddings - 다국어 | `embedding(model="cohere.embed-multilingual-v3", input=input)` |
+| TwelveLabs Marengo (Async) | `embedding(model="bedrock/async_invoke/us.twelvelabs.marengo-embed-2-7-v1:0", input=input, input_type="text")` | [Async Invoke 문서](../providers/bedrock_embedding#async-invoke-embedding) |
 
-## TwelveLabs Bedrock Embedding Models
+## TwelveLabs Bedrock Embedding 모델 {#twelvelabs-bedrock-embedding-models}
 
-TwelveLabs Marengo models support multimodal embeddings (text, image, video, audio) and require the `input_type` parameter to specify the input format.
+TwelveLabs Marengo 모델은 multimodal embedding(text, image, video, audio)을 지원하며, 입력 format을 지정하려면 `input_type` 파라미터가 필요합니다.
 
-### Usage
+### 사용법
 
 ```python
 from litellm import embedding
@@ -329,23 +329,23 @@ response = embedding(
 )
 ```
 
-### Required Parameters
+### 필수 파라미터
 
-| Parameter | Description | Values |
+| 파라미터 | 설명 | 값 |
 |-----------|-------------|--------|
-| `input_type` | Type of input content | `"text"`, `"image"`, `"video"`, `"audio"` |
+| `input_type` | 입력 content의 type | `"text"`, `"image"`, `"video"`, `"audio"` |
 
-### Supported Models
+### 지원 모델 {#supported-models}
 
-| Model Name | Function Call | Notes |
+| 모델 이름 | 함수 호출 | 참고 |
 |------------|---------------|-------|
-| TwelveLabs Marengo 2.7 (Sync) | `embedding(model="bedrock/us.twelvelabs.marengo-embed-2-7-v1:0", input=input, input_type="text")` | Text embeddings only |
-| TwelveLabs Marengo 2.7 (Async) | `embedding(model="bedrock/async_invoke/us.twelvelabs.marengo-embed-2-7-v1:0", input=input, input_type="text/image/video/audio")` | All input types, requires `output_s3_uri` |
+| TwelveLabs Marengo 2.7 (Sync) | `embedding(model="bedrock/us.twelvelabs.marengo-embed-2-7-v1:0", input=input, input_type="text")` | text embedding만 지원 |
+| TwelveLabs Marengo 2.7 (Async) | `embedding(model="bedrock/async_invoke/us.twelvelabs.marengo-embed-2-7-v1:0", input=input, input_type="text/image/video/audio")` | 모든 입력 type 지원, `output_s3_uri` 필요 |
 
-## Cohere Embedding Models
+## Cohere Embedding 모델
 https://docs.cohere.com/reference/embed
 
-### Usage
+### 사용법
 ```python
 from litellm import embedding
 os.environ["COHERE_API_KEY"] = "cohere key"
@@ -357,27 +357,27 @@ response = embedding(
     input_type="search_document" # optional param for v3 llms
 )
 ```
-| Model Name               | Function Call                                                |
+| 모델 이름               | 함수 호출                                                |
 |--------------------------|--------------------------------------------------------------|
-| embed-english-v3.0       | `embedding(model="embed-english-v3.0", input=["good morning from litellm", "this is another item"])` |
-| embed-english-light-v3.0 | `embedding(model="embed-english-light-v3.0", input=["good morning from litellm", "this is another item"])` |
-| embed-multilingual-v3.0  | `embedding(model="embed-multilingual-v3.0", input=["good morning from litellm", "this is another item"])` |
-| embed-multilingual-light-v3.0 | `embedding(model="embed-multilingual-light-v3.0", input=["good morning from litellm", "this is another item"])` |
-| embed-english-v2.0       | `embedding(model="embed-english-v2.0", input=["good morning from litellm", "this is another item"])` |
-| embed-english-light-v2.0 | `embedding(model="embed-english-light-v2.0", input=["good morning from litellm", "this is another item"])` |
-| embed-multilingual-v2.0  | `embedding(model="embed-multilingual-v2.0", input=["good morning from litellm", "this is another item"])` |
+| `embed-english-v3.0`       | `embedding(model="embed-english-v3.0", input=["good morning from litellm", "this is another item"])` |
+| `embed-english-light-v3.0` | `embedding(model="embed-english-light-v3.0", input=["good morning from litellm", "this is another item"])` |
+| `embed-multilingual-v3.0`  | `embedding(model="embed-multilingual-v3.0", input=["good morning from litellm", "this is another item"])` |
+| `embed-multilingual-light-v3.0` | `embedding(model="embed-multilingual-light-v3.0", input=["good morning from litellm", "this is another item"])` |
+| `embed-english-v2.0`       | `embedding(model="embed-english-v2.0", input=["good morning from litellm", "this is another item"])` |
+| `embed-english-light-v2.0` | `embedding(model="embed-english-light-v2.0", input=["good morning from litellm", "this is another item"])` |
+| `embed-multilingual-v2.0`  | `embedding(model="embed-multilingual-v2.0", input=["good morning from litellm", "this is another item"])` |
 
-## NVIDIA NIM Embedding Models
+## NVIDIA NIM Embedding 모델
 
-### API keys
-This can be set as env variables or passed as **params to litellm.embedding()**
+### API key
+환경 변수로 설정하거나 **litellm.embedding()의 파라미터**로 전달할 수 있습니다.
 ```python
 import os
 os.environ["NVIDIA_NIM_API_KEY"] = ""  # api key
 os.environ["NVIDIA_NIM_API_BASE"] = "" # nim endpoint url
 ```
 
-### Usage
+### 사용법
 ```python
 from litellm import embedding
 import os
@@ -388,40 +388,40 @@ response = embedding(
     input_type="query"
 )
 ```
-## `input_type` Parameter for Embedding Models
+## Embedding 모델용 `input_type` 파라미터 {#input-type-parameter-for-embedding-models}
 
-Certain embedding models, such as `nvidia/embed-qa-4` and the E5 family, operate in **dual modes**—one for **indexing documents (passages)** and another for **querying**. To maintain high retrieval accuracy, it's essential to specify how the input text is being used by setting the `input_type` parameter correctly.
+`nvidia/embed-qa-4`, E5 family 같은 일부 embedding 모델은 **문서 indexing(passages)** 용도와 **querying** 용도의 dual mode로 동작합니다. 높은 retrieval 정확도를 유지하려면 `input_type` 파라미터를 올바르게 설정해 입력 text가 어떻게 사용되는지 지정해야 합니다.
 
-### Usage
+### 사용법
 
-Set the `input_type` parameter to one of the following values:
+`input_type` 파라미터를 다음 값 중 하나로 설정하세요.
 
-- `"passage"` – for embedding content during **indexing** (e.g., documents).
-- `"query"` – for embedding content during **retrieval** (e.g., user queries).
+- `"passage"` - **indexing** 중 content embedding에 사용합니다(예: documents).
+- `"query"` - **retrieval** 중 content embedding에 사용합니다(예: user queries).
 
-> **Warning:** Incorrect usage of `input_type` can lead to a significant drop in retrieval performance.
+> **경고:** `input_type`을 잘못 사용하면 retrieval 성능이 크게 떨어질 수 있습니다.
 
 
 
-All models listed [here](https://build.nvidia.com/explore/retrieval) are supported:
+[여기](https://build.nvidia.com/explore/retrieval)에 나열된 모든 모델이 지원됩니다.
 
-| Model Name         | Function Call                                         |
+| 모델 이름         | 함수 호출                                         |
 | :---               | :---                                                  |
 | NV-Embed-QA | `embedding(model="nvidia_nim/NV-Embed-QA", input)` |
-| nvidia/nv-embed-v1 | `embedding(model="nvidia_nim/nvidia/nv-embed-v1", input)` |
-| nvidia/nv-embedqa-mistral-7b-v2 | `embedding(model="nvidia_nim/nvidia/nv-embedqa-mistral-7b-v2", input)` |
-| nvidia/nv-embedqa-e5-v5 | `embedding(model="nvidia_nim/nvidia/nv-embedqa-e5-v5", input)` |
+| `nvidia/nv-embed-v1` | `embedding(model="nvidia_nim/nvidia/nv-embed-v1", input)` |
+| `nvidia/nv-embedqa-mistral-7b-v2` | `embedding(model="nvidia_nim/nvidia/nv-embedqa-mistral-7b-v2", input)` |
+| `nvidia/nv-embedqa-e5-v5` | `embedding(model="nvidia_nim/nvidia/nv-embedqa-e5-v5", input)` |
 | nvidia/embed-qa-4 | `embedding(model="nvidia_nim/nvidia/embed-qa-4", input)` |
-| nvidia/llama-3.2-nv-embedqa-1b-v1 | `embedding(model="nvidia_nim/nvidia/llama-3.2-nv-embedqa-1b-v1", input)` |
-| nvidia/llama-3.2-nv-embedqa-1b-v2 | `embedding(model="nvidia_nim/nvidia/llama-3.2-nv-embedqa-1b-v2", input)` |
-| snowflake/arctic-embed-l | `embedding(model="nvidia_nim/snowflake/arctic-embed-l", input)` |
+| `nvidia/llama-3.2-nv-embedqa-1b-v1` | `embedding(model="nvidia_nim/nvidia/llama-3.2-nv-embedqa-1b-v1", input)` |
+| `nvidia/llama-3.2-nv-embedqa-1b-v2` | `embedding(model="nvidia_nim/nvidia/llama-3.2-nv-embedqa-1b-v2", input)` |
+| `snowflake/arctic-embed-l` | `embedding(model="nvidia_nim/snowflake/arctic-embed-l", input)` |
 | baai/bge-m3 | `embedding(model="nvidia_nim/baai/bge-m3", input)` |
 
 
-## HuggingFace Embedding Models
-LiteLLM supports all Feature-Extraction + Sentence Similarity Embedding models: https://huggingface.co/models?pipeline_tag=feature-extraction
+## HuggingFace Embedding 모델 {#huggingface-embedding-models}
+LiteLLM은 모든 Feature-Extraction 및 Sentence Similarity Embedding 모델을 지원합니다: https://huggingface.co/models?pipeline_tag=feature-extraction
 
-### Usage
+### 사용법
 ```python
 from litellm import embedding
 import os
@@ -432,11 +432,11 @@ response = embedding(
 )
 ```
 
-### Usage - Set input_type
+### 사용법 - input_type 설정
 
-LiteLLM infers input type (feature-extraction or sentence-similarity) by making a GET request to the api base. 
+LiteLLM은 API base에 GET request를 보내 input type(feature-extraction 또는 sentence-similarity)을 추론합니다.
 
-Override this, by setting the `input_type` yourself.
+`input_type`을 직접 설정해 이 동작을 override할 수 있습니다.
 
 ```python
 from litellm import embedding
@@ -450,7 +450,7 @@ response = embedding(
 )
 ```
 
-### Usage - Custom API Base
+### 사용법 - 사용자 정의 API Base
 ```python
 from litellm import embedding
 import os
@@ -462,17 +462,17 @@ response = embedding(
 )
 ```
 
-| Model Name            | Function Call | Required OS Variables                        |
+| 모델 이름            | 함수 호출 | 필수 OS 변수                        |
 |-----------------------|--------------------------------------------------------------|-------------------------------------------------|
-| microsoft/codebert-base    | `embedding('huggingface/microsoft/codebert-base', input=input)`               | `os.environ['HUGGINGFACE_API_KEY']`                                             |
+| `microsoft/codebert-base`    | `embedding('huggingface/microsoft/codebert-base', input=input)`               | `os.environ['HUGGINGFACE_API_KEY']`                                             |
 | BAAI/bge-large-zh | `embedding('huggingface/BAAI/bge-large-zh', input=input)`         | `os.environ['HUGGINGFACE_API_KEY']`                                             |
-| any-hf-embedding-model | `embedding('huggingface/hf-embedding-model', input=input)`         | `os.environ['HUGGINGFACE_API_KEY']`                                             |
+| `any-hf-embedding-model` | `embedding('huggingface/hf-embedding-model', input=input)`         | `os.environ['HUGGINGFACE_API_KEY']`                                             |
 
 
-## Mistral AI Embedding Models
-All models listed here https://docs.mistral.ai/platform/endpoints are supported
+## Mistral AI Embedding 모델 {#mistral-ai-embedding-models}
+여기에 나열된 모든 모델이 지원됩니다: https://docs.mistral.ai/platform/endpoints
 
-### Usage
+### 사용법
 ```python
 from litellm import embedding
 import os
@@ -485,21 +485,21 @@ response = embedding(
 print(response)
 ```
 
-| Model Name               | Function Call                                                                                                                                                      |
+| 모델 이름               | 함수 호출                                                                                                                                                      |
 |--------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | mistral-embed | `embedding(model="mistral/mistral-embed", input)` | 
 
-## Gemini AI Embedding Models
+## Gemini AI Embedding 모델
 
-### API keys
+### API key
 
-This can be set as env variables or passed as **params to litellm.embedding()**
+환경 변수로 설정하거나 **litellm.embedding()의 파라미터**로 전달할 수 있습니다.
 ```python
 import os
 os.environ["GEMINI_API_KEY"] = ""
 ```
 
-### Usage - Embedding
+### 사용법 - Embedding
 ```python
 from litellm import embedding
 response = embedding(
@@ -509,30 +509,30 @@ response = embedding(
 print(response)
 ```
 
-All models listed [here](https://ai.google.dev/gemini-api/docs/models/gemini) are supported:
+[여기](https://ai.google.dev/gemini-api/docs/models/gemini)에 나열된 모든 모델이 지원됩니다.
 
-| Model Name         | Function Call                                         |
+| 모델 이름         | 함수 호출                                         |
 | :---               | :---                                                  |
-| text-embedding-004 | `embedding(model="gemini/text-embedding-004", input)` |
-| gemini-embedding-2-preview | `embedding(model="gemini/gemini-embedding-2-preview", input)` | [Multimodal docs](#gemini-embedding-2-preview-multimodal) |
-| gemini-embedding-2 *(GA)* | `embedding(model="gemini/gemini-embedding-2", input)` | [Multimodal docs](#gemini-embedding-2-preview-multimodal) · [GA notes](/blog/gemini_embedding_2_ga) |
+| `text-embedding-004` | `embedding(model="gemini/text-embedding-004", input)` |
+| gemini-embedding-2-preview | `embedding(model="gemini/gemini-embedding-2-preview", input)` | [Multimodal 문서](#gemini-embedding-2-preview-multimodal) |
+| gemini-embedding-2 *(GA)* | `embedding(model="gemini/gemini-embedding-2", input)` | [Multimodal 문서](#gemini-embedding-2-preview-multimodal) · [GA 참고 사항](/blog/gemini_embedding_2_ga) |
 
-### Gemini Embedding 2 Preview (Multimodal)
+### Gemini Embedding 2 Preview (멀티모달) {#gemini-embedding-2-preview-multimodal}
 
-`gemini-embedding-2-preview` supports **multimodal embeddings**—text, images, audio, video, and PDF in a single request. See [blog post](/blog/gemini_embedding_2_multimodal) for details. The GA model id `gemini-embedding-2` exposes the same behavior—swap the model name in any example below. See [GA blog](/blog/gemini_embedding_2_ga) for cost-map coverage and pricing notes.
+`gemini-embedding-2-preview`는 단일 요청에서 text, images, audio, video, PDF를 처리하는 **multimodal embedding**을 지원합니다. 자세한 내용은 [블로그 게시물](/blog/gemini_embedding_2_multimodal)을 참고하세요. GA 모델 ID `gemini-embedding-2`도 같은 동작을 제공하므로 아래 예제에서 모델 이름만 바꾸면 됩니다. 비용 매핑 범위와 가격 참고 사항은 [GA 블로그](/blog/gemini_embedding_2_ga)를 참고하세요.
 
-:::info Response shape
+:::info 응답 형태
 
-For the Gemini API path (`gemini/gemini-embedding-2-preview`), each input element returns its **own** embedding (indexed `0..N-1`)—same semantics as OpenAI's `/embeddings`. LiteLLM routes to Gemini's `batchEmbedContents` endpoint with one `EmbedContentRequest` per input. This differs from the Vertex AI path, which combines all parts into a single unified vector—see [Vertex AI embeddings docs](../providers/vertex_embedding#gemini-embedding-2-preview-multimodal).
+Gemini API path(`gemini/gemini-embedding-2-preview`)에서는 각 input element가 **자체** embedding(indexed `0..N-1`)을 반환합니다. 이는 OpenAI의 `/embeddings`와 같은 semantics입니다. LiteLLM은 input마다 하나의 `EmbedContentRequest`를 사용해 Gemini의 `batchEmbedContents` endpoint로 route합니다. 모든 part를 하나의 unified vector로 결합하는 Vertex AI path와 다릅니다. [Vertex AI embeddings 문서](../providers/vertex_embedding#gemini-embedding-2-preview-multimodal)를 참고하세요.
 
 :::
 
 
-**Input formats:**
-- **Data URIs:** `data:image/png;base64,<encoded_data>`
-- **Gemini file references:** `files/abc123` (pre-uploaded via Gemini Files API)
+**입력 format:**
+- **Data URI:** `data:image/png;base64,<encoded_data>`
+- **Gemini file reference:** `files/abc123` (Gemini Files API로 미리 upload)
 
-**Supported MIME types:** `image/png`, `image/jpeg`, `audio/mpeg`, `audio/wav`, `video/mp4`, `video/quicktime`, `application/pdf`
+**지원 MIME type:** `image/png`, `image/jpeg`, `audio/mpeg`, `audio/wav`, `video/mp4`, `video/quicktime`, `application/pdf`
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -554,7 +554,7 @@ print(response)
 ```
 
 </TabItem>
-<TabItem value="proxy" label="PROXY">
+<TabItem value="proxy" label="프록시">
 
 ```bash
 curl -X POST http://localhost:4000/embeddings \
@@ -572,11 +572,11 @@ curl -X POST http://localhost:4000/embeddings \
 </TabItem>
 </Tabs>
 
-**Optional:** `dimensions` maps to Gemini's `outputDimensionality`.
+**선택 사항:** `dimensions`는 Gemini의 `outputDimensionality`에 매핑됩니다.
 
-#### Combined Multimodal Embeddings
+#### 결합 Multimodal Embeddings {#combined-multimodal-embeddings}
 
-By default, each element in the `input` list produces a **separate** embedding (OpenAI-compatible). To combine multiple inputs into a **single** embedding (e.g., text + image representing one entity), wrap them in a nested list:
+기본적으로 `input` list의 각 element는 **별도** embedding(OpenAI-compatible)을 생성합니다. 여러 input을 **단일** embedding으로 결합하려면(예: 하나의 entity를 나타내는 text + image) nested list로 감싸세요.
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -607,7 +607,7 @@ response = embedding(
 ```
 
 </TabItem>
-<TabItem value="proxy" label="PROXY">
+<TabItem value="proxy" label="프록시">
 
 ```bash
 curl -X POST http://localhost:4000/embeddings \
@@ -622,12 +622,12 @@ curl -X POST http://localhost:4000/embeddings \
 </TabItem>
 </Tabs>
 
-This is useful for representing multi-modal entities (e.g., a product with a name + photo) as a single vector for search and retrieval. Gemini API only — Vertex AI always returns a single combined vector regardless of input shape (see [Vertex AI embeddings docs](../providers/vertex_embedding#gemini-embedding-2-preview-multimodal)).
+이 방식은 multimodal entity(예: 이름과 사진이 있는 product)를 search 및 retrieval용 단일 vector로 표현할 때 유용합니다. Gemini API에서만 적용됩니다. Vertex AI는 input shape와 관계없이 항상 단일 combined vector를 반환합니다([Vertex AI embeddings 문서](../providers/vertex_embedding#gemini-embedding-2-preview-multimodal) 참고).
 
 
-## Vertex AI Embedding Models
+## Vertex AI Embedding 모델
 
-### Usage - Embedding
+### 사용법 - Embedding
 ```python
 import litellm
 from litellm import embedding
@@ -641,22 +641,22 @@ response = embedding(
 print(response)
 ```
 
-### Supported Models
-All models listed [here](https://github.com/BerriAI/litellm/blob/57f37f743886a0249f630a6792d49dffc2c5d9b7/model_prices_and_context_window.json#L835) are supported
+### 지원 모델
+[여기](https://github.com/BerriAI/litellm/blob/57f37f743886a0249f630a6792d49dffc2c5d9b7/model_prices_and_context_window.json#L835)에 나열된 모든 모델이 지원됩니다.
 
-| Model Name               | Function Call                                                                                                                                                      |
+| 모델 이름               | 함수 호출                                                                                                                                                      |
 |--------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| textembedding-gecko | `embedding(model="vertex_ai/textembedding-gecko", input)` | 
-| textembedding-gecko-multilingual | `embedding(model="vertex_ai/textembedding-gecko-multilingual", input)` | 
-| textembedding-gecko-multilingual@001 | `embedding(model="vertex_ai/textembedding-gecko-multilingual@001", input)` | 
-| textembedding-gecko@001 | `embedding(model="vertex_ai/textembedding-gecko@001", input)` | 
-| textembedding-gecko@003 | `embedding(model="vertex_ai/textembedding-gecko@003", input)` | 
-| text-embedding-preview-0409 | `embedding(model="vertex_ai/text-embedding-preview-0409", input)` |
-| text-multilingual-embedding-preview-0409 | `embedding(model="vertex_ai/text-multilingual-embedding-preview-0409", input)` | 
+| `textembedding-gecko` | `embedding(model="vertex_ai/textembedding-gecko", input)` | 
+| `textembedding-gecko-multilingual` | `embedding(model="vertex_ai/textembedding-gecko-multilingual", input)` | 
+| `textembedding-gecko-multilingual@001` | `embedding(model="vertex_ai/textembedding-gecko-multilingual@001", input)` | 
+| `textembedding-gecko@001` | `embedding(model="vertex_ai/textembedding-gecko@001", input)` | 
+| `textembedding-gecko@003` | `embedding(model="vertex_ai/textembedding-gecko@003", input)` | 
+| `text-embedding-preview-0409` | `embedding(model="vertex_ai/text-embedding-preview-0409", input)` |
+| `text-multilingual-embedding-preview-0409` | `embedding(model="vertex_ai/text-multilingual-embedding-preview-0409", input)` | 
 
-## Voyage AI Embedding Models
+## Voyage AI Embedding 모델
 
-### Usage - Embedding
+### 사용법 - Embedding
 ```python
 from litellm import embedding
 import os
@@ -669,33 +669,33 @@ response = embedding(
 print(response)
 ```
 
-### Supported Models
-All models listed here https://docs.voyageai.com/embeddings/#models-and-specifics are supported
+### 지원 모델
+여기에 나열된 모든 모델이 지원됩니다: https://docs.voyageai.com/embeddings/#models-and-specifics
 
-| Model Name               | Function Call                                                                                                                                                      |
+| 모델 이름               | 함수 호출                                                                                                                                                      |
 |--------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | voyage-01 | `embedding(model="voyage/voyage-01", input)` | 
 | voyage-lite-01 | `embedding(model="voyage/voyage-lite-01", input)` | 
-| voyage-lite-01-instruct | `embedding(model="voyage/voyage-lite-01-instruct", input)` | 
+| `voyage-lite-01-instruct` | `embedding(model="voyage/voyage-lite-01-instruct", input)` | 
 
-### Provider-specific Params
+### Provider별 파라미터 {#provider-specific-params}
 
 
 :::info
 
-Any non-openai params, will be treated as provider-specific params, and sent in the request body as kwargs to the provider.
+OpenAI가 아닌 모든 파라미터는 provider별 파라미터로 처리되며, provider에 보내는 request body의 kwargs로 전달됩니다.
 
-[**See Reserved Params**](https://github.com/BerriAI/litellm/blob/2f5f85cb52f36448d1f8bbfbd3b8af8167d0c4c8/litellm/main.py#L3130)
+[**예약 파라미터 보기**](https://github.com/BerriAI/litellm/blob/2f5f85cb52f36448d1f8bbfbd3b8af8167d0c4c8/litellm/main.py#L3130)
 :::
 
-### **Example**
+### **예제**
 
-Cohere v3 Models have a required parameter: `input_type`, it can be one of the following four values:
+Cohere v3 모델에는 필수 파라미터 `input_type`이 있으며, 다음 네 값 중 하나를 사용할 수 있습니다.
 
-- `input_type="search_document"`: (default) Use this for texts (documents) you want to store in your vector database
-- `input_type="search_query"`: Use this for search queries to find the most relevant documents in your vector database
-- `input_type="classification"`: Use this if you use the embeddings as an input for a classification system
-- `input_type="clustering"`: Use this if you use the embeddings for text clustering
+- `input_type="search_document"`: (기본값) vector database에 저장할 text(documents)에 사용합니다.
+- `input_type="search_query"`: vector database에서 가장 관련성 높은 documents를 찾는 search query에 사용합니다.
+- `input_type="classification"`: embedding을 classification system의 입력으로 사용할 때 사용합니다.
+- `input_type="clustering"`: embedding을 text clustering에 사용할 때 사용합니다.
 
 https://txt.cohere.com/introducing-embed-v3/
 
@@ -714,9 +714,9 @@ response = embedding(
 )
 ```
 </TabItem>
-<TabItem value="proxy" label="PROXY">
+<TabItem value="proxy" label="프록시">
 
-**via config**
+**config 사용**
 
 ```yaml
 model_list:
@@ -726,7 +726,7 @@ model_list:
       input_type: search_document # 👈 PROVIDER-SPECIFIC PARAM
 ```
 
-**via request**
+**request 사용**
 
 ```bash
 curl -X POST 'http://0.0.0.0:4000/v1/embeddings' \
@@ -741,9 +741,9 @@ curl -X POST 'http://0.0.0.0:4000/v1/embeddings' \
 </TabItem>
 </Tabs>
 
-## Nebius AI Studio Embedding Models
+## Nebius AI Studio Embedding 모델
 
-### Usage - Embedding
+### 사용법 - Embedding
 ```python
 from litellm import embedding
 import os
@@ -756,12 +756,11 @@ response = embedding(
 print(response)
 ```
 
-### Supported Models
-All supported models can be found here: https://studio.nebius.ai/models/embedding
+### 지원 모델
+지원되는 모든 모델은 여기에서 확인할 수 있습니다: https://studio.nebius.ai/models/embedding
 
-| Model Name               | Function Call                                                   |
+| 모델 이름               | 함수 호출                                                   |
 |--------------------------|-----------------------------------------------------------------|
 | BAAI/bge-en-icl | `embedding(model="nebius/BAAI/bge-en-icl", input)`              | 
-| BAAI/bge-multilingual-gemma2 | `embedding(model="nebius/BAAI/bge-multilingual-gemma2", input)` | 
-| intfloat/e5-mistral-7b-instruct | `embedding(model="nebius/intfloat/e5-mistral-7b-instruct", input)`      | 
-
+| `BAAI/bge-multilingual-gemma2` | `embedding(model="nebius/BAAI/bge-multilingual-gemma2", input)` | 
+| `intfloat/e5-mistral-7b-instruct` | `embedding(model="nebius/intfloat/e5-mistral-7b-instruct", input)`      | 

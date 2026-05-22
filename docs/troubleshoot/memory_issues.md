@@ -1,37 +1,37 @@
-# Memory Issue Classification & Reproduction
+# 메모리 이슈 분류 및 재현
 
-## 1. Classify the Memory Issue
+## 1. 메모리 이슈 분류
 
-Select the option(s) that best describe the memory behavior observed:
+관찰한 메모리 동작을 가장 잘 설명하는 항목을 선택하세요.
 
-- [ ] Memory scales with traffic (RPS-driven)  
-- [ ] Memory increases without a traffic increase  
-- [ ] Memory increases after a LiteLLM upgrade  
-- [ ] Memory leak (memory continuously grows over time)  
-- [ ] Out of Memory (OOM) events or pod restarts
-
----
-
-## 2. Can you reproduce the issue?
-
-Before escalating, verify whether the memory or OOM issue can be reproduced in a test environment that mirrors your production deployment.  
-
-If reproducible, provide **detailed reproduction steps** along with any relevant requests, workloads, or configuration used.  
-For guidance on the type of information we’re looking for, see the [LiteLLM Troubleshooting Guide](../troubleshoot).
+- [ ] 메모리가 트래픽에 따라 증가함(RPS 기반)
+- [ ] 트래픽 증가 없이 메모리가 증가함
+- [ ] LiteLLM 업그레이드 후 메모리가 증가함
+- [ ] 메모리 누수(시간이 지날수록 메모리가 계속 증가함)
+- [ ] 메모리 부족(OOM) 이벤트 또는 pod 재시작
 
 ---
 
-## 3. Issue Cannot Be Reproduced
+## 2. 이슈를 재현할 수 있나요?
 
-If the memory or OOM issue cannot be reproduced in a test environment that mirrors production, please provide:
+에스컬레이션하기 전에, 프로덕션 배포와 동일하게 구성한 테스트 환경에서 메모리 또는 OOM 이슈를 재현할 수 있는지 확인하세요.
 
-1. **Information from Sections 1 and 2**  
-   - Memory/issue classification (Section 1)  
-   - Reproduction attempts and environment details (Section 2)  
+재현할 수 있다면 사용한 요청, 워크로드, 구성과 함께 **상세한 재현 단계**를 제공하세요.
+필요한 정보 유형은 [LiteLLM 문제 해결 가이드](../troubleshoot)를 참조하세요.
 
-2. **Additional context** to help investigate:  
-   - **Workload:** A realistic sample of requests processed before and during the spike, including any recent configuration changes.  
-   - **Metrics:** Memory usage, CPU usage, P50/P99 latency, and any pod restarts or OOM events. Please include **screenshots** of the metrics whenever possible.  
-   - **Logs / Alerts:** Any relevant logs or alerts captured **before and during the spike**, including OOM errors or stack traces if available.
+---
 
-> Providing this information allows the team to analyze patterns, correlate memory spikes or OOMs with traffic or configuration, and attempt to reproduce the issue internally. Without it, our engineers will not have enough information to investigate the problem.
+## 3. 이슈를 재현할 수 없는 경우
+
+프로덕션과 동일한 테스트 환경에서 메모리 또는 OOM 이슈를 재현할 수 없다면 다음 정보를 제공하세요.
+
+1. **섹션 1과 2의 정보**
+   - 메모리/이슈 분류(섹션 1)
+   - 재현 시도와 환경 세부 정보(섹션 2)
+
+2. 조사를 돕는 **추가 컨텍스트**
+   - **워크로드:** 스파이크 전과 도중에 처리된 실제에 가까운 요청 샘플. 최근 구성 변경도 포함하세요.
+   - **메트릭:** 메모리 사용량, CPU 사용량, P50/P99 지연 시간, pod 재시작 또는 OOM 이벤트. 가능하면 메트릭 **스크린샷**을 포함하세요.
+   - **로그 / 알림:** 스파이크 **전과 도중**에 캡처한 관련 로그 또는 알림. 가능한 경우 OOM 오류나 stack trace도 포함하세요.
+
+> 이 정보를 제공하면 팀이 패턴을 분석하고, 메모리 스파이크 또는 OOM을 트래픽/구성과 연결해 보고, 내부에서 이슈 재현을 시도할 수 있습니다. 이 정보가 없으면 엔지니어가 문제를 조사하기에 충분한 근거가 부족합니다.

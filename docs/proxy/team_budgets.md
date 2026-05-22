@@ -2,21 +2,21 @@ import Image from '@theme/IdealImage';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Setting Team Budgets
+# 팀 예산 설정
 
 
-# Pre-Requisites
+# 사전 요구 사항
 
-- You must set up a Postgres database (e.g. Supabase, Neon, etc.)
+- Postgres 데이터베이스를 설정해야 합니다(예: Supabase, Neon 등).
 
 
-## Default Budget for Auto-Generated JWT Teams
+## 자동 생성된 JWT 팀의 기본 예산
 
-When using JWT authentication with `team_id_upsert: true`, you can automatically assign a default budget to any newly created team.
+`team_id_upsert: true`와 함께 JWT 인증을 사용하면 새로 생성되는 팀에 기본 예산을 자동으로 할당할 수 있습니다.
 
-This is configured in `default_team_settings` in your `config.yaml`.
+이는 `config.yaml`의 `default_team_settings`에서 설정합니다.
 
-**Example:**
+**예제:**
 ```yaml
 # in your config.yaml
 
@@ -30,20 +30,20 @@ litellm_settings:
     - team_id: "default-settings"
       max_budget: 100.0
 ```
-Track spend, set budgets for your Internal Team
+Internal Team의 지출을 추적하고 예산을 설정합니다.
 
 
-## Setting Monthly Team Budgets
+## 월별 팀 예산 설정
 
-### 1. Create a team 
-- Set `max_budget=000000001` ($ value the team is allowed to spend)
-- Set `budget_duration="1d"` (How frequently the budget should update)
+### 1. 팀 생성
+- `max_budget=000000001` 설정(팀이 사용할 수 있는 달러 금액)
+- `budget_duration="1d"` 설정(예산이 갱신되는 빈도)
 
 <Tabs>
 
 <TabItem value="API" label="API">
 
-Create a new team and set `max_budget` and `budget_duration`
+새 팀을 만들고 `max_budget`과 `budget_duration`을 설정합니다.
 ```shell
 curl -X POST 'http://0.0.0.0:4000/team/new' \
      -H 'Authorization: Bearer sk-1234' \
@@ -55,7 +55,7 @@ curl -X POST 'http://0.0.0.0:4000/team/new' \
         }' 
 ```
 
-Response
+응답
 ```shell
 {
  "team_alias": "QA Prod Bot",
@@ -67,7 +67,7 @@ Response
 ```
 </TabItem>
 
-<TabItem value="UI" label="Admin UI">
+<TabItem value="UI" label="관리자 UI">
 <Image img={require('../../img/create_team_gif_good.gif')} />
 
 </TabItem>
@@ -75,26 +75,26 @@ Response
 
 </Tabs>
 
-Possible values for `budget_duration`
+`budget_duration`에 사용할 수 있는 값
 
-| `budget_duration` | When Budget will reset |
+| `budget_duration` | 예산이 reset되는 시점 |
 | --- | --- |
-| `budget_duration="1s"` | every 1 second |
-| `budget_duration="1m"` | every 1 min |
-| `budget_duration="1h"` | every 1 hour |
-| `budget_duration="1d"` | every 1 day |
-| `budget_duration="30d"` | every 1 month |
+| `budget_duration="1s"` | 1초마다 |
+| `budget_duration="1m"` | 1분마다 |
+| `budget_duration="1h"` | 1시간마다 |
+| `budget_duration="1d"` | 1일마다 |
+| `budget_duration="30d"` | 1개월마다 |
 
 
-### 2. Create a key for the `team`
+### 2. `team`용 키 생성
 
-Create a key for Team=`QA Prod Bot` and `team_id="de35b29e-6ca8-4f47-b804-2b79d07aa99a"` from Step 1 
+1단계에서 만든 Team=`QA Prod Bot` 및 `team_id="de35b29e-6ca8-4f47-b804-2b79d07aa99a"`에 대한 키를 생성합니다.
 
 <Tabs>
 
 <TabItem value="api" label="API">
 
-💡 **The Budget for Team="QA Prod Bot" budget will apply to this team**
+💡 **Team="QA Prod Bot"의 예산이 이 팀에 적용됩니다.**
 
 ```shell
 curl -X POST 'http://0.0.0.0:4000/key/generate' \
@@ -103,22 +103,22 @@ curl -X POST 'http://0.0.0.0:4000/key/generate' \
      -d '{"team_id": "de35b29e-6ca8-4f47-b804-2b79d07aa99a"}'
 ```
 
-Response
+응답
 
 ```shell
 {"team_id":"de35b29e-6ca8-4f47-b804-2b79d07aa99a", "key":"sk-5qtncoYjzRcxMM4bDRktNQ"}
 ```
 </TabItem>
 
-<TabItem value="UI" label="Admin UI">
+<TabItem value="UI" label="관리자 UI">
 <Image img={require('../../img/create_key_in_team.gif')} />
 </TabItem>
 
 </Tabs>
 
-### 3. Test It
+### 3. 테스트
 
-Use the key from step 2 and run this Request twice
+2단계에서 만든 키를 사용해 이 요청을 두 번 실행합니다.
 <Tabs>
 
 <TabItem value="api" label="API">
@@ -138,7 +138,7 @@ curl -X POST 'http://0.0.0.0:4000/chat/completions' \
          }'
 ```
 
-On the 2nd response - expect to see the following exception
+두 번째 응답에서는 다음 예외가 표시되어야 합니다.
 
 ```shell
 {
@@ -153,18 +153,18 @@ On the 2nd response - expect to see the following exception
 
 </TabItem>
 
-<TabItem value="UI" label="Admin UI">
+<TabItem value="UI" label="관리자 UI">
 <Image img={require('../../img/test_key_budget.gif')} />
 </TabItem>
 </Tabs>
 
-## Advanced
+## 고급
 
-### Prometheus metrics for `remaining_budget`
+### `remaining_budget`용 Prometheus metric
 
-[More info about Prometheus metrics here](https://docs.litellm.ai/docs/proxy/prometheus)
+[Prometheus metric에 대한 자세한 정보 보기](https://docs.litellm.ai/docs/proxy/prometheus)
 
-You'll need the following in your proxy config.yaml
+Proxy `config.yaml`에 다음 설정이 필요합니다.
 
 ```yaml
 litellm_settings:
@@ -172,12 +172,12 @@ litellm_settings:
   failure_callback: ["prometheus"]
 ```
 
-Expect to see this metric on prometheus to track the Remaining Budget for the team
+팀의 remaining budget을 추적하려면 Prometheus에서 다음 metric을 확인할 수 있어야 합니다.
 
 ```shell
 litellm_remaining_team_budget_metric{team_alias="QA Prod Bot",team_id="de35b29e-6ca8-4f47-b804-2b79d07aa99a"} 9.699999999999992e-06
 ```
 
-## See Also
+## 함께 보기
 
-- [Per-model TPM/RPM for teams](./users.md#per-team-model) - Set rate limits per model for all keys in a team
+- [팀별 모델 단위 TPM/RPM](./users.md#per-team-model) - 팀의 모든 키에 모델별 rate limit을 설정합니다.

@@ -1,32 +1,32 @@
 import Image from '@theme/IdealImage';
 
-# Custom LLM Pricing
+# 커스텀 LLM 가격 책정 {#custom-llm-pricing}
 
-## Overview
+## 개요
 
-LiteLLM provides flexible cost tracking and pricing customization for all LLM providers:
+LiteLLM은 모든 LLM provider에 대해 유연한 비용 추적과 가격 책정 커스터마이징을 제공합니다.
 
-- **Custom Pricing** - Override default model costs or set pricing for custom models
-- **Cost Per Token** - Track costs based on input/output tokens (most common)
-- **Cost Per Second** - Track costs based on runtime (e.g., Sagemaker)
-- **Zero-Cost Models** - Bypass budget checks for free/on-premises models by setting costs to 0
-- **[Provider Discounts](./provider_discounts.md)** - Apply percentage-based discounts to specific providers
-- **[Provider Margins](./provider_margins.md)** - Add fees/margins to LLM costs for internal billing
-- **Base Model Mapping** - Ensure accurate cost tracking for Azure deployments
+- **Custom Pricing** - 기본 모델 비용을 재정의하거나 커스텀 모델의 가격을 설정합니다.
+- **Cost Per Token** - 입력/출력 token 기준으로 비용을 추적합니다. 가장 일반적인 방식입니다.
+- **Cost Per Second** - 실행 시간 기준으로 비용을 추적합니다. 예: Sagemaker.
+- **Zero-Cost 모델** - 비용을 0으로 설정해 무료/on-premises 모델의 budget check를 우회합니다.
+- **[Provider Discounts](./provider_discounts.md)** - 특정 provider에 percentage 기반 할인을 적용합니다.
+- **[Provider Margins](./provider_margins.md)** - 내부 과금용으로 LLM 비용에 fee/margin을 추가합니다.
+- **Base Model Mapping** - Azure deployment의 비용을 정확히 추적하도록 보장합니다.
 
-By default, the response cost is accessible in the logging object via `kwargs["response_cost"]` on success (sync + async). [**Learn More**](../observability/custom_callback.md)
+기본적으로 성공 시(sync + async) logging object에서 `kwargs["response_cost"]`를 통해 응답 비용에 접근할 수 있습니다. [**더 알아보기**](../observability/custom_callback.md)
 
 :::info
 
-LiteLLM already has pricing for 100+ models in our [model cost map](https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json). 
+LiteLLM은 이미 [model cost map](https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json)에 100개 이상의 모델 가격 정보를 포함하고 있습니다.
 
 :::
 
-## Cost Per Second (e.g. Sagemaker)
+## Cost Per Second (예: Sagemaker) {#cost-per-second-eg-sagemaker}
 
-#### Usage with LiteLLM Proxy Server
+#### LiteLLM Proxy Server 사용법 {#usage-with-litellm-proxy-server}
 
-**Step 1: Add pricing to config.yaml**
+**1단계: config.yaml에 가격 정보 추가**
 ```yaml
 model_list:
   - model_name: sagemaker-completion-model
@@ -41,19 +41,19 @@ model_list:
       input_cost_per_second: 0.000420 
 ```
 
-**Step 2: Start proxy**
+**2단계: proxy 시작**
 
 ```bash
 litellm /path/to/config.yaml
 ```
 
-**Step 3: View Spend Logs**
+**3단계: Spend 로그 확인**
 
 <Image img={require('../../img/spend_logs_table.png')} />
 
-## Cost Per Token (e.g. Azure)
+## Cost Per Token (예: Azure) {#cost-per-token-eg-azure}
 
-#### Usage with LiteLLM Proxy Server
+#### LiteLLM Proxy Server 사용법 {#usage-with-litellm-proxy-server-1}
 
 ```yaml
 model_list:
@@ -68,13 +68,13 @@ model_list:
       output_cost_per_token: 0.000520 # 👈 ONLY to track cost per token
 ```
 
-## Override Model Cost Map
+## Model Cost Map 재정의 {#override-model-cost-map}
 
-You can override [our model cost map](https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json) with your own custom pricing for a mapped model.
+매핑된 모델에 대해 자체 custom pricing을 사용하여 [model cost map](https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json)을 재정의할 수 있습니다.
 
-Just add a `model_info` key to your model in the config, and override the desired keys.
+config의 모델에 `model_info` key를 추가한 뒤 원하는 key를 재정의하면 됩니다.
 
-Example: Override Anthropic's model cost map for the `prod/claude-3-5-sonnet-20241022` model.
+예제: `prod/claude-3-5-sonnet-20241022` 모델에 대해 Anthropic model cost map을 재정의합니다.
 
 ```yaml
 model_list:
@@ -89,48 +89,48 @@ model_list:
       cache_read_input_token_cost: 0.0000006
 ```
 
-### Additional Cost Keys
+### 추가 Cost Key {#additional-cost-keys}
 
-There are other keys you can use to specify costs for different scenarios and modalities:
+다양한 시나리오와 modality의 비용을 지정하는 데 사용할 수 있는 다른 key도 있습니다.
 
-- `input_cost_per_token_above_200k_tokens` - Cost for input tokens when context exceeds 200k tokens
-- `output_cost_per_token_above_200k_tokens` - Cost for output tokens when context exceeds 200k tokens  
-- `cache_creation_input_token_cost_above_200k_tokens` - Cache creation cost for large contexts
-- `cache_read_input_token_cost_above_200k_token` - Cache read cost for large contexts
-- `input_cost_per_image` - Cost per image in multimodal requests
-- `output_cost_per_reasoning_token` - Cost for reasoning tokens (e.g., OpenAI o1 models)
-- `input_cost_per_audio_token` - Cost for audio input tokens
-- `output_cost_per_audio_token` - Cost for audio output tokens
-- `input_cost_per_video_per_second` - Cost per second of video input
-- `input_cost_per_video_per_second_above_128k_tokens` - Video cost for large contexts
-- `input_cost_per_character` - Character-based pricing for some providers
-- `input_cost_per_token_priority` / `output_cost_per_token_priority` - Priority/PayGo pricing (Vertex AI Gemini, Bedrock)
-- `input_cost_per_token_flex` / `output_cost_per_token_flex` - Batch/flex pricing
+- `input_cost_per_token_above_200k_tokens` - context가 200k token을 초과할 때 input token 비용
+- `output_cost_per_token_above_200k_tokens` - context가 200k token을 초과할 때 output token 비용
+- `cache_creation_input_token_cost_above_200k_tokens` - large context의 cache creation 비용
+- `cache_read_input_token_cost_above_200k_token` - large context의 cache read 비용
+- `input_cost_per_image` - multimodal 요청의 image당 비용
+- `output_cost_per_reasoning_token` - reasoning token 비용. 예: OpenAI o1 모델.
+- `input_cost_per_audio_token` - audio input token 비용
+- `output_cost_per_audio_token` - audio output token 비용
+- `input_cost_per_video_per_second` - video input의 초당 비용
+- `input_cost_per_video_per_second_above_128k_tokens` - large context의 video 비용
+- `input_cost_per_character` - 일부 provider의 문자 기반 가격 책정
+- `input_cost_per_token_priority` / `output_cost_per_token_priority` - Priority/PayGo 가격 책정(Vertex AI Gemini, Bedrock)
+- `input_cost_per_token_flex` / `output_cost_per_token_flex` - Batch/flex 가격 책정
 
-These keys evolve based on how new models handle multimodality. The latest version can be found at [https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json](https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json).
+새 모델이 multimodality를 처리하는 방식에 따라 이러한 key는 계속 바뀝니다. 최신 버전은 [https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json](https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json)에서 확인할 수 있습니다.
 
-### Service Tier / PayGo Pricing (Vertex AI, Bedrock)
+### Service Tier / PayGo 가격 책정(Vertex AI, Bedrock) {#service-tier--paygo-pricing-vertex-ai-bedrock}
 
-For providers that support multiple pricing tiers (e.g., Vertex AI PayGo, Bedrock service tiers), LiteLLM automatically applies the correct cost based on the response:
+여러 pricing tier를 지원하는 provider의 경우(예: Vertex AI PayGo, Bedrock service tier), LiteLLM은 응답을 기준으로 올바른 비용을 자동 적용합니다.
 
-- **Vertex AI Gemini**: Uses `usageMetadata.trafficType` (`ON_DEMAND_PRIORITY` → priority, `FLEX`/`BATCH` → flex). See [Vertex AI - PayGo / Priority Cost Tracking](../providers/vertex.md#paygo--priority-cost-tracking).
-- **Bedrock**: Uses `serviceTier` from the response. See [Bedrock - Usage - Service Tier](../providers/bedrock.md#usage---service-tier).
+- **Vertex AI Gemini**: `usageMetadata.trafficType`을 사용합니다(`ON_DEMAND_PRIORITY` → priority, `FLEX`/`BATCH` → flex). [Vertex AI - PayGo / Priority Cost Tracking](../providers/vertex.md#paygo--priority-cost-tracking)을 참고하세요.
+- **Bedrock**: 응답의 `serviceTier`를 사용합니다. [Bedrock - 사용법 - Service Tier](../providers/bedrock.md#usage---service-tier)를 참고하세요.
 
-## Zero-Cost Models (Bypass Budget Checks)
+## Zero-Cost 모델(Budget Check 우회) {#zero-cost-models-bypass-budget-checks}
 
-**Use Case**: You have on-premises or free models that should be accessible even when users exceed their budget limits.
+**사용 사례**: 사용자가 budget limit을 초과해도 접근할 수 있어야 하는 on-premises 또는 무료 모델이 있습니다.
 
-**Solution** ✅: Set both `input_cost_per_token` and `output_cost_per_token` to `0` (explicitly) to bypass all budget checks for that model.
+**해결 방법** ✅: 해당 모델의 모든 budget check를 우회하려면 `input_cost_per_token`과 `output_cost_per_token`을 모두 명시적으로 `0`으로 설정합니다.
 
 :::info
 
-When a model is configured with zero cost, LiteLLM will automatically skip ALL budget checks (user, team, team member, end-user, organization, and global proxy budget) for requests to that model.
+모델이 zero cost로 구성되면 LiteLLM은 해당 모델 요청에 대해 모든 budget check(user, team, team member, end-user, organization, global proxy budget)를 자동으로 건너뜁니다.
 
-**Important**: Both costs must be **explicitly set to 0**. If costs are `null` or undefined, the model will be treated as having cost and budget checks will apply.
+**중요**: 두 비용을 모두 **명시적으로 0으로 설정**해야 합니다. 비용이 `null`이거나 정의되지 않은 경우, 모델에 비용이 있는 것으로 처리되어 budget check가 적용됩니다.
 
 :::
 
-### Configuration Example
+### 설정 예제
 
 ```yaml
 model_list:
@@ -151,25 +151,25 @@ model_list:
     # No model_info - uses default pricing from cost map
 ```
 
-### Behavior
+### 동작 {#behavior}
 
-With the above configuration:
+위 구성에서는 다음과 같이 동작합니다.
 
-- **User over budget** → Can still use `on-prem-llama` ✅, but blocked from `gpt-4` ❌
-- **Team over budget** → Can still use `on-prem-llama` ✅, but blocked from `gpt-4` ❌
-- **End-user over budget** → Can still use `on-prem-llama` ✅, but blocked from `gpt-4` ❌
+- **User budget 초과** → `on-prem-llama`는 계속 사용할 수 있지만 ✅, `gpt-4`는 차단됩니다 ❌
+- **Team budget 초과** → `on-prem-llama`는 계속 사용할 수 있지만 ✅, `gpt-4`는 차단됩니다 ❌
+- **End-user budget 초과** → `on-prem-llama`는 계속 사용할 수 있지만 ✅, `gpt-4`는 차단됩니다 ❌
 
-This ensures your free/on-premises models remain accessible regardless of budget constraints, while paid models are still properly governed.
+이를 통해 무료/on-premises 모델은 budget constraint와 관계없이 계속 접근 가능하게 유지하면서, 유료 모델은 적절히 제어할 수 있습니다.
 
-## Set 'base_model' for Cost Tracking (e.g. Azure deployments)
+## Cost Tracking을 위한 `base_model` 설정(예: Azure deployment) {#set-base_model-for-cost-tracking-eg-azure-deployments}
 
-**Problem**: Azure returns `gpt-4` in the response when `azure/gpt-4-1106-preview` is used. This leads to inaccurate cost tracking
+**문제**: `azure/gpt-4-1106-preview`를 사용할 때 Azure가 응답에서 `gpt-4`를 반환합니다. 이로 인해 비용 추적이 부정확해집니다.
 
-**Solution** ✅ :  Set `base_model` on your config so litellm uses the correct model for calculating azure cost
+**해결 방법** ✅: Azure 비용 계산에 올바른 모델을 사용하도록 config에서 `base_model`을 설정합니다.
 
-Get the base model name from [here](https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json)
+[여기](https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json)에서 base model 이름을 확인하세요.
 
-Example config with `base_model`
+`base_model`을 사용하는 config 예제
 ```yaml
 model_list:
   - model_name: azure-gpt-3.5
@@ -182,13 +182,13 @@ model_list:
       base_model: azure/gpt-4-1106-preview
 ```
 
-### OpenAI Models with Dated Versions
+### Dated Version이 있는 OpenAI 모델 {#openai-models-with-dated-versions}
 
-`base_model` is also useful when OpenAI returns a dated model name in the response that differs from your configured model name.
+OpenAI가 응답에서 구성한 모델 이름과 다른 dated model name을 반환할 때도 `base_model`이 유용합니다.
 
-**Example**: You configure custom pricing for `gpt-4o-mini-audio-preview`, but OpenAI returns `gpt-4o-mini-audio-preview-2024-12-17` in the response. Since LiteLLM uses the response model name for pricing lookup, your custom pricing won't be applied.
+**예제**: `gpt-4o-mini-audio-preview`에 custom pricing을 구성했지만 OpenAI가 응답에서 `gpt-4o-mini-audio-preview-2024-12-17`을 반환합니다. LiteLLM은 pricing lookup에 응답의 모델 이름을 사용하므로 custom pricing이 적용되지 않습니다.
 
-**Solution** ✅: Set `base_model` to the key you want LiteLLM to use for pricing lookup.
+**해결 방법** ✅: LiteLLM이 pricing lookup에 사용하기를 원하는 key로 `base_model`을 설정합니다.
 
 ```yaml
 model_list:
@@ -205,23 +205,23 @@ model_list:
 ```
 
 
-## Debugging 
+## Debugging {#debugging}
 
-If you're custom pricing is not being used or you're seeing errors, please check the following:
+custom pricing이 사용되지 않거나 오류가 표시되면 다음 항목을 확인하세요.
 
-1. Run the proxy with `LITELLM_LOG="DEBUG"` or the `--detailed_debug` cli flag
+1. `LITELLM_LOG="DEBUG"` 또는 `--detailed_debug` CLI flag로 proxy를 실행합니다.
 
 ```bash
 litellm --config /path/to/config.yaml --detailed_debug
 ```
 
-2. Check logs for this line: 
+2. 로그에서 다음 줄을 확인합니다.
 
 ```
 LiteLLM:DEBUG: utils.py:263 - litellm.acompletion
 ```
 
-3. Check if 'input_cost_per_token' and 'output_cost_per_token' are top-level keys in the acompletion function. 
+3. acompletion function에서 `input_cost_per_token`과 `output_cost_per_token`이 top-level key인지 확인합니다.
 
 ```bash
 acompletion(
@@ -231,6 +231,6 @@ acompletion(
 )
 ```
 
-If these keys are not present, LiteLLM will not use your custom pricing. 
+이 key가 없으면 LiteLLM은 custom pricing을 사용하지 않습니다.
 
-If the problem persists, please file an issue on [GitHub](https://github.com/BerriAI/litellm/issues). 
+문제가 계속되면 [GitHub](https://github.com/BerriAI/litellm/issues)에 issue를 등록하세요.

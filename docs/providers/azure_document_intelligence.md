@@ -1,17 +1,17 @@
-# Azure Document Intelligence OCR
+# Azure Document Intelligence OCR 사용하기
 
-## Overview
+## 개요
 
-| Property | Details |
+| 속성 | 세부 정보 |
 |-------|-------|
-| Description | Azure Document Intelligence (formerly Form Recognizer) provides advanced document analysis capabilities including text extraction, layout analysis, and structure recognition |
-| Provider Route on LiteLLM | `azure_ai/doc-intelligence/` |
-| Supported Operations | `/ocr` |
-| Link to Provider Doc | [Azure Document Intelligence ↗](https://learn.microsoft.com/en-us/azure/ai-services/document-intelligence/)
+| 설명 | Azure Document Intelligence(이전 Form Recognizer)는 텍스트 추출, 레이아웃 분석, 구조 인식을 포함한 고급 문서 분석 기능을 제공합니다 |
+| LiteLLM 공급자 라우트 | `azure_ai/doc-intelligence/` |
+| 지원 작업 | `/ocr` |
+| 공급자 문서 링크 | [Azure Document Intelligence ↗](https://learn.microsoft.com/en-us/azure/ai-services/document-intelligence/)
 
-Extract text and analyze document structure using Azure Document Intelligence's powerful prebuilt models.
+Azure Document Intelligence의 강력한 사전 빌드 모델을 사용해 텍스트를 추출하고 문서 구조를 분석합니다.
 
-## Quick Start
+## 빠른 시작
 
 ### **LiteLLM SDK**
 
@@ -51,12 +51,12 @@ model_list:
       mode: ocr
 ```
 
-**Start Proxy**
+**프록시 시작**
 ```bash
 litellm --config proxy_config.yaml
 ```
 
-**Call OCR via Proxy**
+**프록시로 OCR 호출**
 ```bash showLineNumbers title="cURL Request"
 curl -X POST http://localhost:4000/ocr \
   -H "Content-Type: application/json" \
@@ -70,11 +70,11 @@ curl -X POST http://localhost:4000/ocr \
   }'
 ```
 
-## How It Works
+## 작동 방식
 
-Azure Document Intelligence uses an asynchronous API pattern. LiteLLM AI Gateway handles the request/response transformation and polling automatically.
+Azure Document Intelligence는 비동기 API 패턴을 사용합니다. LiteLLM AI Gateway가 요청/응답 변환과 폴링을 자동으로 처리합니다.
 
-### Complete Flow Diagram
+### 전체 흐름도
 
 ```mermaid
 sequenceDiagram
@@ -103,36 +103,36 @@ sequenceDiagram
     LiteLLM-->>Client: OCR Response (Mistral format)
 ```
 
-### What LiteLLM Does For You
+### LiteLLM이 대신 처리하는 작업
 
-When you call `litellm.ocr()` via SDK or `/ocr` via Proxy:
+SDK로 `litellm.ocr()`를 호출하거나 프록시로 `/ocr`를 호출하면:
 
-1. **Request Transformation**: Converts Mistral OCR format → Azure Document Intelligence format
-2. **Submits Document**: Sends transformed request to Azure DI API
-3. **Handles 202 Response**: Captures the `Operation-Location` URL from response headers
-4. **Automatic Polling**: 
-   - Polls the operation URL at intervals specified by `retry-after` header (default: 2 seconds)
-   - Continues until status is `succeeded` or `failed`
-   - Respects Azure's rate limiting via `retry-after` headers
-5. **Response Transformation**: Converts Azure DI format → Mistral OCR format
-6. **Returns Result**: Sends unified Mistral format response to client
+1. **요청 변환**: Mistral OCR 형식을 Azure Document Intelligence 형식으로 변환합니다
+2. **문서 제출**: 변환된 요청을 Azure DI API로 보냅니다
+3. **202 응답 처리**: 응답 헤더에서 `Operation-Location` URL을 캡처합니다
+4. **자동 폴링**:
+   - `retry-after` 헤더에 지정된 간격으로 작업 URL을 폴링합니다(기본값: 2초)
+   - 상태가 `succeeded` 또는 `failed`가 될 때까지 계속합니다
+   - `retry-after` 헤더를 사용해 Azure의 속도 제한을 준수합니다
+5. **응답 변환**: Azure DI 형식을 Mistral OCR 형식으로 변환합니다
+6. **결과 반환**: 통합된 Mistral 형식 응답을 클라이언트에 보냅니다
 
-**Polling Configuration:**
-- Default timeout: 120 seconds
-- Configurable via `AZURE_OPERATION_POLLING_TIMEOUT` environment variable
-- Uses sync (`time.sleep()`) or async (`await asyncio.sleep()`) based on call type
+**Polling 설정:**
+- 기본 제한 시간: 120초
+- `AZURE_OPERATION_POLLING_TIMEOUT` 환경 변수로 설정할 수 있습니다
+- 호출 유형에 따라 동기(`time.sleep()`) 또는 비동기(`await asyncio.sleep()`) 방식을 사용합니다
 
 :::info
-**Typical processing time**: 2-10 seconds depending on document size and complexity
+**일반적인 처리 시간**: 문서 크기와 복잡도에 따라 2~10초
 :::
 
-## Supported Models
+## 지원 모델
 
-Azure Document Intelligence offers several prebuilt models optimized for different use cases:
+Azure Document Intelligence는 다양한 사용 사례에 최적화된 여러 사전 빌드 모델을 제공합니다.
 
-### prebuilt-layout (Recommended)
+### prebuilt-layout (권장)
 
-Best for general document OCR with structure preservation.
+구조를 보존해야 하는 일반 문서 OCR에 가장 적합합니다.
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -170,7 +170,7 @@ model_list:
       mode: ocr
 ```
 
-**Usage:**
+**사용법:**
 ```bash
 curl -X POST http://localhost:4000/ocr \
   -H "Authorization: Bearer your-api-key" \
@@ -180,17 +180,17 @@ curl -X POST http://localhost:4000/ocr \
 </TabItem>
 </Tabs>
 
-**Features:**
-- Text extraction with markdown formatting
-- Table detection and extraction
-- Document structure analysis
-- Paragraph and section recognition
+**기능:**
+- 마크다운 형식을 적용한 텍스트 추출
+- 표 감지 및 추출
+- 문서 구조 분석
+- 문단 및 섹션 인식
 
-**Pricing:** $10 per 1,000 pages
+**가격:** 1,000페이지당 $10
 
 ### prebuilt-read
 
-Optimized for reading text from documents - fastest and most cost-effective.
+문서에서 텍스트를 읽는 데 최적화되어 있으며 가장 빠르고 비용 효율적입니다.
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -225,7 +225,7 @@ model_list:
       mode: ocr
 ```
 
-**Usage:**
+**사용법:**
 ```bash
 curl -X POST http://localhost:4000/ocr \
   -H "Authorization: Bearer your-api-key" \
@@ -235,16 +235,16 @@ curl -X POST http://localhost:4000/ocr \
 </TabItem>
 </Tabs>
 
-**Features:**
-- Fast text extraction
-- Optimized for reading-heavy documents
-- Basic structure recognition
+**기능:**
+- 빠른 텍스트 추출
+- 텍스트 읽기 중심 문서에 최적화
+- 기본 구조 인식
 
-**Pricing:** $1.50 per 1,000 pages
+**가격:** 1,000페이지당 $1.50
 
 ### prebuilt-document
 
-General-purpose document analysis with key-value pairs.
+키-값 쌍을 포함하는 범용 문서 분석용 모델입니다.
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -279,7 +279,7 @@ model_list:
       mode: ocr
 ```
 
-**Usage:**
+**사용법:**
 ```bash
 curl -X POST http://localhost:4000/ocr \
   -H "Authorization: Bearer your-api-key" \
@@ -289,13 +289,13 @@ curl -X POST http://localhost:4000/ocr \
 </TabItem>
 </Tabs>
 
-**Pricing:** $10 per 1,000 pages
+**가격:** 1,000페이지당 $10
 
-## Document Types
+## 문서 유형
 
-Azure Document Intelligence supports various document formats.
+Azure Document Intelligence는 다양한 문서 형식을 지원합니다.
 
-### PDF Documents
+### PDF 문서
 
 ```python showLineNumbers title="PDF OCR"
 response = litellm.ocr(
@@ -307,7 +307,7 @@ response = litellm.ocr(
 )
 ```
 
-### Image Documents
+### 이미지 문서
 
 ```python showLineNumbers title="Image OCR"
 response = litellm.ocr(
@@ -319,9 +319,9 @@ response = litellm.ocr(
 )
 ```
 
-**Supported image formats:** JPEG, PNG, BMP, TIFF
+**지원되는 이미지 형식:** JPEG, PNG, BMP, TIFF
 
-### Base64 Encoded Documents
+### Base64 인코딩 문서
 
 ```python showLineNumbers title="Base64 PDF"
 import base64
@@ -339,7 +339,7 @@ response = litellm.ocr(
 )
 ```
 
-## Response Format
+## 응답 형식
 
 ```python showLineNumbers title="Response Structure"
 # Response has the following structure
@@ -359,7 +359,7 @@ for page in response.pages:
         print(f"Height: {page.dimensions.height}px")
 ```
 
-## Async Support
+## 비동기 지원
 
 ```python showLineNumbers title="Async Usage"
 import litellm
@@ -379,11 +379,11 @@ async def process_document():
 response = asyncio.run(process_document())
 ```
 
-## Cost Tracking
+## 비용 추적
 
-LiteLLM automatically tracks costs for Azure Document Intelligence OCR:
+LiteLLM은 Azure Document Intelligence OCR 비용을 자동으로 추적합니다.
 
-| Model | Cost per 1,000 Pages |
+| 모델 | 1,000페이지당 비용 |
 |-------|---------------------|
 | prebuilt-read | $1.50 |
 | prebuilt-layout | $10.00 |
@@ -399,10 +399,9 @@ response = litellm.ocr(
 print(f"Cost: ${response._hidden_params.get('response_cost', 0)}")
 ```
 
-## Additional Resources
+## 추가 자료
 
-- [Azure Document Intelligence Documentation](https://learn.microsoft.com/en-us/azure/ai-services/document-intelligence/)
-- [Pricing Details](https://azure.microsoft.com/en-us/pricing/details/ai-document-intelligence/)
-- [Supported File Formats](https://learn.microsoft.com/en-us/azure/ai-services/document-intelligence/concept-model-overview)
-- [LiteLLM OCR Documentation](https://docs.litellm.ai/docs/ocr)
-
+- [Azure Document Intelligence 문서](https://learn.microsoft.com/en-us/azure/ai-services/document-intelligence/)
+- [가격 세부 정보](https://azure.microsoft.com/en-us/pricing/details/ai-document-intelligence/)
+- [지원되는 파일 형식](https://learn.microsoft.com/en-us/azure/ai-services/document-intelligence/concept-model-overview)
+- [LiteLLM OCR 문서](https://docs.litellm.ai/docs/ocr)

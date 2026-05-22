@@ -1,35 +1,35 @@
-# Worker Startup Hooks
+# Worker Startup Hook 설정 {#worker-startup-hook}
 
-Use `LITELLM_WORKER_STARTUP_HOOKS` to run custom initialization functions in **each worker process** during proxy startup. This is essential when using multi-worker deployments (`--num_workers > 1`) with libraries that require per-process initialization, such as [gflags](https://github.com/google/python-gflags).
+`LITELLM_WORKER_STARTUP_HOOKS`를 사용하면 프록시 시작 중 **각 워커 프로세스**에서 사용자 지정 초기화 함수를 실행할 수 있습니다. 이는 [gflags](https://github.com/google/python-gflags)처럼 프로세스별 초기화가 필요한 라이브러리와 함께 multi-worker 배포(`--num_workers > 1`)를 사용할 때 필수적입니다.
 
-## The Problem
+## 문제
 
-When running the LiteLLM proxy with multiple workers:
+LiteLLM 프록시를 여러 워커로 실행하는 경우:
 
 ```bash
 litellm --config config.yaml --num_workers 4
 ```
 
-Each worker is a **separate process** spawned by uvicorn, gunicorn, or Granian (`--run_granian`). Any in-process state initialized in the master process (before `run_server()`) is **not available** in worker processes. This includes:
+각 워커는 uvicorn 또는 gunicorn이 생성하는 **별도 프로세스**입니다. master process에서(`run_server()` 이전) 초기화된 in-process 상태는 워커 프로세스에서 **사용할 수 없습니다**. 여기에는 다음이 포함됩니다.
 
 - [python-gflags](https://github.com/google/python-gflags) (`gflags.FLAGS`)
 - [absl-py flags](https://abseil.io/docs/python/guides/flags) (`absl.flags.FLAGS`)
-- Custom singleton registries or connection pools
-- Any module-level state that requires explicit initialization
+- 사용자 지정 singleton registry 또는 connection pool
+- 명시적 초기화가 필요한 모듈 수준 상태
 
-## Usage
+## 사용법
 
-Set the `LITELLM_WORKER_STARTUP_HOOKS` environment variable to a comma-separated list of `module.path:function_name` callables:
+`LITELLM_WORKER_STARTUP_HOOKS` 환경 변수를 쉼표로 구분된 `module.path:function_name` callable 목록으로 설정합니다.
 
 ```bash
 export LITELLM_WORKER_STARTUP_HOOKS="my_module:my_init_function"
 ```
 
-Each hook is called **early** in the worker startup lifecycle — before config loading, database setup, or any request handling. Both sync and async functions are supported.
+각 hook은 워커 시작 lifecycle의 **초기 단계**에서 호출됩니다. config loading, database setup 또는 request handling보다 먼저 실행됩니다. sync 함수와 async 함수가 모두 지원됩니다.
 
-## Example: gflags Initialization
+## 예제: gflags 초기화
 
-### 1. Define your wrapper module
+### 1. wrapper module 정의
 
 ```python title="my_litellm_wrapper.py"
 import gflags
@@ -69,7 +69,7 @@ def init_gflags_for_worker():
     init_gflags(raw_args=raw_args, known_only=True)
 ```
 
-### 2. Start the proxy
+### 2. 프록시 시작
 
 ```python title="start_proxy.py"
 import json
@@ -96,7 +96,7 @@ run_server(
 )
 ```
 
-Or via shell:
+또는 shell을 통해 실행합니다.
 
 ```bash
 export GFLAGS_ARGV='["my_app", "--my_flag=value", "--batch_size=32"]'
@@ -105,7 +105,7 @@ export LITELLM_WORKER_STARTUP_HOOKS="my_litellm_wrapper:init_gflags_for_worker"
 litellm --config config.yaml --num_workers 4
 ```
 
-## How It Works
+## 작동 방식
 
 ```
 Master Process                          Worker Process (×N)
@@ -118,23 +118,23 @@ Master Process                          Worker Process (×N)
                                            → Ready to serve requests
 ```
 
-- Hooks run at the **very beginning** of `proxy_startup_event` (the FastAPI lifespan), before config loading, database connections, or any other initialization.
-- Environment variables set in the master process are **inherited** by worker processes (standard Unix fork/spawn behavior).
-- If a hook **raises an exception**, the worker fails to start — this is intentional, since missing initialization (e.g., uninitialized gflags) would cause downstream errors.
+- Hook은 config loading, database connection 또는 기타 초기화보다 먼저 `proxy_startup_event`(FastAPI lifespan)의 **가장 처음**에 실행됩니다.
+- master process에서 설정한 환경 변수는 워커 프로세스에 **상속**됩니다(표준 Unix fork/spawn 동작).
+- hook이 **exception을 발생시키면** worker 시작에 실패합니다. 이는 의도된 동작입니다. 초기화 누락(예: 초기화되지 않은 gflags)은 downstream error를 일으키기 때문입니다.
 
-## Multiple Hooks
+## 여러 Hook
 
-Separate multiple hooks with commas:
+여러 hook은 쉼표로 구분합니다.
 
 ```bash
 export LITELLM_WORKER_STARTUP_HOOKS="my_module:init_gflags,my_module:init_metrics,my_module:init_connections"
 ```
 
-Hooks are executed **in order**, left to right.
+Hook은 왼쪽에서 오른쪽으로 **순서대로** 실행됩니다.
 
-## Async Hooks
+## Async Hook
 
-Async functions are also supported — they are automatically awaited:
+async 함수도 지원됩니다. 자동으로 await됩니다.
 
 ```python
 async def init_async_connections():
@@ -146,10 +146,10 @@ async def init_async_connections():
 export LITELLM_WORKER_STARTUP_HOOKS="my_module:init_async_connections"
 ```
 
-## Reference
+## 참조
 
-| Environment Variable | Description |
+| 환경 변수 | 설명 |
 |---|---|
-| `LITELLM_WORKER_STARTUP_HOOKS` | Comma-separated `module.path:function_name` callables to run in each worker on startup |
+| `LITELLM_WORKER_STARTUP_HOOKS` | startup 시 각 worker에서 실행할 쉼표로 구분된 `module.path:function_name` callable |
 
-The hook format follows the standard Python entry point syntax: `module.path:function_name`, where `module.path` is a dotted Python import path and `function_name` is the name of the callable within that module.
+hook 형식은 표준 Python entry point syntax인 `module.path:function_name`을 따릅니다. 여기서 `module.path`는 점으로 구분된 Python import path이고, `function_name`은 해당 module 안의 callable 이름입니다.

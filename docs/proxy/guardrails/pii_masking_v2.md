@@ -2,35 +2,35 @@ import Image from '@theme/IdealImage';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# PII, PHI Masking - Presidio
+# PII, PHI 마스킹 - Presidio {#pii-phi-masking-presidio}
 
-## Overview
+## 개요
 
-| Property | Details |
+| 속성 | 세부 정보 |
 |-------|-------|
-| Description | Use this guardrail to mask PII (Personally Identifiable Information), PHI (Protected Health Information), and other sensitive data.  |
+| 설명 | PII(Personally Identifiable Information), PHI(Protected Health Information), 기타 민감 데이터를 마스킹하는 guardrail입니다. |
 | Provider | [Microsoft Presidio](https://github.com/microsoft/presidio/) |
-| Supported Entity Types | All Presidio Entity Types |
+| Supported Entity Types | 모든 Presidio Entity Type |
 | Supported Actions | `MASK`, `BLOCK` |
 | Supported Modes | `pre_call`, `during_call`, `post_call`, `logging_only`, `pre_mcp_call` |
-| Language Support | Configurable via `presidio_language` parameter (supports multiple languages including English, Spanish, German, etc.) |
+| Language Support | `presidio_language` parameter로 구성 가능(English, Spanish, German 등 여러 언어 지원) |
 
-## Deployment options
+## 배포 옵션
 
-For this guardrail you need a deployed Presidio Analyzer and Presido Anonymizer containers. 
+이 guardrail을 사용하려면 배포된 Presidio Analyzer 및 Presidio Anonymizer container가 필요합니다.
 
-| Deployment Option | Details |
+| 배포 옵션 | 세부 정보 |
 |------------------|----------|
-| Deploy Presidio Docker Containers | - [Presidio Analyzer Docker Container](https://hub.docker.com/r/microsoft/presidio-analyzer)<br/>- [Presidio Anonymizer Docker Container](https://hub.docker.com/r/microsoft/presidio-anonymizer) |
+| Presidio Docker Container 배포 | - [Presidio Analyzer Docker Container](https://hub.docker.com/r/microsoft/presidio-analyzer)<br/>- [Presidio Anonymizer Docker Container](https://hub.docker.com/r/microsoft/presidio-anonymizer) |
 
-## Quick Start
+## 빠른 시작
 
 <Tabs>
 <TabItem value="ui" label="LiteLLM UI">
 
-### 1. Create a PII, PHI Masking Guardrail 
+### 1. PII, PHI Masking Guardrail 생성
 
-On the LiteLLM UI, navigate to Guardrails. Click "Add Guardrail". On this dropdown select "Presidio PII" and enter your presidio analyzer and anonymizer endpoints. 
+LiteLLM UI에서 가드레일로 이동합니다. "Add Guardrail"을 클릭합니다. dropdown에서 "Presidio PII"를 선택하고 Presidio analyzer 및 anonymizer endpoint를 입력합니다.
 
 <Image 
   img={require('../../../img/presidio_1.png')}
@@ -40,33 +40,33 @@ On the LiteLLM UI, navigate to Guardrails. Click "Add Guardrail". On this dropdo
 <br/>
 <br/>
 
-#### 1.2 Configure Entity Types
+#### 1.2 Entity Type 구성
 
-Now select the entity types you want to mask. See the [supported actions here](#supported-actions)
+이제 마스킹할 entity type을 선택합니다. [지원되는 action](#supported-actions)을 참고하세요.
 
 <Image 
   img={require('../../../img/presidio_2.png')}
   style={{width: '50%', display: 'block', margin: '0'}}
 />
 
-#### 1.3 Set Default Language (Optional)
+#### 1.3 기본 Language 설정(선택 사항)
 
-You can also configure a default language for PII analysis using the `presidio_language` field in the UI. This sets the default language that will be used for all requests unless overridden by a per-request language setting. 
+UI의 `presidio_language` field로 PII analysis의 기본 언어를 구성할 수도 있습니다. 요청별 language 설정으로 override하지 않는 한 모든 요청에 사용할 기본 언어를 설정합니다.
 
-**Supported language codes include:**
-- `en` - English (default)
-- `es` - Spanish  
+**지원되는 language code 예시:**
+- `en` - English(기본값)
+- `es` - Spanish
 - `de` - German
 
 
-If not specified, English (`en`) will be used as the default language.
+지정하지 않으면 English(`en`)가 기본 언어로 사용됩니다.
 
 </TabItem>
 
 
 <TabItem value="config" label="Config.yaml">
 
-Define your guardrails under the `guardrails` section
+`guardrails` section 아래에 guardrail을 정의합니다.
 
 ```yaml title="config.yaml" showLineNumbers
 model_list:
@@ -83,20 +83,20 @@ guardrails:
       presidio_language: "en"  # optional: set default language for PII analysis
 ```
 
-Set the following env vars 
+다음 env var를 설정합니다.
 
 ```bash title="Setup Environment Variables" showLineNumbers
 export PRESIDIO_ANALYZER_API_BASE="http://localhost:5002"
 export PRESIDIO_ANONYMIZER_API_BASE="http://localhost:5001"
 ```
 
-#### Supported values for `mode`
+#### `mode` 지원 값
 
-- `pre_call` Run **before** LLM call, on **input**
-- `post_call` Run **after** LLM call, on **input & output**
-- `logging_only` Run **after** LLM call, only apply PII Masking before logging to Langfuse, etc. Not on the actual llm api request / response.
+- `pre_call` LLM 호출 **전**에 **input**에 대해 실행
+- `post_call` LLM 호출 **후**에 **input & output**에 대해 실행
+- `logging_only` LLM 호출 **후** 실행하며 Langfuse 등에 logging하기 전에만 PII 마스킹 적용. 실제 LLM API request / response에는 적용하지 않음
 
-### 2. Start LiteLLM Gateway 
+### 2. LiteLLM Gateway 시작
 
 ```shell title="Start Gateway" showLineNumbers
 litellm --config config.yaml --detailed_debug
@@ -106,11 +106,11 @@ litellm --config config.yaml --detailed_debug
 </Tabs>
 
 
-### 3. Test it! 
+### 3. 테스트
 
-#### 3.1 LiteLLM UI 
+#### 3.1 LiteLLM UI
 
-On the litellm UI, navigate to the 'Test Keys' page, select the guardrail you created and send the following messaged filled with PII data. 
+LiteLLM UI에서 'Test Keys' page로 이동하고 생성한 guardrail을 선택한 뒤 PII 데이터가 포함된 다음 message를 보냅니다.
 
 ```text title="PII Request" showLineNumbers
 My credit card is 4111-1111-1111-1111 and my email is test@example.com.
@@ -123,16 +123,16 @@ My credit card is 4111-1111-1111-1111 and my email is test@example.com.
 
 <br/>
 
-#### 3.2 Test in code
+#### 3.2 코드에서 테스트
 
-In order to apply a guardrail for a request send `guardrails=["presidio-pii"]` in the request body. 
+요청에 guardrail을 적용하려면 request body에 `guardrails=["presidio-pii"]`를 보냅니다.
 
-**[Langchain, OpenAI SDK Usage Examples](../proxy/user_keys#request-format)**
+**[Langchain, OpenAI SDK 사용법 예제](../proxy/user_keys#request-format)**
 
 <Tabs>
 <TabItem label="Masked PII call" value = "not-allowed">
 
-Expect this to mask `Jane Doe` since it's PII
+`Jane Doe`는 PII이므로 마스킹될 것으로 예상합니다.
 
 ```shell title="Masked PII Request" showLineNumbers
 curl http://localhost:4000/chat/completions \
@@ -147,7 +147,7 @@ curl http://localhost:4000/chat/completions \
   }'
 ```
 
-Expected response on failure
+예상 응답:
 
 ```shell title="Response with Masked PII" showLineNumbers
 {
@@ -198,13 +198,13 @@ curl http://localhost:4000/chat/completions \
 </Tabs>
 
 
-## Tracing Guardrail requests
+## Guardrail 요청 tracing {#guardrail-request-tracing}
 
-Once your guardrail is live in production, you will also be able to trace your guardrail on LiteLLM Logs, Langfuse, Arize Phoenix, etc, all LiteLLM logging integrations. 
+guardrail이 production에서 live 상태가 되면 LiteLLM 로그, Langfuse, Arize Phoenix 등 모든 LiteLLM logging integration에서 guardrail을 추적할 수 있습니다.
 
 ### LiteLLM UI 
 
-On the LiteLLM logs page you can see that the PII content was masked for this specific request. And you can see detailed tracing for the guardrail. This allows you to monitor entity types masked with their corresponding confidence score and the duration of the guardrail execution.  
+LiteLLM logs page에서 특정 요청의 PII content가 마스킹된 것을 확인할 수 있습니다. guardrail의 상세 tracing도 볼 수 있습니다. 이를 통해 마스킹된 entity type, 해당 confidence score, guardrail 실행 duration을 monitoring할 수 있습니다.
 
 <Image 
   img={require('../../../img/presidio_4.png')}
@@ -213,37 +213,37 @@ On the LiteLLM logs page you can see that the PII content was masked for this sp
 
 ### Langfuse 
 
-When connecting Litellm to Langfuse, you can see the guardrail information on the Langfuse Trace. 
+LiteLLM을 Langfuse에 연결하면 Langfuse Trace에서 guardrail 정보를 볼 수 있습니다.
 
 <Image 
   img={require('../../../img/presidio_5.png')}
   style={{width: '60%', display: 'block', margin: '0'}}
 />
 
-## Entity Types, Detection Confidence Score Threshold, and Scope Configuration
+## Entity Type, Detection Confidence Score Threshold, Scope 설정 {#entity-type-detection-confidence-score-threshold-scope-settings}
 
 - **Entity Types**
-  - You can configure specific entity types for PII detection and decide how to handle each entity type (mask or block).
-- **Detection Confidence Score Threshold**
-  - You can also provide an optional confidence score threshold at which detections will be passed to the anonymizer. Entities without an entry in `presidio_score_thresholds` keep all detections (no minimum score).
+  - PII detection용 특정 entity type을 구성하고 각 entity type을 처리하는 방식(mask 또는 block)을 결정할 수 있습니다.
+- **감지 Confidence Score Threshold**
+  - detection이 anonymizer로 전달될 선택적 confidence score threshold도 제공할 수 있습니다. `presidio_score_thresholds`에 entry가 없는 entity는 모든 detection을 유지합니다(최소 score 없음).
 - **Scope**
-  - Use the optional `presidio_filter_scope` to choose where checks run:
+  - optional `presidio_filter_scope`로 check가 실행될 위치를 선택합니다.
 
-      - `input`: only user → model content is scanned
-      - `output`: only model → user content is scanned
-      - `both` (default): scan both directions
+      - `input`: user → model content만 scan
+      - `output`: model → user content만 scan
+      - `both`(기본값): 양방향 scan
 
-    **What about `output_parse_pii`?**  
-    This flag only un-masks tokens back to the originals after the model call; it does not run Presidio detection on outputs. Use `presidio_filter_scope: output` (or `both`) when you want Presidio to actively scan and mask the model’s response before it reaches the user.
+    **`output_parse_pii`는 어떤가요?**  
+    이 flag는 model call 이후 token을 원래 값으로 unmask할 뿐이며 output에 대해 Presidio detection을 실행하지 않습니다. 모델 응답이 사용자에게 도달하기 전에 Presidio가 적극적으로 scan하고 마스킹하도록 하려면 `presidio_filter_scope: output`(또는 `both`)을 사용하세요.
 
-    **When to pick input vs output:**
-    - `input`: Protect upstream providers; strip PII before it leaves your boundary.
-    - `output`: Catch PII the model might generate or leak back to users.
-    - `both`: End-to-end protection in both directions.
+    **input vs output 선택 기준:**
+    - `input`: upstream provider 보호. PII가 경계를 벗어나기 전에 제거합니다.
+    - `output`: 모델이 생성하거나 사용자에게 다시 노출할 수 있는 PII를 잡습니다.
+    - `both`: 양방향 end-to-end 보호.
 
-### Configure Entity Types, Detection Confidence Score Threshold, and Scope in `config.yaml`
+### `config.yaml`에서 Entity Type, Detection Confidence Score Threshold, Scope 구성
 
-Define your guardrails with specific entity type configuration:
+특정 entity type configuration으로 guardrail을 정의합니다.
 
 ```yaml title="config.yaml with Entity Types" showLineNumbers
 model_list:
@@ -277,29 +277,29 @@ guardrails:
         CREDIT_CARD: "BLOCK"  # Will block requests containing credit card numbers
 ```
 
-#### Confidence threshold behavior:
-- No `presidio_score_thresholds`: keep all detections (no thresholds applied)
-- `presidio_score_thresholds.ALL`: apply this confidence threshold to every detection
-- `presidio_score_thresholds.<ENTITY>`: apply only to that entity
-- If both `ALL` and an entity override exist, `ALL` applies globally and the entity override takes precedence for that entity
+#### Confidence threshold 동작:
+- `presidio_score_thresholds` 없음: 모든 detection 유지(threshold 미적용)
+- `presidio_score_thresholds.ALL`: 모든 detection에 이 confidence threshold 적용
+- `presidio_score_thresholds.<ENTITY>`: 해당 entity에만 적용
+- `ALL`과 entity override가 모두 있으면 `ALL`은 전역 적용되고 entity override가 해당 entity에 우선 적용됩니다.
 
-### Supported Entity Types
+### 지원되는 Entity Type
 
-LiteLLM Supports all Presidio entity types. See the complete list of presidio entity types [here](https://microsoft.github.io/presidio/supported_entities/).
+LiteLLM은 모든 Presidio entity type을 지원합니다. 전체 Presidio entity type 목록은 [여기](https://microsoft.github.io/presidio/supported_entities/)에서 확인하세요.
 
-### Supported Actions
+### 지원되는 Action
 
-For each entity type, you can specify one of the following actions:
+각 entity type에 다음 action 중 하나를 지정할 수 있습니다.
 
-- `MASK`: Replace the entity with a placeholder (e.g., `<PERSON>`)
-- `BLOCK`: Block the request entirely if this entity type is detected
+- `MASK`: entity를 placeholder로 대체(예: `<PERSON>`)
+- `BLOCK`: 이 entity type이 감지되면 요청 전체 차단
 
-### Test request with Entity Type Configuration
+### Entity Type 설정으로 요청 테스트
 
 <Tabs>
 <TabItem label="Masking PII entities" value="masked-entities">
 
-When using the masking configuration, entities will be replaced with placeholders:
+마스킹 configuration을 사용하면 entity가 placeholder로 대체됩니다.
 
 ```shell title="Masking PII Request" showLineNumbers
 curl http://localhost:4000/chat/completions \
@@ -314,7 +314,7 @@ curl http://localhost:4000/chat/completions \
   }'
 ```
 
-Example response with masked entities:
+마스킹된 entity가 포함된 예제 response:
 
 ```json
 {
@@ -337,7 +337,7 @@ Example response with masked entities:
 
 <TabItem label="Blocking PII entities" value="blocked-entity">
 
-When using the blocking configuration, requests containing the configured entity types will be blocked completely with an exception:
+차단 configuration을 사용하면 구성된 entity type이 포함된 요청이 exception과 함께 완전히 차단됩니다.
 
 ```shell title="Blocking PII Request" showLineNumbers
 curl http://localhost:4000/chat/completions \
@@ -352,7 +352,7 @@ curl http://localhost:4000/chat/completions \
   }'
 ```
 
-When running this request, the proxy will raise a `BlockedPiiEntityError` exception.
+이 요청을 실행하면 proxy가 `BlockedPiiEntityError` exception을 발생시킵니다.
 
 ```json
 {
@@ -362,25 +362,25 @@ When running this request, the proxy will raise a `BlockedPiiEntityError` except
 }
 ```
 
-The exception includes the entity type that was blocked (`CREDIT_CARD` in this case) and the guardrail name that caused the blocking.
+exception에는 차단된 entity type(이 경우 `CREDIT_CARD`)과 차단을 유발한 guardrail 이름이 포함됩니다.
 
 </TabItem>
 </Tabs>
 
-## Advanced
+## 고급
 
-### Supported Modes
+### 지원되는 Mode
 
-The Presidio guardrail supports the following modes:
+Presidio guardrail은 다음 mode를 지원합니다.
 
-- `pre_call`: Run **before** LLM call, on **input**
-- `post_call`: Run **after** LLM call, on **input & output**
-- `logging_only`: Run **after** LLM call, only apply PII Masking before logging to Langfuse, etc. Not on the actual llm api request / response
-- `pre_mcp_call`: Run **before** MCP call, on **input**. Use this mode when you want to apply PII masking/blocking for MCP requests
+- `pre_call`: LLM 호출 **전**에 **input**에 대해 실행
+- `post_call`: LLM 호출 **후**에 **input & output**에 대해 실행
+- `logging_only`: LLM 호출 **후** 실행하며 Langfuse 등에 logging하기 전에만 PII 마스킹 적용. 실제 LLM API request / response에는 적용하지 않음
+- `pre_mcp_call`: MCP 호출 **전**에 **input**에 대해 실행. MCP 요청에 PII 마스킹/blocking을 적용하려면 이 mode를 사용합니다.
 
-### MCP Usage Example
+### MCP 사용법 예제
 
-Here's how to use Presidio guardrails with MCP:
+MCP에서 Presidio guardrail을 사용하는 방법입니다.
 
 ```yaml title="MCP Configuration Example" showLineNumbers
 guardrails:
@@ -400,7 +400,7 @@ guardrails:
       default_on: true
 ```
 
-Test the MCP guardrail with a request:
+요청으로 MCP guardrail을 테스트합니다.
 
 ```shell title="Test MCP Guardrail" showLineNumbers
 curl http://localhost:4000/chat/completions \
@@ -415,13 +415,13 @@ curl http://localhost:4000/chat/completions \
   }'
 ```
 
-The request will be processed as follows:
-1. Credit card number will be masked (e.g., replaced with `<CREDIT_CARD>`)
-2. If a medical license is detected, the request will be blocked with a `BlockedPiiEntityError`
+요청은 다음과 같이 처리됩니다.
+1. 신용카드 번호가 마스킹됩니다(예: `<CREDIT_CARD>`로 대체).
+2. medical license가 감지되면 요청이 `BlockedPiiEntityError`로 차단됩니다.
 
-###  Set `language` per request
+### 요청별 `language` 설정
 
-The Presidio API [supports passing the `language` param](https://microsoft.github.io/presidio/api-docs/api-docs.html#tag/Analyzer/paths/~1analyze/post). Here is how to set the `language` per request
+Presidio API는 [`language` param 전달](https://microsoft.github.io/presidio/api-docs/api-docs.html#tag/Analyzer/paths/~1analyze/post)을 지원합니다. 요청별로 `language`를 설정하는 방법은 다음과 같습니다.
 
 <Tabs>
 <TabItem label="curl" value = "curl">
@@ -475,9 +475,9 @@ print(response)
 
 </Tabs>
 
-###  Set default `language` in config.yaml
+### config.yaml에서 기본 `language` 설정
 
-You can configure a default language for PII analysis in your YAML configuration using the `presidio_language` parameter. This language will be used for all requests unless overridden by a per-request language setting.
+YAML configuration에서 `presidio_language` parameter를 사용해 PII analysis의 기본 언어를 구성할 수 있습니다. 요청별 language 설정으로 override하지 않는 한 이 언어가 모든 요청에 사용됩니다.
 
 ```yaml title="Default Language Configuration" showLineNumbers
 model_list:
@@ -507,25 +507,25 @@ guardrails:
         PHONE_NUMBER: "MASK"
 ```
 
-#### Supported Language Codes
+#### 지원되는 Language Code
 
-Presidio supports multiple languages for PII detection. Common language codes include:
+Presidio는 PII detection을 위한 여러 언어를 지원합니다. 일반적인 language code는 다음과 같습니다.
 
 - `en` - English (default)
 - `es` - Spanish
 - `de` - German  
 
-For a complete list of supported languages, refer to the [Presidio documentation](https://microsoft.github.io/presidio/analyzer/languages/).
+지원되는 전체 language 목록은 [Presidio documentation](https://microsoft.github.io/presidio/analyzer/languages/)을 참고하세요.
 
-#### Language Precedence
+#### Language 우선순위
 
-The language setting follows this precedence order:
+language 설정은 다음 우선순위를 따릅니다.
 
-1. **Per-request language** (via `guardrail_config.language`) - highest priority
-2. **YAML config language** (via `presidio_language`) - medium priority  
-3. **Default language** (`en`) - lowest priority
+1. **요청별 language**(`guardrail_config.language` 사용) - 가장 높은 우선순위
+2. **YAML config language**(`presidio_language` 사용) - 중간 우선순위
+3. **Default language**(`en`) - 가장 낮은 우선순위
 
-**Example with mixed languages:**
+**mixed language 예제:**
 
 ```yaml title="Mixed Language Configuration" showLineNumbers
 guardrails:
@@ -553,16 +553,16 @@ curl http://localhost:4000/chat/completions \
   }'
 ```
 
-In this example, the request will use Spanish (`es`) for PII detection even though the guardrail is configured with German (`de`) as the default language.
+이 예제에서는 guardrail의 기본 언어가 German(`de`)으로 구성되어 있어도 요청은 PII detection에 Spanish(`es`)를 사용합니다.
 
-### Output parsing 
+### Output parsing {#output-parsing}
 
 
-LLM responses can sometimes contain the masked tokens. 
+LLM 응답에는 때때로 마스킹된 token이 포함될 수 있습니다.
 
-For presidio 'replace' operations, LiteLLM can check the LLM response and replace the masked token with the user-submitted values. 
+Presidio `replace` operation의 경우 LiteLLM은 LLM 응답을 확인하고 마스킹된 token을 사용자가 제출한 값으로 치환할 수 있습니다.
 
-Define your guardrails under the `guardrails` section
+`guardrails` section 아래에 guardrail을 정의합니다.
 ```yaml title="Output Parsing Config" showLineNumbers
 model_list:
   - model_name: gpt-3.5-turbo
@@ -578,26 +578,26 @@ guardrails:
       output_parse_pii: True
 ```
 
-**Expected Flow: **
+**예상 Flow:**
 
-1. User Input: "hello world, my name is Jane Doe. My number is: 034453334"
+1. User Input: "hello world, 제 이름은 Jane Doe입니다. 제 번호는 034453334입니다."
 
-2. LLM Input: "hello world, my name is [PERSON]. My number is: [PHONE_NUMBER]"
+2. LLM Input: "hello world, 제 이름은 [PERSON]입니다. 제 번호는 [PHONE_NUMBER]입니다."
 
 3. LLM Response: "Hey [PERSON], nice to meet you!"
 
-4. User Response: "Hey Jane Doe, nice to meet you!"
+4. User Response: "Hey Jane Doe, 만나서 반가워요!"
 
-### Ad Hoc Recognizers
+### Ad Hoc Recognizer {#ad-hoc-recognizer}
 
 
-Send ad-hoc recognizers to presidio `/analyze` by passing a json file to the proxy 
+json file을 proxy에 전달해 ad-hoc recognizer를 Presidio `/analyze`로 보냅니다.
 
-[**Example** ad-hoc recognizer](https://github.com/BerriAI/litellm/blob/b69b7503db5aa039a49b7ca96ae5b34db0d25a3d/litellm/proxy/hooks/example_presidio_ad_hoc_recognizer.json)
+[**예제** ad-hoc recognizer](https://github.com/BerriAI/litellm/blob/b69b7503db5aa039a49b7ca96ae5b34db0d25a3d/litellm/proxy/hooks/example_presidio_ad_hoc_recognizer.json)
 
-#### Define ad-hoc recognizer on your LiteLLM config.yaml 
+#### LiteLLM config.yaml에 ad-hoc recognizer 정의
 
-Define your guardrails under the `guardrails` section
+`guardrails` section 아래에 guardrail을 정의합니다.
 ```yaml title="Ad Hoc Recognizers Config" showLineNumbers
 model_list:
   - model_name: gpt-3.5-turbo
@@ -613,7 +613,7 @@ guardrails:
       presidio_ad_hoc_recognizers: "./hooks/example_presidio_ad_hoc_recognizer.json"
 ```
 
-Set the following env vars 
+다음 env var를 설정합니다.
 
 ```bash title="Ad Hoc Recognizers Environment Variables" showLineNumbers
 export PRESIDIO_ANALYZER_API_BASE="http://localhost:5002"
@@ -621,13 +621,13 @@ export PRESIDIO_ANONYMIZER_API_BASE="http://localhost:5001"
 ```
 
 
-You can see this working, when you run the proxy: 
+proxy를 실행하면 이 동작을 확인할 수 있습니다.
 
 ```bash title="Run Proxy with Debug" showLineNumbers
 litellm --config /path/to/config.yaml --debug
 ```
 
-Make a chat completions request, example:
+chat completions 요청 예제:
 
 ```json title="Custom PII Request" showLineNumbers
 {
@@ -636,28 +636,28 @@ Make a chat completions request, example:
 }
 ```
 
-And search for any log starting with `Presidio PII Masking`, example:
+`Presidio PII Masking`으로 시작하는 log를 검색합니다. 예:
 ```text title="PII Masking Log" showLineNumbers
 Presidio PII Masking: Redacted pii message: <PERSON> AHV number is <AHV_NUMBER>. Zip code: <US_DRIVER_LICENSE>
 ```
 
-### Logging Only
+### Logging Only {#logging-only}
 
 
-Only apply PII Masking before logging to Langfuse, etc.
+Langfuse 등에 logging하기 전에만 PII 마스킹을 적용합니다.
 
-Not on the actual llm api request / response.
+실제 LLM API request / response에는 적용하지 않습니다.
 
 :::note
-This is currently only applied for 
+현재는 다음에만 적용됩니다.
 - `/chat/completion` requests
-- on 'success' logging
+- 'success' logging
 
 :::
 
-1. Define mode: `logging_only` on your LiteLLM config.yaml 
+1. LiteLLM config.yaml에서 mode를 `logging_only`로 정의합니다.
 
-Define your guardrails under the `guardrails` section
+`guardrails` section 아래에 guardrail을 정의합니다.
 ```yaml title="Logging Only Config" showLineNumbers
 model_list:
   - model_name: gpt-3.5-turbo
@@ -672,7 +672,7 @@ guardrails:
       mode: "logging_only"
 ```
 
-Set the following env vars 
+다음 env var를 설정합니다.
 
 ```bash title="Logging Only Environment Variables" showLineNumbers
 export PRESIDIO_ANALYZER_API_BASE="http://localhost:5002"
@@ -680,13 +680,13 @@ export PRESIDIO_ANONYMIZER_API_BASE="http://localhost:5001"
 ```
 
 
-2. Start proxy
+2. proxy 시작
 
 ```bash title="Start Proxy" showLineNumbers
 litellm --config /path/to/config.yaml
 ```
 
-3. Test it! 
+3. 테스트
 
 ```bash title="Test Logging Only" showLineNumbers
 curl -X POST 'http://0.0.0.0:4000/chat/completions' \
@@ -704,7 +704,7 @@ curl -X POST 'http://0.0.0.0:4000/chat/completions' \
 ```
 
 
-**Expected Logged Response**
+**예상 Logged Response**
 
 ```text title="Logged Response with Masked PII" showLineNumbers
 Hi, my name is <PERSON>!

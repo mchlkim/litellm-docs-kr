@@ -19,7 +19,7 @@ v1.63.0 fixes Anthropic 'thinking' response on streaming to return the `signatur
 
 
 
-It also moves the response structure from `signature_delta` to `signature` to be the same as Anthropic. [Anthropic Docs](https://docs.anthropic.com/en/docs/build-with-claude/extended-thinking#implementing-extended-thinking)
+It also moves the response structure from `signature_delta` to `signature` to be the same as Anthropic. [Anthropic 문서](https://docs.anthropic.com/en/docs/build-with-claude/extended-thinking#implementing-extended-thinking)
 
 
 ## Diff 

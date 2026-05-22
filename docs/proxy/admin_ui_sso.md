@@ -2,54 +2,54 @@ import Image from '@theme/IdealImage';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# ✨ SSO for Admin UI
+# ✨ 관리자 UI용 SSO
 
 :::info
-From v1.76.0, SSO is now Free for up to 5 users.
+v1.76.0부터 SSO는 최대 5명의 user까지 무료입니다.
 :::
 
 :::info
 
-✨ SSO is on LiteLLM Enterprise
+✨ SSO는 LiteLLM Enterprise에서 제공됩니다.
 
-[Enterprise Pricing](https://www.litellm.ai/#pricing)
+[Enterprise 가격](https://www.litellm.ai/#pricing)
 
-[Get free 7-day trial key](https://www.litellm.ai/enterprise#trial)
+[무료 7일 체험 key 받기](https://www.litellm.ai/enterprise#trial)
 
 :::
 
-### Usage (Google, Microsoft, Okta, etc.)
+### 사용법(Google, Microsoft, Okta 등)
 
 <Tabs>
 <TabItem value="okta" label="Okta SSO">
 
-### Video Walkthrough
+### 동영상 안내
 
 <iframe width="100%" height="415" src="https://www.loom.com/embed/cac5be90f2714ceaa95d7f89cf4ac548" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
 
-#### Step 1: Create an OIDC Application in Okta
+#### 1단계: Okta에서 OIDC Application 생성
 
-In your Okta Admin Console, create a new **OIDC Web Application**. See [Okta's guide on creating OIDC app integrations](https://help.okta.com/en-us/content/topics/apps/apps_app_integration_wizard_oidc.htm) for detailed instructions.
+Okta Admin Console에서 새 **OIDC Web Application**을 생성합니다. 자세한 절차는 [OIDC app integration 생성에 대한 Okta 가이드](https://help.okta.com/en-us/content/topics/apps/apps_app_integration_wizard_oidc.htm)를 참고하세요.
 
-When configuring the application:
-- **Sign-in redirect URI**: `https://<your-proxy-base-url>/sso/callback`
-- **Sign-out redirect URI** (optional): `https://<your-proxy-base-url>`
+application을 설정할 때:
+- **`Sign-in redirect URI`**: `https://<your-proxy-base-url>/sso/callback`
+- **`Sign-out redirect URI`**(선택 사항): `https://<your-proxy-base-url>`
 
 <Image img={require('../../img/okta_redirect_uri.png')} />
 
-After creating the app, copy your **Client ID** and **Client Secret** from the application's General tab:
+app을 만든 뒤 application의 **General** tab에서 **Client ID**와 **Client Secret**을 복사합니다.
 
 <Image img={require('../../img/okta_client_credentials.png')} />
 
-#### Step 2: Assign Users to the Application
+#### 2단계: Application에 User 할당
 
-Ensure users are assigned to the app in the **Assignments** tab. If Federation Broker Mode is enabled, you may need to disable it to assign users manually.
+**Assignments** tab에서 user가 app에 할당되어 있는지 확인합니다. **Federation Broker Mode**가 활성화되어 있으면 user를 수동으로 할당하기 위해 비활성화해야 할 수 있습니다.
 
-#### Step 3: Set Environment Variables
+#### 3단계: 환경 변수 설정
 
-Set the following environment variables. The only difference between the two Okta authorization servers is the endpoint URLs:
+다음 환경 변수를 설정합니다. 두 Okta authorization server의 차이는 endpoint URL뿐입니다.
 
-**Org Authorization Server** (available on all Okta plans, no additional SKU required):
+**Org Authorization Server**(모든 Okta plan에서 사용 가능, 추가 SKU 필요 없음):
 ```bash
 GENERIC_CLIENT_ID="<your-client-id>"
 GENERIC_CLIENT_SECRET="<your-client-secret>"
@@ -59,7 +59,7 @@ GENERIC_USERINFO_ENDPOINT="https://<your-okta-domain>/oauth2/v1/userinfo"
 PROXY_BASE_URL="https://<your-proxy-base-url>"
 ```
 
-**Custom Authorization Server** (requires the Okta API Access Management SKU):
+**Custom Authorization Server**(Okta API Access Management SKU 필요):
 ```bash
 GENERIC_CLIENT_ID="<your-client-id>"
 GENERIC_CLIENT_SECRET="<your-client-secret>"
@@ -70,73 +70,73 @@ PROXY_BASE_URL="https://<your-proxy-base-url>"
 ```
 
 :::tip
-You can find all OAuth endpoints at `https://<your-okta-domain>/.well-known/openid-configuration`
+모든 OAuth endpoint는 `https://<your-okta-domain>/.well-known/openid-configuration`에서 확인할 수 있습니다.
 :::
 
-#### Step 3a: Configure Access Policy (Custom Authorization Server only)
+#### 3a단계: Access Policy 설정(Custom Authorization Server만 해당)
 
-If you are using the Custom Authorization Server, you must configure an Access Policy. Without it, users will get a `no_matching_policy` error. Skip this step if you are using the Org Authorization Server.
+Custom Authorization Server를 사용하는 경우 Access Policy를 반드시 설정해야 합니다. 설정하지 않으면 user는 `no_matching_policy` 오류를 받습니다. Org Authorization Server를 사용하는 경우 이 단계를 건너뜁니다.
 
-1. Go to **Security** → **API**
+1. **Security** → **API**로 이동합니다.
 
 <Image img={require('../../img/okta_security_api.png')} />
 
-2. Select the **default** authorization server (or your custom one)
+2. **default** authorization server 또는 직접 만든 authorization server를 선택합니다.
 
 <Image img={require('../../img/okta_authorization_server.png')} />
 
-3. Click on **Access Policies** tab, create a new policy assigned to your LiteLLM app
-4. Add a rule that allows the **Authorization Code** grant type
+3. **Access Policies** tab을 클릭하고 LiteLLM app에 할당할 새 policy를 생성합니다.
+4. **Authorization Code** grant type을 허용하는 rule을 추가합니다.
 
 <Image img={require('../../img/okta_access_policies.png')} />
 
-See [Okta's Access Policy documentation](https://help.okta.com/en-us/content/topics/security/api-access-management/access-policies.htm) for more details.
+자세한 내용은 [Okta Access Policy 문서](https://help.okta.com/en-us/content/topics/security/api-access-management/access-policies.htm)를 참고하세요.
 
-#### Step 4: Configure Okta Security Settings
+#### 4단계: Okta Security 설정 {#step-4-configure-okta-security-settings}
 
-**GENERIC_CLIENT_STATE** is recommended for Okta to prevent CSRF attacks:
+CSRF 공격을 방지하려면 Okta에서 **GENERIC_CLIENT_STATE** 사용을 권장합니다.
 
 ```bash
 GENERIC_CLIENT_STATE="random-string"
 ```
 
-**PKCE (Proof Key for Code Exchange)** — If your Okta application is configured to require PKCE, enable it by setting:
+**PKCE(Proof Key for Code Exchange)** — Okta application이 PKCE를 요구하도록 설정되어 있다면 다음을 설정해 활성화합니다.
 
 ```bash
 GENERIC_CLIENT_USE_PKCE="true"
 ```
 
-LiteLLM will automatically handle PKCE parameter generation and verification during the OAuth flow.
+LiteLLM은 OAuth flow 중 PKCE parameter 생성과 검증을 자동으로 처리합니다.
 
-#### Step 5: Test the SSO Flow
+#### 5단계: SSO Flow 테스트
 
-1. Start your LiteLLM proxy
-2. Navigate to `https://<your-proxy-base-url>/ui`
-3. Click the SSO login button
-4. Authenticate with Okta and verify you're redirected back to LiteLLM
+1. LiteLLM proxy를 시작합니다.
+2. `https://<your-proxy-base-url>/ui`로 이동합니다.
+3. SSO login button을 클릭합니다.
+4. Okta로 인증하고 LiteLLM으로 다시 redirect되는지 확인합니다.
 
-#### Troubleshooting
+#### 문제 해결
 
-| Error | Cause | Solution |
+| 오류 | 원인 | 해결 방법 |
 |-------|-------|----------|
-| `redirect_uri` error | Redirect URI not configured | Add `<proxy_base_url>/sso/callback` to Sign-in redirect URIs in Okta |
-| `access_denied` | User not assigned to app | Assign the user in the Assignments tab |
-| `no_matching_policy` | Missing Access Policy (Custom Authorization Server only) | Create an Access Policy in the Authorization Server (see Step 3a) |
+| `redirect_uri` 오류 | Redirect URI가 설정되지 않음 | Okta의 `Sign-in redirect URI`에 `<proxy_base_url>/sso/callback` 추가 |
+| `access_denied` | user가 app에 할당되지 않음 | Assignments tab에서 user 할당 |
+| `no_matching_policy` | Access Policy 누락(Custom Authorization Server만 해당) | Authorization Server에서 Access Policy 생성(3a단계 참고) |
 
 </TabItem>
 <TabItem value="google" label="Google SSO">
 
-- Create a new Oauth 2.0 Client on https://console.cloud.google.com/ 
+- https://console.cloud.google.com/ 에서 새 OAuth 2.0 Client를 생성합니다.
 
-**Required .env variables on your Proxy**
+**Proxy에 필요한 `.env` 변수**
 ```shell
 # for Google SSO Login
 GOOGLE_CLIENT_ID=
 GOOGLE_CLIENT_SECRET=
 ```
 
-- Set Redirect URL on your Oauth 2.0 Client on https://console.cloud.google.com/ 
-    - Set a redirect url = `<your proxy base url>/sso/callback`
+- https://console.cloud.google.com/ 의 OAuth 2.0 Client에서 Redirect URL을 설정합니다.
+    - redirect URL = `<your proxy base url>/sso/callback`로 설정합니다.
     ```shell
     https://litellm-production-7002.up.railway.app/sso/callback
     ```
@@ -145,19 +145,19 @@ GOOGLE_CLIENT_SECRET=
 
 <TabItem value="msft" label="Microsoft SSO">
 
-- Create a new App Registration on https://portal.azure.com/
-- Create a client Secret for your App Registration
+- https://portal.azure.com/ 에서 새 App Registration을 생성합니다.
+- App Registration용 client secret을 생성합니다.
 
-**Required .env variables on your Proxy**
+**Proxy에 필요한 `.env` 변수**
 ```shell
 MICROSOFT_CLIENT_ID="84583a4d-"
 MICROSOFT_CLIENT_SECRET="nbk8Q~"
 MICROSOFT_TENANT="5a39737"
 ```
 
-**Optional: Custom Microsoft SSO Endpoints**
+**선택 사항: Custom Microsoft SSO Endpoint**
 
-If you need to use custom Microsoft SSO endpoints (e.g., for a custom identity provider, sovereign cloud, or proxy), you can override the default endpoints:
+custom identity provider, sovereign cloud, proxy 등의 이유로 custom Microsoft SSO endpoint가 필요하면 기본 endpoint를 override할 수 있습니다.
 
 ```shell
 MICROSOFT_AUTHORIZATION_ENDPOINT="https://your-custom-url.com/oauth2/v2.0/authorize"
@@ -165,62 +165,62 @@ MICROSOFT_TOKEN_ENDPOINT="https://your-custom-url.com/oauth2/v2.0/token"
 MICROSOFT_USERINFO_ENDPOINT="https://your-custom-graph-api.com/v1.0/me"
 ```
 
-If these are not set, the default Microsoft endpoints are used based on your tenant.
+이 값을 설정하지 않으면 tenant를 기준으로 기본 Microsoft endpoint가 사용됩니다.
 
-- Set Redirect URI on your App Registration on https://portal.azure.com/
-    - Set a redirect url = `<your proxy base url>/sso/callback`
+- https://portal.azure.com/ 의 App Registration에서 Redirect URI를 설정합니다.
+    - redirect URL = `<your proxy base url>/sso/callback`로 설정합니다.
     ```shell
     http://localhost:4000/sso/callback
     ```
 
-**Using App Roles for User Permissions**
+**User Permission에 App Roles 사용**
 
-You can assign user roles directly from Entra ID using App Roles. LiteLLM will automatically read the app roles from the JWT token and assign the corresponding role to the user.
+App Roles를 사용해 Entra ID에서 user role을 직접 할당할 수 있습니다. LiteLLM은 JWT token에서 app role을 자동으로 읽고 user에게 해당 role을 할당합니다.
 
-Supported roles:
-- `proxy_admin` - Admin over the platform
-- `proxy_admin_viewer` - Can login, view all keys, view all spend (read-only)
-- `internal_user` - Normal user. Can login, view spend and depending on team-member permissions - view/create/delete their own keys.
+지원 role:
+- `proxy_admin` - platform admin
+- `proxy_admin_viewer` - login, 모든 key 조회, 전체 spend 조회 가능(read-only)
+- `internal_user` - 일반 user입니다. login과 spend 조회가 가능하며 team-member permission에 따라 본인 key 조회/생성/삭제가 가능합니다.
 
 
-To set up app roles:
-1. Navigate to your App Registration on https://portal.azure.com/
-2. Go to "App roles" and create a new app role
-3. Use one of the supported role names above (e.g., `proxy_admin`)
-4. Assign users to these roles in your Enterprise Application
-5. When users sign in via SSO, LiteLLM will automatically assign them the corresponding role
+app role 설정:
+1. https://portal.azure.com/ 의 App Registration으로 이동합니다.
+2. "App roles"로 이동해 새 app role을 생성합니다.
+3. 위의 지원 role 이름 중 하나를 사용합니다(예: `proxy_admin`).
+4. 엔터프라이즈 Application에서 user를 이 role에 할당합니다.
+5. user가 SSO로 sign in하면 LiteLLM이 해당 role을 자동으로 할당합니다.
 
-**Advanced: Custom User Attribute Mapping**
+**고급: Custom User Attribute Mapping**
 
-For certain Microsoft Entra ID configurations, you may need to override the default user attribute field names. This is useful when your organization uses custom claims or non-standard attribute names in the SSO response.
+일부 Microsoft Entra ID 구성에서는 기본 user attribute field name을 override해야 할 수 있습니다. 조직이 SSO response에서 custom claim이나 비표준 attribute name을 사용할 때 유용합니다.
 
-**Step 1: Debug SSO Response**
+**1단계: SSO Response Debug**
 
-First, inspect the JWT fields returned by your Microsoft SSO provider using the [SSO Debug Route](#debugging-sso-jwt-fields).
+먼저 [SSO Debug Route](#debugging-sso-jwt-fields)를 사용해 Microsoft SSO provider가 반환하는 JWT field를 확인합니다.
 
-1. Add `/sso/debug/callback` as a redirect URL in your Azure App Registration
-2. Navigate to `https://<proxy_base_url>/sso/debug/login`
-3. Complete the SSO flow to see the returned user attributes
+1. Azure App Registration에 `/sso/debug/callback`을 redirect URL로 추가합니다.
+2. `https://<proxy_base_url>/sso/debug/login`으로 이동합니다.
+3. SSO flow를 완료해 반환된 user attribute를 확인합니다.
 
-**Step 2: Identify Field Attribute Names**
+**2단계: Field Attribute Name 확인**
 
-From the debug response, identify the field names used for email, display name, user ID, first name, and last name.
+debug response에서 email, display name, user ID, first name, last name에 사용되는 field name을 확인합니다.
 
-**Step 3: Set Environment Variables**
+**3단계: 환경 변수 설정**
 
-Override the default attribute names by setting these environment variables:
+다음 환경 변수를 설정해 기본 attribute name을 override합니다.
 
-| Environment Variable | Description | Default Value |
+| 환경 변수 | 설명 | 기본값 |
 |---------------------|-------------|---------------|
-| `MICROSOFT_USER_EMAIL_ATTRIBUTE` | Field name for user email | `userPrincipalName` |
-| `MICROSOFT_USER_DISPLAY_NAME_ATTRIBUTE` | Field name for display name | `displayName` |
-| `MICROSOFT_USER_ID_ATTRIBUTE` | Field name for user ID | `id` |
-| `MICROSOFT_USER_FIRST_NAME_ATTRIBUTE` | Field name for first name | `givenName` |
-| `MICROSOFT_USER_LAST_NAME_ATTRIBUTE` | Field name for last name | `surname` |
+| `MICROSOFT_USER_EMAIL_ATTRIBUTE` | user email field 이름 | `userPrincipalName` |
+| `MICROSOFT_USER_DISPLAY_NAME_ATTRIBUTE` | display name field 이름 | `displayName` |
+| `MICROSOFT_USER_ID_ATTRIBUTE` | user ID field 이름 | `id` |
+| `MICROSOFT_USER_FIRST_NAME_ATTRIBUTE` | first name field 이름 | `givenName` |
+| `MICROSOFT_USER_LAST_NAME_ATTRIBUTE` | last name field 이름 | `surname` |
 
-**Step 4: Restart the Proxy**
+**4단계: Proxy 재시작**
 
-After setting the environment variables, restart the proxy:
+환경 변수를 설정한 뒤 proxy를 재시작합니다.
 
 ```bash
 litellm --config /path/to/config.yaml
@@ -230,9 +230,9 @@ litellm --config /path/to/config.yaml
 
 <TabItem value="Generic" label="Generic SSO Provider">
 
-A generic OAuth client that can be used to quickly create support for any OAuth provider with close to no code
+거의 code 없이 모든 OAuth provider 지원을 빠르게 만들 수 있는 generic OAuth client입니다.
 
-**Required .env variables on your Proxy**
+**Proxy에 필요한 .env variable**
 ```shell
 
 GENERIC_CLIENT_ID = "******"
@@ -242,8 +242,8 @@ GENERIC_TOKEN_ENDPOINT = "http://localhost:9090/token"
 GENERIC_USERINFO_ENDPOINT = "http://localhost:9090/me"
 ```
 
-**Optional .env variables**
-The following can be used to customize attribute names when interacting with the generic OAuth provider. We will read these attributes from the SSO Provider result
+**선택 사항 .env variable**
+generic OAuth provider와 연동할 때 attribute name을 customize하려면 다음 값을 사용할 수 있습니다. LiteLLM은 SSO Provider 결과에서 이 attribute를 읽습니다.
 
 ```shell
 GENERIC_USER_ID_ATTRIBUTE = "given_name"
@@ -259,27 +259,27 @@ GENERIC_INCLUDE_CLIENT_ID = "false" # some providers enforce that the client_id 
 GENERIC_SCOPE = "openid profile email" # default scope openid is sometimes not enough to retrieve basic user info like first_name and last_name located in profile scope
 ```
 
-**Assigning User Roles via SSO**
+**SSO로 User Role 할당**
 
-Use `GENERIC_USER_ROLE_ATTRIBUTE` to specify which attribute in the SSO token contains the user's role. The role value must be one of the following supported LiteLLM roles:
+SSO token의 어떤 attribute에 user role이 들어 있는지 지정하려면 `GENERIC_USER_ROLE_ATTRIBUTE`를 사용합니다. role 값은 다음 지원 LiteLLM role 중 하나여야 합니다.
 
-- `proxy_admin` - Admin over the platform
-- `proxy_admin_viewer` - Can login, view all keys, view all spend (read-only)
-- `internal_user` - Can login, view/create/delete their own keys, view their spend
-- `internal_user_view_only` - Can login, view their own keys, view their own spend
+- `proxy_admin` - platform admin
+- `proxy_admin_viewer` - login, 모든 key 조회, 전체 spend 조회 가능(read-only)
+- `internal_user` - login, 본인 key 조회/생성/삭제, 본인 spend 조회 가능
+- `internal_user_view_only` - login, 본인 key 조회, 본인 spend 조회 가능
 
-Nested attribute paths are supported (e.g., `claims.role` or `attributes.litellm_role`).
+중첩 attribute path도 지원됩니다(예: `claims.role` 또는 `attributes.litellm_role`).
 
-**Capturing Additional SSO Fields**
+**추가 SSO Field 캡처**
 
-Use `GENERIC_USER_EXTRA_ATTRIBUTES` to extract additional fields from the SSO provider response beyond the standard user attributes (id, email, name, etc.). This is useful when you need to access custom organization-specific data (e.g., department, employee ID, groups) in your [custom SSO handler](./custom_sso.md).
+표준 user attribute(id, email, name 등) 외에 SSO provider response에서 추가 field를 추출하려면 `GENERIC_USER_EXTRA_ATTRIBUTES`를 사용합니다. [custom SSO handler](./custom_sso.md)에서 조직별 custom data(예: department, employee ID, groups)에 접근해야 할 때 유용합니다.
 
 ```shell
 # Comma-separated list of field names to extract
 GENERIC_USER_EXTRA_ATTRIBUTES="department,employee_id,manager,groups"
 ```
 
-**Accessing Extra Fields in Custom SSO Handler:**
+**Custom SSO Handler에서 Extra Field 접근:**
 
 ```python
 from litellm.proxy.management_endpoints.types import CustomOpenID
@@ -296,16 +296,16 @@ async def custom_sso_handler(userIDPInfo: CustomOpenID):
     # ...
 ```
 
-**Nested Field Paths:**
+**중첩 Field Path:**
 
-Dot notation is supported for nested fields:
+중첩 field에는 dot notation이 지원됩니다.
 
 ```shell
 GENERIC_USER_EXTRA_ATTRIBUTES="org_info.department,org_info.cost_center,metadata.employee_type"
 ```
 
-- Set Redirect URI, if your provider requires it
-    - Set a redirect url = `<your proxy base url>/sso/callback`
+- provider가 요구하는 경우 Redirect URI를 설정합니다.
+    - redirect url = `<your proxy base url>/sso/callback`로 설정합니다.
     ```shell
     http://localhost:4000/sso/callback
     ```
@@ -314,75 +314,75 @@ GENERIC_USER_EXTRA_ATTRIBUTES="org_info.department,org_info.cost_center,metadata
 
 </Tabs>
 
-### Default Login, Logout URLs
+### 기본 Login, Logout URL
 
-Some SSO providers require a specific redirect url for login and logout. You can input the following values.
+일부 SSO provider는 login과 logout에 특정 redirect url을 요구합니다. 다음 값을 입력할 수 있습니다.
 
 - Login: `<your-proxy-base-url>/sso/key/generate`
 - Logout: `<your-proxy-base-url>`
 
-Here's the env var to set the logout url on the proxy
+proxy의 logout url을 설정하는 env var는 다음과 같습니다.
 ```bash
 PROXY_LOGOUT_URL="https://www.google.com"
 ```
 
-#### Step 3. Set `PROXY_BASE_URL` in your .env
+#### 3단계. .env에서 `PROXY_BASE_URL` 설정
 
-Set this in your .env (so the proxy can set the correct redirect url)
+.env에 이 값을 설정합니다. 그래야 proxy가 올바른 redirect url을 설정할 수 있습니다.
 ```shell
 PROXY_BASE_URL=https://litellm-api.up.railway.app
 ```
 
-#### Step 4. Test flow
+#### 4단계. Flow 테스트
 <Image img={require('../../img/litellm_ui_3.gif')} />
 
-### Restrict Email Subdomains w/ SSO
+### SSO에서 Email Subdomain 제한
 
-If you're using SSO and want to only allow users with a specific subdomain - e.g. (@berri.ai email accounts) to access the UI, do this:
+SSO를 사용하면서 특정 subdomain의 user만 UI에 접근하도록 허용하려면(예: @berri.ai email account) 다음을 설정합니다.
 
 ```bash
 export ALLOWED_EMAIL_DOMAINS="berri.ai"
 ```
 
-This will check if the user email we receive from SSO contains this domain, before allowing access.
+접근을 허용하기 전에 SSO에서 받은 user email에 이 domain이 포함되어 있는지 확인합니다.
 
-### Set Proxy Admin
+### Proxy Admin 설정
 
-Set a Proxy Admin when SSO is enabled. Once SSO is enabled, the `user_id` for users is retrieved from the SSO provider. In order to set a Proxy Admin, you need to copy the `user_id` from the UI and set it in your `.env` as `PROXY_ADMIN_ID`.
+SSO가 활성화된 상태에서 Proxy Admin을 설정합니다. SSO가 활성화되면 user의 `user_id`는 SSO provider에서 가져옵니다. Proxy Admin을 설정하려면 UI에서 `user_id`를 복사한 뒤 `.env`에 `PROXY_ADMIN_ID`로 설정해야 합니다.
 
-#### Step 1: Copy your ID from the UI 
+#### 1단계: UI에서 ID 복사
 
 <Image img={require('../../img/litellm_ui_copy_id.png')} />
 
-#### Step 2: Set it in your .env as the PROXY_ADMIN_ID 
+#### 2단계: .env에 PROXY_ADMIN_ID로 설정
 
 ```env
 export PROXY_ADMIN_ID="116544810872468347480"
 ```
 
-This will update the user role in the `LiteLLM_UserTable` to `proxy_admin`. 
+이 설정은 `LiteLLM_UserTable`의 user role을 `proxy_admin`으로 업데이트합니다.
 
-If you plan to change this ID, please update the user role via API `/user/update` or UI (Internal Users page). 
+이 ID를 변경할 계획이라면 API `/user/update` 또는 UI(Internal Users page)를 통해 user role을 업데이트하세요.
 
-#### Step 3: See all proxy keys
+#### 3단계: 모든 proxy key 확인
 
 <Image img={require('../../img/litellm_ui_admin.png')} />
 
 :::info
 
-If you don't see all your keys this could be due to a cached token. So just re-login and it should work.
+모든 key가 보이지 않는다면 cached token 때문일 수 있습니다. 다시 로그인하면 정상 동작합니다.
 
 :::
 
-### Disable `Default Team` on Admin UI
+### 관리자 UI에서 `Default Team` 비활성화
 
-Use this if you want to hide the Default Team on the Admin UI
+관리자 UI에서 Default Team을 숨기려면 이 설정을 사용합니다.
 
-The following logic will apply
-- If team assigned don't show `Default Team`
-- If no team assigned then they should see `Default Team`
+다음 logic이 적용됩니다.
+- team이 할당되어 있으면 `Default Team`을 표시하지 않습니다.
+- team이 할당되어 있지 않으면 `Default Team`을 표시합니다.
 
-Set `default_team_disabled: true` on your litellm config.yaml
+litellm config.yaml에 `default_team_disabled: true`를 설정합니다.
 
 ```yaml
 general_settings:
@@ -390,59 +390,59 @@ general_settings:
   default_team_disabled: true # OR you can set env var PROXY_DEFAULT_TEAM_DISABLED="true"
 ```
 
-### Use Username, Password when SSO is on
+### SSO 사용 중 Username, Password 사용
 
-If you need to access the UI via username/password when SSO is on navigate to `/fallback/login`. This route will allow you to sign in with your username/password credentials.
+SSO가 켜져 있을 때 username/password로 UI에 접근해야 한다면 `/fallback/login`으로 이동합니다. 이 route에서 username/password credential로 sign in할 수 있습니다.
 
-### Restrict UI Access
+### UI Access 제한
 
-You can restrict UI Access to just admins - includes you (proxy_admin) and people you give view only access to (proxy_admin_viewer) for seeing global spend.
+UI Access를 admin으로만 제한할 수 있습니다. 여기에는 본인(`proxy_admin`)과 global spend를 볼 수 있도록 view-only access를 부여한 사용자(`proxy_admin_viewer`)가 포함됩니다.
 
-**Step 1. Set 'admin_only' access**
+**1단계. 'admin_only' access 설정**
 ```yaml
 general_settings:
     ui_access_mode: "admin_only"
 ```
 
-**Step 2. Invite view-only users**
+**2단계. view-only user 초대**
 
 <Image img={require('../../img/admin_ui_viewer.png')} />
 
-### Custom Branding Admin UI
+### 관리자 UI Custom Branding
 
-Use your companies custom branding on the LiteLLM Admin UI
-We allow you to 
-- Customize the UI Logo
-- Customize the UI color scheme
+LiteLLM 관리자 UI에 회사의 custom branding을 적용합니다.
+다음을 customize할 수 있습니다.
+- UI Logo
+- UI color scheme
 <Image img={require('../../img/litellm_custom_ai.png')} />
 
-#### Set Custom Logo
-We allow you to pass a local image or a an http/https url of your image
+#### Custom Logo 설정
+local image 또는 image의 http/https url을 전달할 수 있습니다.
 
-Set `UI_LOGO_PATH` on your env. We recommend using a hosted image, it's a lot easier to set up and configure / debug
+env에 `UI_LOGO_PATH`를 설정합니다. 설정, 구성, debug가 훨씬 쉬우므로 hosted image 사용을 권장합니다.
 
-Example setting Hosted image
+Hosted image 설정 예제
 ```shell
 UI_LOGO_PATH="https://litellm-logo-aws-marketplace.s3.us-west-2.amazonaws.com/berriai-logo-github.png"
 ```
 
-Example setting a local image (on your container)
+local image(container 내부) 설정 예제
 ```shell
 UI_LOGO_PATH="ui_images/logo.jpg"
 ```
 
-#### Or set your logo directly from Admin UI:
+#### 또는 관리자 UI에서 직접 logo 설정:
 <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
   <Image img={require('../../img/admin_settings_ui_theme.png')} />
   <Image img={require('../../img/admin_settings_ui_theme_logo.png')} />
 </div>
 
-#### Set Custom Color Theme
-- Navigate to [/enterprise/enterprise_ui](https://github.com/BerriAI/litellm/blob/main/enterprise/enterprise_ui/_enterprise_colors.json)
-- Inside the `enterprise_ui` directory, rename `_enterprise_colors.json` to `enterprise_colors.json`
-- Set your companies custom color scheme in `enterprise_colors.json`
-Example contents of `enterprise_colors.json` 
-Set your colors to any of the following colors: https://www.tremor.so/docs/layout/color-palette#default-colors
+#### Custom Color Theme 설정
+- [/enterprise/enterprise_ui](https://github.com/BerriAI/litellm/blob/main/enterprise/enterprise_ui/_enterprise_colors.json)로 이동합니다.
+- `enterprise_ui` directory 안에서 `_enterprise_colors.json`을 `enterprise_colors.json`으로 rename합니다.
+- `enterprise_colors.json`에 회사의 custom color scheme을 설정합니다.
+`enterprise_colors.json` contents 예제
+color는 다음 color 중 하나로 설정합니다: https://www.tremor.so/docs/layout/color-palette#default-colors
 ```json
 {
     "brand": {
@@ -456,138 +456,137 @@ Set your colors to any of the following colors: https://www.tremor.so/docs/layou
 }
 
 ```
-- Deploy LiteLLM Proxy Server
+- LiteLLM Proxy Server를 deploy합니다.
 
-## Troubleshooting
+## 문제 해결
 
-### "The 'redirect_uri' parameter must be a Login redirect URI in the client app settings" Error
+### 오류: `The 'redirect_uri' parameter must be a Login redirect URI in the client app settings` {#redirect-uri-parameter-must-be-a-login-redirect-uri-in-the-client-app-settings}
 
-This error commonly occurs with Okta and other SSO providers when the redirect URI configuration is incorrect.
+이 오류는 Okta 및 기타 SSO provider에서 redirect URI 구성이 잘못되었을 때 자주 발생합니다.
 
-#### Issue
+#### 문제
 ```
 Your request resulted in an error. The 'redirect_uri' parameter must be a Login redirect URI in the client app settings
 ```
 
-#### Solution
+#### 해결 방법
 
-**1. Ensure you have set PROXY_BASE_URL in your .env and it includes protocol**
+**1. .env에 PROXY_BASE_URL을 설정했고 protocol이 포함되어 있는지 확인**
 
-Make sure your `PROXY_BASE_URL` includes the complete URL with protocol (`http://` or `https://`):
+`PROXY_BASE_URL`에 protocol(`http://` 또는 `https://`)이 포함된 전체 URL이 들어 있는지 확인합니다.
 
 ```bash
-# ✅ Correct - includes https://
+# ✅ 올바름 - https:// 포함
 PROXY_BASE_URL=https://litellm.platform.com
 
-# ✅ Correct - includes http://
+# ✅ 올바름 - http:// 포함
 PROXY_BASE_URL=http://litellm.platform.com
 
-# ❌ Incorrect - missing protocol
+# ❌ 잘못됨 - protocol 누락
 PROXY_BASE_URL=litellm.platform.com
 ```
 
-**2. For Okta specifically, ensure `GENERIC_CLIENT_STATE` is set and PKCE is configured if required**
+**2. Okta의 경우 `GENERIC_CLIENT_STATE`가 설정되어 있고, 필요한 경우 PKCE가 구성되어 있는지 확인**
 
-See [Okta SSO — Step 4: Configure Okta Security Settings](#step-4-configure-okta-security-settings) for details on `GENERIC_CLIENT_STATE` and PKCE configuration.
+`GENERIC_CLIENT_STATE` 및 PKCE 구성에 대한 자세한 내용은 [Okta SSO — 4단계: Okta Security 설정](#step-4-configure-okta-security-settings)을 참고하세요.
 
-### Common Configuration Issues
+### 일반적인 설정 문제
 
-#### Missing Protocol in Base URL
+#### Base URL에 Protocol 누락
 ```bash
-# This will cause redirect_uri errors
+# redirect_uri 오류를 일으킵니다
 PROXY_BASE_URL=mydomain.com
 
-# Fix: Add the protocol
+# 수정: protocol 추가
 PROXY_BASE_URL=https://mydomain.com
 ```
 
 ### Fallback Login
 
-If you need to access the UI via username/password when SSO is on navigate to `/fallback/login`. This route will allow you to sign in with your username/password credentials.
+SSO가 켜져 있을 때 username/password로 UI에 접근해야 한다면 `/fallback/login`으로 이동합니다. 이 route에서 username/password credential로 sign in할 수 있습니다.
 
 <Image img={require('../../img/fallback_login.png')} />
 
 
-### Debugging SSO JWT fields 
+### SSO JWT 필드 디버그 {#debugging-sso-jwt-fields}
 
-If you need to inspect the JWT fields received from your SSO provider by LiteLLM, follow these instructions. This guide walks you through setting up a debug callback to view the JWT data during the SSO process.
+LiteLLM이 SSO provider에서 받은 JWT field를 확인해야 한다면 다음 절차를 따르세요. 이 guide는 SSO process 중 JWT data를 볼 수 있도록 debug callback을 설정하는 방법을 안내합니다.
 
 
 <Image img={require('../../img/debug_sso.png')}  style={{ width: '500px', height: 'auto' }} />
 <br />
 
-1. Add `/sso/debug/callback` as a redirect URL in your SSO provider 
+1. SSO provider에 `/sso/debug/callback`을 redirect URL로 추가합니다.
 
-  In your SSO provider's settings, add the following URL as a new redirect (callback) URL:
+  SSO provider 설정에서 다음 URL을 새 redirect(callback) URL로 추가합니다.
 
   ```bash showLineNumbers title="Redirect URL"
   http://<proxy_base_url>/sso/debug/callback
   ```
 
 
-2. Navigate to the debug login page on your browser 
+2. browser에서 debug login page로 이동합니다.
 
-    Navigate to the following URL on your browser:
+    browser에서 다음 URL로 이동합니다.
 
     ```bash showLineNumbers title="URL to navigate to"
     https://<proxy_base_url>/sso/debug/login
     ```
 
-    This will initiate the standard SSO flow. You will be redirected to your SSO provider's login screen, and after successful authentication, you will be redirected back to LiteLLM's debug callback route.
+    표준 SSO flow가 시작됩니다. SSO provider의 login screen으로 redirect되고, 인증에 성공하면 LiteLLM의 debug callback route로 다시 redirect됩니다.
 
 
-3. View the JWT fields 
+3. JWT field를 확인합니다.
 
-Once redirected, you should see a page called "SSO Debug Information". This page displays the JWT fields received from your SSO provider (as shown in the image above)
-
-
-## Advanced
-
-### Manage User Roles via Azure App Roles
-
-Centralize role management by defining user permissions in Azure Entra ID. LiteLLM will automatically assign roles based on your Azure configuration when users sign in—no need to manually manage roles in LiteLLM.
-
-#### Step 1: Create App Roles on Azure App Registration
-
-1. Navigate to your App Registration on https://portal.azure.com/
-2. Go to **App roles** > **Create app role**
-3. Configure the app role using one of the [supported LiteLLM roles](./access_control.md#global-proxy-roles):
-   - **Display name**: Admin Viewer (or your preferred display name)
-   - **Value**: `proxy_admin_viewer` (must match one of the LiteLLM role values exactly)
-4. Click **Apply** to save the role
-5. Repeat for each LiteLLM role you want to use
+redirect되면 "SSO Debug Information" page가 표시됩니다. 이 page는 SSO provider에서 받은 JWT field를 표시합니다(위 image 참고).
 
 
-**Supported LiteLLM role values** (see [full role documentation](./access_control.md#global-proxy-roles)):
-- `proxy_admin` - Full admin access
-- `proxy_admin_viewer` - Read-only admin access
-- `internal_user` - Can create/view/delete own keys
-- `internal_user_viewer` - Can view own keys (read-only)
+## 고급
+
+### Azure App Roles로 User Role 관리
+
+Azure Entra ID에서 user permission을 정의해 role 관리를 중앙화합니다. user가 sign in하면 LiteLLM이 Azure 구성에 따라 role을 자동으로 할당하므로 LiteLLM에서 role을 수동으로 관리할 필요가 없습니다.
+
+#### 1단계: Azure App Registration에서 App Roles 생성
+
+1. https://portal.azure.com/ 의 App Registration으로 이동합니다.
+2. **App roles** > **Create app role**로 이동합니다.
+3. [지원 LiteLLM role](./access_control.md#global-proxy-roles) 중 하나를 사용해 app role을 구성합니다.
+   - **Display name**: Admin Viewer 또는 원하는 display name
+   - **Value**: `proxy_admin_viewer`(LiteLLM role value 중 하나와 정확히 일치해야 함)
+4. **Apply**를 클릭해 role을 저장합니다.
+5. 사용할 LiteLLM role마다 반복합니다.
+
+
+**지원 LiteLLM role value**([전체 role documentation](./access_control.md#global-proxy-roles) 참고):
+- `proxy_admin` - 전체 admin access
+- `proxy_admin_viewer` - 읽기 전용 admin access
+- `internal_user` - 본인 key 생성/조회/삭제 가능
+- `internal_user_viewer` - 본인 key 조회 가능(read-only)
 
 <Image img={require('../../img/app_roles.png')} style={{ width: '900px', height: 'auto' }} />
 
 ---
 
-#### Step 2: Assign Users to App Roles
+#### 2단계: User를 App Role에 할당
 
-1. Navigate to **Enterprise Applications** on https://portal.azure.com/
-2. Select your LiteLLM application
-3. Go to **Users and groups** > **Add user/group**
-4. Select the user
-5. Under **Select a role**, choose the app role you created (e.g., `proxy_admin_viewer`)
-6. Click **Assign** to save
+1. https://portal.azure.com/ 에서 **엔터프라이즈 Applications**로 이동합니다.
+2. LiteLLM application을 선택합니다.
+3. **Users and groups** > **Add user/group**으로 이동합니다.
+4. user를 선택합니다.
+5. **Select a role**에서 생성한 app role을 선택합니다(예: `proxy_admin_viewer`).
+6. **Assign**을 클릭해 저장합니다.
 
 <Image img={require('../../img/app_role2.png')} style={{ width: '900px', height: 'auto' }} />
 
 ---
 
-#### Step 3: Sign in and verify
+#### 3단계: Sign in 후 확인
 
-1. Sign in to the LiteLLM UI via SSO
-2. LiteLLM will automatically extract the app role from the JWT token
-3. The user will be assigned the corresponding role (you can verify this in the UI by checking the user profile dropdown)
+1. SSO로 LiteLLM UI에 sign in합니다.
+2. LiteLLM은 JWT token에서 app role을 자동으로 추출합니다.
+3. user에게 해당 role이 할당됩니다. UI의 user profile dropdown에서 확인할 수 있습니다.
 
 <Image img={require('../../img/app_role3.png')} style={{ width: '900px', height: 'auto' }} />
 
-**Note:** The role from Entra ID will take precedence over any existing role in the LiteLLM database. This ensures your SSO provider is the authoritative source for user roles.
-
+**참고:** Entra ID의 role은 LiteLLM database에 있는 기존 role보다 우선합니다. 이를 통해 SSO provider가 user role의 authoritative source가 됩니다.

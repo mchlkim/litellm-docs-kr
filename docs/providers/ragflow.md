@@ -3,15 +3,15 @@ import TabItem from '@theme/TabItem';
 
 # RAGFlow
 
-Litellm supports Ragflow's chat completions APIs
+LiteLLM은 Ragflow의 chat completions APIs를 지원합니다.
 
-## Supported Features
+## 지원 기능 {#supported-features}
 
 - ✅ Chat completions
-- ✅ Streaming responses
-- ✅ Both chat and agent endpoints
-- ✅ Multiple credential sources (params, env vars, litellm_params)
-- ✅ OpenAI-compatible API format
+- ✅ Streaming 응답
+- ✅ chat 및 agent endpoints 모두 지원
+- ✅ 여러 credential sources(params, env vars, litellm_params)
+- ✅ OpenAI 호환 API format
 
 
 ## API Key
@@ -28,19 +28,19 @@ os.environ['RAGFLOW_API_KEY']
 os.environ['RAGFLOW_API_BASE']
 ```
 
-## Overview
+## 개요
 
-RAGFlow provides OpenAI-compatible APIs with unique path structures that include chat and agent IDs:
+RAGFlow는 chat 및 agent IDs를 포함하는 고유한 path 구조의 OpenAI 호환 APIs를 제공합니다.
 
 - **Chat endpoint**: `/api/v1/chats_openai/{chat_id}/chat/completions`
 - **Agent endpoint**: `/api/v1/agents_openai/{agent_id}/chat/completions`
 
-The model name format embeds the endpoint type and ID:
+model name format에는 endpoint type과 ID가 포함됩니다.
 - Chat: `ragflow/chat/{chat_id}/{model_name}`
 - Agent: `ragflow/agent/{agent_id}/{model_name}`
 
 
-## Sample Usage - Chat Endpoint
+## Sample 사용법 - Chat Endpoint
 
 ```python
 from litellm import completion
@@ -56,7 +56,7 @@ response = completion(
 print(response)
 ```
 
-## Sample Usage - Agent Endpoint
+## Sample 사용법 - Agent Endpoint
 
 ```python
 from litellm import completion
@@ -72,9 +72,9 @@ response = completion(
 print(response)
 ```
 
-## Sample Usage - With Parameters
+## Sample 사용법 - With Parameters
 
-You can also pass `api_key` and `api_base` directly as parameters:
+`api_key`와 `api_base`를 parameters로 직접 전달할 수도 있습니다.
 
 ```python
 from litellm import completion
@@ -88,7 +88,7 @@ response = completion(
 print(response)
 ```
 
-## Sample Usage - Streaming
+## Sample 사용법 - Streaming
 
 ```python
 from litellm import completion
@@ -107,47 +107,47 @@ for chunk in response:
     print(chunk)
 ```
 
-## Model Name Format
+## Model Name Format {#model-name-format}
 
-The model name must follow one of these formats:
+model name은 다음 format 중 하나를 따라야 합니다.
 
 ### Chat Endpoint
 ```
 ragflow/chat/{chat_id}/{model_name}
 ```
 
-Example: `ragflow/chat/my-chat-id/gpt-4o-mini`
+예제: `ragflow/chat/my-chat-id/gpt-4o-mini`
 
 ### Agent Endpoint
 ```
 ragflow/agent/{agent_id}/{model_name}
 ```
 
-Example: `ragflow/agent/my-agent-id/gpt-4o-mini`
+예제: `ragflow/agent/my-agent-id/gpt-4o-mini`
 
-Where:
-- `{chat_id}` or `{agent_id}` is the ID of your chat or agent in RAGFlow
-- `{model_name}` is the actual model name (e.g., `gpt-4o-mini`, `gpt-4o`, etc.)
+위 값의 의미:
+- `{chat_id}` 또는 `{agent_id}`는 RAGFlow의 chat 또는 agent ID입니다.
+- `{model_name}`은 실제 model name입니다(예: `gpt-4o-mini`, `gpt-4o` 등).
 
-## Configuration Sources
+## 설정 Sources
 
-LiteLLM supports multiple ways to provide credentials, checked in this order:
+LiteLLM은 credentials를 제공하는 여러 방식을 지원하며, 다음 순서로 확인합니다.
 
-1. **Function parameters**: `api_key="..."`, `api_base="..."`
+1. **함수 parameters**: `api_key="..."`, `api_base="..."`
 2. **litellm_params**: `litellm_params={"api_key": "...", "api_base": "..."}`
-3. **Environment variables**: `RAGFLOW_API_KEY`, `RAGFLOW_API_BASE`
-4. **Global litellm settings**: `litellm.api_key`, `litellm.api_base`
+3. **환경 변수**: `RAGFLOW_API_KEY`, `RAGFLOW_API_BASE`
+4. **전역 litellm 설정**: `litellm.api_key`, `litellm.api_base`
 
-## Usage - LiteLLM Proxy Server
+## 사용법 - LiteLLM Proxy Server
 
-### 1. Save key in your environment
+### 1. 환경에 key 저장 {#save-key-in-your-environment}
 
 ```bash
 export RAGFLOW_API_KEY="your-ragflow-api-key"
 export RAGFLOW_API_BASE="http://localhost:9380"
 ```
 
-### 2. Start the proxy
+### 2. 프록시 시작
 
 <Tabs>
 <TabItem value="config" label="config.yaml">
@@ -178,7 +178,7 @@ $ litellm --config /path/to/config.yaml
 </TabItem>
 </Tabs>
 
-### 3. Test it
+### 3. 테스트 {#test-it}
 
 <Tabs>
 <TabItem value="Curl" label="Curl Request">
@@ -218,27 +218,26 @@ print(response)
 </TabItem>
 </Tabs>
 
-## API Base URL Handling
+## API Base URL 처리 {#api-base-url-handling}
 
-The `api_base` parameter can be provided with or without `/v1` suffix. LiteLLM will automatically handle it:
+`api_base` parameter는 `/v1` suffix 유무와 관계없이 제공할 수 있습니다. LiteLLM이 자동으로 처리합니다.
 
 - `http://localhost:9380` → `http://localhost:9380/api/v1/chats_openai/{chat_id}/chat/completions`
 - `http://localhost:9380/v1` → `http://localhost:9380/api/v1/chats_openai/{chat_id}/chat/completions`
 - `http://localhost:9380/api/v1` → `http://localhost:9380/api/v1/chats_openai/{chat_id}/chat/completions`
 
-All three formats will work correctly.
+세 format 모두 정상 동작합니다.
 
-## Error Handling
+## 오류 처리 {#error-handling}
 
-If you encounter errors:
+오류가 발생하면 다음을 확인하세요.
 
-1. **Invalid model format**: Ensure your model name follows `ragflow/{chat|agent}/{id}/{model_name}` format
-2. **Missing api_base**: Provide `api_base` via parameter, environment variable, or litellm_params
-3. **Connection errors**: Verify your RAGFlow server is running and accessible at the provided `api_base`
+1. **잘못된 model format**: model name이 `ragflow/{chat|agent}/{id}/{model_name}` format을 따르는지 확인하세요.
+2. **api_base 누락**: parameter, environment variable 또는 litellm_params로 `api_base`를 제공하세요.
+3. **Connection errors**: RAGFlow server가 실행 중이고 제공한 `api_base`에서 접근 가능한지 확인하세요.
 
 :::info
 
-For more information about passing provider-specific parameters, [go here](../completion/provider_specific_params.md)
+provider-specific parameters 전달에 대한 자세한 내용은 [여기](../completion/provider_specific_params.md)를 참고하세요.
 
 :::
-

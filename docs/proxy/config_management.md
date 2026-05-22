@@ -1,14 +1,14 @@
-# File Management
+# 파일 관리 {#file-management}
 
-## `include` external YAML files in a config.yaml 
+## config.yaml에서 외부 YAML 파일 `include`하기 {#include-external-yaml-files-in-a-configyaml}
 
-You can use `include` to include external YAML files in a config.yaml. 
+`include`를 사용해 config.yaml에 외부 YAML 파일을 포함할 수 있습니다.
 
-**Quick Start Usage:**
+**빠른 시작 사용법:**
 
-To include a config file, use `include` with either a single file or a list of files. 
+config 파일을 포함하려면 단일 파일 또는 파일 목록과 함께 `include`를 사용하세요.
 
-Contents of `parent_config.yaml`:
+`parent_config.yaml`의 내용:
 ```yaml
 include:
   - model_config.yaml # 👈 Key change, will include the contents of model_config.yaml
@@ -18,7 +18,7 @@ litellm_settings:
 ```
 
 
-Contents of `model_config.yaml`:
+`model_config.yaml`의 내용:
 ```yaml
 model_list:
   - model_name: gpt-4o
@@ -32,9 +32,9 @@ model_list:
 
 ```
 
-Start proxy server 
+프록시 서버 시작
 
-This will start the proxy server with config `parent_config.yaml`. Since the `include` directive is used, the server will also include the contents of `model_config.yaml`.
+이 명령은 `parent_config.yaml` config로 프록시 서버를 시작합니다. `include` 지시문이 사용되었으므로 서버는 `model_config.yaml`의 내용도 함께 포함합니다.
 ```
 litellm --config parent_config.yaml --detailed_debug
 ```
@@ -43,15 +43,15 @@ litellm --config parent_config.yaml --detailed_debug
 
 
 
-## Examples using `include`
+## `include` 사용 예제 {#examples-using-include}
 
-Include a single file:
+단일 파일 포함:
 ```yaml
 include:
   - model_config.yaml
 ```
 
-Include multiple files:
+여러 파일 포함:
 ```yaml
 include:
   - model_config.yaml

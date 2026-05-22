@@ -1,5 +1,5 @@
 ---
-title: "[Preview] v1.81.6 - Logs v2 with Tool Call Tracing"
+title: "[Preview] v1.81.6 - 로그 v2 with Tool Call Tracing"
 slug: "v1-81-6"
 date: 2026-01-31T00:00:00
 authors:
@@ -14,15 +14,15 @@ authors:
 hide_table_of_contents: false
 ---
 
-:::danger Known Issue - CPU Usage
+:::danger Known Issue - CPU 사용법
 
-This release had known issues with CPU usage. This has been fixed in [v1.81.9-stable](./v1-81-9).
+이 릴리스에는 CPU 사용량 관련 알려진 문제가 있었습니다. 이 문제는 [v1.81.9-stable](../v1.81.9/v1-81-9)에서 수정되었습니다.
 
-**We recommend using v1.81.9-stable instead.**
+**대신 v1.81.9-stable 사용을 권장합니다.**
 
 :::
 
-## Deploy this version
+## 이 버전 배포
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -50,34 +50,34 @@ pip install litellm==1.81.6
 
 ## Key Highlights
 
-Logs View v2 with Tool Call Tracing - Redesigned logs interface with side panel, structured tool visualization, and error message search for faster debugging.
+Tool Call Tracing을 포함한 로그 View v2 - 더 빠른 디버깅을 위해 사이드 패널, 구조화된 도구 시각화, 오류 메시지 검색을 갖춘 로그 인터페이스로 재설계했습니다.
 
 Let's dive in.
 
-### Logs View v2 with Tool Call Tracing
+### Tool Call Tracing을 포함한 로그 View v2
 
-This release introduces comprehensive tool call tracing through LiteLLM's redesigned Logs View v2, enabling developers to debug and monitor AI agent workflows in production environments seamlessly.
+이번 릴리스는 LiteLLM의 재설계된 로그 View v2를 통해 포괄적인 tool call tracing을 도입하여, 개발자가 프로덕션 환경의 AI agent workflow를 매끄럽게 디버깅하고 모니터링할 수 있게 합니다.
 
-This means you can now onboard use cases like tracing complex multi-step agent interactions, debugging tool execution failures, and monitoring MCP server calls while maintaining full visibility into request/response payloads with syntax highlighting.
+이제 syntax highlighting이 적용된 request/response payload 전체 가시성을 유지하면서, 복잡한 다단계 agent 상호작용 추적, tool 실행 실패 디버깅, MCP server call 모니터링 같은 사용 사례를 온보딩할 수 있습니다.
 
-Developers can access the new Logs View through LiteLLM's UI to inspect tool calls in structured format, search logs by error messages or request patterns, and correlate agent activities across sessions with collapsible side panel views.
+개발자는 LiteLLM UI에서 새 로그 View에 접근해 tool call을 구조화된 형식으로 살펴보고, 오류 메시지나 요청 패턴으로 로그를 검색하며, 접을 수 있는 사이드 패널 view로 세션 간 agent activity를 연결해 볼 수 있습니다.
 
 {/* TODO: Add image from Slack (group_7219.png) - save as logs_v2_tool_tracing.png */}
 {/* <Image img={require('../../img/release_notes/logs_v2_tool_tracing.png')} style={{ maxWidth: '800px', width: '100%' }} /> */}
 
 [Get Started](../../docs/proxy/ui_logs)
 
-## New Models / Updated Models
+## New 모델 / Updated 모델
 
 #### New Model Support
 
 | Provider | Model | Context Window | Input ($/1M tokens) | Output ($/1M tokens) | Features |
 | -------- | ----- | -------------- | ------------------- | -------------------- | -------- |
-| AWS Bedrock | `amazon.nova-2-pro-preview-20251202-v1:0` | 1M | $2.19 | $17.50 | Chat completions, vision, video, PDF, function calling, prompt caching, reasoning |
-| Google Vertex AI | `gemini-robotics-er-1.5-preview` | 1M | $0.30 | $2.50 | Chat completions, multimodal (text, image, video, audio), function calling, reasoning |
-| OpenRouter | `openrouter/xiaomi/mimo-v2-flash` | 262K | $0.09 | $0.29 | Chat completions, function calling, reasoning |
+| AWS Bedrock | `amazon.nova-2-pro-preview-20251202-v1:0` | 1M | $2.19 | $17.50 | Chat completions, vision, video, PDF, function calling, prompt caching, reasoning 지원 |
+| Google Vertex AI | `gemini-robotics-er-1.5-preview` | 1M | $0.30 | $2.50 | Chat completions, multimodal(text, image, video, audio), function calling, reasoning 지원 |
+| OpenRouter | `openrouter/xiaomi/mimo-v2-flash` | 262K | $0.09 | $0.29 | Chat completions, function calling, reasoning 지원 |
 | OpenRouter | `openrouter/moonshotai/kimi-k2.5` | - | - | - | Chat completions |
-| OpenRouter | `openrouter/z-ai/glm-4.7` | 202K | $0.40 | $1.50 | Chat completions, vision, function calling, reasoning |
+| OpenRouter | `openrouter/z-ai/glm-4.7` | 202K | $0.40 | $1.50 | Chat completions, vision, function calling, reasoning 지원 |
 
 #### Features
 
@@ -200,7 +200,7 @@ Developers can access the new Logs View through LiteLLM's UI to inspect tool cal
 - **General**
     - Fix token calculations and refactor - [PR #19696](https://github.com/BerriAI/litellm/pull/19696)
 
-## Management Endpoints / UI
+## 관리 엔드포인트 / UI
 
 #### Features
 
@@ -208,31 +208,31 @@ Developers can access the new Logs View through LiteLLM's UI to inspect tool cal
     - Add configurable CLI JWT expiration via environment variable - [PR #19780](https://github.com/BerriAI/litellm/pull/19780)
     - Fix team cli auth flow - [PR #19666](https://github.com/BerriAI/litellm/pull/19666)
 
-- **Virtual Keys**
+- **가상 키**
     - UI: Auto Truncation of Table Values - [PR #19718](https://github.com/BerriAI/litellm/pull/19718)
     - Fix Create Key: Expire Key Input Duration - [PR #19807](https://github.com/BerriAI/litellm/pull/19807)
     - Bulk Update Keys Endpoint - [PR #19886](https://github.com/BerriAI/litellm/pull/19886)
 
-- **Logs View**
-    - **v2 Logs view with side panel and improved UX** - [PR #20091](https://github.com/BerriAI/litellm/pull/20091)
-    - New View to render "Tools" on Logs View - [PR #20093](https://github.com/BerriAI/litellm/pull/20093)
+- **로그 View**
+    - **v2 로그 view with side panel and improved UX** - [PR #20091](https://github.com/BerriAI/litellm/pull/20091)
+    - New View to render "Tools" on 로그 View - [PR #20093](https://github.com/BerriAI/litellm/pull/20093)
     - Add Pretty print view of request/response - [PR #20096](https://github.com/BerriAI/litellm/pull/20096)
-    - Add error_message search in Spend Logs Endpoint - [PR #19960](https://github.com/BerriAI/litellm/pull/19960)
+    - Add error_message search in Spend 로그 Endpoint - [PR #19960](https://github.com/BerriAI/litellm/pull/19960)
     - UI: Adding Error message search to ui spend logs - [PR #19963](https://github.com/BerriAI/litellm/pull/19963)
-    - Spend Logs: Settings Modal - [PR #19918](https://github.com/BerriAI/litellm/pull/19918)
-    - Fix error_code in Spend Logs metadata - [PR #20015](https://github.com/BerriAI/litellm/pull/20015)
-    - Spend Logs: Show Current Store and Retention Status - [PR #20017](https://github.com/BerriAI/litellm/pull/20017)
+    - Spend 로그: Settings Modal - [PR #19918](https://github.com/BerriAI/litellm/pull/19918)
+    - Fix error_code in Spend 로그 metadata - [PR #20015](https://github.com/BerriAI/litellm/pull/20015)
+    - Spend 로그: Show Current Store and Retention Status - [PR #20017](https://github.com/BerriAI/litellm/pull/20017)
     - Allow Dynamic Setting of store_prompts_in_spend_logs - [PR #19913](https://github.com/BerriAI/litellm/pull/19913)
-    - [Docs: UI Spend Logs Settings](../../docs/proxy/ui_spend_log_settings) - [PR #20197](https://github.com/BerriAI/litellm/pull/20197)
+    - [문서: UI Spend 로그 Settings](../../docs/proxy/ui_spend_log_settings) - [PR #20197](https://github.com/BerriAI/litellm/pull/20197)
 
-- **Models + Endpoints**
+- **모델 + Endpoints**
     - Add sortBy and sortOrder params for /v2/model/info - [PR #19903](https://github.com/BerriAI/litellm/pull/19903)
     - Fix Sorting for /v2/model/info - [PR #19971](https://github.com/BerriAI/litellm/pull/19971)
     - UI: Model Page Server Sort - [PR #19908](https://github.com/BerriAI/litellm/pull/19908)
 
-- **Usage & Analytics**
-    - UI: Usage Export: Breakdown by Teams and Keys - [PR #19953](https://github.com/BerriAI/litellm/pull/19953)
-    - UI: Usage: Model Breakdown Per Key - [PR #20039](https://github.com/BerriAI/litellm/pull/20039)
+- **사용법 & Analytics**
+    - UI: 사용법 Export: Breakdown by Teams and Keys - [PR #19953](https://github.com/BerriAI/litellm/pull/19953)
+    - UI: 사용법: Model Breakdown Per Key - [PR #20039](https://github.com/BerriAI/litellm/pull/20039)
 
 - **UI Improvements**
     - UI: Allow Admins to control what pages are visible on LeftNav - [PR #19907](https://github.com/BerriAI/litellm/pull/19907)
@@ -245,12 +245,12 @@ Developers can access the new Logs View through LiteLLM's UI to inspect tool cal
     - UI: Navbar: User Dropdown - [PR #20095](https://github.com/BerriAI/litellm/pull/20095)
     - Change default key type from 'Default' to 'LLM API' - [PR #19516](https://github.com/BerriAI/litellm/pull/19516)
 
-- **Team & User Management**
+- **팀 및 사용자 관리**
     - Fix /team/member_add User Email and ID Verifications - [PR #19814](https://github.com/BerriAI/litellm/pull/19814)
     - Fix SSO Email Case Sensitivity - [PR #19799](https://github.com/BerriAI/litellm/pull/19799)
     - UI: Internal User: Bulk Add - [PR #19721](https://github.com/BerriAI/litellm/pull/19721)
 
-- **AI Gateway Features**
+- **AI Gateway 기능**
     - Add support for making silent LLM calls without logging - [PR #19544](https://github.com/BerriAI/litellm/pull/19544)
     - UI: Fix MCP tools instructions to display comma-separated strings - [PR #20101](https://github.com/BerriAI/litellm/pull/20101)
 
@@ -264,14 +264,14 @@ Developers can access the new Logs View through LiteLLM's UI to inspect tool cal
 - Prevent clearing content filter patterns when editing guardrail - [PR #19671](https://github.com/BerriAI/litellm/pull/19671)
 - Fix Prompt Studio history to load tools and system messages - [PR #19920](https://github.com/BerriAI/litellm/pull/19920)
 - Add WATSONX_ZENAPIKEY to WatsonX credentials - [PR #20086](https://github.com/BerriAI/litellm/pull/20086)
-- UI: Vector Store: Allow Config Defined Models to Be Selected - [PR #20031](https://github.com/BerriAI/litellm/pull/20031)
+- UI: Vector Store: Allow Config Defined 모델 to Be Selected - [PR #20031](https://github.com/BerriAI/litellm/pull/20031)
 
-## Logging / Guardrail / Prompt Management Integrations
+## 로깅 / Guardrail / Prompt Management 통합
 
 #### Features
 
 - **[DataDog](../../docs/proxy/logging#datadog)**
-    - Add agent support for LLM Observability - [PR #19574](https://github.com/BerriAI/litellm/pull/19574)
+    - Add agent support for LLM 관측성 - [PR #19574](https://github.com/BerriAI/litellm/pull/19574)
     - Add datadog cost management support and fix startup callback issue - [PR #19584](https://github.com/BerriAI/litellm/pull/19584)
     - Add datadog_llm_observability to /health/services allowed list - [PR #19952](https://github.com/BerriAI/litellm/pull/19952)
     - Check for agent mode before requiring DD_API_KEY/DD_SITE - [PR #20156](https://github.com/BerriAI/litellm/pull/20156)
@@ -296,7 +296,7 @@ Developers can access the new Logs View through LiteLLM's UI to inspect tool cal
     - Add async_post_call_response_headers_hook to CustomLogger - [PR #20083](https://github.com/BerriAI/litellm/pull/20083)
     - Add mock client factory pattern and mock support for PostHog, Helicone, and Braintrust integrations - [PR #19707](https://github.com/BerriAI/litellm/pull/19707)
 
-#### Guardrails
+#### 가드레일
 
 - **[Presidio](../../docs/proxy/guardrails/pii_masking_v2)**
     - Reuse HTTP connections to prevent performance degradation - [PR #19964](https://github.com/BerriAI/litellm/pull/19964)
@@ -309,11 +309,11 @@ Developers can access the new Logs View through LiteLLM's UI to inspect tool cal
     - Fix guardrails issues with streaming-response regex - [PR #19901](https://github.com/BerriAI/litellm/pull/19901)
     - Remove enterprise requirement for guardrail monitoring (docs) - [PR #19833](https://github.com/BerriAI/litellm/pull/19833)
 
-## Spend Tracking, Budgets and Rate Limiting
+## 비용 추적, 예산 및 속도 제한
 
 - Add event-driven coordination for global spend query to prevent cache stampede - [PR #20030](https://github.com/BerriAI/litellm/pull/20030)
 
-## Performance / Loadbalancing / Reliability improvements
+## 성능 / 로드 밸런싱 / 안정성 개선
 
 - **Resolve high CPU when router_settings in DB** - by avoiding REGISTRY.collect() in PrometheusServicesLogger - [PR #20087](https://github.com/BerriAI/litellm/pull/20087)
 - **Reuse HTTP connections in Presidio** - to prevent performance degradation - [PR #19964](https://github.com/BerriAI/litellm/pull/19964)
@@ -340,7 +340,7 @@ Developers can access the new Logs View through LiteLLM's UI to inspect tool cal
 | ----- | ----------- | ----------- | -- | --------- |
 | `LiteLLM_ManagedVectorStoresTable` | New Columns | Added `team_id` and `user_id` fields for permission management | [PR #19972](https://github.com/BerriAI/litellm/pull/19972) | [Migration](https://github.com/BerriAI/litellm/blob/main/litellm-proxy-extras/litellm_proxy_extras/migrations/20260131150814_add_team_user_to_vector_stores/migration.sql) |
 
-### Migration Improvements
+### 마이그레이션 개선
 
 - Fix Docker: Use correct schema path for Prisma generation - [PR #19631](https://github.com/BerriAI/litellm/pull/19631)
 - Resolve 'relation does not exist' migration errors in setup_database - [PR #19281](https://github.com/BerriAI/litellm/pull/19281)
@@ -348,20 +348,20 @@ Developers can access the new Logs View through LiteLLM's UI to inspect tool cal
 - Run Prisma generate as nobody user in non-root Docker container for security - [PR #20000](https://github.com/BerriAI/litellm/pull/20000)
 - Bump litellm-proxy-extras version to 0.4.28 - [PR #20166](https://github.com/BerriAI/litellm/pull/20166)
 
-## Documentation Updates
+## 문서 업데이트
 
 - **[Add Claude Agents SDK x LiteLLM Guide](../../docs/mcp)** - [PR #20036](https://github.com/BerriAI/litellm/pull/20036)
 - **[Add Cookbook: Using Claude Agent SDK + MCPs with LiteLLM](https://github.com/BerriAI/litellm/tree/main/cookbook)** - [PR #20081](https://github.com/BerriAI/litellm/pull/20081)
 - Fix A2A Python SDK URL in documentation - [PR #19832](https://github.com/BerriAI/litellm/pull/19832)
 - **[Add Sarvam usage documentation](../../docs/providers/sarvam)** - [PR #19844](https://github.com/BerriAI/litellm/pull/19844)
 - **[Add supported input formats for embeddings](../../docs/embedding/supported_embedding)** - [PR #20073](https://github.com/BerriAI/litellm/pull/20073)
-- **[UI Spend Logs Settings Docs](../../docs/proxy/ui_spend_log_settings)** - [PR #20197](https://github.com/BerriAI/litellm/pull/20197)
+- **[UI Spend 로그 Settings 문서](../../docs/proxy/ui_spend_log_settings)** - [PR #20197](https://github.com/BerriAI/litellm/pull/20197)
 - Add OpenAI Agents SDK to OSS Adopters list in README - [PR #19820](https://github.com/BerriAI/litellm/pull/19820)
 - Update docs: Remove enterprise requirement for guardrail monitoring - [PR #19833](https://github.com/BerriAI/litellm/pull/19833)
 - Add missing environment variable documentation - [PR #20138](https://github.com/BerriAI/litellm/pull/20138)
 - Improve documentation blog index page - [PR #20188](https://github.com/BerriAI/litellm/pull/20188)
 
-## Infrastructure / Testing Improvements
+## 인프라 / 테스트 개선
 
 - Add test coverage for Router.get_valid_args and improve code coverage reporting - [PR #19797](https://github.com/BerriAI/litellm/pull/19797)
 - Add validation of model cost map as CI job - [PR #19993](https://github.com/BerriAI/litellm/pull/19993)
@@ -389,4 +389,4 @@ Developers can access the new Logs View through LiteLLM's UI to inspect tool cal
 * @nht1206 made their first contribution in https://github.com/BerriAI/litellm/pull/20046
 * @genga6 made their first contribution in https://github.com/BerriAI/litellm/pull/20009
 
-**Full Changelog**: https://github.com/BerriAI/litellm/compare/v1.81.3.rc...v1.81.6
+**Full 변경 이력**: https://github.com/BerriAI/litellm/compare/v1.81.3.rc...v1.81.6

@@ -1,35 +1,35 @@
 import Image from '@theme/IdealImage';
 
-# 🌙 Lunary - GenAI Observability 
+# 🌙 Lunary - GenAI 관측성 
 
-[Lunary](https://lunary.ai/) is an open-source platform providing [observability](https://lunary.ai/docs/features/observe), [prompt management](https://lunary.ai/docs/features/prompts), and [analytics](https://lunary.ai/docs/features/observe#analytics) to help team manage and improve LLM chatbots.
+[Lunary](https://lunary.ai/)는 팀이 LLM 챗봇을 관리하고 개선할 수 있도록 [관측성](https://lunary.ai/docs/features/observe), [프롬프트 관리](https://lunary.ai/docs/features/prompts), [분석](https://lunary.ai/docs/features/observe#analytics)을 제공하는 오픈 소스 플랫폼입니다.
 
-You can reach out to us anytime by [email](mailto:hello@lunary.ai) or directly [schedule a Demo](https://lunary.ai/schedule).
+언제든지 [이메일](mailto:hello@lunary.ai)로 문의하거나 직접 [데모 일정을 예약](https://lunary.ai/schedule)할 수 있습니다.
 
 <video controls width='900' >
   <source src='https://lunary.ai/videos/demo-annotated.mp4'/>
 </video>
 
 
-## Usage with LiteLLM Python SDK
-### Pre-Requisites
+## LiteLLM Python SDK 사용법 {#with-litellm-python-sdk}
+### 사전 요구 사항 {#pre-requisites}
 
 ```shell
 uv add litellm lunary
 ```
 
-### Quick Start
+### 빠른 시작
 
-First, get your Lunary public key on the [Lunary dashboard](https://app.lunary.ai/).
+먼저 [Lunary 대시보드](https://app.lunary.ai/)에서 Lunary 공개 키를 가져옵니다.
 
-Use just 2 lines of code, to instantly log your responses **across all providers** with Lunary:
+단 2줄의 코드로 **모든 제공자 전반의** 응답을 Lunary에 즉시 기록할 수 있습니다.
 
 ```python
 litellm.success_callback = ["lunary"]
 litellm.failure_callback = ["lunary"]
 ```
 
-Complete code:
+전체 코드:
 ```python
 from litellm import completion
 
@@ -46,7 +46,7 @@ response = completion(
 )
 ```
 
-### Usage with LangChain ChatLiteLLM 
+### LangChain ChatLiteLLM 사용법 {#with-langchain-chatlitellm}
 ```python
 import os
 from langchain.chat_models import ChatLiteLLM
@@ -70,9 +70,9 @@ chat(messages)
 ```
 
 
-### Usage with Prompt Templates
+### Prompt Templates 사용법 {#with-prompt-templates}
 
-You can use Lunary to manage [prompt templates](https://lunary.ai/docs/features/prompts) and use them across all your LLM providers with LiteLLM.
+Lunary로 [프롬프트 템플릿](https://lunary.ai/docs/features/prompts)을 관리하고, LiteLLM을 통해 모든 LLM 제공자에서 사용할 수 있습니다.
 
 ```python
 from litellm import completion
@@ -87,8 +87,8 @@ litellm.success_callback = ["lunary"]
 result = completion(**template)
 ```
 
-### Usage with custom chains
-You can wrap your LLM calls inside custom chains, so that you can visualize them as traces.
+### custom chains 사용법 {#사용법-with-custom-chains}
+LLM 호출을 custom chains 안에 래핑하면 추적으로 시각화할 수 있습니다.
 
 ```python
 import litellm
@@ -120,19 +120,19 @@ my_chain("Chain input")
 
 <Image img={require('../../img/lunary-trace.png')} />
 
-## Usage with LiteLLM Proxy Server
-### Step1: Install dependencies and set your environment variables 
-Install the dependencies
+## LiteLLM Proxy Server 사용법 {#with-litellm-proxy-server}
+### 1단계: 의존성을 설치하고 환경 변수를 설정합니다 {#step1-install-dependencies-and-set-your-environment-variables}
+의존성을 설치합니다.
 ```shell
 uv add litellm lunary
 ```
 
-Get you Lunary public key from from https://app.lunary.ai/settings 
+https://app.lunary.ai/settings 에서 Lunary 공개 키를 가져옵니다.
 ```shell
 export LUNARY_PUBLIC_KEY="<your-public-key>"
 ```
 
-### Step 2: Create a `config.yaml` and set `lunary` callbacks
+### 2단계: `config.yaml`을 만들고 `lunary` 콜백을 설정합니다 {#step-2-create-a-configyaml-and-set-lunary-callbacks}
 
 ```yaml
 model_list:
@@ -144,12 +144,12 @@ litellm_settings:
   failure_callback: ["lunary"]
 ```
 
-### Step 3: Start the LiteLLM proxy
+### 3단계: LiteLLM proxy를 시작합니다 {#step-3-start-the-litellm-proxy}
 ```shell
 litellm --config config.yaml
 ```
 
-### Step 4: Make a request
+### 4단계: 요청을 보냅니다 {#step-4-make-a-request}
 
 ```shell
 curl -X POST 'http://0.0.0.0:4000/chat/completions' \
@@ -169,11 +169,11 @@ curl -X POST 'http://0.0.0.0:4000/chat/completions' \
 }'
 ```
 
-You can find more details about the different ways of making requests to the LiteLLM proxy on [this page](https://docs.litellm.ai/docs/proxy/user_keys)
+LiteLLM proxy에 요청을 보내는 여러 방법에 대한 자세한 내용은 [이 페이지](https://docs.litellm.ai/docs/proxy/user_keys)에서 확인할 수 있습니다.
 
 
-## Support & Talk to Founders
+## 지원 및 창업자와 대화하기 {#support--talk-to-founders}
 
-- [Schedule Demo 👋](https://calendly.com/d/4mp-gd3-k5k/berriai-1-1-onboarding-litellm-hosted-version)
-- [Community Discord 💭](https://discord.gg/wuPM9dRgDw)
-- Our emails ✉️ ishaan@berri.ai / krrish@berri.ai
+- [데모 일정 예약 👋](https://calendly.com/d/4mp-gd3-k5k/berriai-1-1-onboarding-litellm-hosted-version)
+- [커뮤니티 Discord 💭](https://discord.gg/wuPM9dRgDw)
+- 이메일 ✉️ ishaan@berri.ai / krrish@berri.ai

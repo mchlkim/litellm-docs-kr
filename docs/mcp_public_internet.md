@@ -1,36 +1,30 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Exposing MCPs on the Public Internet
+# Public Internet에 MCP 노출
 
-Control which MCP servers are visible to external callers (e.g., ChatGPT, Claude Desktop) vs. internal-only callers. This is useful when you want a subset of your MCP servers available publicly while keeping sensitive servers restricted to your private network.
+외부 호출자(예: ChatGPT, Claude Desktop)에게 보이는 MCP server와 내부 전용 호출자에게만 보이는 MCP server를 제어합니다. 민감한 server는 사설 네트워크로 제한하면서 일부 MCP server만 공개적으로 사용할 수 있게 할 때 유용합니다.
 
-## Overview
+## 개요
 
-| Property | Details |
+| 속성 | 세부 정보 |
 |-------|-------|
-| Description | IP-based access control for MCP servers — external callers only see servers marked as public |
-| Setting | `available_on_public_internet` on each MCP server |
-| Network Config | `mcp_internal_ip_ranges` in `general_settings` |
-| Supported Clients | ChatGPT, Claude Desktop, Cursor, OpenAI API, or any MCP client |
+| 설명 | MCP server에 대한 IP 기반 접근 제어 - 외부 호출자는 public으로 표시된 server만 볼 수 있습니다. |
+| 설정 | 각 MCP server의 `available_on_public_internet` |
+| 네트워크 구성 | `general_settings`의 `mcp_internal_ip_ranges` |
+| 지원 클라이언트 | ChatGPT, Claude Desktop, Cursor, OpenAI API 또는 모든 MCP client |
 
-:::warning Interaction with `delegate_auth_to_upstream`
+## 동작 방식
 
-If an MCP server is **`available_on_public_internet: false`** (internal for IP-based discovery) **and** has **`delegate_auth_to_upstream: true`** with **`auth_type: oauth2`** (interactive PKCE, not M2M), anonymous callers can still use the upstream OAuth **`/authorize`** path without a LiteLLM session. See [MCP OAuth — Delegate Auth to Upstream](./mcp_oauth.md#delegate-auth-to-upstream-pkce-passthrough) for details and mitigations.
+LiteLLM의 MCP endpoint에 요청이 도착하면 LiteLLM은 호출자의 IP 주소를 확인해 **내부** 호출자인지 **외부** 호출자인지 판단합니다.
 
-:::
+1. 들어오는 요청에서 **client IP를 추출**합니다(reverse proxy 뒤에 구성된 경우 `X-Forwarded-For` 지원).
+2. 구성된 사설 IP 범위와 비교해 IP를 내부 또는 외부로 **분류**합니다(기본값은 RFC 1918: `10.0.0.0/8`, `172.16.0.0/12`, `192.168.0.0/16`, `127.0.0.0/8`).
+3. **Server 목록을 필터링**합니다.
+   - **내부 호출자**는 모든 MCP server(public 및 private)를 봅니다.
+   - **외부 호출자**는 `available_on_public_internet: true`인 server만 봅니다.
 
-## How It Works
-
-When a request arrives at LiteLLM's MCP endpoints, LiteLLM checks the caller's IP address to determine whether they are an **internal** or **external** caller:
-
-1. **Extract the client IP** from the incoming request (supports `X-Forwarded-For` when configured behind a reverse proxy).
-2. **Classify the IP** as internal or external by checking it against the configured private IP ranges (defaults to RFC 1918: `10.0.0.0/8`, `172.16.0.0/12`, `192.168.0.0/16`, `127.0.0.0/8`).
-3. **Filter the server list**:
-   - **Internal callers** see all MCP servers (public and private).
-   - **External callers** only see servers with `available_on_public_internet: true`.
-
-This filtering is applied at every MCP access point: the MCP registry, tool listing, tool calling, dynamic server routes, and OAuth discovery endpoints.
+이 필터링은 MCP registry, tool listing, tool calling, dynamic server route, OAuth discovery endpoint 등 모든 MCP 접근 지점에 적용됩니다.
 
 ```mermaid
 flowchart TD
@@ -40,162 +34,162 @@ flowchart TD
     C -->|No - External caller| E[Return ONLY servers with<br/>available_on_public_internet = true]
 ```
 
-## Walkthrough
+## 연습 안내
 
-This walkthrough covers two flows:
-1. **Adding a public MCP server** (DeepWiki) and connecting to it from ChatGPT
-2. **Making an existing server private** (Exa) and verifying ChatGPT no longer sees it
+이 안내는 두 가지 흐름을 다룹니다.
+1. **Public MCP server 추가**(DeepWiki) 후 ChatGPT에서 연결
+2. **기존 server를 private으로 전환**(Exa)하고 ChatGPT에서 더 이상 보이지 않는지 확인
 
-### Flow 1: Add a Public MCP Server (DeepWiki)
+### 흐름 1: Public MCP Server 추가(DeepWiki)
 
-DeepWiki is a free MCP server — a good candidate to expose publicly so AI gateway users can access it from ChatGPT.
+DeepWiki는 무료 MCP server이므로 AI gateway 사용자가 ChatGPT에서 접근할 수 있도록 공개 노출하기 좋은 후보입니다.
 
-#### Step 1: Create the MCP Server
+#### 단계 1: MCP Server 생성
 
-Navigate to the MCP Servers page and click **"+ Add New MCP Server"**.
+MCP Servers 페이지로 이동해 **"+ Add New MCP Server"**를 클릭합니다.
 
 ![Click Add New MCP Server](https://colony-recorder.s3.amazonaws.com/files/2026-02-07/28cc27c2-d980-4255-b552-ebf542ef95be/ascreenshot_30a7e3c043834f1c87b69e6ffc5bba4f_text_export.jpeg)
 
-The create dialog opens. Enter **"DeepWiki"** as the server name.
+생성 dialog가 열리면 server 이름으로 **"DeepWiki"**를 입력합니다.
 
 ![Enter server name](https://colony-recorder.s3.amazonaws.com/files/2026-02-07/8c733c38-310a-40ef-8a5b-7af91cc7f74f/ascreenshot_16df83fed5bd4683a22a042e07063cec_text_export.jpeg)
 
-For the transport type dropdown, select **HTTP** since DeepWiki uses the Streamable HTTP transport.
+DeepWiki는 Streamable HTTP transport를 사용하므로 transport type dropdown에서 **HTTP**를 선택합니다.
 
 ![Select transport type](https://colony-recorder.s3.amazonaws.com/files/2026-02-07/e473f603-d692-40c7-a218-866c2e1cb554/ascreenshot_e93997971f2f44beac6152786889addf_text_export.jpeg)
 
-Now scroll down to the MCP Server URL field.
+이제 MCP Server URL 필드까지 아래로 스크롤합니다.
 
 ![Configure server](https://colony-recorder.s3.amazonaws.com/files/2026-02-07/b08d3c1f-9279-45b6-8efb-f73008901da6/ascreenshot_ce0de66f230a41b0a454e76653429021_text_export.jpeg)
 
-Enter the DeepWiki MCP URL: `https://mcp.deepwiki.com/mcp`.
+DeepWiki MCP URL `https://mcp.deepwiki.com/mcp`를 입력합니다.
 
 ![Enter MCP server URL](https://colony-recorder.s3.amazonaws.com/files/2026-02-07/e59f8285-cfde-4c57-aa79-24244acc9160/ascreenshot_8d575c66dc614a4183212ba282d22b41_text_export.jpeg)
 
-With the name, transport, and URL filled in, the basic server configuration is complete.
+이름, transport, URL을 입력하면 기본 server 구성이 완료됩니다.
 
 ![Server URL configured](https://colony-recorder.s3.amazonaws.com/files/2026-02-07/0f1af7ed-760d-4445-bdec-3da706d4eef4/ascreenshot_d7d6db69bc254ded871d14a71188a212_text_export.jpeg)
 
-#### Step 2: Enable "Available on Public Internet"
+#### 단계 2: `"Available on Public Internet"` 활성화
 
-Before creating, scroll down and expand the **Permission Management / Access Control** section. This is where you control who can see this server.
+생성하기 전에 아래로 스크롤해 **Permission Management / Access Control** 섹션을 펼칩니다. 여기서 이 server를 누가 볼 수 있는지 제어합니다.
 
 ![Expand Permission Management](https://colony-recorder.s3.amazonaws.com/files/2026-02-07/cc10dea2-6028-4a27-a33b-1b1b7212efb5/ascreenshot_0fdd152b862a4bf39973bc805ce64c57_text_export.jpeg)
 
-Toggle **"Available on Public Internet"** on. This is the key setting — it tells LiteLLM that external callers (like ChatGPT connecting from the public internet) should be able to discover and use this server.
+**`"Available on Public Internet"`** 토글을 켭니다. 이 핵심 설정은 public internet에서 연결하는 ChatGPT 같은 외부 호출자가 이 server를 발견하고 사용할 수 있어야 한다고 LiteLLM에 알려줍니다.
 
 ![Toggle Available on Public Internet](https://colony-recorder.s3.amazonaws.com/files/2026-02-07/39c14543-c5ae-4189-8f85-9efc87135820/ascreenshot_9991f54910c24e21bba5c05ea4fa8e28_text_export.jpeg)
 
-With the toggle enabled, click **"Create"** to save the server.
+토글이 활성화되면 **"Create"**를 클릭해 server를 저장합니다.
 
 ![Click Create](https://colony-recorder.s3.amazonaws.com/files/2026-02-07/843be209-aade-44f4-98da-e55d1644854c/ascreenshot_8cfc90345a5f4d069b397e80d0a6e449_text_export.jpeg)
 
-#### Step 3: Connect from ChatGPT
+#### 단계 3: ChatGPT에서 연결
 
-Now let's verify it works. Open ChatGPT and look for the MCP server icon to add a new connection. The endpoint to use is `<your-litellm-url>/mcp`.
+이제 동작을 확인합니다. ChatGPT를 열고 MCP server 아이콘에서 새 연결을 추가합니다. 사용할 endpoint는 `<your-litellm-url>/mcp`입니다.
 
 ![ChatGPT add MCP server](https://colony-recorder.s3.amazonaws.com/files/2026-02-07/58b5f674-edf4-4156-a5fa-5fdc8ed5d7b9/ascreenshot_36735f7c37394e919793968794614126_text_export.jpeg)
 
-In the dropdown, select **"Add an MCP server"** to configure a new connection.
+Dropdown에서 **"Add an MCP server"**를 선택해 새 연결을 구성합니다.
 
 ![ChatGPT MCP server option](https://colony-recorder.s3.amazonaws.com/files/2026-02-07/f89da8af-bc61-44a7-a765-f52733f4970d/ascreenshot_6410a917b782437eb558de3bfcd35ffd_text_export.jpeg)
 
-ChatGPT asks for a server label. Give it a recognizable name like "LiteLLM".
+ChatGPT가 server label을 요청하면 "LiteLLM"처럼 알아보기 쉬운 이름을 지정합니다.
 
 ![Enter server label](https://colony-recorder.s3.amazonaws.com/files/2026-02-07/88505afe-07c1-4674-a89c-8035a5d05eb6/ascreenshot_143aefc38ddd4d3f9f5823ca2cc09bc2_text_export.jpeg)
 
-Next, enter the Server URL. This should be your LiteLLM proxy's MCP endpoint — `<your-litellm-url>/mcp`.
+다음으로 Server URL을 입력합니다. 이 값은 LiteLLM proxy의 MCP endpoint인 `<your-litellm-url>/mcp`여야 합니다.
 
 ![Enter LiteLLM MCP URL](https://colony-recorder.s3.amazonaws.com/files/2026-02-07/9048be4a-7e40-43e7-9789-059fed2741a6/ascreenshot_e81232c17fd148f48f0ae552e9dc2a10_text_export.jpeg)
 
-Paste your LiteLLM URL and confirm it looks correct.
+LiteLLM URL을 붙여넣고 올바른지 확인합니다.
 
 ![URL pasted](https://colony-recorder.s3.amazonaws.com/files/2026-02-07/7707e796-e146-47c8-bce0-58e6f4076272/ascreenshot_0710dc58b8ed4d6887856b1388d59329_text_export.jpeg)
 
-ChatGPT also needs authentication. Enter your LiteLLM API key in the authentication field so it can connect to the proxy.
+ChatGPT에는 인증도 필요합니다. Proxy에 연결할 수 있도록 authentication 필드에 LiteLLM API key를 입력합니다.
 
 ![Enter API key](https://colony-recorder.s3.amazonaws.com/files/2026-02-07/f6cfcb81-021d-4a41-94d7-d4eaf449d025/ascreenshot_d635865abfb64732a7278922f08dbcaa_text_export.jpeg)
 
-Click **"Connect"** to establish the connection.
+연결을 설정하려면 **"Connect"**를 클릭합니다.
 
 ![Click Connect](https://colony-recorder.s3.amazonaws.com/files/2026-02-07/1146b326-6f0c-4050-9729-af5c88e1bc81/ascreenshot_e19fb857e5394b9a9bf77b075b4fb620_text_export.jpeg)
 
-ChatGPT connects and shows the available tools. Since both DeepWiki and Exa are currently marked as public, ChatGPT can see tools from both servers.
+ChatGPT가 연결되고 사용 가능한 tool을 표시합니다. 현재 DeepWiki와 Exa가 모두 public으로 표시되어 있으므로 ChatGPT는 두 server의 tool을 모두 볼 수 있습니다.
 
 ![ChatGPT shows available MCP tools](https://colony-recorder.s3.amazonaws.com/files/2026-02-07/43ac56b7-9933-4762-903a-370fc52c79b5/ascreenshot_39073d6dc3bc4bb6a79d93365a26a4f8_text_export.jpeg)
 
 ---
 
-### Flow 2: Make an Existing Server Private (Exa)
+### 흐름 2: 기존 Server를 Private으로 전환(Exa)
 
-Now let's do the reverse — take an existing MCP server (Exa) that's currently public and restrict it to internal access only. After this change, ChatGPT should no longer see Exa's tools.
+이제 반대 흐름을 수행합니다. 현재 public인 기존 MCP server(Exa)를 내부 접근 전용으로 제한합니다. 변경 후 ChatGPT는 더 이상 Exa의 tool을 볼 수 없어야 합니다.
 
-#### Step 1: Edit the Server
+#### 단계 1: Server 편집
 
-Go to the MCP Servers table and click on the Exa server to open its detail view.
+MCP Servers 표로 이동해 Exa server를 클릭하고 상세 화면을 엽니다.
 
 ![Exa server overview](https://colony-recorder.s3.amazonaws.com/files/2026-02-07/65844f13-b1ec-4092-b3fd-b1cae3c0c833/ascreenshot_cc8ea435c5e14761a1394ca80fe817c0_text_export.jpeg)
 
-Switch to the **"Settings"** tab to access the edit form.
+편집 form에 접근하려면 **"Settings"** 탭으로 전환합니다.
 
 ![Click Settings](https://colony-recorder.s3.amazonaws.com/files/2026-02-07/d5b65271-561e-4d2a-b832-96d32611f6e4/ascreenshot_a200942b17264c1eb7a3ffdb2c2141f5_text_export.jpeg)
 
-The edit form loads with Exa's current configuration.
+Exa의 현재 구성이 포함된 편집 form이 로드됩니다.
 
 ![Edit server](https://colony-recorder.s3.amazonaws.com/files/2026-02-07/119184f6-f3cd-45b7-9cfa-0ea08de27020/ascreenshot_c39a793da03a4f0fb84b5ee829af9034_text_export.jpeg)
 
-#### Step 2: Toggle Off "Available on Public Internet"
+#### 단계 2: `"Available on Public Internet"` 끄기
 
-Scroll down and expand the **Permission Management / Access Control** section to find the public internet toggle.
+아래로 스크롤해 **Permission Management / Access Control** 섹션을 펼치고 public internet 토글을 찾습니다.
 
 ![Expand permissions](https://colony-recorder.s3.amazonaws.com/files/2026-02-07/bf7114cc-8741-4fa0-a39a-fe625482e88a/ascreenshot_8a987649c03e46558a2ec9a6f2f539a4_text_export.jpeg)
 
-Toggle **"Available on Public Internet"** off. This will hide Exa from any caller outside your private network.
+**`"Available on Public Internet"`** 토글을 끕니다. 그러면 사설 네트워크 외부의 모든 호출자에게 Exa가 숨겨집니다.
 
 ![Toggle off public internet](https://colony-recorder.s3.amazonaws.com/files/2026-02-07/f36af5ad-028f-4bb1-aed1-43e38ff9b733/ascreenshot_9128364a049f489bb8483e18e5c88015_text_export.jpeg)
 
-Click **"Save Changes"** to apply. The change takes effect immediately — no proxy restart needed.
+적용하려면 **"Save Changes"**를 클릭합니다. 변경은 즉시 적용되며 proxy 재시작은 필요하지 않습니다.
 
 ![Save changes](https://colony-recorder.s3.amazonaws.com/files/2026-02-07/126a71b3-02e1-4d61-a208-942b92e9ef25/ascreenshot_f349ef69e08044dd8e4903f4286b7b97_text_export.jpeg)
 
-#### Step 3: Verify in ChatGPT
+#### 단계 3: ChatGPT에서 확인
 
-Go back to ChatGPT to confirm Exa is no longer visible. You'll need to reconnect for ChatGPT to re-fetch the tool list.
+ChatGPT로 돌아가 Exa가 더 이상 보이지 않는지 확인합니다. ChatGPT가 tool 목록을 다시 가져오도록 다시 연결해야 합니다.
 
 ![ChatGPT verify](https://colony-recorder.s3.amazonaws.com/files/2026-02-07/15518882-8b19-44d3-9bba-245aeb62b4b1/ascreenshot_f98f59c51e6543e1be4f3960ba375fc9_text_export.jpeg)
 
-Open the MCP server settings and select to add or reconnect a server.
+MCP server 설정을 열고 server 추가 또는 재연결을 선택합니다.
 
 ![Reconnect to server](https://colony-recorder.s3.amazonaws.com/files/2026-02-07/784d3174-77c0-42e6-a059-4c906db8f72a/ascreenshot_d77db951b83e4b15a00373222712f6b5_text_export.jpeg)
 
-Enter the same LiteLLM MCP URL as before.
+이전과 동일한 LiteLLM MCP URL을 입력합니다.
 
 ![Reconnect URL](https://colony-recorder.s3.amazonaws.com/files/2026-02-07/17ef5fb0-b240-4556-8d20-753d359b7fcf/ascreenshot_583466ce9e8f40d1ba0af8b1e7d04413_text_export.jpeg)
 
-Set the server label.
+Server label을 설정합니다.
 
 ![Reconnect name](https://colony-recorder.s3.amazonaws.com/files/2026-02-07/d7907637-c957-4a3c-ab4f-1600ca9a70a0/ascreenshot_e429eea43f3f4b3ca4d3ac5a77fbde2d_text_export.jpeg)
 
-Enter your API key for authentication.
+인증을 위해 API key를 입력합니다.
 
 ![Reconnect key](https://colony-recorder.s3.amazonaws.com/files/2026-02-07/9cfff77a-37aa-4ca6-8032-0b46c50f37e3/ascreenshot_250664183399496b8f5c9f86f576fc0b_text_export.jpeg)
 
-Click **"Connect"** to re-establish the connection.
+연결을 다시 설정하려면 **"Connect"**를 클릭합니다.
 
 ![Click Connect](https://colony-recorder.s3.amazonaws.com/files/2026-02-07/686f6307-b4ae-448b-ac6c-2c9d7b4f6b57/ascreenshot_3f499d0812af42ab89fed103cc21c249_text_export.jpeg)
 
-This time, only DeepWiki's tools appear — Exa is gone. LiteLLM detected that ChatGPT is calling from a public IP and filtered out Exa since it's no longer marked as public. Internal users on your private network would still see both servers.
+이번에는 DeepWiki의 tool만 표시되고 Exa는 사라집니다. LiteLLM은 ChatGPT가 public IP에서 호출한다고 판단하고, Exa가 더 이상 public으로 표시되어 있지 않으므로 필터링합니다. 사설 네트워크의 내부 사용자는 여전히 두 server를 모두 볼 수 있습니다.
 
 ![Only DeepWiki tools visible](https://colony-recorder.s3.amazonaws.com/files/2026-02-07/667d79b6-75f9-4799-9315-0c176e7a5e34/ascreenshot_efa43050ac0b4445a09e542fa8f270ff_text_export.jpeg)
 
-## Configuration Reference
+## 설정 참조
 
-### Per-Server Setting
+### Server별 설정
 
 <Tabs>
 <TabItem value="ui" label="UI">
 
-Toggle **"Available on Public Internet"** in the Permission Management section when creating or editing an MCP server.
+MCP server를 생성하거나 편집할 때 Permission Management 섹션에서 **`"Available on Public Internet"`**을 토글합니다.
 
 </TabItem>
 <TabItem value="config" label="config.yaml">
@@ -241,9 +235,9 @@ curl -X PUT <your-litellm-url>/v1/mcp/server \
 </TabItem>
 </Tabs>
 
-### Custom Private IP Ranges
+### 사용자 지정 Private IP 범위
 
-By default, LiteLLM treats RFC 1918 private ranges as internal. You can customize this in the **Network Settings** tab under MCP Servers, or via config:
+기본적으로 LiteLLM은 RFC 1918 private 범위를 내부로 취급합니다. MCP Servers 아래의 **Network Settings** 탭 또는 config에서 이를 사용자 지정할 수 있습니다.
 
 ```yaml title="config.yaml" showLineNumbers
 general_settings:
@@ -254,31 +248,4 @@ general_settings:
     - "100.64.0.0/10"    # Add your VPN/Tailscale range
 ```
 
-When empty, the standard private ranges are used (`10.0.0.0/8`, `172.16.0.0/12`, `192.168.0.0/16`, `127.0.0.0/8`).
-
----
-
-## Public Internet vs MCP Hub Visibility
-
-`available_on_public_internet` and the **MCP Hub** (`GET /public/mcp_hub`) are two separate mechanisms that are easy to confuse:
-
-| Concern | Controlled by | Default |
-|---|---|---|
-| Can an external (non-private-CIDR) caller see this server at the MCP tool endpoints (list/call)? | `available_on_public_internet` on the server | `True` (visible by default; toggle to `false` to restrict to private CIDRs) |
-| Does this server appear in the unauthenticated `GET /public/mcp_hub` advertisement? | `litellm.public_mcp_servers` list, gated by `litellm.public_mcp_hub_strict_whitelist` | Hub strict whitelist is **on** by default — only servers explicitly listed in `public_mcp_servers` are advertised |
-
-In the **default strict-whitelist mode**, `available_on_public_internet: true` (the default) does not make a server appear in the hub. To advertise a server on the hub you also need to add it to `public_mcp_servers`:
-
-```yaml title="Server on the hub AND visible to external callers (the default)" showLineNumbers
-litellm_settings:
-  public_mcp_servers:
-    - deepwiki
-  # public_mcp_hub_strict_whitelist defaults to true
-
-mcp_servers:
-  deepwiki:
-    url: https://mcp.deepwiki.com/mcp
-    # available_on_public_internet defaults to true
-```
-
-If you set `litellm.public_mcp_hub_strict_whitelist: false`, the hub falls back to advertising every server that has `available_on_public_internet: true` — but the IP-based access filter on this page still applies independently to the actual tool endpoints.
+비어 있으면 표준 private 범위(`10.0.0.0/8`, `172.16.0.0/12`, `192.168.0.0/16`, `127.0.0.0/8`)가 사용됩니다.

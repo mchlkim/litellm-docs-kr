@@ -1,7 +1,7 @@
 
 # Harbor
 
-[Harbor](https://github.com/laude-institute/harbor) is a framework from the creators of Terminal-Bench for evaluating and optimizing agents and language models. It uses LiteLLM to call 100+ LLM providers.
+[Harbor](https://github.com/laude-institute/harbor)는 Terminal-Bench 제작진이 만든 프레임워크로, 에이전트와 언어 모델을 평가하고 최적화하는 데 사용됩니다. LiteLLM을 사용해 100개 이상의 LLM provider를 호출합니다.
 
 ```bash
 # Install
@@ -14,11 +14,11 @@ harbor run --dataset terminal-bench@2.0 \
    --n-concurrent 4
 ```
 
-Key features:
-- Evaluate agents like Claude Code, OpenHands, Codex CLI
-- Build and share benchmarks and environments
-- Run experiments in parallel across cloud providers (Daytona, Modal)
-- Generate rollouts for RL optimization
+주요 기능:
+- Claude Code, OpenHands, Codex CLI 같은 에이전트 평가
+- 벤치마크와 환경 빌드 및 공유
+- cloud provider(Daytona, Modal) 전반에서 실험 병렬 실행
+- RL 최적화를 위한 rollout 생성
 
 - [GitHub](https://github.com/laude-institute/harbor)
-- [Documentation](https://harborframework.com/docs)
+- [문서](https://harborframework.com/docs)

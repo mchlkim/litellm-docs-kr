@@ -2,192 +2,192 @@ import Image from '@theme/IdealImage';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Model Compare Playground UI
+# 모델 비교 Playground UI
 
-Compare multiple LLM models side-by-side in an interactive playground interface. Evaluate model responses, performance metrics, and costs to make informed decisions about which models work best for your use case.
+대화형 Playground 인터페이스에서 여러 LLM 모델을 나란히 비교합니다. 모델 응답, 성능 지표, 비용을 평가해 사용 사례에 가장 적합한 모델을 판단할 수 있습니다.
 
-This feature is **available in v1.80.0-stable and above**.
+이 기능은 **v1.80.0-stable 이상에서 사용할 수 있습니다**.
 
-## Overview
+## 개요
 
-The Model Compare Playground UI enables side-by-side comparison of up to 3 different LLM models simultaneously. Configure models, parameters, and test prompts to evaluate and compare model responses with detailed metrics including latency, token usage, and cost.
+Model Compare Playground UI를 사용하면 최대 3개의 서로 다른 LLM 모델을 동시에 나란히 비교할 수 있습니다. 모델, 파라미터, 테스트 프롬프트를 설정하고 지연 시간, 토큰 사용량, 비용 같은 상세 지표로 모델 응답을 평가하고 비교합니다.
 
 <Image img={require('../../img/ui_model_compare_overview.png')} />
 
-## Getting Started
+## 시작하기
 
-### Accessing the Model Compare UI
+### Model Compare UI 접속
 
-#### 1. Navigate to the Playground
+#### 1. Playground로 이동
 
-Go to the Playground page in the Admin UI (`PROXY_BASE_URL/ui/?login=success&page=llm-playground`)
+관리자 UI에서 Playground 페이지(`PROXY_BASE_URL/ui/?login=success&page=llm-playground`)로 이동합니다.
 
 <Image img={require('../../img/ui_playground_navigation.png')} />
 
-#### 2. Switch to Compare Tab
+#### 2. Compare 탭으로 전환
 
-Click on the **Compare** tab in the Playground interface.
+Playground 인터페이스에서 **Compare** 탭을 클릭합니다.
 
-## Configuration
+## 설정
 
-### Setting Up Models
+### 모델 설정
 
-#### 1. Select Models to Compare
+#### 1. 비교할 모델 선택
 
-You can compare up to 3 models simultaneously. For each comparison panel:
+최대 3개의 모델을 동시에 비교할 수 있습니다. 각 비교 패널에서 다음을 수행합니다.
 
-- Click on the model dropdown to see available models
-- Select a model from your configured endpoints
-- Models are loaded from your LiteLLM proxy configuration
+- 모델 드롭다운을 클릭해 사용 가능한 모델을 확인합니다.
+- 설정된 엔드포인트에서 모델을 선택합니다.
+- 모델은 LiteLLM 프록시 설정에서 로드됩니다.
 
 <Image img={require('../../img/ui_model_compare_select_model.png')} />
 
-#### 2. Configure Model Parameters
+#### 2. 모델 파라미터 설정
 
-Each model panel supports individual parameter configuration:
+각 모델 패널은 개별 파라미터 설정을 지원합니다.
 
-**Basic Parameters:**
+**기본 파라미터:**
 
-- **Temperature**: Controls randomness (0.0 to 2.0)
-- **Max Tokens**: Maximum tokens in the response
+- **Temperature**: 무작위성을 제어합니다(0.0~2.0).
+- **Max Tokens**: 응답의 최대 토큰 수입니다.
 
-**Advanced Parameters:**
+**고급 파라미터:**
 
-- Enable "Use Advanced Params" to configure additional model-specific parameters
-- Supports all parameters available for the selected model/provider
+- 추가 모델별 파라미터를 설정하려면 "고급 파라미터 사용"(`Use Advanced Params`)을 활성화합니다.
+- 선택한 모델/프로바이더에서 사용 가능한 모든 파라미터를 지원합니다.
 
 <Image img={require('../../img/ui_model_compare_model_parameters.png')} />
 
-#### 3. Apply Parameters Across Models
+#### 3. 모델 간 파라미터 적용
 
-Use the "Sync Settings Across Models" toggle to synchronize parameters (tags, guardrails, temperature, max tokens, etc.) across all comparison panels for consistent testing.
+"Sync Settings Across 모델" 토글을 사용하면 일관된 테스트를 위해 모든 비교 패널에서 파라미터(태그, 가드레일, temperature, max tokens 등)를 동기화할 수 있습니다.
 
 <Image img={require('../../img/ui_model_compare_sync_across_models.png')} />
 
-### Guardrails
+### 가드레일
 
-Configure and test guardrails directly in the playground:
+Playground에서 가드레일을 직접 설정하고 테스트합니다.
 
-1. Click on the guardrails selector in a model panel
-2. Select one or more guardrails from your configured list
-3. Test how different models respond to guardrail filtering
-4. Compare guardrail behavior across models
+1. 모델 패널에서 가드레일 선택기를 클릭합니다.
+2. 설정된 목록에서 하나 이상의 가드레일을 선택합니다.
+3. 여러 모델이 가드레일 필터링에 어떻게 반응하는지 테스트합니다.
+4. 모델 간 가드레일 동작을 비교합니다.
 
 <Image img={require('../../img/ui_model_compare_guardrails_config.png')} />
 
-### Tags
+### 태그
 
-Apply tags to organize and filter your comparisons:
+비교를 정리하고 필터링하기 위해 태그를 적용합니다.
 
-1. Select tags from the tag dropdown
-2. Tags help categorize and track different test scenarios
+1. 태그 드롭다운에서 태그를 선택합니다.
+2. 태그는 다양한 테스트 시나리오를 분류하고 추적하는 데 도움이 됩니다.
 
 <Image img={require('../../img/ui_model_compare_tags_config.png')} />
 
 ### Vector Stores
 
-Configure vector store retrieval for RAG (Retrieval Augmented Generation) comparisons:
+RAG(Retrieval Augmented Generation) 비교를 위해 vector store 검색을 설정합니다.
 
-1. Select vector stores from the dropdown
-2. Compare how different models utilize retrieved context
-3. Evaluate RAG performance across models
+1. 드롭다운에서 vector store를 선택합니다.
+2. 여러 모델이 검색된 컨텍스트를 어떻게 활용하는지 비교합니다.
+3. 모델 간 RAG 성능을 평가합니다.
 
 <Image img={require('../../img/ui_model_compare_vector_stores_config.png')} />
 
-## Running Comparisons
+## 비교 실행
 
-### 1. Enter Your Prompt
+### 1. 프롬프트 입력
 
-Type your test prompt in the message input area. You can:
+메시지 입력 영역에 테스트 프롬프트를 입력합니다. 다음을 사용할 수 있습니다.
 
-- Enter a single message for all models
-- Use suggested prompts for quick testing
-- Build multi-turn conversations
+- 모든 모델에 보낼 단일 메시지
+- 빠른 테스트를 위한 추천 프롬프트
+- 멀티턴 대화 구성
 
 <Image img={require('../../img/ui_model_compare_enter_prompt.png')} />
 
-### 2. Send Request
+### 2. 요청 전송
 
-Click the send button (or press Enter) to start the comparison. All selected models will process the request simultaneously.
+전송 버튼을 클릭하거나 Enter를 눌러 비교를 시작합니다. 선택한 모든 모델이 요청을 동시에 처리합니다.
 
-### 3. View Responses
+### 3. 응답 확인
 
-Responses appear side-by-side in each model panel, making it easy to compare:
+응답은 각 모델 패널에 나란히 표시되어 쉽게 비교할 수 있습니다.
 
-- Response quality and content
-- Response length and structure
-- Model-specific formatting
+- 응답 품질과 내용
+- 응답 길이와 구조
+- 모델별 형식
 
 <Image img={require('../../img/ui_model_compare_responses.png')} />
 
-## Comparison Metrics
+## 비교 지표
 
-Each comparison panel displays detailed metrics to help you evaluate model performance:
+각 비교 패널은 모델 성능 평가에 도움이 되는 상세 지표를 표시합니다.
 
-### Time To First Token (TTFT)
+### 첫 토큰까지 걸리는 시간(TTFT)
 
-Measures the latency from request submission to the first token received. Lower values indicate faster initial response times.
+요청 제출부터 첫 토큰 수신까지의 지연 시간을 측정합니다. 값이 낮을수록 초기 응답이 빠릅니다.
 
-### Token Usage
+### Token 사용량
 
-- **Input Tokens**: Number of tokens in the prompt/request
-- **Output Tokens**: Number of tokens in the model's response
-- **Reasoning Tokens**: Tokens used for reasoning (if applicable, e.g., o1 models)
+- **Input Tokens**: 프롬프트/요청의 토큰 수
+- **Output Tokens**: 모델 응답의 토큰 수
+- **Reasoning Tokens**: 추론에 사용된 토큰 수(해당하는 경우, 예: o1 모델)
 
-### Total Latency
+### 전체 지연 시간
 
-Complete time from request to final response, including streaming time.
+스트리밍 시간을 포함해 요청부터 최종 응답까지 걸린 전체 시간입니다.
 
-### Cost
+### 비용
 
-If cost tracking is enabled in your LiteLLM configuration, you'll see:
+LiteLLM 설정에서 비용 추적이 활성화되어 있으면 다음을 볼 수 있습니다.
 
-- Cost per request
-- Cost breakdown by input/output tokens
-- Comparison of costs across models
+- 요청당 비용
+- 입력/출력 토큰별 비용 세부 내역
+- 모델 간 비용 비교
 
 <Image img={require('../../img/ui_model_compare_cost_metrics.png')} />
 
-## Use Cases
+## 사용 사례
 
-### Model Selection
+### 모델 선택
 
-Compare multiple models on the same prompt to determine which performs best for your specific use case:
+동일한 프롬프트에서 여러 모델을 비교해 특정 사용 사례에 가장 적합한 모델을 판단합니다.
 
-- Response quality
-- Response time
-- Cost efficiency
-- Token usage
+- 응답 품질
+- 응답 시간
+- 비용 효율
+- 토큰 사용량
 
-### Parameter Tuning
+### 파라미터 튜닝
 
-Test different parameter configurations across models to find optimal settings:
+최적 설정을 찾기 위해 모델별로 다른 파라미터 구성을 테스트합니다.
 
-- Temperature variations
-- Max token limits
-- Advanced parameter combinations
+- Temperature 변화
+- 최대 토큰 제한
+- 고급 파라미터 조합
 
-### Guardrail Testing
+### 가드레일 테스트
 
-Evaluate how different models respond to safety filters and guardrails:
+여러 모델이 안전 필터와 가드레일에 어떻게 반응하는지 평가합니다.
 
-- Filter effectiveness
-- False positive rates
-- Model-specific guardrail behavior
+- 필터 효과
+- 오탐률
+- 모델별 가드레일 동작
 
-### A/B Testing
+### A/B 테스트
 
-Use tags and multiple comparisons to run structured A/B tests:
+태그와 여러 비교를 사용해 구조화된 A/B 테스트를 실행합니다.
 
-- Compare model versions
-- Test prompt variations
-- Evaluate feature rollouts
+- 모델 버전 비교
+- 프롬프트 변형 테스트
+- 기능 롤아웃 평가
 
 ---
 
-## Related Features
+## 관련 기능
 
-- [Playground Chat UI](./ui.md) - Single model testing interface
-- [Model Management](./model_management.md) - Configure and manage models
-- [Guardrails](./guardrails/quick_start.md) - Set up safety filters
-- [AI Hub](./ai_hub.md) - Share models and agents with your organization
+- [Playground Chat UI](./ui.md) - 단일 모델 테스트 인터페이스
+- [Model Management](./model_management.md) - 모델 설정 및 관리
+- [가드레일](./guardrails/quick_start.md) - 안전 필터 설정
+- [AI Hub](./ai_hub.md) - 조직 내 모델과 에이전트 공유

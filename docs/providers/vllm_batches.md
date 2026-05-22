@@ -1,21 +1,21 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# vLLM - Batch + Files API
+# `vLLM` 배치 및 파일 API {#vllm---batch--files-api}
 
-LiteLLM supports vLLM's Batch and Files API for processing large volumes of requests asynchronously.
+LiteLLM은 대량의 요청을 비동기적으로 처리할 수 있도록 vLLM의 Batch 및 Files API를 지원합니다.
 
-| Feature | Supported |
+| 기능 | 지원 여부 |
 |---------|-----------|
 | `/v1/files` | ✅ |
 | `/v1/batches` | ✅ |
-| Cost Tracking | ✅ |
+| 비용 추적 | ✅ |
 
-## Quick Start
+## 빠른 시작
 
-### 1. Setup config.yaml
+### 1. config.yaml 설정 {#1-setup-configyaml}
 
-Define your vLLM model in `config.yaml`. LiteLLM uses the model name to route batch requests to the correct vLLM server.
+`config.yaml`에 vLLM 모델을 정의합니다. LiteLLM은 모델 이름을 사용해 배치 요청을 올바른 vLLM 서버로 라우팅합니다.
 
 ```yaml
 model_list:
@@ -25,33 +25,33 @@ model_list:
       api_base: http://localhost:8000  # your vLLM server
 ```
 
-### 2. Start LiteLLM Proxy
+### 2. LiteLLM Proxy 시작 {#2-start-litellm-proxy}
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-### 3. Create Batch File
+### 3. 배치 파일 생성 {#3-create-batch-file}
 
-Create a JSONL file with your batch requests:
+배치 요청이 포함된 JSONL 파일을 생성합니다.
 
 ```jsonl
 {"custom_id": "request-1", "method": "POST", "url": "/v1/chat/completions", "body": {"model": "my-vllm-model", "messages": [{"role": "user", "content": "Hello!"}]}}
 {"custom_id": "request-2", "method": "POST", "url": "/v1/chat/completions", "body": {"model": "my-vllm-model", "messages": [{"role": "user", "content": "How are you?"}]}}
 ```
 
-### 4. Upload File & Create Batch
+### 4. 파일 업로드 및 배치 생성 {#4-upload-file--create-batch}
 
-:::tip Model Routing
-LiteLLM needs to know which model (and therefore which vLLM server) to use for batch operations. Specify the model using the `x-litellm-model` header when uploading files. LiteLLM will encode this model info into the file ID, so subsequent batch operations automatically route to the correct server.
+:::tip 모델 라우팅
+LiteLLM은 배치 작업에 사용할 모델과 그에 해당하는 vLLM 서버를 알아야 합니다. 파일을 업로드할 때 `x-litellm-model` 헤더로 모델을 지정하세요. LiteLLM은 이 모델 정보를 파일 ID에 인코딩하므로, 이후 배치 작업은 자동으로 올바른 서버로 라우팅됩니다.
 
-See [Multi-Account / Model-Based Routing](../batches#multi-account--model-based-routing) for more details.
+자세한 내용은 [Multi-Account / Model-Based Routing](../batches#multi-account--model-based-routing)을 참고하세요.
 :::
 
 <Tabs>
 <TabItem value="curl" label="cURL">
 
-**Upload File**
+**파일 업로드**
 
 ```bash
 curl http://localhost:4000/v1/files \
@@ -61,7 +61,7 @@ curl http://localhost:4000/v1/files \
   -F file="@batch_requests.jsonl"
 ```
 
-**Create Batch**
+**배치 생성**
 
 ```bash
 curl http://localhost:4000/v1/batches \
@@ -74,7 +74,7 @@ curl http://localhost:4000/v1/batches \
   }'
 ```
 
-**Check Batch Status**
+**배치 상태 확인**
 
 ```bash
 curl http://localhost:4000/v1/batches/batch_abc123 \
@@ -135,21 +135,21 @@ asyncio.run(run_vllm_batch())
 </TabItem>
 </Tabs>
 
-## Supported Operations
+## 지원되는 작업 {#supported-operations}
 
-| Operation | Endpoint | Method |
+| 작업 | 엔드포인트 | 메서드 |
 |-----------|----------|--------|
-| Upload file | `/v1/files` | POST |
-| List files | `/v1/files` | GET |
-| Retrieve file | `/v1/files/{file_id}` | GET |
-| Delete file | `/v1/files/{file_id}` | DELETE |
-| Get file content | `/v1/files/{file_id}/content` | GET |
-| Create batch | `/v1/batches` | POST |
-| List batches | `/v1/batches` | GET |
-| Retrieve batch | `/v1/batches/{batch_id}` | GET |
-| Cancel batch | `/v1/batches/{batch_id}/cancel` | POST |
+| 파일 업로드 | `/v1/files` | POST |
+| 파일 목록 조회 | `/v1/files` | GET |
+| 파일 조회 | `/v1/files/{file_id}` | GET |
+| 파일 삭제 | `/v1/files/{file_id}` | DELETE |
+| 파일 콘텐츠 가져오기 | `/v1/files/{file_id}/content` | GET |
+| 배치 생성 | `/v1/batches` | POST |
+| 배치 목록 조회 | `/v1/batches` | GET |
+| 배치 조회 | `/v1/batches/{batch_id}` | GET |
+| 배치 취소 | `/v1/batches/{batch_id}/cancel` | POST |
 
-## Environment Variables
+## 환경 변수 {#environment-variables}
 
 ```bash
 # Set vLLM server endpoint
@@ -159,20 +159,20 @@ export HOSTED_VLLM_API_BASE="http://localhost:8000"
 export HOSTED_VLLM_API_KEY="your-api-key"
 ```
 
-## How Model Routing Works
+## 모델 라우팅 작동 방식 {#how-model-routing-works}
 
-When you upload a file with `x-litellm-model: my-vllm-model`, LiteLLM:
+`x-litellm-model: my-vllm-model`로 파일을 업로드하면 LiteLLM은 다음과 같이 동작합니다.
 
-1. Encodes the model name into the returned file ID
-2. Uses this encoded model info to automatically route subsequent batch operations to the correct vLLM server
-3. No need to specify the model again when creating batches or retrieving results
+1. 반환되는 파일 ID에 모델 이름을 인코딩합니다.
+2. 인코딩된 모델 정보를 사용해 이후 배치 작업을 올바른 vLLM 서버로 자동 라우팅합니다.
+3. 배치를 생성하거나 결과를 조회할 때 모델을 다시 지정할 필요가 없습니다.
 
-This enables multi-tenant batch processing where different teams can use different vLLM deployments through the same LiteLLM proxy.
+이를 통해 여러 팀이 동일한 LiteLLM proxy를 통해 서로 다른 vLLM 배포를 사용하는 멀티 테넌트 배치 처리가 가능합니다.
 
-**Learn more:** [Multi-Account / Model-Based Routing](../batches#multi-account--model-based-routing)
+**더 알아보기:** [Multi-Account / Model-Based Routing](../batches#multi-account--model-based-routing)
 
-## Related
+## 관련 문서 {#related}
 
-- [vLLM Provider Overview](./vllm)
-- [Batch API Overview](../batches)
+- [vLLM Provider 개요](./vllm)
+- [Batch API 개요](../batches)
 - [Files API](../files_endpoints)

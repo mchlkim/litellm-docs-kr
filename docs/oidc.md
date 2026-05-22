@@ -1,94 +1,89 @@
-# [BETA] OpenID Connect (OIDC)
-LiteLLM supports using OpenID Connect (OIDC) for authentication to upstream services . This allows you to avoid storing sensitive credentials in your configuration files.
+# [베타] OpenID Connect (OIDC) {#beta-openid-connect-oidc}
+LiteLLM은 업스트림 서비스 인증에 OpenID Connect (OIDC)를 사용할 수 있습니다. 이를 통해 구성 파일에 민감한 자격 증명을 저장하지 않아도 됩니다.
 
 :::info
 
-This feature is in Beta
+이 기능은 베타입니다.
 
 :::
 
 
-## OIDC Identity Provider (IdP)
+## OIDC ID 공급자(IdP) {#oidc-identity-provider-idp}
 
-LiteLLM supports the following OIDC identity providers:
+LiteLLM은 다음 OIDC ID 공급자를 지원합니다.
 
-| Provider                 | Config Name  | Custom Audiences |
+| 공급자                   | 구성 이름    | 사용자 지정 대상 |
 | -------------------------| ------------ | ---------------- |
-| Google Cloud Run         | `google`     | Yes              |
-| CircleCI v1              | `circleci`   | No               |
-| CircleCI v2              | `circleci_v2`| No               |
-| GitHub Actions           | `github`     | Yes              |
-| Azure Kubernetes Service | `azure`      | No               |
-| Azure AD                 | `azure`      | Yes              |
-| File                     | `file`       | No               |
-| Environment Variable     | `env`        | No               |
-| Environment Path         | `env_path`   | No               |
+| Google Cloud Run         | `google`     | 예               |
+| CircleCI v1              | `circleci`   | 아니요           |
+| CircleCI v2              | `circleci_v2`| 아니요           |
+| GitHub Actions           | `github`     | 예               |
+| Azure Kubernetes Service | `azure`      | 아니요           |
+| Azure AD                 | `azure`      | 예               |
+| 파일                     | `file`       | 아니요           |
+| 환경 변수                | `env`        | 아니요           |
+| 환경 경로                | `env_path`   | 아니요           |
 
-If you would like to use a different OIDC provider, please open an issue on GitHub.
+다른 OIDC 공급자를 사용하려면 GitHub에 이슈를 열어 주세요.
 
 :::tip
 
-Do not use the `file`, `env`, or `env_path` providers unless you know what you're doing, and you are sure none of the other providers will work for your use-case. Hint: they probably will.
+작동 방식을 정확히 알고 있고 다른 공급자가 사용 사례에 맞지 않는다고 확신하는 경우가 아니라면 `file`, `env`, `env_path` provider를 사용하지 마세요. 힌트: 대부분은 다른 공급자로 처리할 수 있습니다.
 
 :::
 
-## OIDC Connect Relying Party (RP)
+## OIDC 신뢰 당사자(RP) {#oidc-connect-relying-party-rp}
 
-LiteLLM supports the following OIDC relying parties / clients:
+LiteLLM은 다음 OIDC 신뢰 당사자 / 클라이언트를 지원합니다.
 
 - Amazon Bedrock
 - Azure OpenAI
-- _(Coming soon) Google Cloud Vertex AI_
+- _(곧 지원 예정) Google Cloud Vertex AI_
 
 
-### Configuring OIDC
+### OIDC 구성 {#configuring-oidc}
 
-Wherever a secret key can be used, OIDC can be used in-place. The general format is:
+비밀 키를 사용할 수 있는 곳에서는 OIDC를 대신 사용할 수 있습니다. 일반 형식은 다음과 같습니다.
 
 ```
 oidc/config_name_here/audience_here
 ```
 
-For providers that do not use the `audience` parameter, you can (and should) omit it:
+`audience` 매개변수를 사용하지 않는 공급자에서는 이를 생략할 수 있으며, 생략하는 것이 좋습니다.
 
 ```
 oidc/config_name_here/
 ```
 
-#### Unofficial Providers (not recommended)
+#### 비공식 Provider(권장하지 않음)
 
-For the unofficial `file` provider, you can use the following format
-(note the double slash — the path after `oidc/file/` must be absolute):
+비공식 `file` provider에는 다음 형식을 사용할 수 있습니다.
+이중 슬래시에 유의하세요. `oidc/file/` 뒤의 경로는 절대 경로여야 합니다.
 
 ```
 oidc/file//var/run/secrets/my-token
 ```
 
-For safety, the resolved path must live inside an allowed credential
-directory. By default the following directories are allowed:
+안전을 위해 확인된 경로는 허용된 자격 증명 디렉터리 안에 있어야 합니다. 기본적으로 다음 디렉터리가 허용됩니다.
 
 - `/var/run/secrets`
 - `/run/secrets`
 
-If your deployment mounts credentials elsewhere, set the
-`LITELLM_OIDC_ALLOWED_CREDENTIAL_DIRS` environment variable to a
-comma-separated list of absolute directories. The value replaces the
-default list, so include the defaults if you still need them:
+배포 환경에서 자격 증명을 다른 위치에 마운트하는 경우 `LITELLM_OIDC_ALLOWED_CREDENTIAL_DIRS` 환경 변수를 쉼표로 구분된 절대 디렉터리 목록으로 설정하세요. 이 값은 기본 목록을 대체하므로 기본값이 여전히 필요하다면 함께 포함하세요.
 
 ```bash
 export LITELLM_OIDC_ALLOWED_CREDENTIAL_DIRS="/var/run/secrets,/etc/litellm/creds"
 ```
 
-Paths that resolve (after following symlinks and `..`) outside the
-allowlist are rejected.
+심볼릭 링크와 `..`을 따라 확인한 결과 허용 목록 밖으로 벗어나는 경로는 거부됩니다.
 
-For the unofficial `env`, use the following format, where `SECRET_TOKEN` is the name of the environment variable that contains the token:
+비공식 `env`에는 다음 형식을 사용하세요. 여기서 `SECRET_TOKEN`은 토큰이 들어 있는 환경 변수의 이름입니다.
 
 ```
 oidc/env/SECRET_TOKEN
 ```
 
-For the unofficial `env_path`, use the following format, where `SECRET_TOKEN` is the name of the environment variable that contains the path to the file with the token:
+비공식 `env_path`에는 다음 형식을 사용하세요. 여기서 `SECRET_TOKEN`은 토큰이 들어 있는 파일 경로를 담은 환경 변수의 이름입니다.
 
 ```
 oidc/env_path/SECRET_TOKEN
@@ -96,11 +91,11 @@ oidc/env_path/SECRET_TOKEN
 
 :::tip
 
-If you are tempted to use oidc/env_path/AZURE_FEDERATED_TOKEN_FILE, don't do that. Instead, use `oidc/azure/`, as this will ensure continued support from LiteLLM if Azure changes their OIDC configuration and/or adds new features.
+oidc/env_path/AZURE_FEDERATED_TOKEN_FILE를 사용하려는 경우에는 그렇게 하지 마세요. 대신 `oidc/azure/`를 사용하세요. 이렇게 하면 Azure가 OIDC 구성을 변경하거나 새 기능을 추가하더라도 LiteLLM의 지속적인 지원을 받을 수 있습니다.
 
 :::
 
-## Examples
+## 예제
 
 ### Google Cloud Run -> Amazon Bedrock
 
@@ -128,11 +123,11 @@ model_list:
       aws_web_identity_token: "oidc/example-provider/"
 ```
 
-#### Amazon IAM Role Configuration for CircleCI v2 -> Bedrock
+#### CircleCI v2 -> Bedrock용 Amazon IAM Role 설정
 
-The configuration below is only an example. You should adjust the permissions and trust relationship to match your specific use case.
+아래 구성은 예시일 뿐입니다. 구체적인 사용 사례에 맞게 권한과 신뢰 관계를 조정해야 합니다.
 
-Permissions:
+권한:
 
 ```json
 {
@@ -154,9 +149,9 @@ Permissions:
 }
 ```
 
-See https://docs.aws.amazon.com/bedrock/latest/userguide/security_iam_id-based-policy-examples.html for more examples. 
+더 많은 예시는 https://docs.aws.amazon.com/bedrock/latest/userguide/security_iam_id-based-policy-examples.html 을 참고하세요.
 
-Trust Relationship:
+신뢰 관계(Trust Relationship):
 
 ```json
 {
@@ -184,13 +179,13 @@ Trust Relationship:
 }
 ```
 
-This trust relationship restricts CircleCI to only assume the role on the main branch and branches that start with `litellm_`.
+이 신뢰 관계는 CircleCI가 main 브랜치와 `litellm_`로 시작하는 브랜치에서만 role을 assume하도록 제한합니다.
 
-For CircleCI (v1 and v2), you also need to add your organization's OIDC provider in your AWS IAM settings. See https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-idp_oidc.html for more information.
+CircleCI(v1 및 v2)의 경우 AWS IAM 설정에 조직의 OIDC 공급자도 추가해야 합니다. 자세한 내용은 https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-idp_oidc.html 을 참고하세요.
 
 :::tip
 
-You should _never_ need to create an IAM user. If you did, you're not using OIDC correctly. You should only be creating a role with permissions and a trust relationship to your OIDC provider.
+IAM 사용자를 만들 필요는 _절대_ 없어야 합니다. 만들었다면 OIDC를 올바르게 사용하고 있지 않은 것입니다. OIDC 공급자에 대한 권한과 신뢰 관계가 있는 role만 생성해야 합니다.
 
 :::
 
@@ -209,7 +204,7 @@ model_list:
       base_model: azure/gpt-4o-2024-05-13
 ```
 
-For Azure OpenAI, you need to define `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, and optionally `AZURE_AUTHORITY_HOST` in your environment.
+Azure OpenAI의 경우 환경에 `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`를 정의해야 하며, 필요하면 `AZURE_AUTHORITY_HOST`도 정의할 수 있습니다.
 
 ```bash
 export AZURE_CLIENT_ID="91a43c21-cf21-4f34-9085-331015ea4f91" # Azure AD Application (Client) ID
@@ -219,35 +214,35 @@ export AZURE_AUTHORITY_HOST="https://login.microsoftonline.com" # 👈 Optional,
 
 :::tip
 
-You can find `AZURE_CLIENT_ID` by visiting `https://login.microsoftonline.com/YOUR_DOMAIN_HERE/v2.0/.well-known/openid-configuration` and looking for the UUID in the `issuer` field.
+`https://login.microsoftonline.com/YOUR_DOMAIN_HERE/v2.0/.well-known/openid-configuration`에 접속한 뒤 `issuer` 필드의 UUID를 확인하면 `AZURE_CLIENT_ID`를 찾을 수 있습니다.
 
 :::
 
 
 :::tip
 
-Don't set `AZURE_AUTHORITY_HOST` in your environment unless you need to override the default value. This way, if the default value changes in the future, you won't need to update your environment.
+기본값을 재정의해야 하는 경우가 아니라면 환경에 `AZURE_AUTHORITY_HOST`를 설정하지 마세요. 이렇게 하면 나중에 기본값이 바뀌더라도 환경을 업데이트할 필요가 없습니다.
 
 :::
 
 
 :::tip
 
-By default, Azure AD applications use the audience `api://AzureADTokenExchange`. We recommend setting the audience to something more specific to your application.
+기본적으로 Azure AD 애플리케이션은 audience `api://AzureADTokenExchange`를 사용합니다. 애플리케이션에 더 구체적인 audience를 설정하는 것을 권장합니다.
 
 :::
 
 
-#### Azure AD Application Configuration
+#### Azure AD 애플리케이션 설정 {#azure-ad-application-setup}
 
-Unfortunately, Azure is bit more complicated to set up than other OIDC relying parties like AWS. Basically, you have to:
+아쉽게도 Azure는 AWS 같은 다른 OIDC 신뢰 당사자보다 설정이 조금 더 복잡합니다. 기본적으로 다음 작업이 필요합니다.
 
-1. Create an Azure application.
-2. Add a federated credential for the OIDC IdP you're using (e.g. Google Cloud Run).
-3. Add the Azure application to resource group that contains the Azure OpenAI resource(s).
-4. Give the Azure application the necessary role to access the Azure OpenAI resource(s).
+1. Azure 애플리케이션을 생성합니다.
+2. 사용 중인 OIDC IdP(예: Google Cloud Run)에 대한 federated credential을 추가합니다.
+3. Azure OpenAI resource가 포함된 resource group에 Azure 애플리케이션을 추가합니다.
+4. Azure OpenAI resource에 접근하는 데 필요한 role을 Azure 애플리케이션에 부여합니다.
 
-The custom role below is the recommended minimum permissions for the Azure application to access Azure OpenAI resources. You should adjust the permissions to match your specific use case.
+아래 custom role은 Azure 애플리케이션이 Azure OpenAI resource에 접근하는 데 권장되는 최소 권한입니다. 구체적인 사용 사례에 맞게 권한을 조정해야 합니다.
 
 ```json
 {
@@ -278,9 +273,9 @@ The custom role below is the recommended minimum permissions for the Azure appli
 }
 ```
 
-_Note: Your UUIDs will be different._
+_참고: 사용자의 UUID는 다릅니다._
 
-Please contact us for paid enterprise support if you need help setting up Azure AD applications.
+Azure AD 애플리케이션 설정에 도움이 필요하면 유료 enterprise support로 문의하세요.
 
 ### Azure AD -> Amazon Bedrock
 ```yaml

@@ -1,23 +1,23 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Amazon Bedrock Mantle
+# Amazon Bedrock Mantle 개요 {#amazon-bedrock-mantle}
 
-[Amazon Bedrock Mantle](https://docs.aws.amazon.com/bedrock/latest/userguide/bedrock-mantle.html) is Amazon Bedrock's distributed inference engine (Project Mantle) that exposes an **OpenAI-compatible API** for Bedrock-hosted models.
+[Amazon Bedrock Mantle](https://docs.aws.amazon.com/bedrock/latest/userguide/bedrock-mantle.html)는 Bedrock 호스팅 모델에 **OpenAI 호환 API**를 제공하는 Amazon Bedrock의 분산 추론 엔진(Project Mantle)입니다.
 
-Use this provider to call Bedrock Mantle models with accurate **AWS Bedrock pricing** instead of OpenAI pricing.
+이 공급자를 사용하면 OpenAI 가격이 아니라 정확한 **AWS Bedrock 가격**으로 Bedrock Mantle 모델을 호출할 수 있습니다.
 
 :::tip
 
-**We support ALL Bedrock Mantle models, just set `model=bedrock_mantle/<model-id>` as a prefix when sending litellm requests**
+**모든 Bedrock Mantle 모델을 지원합니다. litellm 요청을 보낼 때 `model=bedrock_mantle/<model-id>`를 접두사로 설정하기만 하면 됩니다.**
 
 :::
 
 ## Claude Mythos
 
-[Claude Mythos](https://docs.aws.amazon.com/bedrock/latest/userguide/model-card-anthropic-claude-mythos-preview.html) (`anthropic.claude-mythos-preview`) is available on Bedrock Mantle with **1M token input context**, 128K output, and support for reasoning, vision, and tool use.
+[Claude Mythos](https://docs.aws.amazon.com/bedrock/latest/userguide/model-card-anthropic-claude-mythos-preview.html)(`anthropic.claude-mythos-preview`)는 Bedrock Mantle에서 사용할 수 있으며, **1M 토큰 입력 컨텍스트**, 128K 출력, 추론, 비전, 도구 사용을 지원합니다.
 
-Use the `bedrock/mantle/` route prefix with standard AWS credentials.
+표준 AWS 자격 증명과 함께 `bedrock/mantle/` 라우트 접두사를 사용하세요.
 
 ### /messages
 
@@ -47,7 +47,7 @@ asyncio.run(main())
 </TabItem>
 <TabItem value="ai-gateway" label="AI Gateway">
 
-**1. Add to config.yaml**
+**1. config.yaml에 추가**
 
 ```yaml
 model_list:
@@ -57,13 +57,13 @@ model_list:
       aws_region_name: us-east-1
 ```
 
-**2. Start LiteLLM AI Gateway**
+**2. LiteLLM AI Gateway 시작**
 
 ```shell
 litellm --config /path/to/config.yaml
 ```
 
-**3. Call `/v1/messages` via curl**
+**3. curl로 `/v1/messages` 호출**
 
 ```bash
 curl -X POST http://0.0.0.0:4000/v1/messages \
@@ -104,7 +104,7 @@ print(response)
 </TabItem>
 <TabItem value="ai-gateway-chat" label="AI Gateway">
 
-**1. Add to config.yaml**
+**1. config.yaml에 추가**
 
 ```yaml
 model_list:
@@ -114,13 +114,13 @@ model_list:
       aws_region_name: us-east-1
 ```
 
-**2. Start LiteLLM AI Gateway**
+**2. LiteLLM AI Gateway 시작**
 
 ```shell
 litellm --config /path/to/config.yaml
 ```
 
-**3. Call `/v1/chat/completions` via curl**
+**3. curl로 `/v1/chat/completions` 호출**
 
 ```bash
 curl -X POST http://0.0.0.0:4000/v1/chat/completions \
@@ -137,7 +137,7 @@ curl -X POST http://0.0.0.0:4000/v1/chat/completions \
 </TabItem>
 </Tabs>
 
-## API Key
+## API 키 {#api-key}
 
 ```python
 # env variable
@@ -147,16 +147,16 @@ os.environ['BEDROCK_MANTLE_API_KEY'] = "your-aws-bedrock-api-key"
 os.environ['BEDROCK_MANTLE_REGION'] = "us-east-1"  # or use AWS_REGION
 ```
 
-## Supported Models
+## 지원 모델
 
-| Model | Context Window | Input (per 1M tokens) | Output (per 1M tokens) |
+| 모델 | 컨텍스트 창 | 입력(1M 토큰당) | 출력(1M 토큰당) |
 |-------|---------------|----------------------|------------------------|
 | `openai.gpt-oss-120b` | 131K | $0.15 | $0.60 |
 | `openai.gpt-oss-20b` | 131K | $0.075 | $0.30 |
 | `openai.gpt-oss-safeguard-120b` | 131K | $0.15 | $0.60 |
 | `openai.gpt-oss-safeguard-20b` | 131K | $0.075 | $0.30 |
 
-## Sample Usage
+## 샘플 사용법
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -216,15 +216,15 @@ asyncio.run(main())
 </TabItem>
 </Tabs>
 
-## Region Configuration
+## 리전 설정
 
-The API base URL is `https://bedrock-mantle.{region}.api.aws/v1`. Region is resolved in this order:
+API 기본 URL은 `https://bedrock-mantle.{region}.api.aws/v1`입니다. 리전은 다음 순서로 결정됩니다.
 
-1. `BEDROCK_MANTLE_REGION` env var
-2. `AWS_REGION` env var
-3. Default: `us-east-1`
+1. `BEDROCK_MANTLE_REGION` 환경 변수
+2. `AWS_REGION` 환경 변수
+3. 기본값: `us-east-1`
 
-**Supported regions:** `us-east-1`, `us-east-2`, `us-west-2`, `eu-west-1`, `eu-west-2`, `eu-central-1`, `eu-south-1`, `eu-north-1`, `ap-northeast-1`, `ap-south-1`, `ap-southeast-3`, `sa-east-1`
+**지원 리전:** `us-east-1`, `us-east-2`, `us-west-2`, `eu-west-1`, `eu-west-2`, `eu-central-1`, `eu-south-1`, `eu-north-1`, `ap-northeast-1`, `ap-south-1`, `ap-southeast-3`, `sa-east-1`
 
 ```python
 import os
@@ -238,9 +238,9 @@ response = completion(
 )
 ```
 
-## Usage with LiteLLM Proxy
+## LiteLLM Proxy 사용법
 
-### 1. Set Bedrock Mantle models on config.yaml
+### 1. config.yaml에 Bedrock Mantle 모델 설정 {#1-set-bedrock-mantle-models-on-configyaml}
 
 ```yaml
 model_list:
@@ -257,13 +257,13 @@ model_list:
       api_key: os.environ/BEDROCK_MANTLE_API_KEY
 ```
 
-### 2. Start the proxy
+### 2. 프록시 시작
 
 ```shell
 litellm --config /path/to/config.yaml
 ```
 
-### 3. Send a request
+### 3. 요청 전송 {#3-send-a-request}
 
 ```python
 import openai

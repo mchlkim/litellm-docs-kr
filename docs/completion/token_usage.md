@@ -1,7 +1,7 @@
-# Completion Token Usage & Cost
-By default LiteLLM returns token usage in all completion requests ([See here](https://litellm.readthedocs.io/en/latest/output/))
+# Completion Token 사용법 및 비용 {#completion-token-사용법--cost}
+기본적으로 LiteLLM은 모든 completion 요청에서 토큰 사용량을 반환합니다([여기 보기](https://litellm.readthedocs.io/en/latest/output/)).
 
-LiteLLM returns `response_cost` in all calls. 
+LiteLLM은 모든 호출에서 `response_cost`를 반환합니다.
 
 ```python
 from litellm import completion 
@@ -15,34 +15,34 @@ response = litellm.completion(
 print(response._hidden_params["response_cost"])
 ```
 
-LiteLLM also exposes some helper functions:
+LiteLLM은 다음과 같은 헬퍼 함수도 제공합니다.
 
-- `encode`: This encodes the text passed in, using the model-specific tokenizer. [**Jump to code**](#1-encode)
+- `encode`: 전달된 텍스트를 모델별 tokenizer로 인코딩합니다. [**코드로 이동**](#1-encode)
 
-- `decode`: This decodes the tokens passed in, using the model-specific tokenizer. [**Jump to code**](#2-decode)
+- `decode`: 전달된 토큰을 모델별 tokenizer로 디코딩합니다. [**코드로 이동**](#2-decode)
 
-- `token_counter`: This returns the number of tokens for a given input - it uses the tokenizer based on the model, and defaults to tiktoken if no model-specific tokenizer is available. [**Jump to code**](#3-token_counter)
+- `token_counter`: 주어진 입력의 토큰 수를 반환합니다. 모델에 맞는 tokenizer를 사용하며, 모델별 tokenizer가 없으면 기본값으로 tiktoken을 사용합니다. [**코드로 이동**](#3-token_counter)
 
-- `create_pretrained_tokenizer` and `create_tokenizer`: LiteLLM provides default tokenizer support for OpenAI, Cohere, Anthropic, Llama2, and Llama3 models. If you are using a different model, you can create a custom tokenizer and pass it as `custom_tokenizer` to the `encode`, `decode`, and `token_counter` methods. [**Jump to code**](#4-create_pretrained_tokenizer-and-create_tokenizer)
+- `create_pretrained_tokenizer` 및 `create_tokenizer`: LiteLLM은 OpenAI, Cohere, Anthropic, Llama2, Llama3 모델에 대한 기본 tokenizer 지원을 제공합니다. 다른 모델을 사용하는 경우 custom tokenizer를 만들고 `encode`, `decode`, `token_counter` 메서드에 `custom_tokenizer`로 전달할 수 있습니다. 아래 4번 섹션을 참고하세요.
 
-- `cost_per_token`: This returns the cost (in USD) for prompt (input) and completion (output) tokens. Uses the live list from `api.litellm.ai`. [**Jump to code**](#5-cost_per_token)
+- `cost_per_token`: prompt(input) 및 completion(output) 토큰의 비용(USD)을 반환합니다. `api.litellm.ai`의 실시간 목록을 사용합니다. [**코드로 이동**](#5-cost_per_token)
 
-- `completion_cost`: This returns the overall cost (in USD) for a given LLM API Call. It combines `token_counter` and `cost_per_token` to return the cost for that query (counting both cost of input and output). [**Jump to code**](#6-completion_cost)
+- `completion_cost`: 주어진 LLM API Call의 전체 비용(USD)을 반환합니다. `token_counter`와 `cost_per_token`을 결합해 해당 query 비용을 반환합니다(input 및 output 비용 모두 계산). [**코드로 이동**](#6-completion_cost)
 
-- `get_max_tokens`: This returns the maximum number of tokens allowed for the given model. [**Jump to code**](#7-get_max_tokens)
+- `get_max_tokens`: 주어진 모델에 허용되는 최대 토큰 수를 반환합니다. [**코드로 이동**](#7-get_max_tokens)
 
-- `model_cost`: This returns a dictionary for all models, with their max_tokens, input_cost_per_token and output_cost_per_token. It uses the `api.litellm.ai` call shown below. [**Jump to code**](#8-model_cost)
+- `model_cost`: 모든 모델의 `max_tokens`, `input_cost_per_token`, `output_cost_per_token`을 포함한 딕셔너리를 반환합니다. 아래에 표시된 `api.litellm.ai` 호출을 사용합니다. [**코드로 이동**](#8-model_cost)
 
-- `register_model`: This registers new / overrides existing models (and their pricing details) in the model cost dictionary. [**Jump to code**](#9-register_model)
+- `register_model`: model cost dictionary에 새 모델과 가격 정보를 등록하거나 기존 모델을 override합니다. [**코드로 이동**](#9-register_model)
 
-- `api.litellm.ai`: Live token + price count across [all supported models](https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json). [**Jump to code**](#10-apilitellmai)
+- `api.litellm.ai`: [지원되는 모든 모델](https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json)의 실시간 token 및 price count입니다. [**코드로 이동**](#10-apilitellmai)
 
-📣 [This is a community maintained list](https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json). Contributions are welcome! ❤️
+📣 [이 목록은 커뮤니티에서 관리합니다](https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json). 기여를 환영합니다! ❤️
 
-## Example Usage 
+## 예제 사용법 
 
 ### 1. `encode`
-Encoding has model-specific tokenizers for anthropic, cohere, llama2 and openai. If an unsupported model is passed in, it'll default to using tiktoken (openai's tokenizer).
+인코딩은 anthropic, cohere, llama2, openai에 대한 모델별 tokenizer를 제공합니다. 지원되지 않는 모델이 전달되면 기본값으로 tiktoken(openai의 tokenizer)을 사용합니다.
 
 ```python
 from litellm import encode, decode
@@ -55,7 +55,7 @@ print(openai_tokens)
 
 ### 2. `decode`
 
-Decoding is supported for anthropic, cohere, llama2 and openai.
+디코딩은 anthropic, cohere, llama2, openai에서 지원됩니다.
 
 ```python
 from litellm import encode, decode
@@ -76,7 +76,7 @@ messages = [{"user": "role", "content": "Hey, how's it going"}]
 print(token_counter(model="gpt-3.5-turbo", messages=messages))
 ```
 
-### 4. `create_pretrained_tokenizer` and `create_tokenizer`
+### 4. `create_pretrained_tokenizer` 및 `create_tokenizer` {#4-create_pretrained_tokenizer-and-create_tokenizer}
 
 ```python
 from litellm import create_pretrained_tokenizer, create_tokenizer
@@ -107,8 +107,8 @@ print(prompt_tokens_cost_usd_dollar, completion_tokens_cost_usd_dollar)
 
 ### 6. `completion_cost`
 
-* Input: Accepts a `litellm.completion()` response **OR** prompt + completion strings
-* Output: Returns a `float` of cost for the `completion` call 
+* 입력: `litellm.completion()` 응답 **또는** prompt + completion 문자열을 받습니다.
+* 출력: `completion` 호출 비용을 `float`로 반환합니다.
 
 **litellm.completion()**
 ```python
@@ -125,7 +125,7 @@ formatted_string = f"${float(cost):.10f}"
 print(formatted_string)
 ```
 
-**prompt + completion string**
+**prompt + completion 문자열**
 ```python
 from litellm import completion_cost
 cost = completion_cost(model="bedrock/anthropic.claude-v2", prompt="Hey!", completion="How's it going?")
@@ -134,8 +134,8 @@ print(formatted_string)
 ```
 ### 7. `get_max_tokens`
 
-Input: Accepts a model name - e.g., gpt-3.5-turbo (to get a complete list, call litellm.model_list).
-Output: Returns the maximum number of tokens allowed for the given model
+입력: 모델 이름을 받습니다. 예: gpt-3.5-turbo. 전체 목록을 가져오려면 litellm.model_list를 호출하세요.
+출력: 주어진 모델에 허용되는 최대 토큰 수를 반환합니다.
 
 ```python 
 from litellm import get_max_tokens 
@@ -147,7 +147,7 @@ print(get_max_tokens(model)) # Output: 4097
 
 ### 8. `model_cost`
 
-* Output: Returns a dict object containing the max_tokens, input_cost_per_token, output_cost_per_token for all models on [community-maintained list](https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json)
+* 출력: [커뮤니티 관리 목록](https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json)에 있는 모든 모델의 max_tokens, input_cost_per_token, output_cost_per_token을 포함한 dict object를 반환합니다.
 
 ```python 
 from litellm import model_cost 
@@ -157,10 +157,10 @@ print(model_cost) # {'gpt-3.5-turbo': {'max_tokens': 4000, 'input_cost_per_token
 
 ### 9. `register_model`
 
-* Input: Provide EITHER a model cost dictionary or a url to a hosted json blob
-* Output: Returns updated model_cost dictionary + updates litellm.model_cost with model details.  
+* 입력: model cost dictionary 또는 hosted json blob의 url 중 하나를 제공합니다.
+* 출력: 업데이트된 model_cost dictionary를 반환하고 모델 세부 정보로 litellm.model_cost를 업데이트합니다.
 
-**Dictionary**
+**딕셔너리**
 ```python
 import litellm
 
@@ -175,7 +175,7 @@ litellm.register_model({
 })
 ```
 
-**URL for json blob**
+**json blob용 URL**
 ```python
 import litellm
 
@@ -183,10 +183,10 @@ litellm.register_model(model_cost=
 "https://raw.githubusercontent.com/BerriAI/litellm/main/model_prices_and_context_window.json")
 ```
 
-**Don't pull hosted model_cost_map**  
-If you have firewalls, and want to just use the local copy of the model cost map, you can do so like this:
+### hosted model_cost_map을 가져오지 않기 {#dont-pull-hosted-model_cost_map}
+방화벽이 있거나 model cost map의 로컬 복사본만 사용하려는 경우 다음과 같이 설정할 수 있습니다.
 ```bash
 export LITELLM_LOCAL_MODEL_COST_MAP="True"
 ```
 
-Note: this means you will need to upgrade to get updated pricing, and newer models. 
+참고: 이 경우 업데이트된 가격과 더 새로운 모델을 가져오려면 업그레이드해야 합니다.

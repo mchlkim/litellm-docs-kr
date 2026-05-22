@@ -20,7 +20,7 @@ import TabItem from '@theme/TabItem';
 
 
 
-## Deploy this version
+## 이 버전 배포하기 {#deploy-this-version}
 
 <Tabs>
 <TabItem value="docker" label="Docker">
@@ -41,142 +41,142 @@ pip install litellm==1.68.0.post1
 </TabItem>
 </Tabs>
 
-## Key Highlights
+## 주요 하이라이트 {#key-highlights}
 
-LiteLLM v1.68.0-stable will be live soon. Here are the key highlights of this release:
+LiteLLM v1.68.0-stable이 곧 공개됩니다. 이번 릴리스의 주요 내용은 다음과 같습니다.
 
-- **Bedrock Knowledge Base**: You can now call query your Bedrock Knowledge Base with all LiteLLM models via `/chat/completion` or `/responses` API.
-- **Rate Limits**: This release brings accurate rate limiting across multiple instances, reducing spillover to at most 10 additional requests in high traffic. 
-- **Meta Llama API**: Added support for Meta Llama API [Get Started](https://docs.litellm.ai/docs/providers/meta_llama)
-- **LlamaFile**: Added support for LlamaFile [Get Started](https://docs.litellm.ai/docs/providers/llamafile)
+- **Bedrock Knowledge Base**: 이제 모든 LiteLLM 모델에서 `/chat/completion` 또는 `/responses` API를 통해 Bedrock Knowledge Base를 쿼리할 수 있습니다.
+- **Rate Limits**: 이번 릴리스는 여러 인스턴스 전반에서 정확한 속도 제한을 제공하며, 높은 트래픽에서도 spillover를 최대 10개 추가 요청으로 줄입니다.
+- **Meta Llama API**: Meta Llama API 지원을 추가했습니다. [시작하기](https://docs.litellm.ai/docs/providers/meta_llama)
+- **LlamaFile**: LlamaFile 지원을 추가했습니다. [시작하기](https://docs.litellm.ai/docs/providers/llamafile)
 
-## Bedrock Knowledge Base (Vector Store)
+## `Bedrock Knowledge Base`(Vector Store) {#bedrock-knowledge-base-vector-store}
 
 <Image img={require('../../img/release_notes/bedrock_kb.png')}/>
 <br/>
 
-This release adds support for Bedrock vector stores (knowledge bases) in LiteLLM. With this update, you can:
+이번 릴리스는 LiteLLM에 Bedrock vector store(knowledge base) 지원을 추가합니다. 이 업데이트로 다음을 할 수 있습니다.
 
-- Use Bedrock vector stores in the OpenAI /chat/completions spec with all LiteLLM supported models. 
-- View all available vector stores through the LiteLLM UI or API.
-- Configure vector stores to be always active for specific models.
-- Track vector store usage in LiteLLM Logs.
+- 모든 LiteLLM 지원 모델에서 OpenAI `/chat/completions` spec으로 Bedrock vector store를 사용할 수 있습니다.
+- LiteLLM UI 또는 API를 통해 사용 가능한 모든 vector store를 볼 수 있습니다.
+- 특정 모델에서 vector store가 항상 활성화되도록 구성할 수 있습니다.
+- LiteLLM 로그에서 vector store 사용량을 추적할 수 있습니다.
 
-For the next release we plan on allowing you to set key, user, team, org permissions for vector stores. 
+다음 릴리스에서는 vector store에 대해 key, user, team, org 권한을 설정할 수 있도록 할 계획입니다.
 
-[Read more here](https://docs.litellm.ai/docs/completion/knowledgebase)
+[여기에서 자세히 읽기](https://docs.litellm.ai/docs/completion/knowledgebase)
 
-## Rate Limiting
+## Rate Limiting {#rate-limiting}
 
 <Image img={require('../../img/multi_instance_rate_limiting.png')}/>
 <br/>
 
 
-This release brings accurate multi-instance rate limiting across keys/users/teams. Outlining key engineering changes below:
+이번 릴리스는 key/user/team 전반에 정확한 multi-instance rate limiting을 제공합니다. 핵심 엔지니어링 변경 사항은 아래와 같습니다.
 
-- **Change**: Instances now increment cache value instead of setting it. To avoid calling Redis on each request, this is synced every 0.01s.
-- **Accuracy**: In testing, we saw a maximum spill over from expected of 10 requests, in high traffic (100 RPS, 3 instances), vs. current 189 request spillover
-- **Performance**: Our load tests show this to reduce median response time by 100ms in high traffic 
+- **변경 사항**: 이제 인스턴스가 cache value를 설정하는 대신 증가시킵니다. 각 요청마다 Redis를 호출하지 않도록 0.01초마다 동기화합니다.
+- **정확도**: 테스트에서 높은 트래픽(100 RPS, 인스턴스 3개) 기준 예상치 대비 최대 spillover가 10개 요청으로 나타났습니다. 기존에는 189개 요청 spillover였습니다.
+- **성능**: 로드 테스트에서 높은 트래픽 시 median response time이 100ms 줄어드는 것으로 확인되었습니다.
 
-This is currently behind a feature flag, and we plan to have this be the default by next week. To enable this today, just add this environment variable:
+현재 이 기능은 feature flag 뒤에 있으며, 다음 주까지 기본값으로 전환할 계획입니다. 지금 활성화하려면 다음 환경 변수를 추가하면 됩니다.
 
 ```
 export LITELLM_RATE_LIMIT_ACCURACY=true
 ```
 
-[Read more here](../../docs/proxy/users#beta-multi-instance-rate-limiting) 
+[여기에서 자세히 읽기](../../docs/proxy/users#beta-multi-instance-rate-limiting)
 
 
 
-## New Models / Updated Models
+## 신규 모델 / 업데이트된 모델 {#new--updated-models}
 - **Gemini ([VertexAI](https://docs.litellm.ai/docs/providers/vertex#usage-with-litellm-proxy-server) + [Google AI Studio](https://docs.litellm.ai/docs/providers/gemini))**
-    - Handle more json schema - openapi schema conversion edge cases [PR](https://github.com/BerriAI/litellm/pull/10351)
-    - Tool calls - return ‘finish_reason=“tool_calls”’ on gemini tool calling response [PR](https://github.com/BerriAI/litellm/pull/10485)
+    - 더 많은 json schema - openapi schema 변환 edge case 처리 [PR](https://github.com/BerriAI/litellm/pull/10351)
+    - Tool calls - gemini tool calling 응답에서 `finish_reason="tool_calls"` 반환 [PR](https://github.com/BerriAI/litellm/pull/10485)
 - **[VertexAI](../../docs/providers/vertex#metallama-api)**
-    - Meta/llama-4 model support [PR](https://github.com/BerriAI/litellm/pull/10492)
-    - Meta/llama3 - handle tool call result in content [PR](https://github.com/BerriAI/litellm/pull/10492)
-    - Meta/* - return ‘finish_reason=“tool_calls”’ on tool calling response [PR](https://github.com/BerriAI/litellm/pull/10492)
+    - Meta/llama-4 모델 지원 [PR](https://github.com/BerriAI/litellm/pull/10492)
+    - Meta/llama3 - content 안의 tool call result 처리 [PR](https://github.com/BerriAI/litellm/pull/10492)
+    - Meta/* - tool calling 응답에서 `finish_reason="tool_calls"` 반환 [PR](https://github.com/BerriAI/litellm/pull/10492)
 - **[Bedrock](../../docs/providers/bedrock#litellm-proxy-usage)**
-    - [Image Generation](../../docs/providers/bedrock#image-generation) - Support new ‘stable-image-core’ models - [PR](https://github.com/BerriAI/litellm/pull/10351)
-    - [Knowledge Bases](../../docs/completion/knowledgebase) - support using Bedrock knowledge bases with `/chat/completions` [PR](https://github.com/BerriAI/litellm/pull/10413)
-    - [Anthropic](../../docs/providers/bedrock#litellm-proxy-usage) - add ‘supports_pdf_input’ for claude-3.7-bedrock models [PR](https://github.com/BerriAI/litellm/pull/9917), [Get Started](../../docs/completion/document_understanding#checking-if-a-model-supports-pdf-input)
+    - [Image Generation](../../docs/providers/bedrock#image-generation) - 새로운 `stable-image-core` 모델 지원 [PR](https://github.com/BerriAI/litellm/pull/10351)
+    - [Knowledge Bases](../../docs/completion/knowledgebase) - `/chat/completions`에서 Bedrock knowledge base 사용 지원 [PR](https://github.com/BerriAI/litellm/pull/10413)
+    - [Anthropic](../../docs/providers/bedrock#litellm-proxy-usage) - claude-3.7-bedrock 모델에 `supports_pdf_input` 추가 [PR](https://github.com/BerriAI/litellm/pull/9917), [시작하기](../../docs/completion/document_understanding#checking-if-a-model-supports-pdf-input)
 - **[OpenAI](../../docs/providers/openai)**
-    - Support OPENAI_BASE_URL in addition to OPENAI_API_BASE [PR](https://github.com/BerriAI/litellm/pull/10423)
-    - Correctly re-raise 504 timeout errors [PR](https://github.com/BerriAI/litellm/pull/10462)
-    - Native Gpt-4o-mini-tts support [PR](https://github.com/BerriAI/litellm/pull/10462)
+    - OPENAI_API_BASE에 더해 OPENAI_BASE_URL 지원 [PR](https://github.com/BerriAI/litellm/pull/10423)
+    - 504 timeout error를 올바르게 다시 발생 [PR](https://github.com/BerriAI/litellm/pull/10462)
+    - Native Gpt-4o-mini-tts 지원 [PR](https://github.com/BerriAI/litellm/pull/10462)
 - 🆕 **[Meta Llama API](../../docs/providers/meta_llama)** provider [PR](https://github.com/BerriAI/litellm/pull/10451)
 - 🆕 **[LlamaFile](../../docs/providers/llamafile)** provider [PR](https://github.com/BerriAI/litellm/pull/10482)
 
-## LLM API Endpoints
+## LLM API 엔드포인트 {#llm-api-endpoints}
 - **[Response API](../../docs/response_api)** 
-    - Fix for handling multi turn sessions [PR](https://github.com/BerriAI/litellm/pull/10415)
+    - multi turn session 처리 수정 [PR](https://github.com/BerriAI/litellm/pull/10415)
 - **[Embeddings](../../docs/embedding/supported_embedding)**
-    - Caching fixes - [PR](https://github.com/BerriAI/litellm/pull/10424)
-        - handle str -> list cache
-        - Return usage tokens for cache hit 
-        - Combine usage tokens on partial cache hits 
+    - 캐싱 수정 [PR](https://github.com/BerriAI/litellm/pull/10424)
+        - str -> list cache 처리
+        - cache hit 시 usage token 반환
+        - partial cache hit 시 usage token 결합
 - 🆕 **[Vector Stores](../../docs/completion/knowledgebase)**
-    - Allow defining Vector Store Configs - [PR](https://github.com/BerriAI/litellm/pull/10448)
-    - New StandardLoggingPayload field for requests made when a vector store is used - [PR](https://github.com/BerriAI/litellm/pull/10509)
-    - Show Vector Store / KB Request on LiteLLM Logs Page  - [PR](https://github.com/BerriAI/litellm/pull/10514)
-    - Allow using vector store in OpenAI API spec with tools - [PR](https://github.com/BerriAI/litellm/pull/10516)
+    - Vector Store Config 정의 허용 [PR](https://github.com/BerriAI/litellm/pull/10448)
+    - vector store가 사용된 요청을 위한 새 StandardLoggingPayload field 추가 [PR](https://github.com/BerriAI/litellm/pull/10509)
+    - LiteLLM 로그 페이지에 Vector Store / KB Request 표시 [PR](https://github.com/BerriAI/litellm/pull/10514)
+    - OpenAI API spec에서 tools와 함께 vector store 사용 허용 [PR](https://github.com/BerriAI/litellm/pull/10516)
 - **[MCP](../../docs/mcp)**
-    - Ensure Non-Admin virtual keys can access /mcp routes - [PR](https://github.com/BerriAI/litellm/pull/10473)
+    - Non-Admin virtual key가 /mcp route에 접근할 수 있도록 보장 [PR](https://github.com/BerriAI/litellm/pull/10473)
       
-      **Note:** Currently, all Virtual Keys are able to access the MCP endpoints. We are working on a feature to allow restricting MCP access by keys/teams/users/orgs. Follow [here](https://github.com/BerriAI/litellm/discussions/9891) for updates.
+      **참고:** 현재 모든 가상 키가 MCP endpoint에 접근할 수 있습니다. key/team/user/org별로 MCP 접근을 제한할 수 있는 기능을 작업 중입니다. 업데이트는 [여기](https://github.com/BerriAI/litellm/discussions/9891)를 확인하세요.
 - **Moderations**
-    - Add logging callback support for `/moderations` API - [PR](https://github.com/BerriAI/litellm/pull/10390)
+    - `/moderations` API에 logging callback 지원 추가 [PR](https://github.com/BerriAI/litellm/pull/10390)
 
 
-## Spend Tracking / Budget Improvements
+## 비용 추적 / Budget 개선 사항 {#cost-tracking--budget-improvements}
 - **[OpenAI](../../docs/providers/openai)**
-    - [computer-use-preview](../../docs/providers/openai/responses_api#computer-use) cost tracking / pricing [PR](https://github.com/BerriAI/litellm/pull/10422)
-    - [gpt-4o-mini-tts](../../docs/providers/openai/text_to_speech) input cost tracking - [PR](https://github.com/BerriAI/litellm/pull/10462)
-- **[Fireworks AI](../../docs/providers/fireworks_ai)** - pricing updates - new `0-4b` model pricing tier + llama4 model pricing
+    - [computer-use-preview](../../docs/providers/openai/responses_api#computer-use) 비용 추적 / pricing [PR](https://github.com/BerriAI/litellm/pull/10422)
+    - [gpt-4o-mini-tts](../../docs/providers/openai/text_to_speech) input 비용 추적 [PR](https://github.com/BerriAI/litellm/pull/10462)
+- **[Fireworks AI](../../docs/providers/fireworks_ai)** - pricing 업데이트 - 새로운 `0-4b` model pricing tier + llama4 model pricing
 - **[Budgets](../../docs/proxy/users#set-budgets)**
-    - [Budget resets](../../docs/proxy/users#reset-budgets) now happen as start of day/week/month - [PR](https://github.com/BerriAI/litellm/pull/10333)
-    - Trigger [Soft Budget Alerts](../../docs/proxy/alerting#soft-budget-alerts-for-virtual-keys) When Key Crosses Threshold - [PR](https://github.com/BerriAI/litellm/pull/10491)
+    - [Budget reset](../../docs/proxy/users#reset-budgets)이 이제 일/주/월 시작 시점에 실행됩니다. [PR](https://github.com/BerriAI/litellm/pull/10333)
+    - key가 threshold를 넘으면 [Soft Budget Alerts](../../docs/proxy/alerting#soft-budget-alerts-for-virtual-keys) 트리거 [PR](https://github.com/BerriAI/litellm/pull/10491)
 - **[Token Counting](../../docs/completion/token_usage#3-token_counter)**
-    - Rewrite of token_counter() function to handle to prevent undercounting tokens - [PR](https://github.com/BerriAI/litellm/pull/10409)
+    - token undercounting을 방지하도록 token_counter() 함수 재작성 [PR](https://github.com/BerriAI/litellm/pull/10409)
 
 
-## Management Endpoints / UI
-- **Virtual Keys**
-    - Fix filtering on key alias - [PR](https://github.com/BerriAI/litellm/pull/10455)
-    - Support global filtering on keys - [PR](https://github.com/BerriAI/litellm/pull/10455)
-    - Pagination - fix clicking on next/back buttons on table - [PR](https://github.com/BerriAI/litellm/pull/10528)
-- **Models**
-    - Triton - Support adding model/provider on UI - [PR](https://github.com/BerriAI/litellm/pull/10456)
-    - VertexAI - Fix adding vertex models with reusable credentials - [PR](https://github.com/BerriAI/litellm/pull/10528)
-    - LLM Credentials - show existing credentials for easy editing - [PR](https://github.com/BerriAI/litellm/pull/10519)
+## 관리 엔드포인트 / UI {#management-endpoints--ui}
+- **가상 키**
+    - key alias 필터링 수정 [PR](https://github.com/BerriAI/litellm/pull/10455)
+    - key의 global filtering 지원 [PR](https://github.com/BerriAI/litellm/pull/10455)
+    - Pagination - table의 next/back button 클릭 수정 [PR](https://github.com/BerriAI/litellm/pull/10528)
+- **모델**
+    - Triton - UI에서 model/provider 추가 지원 [PR](https://github.com/BerriAI/litellm/pull/10456)
+    - VertexAI - reusable credential로 vertex model을 추가하는 문제 수정 [PR](https://github.com/BerriAI/litellm/pull/10528)
+    - LLM Credentials - 쉽게 편집할 수 있도록 기존 credential 표시 [PR](https://github.com/BerriAI/litellm/pull/10519)
 - **Teams**
-    - Allow reassigning team to other org - [PR](https://github.com/BerriAI/litellm/pull/10527)
+    - team을 다른 org로 재할당 허용 [PR](https://github.com/BerriAI/litellm/pull/10527)
 - **Organizations**
-    - Fix showing org budget on table - [PR](https://github.com/BerriAI/litellm/pull/10528)
+    - table에 org budget 표시 수정 [PR](https://github.com/BerriAI/litellm/pull/10528)
 
 
 
-## Logging / Guardrail Integrations
+## 로깅 / Guardrail 통합 {#logging--guardrail-integrations}
 - **[Langsmith](../../docs/observability/langsmith_integration)**
-    - Respect [langsmith_batch_size](../../docs/observability/langsmith_integration#local-testing---control-batch-size) param - [PR](https://github.com/BerriAI/litellm/pull/10411)
+    - [langsmith_batch_size](../../docs/observability/langsmith_integration#local-testing---control-batch-size) param 준수 [PR](https://github.com/BerriAI/litellm/pull/10411)
 
-## Performance / Loadbalancing / Reliability improvements
+## 성능 / Loadbalancing / 안정성 개선 {#performance--loadbalancing--reliability-improvements}
 - **[Redis](../../docs/proxy/caching)**
-    - Ensure all redis queues are periodically flushed, this fixes an issue where redis queue size was growing indefinitely when request tags were used - [PR](https://github.com/BerriAI/litellm/pull/10393)
+    - 모든 redis queue가 주기적으로 flush되도록 보장합니다. request tag를 사용할 때 redis queue size가 무기한 증가하던 문제를 수정합니다. [PR](https://github.com/BerriAI/litellm/pull/10393)
 - **[Rate Limits](../../docs/proxy/users#set-rate-limit)**
-    - [Multi-instance rate limiting](../../docs/proxy/users#beta-multi-instance-rate-limiting) support across keys/teams/users/customers - [PR](https://github.com/BerriAI/litellm/pull/10458), [PR](https://github.com/BerriAI/litellm/pull/10497), [PR](https://github.com/BerriAI/litellm/pull/10500)
+    - key/team/user/customer 전반에서 [Multi-instance rate limiting](../../docs/proxy/users#beta-multi-instance-rate-limiting) 지원 [PR](https://github.com/BerriAI/litellm/pull/10458), [PR](https://github.com/BerriAI/litellm/pull/10497), [PR](https://github.com/BerriAI/litellm/pull/10500)
 - **[Azure OpenAI OIDC](../../docs/providers/azure#entra-id---use-azure_ad_token)**
-    - allow using litellm defined params for [OIDC Auth](../../docs/providers/azure#entra-id---use-azure_ad_token) - [PR](https://github.com/BerriAI/litellm/pull/10394)
+    - [OIDC Auth](../../docs/providers/azure#entra-id---use-azure_ad_token)에 litellm 정의 param 사용 허용 [PR](https://github.com/BerriAI/litellm/pull/10394)
 
 
-## General Proxy Improvements
+## 일반 Proxy 개선 사항 {#general-proxy-improvements}
 - **Security**
-    - Allow [blocking web crawlers](../../docs/proxy/enterprise#blocking-web-crawlers) - [PR](https://github.com/BerriAI/litellm/pull/10420)
+    - [web crawler 차단](../../docs/proxy/enterprise#blocking-web-crawlers) 허용 [PR](https://github.com/BerriAI/litellm/pull/10420)
 - **Auth**
-    - Support [`x-litellm-api-key` header param by default](../../docs/pass_through/vertex_ai#use-with-virtual-keys), this fixes an issue from the prior release where `x-litellm-api-key` was not being used on vertex ai passthrough requests - [PR](https://github.com/BerriAI/litellm/pull/10392)
-    - Allow key at max budget to call non-llm api endpoints - [PR](https://github.com/BerriAI/litellm/pull/10392)
-- 🆕 **[Python Client Library](../../docs/proxy/management_cli) for LiteLLM Proxy management endpoints**
-    - Initial PR - [PR](https://github.com/BerriAI/litellm/pull/10445)
-    - Support for doing HTTP requests - [PR](https://github.com/BerriAI/litellm/pull/10452)
+    - 기본적으로 [`x-litellm-api-key` header param](../../docs/pass_through/vertex_ai#use-with-virtual-keys)을 지원합니다. 이전 릴리스에서 vertex ai passthrough request에 `x-litellm-api-key`가 사용되지 않던 문제를 수정합니다. [PR](https://github.com/BerriAI/litellm/pull/10392)
+    - max budget에 도달한 key가 non-llm api endpoint를 호출할 수 있도록 허용 [PR](https://github.com/BerriAI/litellm/pull/10392)
+- 🆕 **LiteLLM Proxy 관리 엔드포인트용 [Python Client Library](../../docs/proxy/management_cli)**
+    - 초기 PR [PR](https://github.com/BerriAI/litellm/pull/10445)
+    - HTTP request 실행 지원 [PR](https://github.com/BerriAI/litellm/pull/10452)
 - **Dependencies**
-    - Don’t require uvloop for windows - [PR](https://github.com/BerriAI/litellm/pull/10483)
+    - windows에서 uvloop가 필요하지 않도록 변경 [PR](https://github.com/BerriAI/litellm/pull/10483)

@@ -1,33 +1,33 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Token Counting
+# 토큰 계산 {#token-counting}
 
-## Overview
+## 개요
 
-LiteLLM provides exact token counting by calling provider-specific token counting APIs. This gives you accurate token counts before sending requests, helping with cost estimation and context window management.
+LiteLLM은 프로바이더별 토큰 계산 API를 호출해 정확한 토큰 수를 제공합니다. 요청을 보내기 전에 정확한 토큰 수를 확인할 수 있어 비용 예측과 컨텍스트 창 관리에 도움이 됩니다.
 
-| Feature | Details |
+| 기능 | 세부 정보 |
 |---------|---------|
-| SDK Method | `litellm.acount_tokens()` |
-| Proxy Endpoints | `/v1/messages/count_tokens` (Anthropic format), `/v1/responses/input_tokens` (OpenAI format) |
-| Fallback | Local tiktoken-based counting for unsupported providers |
+| SDK 메서드 | `litellm.acount_tokens()` |
+| Proxy 엔드포인트 | `/v1/messages/count_tokens` (Anthropic 형식), `/v1/responses/input_tokens` (OpenAI 형식) |
+| 대체 계산 | 지원되지 않는 프로바이더에는 로컬 tiktoken 기반 계산 사용 |
 
-## Supported Providers
+## 지원 프로바이더
 
-| Provider | Token Counting API | Format |
+| 프로바이더 | 토큰 계산 API | 형식 |
 |----------|-------------------|--------|
-| OpenAI | [Responses API `/input_tokens`](https://platform.openai.com/docs/api-reference/responses/input-tokens) | OpenAI Responses |
-| Anthropic | [Messages `/count_tokens`](https://docs.anthropic.com/en/docs/build-with-claude/token-counting) | Anthropic Messages |
-| Vertex AI (Claude) | Vertex AI Partner Models Token Counter | Anthropic Messages |
-| Bedrock (Claude) | AWS Bedrock CountTokens API | Anthropic Messages |
-| Gemini | Google AI Studio countTokens API | Anthropic Messages |
-| Vertex AI (Gemini) | Vertex AI countTokens API | Anthropic Messages |
-| Other providers | Local tiktoken fallback | N/A |
+| OpenAI | [Responses API `/input_tokens`](https://platform.openai.com/docs/api-reference/responses/input-tokens) | OpenAI Responses 형식 |
+| Anthropic | [Messages `/count_tokens`](https://docs.anthropic.com/en/docs/build-with-claude/token-counting) | Anthropic Messages 형식 |
+| Vertex AI (Claude) | Vertex AI Partner 모델 Token Counter | Anthropic Messages 형식 |
+| Bedrock (Claude) | AWS Bedrock CountTokens API | Anthropic Messages 형식 |
+| Gemini | Google AI Studio countTokens API | Anthropic Messages 형식 |
+| Vertex AI (Gemini) | Vertex AI countTokens API | Anthropic Messages 형식 |
+| 기타 프로바이더 | 로컬 tiktoken 대체 계산 | N/A |
 
-## SDK Usage
+## SDK 사용법
 
-### Basic Usage
+### 기본 사용법 {#basic-usage}
 
 ```python
 import asyncio
@@ -53,7 +53,7 @@ async def main():
 asyncio.run(main())
 ```
 
-### With Tools and System Message
+### 도구와 시스템 메시지 사용 {#with-tools-and-system-message}
 
 ```python
 import asyncio
@@ -81,9 +81,9 @@ async def main():
 asyncio.run(main())
 ```
 
-### Response Format
+### 응답 형식
 
-`litellm.acount_tokens()` returns a `TokenCountResponse`:
+`litellm.acount_tokens()`는 `TokenCountResponse`를 반환합니다.
 
 ```python
 TokenCountResponse(
@@ -97,9 +97,9 @@ TokenCountResponse(
 )
 ```
 
-### Fallback Behavior
+### 대체 계산 동작 {#fallback-behavior}
 
-If a provider doesn't support a token counting API, or if the API key is missing, `acount_tokens()` automatically falls back to local tiktoken-based counting:
+프로바이더가 토큰 계산 API를 지원하지 않거나 API 키가 없으면 `acount_tokens()`는 자동으로 로컬 tiktoken 기반 계산으로 대체합니다.
 
 ```python
 # Unsupported provider → automatic fallback
@@ -110,9 +110,9 @@ result = await litellm.acount_tokens(
 print(result.tokenizer_type)  # "local_tokenizer"
 ```
 
-## Proxy Usage
+## Proxy 사용법
 
-### OpenAI Format — `/v1/responses/input_tokens`
+### OpenAI 형식 — `/v1/responses/input_tokens` {#openai-format-v1responsesinput_tokens}
 
 <Tabs>
 <TabItem value="curl" label="curl">
@@ -152,14 +152,14 @@ print(response.json())
 </TabItem>
 </Tabs>
 
-**Response:**
+**응답:**
 ```json
 {"input_tokens": 7}
 ```
 
-### Anthropic Format — `/v1/messages/count_tokens`
+### Anthropic 형식 — `/v1/messages/count_tokens` {#anthropic-format-v1messagescount_tokens}
 
-See [Anthropic Token Counting](./anthropic_count_tokens.md) for full documentation.
+전체 문서는 [Anthropic Token Counting](./anthropic_count_tokens.md) 문서를 참고하세요.
 
 ```bash
 curl -X POST "http://localhost:4000/v1/messages/count_tokens" \
@@ -173,7 +173,7 @@ curl -X POST "http://localhost:4000/v1/messages/count_tokens" \
   }'
 ```
 
-## Proxy Configuration
+## Proxy 설정
 
 ```yaml
 model_list:

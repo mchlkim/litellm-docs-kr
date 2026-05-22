@@ -2,47 +2,47 @@ import Image from '@theme/IdealImage';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Presidio PII Masking with LiteLLM - Complete Tutorial
+# LiteLLM으로 Presidio PII Masking 설정하기 - 전체 튜토리얼
 
-This tutorial will guide you through setting up PII (Personally Identifiable Information) masking with Microsoft Presidio and LiteLLM Gateway. By the end of this tutorial, you'll have a production-ready setup that automatically detects and masks sensitive information in your LLM requests.
+이 튜토리얼은 Microsoft Presidio와 LiteLLM Gateway로 PII(Personally Identifiable Information) masking을 설정하는 과정을 안내합니다. 완료 후에는 LLM 요청에서 민감 정보를 자동으로 감지하고 masking하는 production-ready 구성을 갖추게 됩니다.
 
-## What You'll Learn
+## 학습할 내용
 
-- Deploy Presidio containers for PII detection
-- Configure LiteLLM to automatically mask sensitive data
-- Test PII masking with real examples
-- Monitor and trace guardrail execution
-- Configure advanced features like output parsing and language support
+- PII detection을 위한 Presidio container 배포
+- 민감 data를 자동 masking하도록 LiteLLM 구성
+- 실제 예제로 PII masking 테스트
+- guardrail 실행 monitoring 및 tracing
+- output parsing, language support 같은 고급 기능 구성
 
-## Why Use PII Masking?
+## PII Masking을 사용하는 이유
 
-When working with LLMs, users may inadvertently share sensitive information like:
-- Credit card numbers
-- Email addresses
-- Phone numbers
-- Social Security Numbers
-- Medical information (PHI)
-- Personal names and addresses
+LLM을 사용할 때 사용자는 다음과 같은 민감 정보를 실수로 공유할 수 있습니다.
+- 신용카드 번호
+- email 주소
+- 전화번호
+- 사회보장번호
+- 의료 정보(PHI)
+- 개인 이름과 주소
 
-PII masking automatically detects and redacts this information before it reaches the LLM, protecting user privacy and helping you comply with regulations like GDPR, HIPAA, and CCPA.
+PII masking은 이 정보가 LLM에 도달하기 전에 자동으로 감지하고 redaction합니다. 이를 통해 사용자 privacy를 보호하고 GDPR, HIPAA, CCPA 같은 규정 준수를 지원할 수 있습니다.
 
-## Prerequisites
+## 사전 준비
 
-Before starting this tutorial, ensure you have:
-- Docker installed on your machine
-- A LiteLLM API key or OpenAI API key for testing
-- Basic familiarity with YAML configuration
-- `curl` or a similar HTTP client for testing
+시작하기 전에 다음이 준비되어 있는지 확인하세요.
+- 로컬 머신에 Docker 설치
+- 테스트용 LiteLLM API key 또는 OpenAI API key
+- YAML configuration에 대한 기본 이해
+- 테스트용 `curl` 또는 유사한 HTTP client
 
-## Part 1: Deploy Presidio Containers
+## Part 1: Presidio Container 배포
 
-Presidio consists of two main services:
-1. **Presidio Analyzer**: Detects PII in text
-2. **Presidio Anonymizer**: Masks or redacts the detected PII
+Presidio는 두 가지 주요 service로 구성됩니다.
+1. **Presidio Analyzer**: text에서 PII 감지
+2. **Presidio Anonymizer**: 감지된 PII를 masking 또는 redaction
 
-### Step 1.1: Deploy with Docker
+### Step 1.1: Docker로 배포
 
-Create a `docker-compose.yml` file for Presidio:
+Presidio용 `docker-compose.yml` file을 생성합니다.
 
 ```yaml
 version: '3.8'
@@ -69,15 +69,15 @@ networks:
     driver: bridge
 ```
 
-### Step 1.2: Start the Containers
+### Step 1.2: Container 시작
 
 ```bash
 docker-compose up -d
 ```
 
-### Step 1.3: Verify Presidio is Running
+### Step 1.3: Presidio 실행 확인
 
-Test the analyzer endpoint:
+analyzer endpoint를 테스트합니다.
 
 ```bash
 curl -X POST http://localhost:5002/analyze \
@@ -88,7 +88,7 @@ curl -X POST http://localhost:5002/analyze \
   }'
 ```
 
-You should see a response like:
+다음과 같은 응답이 표시되어야 합니다.
 
 ```json
 [
@@ -101,15 +101,15 @@ You should see a response like:
 ]
 ```
 
-✅ **Checkpoint**: Your Presidio containers are now running and ready!
+✅ **Checkpoint**: Presidio container가 실행 중이며 사용할 준비가 되었습니다.
 
-## Part 2: Configure LiteLLM Gateway
+## Part 2: LiteLLM Gateway 구성
 
-Now let's configure LiteLLM to use Presidio for automatic PII masking.
+이제 자동 PII masking에 Presidio를 사용하도록 LiteLLM을 구성합니다.
 
-### Step 2.1: Create LiteLLM Configuration
+### Step 2.1: LiteLLM 설정 생성
 
-Create a `config.yaml` file:
+`config.yaml` file을 생성합니다.
 
 ```yaml
 model_list:
@@ -134,7 +134,7 @@ guardrails:
         US_SSN: "MASK"
 ```
 
-### Step 2.2: Set Environment Variables
+### Step 2.2: Environment variable 설정
 
 ```bash
 export OPENAI_API_KEY="your-openai-key"
@@ -142,28 +142,28 @@ export PRESIDIO_ANALYZER_API_BASE="http://localhost:5002"
 export PRESIDIO_ANONYMIZER_API_BASE="http://localhost:5001"
 ```
 
-### Step 2.3: Start LiteLLM Gateway
+### Step 2.3: LiteLLM Gateway 시작
 
 ```bash
 litellm --config config.yaml --port 4000 --detailed_debug
 ```
 
-You should see output indicating the guardrails are loaded:
+guardrail이 load되었음을 나타내는 output이 표시되어야 합니다.
 
 ```
 Loaded guardrails: ['presidio-pii-guard']
 ```
 
-✅ **Checkpoint**: LiteLLM Gateway is running with PII masking enabled!
+✅ **Checkpoint**: PII masking이 활성화된 LiteLLM Gateway가 실행 중입니다.
 
-## Part 3: Test PII Masking
+## Part 3: PII Masking 테스트
 
-Let's test the PII masking with various types of sensitive data.
+다양한 유형의 민감 data로 PII masking을 테스트합니다.
 
-### Test 1: Basic PII Detection
+### Test 1: 기본 PII Detection
 
 <Tabs>
-<TabItem label="Request with PII" value="pii-request">
+<TabItem label="PII가 포함된 요청" value="pii-request">
 
 ```bash
 curl -X POST http://localhost:4000/chat/completions \
@@ -183,9 +183,9 @@ curl -X POST http://localhost:4000/chat/completions \
 
 </TabItem>
 
-<TabItem label="What LLM Receives" value="masked">
+<TabItem label="LLM이 받는 내용" value="masked">
 
-The LLM will receive the masked version:
+LLM은 masking된 version을 받습니다.
 
 ```
 My name is <PERSON>, my email is <EMAIL_ADDRESS>, and my credit card is <CREDIT_CARD>
@@ -214,7 +214,7 @@ My name is <PERSON>, my email is <EMAIL_ADDRESS>, and my credit card is <CREDIT_
 </TabItem>
 </Tabs>
 
-### Test 2: Medical Information (PHI)
+### Test 2: 의료 정보(PHI)
 
 ```bash
 curl -X POST http://localhost:4000/chat/completions \
@@ -232,9 +232,9 @@ curl -X POST http://localhost:4000/chat/completions \
   }'
 ```
 
-The patient name and medical record number will be automatically masked.
+환자 이름과 medical record number가 자동으로 masking됩니다.
 
-### Test 3: No PII (Normal Request)
+### Test 3: PII 없음(일반 요청)
 
 ```bash
 curl -X POST http://localhost:4000/chat/completions \
@@ -252,15 +252,15 @@ curl -X POST http://localhost:4000/chat/completions \
   }'
 ```
 
-This request passes through unchanged since there's no PII detected.
+PII가 감지되지 않으므로 이 요청은 변경 없이 통과합니다.
 
-✅ **Checkpoint**: You've successfully tested PII masking!
+✅ **Checkpoint**: PII masking 테스트를 성공적으로 완료했습니다.
 
-## Part 4: Advanced Configurations
+## Part 4: 고급 설정
 
-### Blocking Sensitive Entities
+### 민감 Entity 차단
 
-Instead of masking, you can completely block requests containing specific PII types:
+masking 대신 특정 PII type이 포함된 요청을 완전히 차단할 수 있습니다.
 
 ```yaml
 guardrails:
@@ -274,7 +274,7 @@ guardrails:
         MEDICAL_LICENSE: "BLOCK"
 ```
 
-Test the blocking behavior:
+차단 동작을 테스트합니다.
 
 ```bash
 curl -X POST http://localhost:4000/chat/completions \
@@ -289,7 +289,7 @@ curl -X POST http://localhost:4000/chat/completions \
   }'
 ```
 
-Expected response:
+예상 응답:
 
 ```json
 {
@@ -299,9 +299,9 @@ Expected response:
 }
 ```
 
-### Output Parsing (Unmasking)
+### 출력 파싱(Unmasking) {#output-parsing-unmasking}
 
-Enable output parsing to automatically replace masked tokens in LLM responses with original values:
+LLM 응답의 masked token을 원래 값으로 자동 치환하려면 output parsing을 활성화합니다.
 
 ```yaml
 guardrails:
@@ -315,16 +315,16 @@ guardrails:
         PHONE_NUMBER: "MASK"
 ```
 
-**How it works:**
+**동작 방식:**
 
-1. **User Input**: "Hello, my name is Jane Doe. My number is 555-1234"
-2. **LLM Receives**: "Hello, my name is `<PERSON>`. My number is `<PHONE_NUMBER>`"
-3. **LLM Response**: "Nice to meet you, `<PERSON>`!"
-4. **User Receives**: "Nice to meet you, Jane Doe!" ✨
+1. **사용자 입력**: "안녕하세요, 제 이름은 Jane Doe입니다. 제 번호는 555-1234입니다."
+2. **LLM이 받는 내용**: "안녕하세요, 제 이름은 `<PERSON>`입니다. 제 번호는 `<PHONE_NUMBER>`입니다."
+3. **LLM 응답**: "만나서 반갑습니다, `<PERSON>`님!"
+4. **사용자가 받는 내용**: "만나서 반갑습니다, Jane Doe님!" ✨
 
-### Multi-language Support
+### Multi-language 지원
 
-Configure PII detection for different languages:
+여러 language에 대해 PII detection을 구성합니다.
 
 ```yaml
 guardrails:
@@ -347,7 +347,7 @@ guardrails:
         PERSON: "MASK"
 ```
 
-You can also override language per request:
+요청별로 language를 override할 수도 있습니다.
 
 ```bash
 curl -X POST http://localhost:4000/chat/completions \
@@ -365,7 +365,7 @@ curl -X POST http://localhost:4000/chat/completions \
 
 ### Logging-Only Mode
 
-Apply PII masking only to logs (not to actual LLM requests):
+실제 LLM 요청이 아닌 log에만 PII masking을 적용합니다.
 
 ```yaml
 guardrails:
@@ -378,33 +378,33 @@ guardrails:
         EMAIL_ADDRESS: "MASK"
 ```
 
-This is useful when:
-- You want to allow PII in production requests
-- But need to comply with logging regulations
-- Integrating with Langfuse, Datadog, etc.
+다음 경우에 유용합니다.
+- production 요청에서는 PII를 허용해야 함
+- 하지만 logging 규정을 준수해야 함
+- Langfuse, Datadog 등과 integration 중임
 
-## Part 5: Monitoring and Tracing
+## Part 5: Monitoring 및 Tracing
 
-### View Guardrail Execution on LiteLLM UI
+### LiteLLM UI에서 Guardrail 실행 보기
 
-If you're using the LiteLLM Admin UI, you can see detailed guardrail traces:
+LiteLLM 관리자 UI를 사용 중이면 상세 guardrail trace를 볼 수 있습니다.
 
-1. Navigate to the **Logs** page
-2. Click on any request that used the guardrail
-3. View detailed information:
-   - Which entities were detected
-   - Confidence scores for each detection
-   - Guardrail execution duration
-   - Original vs. masked content
+1. **로그** page로 이동합니다.
+2. guardrail을 사용한 요청을 클릭합니다.
+3. 상세 정보를 확인합니다.
+   - 감지된 entity
+   - detection별 confidence score
+   - guardrail 실행 duration
+   - 원본 content와 masked content 비교
 
 <Image 
   img={require('../../img/presidio_4.png')}
   style={{width: '60%', display: 'block', margin: '0'}}
 />
 
-### Integration with Langfuse
+### Langfuse 연동
 
-If you're logging to Langfuse, guardrail information is automatically included:
+Langfuse로 logging 중이면 guardrail 정보가 자동으로 포함됩니다.
 
 ```yaml
 litellm_settings:
@@ -420,9 +420,9 @@ environment_variables:
   style={{width: '60%', display: 'block', margin: '0'}}
 />
 
-### Programmatic Access to Guardrail Metadata
+### Guardrail Metadata에 Programmatic Access
 
-You can access guardrail metadata in custom callbacks:
+custom callback에서 guardrail metadata에 access할 수 있습니다.
 
 ```python
 import litellm
@@ -437,11 +437,11 @@ def custom_callback(kwargs, result, **callback_kwargs):
 litellm.callbacks = [custom_callback]
 ```
 
-## Part 6: Production Best Practices
+## Part 6: Production 권장 사항
 
-### 1. Performance Optimization
+### 1. Performance 최적화
 
-**Use parallel execution for pre-call guardrails:**
+**pre-call guardrail에는 병렬 실행을 사용하세요.**
 
 ```yaml
 guardrails:
@@ -451,7 +451,7 @@ guardrails:
       mode: "during_call"  # Runs in parallel with LLM call
 ```
 
-### 2. Configure Entity Types by Use Case
+### 2. Use case별 Entity Type 구성
 
 **Healthcare Application:**
 
@@ -487,9 +487,9 @@ pii_entities_config:
   CREDIT_CARD: "BLOCK"  # Should never be shared
 ```
 
-### 3. High Availability Setup
+### 3. High Availability 구성
 
-For production deployments, run multiple Presidio instances:
+production 배포에서는 여러 Presidio instance를 실행합니다.
 
 ```yaml
 version: '3.8'
@@ -510,13 +510,13 @@ services:
       replicas: 3
 ```
 
-Use a load balancer (nginx, HAProxy) to distribute requests.
+load balancer(nginx, HAProxy)를 사용해 요청을 분산합니다.
 
-### 4. Custom Entity Recognition
+### 4. Custom Entity 인식 {#custom-entity-recognition}
 
-For domain-specific PII (e.g., internal employee IDs), create custom recognizers:
+domain-specific PII(예: 내부 employee ID)를 위해 custom recognizer를 생성합니다.
 
-Create `custom_recognizers.json`:
+`custom_recognizers.json`을 생성합니다.
 
 ```json
 [
@@ -534,7 +534,7 @@ Create `custom_recognizers.json`:
 ]
 ```
 
-Configure in LiteLLM:
+LiteLLM에서 구성합니다.
 
 ```yaml
 guardrails:
@@ -549,7 +549,7 @@ guardrails:
 
 ### 5. Testing Strategy
 
-Create test cases for your PII masking:
+PII masking용 test case를 생성합니다.
 
 ```python
 import pytest
@@ -590,26 +590,26 @@ def test_pii_masking_allows_normal_text():
     assert response.choices[0].message.content is not None
 ```
 
-## Part 7: Troubleshooting
+## Part 7: 문제 해결
 
-### Issue: Guardrail failure: non-JSON response from Presidio
+### Issue: Guardrail failure: Presidio의 non-JSON response
 
-**Symptom:** You receive an error indicating `expected application/json Content-Type but received text/html` or similar.
+**증상:** `expected application/json Content-Type but received text/html` 또는 유사한 error가 발생합니다.
 
-**Root cause:** Your ingress controller or reverse proxy might be routing the `/analyze` or `/anonymize` POST request to a health endpoint (like `/health` or `/presidio-analyzer/health`) which returns plain text instead of JSON.
+**원인:** ingress controller 또는 reverse proxy가 `/analyze` 또는 `/anonymize` POST 요청을 JSON 대신 plain text를 반환하는 health endpoint(`/health`, `/presidio-analyzer/health` 등)로 routing하고 있을 수 있습니다.
 
-**Fix:** Ensure your `PRESIDIO_ANALYZER_API_BASE` and `PRESIDIO_ANONYMIZER_API_BASE` are correctly pointing directly to the Presidio API endpoints, or that your ingress routes the path correctly without stripping it and inadvertently forwarding to a plain-text health check endpoint.
+**해결:** `PRESIDIO_ANALYZER_API_BASE`와 `PRESIDIO_ANONYMIZER_API_BASE`가 Presidio API endpoint를 직접 가리키는지 확인하세요. 또는 ingress가 path를 strip하지 않고 올바르게 route하며 plain-text health check endpoint로 잘못 forwarding하지 않는지 확인합니다.
 
-**Verification:** You can verify your endpoints using `curl`. It should return a JSON array, not `text/html`:
+**검증:** `curl`로 endpoint를 확인할 수 있습니다. `text/html`이 아니라 JSON array를 반환해야 합니다.
 ```bash
 curl -sv -X POST http://your-analyzer-endpoint/analyze \
   -H "Content-Type: application/json" \
   -d '{"text":"test","language":"en"}'
 ```
 
-### Issue: Presidio Not Detecting PII
+### Issue: Presidio가 PII를 감지하지 못함
 
-**Check 1: Language Configuration**
+**Check 1: Language 설정**
 
 ```bash
 # Verify language is set correctly
@@ -621,9 +621,9 @@ curl -X POST http://localhost:5002/analyze \
   }'
 ```
 
-**Check 2: Entity Types**
+**Check 2: Entity Type**
 
-Ensure the entity types you're looking for are in your config:
+찾으려는 entity type이 config에 포함되어 있는지 확인합니다.
 
 ```yaml
 pii_entities_config:
@@ -631,38 +631,38 @@ pii_entities_config:
   # Add all entity types you need
 ```
 
-[View all supported entity types](https://microsoft.github.io/presidio/supported_entities/)
+[지원되는 모든 entity type 보기](https://microsoft.github.io/presidio/supported_entities/)
 
-### Issue: Presidio Containers Not Starting
+### Issue: Presidio Container가 시작되지 않음
 
-**Check logs:**
+**log 확인:**
 
 ```bash
 docker-compose logs presidio-analyzer
 docker-compose logs presidio-anonymizer
 ```
 
-**Common issues:**
-- Port conflicts (5001, 5002 already in use)
-- Insufficient memory allocation
-- Docker network issues
+**일반적인 문제:**
+- port conflict(5001, 5002가 이미 사용 중)
+- memory allocation 부족
+- Docker network 문제
 
-### Issue: High Latency
+### Issue: 높은 Latency
 
-**Solution 1: Use `during_call` mode**
+**Solution 1: `during_call` mode 사용**
 
 ```yaml
 mode: "during_call"  # Runs in parallel
 ```
 
-**Solution 2: Scale Presidio containers**
+**Solution 2: Presidio container scale-out**
 
 ```yaml
 deploy:
   replicas: 3
 ```
 
-**Solution 3: Enable caching**
+**Solution 3: caching 활성화**
 
 ```yaml
 litellm_settings:
@@ -671,41 +671,41 @@ litellm_settings:
     type: "redis"
 ```
 
-## Conclusion
+## 결론
 
-Congratulations! 🎉 You've successfully set up PII masking with Presidio and LiteLLM. You now have:
+Presidio와 LiteLLM으로 PII masking을 성공적으로 설정했습니다. 이제 다음을 갖추었습니다.
 
-✅ A production-ready PII masking solution  
-✅ Automatic detection of sensitive information  
-✅ Multiple configuration options (masking vs. blocking)  
-✅ Monitoring and tracing capabilities  
-✅ Multi-language support  
-✅ Best practices for production deployment  
+✅ production-ready PII masking 솔루션  
+✅ 민감 정보 자동 detection  
+✅ 여러 configuration option(masking vs. blocking)  
+✅ monitoring 및 tracing capability  
+✅ multi-language 지원  
+✅ production 배포 best practice  
 
-## Next Steps
+## 다음 단계
 
-- **[View all supported PII entity types](https://microsoft.github.io/presidio/supported_entities/)**
-- **[Explore other LiteLLM guardrails](../proxy/guardrails/quick_start)**
-- **[Set up multiple guardrails](../proxy/guardrails/quick_start#combining-multiple-guardrails)**
-- **[Configure per-key guardrails](../proxy/virtual_keys#guardrails)**
-- **[Learn about custom guardrails](../proxy/guardrails/custom_guardrail)**
+- **[지원되는 모든 PII entity type 보기](https://microsoft.github.io/presidio/supported_entities/)**
+- **[다른 LiteLLM guardrail 살펴보기](../proxy/guardrails/quick_start)**
+- **[여러 guardrail 설정](../proxy/guardrails/quick_start#combining-multiple-guardrails)**
+- **[key별 guardrail 구성](../proxy/virtual_keys#guardrails)**
+- **[custom guardrail 학습](../proxy/guardrails/custom_guardrail)**
 
-## Additional Resources
+## 추가 자료
 
-- [Presidio Documentation](https://microsoft.github.io/presidio/)
-- [LiteLLM Guardrails Reference](../proxy/guardrails/pii_masking_v2)
+- [Presidio 문서](https://microsoft.github.io/presidio/)
+- [LiteLLM 가드레일 Reference](../proxy/guardrails/pii_masking_v2)
 - [LiteLLM GitHub Repository](https://github.com/BerriAI/litellm)
-- [Report Issues](https://github.com/BerriAI/litellm/issues)
+- [Issue 보고](https://github.com/BerriAI/litellm/issues)
 
 ---
 
-**Need help?** Join our [Discord community](https://discord.com/invite/wuPM9dRgDw) or open an issue on GitHub!
+**도움이 필요하신가요?** [Discord community](https://discord.com/invite/wuPM9dRgDw)에 참여하거나 GitHub issue를 열어 주세요.
 
-### Suppressing False Positives
+### False Positive 억제
 
-Presidio can sometimes trigger false positive detections. For example, short alphanumeric strings might be incorrectly flagged as `US_DRIVER_LICENSE`.
+Presidio는 때때로 false positive detection을 발생시킬 수 있습니다. 예를 들어 짧은 alphanumeric string이 `US_DRIVER_LICENSE`로 잘못 flag될 수 있습니다.
 
-You can suppress these false positives using `presidio_score_thresholds` or `presidio_entities_deny_list`.
+`presidio_score_thresholds` 또는 `presidio_entities_deny_list`를 사용해 이러한 false positive를 억제할 수 있습니다.
 
 ```yaml
 guardrails:

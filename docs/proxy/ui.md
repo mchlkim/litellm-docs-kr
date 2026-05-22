@@ -2,20 +2,20 @@ import Image from '@theme/IdealImage';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Quick Start
+# 빠른 시작
 
-Create keys, track spend, add models without worrying about the config / CRUD endpoints.
+config / CRUD 엔드포인트를 직접 다루지 않고 키 생성, spend 추적, 모델 추가를 수행할 수 있습니다.
 
 <Image img={require('../../img/litellm_ui_create_key.png')} />
 
-## Quick Start
+## 빠른 시작
 
-- Requires proxy master key to be set
-- Requires db connected
+- 프록시 master key 설정이 필요합니다.
+- DB 연결이 필요합니다.
 
-Follow [setup](./virtual_keys.md#setup)
+[설정](./virtual_keys.md#setup)을 따르세요.
 
-### 1. Start the proxy
+### 1. 프록시 시작
 
 ```bash
 litellm --config /path/to/config.yaml
@@ -23,21 +23,21 @@ litellm --config /path/to/config.yaml
 #INFO: Proxy running on http://0.0.0.0:4000
 ```
 
-### 2. Go to UI
+### 2. UI로 이동 {#2-go-to-ui}
 
 ```bash
 http://0.0.0.0:4000/ui # <proxy_base_url>/ui
 ```
 
-### 3. Get Admin UI Link on Swagger
+### 3. Swagger에서 관리자 UI 링크 확인 {#3-get-admin-ui-link-on-swagger}
 
-Your Proxy Swagger is available on the root of the Proxy: e.g.: `http://localhost:4000/`
+Proxy Swagger는 프록시 루트에서 사용할 수 있습니다. 예: `http://localhost:4000/`
 
 <Image img={require('../../img/ui_link.png')} />
 
-### 4. Change default username + password
+### 4. 기본 사용자 이름 및 비밀번호 변경 {#4-change-default-username--password}
 
-Set the following in your .env on the Proxy
+프록시의 `.env`에 다음 값을 설정합니다.
 
 ```shell
 LITELLM_MASTER_KEY="sk-1234" # this is your master key for using the proxy server
@@ -45,47 +45,47 @@ UI_USERNAME=ishaan-litellm   # username to sign in on UI
 UI_PASSWORD=langchain        # password to sign in on UI
 ```
 
-On accessing the LiteLLM UI, you will be prompted to enter your username, password
+LiteLLM UI에 접근하면 사용자 이름과 비밀번호를 입력하라는 메시지가 표시됩니다.
 
-### 5. Configure Root Redirect URL
+### 5. 루트 리디렉션 URL 구성 {#5-configure-root-redirect-url}
 
-When `DOCS_URL` is set to something other than `"/"`, you can configure where the root path (`/`) redirects to using `ROOT_REDIRECT_URL`:
+`DOCS_URL`이 `"/"`가 아닌 값으로 설정된 경우 `ROOT_REDIRECT_URL`을 사용해 루트 경로(`/`)가 리디렉션될 위치를 구성할 수 있습니다.
 
 ```shell
 DOCS_URL="/docs"              # Set docs to a different path
 ROOT_REDIRECT_URL="/ui"       # Redirect root path (/) to /ui
 ```
 
-By default, `DOCS_URL` is `"/"`, so this setting is only needed when you've changed `DOCS_URL` to a different path.
+기본적으로 `DOCS_URL`은 `"/"`입니다. 따라서 이 설정은 `DOCS_URL`을 다른 경로로 변경한 경우에만 필요합니다.
 
-## Invite-other users
+## 다른 사용자 초대 {#invite-other-users}
 
-Allow others to create/delete their own keys.
+다른 사용자가 자신의 키를 생성/삭제할 수 있게 합니다.
 
-[**Go Here**](./self_serve.md)
+[**여기로 이동**](./self_serve.md)
 
-## Model Management
+## 모델 관리 {#model-management}
 
-The Admin UI provides comprehensive model management capabilities:
+관리자 UI는 포괄적인 모델 관리 기능을 제공합니다.
 
-- **Add Models**: Add new models through the UI without restarting the proxy
-- **AI Hub**: Make models and agents public for developers to discover what's available
-- **Price Data Sync**: Keep model pricing data up to date by syncing from GitHub
+- **모델 추가**: 프록시를 재시작하지 않고 UI에서 새 모델을 추가합니다.
+- **AI Hub**: 개발자가 사용 가능한 항목을 확인할 수 있도록 모델과 에이전트를 공개합니다.
+- **가격 데이터 동기화**: GitHub에서 동기화해 모델 가격 데이터를 최신 상태로 유지합니다.
 
-For detailed information on model management, see [Model Management](./model_management.md).
+모델 관리에 대한 자세한 내용은 [Model Management](./model_management.md)를 참고하세요.
 
-For information on sharing models and agents, see [AI Hub](./ai_hub.md).
+모델 및 에이전트 공유에 대한 내용은 [AI Hub](./ai_hub.md)를 참고하세요.
 
-:::tip Sync Model Pricing Data
-[Sync model pricing data from GitHub](./sync_models_github.md) to keep your model cost information current.
+:::tip 모델 가격 데이터 동기화
+모델 비용 정보를 최신 상태로 유지하려면 [GitHub에서 모델 가격 데이터를 동기화](./sync_models_github.md)하세요.
 :::
 
-## Disable Admin UI
+## 관리자 UI 비활성화 {#disable-admin-ui}
 
-Set `DISABLE_ADMIN_UI="True"` in your environment to disable the Admin UI.
+관리자 UI를 비활성화하려면 환경에 `DISABLE_ADMIN_UI="True"`를 설정합니다.
 
-Useful, if your security team has additional restrictions on UI usage.
+보안 팀이 UI 사용에 추가 제한을 두는 경우 유용합니다.
 
-**Expected Response**
+**예상 응답**
 
 <Image img={require('../../img/admin_ui_disabled.png')}/>

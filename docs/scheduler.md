@@ -1,30 +1,30 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# [BETA] Request Prioritization
+# [베타] 요청 우선순위 지정 {#request-prioritization}
 
 :::info 
 
-Beta feature. Use for testing only. 
+베타 기능입니다. 테스트 용도로만 사용하세요.
 
-[Help us improve this](https://github.com/BerriAI/litellm/issues)
+[개선에 참여하기](https://github.com/BerriAI/litellm/issues)
 :::
 
-Prioritize LLM API requests in high-traffic.
+트래픽이 많은 상황에서 LLM API 요청의 우선순위를 지정합니다.
 
-- Add request to priority queue
-- Poll queue, to check if request can be made. Returns 'True':
-    * if there's healthy deployments 
-    * OR if request is at top of queue
-- Priority - The lower the number, the higher the priority: 
-    * e.g. `priority=0` > `priority=2000`
+- 요청을 우선순위 큐에 추가합니다.
+- 요청을 보낼 수 있는지 확인하기 위해 큐를 폴링합니다. 다음 경우 'True'를 반환합니다.
+    * 정상 상태인 배포가 있는 경우
+    * 또는 요청이 큐의 맨 앞에 있는 경우
+- 우선순위 - 숫자가 낮을수록 우선순위가 높습니다.
+    * 예: `priority=0` > `priority=2000`
 
-Supported Router endpoints:
-- `acompletion` (`/v1/chat/completions` on Proxy)
-- `atext_completion` (`/v1/completions` on Proxy)
+지원되는 Router 엔드포인트:
+- `acompletion` (Proxy의 `/v1/chat/completions`)
+- `atext_completion` (Proxy의 `/v1/completions`)
 
 
-## Quick Start 
+## 빠른 시작 
 
 ```python
 from litellm import Router
@@ -55,9 +55,9 @@ except Exception as e:
     print("didn't make request")
 ```
 
-## LiteLLM Proxy
+## LiteLLM Proxy {#litellm-proxy}
 
-To prioritize requests on LiteLLM Proxy add `priority` to the request.
+LiteLLM Proxy에서 요청의 우선순위를 지정하려면 요청에 `priority`를 추가하세요.
 
 <Tabs>
 <TabItem value="curl" label="curl">
@@ -107,9 +107,9 @@ print(response)
 </TabItem>
 </Tabs>
 
-## Advanced - Redis Caching 
+## 고급 - Redis 캐싱 {#advanced-redis-caching}
 
-Use redis caching to do request prioritization across multiple instances of LiteLLM. 
+Redis 캐싱을 사용하면 여러 LiteLLM 인스턴스에 걸쳐 요청 우선순위 지정을 수행할 수 있습니다.
 
 ### SDK 
 ```python

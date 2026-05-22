@@ -2,19 +2,19 @@ import Image from '@theme/IdealImage';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Custom Guardrail
+# 커스텀 가드레일
 
-Use this if you want to write code to run a custom guardrail
+커스텀 가드레일을 실행하는 코드를 작성하려면 이 방법을 사용하세요.
 
-## Quick Start 
+## 빠른 시작 
 
-### 1. Write a `CustomGuardrail` Class
+### 1. `CustomGuardrail` 클래스 작성 {#1-write-a-customguardrail-class}
 
-The simplest way to create a custom guardrail is by implementing the `apply_guardrail` method. This method is called to check text content and can block requests by raising an exception.
+커스텀 가드레일을 만드는 가장 간단한 방법은 `apply_guardrail` 메서드를 구현하는 것입니다. 이 메서드는 텍스트 콘텐츠를 검사할 때 호출되며, 예외를 발생시켜 요청을 차단할 수 있습니다.
 
-**Example `CustomGuardrail` Class**
+**예제 `CustomGuardrail` 클래스**
 
-Create a new file called `custom_guardrail.py` and add this code to it:
+`custom_guardrail.py`라는 새 파일을 만들고 다음 코드를 추가하세요.
 
 ```python
 import os
@@ -71,25 +71,25 @@ class myCustomGuardrail(CustomGuardrail):
         return response.json()
 ```
 
-:::tip Advanced: Using Individual Event Hooks
+:::tip 고급: 개별 이벤트 훅 사용
 
-If you need more fine-grained control, you can implement individual event hooks instead of (or in addition to) `apply_guardrail`:
+더 세밀하게 제어해야 한다면 `apply_guardrail` 대신 또는 함께 개별 이벤트 훅을 구현할 수 있습니다.
 
-- `async_pre_call_hook` - Modify input or reject request before making LLM API call
-- `async_moderation_hook` - Reject request, runs in parallel with LLM API call (helps lower latency)
-- `async_post_call_success_hook` - Apply guardrail on input/output, runs after making LLM API call
-- `async_post_call_streaming_iterator_hook` - Pass the entire stream to the guardrail
+- `async_pre_call_hook` - LLM API 호출 전에 입력을 수정하거나 요청을 거부합니다.
+- `async_moderation_hook` - 요청을 거부합니다. LLM API 호출과 병렬로 실행되어 지연 시간을 줄이는 데 도움이 됩니다.
+- `async_post_call_success_hook` - LLM API 호출 후 실행되며 입력/출력에 가드레일을 적용합니다.
+- `async_post_call_streaming_iterator_hook` - 전체 스트림을 가드레일에 전달합니다.
 
-**[See examples of individual event hooks here](#advanced-individual-event-hooks)** | **[See detailed spec of methods here](#customguardrail-methods)**
+**[개별 이벤트 훅 예제 보기](#advanced-individual-event-hooks)** | **[메서드 상세 사양 보기](#customguardrail-methods)**
 
 :::
 
-### 2. Pass your custom guardrail class in LiteLLM `config.yaml`
+### 2. LiteLLM `config.yaml`에 커스텀 가드레일 클래스 전달
 
-In the config below, we point the guardrail to our custom guardrail by setting `guardrail: custom_guardrail.myCustomGuardrail`
+아래 설정에서는 `guardrail: custom_guardrail.myCustomGuardrail`을 지정해 가드레일이 커스텀 가드레일을 가리키도록 합니다.
 
-- Python Filename: `custom_guardrail.py`
-- Guardrail class name : `myCustomGuardrail`. This is defined in Step 1
+- Python 파일명: `custom_guardrail.py`
+- 가드레일 클래스 이름: `myCustomGuardrail`. 1단계에서 정의한 클래스입니다.
 
 `guardrail: custom_guardrail.myCustomGuardrail`
 
@@ -109,26 +109,26 @@ guardrails:
       api_base: https://api.myguardrail.com
 ```
 
-:::info Mode Options
+:::info 모드 옵션
 
-- `during_call` - Default mode, runs `apply_guardrail` method (or `async_moderation_hook` if using individual hooks)
-- `pre_call` - Runs `async_pre_call_hook` for input modification
-- `post_call` - Runs `async_post_call_success_hook` for output validation
+- `during_call` - 기본 모드입니다. `apply_guardrail` 메서드를 실행합니다. 개별 훅을 사용하는 경우 `async_moderation_hook`을 실행합니다.
+- `pre_call` - 입력 수정을 위해 `async_pre_call_hook`을 실행합니다.
+- `post_call` - 출력 검증을 위해 `async_post_call_success_hook`을 실행합니다.
 
 :::
 
-:::note Streaming and post_call guardrails
+:::note 스트리밍 및 post_call 가드레일
 
-For **streaming responses**, `post_call` guardrails run on the fully assembled response **after** all chunks have been delivered to the client. This means `post_call` guardrails on streaming are **audit-only** — they can inspect and log the complete response, but cannot block content delivery. Guardrail results are recorded in `guardrail_information` within the logging payload for compliance and auditing.
+**스트리밍 응답**에서는 모든 청크가 클라이언트에 전달된 **후** 완전히 조립된 응답에 대해 `post_call` 가드레일이 실행됩니다. 즉, 스트리밍의 `post_call` 가드레일은 **감사 전용**입니다. 완전한 응답을 검사하고 로그로 남길 수는 있지만, 콘텐츠 전달을 차단할 수는 없습니다. 가드레일 결과는 규정 준수와 감사를 위해 로깅 페이로드의 `guardrail_information`에 기록됩니다.
 
-To filter or block streaming content in real-time, use `async_post_call_streaming_iterator_hook` instead, which processes chunks as they arrive.
+스트리밍 콘텐츠를 실시간으로 필터링하거나 차단하려면 청크가 도착할 때 처리하는 `async_post_call_streaming_iterator_hook`을 대신 사용하세요.
 
 :::
 
 <details>
-<summary>Advanced: Multiple modes with individual event hooks</summary>
+<summary>고급: 개별 이벤트 훅으로 여러 모드 사용</summary>
 
-If you're using individual event hooks, you can configure multiple guardrails with different modes:
+개별 이벤트 훅을 사용하는 경우 서로 다른 모드로 여러 가드레일을 설정할 수 있습니다.
 
 ```yaml
 guardrails:
@@ -148,14 +148,14 @@ guardrails:
 
 </details>
 
-### 3. Start LiteLLM Gateway 
+### 3. LiteLLM Gateway 시작
 
 <Tabs>
-<TabItem value="docker" label="Docker Run">
+<TabItem value="docker" label="Docker 실행">
 
-Mount your `custom_guardrail.py` on the LiteLLM Docker container
+LiteLLM Docker 컨테이너에 `custom_guardrail.py`를 마운트합니다.
 
-This mounts your `custom_guardrail.py` file from your local directory to the `/app` directory in the Docker container, making it accessible to the LiteLLM Gateway.
+이렇게 하면 로컬 디렉터리의 `custom_guardrail.py` 파일이 Docker 컨테이너의 `/app` 디렉터리에 마운트되어 LiteLLM Gateway에서 접근할 수 있습니다.
 
 
 ```shell
@@ -184,14 +184,14 @@ litellm --config config.yaml --detailed_debug
 
 </Tabs>
 
-### 4. Test it 
+### 4. 테스트
 
-**[Langchain, OpenAI SDK Usage Examples](../proxy/user_keys#request-format)**
+**[Langchain, OpenAI SDK 사용법 예제](../proxy/user_keys#request-format)**
 
 <Tabs>
-<TabItem label="Blocked Request" value = "blocked">
+<TabItem label="차단된 요청" value = "blocked">
 
-This request will be blocked if it violates your guardrail policy:
+이 요청은 가드레일 정책을 위반하면 차단됩니다.
 
 ```shell
 curl -i -X POST http://localhost:4000/v1/chat/completions \
@@ -209,7 +209,7 @@ curl -i -X POST http://localhost:4000/v1/chat/completions \
 }'
 ```
 
-Expected response when blocked:
+차단될 때 예상 응답:
 
 ```json
 {
@@ -224,9 +224,9 @@ Expected response when blocked:
 
 </TabItem>
 
-<TabItem label="Successful Call" value = "allowed">
+<TabItem label="성공한 호출" value = "allowed">
 
-This request passes the guardrail:
+이 요청은 가드레일을 통과합니다.
 
 ```shell
 curl -i http://localhost:4000/v1/chat/completions \
@@ -246,16 +246,16 @@ curl -i http://localhost:4000/v1/chat/completions \
 </Tabs>
 
 <details>
-<summary>Advanced: Testing individual event hooks</summary>
+<summary>고급: 개별 이벤트 훅 테스트</summary>
 
-If you're using individual event hooks, you can test each mode separately:
+개별 이벤트 훅을 사용하는 경우 각 모드를 별도로 테스트할 수 있습니다.
 
-#### Test `"custom-pre-guard"`
+#### `"custom-pre-guard"` 테스트
 
 <Tabs>
-<TabItem label="Modify input" value = "not-allowed">
+<TabItem label="입력 수정" value = "not-allowed">
 
-Expect this to mask the word `litellm` before sending the request to the LLM API. [This runs the `async_pre_call_hook`](#advanced-individual-event-hooks)
+요청을 LLM API로 보내기 전에 `litellm` 단어가 마스킹될 것으로 예상합니다. [이 작업은 `async_pre_call_hook`을 실행합니다](#advanced-individual-event-hooks).
 
 ```shell
 curl -i  -X POST http://localhost:4000/v1/chat/completions \
@@ -275,7 +275,7 @@ curl -i  -X POST http://localhost:4000/v1/chat/completions \
 
 </TabItem>
 
-<TabItem label="Successful Call " value = "allowed">
+<TabItem label="성공한 호출" value = "allowed">
 
 ```shell
 curl -i http://localhost:4000/v1/chat/completions \
@@ -294,12 +294,12 @@ curl -i http://localhost:4000/v1/chat/completions \
 
 </Tabs>
 
-#### Test `"custom-during-guard"`
+#### `"custom-during-guard"` 테스트
 
 <Tabs>
-<TabItem label="Unsuccessful call" value = "not-allowed">
+<TabItem label="실패한 호출" value = "not-allowed">
 
-Expect this to fail since `litellm` is in the message content. [This runs the `async_moderation_hook`](#advanced-individual-event-hooks)
+메시지 콘텐츠에 `litellm`이 있으므로 실패할 것으로 예상합니다. [이 작업은 `async_moderation_hook`을 실행합니다](#advanced-individual-event-hooks).
 
 ```shell
 curl -i  -X POST http://localhost:4000/v1/chat/completions \
@@ -317,7 +317,7 @@ curl -i  -X POST http://localhost:4000/v1/chat/completions \
 }'
 ```
 
-Expected response:
+예상 응답:
 
 ```json
 {
@@ -332,7 +332,7 @@ Expected response:
 
 </TabItem>
 
-<TabItem label="Successful Call " value = "allowed">
+<TabItem label="성공한 호출" value = "allowed">
 
 ```shell
 curl -i http://localhost:4000/v1/chat/completions \
@@ -351,12 +351,12 @@ curl -i http://localhost:4000/v1/chat/completions \
 
 </Tabs>
 
-#### Test `"custom-post-guard"`
+#### `"custom-post-guard"` 테스트
 
 <Tabs>
-<TabItem label="Unsuccessful call" value = "not-allowed">
+<TabItem label="실패한 호출" value = "not-allowed">
 
-Expect this to fail since `coffee` will be in the response content. [This runs the `async_post_call_success_hook`](#advanced-individual-event-hooks)
+응답 콘텐츠에 `coffee`가 포함될 것이므로 실패할 것으로 예상합니다. [이 작업은 `async_post_call_success_hook`을 실행합니다](#advanced-individual-event-hooks).
 
 ```shell
 curl -i  -X POST http://localhost:4000/v1/chat/completions \
@@ -374,7 +374,7 @@ curl -i  -X POST http://localhost:4000/v1/chat/completions \
 }'
 ```
 
-Expected response:
+예상 응답:
 
 ```json
 {
@@ -389,7 +389,7 @@ Expected response:
 
 </TabItem>
 
-<TabItem label="Successful Call " value = "allowed">
+<TabItem label="성공한 호출" value = "allowed">
 
 ```shell
 curl -i  -X POST http://localhost:4000/v1/chat/completions \
@@ -413,20 +413,20 @@ curl -i  -X POST http://localhost:4000/v1/chat/completions \
 
 </details>
 
-## ✨ Pass additional parameters to guardrail
+## ✨ 가드레일에 추가 파라미터 전달
 
 :::info
 
-✨ This is an Enterprise only feature [Contact us to get a free trial](https://enterprise.litellm.ai/demo)
+✨ 이 기능은 엔터프라이즈 전용 기능입니다. [무료 평가판 문의하기](https://enterprise.litellm.ai/demo)
 
 :::
 
 
-Use this to pass additional parameters to the guardrail API call. e.g. things like success threshold
+가드레일 API 호출에 추가 파라미터를 전달하려면 이 방법을 사용하세요. 예를 들어 성공 임곗값 같은 값을 전달할 수 있습니다.
 
-1. Use `get_guardrail_dynamic_request_body_params`
+1. `get_guardrail_dynamic_request_body_params` 사용
 
-`get_guardrail_dynamic_request_body_params` is a method of the `litellm.integrations.custom_guardrail.CustomGuardrail` class that fetches the dynamic guardrail params passed in the request body.
+`get_guardrail_dynamic_request_body_params`는 요청 본문에 전달된 동적 가드레일 파라미터를 가져오는 `litellm.integrations.custom_guardrail.CustomGuardrail` 클래스의 메서드입니다.
 
 ```python
 from typing import Any, Dict, List, Literal, Optional, Union
@@ -463,9 +463,9 @@ class myCustomGuardrail(CustomGuardrail):
         return data
 ```
 
-2. Pass parameters in your API requests:
+2. API 요청에 파라미터 전달:
 
-LiteLLM Proxy allows you to pass `guardrails` in the request body, following the [`guardrails` spec](quick_start#spec-guardrails-parameter).
+LiteLLM Proxy에서는 [`guardrails` 사양](quick_start#spec-guardrails-parameter)에 따라 요청 본문에 `guardrails`를 전달할 수 있습니다.
 
 <Tabs>
 <TabItem value="openai" label="OpenAI Python">
@@ -518,25 +518,25 @@ curl 'http://0.0.0.0:4000/chat/completions' \
 </TabItem>
 </Tabs>
 
-The `get_guardrail_dynamic_request_body_params` method will return:
+`get_guardrail_dynamic_request_body_params` 메서드는 다음을 반환합니다.
 ```json
 {
     "success_threshold": 0.9
 }
 ```
 
-## Advanced: Individual Event Hooks
+## 고급: 개별 이벤트 훅
 
-Pro: More flexibility
-Con: You need to implement this for each LLM call type (chat completions, text completions, embeddings, image generation, moderation, audio transcription, pass through endpoint, rerank, etc. )
+장점: 유연성이 더 높습니다.
+단점: 각 LLM 호출 유형(chat completions, text completions, embeddings, image generation, moderation, audio transcription, pass through endpoint, rerank 등)에 대해 구현해야 합니다.
 
-For more fine-grained control over when and how your guardrail runs, you can implement individual event hooks. This gives you flexibility to:
-- Modify inputs before the LLM call
-- Run checks in parallel with the LLM call (lower latency)
-- Validate or modify outputs after the LLM call
-- Process streaming responses
+가드레일이 언제, 어떻게 실행되는지 더 세밀하게 제어하려면 개별 이벤트 훅을 구현할 수 있습니다. 이를 통해 다음 작업을 유연하게 처리할 수 있습니다.
+- LLM 호출 전에 입력 수정
+- LLM 호출과 병렬로 검사 실행(지연 시간 감소)
+- LLM 호출 후 출력 검증 또는 수정
+- 스트리밍 응답 처리
 
-### Example with Individual Event Hooks
+### 개별 이벤트 훅 예제
 
 ```python
 from typing import Any, AsyncGenerator, Literal, Optional, Union
@@ -656,31 +656,31 @@ class myCustomGuardrail(CustomGuardrail):
 
 ```
 
-## **CustomGuardrail methods**
+## **CustomGuardrail 메서드**
 
-| Component | Description | Optional | Checked Data | Can Modify Input | Can Modify Output | Can Fail Call |
+| 컴포넌트 | 설명 | 선택 사항 | 검사 데이터 | 입력 수정 가능 | 출력 수정 가능 | 호출 실패 가능 |
 |-----------|-------------|----------|--------------|------------------|-------------------|----------------|
-| `apply_guardrail` | Simple method to check and optionally modify text | ✅ | INPUT or OUTPUT | ✅ | ✅ | ✅ |
-| `async_pre_call_hook` | A hook that runs before the LLM API call | ✅ | INPUT | ✅ | ❌ | ✅ |
-| `async_moderation_hook` | A hook that runs during the LLM API call| ✅ | INPUT | ❌ | ❌ | ✅ |
-| `async_post_call_success_hook` | A hook that runs after a successful LLM API call. For streaming, runs on the assembled response after delivery (audit-only, cannot block). | ✅ | INPUT, OUTPUT | ❌ | ✅ | ✅ (non-streaming only) |
-| `async_post_call_streaming_iterator_hook` | A hook that processes streaming responses in real-time (can filter/block chunks) | ✅ | OUTPUT | ❌ | ✅ | ✅ |
+| `apply_guardrail` | 텍스트를 검사하고 선택적으로 수정하는 간단한 메서드 | ✅ | INPUT 또는 OUTPUT | ✅ | ✅ | ✅ |
+| `async_pre_call_hook` | LLM API 호출 전에 실행되는 훅 | ✅ | INPUT | ✅ | ❌ | ✅ |
+| `async_moderation_hook` | LLM API 호출 중에 실행되는 훅 | ✅ | INPUT | ❌ | ❌ | ✅ |
+| `async_post_call_success_hook` | 성공한 LLM API 호출 후 실행되는 훅입니다. 스트리밍에서는 전달 후 조립된 응답에 대해 실행됩니다(감사 전용, 차단 불가). | ✅ | INPUT, OUTPUT | ❌ | ✅ | ✅ (비스트리밍에서만) |
+| `async_post_call_streaming_iterator_hook` | 스트리밍 응답을 실시간으로 처리하는 훅입니다(청크 필터링/차단 가능). | ✅ | OUTPUT | ❌ | ✅ | ✅ |
 
 
-## Frequently Asked Questions
+## 자주 묻는 질문
 
-**Q. Is `apply_guardrail` relevant both in the request and in the response (pre_call, during_call and post_call hooks)?**
+**Q. `apply_guardrail`은 요청과 응답 모두(pre_call, during_call, post_call 훅)에 적용되나요?**
 
-**A.** Yes, one function works in both - See implementation [here](https://github.com/BerriAI/litellm/blob/0292b84dc47473ddeff29bd5a86f529bc523034b/litellm/proxy/utils.py#L825)
+**A.** 예, 하나의 함수가 양쪽 모두에서 작동합니다. 구현은 [여기](https://github.com/BerriAI/litellm/blob/0292b84dc47473ddeff29bd5a86f529bc523034b/litellm/proxy/utils.py#L825)를 참고하세요.
 
-**Q. What do I get in the inputs of `apply_guardrail`? What does each field represent (what is text, language, entities, request_data)?**
+**Q. `apply_guardrail`의 입력으로 무엇을 받나요? 각 필드(text, language, entities, request_data)는 무엇을 의미하나요?**
 
-**A.** The main one you should care about is 'text' - this is what you'll want to send to your api for verification - See implementation [here](https://github.com/BerriAI/litellm/blob/0292b84dc47473ddeff29bd5a86f529bc523034b/litellm/llms/anthropic/chat/guardrail_translation/handler.py#L102)
+**A.** 가장 중요한 것은 'text'입니다. 검증을 위해 API로 보내려는 값입니다. 구현은 [여기](https://github.com/BerriAI/litellm/blob/0292b84dc47473ddeff29bd5a86f529bc523034b/litellm/llms/anthropic/chat/guardrail_translation/handler.py#L102)를 참고하세요.
 
-**Q. Is this function agnostic to the LLM provider? Meaning does it pass the same values for OpenAI and Anthropic for example?
+**Q. 이 함수는 LLM 제공자와 무관한가요? 예를 들어 OpenAI와 Anthropic에 동일한 값을 전달하나요?**
 
-**A.** Yes
+**A.** 예.
 
-**Q. How do I know if my guardrail is running?**
+**Q. 내 가드레일이 실행 중인지 어떻게 확인하나요?**
 
-**A.** If you implement `apply_guardrail`, you can query the guardrail directly via [the `/apply_guardrail` API](../../apply_guardrail).
+**A.** `apply_guardrail`을 구현했다면 [`/apply_guardrail` API](../../apply_guardrail)를 통해 가드레일을 직접 쿼리할 수 있습니다.

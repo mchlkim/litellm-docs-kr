@@ -1,20 +1,20 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# [BETA] Google AI Studio (Gemini) Files API
+# [BETA] Google AI Studio (Gemini) 파일 API {#beta-google-ai-studio-gemini-files-api}
 
-Use this to upload files to Google AI Studio (Gemini).
+Google AI Studio (Gemini)에 파일을 업로드할 때 사용합니다.
 
-Useful to pass in large media files to Gemini's `/generateContent` endpoint.
+대용량 미디어 파일을 Gemini의 `/generateContent` 엔드포인트로 전달할 때 유용합니다.
 
-| Action | Supported | 
+| 작업 | 지원 여부 | 
 |----------|-----------|
-| `create` | Yes |
-| `delete` | No |
-| `retrieve` | No |
-| `list` | No |
+| `create` | 예 |
+| `delete` | 아니요 |
+| `retrieve` | 아니요 |
+| `list` | 아니요 |
 
-## Usage
+## 사용법
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -78,7 +78,7 @@ print(completion.choices[0].message)
 </TabItem>
 <TabItem value="proxy" label="PROXY">
 
-1. Setup config.yaml
+1. config.yaml 설정
 
 ```yaml
 model_list:
@@ -88,13 +88,13 @@ model_list:
         api_key: os.environ/GEMINI_API_KEY
 ```
 
-2. Start proxy
+2. proxy 시작
 
 ```bash
 litellm --config config.yaml
 ```
 
-3. Test it
+3. 테스트
 
 ```python
 import base64
@@ -159,41 +159,41 @@ print(completion.choices[0].message)
 </TabItem>
 </Tabs>
 
-## Azure Blob Storage Integration
+## Azure Blob Storage 통합 {#azure-blob-storage-integration}
 
-LiteLLM supports using Azure Blob Storage as a target storage backend for Gemini file uploads. This allows you to store files in Azure Data Lake Storage Gen2 instead of Google's managed storage.
+LiteLLM은 Gemini 파일 업로드의 대상 스토리지 백엔드로 Azure Blob Storage를 사용하는 방식을 지원합니다. 이를 사용하면 Google 관리형 스토리지 대신 Azure Data Lake Storage Gen2에 파일을 저장할 수 있습니다.
 
-### Step 1: Setup Azure Blob Storage
+### 1단계: Azure Blob Storage 설정 {#step-1-setup-azure-blob-storage}
 
-Configure your Azure Blob Storage account by setting the following environment variables:
+다음 환경 변수를 설정해 Azure Blob Storage 계정을 구성합니다.
 
-**Required Environment Variables:**
-- `AZURE_STORAGE_ACCOUNT_NAME` - Your Azure Storage account name
-- `AZURE_STORAGE_FILE_SYSTEM` - The container/filesystem name where files will be stored
-- `AZURE_STORAGE_ACCOUNT_KEY` - Your account key
+**필수 환경 변수:**
+- `AZURE_STORAGE_ACCOUNT_NAME` - Azure Storage 계정 이름
+- `AZURE_STORAGE_FILE_SYSTEM` - 파일이 저장될 컨테이너/파일 시스템 이름
+- `AZURE_STORAGE_ACCOUNT_KEY` - 계정 키
 
-### Step 2: Pass Azure Blob Storage as Target Storage
+### 2단계: Azure Blob Storage를 대상 스토리지로 전달 {#step-2-pass-azure-blob-storage-as-target-storage}
 
-When uploading files, specify `target_storage: "azure_storage"` to use Azure Blob Storage instead of the default storage.
+파일을 업로드할 때 기본 스토리지 대신 Azure Blob Storage를 사용하려면 `target_storage: "azure_storage"`를 지정합니다.
 
-**Supported File Types:**
+**지원되는 파일 형식:**
 
-Azure Blob Storage supports all Gemini-compatible file types:
+Azure Blob Storage는 Gemini와 호환되는 모든 파일 형식을 지원합니다.
 
-- **Images**: PNG, JPEG, WEBP
-- **Audio**: AAC, FLAC, MP3, MPA, MPEG, MPGA, OPUS, PCM, WAV, WEBM
-- **Video**: FLV, MOV, MPEG, MPEGPS, MPG, MP4, WEBM, WMV, 3GPP
-- **Documents**: PDF, TXT
+- **이미지**: PNG, JPEG, WEBP
+- **오디오**: AAC, FLAC, MP3, MPA, MPEG, MPGA, OPUS, PCM, WAV, WEBM
+- **비디오**: FLV, MOV, MPEG, MPEGPS, MPG, MP4, WEBM, WMV, 3GPP
+- **문서**: PDF, TXT
 
-> **Note:** Only small files can be sent as inline data because the total request size limit is 20 MB.
+> **참고:** 전체 요청 크기 제한이 20 MB이므로 작은 파일만 inline data로 전송할 수 있습니다.
 
 
-### Step 3: Upload Files with Azure Blob Storage for Gemini
+### 3단계: Gemini용 Azure Blob Storage로 파일 업로드 {#step-3-upload-files-with-azure-blob-storage-for-gemini}
 
 <Tabs>
 <TabItem value="proxy" label="PROXY">
 
-1. Setup config.yaml
+1. config.yaml 설정
 
 ```yaml
 model_list:
@@ -203,22 +203,22 @@ model_list:
         api_key: os.environ/GEMINI_API_KEY
 ```
 
-2. Set environment variables
+2. 환경 변수 설정
 
 ```bash
 export AZURE_STORAGE_ACCOUNT_NAME="your-storage-account"
 export AZURE_STORAGE_FILE_SYSTEM="your-container-name"
 export AZURE_STORAGE_ACCOUNT_KEY="your-account-key"
 ```
-or add them in your `.env`
+또는 `.env`에 추가합니다.
 
-3. Start proxy
+3. proxy 시작
 
 ```bash
 litellm --config config.yaml
 ```
 
-4. Upload file with Azure Blob Storage
+4. Azure Blob Storage로 파일 업로드
 
 ```python
 from openai import OpenAI
@@ -303,6 +303,5 @@ curl -X POST "http://0.0.0.0:4000/v1/chat/completions" \
 </Tabs>
 
 :::info
-Files uploaded to Azure Blob Storage are stored in your Azure account and can be accessed via the returned file ID. The file URL format is: `https://{account}.blob.core.windows.net/{container}/{path}`
+Azure Blob Storage에 업로드된 파일은 Azure 계정에 저장되며 반환된 file ID로 접근할 수 있습니다. 파일 URL 형식은 `https://{account}.blob.core.windows.net/{container}/{path}`입니다.
 :::
-

@@ -4,15 +4,15 @@ import Image from '@theme/IdealImage';
 
 # HuggingFace Rerank
 
-HuggingFace Rerank allows you to use reranking models hosted on Hugging Face infrastructure or your custom endpoints to reorder documents based on their relevance to a query.
+HuggingFace Rerank를 사용하면 Hugging Face 인프라나 custom endpoint에 호스팅된 reranking 모델로, 쿼리와의 관련도에 따라 문서를 다시 정렬할 수 있습니다.
 
-| Property | Details |
+| 속성 | 세부 정보 |
 |----------|---------|
-| Description | HuggingFace Rerank enables semantic reranking of documents using models hosted on Hugging Face infrastructure or custom endpoints. |
-| Provider Route on LiteLLM | `huggingface/` in model name |
-| Provider Doc | [Hugging Face Hub ↗](https://huggingface.co/models?pipeline_tag=sentence-similarity) |
+| 설명 | Hugging Face 인프라 또는 custom endpoint에 호스팅된 모델을 사용해 문서를 semantic reranking할 수 있습니다. |
+| LiteLLM 제공자 route | 모델 이름의 `huggingface/` |
+| 제공자 문서 | [Hugging Face Hub ↗](https://huggingface.co/models?pipeline_tag=sentence-similarity) |
 
-## Quick Start
+## 빠른 시작
 
 ### LiteLLM Python SDK
 
@@ -39,7 +39,7 @@ response = litellm.rerank(
 print(response)
 ```
 
-### Custom Endpoint Usage
+### Custom Endpoint 사용법
 
 ```python showLineNumbers title="Using custom HuggingFace endpoint"
 import litellm
@@ -56,7 +56,7 @@ response = litellm.rerank(
 print(response)
 ```
 
-### Async Usage
+### Async 사용법
 
 ```python showLineNumbers title="Async rerank example"
 import litellm
@@ -84,7 +84,7 @@ asyncio.run(async_rerank_example())
 
 ## LiteLLM Proxy
 
-### 1. Configure your model in config.yaml
+### 1. config.yaml에 모델 구성 {#configure-your-model-in-configyaml}
 
 <Tabs>
 <TabItem value="config-yaml" label="config.yaml">
@@ -109,7 +109,7 @@ model_list:
 </TabItem>
 </Tabs>
 
-### 2. Start the proxy
+### 2. 프록시 시작
 
 ```bash
 export HF_TOKEN="hf_xxxxxx"
@@ -118,7 +118,7 @@ litellm --config /path/to/config.yaml
 # RUNNING on http://0.0.0.0:4000
 ```
 
-### 3. Make rerank requests
+### 3. Rerank 요청 보내기 {#make-rerank-requests}
 
 <Tabs>
 <TabItem value="curl" label="Curl">
@@ -199,11 +199,11 @@ print(response.json())
 
 
 
-## Configuration Options
+## 설정 옵션 {#configuration-options}
 
-### Authentication
+### 인증
 
-#### Using HuggingFace Token (Serverless)
+#### HuggingFace Token 사용(Serverless) {#using-huggingface-token-serverless}
 ```python
 import os
 os.environ["HF_TOKEN"] = "hf_xxxxxx"
@@ -216,7 +216,7 @@ litellm.rerank(
 )
 ```
 
-#### Using Custom Endpoint
+#### Custom Endpoint 사용 {#using-custom-endpoint}
 ```python
 litellm.rerank(
     model="huggingface/BAAI/bge-reranker-base",
@@ -228,9 +228,9 @@ litellm.rerank(
 
 
 
-## Response Format
+## 응답 형식
 
-The response follows the standard rerank API format:
+응답은 표준 rerank API 형식을 따릅니다.
 
 ```json
 {
@@ -260,4 +260,3 @@ The response follows the standard rerank API format:
   }
 }
 ```
-

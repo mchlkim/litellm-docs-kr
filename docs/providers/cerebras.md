@@ -6,17 +6,17 @@ https://inference-docs.cerebras.ai/api-reference/chat-completions
 
 :::tip
 
-**We support ALL Cerebras models, just set `model=cerebras/<any-model-on-cerebras>` as a prefix when sending litellm requests**
+**모든 Cerebras 모델을 지원합니다. litellm 요청을 보낼 때 `model=cerebras/<any-model-on-cerebras>`를 prefix로 설정하기만 하면 됩니다.**
 
 :::
 
-## API Key
+## API 키 {#api-key}
 ```python
 # env variable
 os.environ['CEREBRAS_API_KEY']
 ```
 
-## Sample Usage
+## Sample 사용법
 ```python
 from litellm import completion
 import os
@@ -45,7 +45,7 @@ response = completion(
 print(response)
 ```
 
-## Sample Usage - Streaming
+## Sample 사용법 - Streaming
 ```python
 from litellm import completion
 import os
@@ -78,11 +78,11 @@ for chunk in response:
 ```
 
 
-## Usage with LiteLLM Proxy Server
+## LiteLLM Proxy Server 사용법 {#usage-with-litellm-proxy-server}
 
-Here's how to call a Cerebras model with the LiteLLM Proxy Server
+LiteLLM Proxy Server로 Cerebras 모델을 호출하는 방법은 다음과 같습니다.
 
-1. Modify the config.yaml 
+1. config.yaml 수정 
 
   ```yaml
   model_list:
@@ -93,13 +93,13 @@ Here's how to call a Cerebras model with the LiteLLM Proxy Server
   ```
 
 
-2. Start the proxy 
+2. 프록시 시작 
 
   ```bash
   $ litellm --config /path/to/config.yaml
   ```
 
-3. Send Request to LiteLLM Proxy Server
+3. LiteLLM Proxy Server에 요청 보내기
 
   <Tabs>
 
@@ -145,5 +145,4 @@ Here's how to call a Cerebras model with the LiteLLM Proxy Server
   </TabItem>
 
   </Tabs>
-
 

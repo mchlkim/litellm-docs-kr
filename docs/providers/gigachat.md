@@ -4,35 +4,35 @@ import TabItem from '@theme/TabItem';
 # GigaChat
 https://developers.sber.ru/docs/ru/gigachat/api/overview
 
-GigaChat is Sber AI's large language model, Russia's leading LLM provider.
+GigaChat은 러시아의 주요 LLM 제공업체인 Sber AI의 대규모 언어 모델입니다.
 
 :::tip
 
-**We support ALL GigaChat models, just set `model=gigachat/<any-model-on-gigachat>` as a prefix when sending litellm requests**
+**모든 GigaChat 모델을 지원합니다. litellm 요청을 보낼 때 `model=gigachat/<any-model-on-gigachat>` 접두사를 설정하기만 하면 됩니다.**
 
 :::
 
 :::warning
 
-GigaChat API uses self-signed SSL certificates. You must pass `ssl_verify=False` in your requests.
+GigaChat API는 자체 서명 SSL 인증서를 사용합니다. 요청에 `ssl_verify=False`를 전달해야 합니다.
 
 :::
 
-## Supported Features
+## 지원 기능
 
-| Feature | Supported |
+| 기능 | 지원 여부 |
 |---------|-----------|
-| Chat Completion | Yes |
-| Streaming | Yes |
-| Async | Yes |
-| Function Calling / Tools | Yes |
-| Structured Output (JSON Schema) | Yes (via function call emulation) |
-| Image Input | Yes (base64 and URL) - GigaChat-2-Max, GigaChat-2-Pro only |
-| Embeddings | Yes |
+| Chat Completion | 예 |
+| Streaming | 예 |
+| Async | 예 |
+| Function Calling / Tools | 예 |
+| Structured Output (JSON Schema) | 예(function call 에뮬레이션 사용) |
+| Image Input | 예(base64 및 URL) - GigaChat-2-Max, GigaChat-2-Pro만 해당 |
+| Embeddings | 예 |
 
-## API Key
+## API 키
 
-GigaChat uses OAuth authentication. Set your credentials as environment variables:
+GigaChat은 OAuth 인증을 사용합니다. 자격 증명을 환경 변수로 설정하세요.
 
 ```python
 import os
@@ -44,9 +44,9 @@ os.environ['GIGACHAT_CREDENTIALS'] = "your-credentials-here"
 os.environ['GIGACHAT_SCOPE'] = "GIGACHAT_API_PERS"  # or GIGACHAT_API_B2B for business
 ```
 
-Get your credentials at: https://developers.sber.ru/studio/
+자격 증명은 https://developers.sber.ru/studio/ 에서 받을 수 있습니다.
 
-## Sample Usage
+## 샘플 사용법
 
 ```python
 from litellm import completion
@@ -64,7 +64,7 @@ response = completion(
 print(response)
 ```
 
-## Sample Usage - Streaming
+## 샘플 사용법 - Streaming
 
 ```python
 from litellm import completion
@@ -85,7 +85,7 @@ for chunk in response:
     print(chunk)
 ```
 
-## Sample Usage - Function Calling
+## 샘플 사용법 - Function Calling
 
 ```python
 from litellm import completion
@@ -117,9 +117,9 @@ response = completion(
 print(response)
 ```
 
-## Sample Usage - Structured Output
+## 샘플 사용법 - Structured Output
 
-GigaChat supports structured output via JSON schema (emulated through function calling):
+GigaChat은 JSON schema를 통한 구조화된 출력을 지원합니다(function calling으로 에뮬레이션됨).
 
 ```python
 from litellm import completion
@@ -148,9 +148,9 @@ response = completion(
 print(response)  # Returns JSON: {"name": "John", "age": 30}
 ```
 
-## Sample Usage - Image Input
+## 샘플 사용법 - Image Input
 
-GigaChat supports image input via base64 or URL (GigaChat-2-Max and GigaChat-2-Pro only):
+GigaChat은 base64 또는 URL을 통한 이미지 입력을 지원합니다(GigaChat-2-Max 및 GigaChat-2-Pro만 해당).
 
 ```python
 from litellm import completion
@@ -172,7 +172,7 @@ response = completion(
 print(response)
 ```
 
-## Sample Usage - Embeddings
+## 샘플 사용법 - Embeddings
 
 ```python
 from litellm import embedding
@@ -188,9 +188,9 @@ response = embedding(
 print(response)
 ```
 
-## Usage with LiteLLM Proxy
+## LiteLLM Proxy 사용법
 
-### 1. Set GigaChat Models on config.yaml
+### 1. config.yaml에 GigaChat 모델 설정
 
 ```yaml
 model_list:
@@ -211,16 +211,16 @@ model_list:
       ssl_verify: false
 ```
 
-### 2. Start Proxy
+### 2. Proxy 시작
 
 ```bash
 litellm --config config.yaml
 ```
 
-### 3. Test it
+### 3. 테스트
 
 <Tabs>
-<TabItem value="Curl" label="Curl Request">
+<TabItem value="Curl" label="Curl 요청">
 
 ```shell
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -254,30 +254,30 @@ print(response)
 </TabItem>
 </Tabs>
 
-## Supported Models
+## 지원 모델
 
-### Chat Models
+### Chat 모델
 
-| Model Name | Context Window | Vision | Description |
+| 모델 이름 | 컨텍스트 창 | Vision | 설명 |
 |------------|----------------|--------|-------------|
-| gigachat/GigaChat-2-Lite | 128K | No | Fast, lightweight model |
-| gigachat/GigaChat-2-Pro | 128K | Yes | Professional model with vision |
-| gigachat/GigaChat-2-Max | 128K | Yes | Maximum capability model |
+| gigachat/GigaChat-2-Lite | 128K | 아니요 | 빠르고 가벼운 모델 |
+| gigachat/GigaChat-2-Pro | 128K | 예 | Vision을 지원하는 전문가용 모델 |
+| gigachat/GigaChat-2-Max | 128K | 예 | 최대 성능 모델 |
 
-### Embedding Models
+### Embedding 모델
 
-| Model Name | Max Input | Dimensions | Description |
+| 모델 이름 | 최대 입력 | 차원 | 설명 |
 |------------|-----------|------------|-------------|
-| gigachat/Embeddings | 512 | 1024 | Standard embeddings |
-| gigachat/Embeddings-2 | 512 | 1024 | Updated embeddings |
-| gigachat/EmbeddingsGigaR | 4096 | 2560 | High-dimensional embeddings |
+| gigachat/Embeddings | 512 | 1024 | 표준 embeddings |
+| gigachat/Embeddings-2 | 512 | 1024 | 업데이트된 embeddings |
+| gigachat/EmbeddingsGigaR | 4096 | 2560 | 고차원 embeddings |
 
 :::note
-Available models may vary depending on your API access level (personal or business).
+사용 가능한 모델은 API 액세스 수준(개인 또는 비즈니스)에 따라 달라질 수 있습니다.
 :::
 
-## Limitations
+## 제한 사항
 
-- Only one function call per request (GigaChat API limitation)
-- Maximum 1 image per message, 10 images total per conversation
-- GigaChat API uses self-signed SSL certificates - `ssl_verify=False` is required
+- 요청당 function call은 하나만 사용할 수 있습니다(GigaChat API 제한).
+- 메시지당 이미지는 최대 1개, 대화당 총 10개까지 사용할 수 있습니다.
+- GigaChat API는 자체 서명 SSL 인증서를 사용하므로 `ssl_verify=False`가 필요합니다.

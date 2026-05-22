@@ -1,47 +1,47 @@
 import Image from '@theme/IdealImage';
 
-# Claude Code - Managing Anthropic Beta Headers
+# Claude Code - Anthropic Beta Header 관리
 
-When using Claude Code with LiteLLM and non-Anthropic providers (Bedrock, Azure AI, Vertex AI), you need to ensure that only supported beta headers are sent to each provider. This guide explains how to add support for new beta headers or fix invalid beta header errors.
+Claude Code를 LiteLLM 및 non-Anthropic provider(Bedrock, Azure AI, Vertex AI)와 함께 사용할 때는 각 provider가 지원하는 beta header만 전송되도록 해야 합니다. 이 가이드는 새 beta header 지원을 추가하거나 잘못된 beta header error를 수정하는 방법을 설명합니다.
 
-## What Are Beta Headers?
+## Beta Header란?
 
-Anthropic uses beta headers to enable experimental features in Claude. When you use Claude Code, it may send beta headers like:
+Anthropic은 Claude의 실험 기능을 활성화하기 위해 beta header를 사용합니다. Claude Code를 사용하면 다음과 같은 beta header를 보낼 수 있습니다.
 
 ```
 anthropic-beta: prompt-caching-scope-2026-01-05,advanced-tool-use-2025-11-20
 ```
 
-However, not all providers support all Anthropic beta features. LiteLLM uses `anthropic_beta_headers_config.json` to manage which beta headers are supported by each provider.
+하지만 모든 provider가 모든 Anthropic beta 기능을 지원하지는 않습니다. LiteLLM은 각 provider가 지원하는 beta header를 관리하기 위해 `anthropic_beta_headers_config.json`을 사용합니다.
 
-## Common Error Message
+## 일반적인 Error Message
 
 ```bash
 Error: The model returned the following errors: invalid beta flag
 ```
 
-## How LiteLLM Handles Beta Headers
+## LiteLLM이 Beta Header를 처리하는 방식
 
-LiteLLM uses a strict validation approach with a configuration file:
+LiteLLM은 configuration file을 사용해 엄격한 validation 방식을 적용합니다.
 
 ```
 litellm/litellm/anthropic_beta_headers_config.json
 ```
 
-This JSON file contains a **mapping** of beta headers for each provider:
-- **Keys**: Input beta header names (from Anthropic)
-- **Values**: Provider-specific header names (or `null` if unsupported)
-- **Validation**: Only headers present in the mapping with non-null values are forwarded
+이 JSON file에는 각 provider별 beta header **mapping**이 들어 있습니다.
+- **Keys**: input beta header name(Anthropic 기준)
+- **Values**: provider별 header name(미지원 시 `null`)
+- **Validation**: mapping에 있고 non-null value를 가진 header만 forwarding됩니다.
 
-This enforces stricter validation than just filtering unsupported headers - headers must be explicitly defined to be allowed.
+이는 unsupported header를 단순히 filtering하는 것보다 엄격합니다. 허용하려면 header가 명시적으로 정의되어 있어야 합니다.
 
-## Adding Support for a New Beta Header
+## 새 Beta Header 지원 추가
 
-When Anthropic releases a new beta feature, you need to add it to the configuration file for each provider.
+Anthropic이 새 beta feature를 release하면 각 provider의 configuration file에 해당 항목을 추가해야 합니다.
 
-### Step 1: Locate the Config File
+### Step 1: Config File 위치 찾기
 
-Find the file in your LiteLLM installation:
+LiteLLM 설치 경로에서 file을 찾습니다.
 
 ```bash
 # If installed via pip
@@ -51,9 +51,9 @@ cd $(python -c "import litellm; import os; print(os.path.dirname(litellm.__file_
 # litellm/anthropic_beta_headers_config.json
 ```
 
-### Step 2: Add the New Beta Header
+### Step 2: 새 Beta Header 추가
 
-Open `anthropic_beta_headers_config.json` and add the new header to each provider's mapping:
+`anthropic_beta_headers_config.json`을 열고 각 provider mapping에 새 header를 추가합니다.
 
 ```json title="anthropic_beta_headers_config.json"
 {
@@ -86,17 +86,17 @@ Open `anthropic_beta_headers_config.json` and add the new header to each provide
 }
 ```
 
-**Key Points:**
-- **Supported headers**: Set the value to the provider-specific header name (often the same as the key)
-- **Unsupported headers**: Set the value to `null`
-- **Header transformations**: Some providers use different header names (e.g., Bedrock maps `advanced-tool-use-2025-11-20` to `tool-search-tool-2025-10-19`)
-- **Alphabetical order**: Keep headers sorted alphabetically for maintainability
+**핵심 사항:**
+- **지원 header**: value를 provider별 header name으로 설정합니다(대개 key와 동일).
+- **미지원 header**: value를 `null`로 설정합니다.
+- **Header 변환**: 일부 provider는 다른 header name을 사용합니다(예: Bedrock은 `advanced-tool-use-2025-11-20`을 `tool-search-tool-2025-10-19`로 mapping).
+- **알파벳순 정렬**: 유지보수를 위해 header를 alphabetic order로 정렬합니다.
 
-### Step 3: Reload Configuration (No Restart Required!)
+### Step 3: 설정 Reload(Restart 불필요)
 
-**Option 1: Dynamic Reload Without Restart** 
+**Option 1: restart 없는 dynamic reload**
 
-Instead of restarting your application, you can dynamically reload the beta headers configuration using environment variables and API endpoints:
+application을 restart하지 않고 환경 변수와 API endpoint를 사용해 beta header 설정을 동적으로 reload할 수 있습니다.
 
 ```bash
 # Set environment variable to fetch from remote URL (Do this if you want to point it to some other URL)
@@ -107,9 +107,9 @@ curl -X POST "https://your-proxy-url/reload/anthropic_beta_headers" \
   -H "Authorization: Bearer YOUR_ADMIN_TOKEN"
 ```
 
-**Option 2: Schedule Automatic Reloads** 
+**Option 2: 자동 reload schedule 설정**
 
-Set up automatic reloading to always stay up-to-date with the latest beta headers:
+최신 beta header를 유지하도록 automatic reload를 설정합니다.
 
 ```bash
 # Reload configuration every 24 hours
@@ -117,9 +117,9 @@ curl -X POST "https://your-proxy-url/schedule/anthropic_beta_headers_reload?hour
   -H "Authorization: Bearer YOUR_ADMIN_TOKEN"
 ```
 
-**Option 3: Traditional Restart**
+**Option 3: 기존 방식의 restart**
 
-If you prefer the traditional approach, restart your LiteLLM proxy or application:
+기존 방식을 선호한다면 LiteLLM proxy 또는 application을 restart합니다.
 
 ```bash
 # If using LiteLLM proxy
@@ -129,27 +129,27 @@ litellm --config config.yaml
 # Just restart your Python application
 ```
 
-:::tip Zero-Downtime Updates
-With dynamic reloading, you can fix invalid beta header errors **without restarting your service**! This is especially useful in production environments where downtime is costly.
+:::tip Zero-Downtime 업데이트
+Dynamic reloading을 사용하면 **service를 restart하지 않고** 잘못된 beta header error를 수정할 수 있습니다. downtime 비용이 큰 production 환경에서 특히 유용합니다.
 
-See [Auto Sync Anthropic Beta Headers](../proxy/sync_anthropic_beta_headers.md) for complete documentation.
+전체 문서는 [Auto Sync Anthropic Beta Headers](../proxy/sync_anthropic_beta_headers.md)를 참고하세요.
 :::
 
-## Fixing Invalid Beta Header Errors
+## 잘못된 Beta Header Error 수정
 
-If you encounter an "invalid beta flag" error, it means a beta header is being sent that the provider doesn't support.
+"invalid beta flag" error가 발생하면 provider가 지원하지 않는 beta header가 전송되고 있다는 뜻입니다.
 
-### Step 1: Identify the Problematic Header
+### Step 1: 문제가 되는 Header 식별
 
-Check your logs to see which header is causing the issue:
+어떤 header가 문제를 일으키는지 log에서 확인합니다.
 
 ```bash
 Error: The model returned the following errors: invalid beta flag: new-feature-2026-03-01
 ```
 
-### Step 2: Update the Config
+### Step 2: Config 업데이트
 
-Set the header value to `null` for that provider:
+해당 provider에서 header value를 `null`로 설정합니다.
 
 ```json title="anthropic_beta_headers_config.json"
 {
@@ -159,21 +159,21 @@ Set the header value to `null` for that provider:
 }
 ```
 
-### Step 3: Restart and Test
+### Step 3: Restart 및 Test
 
-Restart your application and verify the header is now filtered out.
+application을 restart하고 해당 header가 filtering되는지 확인합니다.
 
-## Contributing a Fix to LiteLLM
+## LiteLLM에 Fix 기여하기
 
-Help the community by contributing your fix!
+수정 내용을 기여해 community에 도움을 줄 수 있습니다.
 
-### What to Include in Your PR
+### PR에 포함할 내용
 
-1. **Update the config file**: Add the new beta header to `litellm/anthropic_beta_headers_config.json`
-2. **Test your changes**: Verify the header is correctly filtered/mapped for each provider
-3. **Documentation**: Include provider documentation links showing which headers are supported
+1. **config file 업데이트**: `litellm/anthropic_beta_headers_config.json`에 새 beta header를 추가합니다.
+2. **변경사항 test**: 각 provider에서 header가 올바르게 filtered/mapped 되는지 확인합니다.
+3. **Documentation**: 어떤 header가 지원되는지 보여주는 provider 문서 link를 포함합니다.
 
-### Example PR Description
+### 예제 PR Description
 
 ```markdown
 ## Add support for new-feature-2026-03-01 beta header
@@ -195,9 +195,9 @@ Tested with:
 ```
 
 
-## How Beta Header Filtering Works
+## Beta Header Filtering 동작 방식
 
-When you make a request through LiteLLM:
+LiteLLM을 통해 request를 보내면 다음 흐름으로 처리됩니다.
 
 ```mermaid
 sequenceDiagram
@@ -223,57 +223,57 @@ sequenceDiagram
 
 ### Filtering Rules
 
-1. **Header must exist in mapping**: Unknown headers are filtered out
-2. **Header must have non-null value**: Headers with `null` values are filtered out
-3. **Header transformation**: Headers are mapped to provider-specific names (e.g., `advanced-tool-use-2025-11-20` → `tool-search-tool-2025-10-19` for Bedrock)
+1. **Header가 mapping에 존재해야 함**: unknown header는 filtering됩니다.
+2. **Header value가 non-null이어야 함**: `null` value를 가진 header는 filtering됩니다.
+3. **Header 변환**: header는 provider별 name으로 mapping됩니다(예: Bedrock의 `advanced-tool-use-2025-11-20` -> `tool-search-tool-2025-10-19`).
 
-### Example
+### 예제
 
-Request with headers:
+Header가 포함된 request:
 ```
 anthropic-beta: advanced-tool-use-2025-11-20,computer-use-2025-01-24,unknown-header
 ```
 
-For Bedrock Converse:
-- ✅ `computer-use-2025-01-24` → `computer-use-2025-01-24` (supported, passed through)
-- ❌ `advanced-tool-use-2025-11-20` → filtered out (null value in config)
-- ❌ `unknown-header` → filtered out (not in config)
+Bedrock Converse의 경우:
+- ✅ `computer-use-2025-01-24` -> `computer-use-2025-01-24` (지원, pass-through)
+- ❌ `advanced-tool-use-2025-11-20` -> filtering됨(config의 null value)
+- ❌ `unknown-header` -> filtering됨(config에 없음)
 
-Result sent to Bedrock:
+Bedrock으로 전송되는 결과:
 ```
 anthropic-beta: computer-use-2025-01-24
 ```
 
-## Dynamic Configuration Management (No Restart Required!)
+## Dynamic 설정 관리(Restart 불필요)
 
-### Environment Variables
+### 환경 변수
 
-Control how LiteLLM loads the beta headers configuration:
+LiteLLM이 beta header 설정을 load하는 방식을 제어합니다.
 
 | Variable | Description | Default |
 |----------|-------------|---------|
-| `LITELLM_ANTHROPIC_BETA_HEADERS_URL` | URL to fetch config from | GitHub main branch |
-| `LITELLM_LOCAL_ANTHROPIC_BETA_HEADERS` | Set to `True` to use local config only | `False` |
+| `LITELLM_ANTHROPIC_BETA_HEADERS_URL` | config를 fetch할 URL | GitHub main branch |
+| `LITELLM_LOCAL_ANTHROPIC_BETA_HEADERS` | local config만 사용하려면 `True`로 설정 | `False` |
 
-**Example: Use Custom Config URL**
+**예제: Custom Config URL 사용**
 ```bash
 export LITELLM_ANTHROPIC_BETA_HEADERS_URL="https://your-company.com/custom-beta-headers.json"
 ```
 
-**Example: Use Local Config Only (No Remote Fetching)**
+**예제: Local Config만 사용(remote fetch 없음)**
 ```bash
 export LITELLM_LOCAL_ANTHROPIC_BETA_HEADERS=True
 ```
-## Provider-Specific Notes
+## Provider-Specific 참고
 
 ### Bedrock
-- Beta headers appear in both HTTP headers AND request body (`additionalModelRequestFields.anthropic_beta`)
-- Some headers are transformed (e.g., `advanced-tool-use` → `tool-search-tool`)
+- Beta header는 HTTP header와 request body(`additionalModelRequestFields.anthropic_beta`)에 모두 나타납니다.
+- 일부 header는 transformation됩니다(예: `advanced-tool-use` -> `tool-search-tool`).
 
 ### Azure AI
-- Uses same header names as Anthropic
-- Some features not yet supported (check config for null values)
+- Anthropic과 동일한 header name을 사용합니다.
+- 아직 지원되지 않는 feature가 있습니다(null value는 config에서 확인).
 
 ### Vertex AI
-- Some headers are transformed to match Vertex AI's implementation
-- Limited beta feature support compared to Anthropic
+- 일부 header는 Vertex AI 구현에 맞게 transformation됩니다.
+- Anthropic에 비해 beta feature 지원 범위가 제한적입니다.

@@ -2,24 +2,24 @@
 
 :::tip
 
-LiteLLM Follows the [cohere api request / response for the rerank api](https://cohere.com/rerank)
+LiteLLM은 [rerank api용 cohere api request / response](https://cohere.com/rerank)를 따릅니다.
 
 :::
 
-## Overview
+## 개요
 
-| Feature | Supported                                                                                           | Notes |
+| 기능 | 지원 여부                                                                                           | 참고 |
 |---------|-----------------------------------------------------------------------------------------------------|-------|
-| Cost Tracking | ✅                                                                                                   | Works with all supported models |
-| Logging | ✅                                                                                                   | Works across all integrations |
+| Cost Tracking | ✅                                                                                                   | 지원되는 모든 model에서 동작 |
+| Logging | ✅                                                                                                   | 모든 integration에서 동작 |
 | End-user Tracking | ✅                                                                                                   | |
-| Fallbacks | ✅                                                                                                   | Works between supported models |
-| Loadbalancing | ✅                                                                                                   | Works between supported models |
-| Guardrails | ✅                                                                                                   | Applies to input query only (not documents) |
-| Supported Providers | Cohere, Together AI, Azure AI, DeepInfra, Nvidia NIM, Infinity, Fireworks AI, Voyage AI, watsonx.ai | |
+| Fallbacks | ✅                                                                                                   | 지원되는 model 간에 동작 |
+| Loadbalancing | ✅                                                                                                   | 지원되는 model 간에 동작 |
+| 가드레일 | ✅                                                                                                   | input query에만 적용(documents에는 미적용) |
+| 지원 프로바이더 | Cohere, Together AI, Azure AI, DeepInfra, Nvidia NIM, Infinity, Fireworks AI, Voyage AI, watsonx.ai | |
 
-## **LiteLLM Python SDK Usage**
-### Quick Start 
+## **LiteLLM Python SDK 사용법**
+### 빠른 시작 
 
 ```python
 from litellm import rerank
@@ -44,7 +44,7 @@ response = rerank(
 print(response)
 ```
 
-### Async Usage 
+### Async 사용법 
 
 ```python
 from litellm import arerank
@@ -72,13 +72,13 @@ async def test_async_rerank():
 asyncio.run(test_async_rerank())
 ```
 
-## **LiteLLM Proxy Usage**
+## **LiteLLM Proxy 사용법**
 
-LiteLLM provides an cohere api compatible `/rerank` endpoint for Rerank calls.
+LiteLLM은 Rerank 호출을 위해 cohere api와 호환되는 `/rerank` endpoint를 제공합니다.
 
-**Setup**
+**설정**
 
-Add this to your litellm proxy config.yaml
+다음을 `litellm` proxy `config.yaml`에 추가합니다.
 
 ```yaml
 model_list:
@@ -92,7 +92,7 @@ model_list:
       api_key: os.environ/COHERE_API_KEY
 ```
 
-Start litellm
+`litellm`을 시작합니다.
 
 ```bash
 litellm --config /path/to/config.yaml
@@ -100,7 +100,7 @@ litellm --config /path/to/config.yaml
 # RUNNING on http://0.0.0.0:4000
 ```
 
-Test request
+요청을 테스트합니다.
 
 ```bash
 curl http://0.0.0.0:4000/rerank \
@@ -119,22 +119,22 @@ curl http://0.0.0.0:4000/rerank \
   }'
 ```
 
-## **Supported Providers**
+## **지원 프로바이더**
 
-#### ⚡️See all supported models and providers at [models.litellm.ai](https://models.litellm.ai/)
+#### ⚡️지원되는 모든 model과 provider는 [models.litellm.ai](https://models.litellm.ai/)에서 확인하세요.
 
-| Provider                 | Link to Usage                                        |
+| Provider                 | 사용법 링크                                        |
 |--------------------------|------------------------------------------------------|
-| Cohere (v1 + v2 clients) | [Usage](#quick-start)                                |
-| Together AI              | [Usage](../docs/providers/togetherai)                |  
-| Azure AI                 | [Usage](../docs/providers/azure_ai#rerank-endpoint)  |  
-| Jina AI                  | [Usage](../docs/providers/jina_ai)                   |  
-| AWS Bedrock              | [Usage](../docs/providers/bedrock#rerank-api)        |  
-| HuggingFace              | [Usage](../docs/providers/huggingface_rerank)        |  
-| Infinity                 | [Usage](../docs/providers/infinity)                  |  
-| vLLM                     | [Usage](../docs/providers/vllm#rerank-endpoint)      |  
-| DeepInfra                | [Usage](../docs/providers/deepinfra#rerank-endpoint) |
-| Vertex AI                | [Usage](../docs/providers/vertex#rerank-api)         |
-| Fireworks AI             | [Usage](../docs/providers/fireworks_ai#rerank-endpoint) |
-| Voyage AI                | [Usage](../docs/providers/voyage#rerank)             |  
-| IBM watsonx.ai           | [Usage](../docs/providers/watsonx/rerank)            |  
+| Cohere (v1 + v2 clients) | [사용법](#quick-start)                                |
+| Together AI              | [사용법](../docs/providers/togetherai)                |  
+| Azure AI                 | [사용법](../docs/providers/azure_ai#rerank-endpoint)  |  
+| Jina AI                  | [사용법](../docs/providers/jina_ai)                   |  
+| AWS Bedrock              | [사용법](../docs/providers/bedrock#rerank-api)        |  
+| HuggingFace              | [사용법](../docs/providers/huggingface_rerank)        |  
+| Infinity                 | [사용법](../docs/providers/infinity)                  |  
+| vLLM                     | [사용법](../docs/providers/vllm#rerank-endpoint)      |  
+| DeepInfra                | [사용법](../docs/providers/deepinfra#rerank-endpoint) |
+| Vertex AI                | [사용법](../docs/providers/vertex#rerank-api)         |
+| Fireworks AI             | [사용법](../docs/providers/fireworks_ai#rerank-endpoint) |
+| Voyage AI                | [사용법](../docs/providers/voyage#rerank)             |  
+| IBM watsonx.ai           | [사용법](../docs/providers/watsonx/rerank)            |  

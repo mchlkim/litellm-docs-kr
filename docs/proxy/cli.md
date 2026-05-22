@@ -1,17 +1,17 @@
-# CLI Arguments
+# CLI 인자
 
-This page documents all command-line interface (CLI) arguments available for the LiteLLM proxy server.
+이 페이지는 LiteLLM 프록시 서버에서 사용할 수 있는 모든 command-line interface(CLI) 인자를 정리합니다.
 
-## Server Configuration
+## Server 설정
 
 ### --host
    - **Default:** `'0.0.0.0'`
-   - The host for the server to listen on.
-   - **Usage:** 
+   - 서버가 수신할 호스트입니다.
+   - **사용법:** 
      ```shell
      litellm --host 127.0.0.1
      ```
-   - **Usage - set Environment Variable:** `HOST`
+   - **사용법 - 환경 변수 설정:** `HOST`
     ```shell
     export HOST=127.0.0.1
     litellm
@@ -19,35 +19,35 @@ This page documents all command-line interface (CLI) arguments available for the
 
 ### --port
    - **Default:** `4000`
-   - The port to bind the server to.
-   - **Usage:** 
+   - 서버를 바인딩할 포트입니다.
+   - **사용법:** 
      ```shell
      litellm --port 8080
      ```
-  - **Usage - set Environment Variable:** `PORT`
+  - **사용법 - 환경 변수 설정:** `PORT`
     ```shell
     export PORT=8080
     litellm
     ```
 
 ### --num_workers
-   - **Default:** Number of logical CPUs in the system, or `4` if that cannot be determined
-   - The number of worker processes to spin up (uvicorn, gunicorn, or Granian `--workers`).
-   - **Usage:** 
+   - **Default:** 시스템의 논리 CPU 수. 확인할 수 없으면 `4`
+   - 시작할 uvicorn / gunicorn worker 수입니다.
+   - **사용법:** 
      ```shell
      litellm --num_workers 4
      ```
-  - **Usage - set Environment Variable:** `NUM_WORKERS`
+  - **사용법 - 환경 변수 설정:** `NUM_WORKERS`
     ```shell
     export NUM_WORKERS=4
     litellm
     ```
 
 ### --config
-   - **Short form:** `-c`
+   - **짧은 형식:** `-c`
    - **Default:** `None`
-   - Path to the proxy configuration file (e.g., config.yaml).
-   - **Usage:** 
+   - 프록시 설정 파일 경로입니다(예: config.yaml).
+   - **사용법:** 
      ```shell
      litellm --config path/to/config.yaml
      ```
@@ -55,8 +55,8 @@ This page documents all command-line interface (CLI) arguments available for the
 ### --log_config
    - **Default:** `None`
    - **Type:** `str`
-   - Path to the logging configuration file for uvicorn.
-   - **Usage:** 
+   - uvicorn 로깅 설정 파일 경로입니다.
+   - **사용법:** 
      ```shell
      litellm --log_config path/to/log_config.conf
      ```
@@ -64,12 +64,12 @@ This page documents all command-line interface (CLI) arguments available for the
 ### --keepalive_timeout
    - **Default:** `None`
    - **Type:** `int`
-   - Set the uvicorn keepalive timeout in seconds (uvicorn timeout_keep_alive parameter).
-   - **Usage:** 
+   - uvicorn keepalive timeout을 초 단위로 설정합니다(uvicorn `timeout_keep_alive` 파라미터).
+   - **사용법:** 
      ```shell
      litellm --keepalive_timeout 30
      ```
-  - **Usage - set Environment Variable:** `KEEPALIVE_TIMEOUT`
+  - **사용법 - 환경 변수 설정:** `KEEPALIVE_TIMEOUT`
     ```shell
     export KEEPALIVE_TIMEOUT=30
     litellm
@@ -78,26 +78,26 @@ This page documents all command-line interface (CLI) arguments available for the
 ### --max_requests_before_restart
    - **Default:** `None`
    - **Type:** `int`
-   - Restart worker after this many requests. This is useful for mitigating memory growth over time.
-   - For uvicorn: maps to `limit_max_requests`
-   - For gunicorn: maps to `max_requests`
-   - **Usage:** 
+   - 지정한 요청 수 이후 worker를 재시작합니다. 시간이 지나며 메모리가 증가하는 문제를 완화하는 데 유용합니다.
+   - uvicorn에서는 `limit_max_requests`에 매핑됩니다.
+   - gunicorn에서는 `max_requests`에 매핑됩니다.
+   - **사용법:** 
      ```shell
      litellm --max_requests_before_restart 10000
      ```
-  - **Usage - set Environment Variable:** `MAX_REQUESTS_BEFORE_RESTART`
+  - **사용법 - 환경 변수 설정:** `MAX_REQUESTS_BEFORE_RESTART`
     ```shell
     export MAX_REQUESTS_BEFORE_RESTART=10000
     litellm
     ```
 
-## Server Backend Options
+## 서버 백엔드 옵션
 
 ### --run_gunicorn
    - **Default:** `False`
    - **Type:** `bool` (Flag)
-   - Starts proxy via gunicorn instead of uvicorn. Better for managing multiple workers in production.
-   - **Usage:** 
+   - uvicorn 대신 gunicorn으로 프록시를 시작합니다. 프로덕션에서 여러 worker를 관리할 때 더 적합합니다.
+   - **사용법:** 
      ```shell
      litellm --run_gunicorn
      ```
@@ -105,48 +105,32 @@ This page documents all command-line interface (CLI) arguments available for the
 ### --run_hypercorn
    - **Default:** `False`
    - **Type:** `bool` (Flag)
-   - Starts proxy via hypercorn instead of uvicorn. Supports HTTP/2.
-   - **Usage:** 
+   - uvicorn 대신 hypercorn으로 프록시를 시작합니다. HTTP/2를 지원합니다.
+   - **사용법:** 
      ```shell
      litellm --run_hypercorn
-     ```
-
-### --run_granian
-   - **Default:** `False`
-   - **Type:** `bool` (Flag)
-   - **Status:** Beta — opt in when you want higher gateway throughput; uvicorn remains the default.
-   - Starts the proxy via [Granian](https://github.com/emmett-framework/granian) (Rust-backed ASGI server) instead of uvicorn. Supports HTTP/1 and HTTP/2.
-   - **Why use it:** Granian moves the HTTP layer off Python into a Rust runtime, which tends to handle concurrent proxy traffic more predictably than uvicorn alone. In LiteLLM load tests, Granian showed a **10–20 RPS improvement** over an equivalent uvicorn multi-worker setup, with **better stability under sustained load and fewer request failures**.
-   - **Requirements:** Python 3.9+ and the `granian` package (included in `litellm[proxy]`).
-   - **Limitations when using Granian:**
-     - `--max_requests_before_restart` is not supported (Granian uses `workers_lifetime` in seconds, not a per-request limit).
-     - `--ciphers` is not applied.
-     - `--keepalive_timeout` and `--log_config` apply to uvicorn only.
-   - **Usage:** 
-     ```shell
-     litellm --config config.yaml --run_granian --num_workers 4
      ```
 
 ### --skip_server_startup
    - **Default:** `False`
    - **Type:** `bool` (Flag)
-   - Skip starting the server after setup (useful for database migrations only).
-   - **Usage:** 
+   - 설정 후 서버 시작을 건너뜁니다. 데이터베이스 마이그레이션만 수행할 때 유용합니다.
+   - **사용법:** 
      ```shell
      litellm --skip_server_startup
      ```
 
-## SSL/TLS Configuration
+## SSL/TLS 설정
 
 ### --ssl_keyfile_path
    - **Default:** `None`
    - **Type:** `str`
-   - Path to the SSL keyfile. Use this when you want to provide SSL certificate when starting proxy.
-   - **Usage:** 
+   - SSL keyfile 경로입니다. 프록시 시작 시 SSL 인증서를 제공하려면 사용합니다.
+   - **사용법:** 
      ```shell
      litellm --ssl_keyfile_path /path/to/key.pem --ssl_certfile_path /path/to/cert.pem
      ```
-  - **Usage - set Environment Variable:** `SSL_KEYFILE_PATH`
+  - **사용법 - 환경 변수 설정:** `SSL_KEYFILE_PATH`
     ```shell
     export SSL_KEYFILE_PATH=/path/to/key.pem
     litellm
@@ -155,12 +139,12 @@ This page documents all command-line interface (CLI) arguments available for the
 ### --ssl_certfile_path
    - **Default:** `None`
    - **Type:** `str`
-   - Path to the SSL certfile. Use this when you want to provide SSL certificate when starting proxy.
-   - **Usage:** 
+   - SSL certfile 경로입니다. 프록시 시작 시 SSL 인증서를 제공하려면 사용합니다.
+   - **사용법:** 
      ```shell
      litellm --ssl_certfile_path /path/to/cert.pem --ssl_keyfile_path /path/to/key.pem
      ```
-  - **Usage - set Environment Variable:** `SSL_CERTFILE_PATH`
+  - **사용법 - 환경 변수 설정:** `SSL_CERTFILE_PATH`
     ```shell
     export SSL_CERTFILE_PATH=/path/to/cert.pem
     litellm
@@ -169,77 +153,77 @@ This page documents all command-line interface (CLI) arguments available for the
 ### --ciphers
    - **Default:** `None`
    - **Type:** `str`
-   - Ciphers to use for the SSL setup. Only used with `--run_hypercorn`.
-   - **Usage:** 
+   - SSL 설정에 사용할 cipher입니다. `--run_hypercorn`과 함께 사용할 때만 적용됩니다.
+   - **사용법:** 
      ```shell
      litellm --run_hypercorn --ssl_keyfile_path /path/to/key.pem --ssl_certfile_path /path/to/cert.pem --ciphers "ECDHE+AESGCM"
      ```
 
-## Model Configuration
+## Model 설정
 
 ### --model or -m
    - **Default:** `None`
-   - The model name to pass to LiteLLM.
-   - **Usage:** 
+   - LiteLLM에 전달할 모델 이름입니다.
+   - **사용법:** 
      ```shell
      litellm --model gpt-3.5-turbo
      ```
 
 ### --alias
    - **Default:** `None`
-   - An alias for the model, for user-friendly reference. Use this to give a litellm model name (e.g., "huggingface/codellama/CodeLlama-7b-Instruct-hf") a more user-friendly name ("codellama").
-   - **Usage:** 
+   - 사용자가 읽기 쉬운 모델 별칭입니다. 예를 들어 LiteLLM 모델 이름 `"huggingface/codellama/CodeLlama-7b-Instruct-hf"`에 `"codellama"`처럼 더 친숙한 이름을 붙일 때 사용합니다.
+   - **사용법:** 
      ```shell
      litellm --alias my-gpt-model
      ```
 
 ### --api_base
    - **Default:** `None`
-   - The API base for the model LiteLLM should call.
-   - **Usage:** 
+   - LiteLLM이 호출할 모델의 API base입니다.
+   - **사용법:** 
      ```shell
      litellm --model huggingface/tinyllama --api_base https://k58ory32yinf1ly0.us-east-1.aws.endpoints.huggingface.cloud
      ```
 
 ### --api_version
    - **Default:** `2024-07-01-preview`
-   - For Azure services, specify the API version.
-   - **Usage:** 
+   - Azure 서비스에 사용할 API 버전을 지정합니다.
+   - **사용법:** 
      ```shell
      litellm --model azure/gpt-deployment --api_version 2023-08-01 --api_base https://<your api base>"
      ```
 
 ### --headers
    - **Default:** `None`
-   - Headers for the API call (as JSON string).
-   - **Usage:** 
+   - API 호출에 사용할 헤더입니다(JSON 문자열).
+   - **사용법:** 
      ```shell
      litellm --model my-model --headers '{"Authorization": "Bearer token"}'
      ```
 
 ### --add_key
    - **Default:** `None`
-   - Add a key to the model configuration.
-   - **Usage:** 
+   - 모델 설정에 키를 추가합니다.
+   - **사용법:** 
      ```shell
      litellm --add_key my-api-key
      ```
 
 ### --save
    - **Type:** `bool` (Flag)
-   - Save the model-specific config.
-   - **Usage:** 
+   - 모델별 설정을 저장합니다.
+   - **사용법:** 
      ```shell
      litellm --model gpt-3.5-turbo --save
      ```
 
-## Model Parameters
+## 모델 파라미터
 
 ### --temperature
    - **Default:** `None`
    - **Type:** `float`
-   - Set the temperature for the model.
-   - **Usage:** 
+   - 모델의 temperature를 설정합니다.
+   - **사용법:** 
      ```shell
      litellm --temperature 0.7
      ```
@@ -247,8 +231,8 @@ This page documents all command-line interface (CLI) arguments available for the
 ### --max_tokens
    - **Default:** `None`
    - **Type:** `int`
-   - Set the maximum number of tokens for the model output.
-   - **Usage:** 
+   - 모델 출력의 최대 토큰 수를 설정합니다.
+   - **사용법:** 
      ```shell
      litellm --max_tokens 50
      ```
@@ -256,8 +240,8 @@ This page documents all command-line interface (CLI) arguments available for the
 ### --request_timeout
    - **Default:** `None`
    - **Type:** `int`
-   - Set the timeout in seconds for completion calls.
-   - **Usage:** 
+   - completion 호출의 timeout을 초 단위로 설정합니다.
+   - **사용법:** 
      ```shell
      litellm --request_timeout 300
      ```
@@ -265,46 +249,46 @@ This page documents all command-line interface (CLI) arguments available for the
 ### --max_budget
    - **Default:** `None`
    - **Type:** `float`
-   - Set max budget for API calls. Works for hosted models like OpenAI, TogetherAI, Anthropic, etc.
-   - **Usage:** 
+   - API 호출의 최대 예산을 설정합니다. OpenAI, TogetherAI, Anthropic 같은 호스팅 모델에 동작합니다.
+   - **사용법:** 
      ```shell
      litellm --max_budget 100.0
      ```
 
 ### --drop_params
    - **Type:** `bool` (Flag)
-   - Drop any unmapped params.
-   - **Usage:** 
+   - 매핑되지 않은 파라미터를 제거합니다.
+   - **사용법:** 
      ```shell
      litellm --drop_params
      ```
 
 ### --add_function_to_prompt
    - **Type:** `bool` (Flag)
-   - If a function passed but unsupported, pass it as a part of the prompt.
-   - **Usage:** 
+   - 함수가 전달되었지만 지원되지 않으면 prompt의 일부로 전달합니다.
+   - **사용법:** 
      ```shell
      litellm --add_function_to_prompt
      ```
 
-## Database Configuration
+## Database 설정
 
 ### --iam_token_db_auth
    - **Default:** `False`
    - **Type:** `bool` (Flag)
-   - Connects to an RDS database using IAM token authentication instead of a password. This is useful for AWS RDS instances that are configured to use IAM database authentication.
-   - When enabled, LiteLLM will generate an IAM authentication token to connect to the database.
-   - **Required Environment Variables:**
-     - `DATABASE_HOST` - The RDS database host
-     - `DATABASE_PORT` - The database port
-     - `DATABASE_USER` - The database user
-     - `DATABASE_NAME` - The database name
-     - `DATABASE_SCHEMA` (optional) - The database schema
-   - **Usage:** 
+   - 비밀번호 대신 IAM 토큰 인증으로 RDS 데이터베이스에 연결합니다. IAM 데이터베이스 인증을 사용하도록 구성된 AWS RDS 인스턴스에 유용합니다.
+   - 활성화하면 LiteLLM은 데이터베이스 연결용 IAM 인증 토큰을 생성합니다.
+   - **필수 환경 변수:**
+     - `DATABASE_HOST` - RDS 데이터베이스 호스트
+     - `DATABASE_PORT` - 데이터베이스 포트
+     - `DATABASE_USER` - 데이터베이스 사용자
+     - `DATABASE_NAME` - 데이터베이스 이름
+     - `DATABASE_SCHEMA`(선택 사항) - 데이터베이스 스키마
+   - **사용법:** 
      ```shell
      litellm --iam_token_db_auth
      ```
-   - **Usage - set Environment Variable:** `IAM_TOKEN_DB_AUTH`
+   - **사용법 - 환경 변수 설정:** `IAM_TOKEN_DB_AUTH`
      ```shell
      export IAM_TOKEN_DB_AUTH=True
      export DATABASE_HOST=mydb.us-east-1.rds.amazonaws.com
@@ -317,23 +301,23 @@ This page documents all command-line interface (CLI) arguments available for the
 ### --use_prisma_db_push
    - **Default:** `False`
    - **Type:** `bool` (Flag)
-   - Use `prisma db push` instead of `prisma migrate` for database schema updates. This is useful when you want to quickly sync your database schema without creating migration files.
-   - **Usage:** 
+   - 데이터베이스 스키마 업데이트에 `prisma migrate` 대신 `prisma db push`를 사용합니다. 마이그레이션 파일을 만들지 않고 데이터베이스 스키마를 빠르게 동기화할 때 유용합니다.
+   - **사용법:** 
      ```shell
      litellm --use_prisma_db_push
      ```
 
-## Debugging
+## 디버깅
 
 ### --debug
    - **Default:** `False`
    - **Type:** `bool` (Flag)
-   - Enable debugging mode for the input.
-   - **Usage:** 
+   - 입력에 대한 디버깅 모드를 활성화합니다.
+   - **사용법:** 
      ```shell
      litellm --debug
      ```
-  - **Usage - set Environment Variable:** `DEBUG`
+  - **사용법 - 환경 변수 설정:** `DEBUG`
     ```shell
     export DEBUG=True
     litellm
@@ -342,12 +326,12 @@ This page documents all command-line interface (CLI) arguments available for the
 ### --detailed_debug
    - **Default:** `False`
    - **Type:** `bool` (Flag)
-   - Enable detailed debugging mode to view verbose debug logs.
-   - **Usage:** 
+   - 자세한 debug 로그를 보기 위해 상세 디버깅 모드를 활성화합니다.
+   - **사용법:** 
      ```shell
      litellm --detailed_debug
      ```
-  - **Usage - set Environment Variable:** `DETAILED_DEBUG`
+  - **사용법 - 환경 변수 설정:** `DETAILED_DEBUG`
     ```shell
     export DETAILED_DEBUG=True
     litellm
@@ -356,18 +340,18 @@ This page documents all command-line interface (CLI) arguments available for the
 ### --local
    - **Default:** `False`
    - **Type:** `bool` (Flag)
-   - For local debugging purposes.
-   - **Usage:** 
+   - 로컬 디버깅 용도입니다.
+   - **사용법:** 
      ```shell
      litellm --local
      ```
 
-## Testing & Health Checks
+## 테스트 및 상태 확인
 
 ### --test
    - **Type:** `bool` (Flag)
-   - Proxy chat completions URL to make a test request to.
-   - **Usage:** 
+   - 테스트 요청을 보낼 프록시 chat completions URL입니다.
+   - **사용법:** 
      ```shell
      litellm --test
      ```
@@ -375,8 +359,8 @@ This page documents all command-line interface (CLI) arguments available for the
 ### --test_async
    - **Default:** `False`
    - **Type:** `bool` (Flag)
-   - Calls async endpoints `/queue/requests` and `/queue/response`.
-   - **Usage:** 
+   - 비동기 엔드포인트 `/queue/requests`와 `/queue/response`를 호출합니다.
+   - **사용법:** 
      ```shell
      litellm --test_async
      ```
@@ -384,27 +368,27 @@ This page documents all command-line interface (CLI) arguments available for the
 ### --num_requests
    - **Default:** `10`
    - **Type:** `int`
-   - Number of requests to hit async endpoint with (used with `--test_async`).
-   - **Usage:** 
+   - 비동기 엔드포인트에 보낼 요청 수입니다(`--test_async`와 함께 사용).
+   - **사용법:** 
      ```shell
      litellm --test_async --num_requests 100
      ```
 
 ### --health
    - **Type:** `bool` (Flag)
-   - Runs a health check on all models in config.yaml.
-   - **Usage:** 
+   - config.yaml의 모든 모델에 대해 상태 확인을 실행합니다.
+   - **사용법:** 
      ```shell
      litellm --health
      ```
 
-## Other Options
+## 기타 옵션
 
 ### --version
-   - **Short form:** `-v`
+   - **짧은 형식:** `-v`
    - **Type:** `bool` (Flag)
-   - Print LiteLLM version and exit.
-   - **Usage:** 
+   - LiteLLM 버전을 출력하고 종료합니다.
+   - **사용법:** 
      ```shell
      litellm --version
      ```
@@ -412,8 +396,8 @@ This page documents all command-line interface (CLI) arguments available for the
 ### --telemetry
    - **Default:** `True`
    - **Type:** `bool`
-   - Help track usage of this feature. Turn off for privacy.
-   - **Usage:** 
+   - 이 기능 사용량 추적에 도움을 줍니다. 개인정보 보호가 필요하면 끄세요.
+   - **사용법:** 
      ```shell
      litellm --telemetry False
      ```
@@ -421,8 +405,8 @@ This page documents all command-line interface (CLI) arguments available for the
 ### --use_queue
    - **Default:** `False`
    - **Type:** `bool` (Flag)
-   - To use celery workers for async endpoints.
-   - **Usage:** 
+   - 비동기 엔드포인트에 celery worker를 사용합니다.
+   - **사용법:** 
      ```shell
      litellm --use_queue
      ```

@@ -1,16 +1,16 @@
-# Adding OpenAI-Compatible Providers
+# OpenAI 호환 Provider 추가하기
 
-For simple OpenAI-compatible providers (like Hyperbolic, Nscale, etc.), you can add support by editing a single JSON file.
+단순한 OpenAI 호환 provider(Hyperbolic, Nscale 등)는 JSON 파일 하나만 수정해서 지원을 추가할 수 있습니다.
 
-## Quick Start
+## 빠른 시작
 
-1. Edit `litellm/llms/openai_like/providers.json`
-2. Add your provider configuration
-3. Test with: `litellm.completion(model="your_provider/model-name", ...)`
+1. `litellm/llms/openai_like/providers.json` 수정
+2. provider 설정 추가
+3. 다음으로 테스트: `litellm.completion(model="your_provider/model-name", ...)`
 
-## Basic Configuration
+## 기본 설정
 
-For a fully OpenAI-compatible provider:
+완전히 OpenAI와 호환되는 provider의 경우:
 
 ```json
 {
@@ -21,26 +21,26 @@ For a fully OpenAI-compatible provider:
 }
 ```
 
-That's it! The provider is now available.
+이것으로 끝입니다. 이제 해당 provider를 사용할 수 있습니다.
 
-## Configuration Options
+## 설정 옵션
 
-### Required Fields
+### 필수 필드
 
-- `base_url` - API endpoint (e.g., `https://api.provider.com/v1`)
-- `api_key_env` - Environment variable name for API key (e.g., `PROVIDER_API_KEY`)
+- `base_url` - API 엔드포인트(예: `https://api.provider.com/v1`)
+- `api_key_env` - API 키에 사용할 환경 변수 이름(예: `PROVIDER_API_KEY`)
 
-### Optional Fields
+### 선택 필드
 
-- `api_base_env` - Environment variable to override `base_url`
-- `base_class` - Use `"openai_gpt"` (default) or `"openai_like"`
-- `param_mappings` - Map OpenAI parameter names to provider-specific names
-- `constraints` - Parameter value constraints (min/max)
-- `special_handling` - Special behaviors like content format conversion
+- `api_base_env` - `base_url`을 재정의하는 환경 변수
+- `base_class` - `"openai_gpt"`(기본값) 또는 `"openai_like"` 사용
+- `param_mappings` - OpenAI 파라미터 이름을 provider별 이름으로 매핑
+- `constraints` - 파라미터 값 제약 조건(min/max)
+- `special_handling` - 콘텐츠 형식 변환 같은 특수 동작
 
-## Examples
+## 예제
 
-### Simple Provider (Fully Compatible)
+### 단순한 Provider(완전 호환)
 
 ```json
 {
@@ -51,7 +51,7 @@ That's it! The provider is now available.
 }
 ```
 
-### Provider with Parameter Mapping
+### 파라미터 매핑이 있는 Provider
 
 ```json
 {
@@ -65,7 +65,7 @@ That's it! The provider is now available.
 }
 ```
 
-### Provider with Constraints
+### 제약 조건이 있는 Provider
 
 ```json
 {
@@ -80,9 +80,9 @@ That's it! The provider is now available.
 }
 ```
 
-## Responses API Support
+## Responses API 지원
 
-If your provider also supports the OpenAI Responses API (`/v1/responses`), add `supported_endpoints`:
+provider가 OpenAI Responses API(`/v1/responses`)도 지원한다면 `supported_endpoints`를 추가하세요.
 
 ```json
 {
@@ -94,7 +94,7 @@ If your provider also supports the OpenAI Responses API (`/v1/responses`), add `
 }
 ```
 
-This enables `litellm.responses()` with zero additional code:
+그러면 추가 코드 없이 `litellm.responses()`를 사용할 수 있습니다.
 
 ```python
 import litellm
@@ -106,17 +106,17 @@ response = litellm.responses(
 print(response.output)
 ```
 
-If `supported_endpoints` is omitted, it defaults to `[]`. Chat completions is always enabled for JSON providers regardless of this field.
+`supported_endpoints`를 생략하면 기본값은 `[]`입니다. Chat completions는 이 필드와 관계없이 JSON provider에서 항상 활성화됩니다.
 
-The provider inherits all request/response handling from OpenAI's Responses API — streaming, tools, and all standard parameters work out of the box.
+provider는 모든 요청/응답 처리를 OpenAI의 Responses API에서 상속합니다. 스트리밍, 도구, 모든 표준 파라미터가 별도 설정 없이 동작합니다.
 
-## Usage
+## 사용법
 
 ```python
 import litellm
 import os
 
-# Set your API key
+# API 키 설정
 os.environ["YOUR_PROVIDER_API_KEY"] = "your-key-here"
 
 # Chat completions
@@ -125,32 +125,32 @@ response = litellm.completion(
     messages=[{"role": "user", "content": "Hello"}],
 )
 
-# Responses API (if supported_endpoints includes "/v1/responses")
+# Responses API(`supported_endpoints`에 "/v1/responses"가 포함된 경우)
 response = litellm.responses(
     model="your_provider/model-name",
     input="Hello",
 )
 ```
 
-## When to Use Python Instead
+## 대신 Python을 사용해야 하는 경우
 
-Use a Python config class if you need:
+다음이 필요하다면 Python 설정 클래스를 사용하세요.
 
-- Custom authentication flows (OAuth, JWT, etc.)
-- Complex request/response transformations
-- Provider-specific streaming logic
-- Advanced tool calling modifications
+- 사용자 지정 인증 흐름(OAuth, JWT 등)
+- 복잡한 요청/응답 변환
+- Provider별 스트리밍 로직
+- 고급 도구 호출 수정
 
-For chat completions, create a config class in `litellm/llms/your_provider/chat/transformation.py` that inherits from `OpenAIGPTConfig` or `OpenAILikeChatConfig`.
+chat completions의 경우 `OpenAIGPTConfig` 또는 `OpenAILikeChatConfig`를 상속하는 설정 클래스를 `litellm/llms/your_provider/chat/transformation.py`에 생성하세요.
 
-For responses API with small overrides, inherit from `OpenAIResponsesAPIConfig` and override only what's needed. See `litellm/llms/perplexity/responses/transformation.py` for a minimal example (~40 lines vs 400+).
+responses API에서 작은 오버라이드만 필요하다면 `OpenAIResponsesAPIConfig`를 상속하고 필요한 부분만 오버라이드하세요. 최소 예시는 `litellm/llms/perplexity/responses/transformation.py`를 참고하세요(400줄 이상 대신 약 40줄).
 
-## Testing
+## 테스트
 
-Test your provider:
+provider를 테스트하세요.
 
 ```bash
-# Quick test
+# 빠른 테스트
 python -c "
 import litellm
 import os
@@ -163,6 +163,6 @@ print(response.choices[0].message.content)
 "
 ```
 
-## Reference
+## 참고
 
-See existing providers in `litellm/llms/openai_like/providers.json` for examples.
+예시는 `litellm/llms/openai_like/providers.json`의 기존 provider를 참고하세요.

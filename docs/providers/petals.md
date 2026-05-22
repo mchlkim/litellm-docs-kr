@@ -5,14 +5,14 @@ Petals: https://github.com/bigscience-workshop/petals
   <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
 </a>
 
-## Pre-Requisites
-Ensure you have `petals` installed
+## 사전 요구 사항 {#pre-requisites}
+`petals`가 설치되어 있는지 확인하세요.
 ```shell
 uv add git+https://github.com/bigscience-workshop/petals
 ```
 
-## Usage
-Ensure you add `petals/` as a prefix for all petals LLMs. This sets the custom_llm_provider to petals
+## 사용법 {#usage}
+모든 `petals` LLM에 `petals/`를 접두사로 추가하세요. 이렇게 하면 `custom_llm_provider`가 `petals`로 설정됩니다.
 
 ```python
 from litellm import completion
@@ -25,7 +25,7 @@ response = completion(
 print(response)
 ```
 
-## Usage with Streaming
+## 스트리밍 사용법 {#usage-with-streaming}
 
 ```python
 response = completion(
@@ -39,11 +39,9 @@ for chunk in response:
   print(chunk)
 ```
 
-### Model Details
+### 모델 세부 정보 {#model-details}
 
-| Model Name       | Function Call                              |
+| 모델 이름       | 함수 호출                              |
 |------------------|--------------------------------------------|
-| petals-team/StableBeluga | `completion('petals/petals-team/StableBeluga2', messages)` | 
-| huggyllama/llama-65b | `completion('petals/huggyllama/llama-65b', messages)` | 
-
-
+| `petals-team/StableBeluga` | `completion('petals/petals-team/StableBeluga2', messages)` | 
+| `huggyllama/llama-65b` | `completion('petals/huggyllama/llama-65b', messages)` | 

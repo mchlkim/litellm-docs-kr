@@ -1,11 +1,11 @@
 # Gemini CLI
 
-This tutorial shows you how to integrate the Gemini CLI with LiteLLM Proxy, allowing you to route requests through LiteLLM's unified interface.
+이 튜토리얼에서는 Gemini CLI를 LiteLLM Proxy와 통합하여 LiteLLM의 통합 인터페이스를 통해 요청을 라우팅하는 방법을 설명합니다.
 
 
 :::info 
 
-This integration is supported from LiteLLM v1.73.3-nightly and above.
+이 통합은 LiteLLM v1.73.3-nightly 이상에서 지원됩니다.
 
 :::
 
@@ -13,75 +13,75 @@ This integration is supported from LiteLLM v1.73.3-nightly and above.
 
 <iframe width="840" height="500" src="https://www.loom.com/embed/d5dadd811ae64c70b29a16ecd558d4ba" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
 
-## Benefits of using gemini-cli with LiteLLM
+## LiteLLM에서 gemini-cli를 사용할 때의 이점 {#benefits-of-using-gemini-cli-with-litellm}
 
-When you use gemini-cli with LiteLLM you get the following benefits:
+gemini-cli를 LiteLLM과 함께 사용하면 다음과 같은 이점이 있습니다.
 
-**Developer Benefits:**
-- Universal Model Access: Use any LiteLLM supported model (Anthropic, OpenAI, Vertex AI, Bedrock, etc.) through the gemini-cli interface.
-- Higher Rate Limits & Reliability: Load balance across multiple models and providers to avoid hitting individual provider limits, with fallbacks to ensure you get responses even if one provider fails.
+**개발자 이점:**
+- 범용 모델 접근: gemini-cli 인터페이스를 통해 LiteLLM이 지원하는 모든 모델(Anthropic, OpenAI, Vertex AI, Bedrock 등)을 사용할 수 있습니다.
+- 더 높은 속도 제한 및 안정성: 여러 모델과 공급자에 걸쳐 로드 밸런싱하여 개별 공급자 제한에 도달하는 상황을 피하고, 한 공급자가 실패해도 응답을 받을 수 있도록 폴백을 사용할 수 있습니다.
 
-**Proxy Admin Benefits:**
-- Centralized Management: Control access to all models through a single LiteLLM proxy instance without giving your developers API Keys to each provider.
-- Budget Controls: Set spending limits and track costs across all gemini-cli usage.
+**Proxy 관리자 이점:**
+- 중앙 집중식 관리: 개발자에게 각 공급자의 API 키를 제공하지 않고도 단일 LiteLLM Proxy 인스턴스를 통해 모든 모델 접근을 제어할 수 있습니다.
+- 예산 제어: 모든 gemini-cli 사용량에 대해 지출 한도를 설정하고 비용을 추적할 수 있습니다.
 
 
 
-## Prerequisites
+## 사전 준비
 
-Before you begin, ensure you have:
-- Node.js and npm installed on your system
-- A running LiteLLM Proxy instance
-- A valid LiteLLM Proxy API key
-- Git installed for cloning the repository
+시작하기 전에 다음 항목이 준비되어 있는지 확인하세요.
+- 시스템에 설치된 Node.js 및 npm
+- 실행 중인 LiteLLM Proxy 인스턴스
+- 유효한 LiteLLM Proxy API 키
+- 저장소 복제를 위해 설치된 Git
 
-## Quick Start Guide
+## 빠른 시작 가이드 {#quick-start-guide}
 
-### Step 1: Install Gemini CLI
+### 1단계: Gemini CLI 설치 {#step-1-install-gemini-cli}
 
-Clone the Gemini CLI repository and navigate to the project directory:
+Gemini CLI 저장소를 복제하고 프로젝트 디렉터리로 이동합니다.
 
 ```bash
 npm install -g @google/gemini-cli
 ```
 
-### Step 2: Configure Gemini CLI for LiteLLM Proxy
+### 2단계: LiteLLM Proxy용 Gemini CLI 구성 {#step-2-configure-gemini-cli-for-litellm-proxy}
 
-Configure the Gemini CLI to point to your LiteLLM Proxy instance by setting the required environment variables:
+필수 환경 변수를 설정하여 Gemini CLI가 LiteLLM Proxy 인스턴스를 가리키도록 구성합니다.
 
 ```bash
 export GOOGLE_GEMINI_BASE_URL="http://localhost:4000"
 export GEMINI_API_KEY=sk-1234567890
 ```
 
-**Note:** Replace the values with your actual LiteLLM Proxy configuration:
-- `BASE_URL`: The URL where your LiteLLM Proxy is running
-- `GEMINI_API_KEY`: Your LiteLLM Proxy API key
+**참고:** 값을 실제 LiteLLM Proxy 구성으로 바꾸세요.
+- `BASE_URL`: LiteLLM Proxy가 실행 중인 URL
+- `GEMINI_API_KEY`: LiteLLM Proxy API 키
 
-### Step 3: Build and Start Gemini CLI
+### 3단계: Gemini CLI 빌드 및 시작 {#step-3-build-and-start-gemini-cli}
 
-Build the project and start the CLI:
+프로젝트를 빌드하고 CLI를 시작합니다.
 
 ```bash
 gemini
 ```
 
-### Step 4: Test the Integration
+### 4단계: 통합 테스트 {#step-4-test-the-integration}
 
-Once the CLI is running, you can send test requests. These requests will be automatically routed through LiteLLM Proxy to the configured Gemini model.
+CLI가 실행되면 테스트 요청을 보낼 수 있습니다. 이 요청은 LiteLLM Proxy를 통해 구성된 Gemini 모델로 자동 라우팅됩니다.
 
-The CLI will now use LiteLLM Proxy as the backend, giving you access to LiteLLM's features like:
-- Request/response logging
-- Rate limiting
-- Cost tracking
-- Model routing and fallbacks
+이제 CLI가 LiteLLM Proxy를 백엔드로 사용하므로 다음과 같은 LiteLLM 기능을 사용할 수 있습니다.
+- 요청/응답 로깅
+- 속도 제한
+- 비용 추적
+- 모델 라우팅 및 폴백
 
 
-## Advanced
+## 고급 설정 {#advanced}
 
-### Use Anthropic, OpenAI, Bedrock, etc. models on gemini-cli
+### gemini-cli에서 Anthropic, OpenAI, Bedrock 등 모델 사용 {#use-anthropic-openai-bedrock-etc-models-on-gemini-cli}
 
-In order to use non-gemini models on gemini-cli, you need to set a `model_group_alias` in the LiteLLM Proxy config. This tells LiteLLM that requests with model = `gemini-2.5-pro` should be routed to your desired model from any provider.
+gemini-cli에서 Gemini가 아닌 모델을 사용하려면 LiteLLM Proxy 구성에 `model_group_alias`를 설정해야 합니다. 이렇게 하면 `model = gemini-2.5-pro`인 요청을 원하는 공급자의 모델로 라우팅하도록 LiteLLM에 알려줄 수 있습니다.
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -89,7 +89,7 @@ import TabItem from '@theme/TabItem';
 <Tabs>
 <TabItem value="anthropic" label="Anthropic">
 
-Route `gemini-2.5-pro` requests to Claude Sonnet:
+`gemini-2.5-pro` 요청을 Claude Sonnet으로 라우팅합니다.
 
 ```yaml showLineNumbers title="proxy_config.yaml"
 model_list:
@@ -105,7 +105,7 @@ router_settings:
 </TabItem>
 <TabItem value="openai" label="OpenAI">
 
-Route `gemini-2.5-pro` requests to GPT-4o:
+`gemini-2.5-pro` 요청을 GPT-4o로 라우팅합니다.
 
 ```yaml showLineNumbers title="proxy_config.yaml"
 model_list:
@@ -121,7 +121,7 @@ router_settings:
 </TabItem>
 <TabItem value="bedrock" label="Bedrock">
 
-Route `gemini-2.5-pro` requests to Claude on Bedrock:
+`gemini-2.5-pro` 요청을 Bedrock의 Claude로 라우팅합니다.
 
 ```yaml showLineNumbers title="proxy_config.yaml"
 model_list:
@@ -137,9 +137,9 @@ router_settings:
 ```
 
 </TabItem>
-<TabItem value="multi-provider" label="Multi-Provider Load Balancing">
+<TabItem value="multi-provider" label="다중 공급자 로드 밸런싱">
 
-All deployments with model_name=`anthropic-claude` will be load balanced. In this example we load balance between Anthropic and Bedrock.
+`model_name=anthropic-claude`인 모든 배포는 로드 밸런싱됩니다. 이 예시에서는 Anthropic과 Bedrock 사이에서 로드 밸런싱합니다.
 
 ```yaml showLineNumbers title="proxy_config.yaml"
 model_list:
@@ -161,7 +161,7 @@ router_settings:
 </TabItem>
 </Tabs>
 
-With this configuration, when you use `gemini-2.5-pro` in the CLI, LiteLLM will automatically route your requests to the configured provider(s) with load balancing and fallbacks.
+이 구성에서 CLI에 `gemini-2.5-pro`를 사용하면 LiteLLM이 로드 밸런싱과 폴백을 적용하여 구성된 공급자로 요청을 자동 라우팅합니다.
 
 
 
@@ -169,11 +169,10 @@ With this configuration, when you use `gemini-2.5-pro` in the CLI, LiteLLM will 
 
 
 
-## Troubleshooting
+## 문제 해결
 
-If you encounter issues:
+문제가 발생하면 다음을 확인하세요.
 
-1. **Connection errors**: Verify that your LiteLLM Proxy is running and accessible at the configured `GOOGLE_GEMINI_BASE_URL`
-2. **Authentication errors**: Ensure your `GEMINI_API_KEY` is valid and has the necessary permissions
-3. **Build failures**: Make sure all dependencies are installed with `npm install`
-
+1. **연결 오류**: LiteLLM Proxy가 실행 중이며 구성된 `GOOGLE_GEMINI_BASE_URL`에서 접근 가능한지 확인하세요.
+2. **인증 오류**: `GEMINI_API_KEY`가 유효하고 필요한 권한을 가지고 있는지 확인하세요.
+3. **빌드 실패**: 모든 종속성이 `npm install`로 설치되어 있는지 확인하세요.

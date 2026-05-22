@@ -1,15 +1,15 @@
 # watsonx.ai Rerank
 
-## Overview
+## 개요
 
-| Property | Details                                                                  |
+| 속성 | 세부 정보                                                                  |
 |----------|--------------------------------------------------------------------------|
-| Description | watsonx.ai rerank integration                                            |
-| Provider Route on LiteLLM | `watsonx/`                                                               |
-| Supported Operations | `/ml/v1/text/rerank`                                                     |
-| Link to Provider Doc | [IBM WatsonX.ai ↗](https://cloud.ibm.com/apidocs/watsonx-ai#text-rerank) |
+| 설명 | watsonx.ai rerank 연동                                            |
+| LiteLLM의 제공자 라우트 | `watsonx/`                                                               |
+| 지원 작업 | `/ml/v1/text/rerank`                                                     |
+| 제공자 문서 링크 | [IBM WatsonX.ai ↗](https://cloud.ibm.com/apidocs/watsonx-ai#text-rerank) |
 
-## Quick Start
+## 빠른 시작
 
 ### **LiteLLM SDK**
 

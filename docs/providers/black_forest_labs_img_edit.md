@@ -1,22 +1,22 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Black Forest Labs Image Editing
+# Black Forest Labs Image Editing 사용
 
-Black Forest Labs provides powerful image editing capabilities using their FLUX models to modify existing images based on text descriptions.
+Black Forest Labs는 FLUX 모델을 사용해 텍스트 설명에 따라 기존 이미지를 수정하는 강력한 이미지 편집 기능을 제공합니다.
 
-## Overview
+## 개요
 
-| Property | Details |
+| 속성 | 상세 |
 |----------|---------|
-| Description | Black Forest Labs Image Editing uses FLUX Kontext and other models to modify, inpaint, and expand images based on text prompts. |
-| Provider Route on LiteLLM | `black_forest_labs/` |
-| Provider Doc | [Black Forest Labs API ↗](https://docs.bfl.ai/) |
-| Supported Operations | [`/images/edits`](#image-editing) |
+| 설명 | Black Forest Labs Image Editing은 FLUX Kontext와 기타 모델을 사용해 텍스트 prompt 기반으로 이미지를 수정, inpaint, 확장합니다. |
+| LiteLLM Provider Route 값 | `black_forest_labs/` |
+| Provider 문서 | [Black Forest Labs API ↗](https://docs.bfl.ai/) |
+| 지원 작업 | [`/images/edits`](#image-editing) |
 
-## Setup
+## 설정
 
-### API Key
+### API 키
 
 ```python showLineNumbers
 import os
@@ -25,23 +25,23 @@ import os
 os.environ["BFL_API_KEY"] = "your-api-key-here"
 ```
 
-Get your API key from [Black Forest Labs](https://blackforestlabs.ai/).
+[Black Forest Labs](https://blackforestlabs.ai/)에서 API 키를 발급받습니다.
 
-## Supported Models
+## Supported 모델
 
-| Model Name | Description | Use Case |
+| 모델 이름 | 설명 | 사용 사례 |
 |------------|-------------|----------|
-| `black_forest_labs/flux-kontext-pro` | FLUX Kontext Pro - General image editing with prompts | General editing, style transfer |
-| `black_forest_labs/flux-kontext-max` | FLUX Kontext Max - Premium quality editing | High-quality edits |
-| `black_forest_labs/flux-pro-1.0-fill` | FLUX Pro Fill - Inpainting with mask | Remove/replace objects |
-| `black_forest_labs/flux-pro-1.0-expand` | FLUX Pro Expand - Outpainting | Expand image borders |
+| `black_forest_labs/flux-kontext-pro` | FLUX Kontext Pro - prompt 기반 일반 이미지 편집 | 일반 편집, 스타일 변환 |
+| `black_forest_labs/flux-kontext-max` | FLUX Kontext Max - 프리미엄 품질 편집 | 고품질 편집 |
+| `black_forest_labs/flux-pro-1.0-fill` | FLUX Pro Fill - mask 기반 inpainting | 객체 제거/교체 |
+| `black_forest_labs/flux-pro-1.0-expand` | FLUX Pro Expand - outpainting | 이미지 테두리 확장 |
 
-## Image Editing
+## 이미지 편집
 
-### Usage - LiteLLM Python SDK
+### 사용법 - LiteLLM Python SDK
 
 <Tabs>
-<TabItem value="basic-edit" label="Basic Usage">
+<TabItem value="basic-edit" label="기본 사용법">
 
 ```python showLineNumbers title="Basic Image Editing"
 import os
@@ -63,7 +63,7 @@ print(response.data[0].url)
 
 </TabItem>
 
-<TabItem value="async-edit" label="Async Usage">
+<TabItem value="async-edit" label="Async 사용법">
 
 ```python showLineNumbers title="Async Image Editing"
 import os
@@ -136,7 +136,7 @@ print(response.data[0].url)
 
 </TabItem>
 
-<TabItem value="advanced" label="Advanced Parameters">
+<TabItem value="advanced" label="고급 파라미터">
 
 ```python showLineNumbers title="Advanced Image Editing with BFL Parameters"
 import os
@@ -162,9 +162,9 @@ print(response.data[0].url)
 </TabItem>
 </Tabs>
 
-### Usage - LiteLLM Proxy Server
+### 사용법 - LiteLLM Proxy Server
 
-#### 1. Configure your config.yaml
+#### 1. config.yaml 구성
 
 ```yaml showLineNumbers title="Black Forest Labs Image Editing Configuration"
 model_list:
@@ -200,7 +200,7 @@ general_settings:
   master_key: sk-1234
 ```
 
-#### 2. Start LiteLLM Proxy Server
+#### 2. LiteLLM Proxy Server 시작
 
 ```bash showLineNumbers title="Start LiteLLM Proxy Server"
 litellm --config /path/to/config.yaml
@@ -208,7 +208,7 @@ litellm --config /path/to/config.yaml
 # RUNNING on http://0.0.0.0:4000
 ```
 
-#### 3. Make image editing requests
+#### 3. 이미지 편집 요청 보내기
 
 <Tabs>
 <TabItem value="openai-sdk" label="OpenAI SDK">
@@ -247,55 +247,55 @@ curl --location 'http://localhost:4000/v1/images/edits' \
 </TabItem>
 </Tabs>
 
-## Supported Parameters
+## 지원 파라미터
 
-### OpenAI-Compatible Parameters
+### OpenAI 호환 파라미터
 
-| Parameter | Type | Description | Default |
+| Parameter | Type | 설명 | 기본값 |
 |-----------|------|-------------|---------|
-| `image` | file | The image file to edit | Required |
-| `prompt` | string | Text description of the desired changes | Required |
-| `model` | string | The FLUX model to use | Required |
-| `mask` | file | Mask image for inpainting (flux-pro-1.0-fill) | Optional |
-| `n` | integer | Number of images (BFL returns 1 per request) | `1` |
-| `size` | string | Maps to aspect_ratio | Optional |
-| `response_format` | string | `url` or `b64_json` | `url` |
+| `image` | file | 편집할 이미지 파일입니다. | 필수 |
+| `prompt` | string | 원하는 변경 사항을 설명하는 텍스트입니다. | 필수 |
+| `model` | string | 사용할 FLUX 모델입니다. | 필수 |
+| `mask` | file | inpainting용 mask 이미지입니다(`flux-pro-1.0-fill`). | 선택 사항 |
+| `n` | integer | 이미지 수입니다. BFL은 요청당 1개를 반환합니다. | `1` |
+| `size` | string | `aspect_ratio`로 매핑됩니다. | 선택 사항 |
+| `response_format` | string | `url` 또는 `b64_json`입니다. | `url` |
 
-### Black Forest Labs Specific Parameters
+### Black Forest Labs 전용 파라미터
 
-| Parameter | Type | Description | Default | Models |
+| Parameter | Type | 설명 | 기본값 | 모델 |
 |-----------|------|-------------|---------|--------|
-| `seed` | integer | Seed for reproducible results | Random | All |
-| `output_format` | string | Output format: `png` or `jpeg` | `png` | All |
-| `safety_tolerance` | integer | Safety filter tolerance (0-6) | 2 | All |
-| `aspect_ratio` | string | Output aspect ratio (e.g., `16:9`, `1:1`) | Original | Kontext models |
-| `steps` | integer | Number of inference steps | Model default | Fill |
-| `guidance` | float | Guidance scale | Model default | Fill |
-| `grow_mask` | integer | Pixels to grow mask | 0 | Fill |
-| `top` | integer | Pixels to expand at top | 0 | Expand |
-| `bottom` | integer | Pixels to expand at bottom | 0 | Expand |
-| `left` | integer | Pixels to expand at left | 0 | Expand |
-| `right` | integer | Pixels to expand at right | 0 | Expand |
+| `seed` | integer | 재현 가능한 결과를 위한 seed입니다. | Random | All |
+| `output_format` | string | 출력 형식입니다: `png` 또는 `jpeg`. | `png` | All |
+| `safety_tolerance` | integer | safety filter 허용치입니다(0-6). | 2 | All |
+| `aspect_ratio` | string | 출력 aspect ratio입니다. 예: `16:9`, `1:1`. | Original | Kontext models |
+| `steps` | integer | inference step 수입니다. | Model default | Fill |
+| `guidance` | float | guidance scale입니다. | Model default | Fill |
+| `grow_mask` | integer | mask를 확장할 pixel 수입니다. | 0 | Fill |
+| `top` | integer | 위쪽으로 확장할 pixel 수입니다. | 0 | Expand |
+| `bottom` | integer | 아래쪽으로 확장할 pixel 수입니다. | 0 | Expand |
+| `left` | integer | 왼쪽으로 확장할 pixel 수입니다. | 0 | Expand |
+| `right` | integer | 오른쪽으로 확장할 pixel 수입니다. | 0 | Expand |
 
-## How It Works
+## 동작 방식
 
-Black Forest Labs uses a polling-based API:
+Black Forest Labs는 polling 기반 API를 사용합니다.
 
-1. **Submit Request**: LiteLLM sends your image and prompt to BFL
-2. **Get Task ID**: BFL returns a task ID and polling URL
-3. **Poll for Result**: LiteLLM automatically polls until the image is ready
-4. **Return Result**: The generated image URL is returned
+1. **요청 제출**: LiteLLM이 이미지와 prompt를 BFL로 보냅니다.
+2. **Task ID 받기**: BFL이 task ID와 polling URL을 반환합니다.
+3. **결과 polling**: LiteLLM이 이미지가 준비될 때까지 자동으로 polling합니다.
+4. **결과 반환**: 생성된 이미지 URL이 반환됩니다.
 
-This polling is handled automatically by LiteLLM - you just call `image_edit()` and get the result.
+이 polling은 LiteLLM이 자동으로 처리합니다. `image_edit()`만 호출하면 결과를 받을 수 있습니다.
 
-## Getting Started
+## 시작하기
 
-1. Create an account at [Black Forest Labs](https://blackforestlabs.ai/)
-2. Get your API key from the dashboard
-3. Set your `BFL_API_KEY` environment variable
-4. Use `litellm.image_edit()` with any supported model
+1. [Black Forest Labs](https://blackforestlabs.ai/)에서 계정을 생성합니다.
+2. dashboard에서 API 키를 발급받습니다.
+3. `BFL_API_KEY` 환경 변수를 설정합니다.
+4. 지원 모델 중 하나로 `litellm.image_edit()`을 사용합니다.
 
-## Additional Resources
+## 추가 리소스
 
-- [Black Forest Labs Documentation](https://docs.bfl.ai/)
-- [FLUX Model Information](https://blackforestlabs.ai/)
+- [Black Forest Labs 문서](https://docs.bfl.ai/)
+- [FLUX 모델 정보](https://blackforestlabs.ai/)

@@ -2,18 +2,18 @@ import Image from '@theme/IdealImage';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Bedrock Guardrails
+# Bedrock 가드레일
 
 :::tip ⚡️
-If you haven't set up or authenticated your Bedrock provider yet, see the [Bedrock Provider Setup & Authentication Guide](../../providers/bedrock.md).
+아직 Bedrock 프로바이더를 설정하거나 인증하지 않았다면 [Bedrock 프로바이더 설정 및 인증 가이드](../../providers/bedrock.md)를 참조하세요.
 :::
 
-LiteLLM supports Bedrock guardrails via the [Bedrock ApplyGuardrail API](https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_ApplyGuardrail.html). 
+LiteLLM은 [Bedrock ApplyGuardrail API](https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_ApplyGuardrail.html)를 통해 Bedrock 가드레일을 지원합니다.
 
-## Quick Start
-### 1. Define Guardrails on your LiteLLM config.yaml 
+## 빠른 시작
+### 1. LiteLLM config.yaml에 가드레일 정의하기
 
-Define your guardrails under the `guardrails` section
+`guardrails` 섹션 아래에 가드레일을 정의합니다.
 ```yaml
 model_list:
   - model_name: gpt-3.5-turbo
@@ -33,27 +33,27 @@ guardrails:
   
 ```
 
-#### Supported values for `mode`
+#### `mode`에 지원되는 값
 
-- `pre_call` Run **before** LLM call, on **input**
-- `post_call` Run **after** LLM call, on **input & output**
-- `during_call` Run **during** LLM call, on **input** Same as `pre_call` but runs in parallel as LLM call.  Response not returned until guardrail check completes
+- `pre_call` **LLM 호출 전**에 **입력**에 대해 실행합니다.
+- `post_call` **LLM 호출 후**에 **입력 및 출력**에 대해 실행합니다.
+- `during_call` LLM 호출 **중**에 **입력**에 대해 실행합니다. `pre_call`과 동일하지만 LLM 호출과 병렬로 실행됩니다. 가드레일 검사가 완료될 때까지 응답이 반환되지 않습니다.
 
-### 2. Start LiteLLM Gateway 
+### 2. LiteLLM Gateway 시작하기
 
 
 ```shell
 litellm --config config.yaml --detailed_debug
 ```
 
-### 3. Test request 
+### 3. 요청 테스트하기
 
-**[Langchain, OpenAI SDK Usage Examples](../proxy/user_keys#request-format)**
+**[Langchain, OpenAI SDK 사용법 예제](../proxy/user_keys#request-format)**
 
 <Tabs>
-<TabItem label="Unsuccessful call" value = "not-allowed">
+<TabItem label="실패한 호출" value = "not-allowed">
 
-Expect this to fail since since `ishaan@berri.ai` in the request is PII
+요청의 `ishaan@berri.ai`가 PII이므로 실패할 것으로 예상됩니다.
 
 ```shell
 curl -i http://localhost:4000/v1/chat/completions \
@@ -68,7 +68,7 @@ curl -i http://localhost:4000/v1/chat/completions \
   }'
 ```
 
-Expected response on failure
+실패 시 예상 응답
 
 ```shell
 {
@@ -121,7 +121,7 @@ Expected response on failure
 
 </TabItem>
 
-<TabItem label="Successful Call " value = "allowed">
+<TabItem label="성공한 호출 " value = "allowed">
 
 ```shell
 curl -i http://localhost:4000/v1/chat/completions \
@@ -141,14 +141,14 @@ curl -i http://localhost:4000/v1/chat/completions \
 
 </Tabs>
 
-## PII Masking with Bedrock Guardrails
+## Bedrock 가드레일로 PII 마스킹
 
-Bedrock guardrails support PII detection and masking capabilities. To enable this feature, you need to:
+Bedrock 가드레일은 PII 감지 및 마스킹 기능을 지원합니다. 이 기능을 활성화하려면 다음이 필요합니다.
 
-1. Set `mode` to `pre_call` to run the guardrail check before the LLM call
-2. Enable masking by setting `mask_request_content` and/or `mask_response_content` to `true`
+1. LLM 호출 전에 guardrail 검사를 실행하도록 `mode`를 `pre_call`로 설정합니다.
+2. `mask_request_content` 및/또는 `mask_response_content`를 `true`로 설정해 마스킹을 활성화합니다.
 
-Here's how to configure it in your config.yaml:
+config.yaml에서 설정하는 방법은 다음과 같습니다.
 
 ```yaml showLineNumbers title="litellm proxy config.yaml"
 model_list:
@@ -170,31 +170,31 @@ guardrails:
       mask_response_content: true   # Enable masking in model responses
 ```
 
-With this configuration, when the bedrock guardrail intervenes, litellm will read the masked output from the guardrail and send it to the model.
+이 설정을 사용하면 bedrock 가드레일이 개입할 때 litellm이 가드레일의 마스킹된 출력을 읽어 모델로 전송합니다.
 
-### Example Usage
+### 예제 사용법
 
-When enabled, PII will be automatically masked in the text. For example, if a user sends:
+활성화하면 텍스트의 PII가 자동으로 마스킹됩니다. 예를 들어 사용자가 다음을 보내면:
 
 ```
 My email is john.doe@example.com and my phone number is 555-123-4567
 ```
 
-The text sent to the model might be masked as:
+모델로 전송되는 텍스트는 다음처럼 마스킹될 수 있습니다.
 
 ```
 My email is [EMAIL] and my phone number is [PHONE_NUMBER]
 ```
 
-This helps protect sensitive information while still allowing the model to understand the context of the request.
+이를 통해 모델이 요청의 맥락을 이해할 수 있도록 하면서도 민감한 정보를 보호할 수 있습니다.
 
-## Experimental: Only Send Latest User Message
+## 실험적 기능: 최신 `user` 메시지만 전송
 
-When you're chaining long conversations through Bedrock guardrails, you can opt into a lighter, experimental behavior by setting `experimental_use_latest_role_message_only: true` in the guardrail's `litellm_params`. When enabled, LiteLLM only sends the most recent `user` message (or assistant output during post-call checks) to Bedrock, which:
+Bedrock 가드레일을 통해 긴 대화를 연결할 때 가드레일의 `litellm_params`에서 `experimental_use_latest_role_message_only: true`를 설정하면 더 가벼운 실험적 동작을 선택할 수 있습니다. 활성화하면 LiteLLM은 가장 최근의 `user` 메시지(또는 post-call 검사 중에는 assistant 출력)만 Bedrock으로 전송하며, 이 방식은 다음과 같은 효과가 있습니다.
 
-- prevents unintended blocks on older system/dev messages
-- keeps Bedrock payloads smaller, reducing latency and cost
-- applies to proxy hooks (`pre_call`, `during_call`) and the `/guardrails/apply_guardrail` testing endpoint
+- 이전 system/dev 메시지로 인해 의도치 않게 차단되는 것을 방지합니다.
+- Bedrock 페이로드를 더 작게 유지해 지연 시간과 비용을 줄입니다.
+- proxy hook(`pre_call`, `during_call`)와 `/guardrails/apply_guardrail` 테스트 엔드포인트에 적용됩니다.
 
 ```yaml showLineNumbers title="litellm proxy config.yaml"
 guardrails:
@@ -208,17 +208,17 @@ guardrails:
       experimental_use_latest_role_message_only: true  # NEW
 ```
 
-> ⚠️ This flag is currently experimental and defaults to `false` to preserve the legacy behavior (entire message history). We'll be listening to user feedback to decide if this becomes the default or rolls out more broadly.
+> ⚠️ 이 플래그는 현재 실험적 상태이며 기존 동작(전체 메시지 기록)을 유지하기 위해 기본값은 `false`입니다. 사용자 피드백을 반영해 이를 기본값으로 만들지, 더 넓게 배포할지 결정할 예정입니다.
 
-## Disabling Exceptions on Bedrock BLOCK
+## Bedrock BLOCK 시 예외 비활성화
 
-By default, when Bedrock guardrails block content, LiteLLM raises an HTTP 400 exception. However, you can disable this behavior by setting `disable_exception_on_block: true`. This is particularly useful when integrating with **OpenWebUI**, where exceptions can interrupt the chat flow and break the user experience.
+기본적으로 Bedrock 가드레일이 콘텐츠를 차단하면 LiteLLM은 HTTP 400 예외를 발생시킵니다. 하지만 `disable_exception_on_block: true`를 설정해 이 동작을 비활성화할 수 있습니다. 예외가 채팅 흐름을 중단하고 사용자 경험을 해칠 수 있는 **OpenWebUI** 통합에서 특히 유용합니다.
 
-When exceptions are disabled, instead of receiving an error, you'll get a successful response containing the Bedrock guardrail's modified/blocked output.
+예외를 비활성화하면 오류를 받는 대신 Bedrock 가드레일의 수정/차단 출력이 포함된 성공 응답을 받습니다.
 
-### Configuration
+### 설정
 
-Add `disable_exception_on_block: true` to your guardrail configuration:
+가드레일 설정에 `disable_exception_on_block: true`를 추가합니다.
 
 ```yaml showLineNumbers title="litellm proxy config.yaml"
 model_list:
@@ -239,12 +239,12 @@ guardrails:
       disable_exception_on_block: true  # Prevents exceptions when content is blocked
 ```
 
-### Behavior Comparison
+### 동작 비교
 
 <Tabs>
-<TabItem label="With Exceptions (Default)" value="with-exceptions">
+<TabItem label="예외 사용(기본값)" value="with-exceptions">
 
-When `disable_exception_on_block: false` (default):
+`disable_exception_on_block: false`(기본값)인 경우:
 
 ```shell
 curl -i http://localhost:4000/v1/chat/completions \
@@ -259,7 +259,7 @@ curl -i http://localhost:4000/v1/chat/completions \
   }'
 ```
 
-**Response: HTTP 400 Error**
+**응답: HTTP 400 오류**
 ```json
 {
   "error": {
@@ -280,9 +280,9 @@ curl -i http://localhost:4000/v1/chat/completions \
 
 </TabItem>
 
-<TabItem label="Without Exceptions" value="without-exceptions">
+<TabItem label="예외 없음" value="without-exceptions">
 
-When `disable_exception_on_block: true`:
+`disable_exception_on_block: true`인 경우:
 
 ```shell
 curl -i http://localhost:4000/v1/chat/completions \
@@ -297,7 +297,7 @@ curl -i http://localhost:4000/v1/chat/completions \
   }'
 ```
 
-**Response: HTTP 200 Success**
+**응답: HTTP 200 성공**
 ```json
 {
   "id": "chatcmpl-123",

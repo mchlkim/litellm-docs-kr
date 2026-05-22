@@ -1,5 +1,5 @@
 ---
-title: "v1.73.0-stable - Set default team for new users"
+title: "v1.73.0-stable - 신규 사용자의 기본 팀 설정"
 slug: "v1-73-0-stable"
 date: 2025-06-21T10:00:00
 authors:
@@ -22,13 +22,13 @@ import TabItem from '@theme/TabItem';
 
 :::warning
 
-## Known Issues
+## 알려진 문제 {#known-issues}
 
-The `non-root` docker image has a known issue around the UI not loading. If you use the `non-root` docker image we recommend waiting before upgrading to this version. We will post a patch fix for this.
+`non-root` docker image에는 UI가 로드되지 않는 알려진 문제가 있습니다. `non-root` docker image를 사용하는 경우 이 버전으로 업그레이드하기 전에 기다리는 것을 권장합니다. 이 문제에 대한 패치 수정 사항을 게시할 예정입니다.
 
 :::
 
-## Deploy this version
+## 이 버전 배포 {#deploy-this-version}
 
 <Tabs>
 <TabItem value="docker" label="Docker">
@@ -51,83 +51,83 @@ pip install litellm==1.73.0.post1
 </Tabs>
 
 
-## TLDR
+## 요약 {#tldr}
 
 
-* **Why Upgrade**
-    - User Management: Set default team for new users - enables giving all users $10 API keys for exploration.
-    - Passthrough Endpoints v2: Enhanced support for subroutes and custom cost tracking for passthrough endpoints.
-    - Health Check Dashboard: New frontend UI for monitoring model health and status.
-* **Who Should Read**
-    - Teams using **Passthrough Endpoints**
-    - Teams using **User Management** on LiteLLM
-    - Teams using **Health Check Dashboard** for models
-    - Teams using **Claude Code** with LiteLLM
-* **Risk of Upgrade**
-    - **Low**
-        - No major breaking changes to existing functionality.
-- **Major Changes**
-    - `User Agent` will be auto-tracked as a tag in LiteLLM UI Logs Page. This means for all LLM requests you will see a `User Agent` tag in the logs page.
+* **업그레이드 이유**
+    - 사용자 관리: 신규 사용자의 기본 팀을 설정할 수 있습니다. 모든 사용자에게 탐색용 $10 API key를 제공할 수 있습니다.
+    - Passthrough Endpoints v2: passthrough endpoints의 하위 경로와 사용자 지정 비용 추적 지원이 강화되었습니다.
+    - Health Check Dashboard: 모델 상태와 status를 모니터링하는 새 frontend UI입니다.
+* **읽어야 하는 대상**
+    - **Passthrough Endpoints**를 사용하는 팀
+    - LiteLLM에서 **User Management**를 사용하는 팀
+    - 모델용 **Health Check Dashboard**를 사용하는 팀
+    - LiteLLM과 함께 **Claude Code**를 사용하는 팀
+* **업그레이드 위험도**
+    - **낮음**
+        - 기존 기능에 대한 주요 breaking change는 없습니다.
+- **주요 변경 사항**
+    - `User Agent`가 LiteLLM UI 로그 Page에서 tag로 자동 추적됩니다. 즉, 모든 LLM 요청에 대해 logs page에서 `User Agent` tag를 볼 수 있습니다.
 
 ---
 
-## Key Highlights
+## 주요 하이라이트 {#key-highlights}
 
 
 
-### Set Default Team for New Users
+### 신규 사용자의 기본 팀 설정 {#set-default-team-for-new-users}
 
 <Image img={require('../../img/default_teams_product_ss.jpg')}/>
 
 <br/>
 
-v1.73.0 introduces the ability to assign new users to Default Teams. This makes it much easier to enable experimentation with LLMs within your company, while also **ensuring spend for exploration is tracked correctly.** 
+v1.73.0에서는 신규 사용자를 Default Teams에 할당할 수 있습니다. 이를 통해 회사 내부에서 LLM 실험을 훨씬 쉽게 활성화하면서도 **탐색 비용이 올바르게 추적되도록 보장할 수 있습니다.**
  
-What this means for **Proxy Admins**:
-- Set a max budget per team member: This sets a max amount an individual can spend within a team. 
-- Set a default team for new users: When a new user signs in via SSO / invitation link, they will be automatically added to this team. 
+**Proxy Admins**에게 의미하는 내용:
+- 팀 멤버별 최대 예산 설정: 개인이 팀 내에서 사용할 수 있는 최대 금액을 설정합니다.
+- 신규 사용자의 기본 팀 설정: 신규 사용자가 SSO / invitation link로 로그인하면 이 팀에 자동으로 추가됩니다.
 
-What this means for **Developers**: 
-- View models across teams: You can now go to `Models + Endpoints` and view the models you have access to, across all teams you're a member of. 
-- Safe create key modal: If you have no model access outside of a team (default behaviour), you are now nudged to select a team on the Create Key modal. This resolves a common confusion point for new users onboarding to the proxy. 
+**Developers**에게 의미하는 내용:
+- 팀 전체 모델 보기: 이제 `모델 + Endpoints`로 이동해, 자신이 소속된 모든 팀에서 접근 가능한 모델을 볼 수 있습니다.
+- 안전한 create key modal: 팀 외부의 모델 접근 권한이 없는 경우(기본 동작), Create Key modal에서 팀을 선택하도록 안내됩니다. 이는 proxy에 온보딩하는 신규 사용자가 흔히 겪는 혼란을 해결합니다.
 
-[Get Started](https://docs.litellm.ai/docs/tutorials/default_team_self_serve)
+[시작하기](https://docs.litellm.ai/docs/tutorials/default_team_self_serve)
 
 
-### Passthrough Endpoints v2
+### Passthrough Endpoints v2 개선 {#passthrough-endpoints-v2}
 
 <Image img={require('../../img/release_notes/v2_pt.png')}/>
 
 
 <br/>
 
-This release brings support for adding billing and full URL forwarding for passthrough endpoints. 
+이번 릴리스에서는 passthrough endpoints에 대한 billing 추가와 전체 URL forwarding을 지원합니다.
 
-Previously, you could only map simple endpoints, but now you can add just `/bria` and all subroutes automatically get forwarded - for example, `/bria/v1/text-to-image/base/model` and `/bria/v1/enhance_image` will both be forwarded to the target URL with the same path structure.
+이전에는 단순한 endpoints만 매핑할 수 있었지만, 이제 `/bria`만 추가하면 모든 하위 경로가 자동으로 전달됩니다. 예를 들어 `/bria/v1/text-to-image/base/model`과 `/bria/v1/enhance_image`가 모두 동일한 path structure로 target URL에 전달됩니다.
 
-This means you as Proxy Admin can onboard third-party endpoints like Bria API and Mistral OCR, set a cost per request, and give your developers access to the complete API functionality.
+즉, Proxy Admin은 Bria API 및 Mistral OCR 같은 third-party endpoints를 온보딩하고, 요청당 비용을 설정하며, 개발자에게 완전한 API 기능 접근 권한을 제공할 수 있습니다.
 
-[Learn more about Passthrough Endpoints](../../docs/proxy/pass_through)
+[Passthrough Endpoints 자세히 알아보기](../../docs/proxy/pass_through)
 
 
-### v2 Health Checks 
+### v2 Health Checks {#v2-health-checks}
 
 <Image img={require('../../img/release_notes/v2_health.png')}/>
 
 <br/>
 
-This release brings support for Proxy Admins to select which specific models to health check and see the health status as soon as its individual check completes, along with last check times.
+이번 릴리스에서는 Proxy Admins가 health check할 특정 모델을 선택하고, 개별 check가 완료되는 즉시 마지막 check 시간과 함께 health status를 볼 수 있습니다.
 
-This allows Proxy Admins to immediately identify which specific models are in a bad state and view the full error stack trace for faster troubleshooting.
+이를 통해 Proxy Admins는 문제가 있는 특정 모델을 즉시 식별하고 전체 error stack trace를 확인해 더 빠르게 문제를 해결할 수 있습니다.
 
 ---
 
 
-## New / Updated Models
+## 신규 / 업데이트된 모델 {#new--updated-model}
 
-### Pricing / Context Window Updates
+### 가격 / Context Window 업데이트 {#pricing--context-window-updates}
 
-| Provider    | Model                                  | Context Window | Input ($/1M tokens) | Output ($/1M tokens) | Type |
+| Provider    | 모델                                  | Context Window | Input ($/1M tokens) | Output ($/1M tokens) | Type |
 | ----------- | -------------------------------------- | -------------- | ------------------- | -------------------- | ---- |
 | Google VertexAI | `vertex_ai/imagen-4` | N/A | Image Generation | Image Generation | New |
 | Google VertexAI | `vertex_ai/imagen-4-preview` | N/A | Image Generation | Image Generation | New |
@@ -136,198 +136,198 @@ This allows Proxy Admins to immediately identify which specific models are in a 
 | OpenRouter | Various models | Updated | Updated | Updated | Updated |
 | Azure | `azure/o3` | 200k | $2.00 | $8.00 | Updated |
 | Azure | `azure/o3-pro` | 200k | $2.00 | $8.00 | Updated |
-| Azure OpenAI | Azure Codex Models | Various | Various | Various | New |
+| Azure OpenAI | Azure Codex 모델 | Various | Various | Various | New |
 
-### Updated Models
+### 업데이트된 모델 {#updated-model}
 
-#### Features
+#### 기능 {#features}
 - **[Azure](../../docs/providers/azure)**
-    - Support for new /v1 preview Azure OpenAI API - [PR](https://github.com/BerriAI/litellm/pull/11934), [Get Started](../../docs/providers/azure/azure_responses#azure-codex-models)
-    - Add Azure Codex Models support - [PR](https://github.com/BerriAI/litellm/pull/11934), [Get Started](../../docs/providers/azure/azure_responses#azure-codex-models)
-    - Make Azure AD scope configurable - [PR](https://github.com/BerriAI/litellm/pull/11621)
-    - Handle more GPT custom naming patterns - [PR](https://github.com/BerriAI/litellm/pull/11914)
-    - Update o3 pricing to match OpenAI pricing - [PR](https://github.com/BerriAI/litellm/pull/11937)
+    - 새로운 /v1 preview Azure OpenAI API 지원 - [PR](https://github.com/BerriAI/litellm/pull/11934), [시작하기](../../docs/providers/azure/azure_responses#azure-codex-models)
+    - Azure Codex 모델 지원 추가 - [PR](https://github.com/BerriAI/litellm/pull/11934), [시작하기](../../docs/providers/azure/azure_responses#azure-codex-models)
+    - Azure AD scope를 구성 가능하게 변경 - [PR](https://github.com/BerriAI/litellm/pull/11621)
+    - 더 많은 GPT 사용자 지정 naming pattern 처리 - [PR](https://github.com/BerriAI/litellm/pull/11914)
+    - OpenAI pricing에 맞춰 o3 pricing 업데이트 - [PR](https://github.com/BerriAI/litellm/pull/11937)
 - **[VertexAI](../../docs/providers/vertex)**
-    - Add Vertex Imagen-4 models - [PR](https://github.com/BerriAI/litellm/pull/11767), [Get Started](../../docs/providers/vertex_image)
-    - Anthropic streaming passthrough cost tracking - [PR](https://github.com/BerriAI/litellm/pull/11734)
+    - Vertex Imagen-4 models 추가 - [PR](https://github.com/BerriAI/litellm/pull/11767), [시작하기](../../docs/providers/vertex_image)
+    - Anthropic streaming passthrough 비용 추적 - [PR](https://github.com/BerriAI/litellm/pull/11734)
 - **[Gemini](../../docs/providers/gemini)**
-    - Working Gemini TTS support via `/v1/speech` endpoint - [PR](https://github.com/BerriAI/litellm/pull/11832)
-    - Fix gemini 2.5 flash config - [PR](https://github.com/BerriAI/litellm/pull/11830)
-    - Add missing `flash-2.5-flash-lite` model and fix pricing - [PR](https://github.com/BerriAI/litellm/pull/11901)
-    - Mark all gemini-2.5 models as supporting PDF input - [PR](https://github.com/BerriAI/litellm/pull/11907)
-    - Add `gemini-2.5-pro` with reasoning support - [PR](https://github.com/BerriAI/litellm/pull/11927)
+    - `/v1/speech` endpoint를 통한 Gemini TTS 지원 동작 - [PR](https://github.com/BerriAI/litellm/pull/11832)
+    - gemini 2.5 flash config 수정 - [PR](https://github.com/BerriAI/litellm/pull/11830)
+    - 누락된 `flash-2.5-flash-lite` model 추가 및 pricing 수정 - [PR](https://github.com/BerriAI/litellm/pull/11901)
+    - 모든 gemini-2.5 models가 PDF input을 지원하는 것으로 표시 - [PR](https://github.com/BerriAI/litellm/pull/11907)
+    - reasoning support가 포함된 `gemini-2.5-pro` 추가 - [PR](https://github.com/BerriAI/litellm/pull/11927)
 - **[AWS Bedrock](../../docs/providers/bedrock)**
-    - AWS credentials no longer mandatory - [PR](https://github.com/BerriAI/litellm/pull/11765)
-    - Add AWS Bedrock profiles for APAC region - [PR](https://github.com/BerriAI/litellm/pull/11883)
-    - Fix AWS Bedrock Claude tool call index - [PR](https://github.com/BerriAI/litellm/pull/11842)
-    - Handle base64 file data with `qs:..` prefix - [PR](https://github.com/BerriAI/litellm/pull/11908)
-    - Add Mistral Small to BEDROCK_CONVERSE_MODELS - [PR](https://github.com/BerriAI/litellm/pull/11760)
+    - AWS credentials를 더 이상 필수로 요구하지 않음 - [PR](https://github.com/BerriAI/litellm/pull/11765)
+    - APAC region용 AWS Bedrock profiles 추가 - [PR](https://github.com/BerriAI/litellm/pull/11883)
+    - AWS Bedrock Claude tool call index 수정 - [PR](https://github.com/BerriAI/litellm/pull/11842)
+    - `qs:..` prefix가 있는 base64 file data 처리 - [PR](https://github.com/BerriAI/litellm/pull/11908)
+    - BEDROCK_CONVERSE_MODELS에 Mistral Small 추가 - [PR](https://github.com/BerriAI/litellm/pull/11760)
 - **[Mistral](../../docs/providers/mistral)**
-    - Enhance Mistral API with parallel tool calls support - [PR](https://github.com/BerriAI/litellm/pull/11770)
+    - parallel tool calls 지원으로 Mistral API 개선 - [PR](https://github.com/BerriAI/litellm/pull/11770)
 - **[Meta Llama API](../../docs/providers/meta_llama)**
-    - Enable tool calling for meta_llama models - [PR](https://github.com/BerriAI/litellm/pull/11895)
+    - meta_llama models에 tool calling 활성화 - [PR](https://github.com/BerriAI/litellm/pull/11895)
 - **[Volcengine](../../docs/providers/volcengine)**
-    - Add thinking parameter support - [PR](https://github.com/BerriAI/litellm/pull/11914)
+    - thinking parameter 지원 추가 - [PR](https://github.com/BerriAI/litellm/pull/11914)
 
 
-#### Bugs
+#### 버그 {#bugs}
 
 - **[VertexAI](../../docs/providers/vertex)**
-    - Handle missing tokenCount in promptTokensDetails - [PR](https://github.com/BerriAI/litellm/pull/11896)
-    - Fix vertex AI claude thinking params - [PR](https://github.com/BerriAI/litellm/pull/11796)
+    - promptTokensDetails의 누락된 tokenCount 처리 - [PR](https://github.com/BerriAI/litellm/pull/11896)
+    - vertex AI claude thinking params 수정 - [PR](https://github.com/BerriAI/litellm/pull/11796)
 - **[Gemini](../../docs/providers/gemini)**
-    - Fix web search error with responses API - [PR](https://github.com/BerriAI/litellm/pull/11894), [Get Started](../../docs/completion/web_search#responses-litellmresponses)
+    - responses API의 web search 오류 수정 - [PR](https://github.com/BerriAI/litellm/pull/11894), [시작하기](../../docs/completion/web_search#responses-litellmresponses)
 - **[Custom LLM](../../docs/providers/custom_llm_server)**
-    - Set anthropic custom LLM provider property - [PR](https://github.com/BerriAI/litellm/pull/11907)
+    - anthropic custom LLM provider property 설정 - [PR](https://github.com/BerriAI/litellm/pull/11907)
 - **[Anthropic](../../docs/providers/anthropic)**
-    - Bump anthropic package version - [PR](https://github.com/BerriAI/litellm/pull/11851)
+    - anthropic package version 상향 - [PR](https://github.com/BerriAI/litellm/pull/11851)
 - **[Ollama](../../docs/providers/ollama)**
-    - Update ollama_embeddings to work on sync API - [PR](https://github.com/BerriAI/litellm/pull/11746)
-    - Fix response_format not working - [PR](https://github.com/BerriAI/litellm/pull/11880)
+    - sync API에서 작동하도록 ollama_embeddings 업데이트 - [PR](https://github.com/BerriAI/litellm/pull/11746)
+    - response_format이 작동하지 않는 문제 수정 - [PR](https://github.com/BerriAI/litellm/pull/11880)
 
 ---
 
-## LLM API Endpoints
+## LLM API 엔드포인트 {#llm-api-endpoints}
 
-#### Features
+#### 기능 {#features-1}
 - **[Responses API](../../docs/response_api)**
-    - Day-0 support for OpenAI re-usable prompts Responses API - [PR](https://github.com/BerriAI/litellm/pull/11782), [Get Started](../../docs/providers/openai/responses_api#reusable-prompts)
-    - Support passing image URLs in Completion-to-Responses bridge - [PR](https://github.com/BerriAI/litellm/pull/11833)
+    - OpenAI reusable prompts Responses API에 대한 Day-0 지원 - [PR](https://github.com/BerriAI/litellm/pull/11782), [시작하기](../../docs/providers/openai/responses_api#reusable-prompts)
+    - Completion-to-Responses bridge에서 image URLs 전달 지원 - [PR](https://github.com/BerriAI/litellm/pull/11833)
 - **[MCP Gateway](../../docs/mcp)**
-    - Add Allowed MCPs to Creating/Editing Organizations - [PR](https://github.com/BerriAI/litellm/pull/11893), [Get Started](../../docs/mcp#-mcp-permission-management)
-    - Allow connecting to MCP with authentication headers - [PR](https://github.com/BerriAI/litellm/pull/11891), [Get Started](../../docs/mcp#using-your-mcp-with-client-side-credentials)
+    - Creating/Editing Organizations에 Allowed MCPs 추가 - [PR](https://github.com/BerriAI/litellm/pull/11893), [시작하기](../../docs/mcp#-mcp-permission-management)
+    - authentication headers로 MCP에 연결할 수 있도록 허용 - [PR](https://github.com/BerriAI/litellm/pull/11891), [시작하기](../../docs/mcp#using-your-mcp-with-client-side-credentials)
 - **[Speech API](../../docs/speech)**
-    - Working Gemini TTS support via OpenAI's `/v1/speech` endpoint - [PR](https://github.com/BerriAI/litellm/pull/11832)
+    - OpenAI의 `/v1/speech` endpoint를 통한 Gemini TTS 지원 동작 - [PR](https://github.com/BerriAI/litellm/pull/11832)
 - **[Passthrough Endpoints](../../docs/proxy/pass_through)**
-    - Add support for subroutes for passthrough endpoints - [PR](https://github.com/BerriAI/litellm/pull/11827)
-    - Support for setting custom cost per passthrough request - [PR](https://github.com/BerriAI/litellm/pull/11870)
-    - Ensure "Request" is tracked for passthrough requests on LiteLLM Proxy - [PR](https://github.com/BerriAI/litellm/pull/11873)
-    - Add V2 Passthrough endpoints on UI - [PR](https://github.com/BerriAI/litellm/pull/11905)
-    - Move passthrough endpoints under Models + Endpoints in UI - [PR](https://github.com/BerriAI/litellm/pull/11871)
-    - QA improvements for adding passthrough endpoints - [PR](https://github.com/BerriAI/litellm/pull/11909), [PR](https://github.com/BerriAI/litellm/pull/11939)
-- **[Models API](../../docs/completion/model_alias)**
-    - Allow `/models` to return correct models for custom wildcard prefixes - [PR](https://github.com/BerriAI/litellm/pull/11784)
+    - passthrough endpoints의 하위 경로 지원 추가 - [PR](https://github.com/BerriAI/litellm/pull/11827)
+    - passthrough request당 사용자 지정 비용 설정 지원 - [PR](https://github.com/BerriAI/litellm/pull/11870)
+    - LiteLLM Proxy에서 passthrough requests에 대해 "Request"가 추적되도록 보장 - [PR](https://github.com/BerriAI/litellm/pull/11873)
+    - UI에 V2 Passthrough endpoints 추가 - [PR](https://github.com/BerriAI/litellm/pull/11905)
+    - UI에서 passthrough endpoints를 모델 + Endpoints 아래로 이동 - [PR](https://github.com/BerriAI/litellm/pull/11871)
+    - passthrough endpoints 추가를 위한 QA 개선 - [PR](https://github.com/BerriAI/litellm/pull/11909), [PR](https://github.com/BerriAI/litellm/pull/11939)
+- **[모델 API](../../docs/completion/model_alias)**
+    - `/models`가 custom wildcard prefixes에 대해 올바른 models를 반환하도록 허용 - [PR](https://github.com/BerriAI/litellm/pull/11784)
 
-#### Bugs
+#### 버그 {#bugs-1}
 
 - **[Messages API](../../docs/anthropic_unified)**
-    - Fix `/v1/messages` endpoint always using us-central1 with vertex_ai-anthropic models - [PR](https://github.com/BerriAI/litellm/pull/11831)
-    - Fix model_group tracking for `/v1/messages` and `/moderations` - [PR](https://github.com/BerriAI/litellm/pull/11933)
-    - Fix cost tracking and logging via `/v1/messages` API when using Claude Code - [PR](https://github.com/BerriAI/litellm/pull/11928)
+    - vertex_ai-anthropic models 사용 시 `/v1/messages` endpoint가 항상 us-central1을 사용하는 문제 수정 - [PR](https://github.com/BerriAI/litellm/pull/11831)
+    - `/v1/messages` 및 `/moderations`의 model_group 추적 수정 - [PR](https://github.com/BerriAI/litellm/pull/11933)
+    - Claude Code 사용 시 `/v1/messages` API를 통한 비용 추적 및 logging 수정 - [PR](https://github.com/BerriAI/litellm/pull/11928)
 - **[MCP Gateway](../../docs/mcp)**
-    - Fix using MCPs defined on config.yaml - [PR](https://github.com/BerriAI/litellm/pull/11824)
+    - config.yaml에 정의된 MCPs 사용 문제 수정 - [PR](https://github.com/BerriAI/litellm/pull/11824)
 - **[Chat Completion API](../../docs/completion/input)**
-    - Allow dict for tool_choice argument in acompletion - [PR](https://github.com/BerriAI/litellm/pull/11860)
+    - acompletion에서 tool_choice argument로 dict 허용 - [PR](https://github.com/BerriAI/litellm/pull/11860)
 - **[Passthrough Endpoints](../../docs/pass_through/langfuse)**
-    - Don't log request to Langfuse passthrough on Langfuse - [PR](https://github.com/BerriAI/litellm/pull/11768)
+    - Langfuse에서 Langfuse passthrough request를 기록하지 않도록 수정 - [PR](https://github.com/BerriAI/litellm/pull/11768)
 
 ---
 
-## Spend Tracking
+## 비용 추적 {#cost-tracking}
 
-#### Features
+#### 기능 {#features-2}
 - **[User Agent Tracking](../../docs/proxy/cost_tracking)**
-    - Automatically track spend by user agent (allows cost tracking for Claude Code) - [PR](https://github.com/BerriAI/litellm/pull/11781)
-    - Add user agent tags in spend logs payload - [PR](https://github.com/BerriAI/litellm/pull/11872)
+    - user agent별 spend 자동 추적(Claude Code 비용 추적 가능) - [PR](https://github.com/BerriAI/litellm/pull/11781)
+    - spend logs payload에 user agent tags 추가 - [PR](https://github.com/BerriAI/litellm/pull/11872)
 - **[Tag Management](../../docs/proxy/cost_tracking)**
-    - Support adding public model names in tag management - [PR](https://github.com/BerriAI/litellm/pull/11908)
+    - tag management에서 public model names 추가 지원 - [PR](https://github.com/BerriAI/litellm/pull/11908)
 
 ---
 
-## Management Endpoints / UI
+## 관리 Endpoints / UI {#management-endpoints--ui}
 
-#### Features
+#### 기능 {#features-3}
 - **Test Key Page**
-    - Allow testing `/v1/messages` on the Test Key Page - [PR](https://github.com/BerriAI/litellm/pull/11930)
+    - Test Key Page에서 `/v1/messages` testing 허용 - [PR](https://github.com/BerriAI/litellm/pull/11930)
 - **[SSO](../../docs/proxy/sso)**
-    - Allow passing additional headers - [PR](https://github.com/BerriAI/litellm/pull/11781)
+    - additional headers 전달 허용 - [PR](https://github.com/BerriAI/litellm/pull/11781)
 - **[JWT Auth](../../docs/proxy/jwt_auth)**
-    - Correctly return user email - [PR](https://github.com/BerriAI/litellm/pull/11783)
+    - user email을 올바르게 반환 - [PR](https://github.com/BerriAI/litellm/pull/11783)
 - **[Model Management](../../docs/proxy/model_management)**
-    - Allow editing model access group for existing model - [PR](https://github.com/BerriAI/litellm/pull/11783)
+    - existing model의 model access group 편집 허용 - [PR](https://github.com/BerriAI/litellm/pull/11783)
 - **[Team Management](../../docs/proxy/team_management)**
-    - Allow setting default team for new users - [PR](https://github.com/BerriAI/litellm/pull/11874), [PR](https://github.com/BerriAI/litellm/pull/11877)
-    - Fix default team settings - [PR](https://github.com/BerriAI/litellm/pull/11887)
+    - 신규 사용자의 default team 설정 허용 - [PR](https://github.com/BerriAI/litellm/pull/11874), [PR](https://github.com/BerriAI/litellm/pull/11877)
+    - default team settings 수정 - [PR](https://github.com/BerriAI/litellm/pull/11887)
 - **[SCIM](../../docs/proxy/scim)**
-    - Add error handling for existing user on SCIM - [PR](https://github.com/BerriAI/litellm/pull/11862)
-    - Add SCIM PATCH and PUT operations for users - [PR](https://github.com/BerriAI/litellm/pull/11863)
-- **Health Check Dashboard**
-    - Implement health check backend API and storage functionality - [PR](https://github.com/BerriAI/litellm/pull/11852)
-    - Add LiteLLM_HealthCheckTable to database schema - [PR](https://github.com/BerriAI/litellm/pull/11677)
-    - Implement health check frontend UI components and dashboard integration - [PR](https://github.com/BerriAI/litellm/pull/11679)
-    - Add success modal for health check responses - [PR](https://github.com/BerriAI/litellm/pull/11899)
-    - Fix clickable model ID in health check table - [PR](https://github.com/BerriAI/litellm/pull/11898)
-    - Fix health check UI table design - [PR](https://github.com/BerriAI/litellm/pull/11897)
+    - SCIM의 existing user에 대한 error handling 추가 - [PR](https://github.com/BerriAI/litellm/pull/11862)
+    - users용 SCIM PATCH 및 PUT operations 추가 - [PR](https://github.com/BerriAI/litellm/pull/11863)
+- **Health Check Dashboard 개선**
+    - health check backend API 및 storage functionality 구현 - [PR](https://github.com/BerriAI/litellm/pull/11852)
+    - database schema에 LiteLLM_HealthCheckTable 추가 - [PR](https://github.com/BerriAI/litellm/pull/11677)
+    - health check frontend UI components 및 dashboard integration 구현 - [PR](https://github.com/BerriAI/litellm/pull/11679)
+    - health check responses용 success modal 추가 - [PR](https://github.com/BerriAI/litellm/pull/11899)
+    - health check table에서 클릭 가능한 model ID 수정 - [PR](https://github.com/BerriAI/litellm/pull/11898)
+    - health check UI table design 수정 - [PR](https://github.com/BerriAI/litellm/pull/11897)
 
 ---
 
-## Logging / Guardrails Integrations
+## Logging / Guardrails 연동 {#logging--guardrail-integrations}
 
-#### Bugs
+#### 버그 {#bugs-2}
 - **[Prometheus](../../docs/observability/prometheus)**
-    - Fix bug for using prometheus metrics config - [PR](https://github.com/BerriAI/litellm/pull/11779)
+    - prometheus metrics config 사용 버그 수정 - [PR](https://github.com/BerriAI/litellm/pull/11779)
 
 ---
 
-## Security & Reliability
+## 보안 및 안정성 {#security--reliability}
 
-#### Security Fixes
-- **[Documentation Security](../../docs)**
-    - Security fixes for docs - [PR](https://github.com/BerriAI/litellm/pull/11776)
-    - Add Trivy Security Scan for UI + Docs folder - remove all vulnerabilities - [PR](https://github.com/BerriAI/litellm/pull/11778)
+#### 보안 수정 {#security-fixes}
+- **[문서 보안](../../docs)**
+    - docs 보안 수정 - [PR](https://github.com/BerriAI/litellm/pull/11776)
+    - UI + 문서 folder에 Trivy Security Scan 추가 및 모든 vulnerabilities 제거 - [PR](https://github.com/BerriAI/litellm/pull/11778)
 
-#### Reliability Improvements
+#### 안정성 개선 {#reliability-improvements}
 - **[Dependencies](../../docs)**
-    - Fix aiohttp version requirement - [PR](https://github.com/BerriAI/litellm/pull/11777)
-    - Bump next from 14.2.26 to 14.2.30 in UI dashboard - [PR](https://github.com/BerriAI/litellm/pull/11720)
+    - aiohttp version requirement 수정 - [PR](https://github.com/BerriAI/litellm/pull/11777)
+    - UI dashboard에서 next를 14.2.26에서 14.2.30으로 상향 - [PR](https://github.com/BerriAI/litellm/pull/11720)
 - **[Networking](../../docs)**
-    - Allow using CA Bundles - [PR](https://github.com/BerriAI/litellm/pull/11906)
-    - Add workload identity federation between GCP and AWS - [PR](https://github.com/BerriAI/litellm/pull/10210)
+    - CA Bundles 사용 허용 - [PR](https://github.com/BerriAI/litellm/pull/11906)
+    - GCP와 AWS 간 workload identity federation 추가 - [PR](https://github.com/BerriAI/litellm/pull/10210)
 
 ---
 
-## General Proxy Improvements
+## 일반 Proxy 개선 사항 {#general-proxy-improvements}
 
-#### Features
+#### 기능 {#features-4}
 - **[Deployment](../../docs/proxy/deploy)**
-    - Add deployment annotations for Kubernetes - [PR](https://github.com/BerriAI/litellm/pull/11849)
-    - Add ciphers in command and pass to hypercorn for proxy - [PR](https://github.com/BerriAI/litellm/pull/11916)
+    - Kubernetes용 deployment annotations 추가 - [PR](https://github.com/BerriAI/litellm/pull/11849)
+    - command에 ciphers를 추가하고 proxy용 hypercorn에 전달 - [PR](https://github.com/BerriAI/litellm/pull/11916)
 - **[Custom Root Path](../../docs/proxy/deploy)**
-    - Fix loading UI on custom root path - [PR](https://github.com/BerriAI/litellm/pull/11912)
+    - custom root path에서 UI 로드 수정 - [PR](https://github.com/BerriAI/litellm/pull/11912)
 - **[SDK Improvements](../../docs/proxy/reliability)**
-    - LiteLLM SDK / Proxy improvement (don't transform message client-side) - [PR](https://github.com/BerriAI/litellm/pull/11908)
+    - LiteLLM SDK / Proxy 개선(message를 client-side에서 변환하지 않음) - [PR](https://github.com/BerriAI/litellm/pull/11908)
 
-#### Bugs
-- **[Observability](../../docs/observability)**
-    - Fix boto3 tracer wrapping for observability - [PR](https://github.com/BerriAI/litellm/pull/11869)
+#### 버그 {#bugs-3}
+- **[관측성](../../docs/observability)**
+    - observability용 boto3 tracer wrapping 수정 - [PR](https://github.com/BerriAI/litellm/pull/11869)
 
-
----
-
-## New Contributors
-* @kjoth made their first contribution in [PR](https://github.com/BerriAI/litellm/pull/11621)
-* @shagunb-acn made their first contribution in [PR](https://github.com/BerriAI/litellm/pull/11760)
-* @MadsRC made their first contribution in [PR](https://github.com/BerriAI/litellm/pull/11765)
-* @Abiji-2020 made their first contribution in [PR](https://github.com/BerriAI/litellm/pull/11746)
-* @salzubi401 made their first contribution in [PR](https://github.com/BerriAI/litellm/pull/11803)
-* @orolega made their first contribution in [PR](https://github.com/BerriAI/litellm/pull/11826)
-* @X4tar made their first contribution in [PR](https://github.com/BerriAI/litellm/pull/11796)
-* @karen-veigas made their first contribution in [PR](https://github.com/BerriAI/litellm/pull/11858)
-* @Shankyg made their first contribution in [PR](https://github.com/BerriAI/litellm/pull/11859)
-* @pascallim made their first contribution in [PR](https://github.com/BerriAI/litellm/pull/10210)
-* @lgruen-vcgs made their first contribution in [PR](https://github.com/BerriAI/litellm/pull/11883)
-* @rinormaloku made their first contribution in [PR](https://github.com/BerriAI/litellm/pull/11851)
-* @InvisibleMan1306 made their first contribution in [PR](https://github.com/BerriAI/litellm/pull/11849)
-* @ervwalter made their first contribution in [PR](https://github.com/BerriAI/litellm/pull/11937)
-* @ThakeeNathees made their first contribution in [PR](https://github.com/BerriAI/litellm/pull/11880)
-* @jnhyperion made their first contribution in [PR](https://github.com/BerriAI/litellm/pull/11842)
-* @Jannchie made their first contribution in [PR](https://github.com/BerriAI/litellm/pull/11860)
 
 ---
 
-## Demo Instance
+## 신규 기여자 {#new-contributors}
+* @kjoth가 [PR](https://github.com/BerriAI/litellm/pull/11621)에서 첫 기여를 했습니다.
+* @shagunb-acn이 [PR](https://github.com/BerriAI/litellm/pull/11760)에서 첫 기여를 했습니다.
+* @MadsRC가 [PR](https://github.com/BerriAI/litellm/pull/11765)에서 첫 기여를 했습니다.
+* @Abiji-2020이 [PR](https://github.com/BerriAI/litellm/pull/11746)에서 첫 기여를 했습니다.
+* @salzubi401이 [PR](https://github.com/BerriAI/litellm/pull/11803)에서 첫 기여를 했습니다.
+* @orolega가 [PR](https://github.com/BerriAI/litellm/pull/11826)에서 첫 기여를 했습니다.
+* @X4tar가 [PR](https://github.com/BerriAI/litellm/pull/11796)에서 첫 기여를 했습니다.
+* @karen-veigas가 [PR](https://github.com/BerriAI/litellm/pull/11858)에서 첫 기여를 했습니다.
+* @Shankyg가 [PR](https://github.com/BerriAI/litellm/pull/11859)에서 첫 기여를 했습니다.
+* @pascallim이 [PR](https://github.com/BerriAI/litellm/pull/10210)에서 첫 기여를 했습니다.
+* @lgruen-vcgs가 [PR](https://github.com/BerriAI/litellm/pull/11883)에서 첫 기여를 했습니다.
+* @rinormaloku가 [PR](https://github.com/BerriAI/litellm/pull/11851)에서 첫 기여를 했습니다.
+* @InvisibleMan1306이 [PR](https://github.com/BerriAI/litellm/pull/11849)에서 첫 기여를 했습니다.
+* @ervwalter가 [PR](https://github.com/BerriAI/litellm/pull/11937)에서 첫 기여를 했습니다.
+* @ThakeeNathees가 [PR](https://github.com/BerriAI/litellm/pull/11880)에서 첫 기여를 했습니다.
+* @jnhyperion이 [PR](https://github.com/BerriAI/litellm/pull/11842)에서 첫 기여를 했습니다.
+* @Jannchie가 [PR](https://github.com/BerriAI/litellm/pull/11860)에서 첫 기여를 했습니다.
 
-Here's a Demo Instance to test changes:
+---
+
+## Demo Instance {#demo-instance}
+
+변경 사항을 테스트할 수 있는 Demo Instance입니다.
 
 - Instance: https://demo.litellm.ai/
 - Login Credentials:

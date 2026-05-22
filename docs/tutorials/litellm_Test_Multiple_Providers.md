@@ -1,10 +1,10 @@
-# Reliability test Multiple LLM Providers with LiteLLM
+# LiteLLM으로 여러 LLM Providers 안정성 테스트하기 {#reliability-test-multiple-llm-providers-with-litellm}
 
 
 
-*   Quality Testing
-*   Load Testing
-*   Duration Testing
+*   품질 테스트
+*   부하 테스트
+*   지속 시간 테스트
 
 
 
@@ -26,11 +26,11 @@ from dotenv import load_dotenv
 load_dotenv()
 ```
 
-# Quality Test endpoint
+# 품질 테스트 endpoint {#quality-test-endpoint}
 
-## Test the same prompt across multiple LLM providers
+## 여러 LLM providers에서 같은 prompt 테스트하기 {#test-the-same-prompt-across-multiple-llm-providers}
 
-In this example, let's ask some questions about Paul Graham
+이 예제에서는 Paul Graham에 대한 몇 가지 질문을 해보겠습니다.
 
 
 ```python
@@ -42,9 +42,9 @@ result = testing_batch_completion(models=models, messages=messages)
 ```
 
 
-# Load Test endpoint
+# 부하 테스트 endpoint {#load-test-endpoint}
 
-Run 100+ simultaneous queries across multiple providers to see when they fail + impact on latency
+여러 providers에 동시에 100개 이상의 query를 실행하여 실패 시점과 latency에 미치는 영향을 확인합니다.
 
 
 ```python
@@ -55,7 +55,7 @@ final_prompt = context + prompt
 result = load_test_model(models=models, prompt=final_prompt, num_calls=5)
 ```
 
-## Visualize the data
+## 데이터 시각화 {#visualize-the-data}
 
 
 ```python
@@ -89,9 +89,9 @@ plt.show()
     
 
 
-# Duration Test endpoint
+# 지속 시간 테스트 endpoint {#duration-test-endpoint}
 
-Run load testing for 2 mins. Hitting endpoints with 100+ queries every 15 seconds.
+2분 동안 부하 테스트를 실행합니다. 15초마다 100개 이상의 query로 endpoints를 호출합니다.
 
 
 ```python
@@ -133,4 +133,3 @@ plt.show()
     
 ![png](litellm_Test_Multiple_Providers_files/litellm_Test_Multiple_Providers_14_0.png)
     
-

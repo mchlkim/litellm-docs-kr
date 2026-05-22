@@ -1,26 +1,26 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# In-memory Prompt Injection Detection
+# 인메모리 프롬프트 인젝션 탐지 {#in-memory-prompt-injection-detection}
 
-LiteLLM Supports the following methods for detecting prompt injection attacks
+LiteLLM은 프롬프트 인젝션 공격을 탐지하기 위해 다음 방법을 지원합니다.
 
-- [Similarity Checks](#similarity-checking)
-- [LLM API Call to check](#llm-api-checks)
+- [유사도 검사](#similarity-checking)
+- [LLM API 호출 검사](#llm-api-checks)
 
-## Similarity Checking
+## 유사도 검사 {#similarity-checking}
 
-LiteLLM supports similarity checking against a pre-generated list of prompt injection attacks, to identify if a request contains an attack. 
+LiteLLM은 요청에 공격이 포함되어 있는지 식별하기 위해, 미리 생성된 프롬프트 인젝션 공격 목록과 비교하는 유사도 검사를 지원합니다.
 
-[**See Code**](https://github.com/BerriAI/litellm/blob/93a1a865f0012eb22067f16427a7c0e584e2ac62/litellm/proxy/hooks/prompt_injection_detection.py#L4)
+[**코드 보기**](https://github.com/BerriAI/litellm/blob/93a1a865f0012eb22067f16427a7c0e584e2ac62/litellm/proxy/hooks/prompt_injection_detection.py#L4)
 
-1. Enable `detect_prompt_injection` in your config.yaml
+1. config.yaml에서 `detect_prompt_injection`을 활성화합니다.
 ```yaml
 litellm_settings:
     callbacks: ["detect_prompt_injection"]
 ```
 
-2. Make a request 
+2. 요청을 보냅니다.
 
 ```
 curl --location 'http://0.0.0.0:4000/v1/chat/completions' \
@@ -34,7 +34,7 @@ curl --location 'http://0.0.0.0:4000/v1/chat/completions' \
 }'
 ```
 
-3. Expected response
+3. 예상 응답
 
 ```json
 {
@@ -49,13 +49,13 @@ curl --location 'http://0.0.0.0:4000/v1/chat/completions' \
 }
 ```
 
-## Advanced Usage 
+## 고급 사용법 
 
-### LLM API Checks 
+### LLM API 검사 {#llm-api-checks}
 
-Check if user input contains a prompt injection attack, by running it against an LLM API.
+사용자 입력을 LLM API에 실행하여 프롬프트 인젝션 공격이 포함되어 있는지 확인합니다.
 
-**Step 1. Setup config**
+**1단계. 구성 설정**
 ```yaml
 litellm_settings:
   callbacks: ["detect_prompt_injection"]
@@ -76,7 +76,7 @@ model_list:
       api_version: "2023-07-01-preview"
 ```
 
-**Step 2. Start proxy**
+**2단계. 프록시 시작**
 
 ```bash
 litellm --config /path/to/config.yaml
@@ -84,7 +84,7 @@ litellm --config /path/to/config.yaml
 # RUNNING on http://0.0.0.0:4000
 ```
 
-**Step 3. Test it**
+**3단계. 테스트**
 
 ```bash
 curl --location 'http://0.0.0.0:4000/v1/chat/completions' \

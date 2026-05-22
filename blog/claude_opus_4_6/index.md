@@ -1,12 +1,12 @@
 ---
 slug: claude_opus_4_6
-title: "Day 0 Support: Claude Opus 4.6"
+title: "출시 당일 지원: Claude Opus 4.6"
 date: 2026-02-05T10:00:00
 authors:
   - sameer
   - ishaan-alt
   - krrish
-description: "Day 0 support for Claude Opus 4.6 on LiteLLM AI Gateway - use across Anthropic, Azure, Vertex AI, and Bedrock."
+description: "LiteLLM AI Gateway에서 Claude Opus 4.6을 출시 당일 지원합니다. Anthropic, Azure, Vertex AI, Bedrock 전반에서 사용할 수 있습니다."
 tags: [anthropic, claude, opus 4.6]
 hide_table_of_contents: false
 ---
@@ -14,22 +14,22 @@ hide_table_of_contents: false
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-LiteLLM now supports Claude Opus 4.6 on Day 0. Use it across Anthropic, Azure, Vertex AI, and Bedrock through the LiteLLM AI Gateway.
+LiteLLM은 Claude Opus 4.6을 출시 당일 지원합니다. LiteLLM AI Gateway를 통해 Anthropic, Azure, Vertex AI, Bedrock 전반에서 사용할 수 있습니다.
 
 {/* truncate */}
 
-## Docker Image
+## Docker 이미지
 
 ```bash
 docker pull ghcr.io/berriai/litellm:litellm_stable_release_branch-v1.80.0-stable.opus-4-6
 ```
 
-## Usage - Anthropic
+## 사용법 - Anthropic
 
 <Tabs>
 <TabItem value="proxy" label="LiteLLM Proxy">
 
-**1. Setup config.yaml**
+**1. config.yaml 설정**
 
 ```yaml
 model_list:
@@ -39,7 +39,7 @@ model_list:
       api_key: os.environ/ANTHROPIC_API_KEY
 ```
 
-**2. Start the proxy**
+**2. 프록시 시작**
 
 ```bash
 docker run -d \
@@ -50,7 +50,7 @@ docker run -d \
   --config /app/config.yaml
 ```
 
-**3. Test it!**
+**3. 테스트**
 
 ```bash
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -70,12 +70,12 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 </TabItem>
 </Tabs>
 
-## Usage - Azure
+## 사용법 - Azure
 
 <Tabs>
 <TabItem value="proxy" label="LiteLLM Proxy">
 
-**1. Setup config.yaml**
+**1. config.yaml 설정**
 
 ```yaml
 model_list:
@@ -86,7 +86,7 @@ model_list:
       api_base: os.environ/AZURE_AI_API_BASE  # https://<resource>.services.ai.azure.com
 ```
 
-**2. Start the proxy**
+**2. 프록시 시작**
 
 ```bash
 docker run -d \
@@ -98,7 +98,7 @@ docker run -d \
   --config /app/config.yaml
 ```
 
-**3. Test it!**
+**3. 테스트**
 
 ```bash
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -118,12 +118,12 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 </TabItem>
 </Tabs>
 
-## Usage - Vertex AI
+## 사용법 - Vertex AI
 
 <Tabs>
 <TabItem value="proxy" label="LiteLLM Proxy">
 
-**1. Setup config.yaml**
+**1. config.yaml 설정**
 
 ```yaml
 model_list:
@@ -134,7 +134,7 @@ model_list:
       vertex_location: us-east5
 ```
 
-**2. Start the proxy**
+**2. 프록시 시작**
 
 ```bash
 docker run -d \
@@ -147,7 +147,7 @@ docker run -d \
   --config /app/config.yaml
 ```
 
-**3. Test it!**
+**3. 테스트**
 
 ```bash
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -167,12 +167,12 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 </TabItem>
 </Tabs>
 
-## Usage - Bedrock
+## 사용법 - Bedrock
 
 <Tabs>
 <TabItem value="proxy" label="LiteLLM Proxy">
 
-**1. Setup config.yaml**
+**1. config.yaml 설정**
 
 ```yaml
 model_list:
@@ -184,7 +184,7 @@ model_list:
       aws_region_name: us-east-1
 ```
 
-**2. Start the proxy**
+**2. 프록시 시작**
 
 ```bash
 docker run -d \
@@ -196,7 +196,7 @@ docker run -d \
   --config /app/config.yaml
 ```
 
-**3. Test it!**
+**3. 테스트**
 
 ```bash
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -216,18 +216,18 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 </TabItem>
 </Tabs>
 
-## Advanced Features
+## 고급 기능
 
 ### Compaction
 
 <Tabs>
 <TabItem value="completions" label="/chat/completions">
 
-Litellm supports enabling compaction for the new claude-opus-4-6.
+LiteLLM은 새 `claude-opus-4-6`에서 compaction 활성화를 지원합니다.
 
-**Enabling Compaction**
+**Compaction 활성화**
 
-To enable compaction, add the `context_management` parameter with the `compact_20260112` edit type:
+compaction을 활성화하려면 `compact_20260112` edit type과 함께 `context_management` parameter를 추가합니다.
 
 ```bash
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -251,15 +251,15 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
   "max_tokens": 100
 }'
 ```
-All the parameters supported for context_management by anthropic are supported and can be directly added. Litellm automatically adds the `compact-2026-01-12` beta header in the request.
+Anthropic이 `context_management`에서 지원하는 모든 parameter를 그대로 추가할 수 있습니다. LiteLLM은 요청에 `compact-2026-01-12` beta header를 자동으로 추가합니다.
 
 </TabItem>
 <TabItem value="messages" label="/v1/messages">
 
-Enable compaction to reduce context size while preserving key information. LiteLLM automatically adds the `compact-2026-01-12` beta header when compaction is enabled.
+핵심 정보를 보존하면서 context size를 줄이려면 compaction을 활성화하세요. compaction이 활성화되면 LiteLLM은 `compact-2026-01-12` beta header를 자동으로 추가합니다.
 
 :::info
-**Provider Support:** Compaction is supported on Anthropic, Azure AI, and Vertex AI. It is **not supported** on Bedrock (Invoke or Converse APIs).
+**Provider 지원:** Compaction은 Anthropic, Azure AI, Vertex AI에서 지원됩니다. Bedrock(Invoke 또는 Converse API)에서는 **지원되지 않습니다**.
 :::
 
 ```bash
@@ -289,9 +289,9 @@ curl --location 'http://0.0.0.0:4000/v1/messages' \
 </Tabs>
 
 
-**Response with Compaction Block**
+**Compaction block이 포함된 응답**
 
-The response will include the compaction summary in `provider_specific_fields.compaction_blocks`:
+응답에는 `provider_specific_fields.compaction_blocks`에 compaction summary가 포함됩니다.
 
 ```json
 {
@@ -325,9 +325,9 @@ The response will include the compaction summary in `provider_specific_fields.co
 }
 ```
 
-**Using Compaction Blocks in Follow-up Requests**
+**후속 요청에서 compaction block 사용**
 
-To continue the conversation with compaction, include the compaction block in the assistant message's `provider_specific_fields`:
+compaction을 유지한 채 대화를 이어가려면 assistant message의 `provider_specific_fields`에 compaction block을 포함합니다.
 
 ```bash
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -373,23 +373,23 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 }'
 ```
 
-**Streaming Support**
+**Streaming 지원**
 
-Compaction blocks are also supported in streaming mode. You'll receive:
-- `compaction_start` event when a compaction block begins
-- `compaction_delta` events with the compaction content
-- The accumulated `compaction_blocks` in `provider_specific_fields`
+Compaction block은 streaming mode에서도 지원됩니다. 다음 항목을 받게 됩니다.
+- compaction block이 시작될 때 `compaction_start` event
+- compaction content를 담은 `compaction_delta` event
+- `provider_specific_fields` 안에 누적된 `compaction_blocks`
 
 ### Adaptive Thinking
 
 :::note
-When using `reasoning_effort` with Claude Opus 4.6, all values (`low`, `medium`, `high`) are mapped to `thinking: {type: "adaptive"}`. To use explicit thinking budgets with `type: "enabled"`, pass the native `thinking` parameter directly (see "Native thinking param" tab below).
+Claude Opus 4.6에서 `reasoning_effort`를 사용하면 모든 값(`low`, `medium`, `high`)이 `thinking: {type: "adaptive"}`로 mapping됩니다. `type: "enabled"`와 함께 명시적인 thinking budget을 사용하려면 native `thinking` parameter를 직접 전달하세요. 아래 "네이티브 thinking parameter" tab을 참고하세요.
 :::
 
 <Tabs>
 <TabItem value="completions" label="/chat/completions">
 
-LiteLLM supports adaptive thinking through the `reasoning_effort` parameter:
+LiteLLM은 `reasoning_effort` parameter를 통해 adaptive thinking을 지원합니다.
 
 ```bash
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -410,7 +410,7 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 </TabItem>
 <TabItem value="messages" label="/v1/messages">
 
-Use the `thinking` parameter with `type: "adaptive"` to enable adaptive thinking mode:
+adaptive thinking mode를 활성화하려면 `type: "adaptive"`와 함께 `thinking` parameter를 사용합니다.
 
 ```bash
 curl --location 'http://0.0.0.0:4000/v1/messages' \
@@ -432,9 +432,9 @@ curl --location 'http://0.0.0.0:4000/v1/messages' \
 ```
 
 </TabItem>
-<TabItem value="native" label="Native thinking param">
+<TabItem value="native" label="네이티브 thinking parameter">
 
-Use the `thinking` parameter directly for adaptive thinking via the SDK:
+SDK에서 adaptive thinking을 사용하려면 `thinking` parameter를 직접 전달합니다.
 
 ```python
 import litellm
@@ -449,12 +449,12 @@ response = litellm.completion(
 </TabItem>
 </Tabs>
 
-### Effort Levels
+### Effort Level
 
 <Tabs>
 <TabItem value="completions" label="/chat/completions">
 
-Four effort levels available: `low`, `medium`, `high` (default), and `max`. Pass directly via the `output_config` parameter:
+사용 가능한 effort level은 `low`, `medium`, `high`(기본값), `max` 네 가지입니다. `output_config` parameter로 직접 전달합니다.
 
 ```bash
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -474,12 +474,12 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 }'
 ```
 
-You can use reasoning effort plus output_config to have more control on the model.
+모델 제어를 더 세밀하게 하려면 reasoning effort와 `output_config`를 함께 사용할 수 있습니다.
 
 </TabItem>
 <TabItem value="messages" label="/v1/messages">
 
-Four effort levels available: `low`, `medium`, `high` (default), and `max`. Pass directly via the `output_config` parameter:
+사용 가능한 effort level은 `low`, `medium`, `high`(기본값), `max` 네 가지입니다. `output_config` parameter로 직접 전달합니다.
 
 ```bash
 curl --location 'http://0.0.0.0:4000/v1/messages' \
@@ -503,23 +503,23 @@ curl --location 'http://0.0.0.0:4000/v1/messages' \
 </TabItem>
 </Tabs>
 
-### 1M Token Context (Beta)
+### 1M 토큰 컨텍스트(베타)
 
-Opus 4.6 supports 1M token context. Premium pricing applies for prompts exceeding 200k tokens ($10/$37.50 per million input/output tokens). LiteLLM supports cost calculations for 1M token contexts.
+Opus 4.6은 1M token context를 지원합니다. 200k token을 초과하는 prompt에는 premium pricing이 적용됩니다(입력/출력 100만 token당 $10/$37.50). LiteLLM은 1M token context의 비용 계산을 지원합니다.
 
 <Tabs>
 <TabItem value="completions" label="/chat/completions">
 
-To use the 1M token context window, you need to forward the `anthropic-beta` header from your client to the LLM provider.
+1M token context window를 사용하려면 client의 `anthropic-beta` header를 LLM provider로 전달해야 합니다.
 
-**Step 1: Enable header forwarding in your config**
+**1단계: config에서 header forwarding 활성화**
 
 ```yaml
 general_settings:
   forward_client_headers_to_llm_api: true
 ```
 
-**Step 2: Send requests with the beta header**
+**2단계: beta header와 함께 요청 전송**
 
 ```bash
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -540,16 +540,16 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 </TabItem>
 <TabItem value="messages" label="/v1/messages">
 
-To use the 1M token context window, you need to forward the `anthropic-beta` header from your client to the LLM provider.
+1M token context window를 사용하려면 client의 `anthropic-beta` header를 LLM provider로 전달해야 합니다.
 
-**Step 1: Enable header forwarding in your config**
+**1단계: config에서 header forwarding 활성화**
 
 ```yaml
 general_settings:
   forward_client_headers_to_llm_api: true
 ```
 
-**Step 2: Send requests with the beta header**
+**2단계: beta header와 함께 요청 전송**
 
 ```bash
 curl --location 'http://0.0.0.0:4000/v1/messages' \
@@ -569,7 +569,7 @@ curl --location 'http://0.0.0.0:4000/v1/messages' \
 ```
 
 :::tip
-You can combine multiple beta headers by separating them with commas:
+여러 beta header는 comma로 구분해 함께 사용할 수 있습니다.
 ```bash
 --header 'anthropic-beta: context-1m-2025-08-07,compact-2026-01-12'
 ```
@@ -580,12 +580,12 @@ You can combine multiple beta headers by separating them with commas:
 
 ### US-Only Inference
 
-Available at 1.1× token pricing. LiteLLM automatically tracks costs for US-only inference.
+1.1배 token 가격으로 사용할 수 있습니다. LiteLLM은 US-only inference 비용을 자동으로 추적합니다.
 
 <Tabs>
 <TabItem value="completions" label="/chat/completions">
 
-Use the `inference_geo` parameter to specify US-only inference:
+US-only inference를 지정하려면 `inference_geo` parameter를 사용합니다.
 
 ```bash
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -603,12 +603,12 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 }'
 ```
 
-LiteLLM will automatically apply the 1.1× pricing multiplier for US-only inference in cost tracking.
+LiteLLM은 비용 추적에서 US-only inference에 1.1배 pricing multiplier를 자동 적용합니다.
 
 </TabItem>
 <TabItem value="messages" label="/v1/messages">
 
-Use the `inference_geo` parameter to specify US-only inference:
+US-only inference를 지정하려면 `inference_geo` parameter를 사용합니다.
 
 ```bash
 curl --location 'http://0.0.0.0:4000/v1/messages' \
@@ -627,7 +627,7 @@ curl --location 'http://0.0.0.0:4000/v1/messages' \
 }'
 ```
 
-LiteLLM will automatically apply the 1.1× pricing multiplier for US-only inference in cost tracking.
+LiteLLM은 비용 추적에서 US-only inference에 1.1배 pricing multiplier를 자동 적용합니다.
 
 </TabItem>
 </Tabs>
@@ -635,12 +635,12 @@ LiteLLM will automatically apply the 1.1× pricing multiplier for US-only infere
 ### Fast Mode
 
 :::info
-Fast mode is **only supported on the Anthropic provider** (`anthropic/claude-opus-4-6`). It is not available on Azure AI, Vertex AI, or Bedrock.
+Fast mode는 **Anthropic provider에서만 지원됩니다**(`anthropic/claude-opus-4-6`). Azure AI, Vertex AI, Bedrock에서는 사용할 수 없습니다.
 :::
 
-**Pricing:**
-- Standard: $5 input / $25 output per MTok
-- Fast: $30 input / $150 output per MTok (6× premium)
+**가격:**
+- Standard: MTok당 입력 $5 / 출력 $25
+- Fast: MTok당 입력 $30 / 출력 $150(6배 premium)
 
 <Tabs>
 <TabItem value="completions" label="/chat/completions">
@@ -662,7 +662,7 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 }'
 ```
 
-**Using OpenAI SDK:**
+**OpenAI SDK 사용:**
 
 ```python
 import openai
@@ -680,7 +680,7 @@ response = client.chat.completions.create(
 )
 ```
 
-**Using LiteLLM SDK:**
+**LiteLLM SDK 사용:**
 
 ```python
 from litellm import completion
@@ -693,7 +693,7 @@ response = completion(
 )
 ```
 
-LiteLLM automatically tracks the higher costs for fast mode in usage and cost calculations.
+LiteLLM은 usage와 cost calculation에서 fast mode의 더 높은 비용을 자동으로 추적합니다.
 
 </TabItem>
 <TabItem value="messages" label="/v1/messages">
@@ -715,9 +715,9 @@ curl --location 'http://0.0.0.0:4000/v1/messages' \
 }'
 ```
 
-LiteLLM automatically:
-- Adds the `fast-mode-2026-02-01` beta header
-- Tracks the 6× premium pricing in cost calculations
+LiteLLM은 자동으로 다음을 처리합니다.
+- `fast-mode-2026-02-01` beta header 추가
+- 비용 계산에서 6배 premium pricing 추적
 
 </TabItem>
 </Tabs>

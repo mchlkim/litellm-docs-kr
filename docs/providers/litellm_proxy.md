@@ -1,19 +1,19 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# LiteLLM Proxy (LLM Gateway)
+# LiteLLM Proxy (LLM 게이트웨이)
 
 
-| Property | Details |
+| 속성 | 세부 정보 |
 |-------|-------|
-| Description | LiteLLM Proxy is an OpenAI-compatible gateway that allows you to interact with multiple LLM providers through a unified API. Simply use the `litellm_proxy/` prefix before the model name to route your requests through the proxy. |
-| Provider Route on LiteLLM | `litellm_proxy/` (add this prefix to the model name, to route any requests to litellm_proxy - e.g. `litellm_proxy/your-model-name`) |
-| Setup LiteLLM Gateway | [LiteLLM Gateway ↗](../simple_proxy) |
-| Supported Endpoints |`/chat/completions`, `/completions`, `/embeddings`, `/audio/speech`, `/audio/transcriptions`, `/images`, `/images/edits`, `/rerank` |
+| 설명 | LiteLLM Proxy는 통합 API를 통해 여러 LLM 제공자와 상호 작용할 수 있게 해주는 OpenAI 호환 게이트웨이입니다. 모델 이름 앞에 `litellm_proxy/` 접두사를 붙이기만 하면 요청이 프록시를 통해 라우팅됩니다. |
+| LiteLLM의 제공자 라우트 | `litellm_proxy/` (요청을 litellm_proxy로 라우팅하려면 모델 이름 앞에 이 접두사를 추가하세요. 예: `litellm_proxy/your-model-name`) |
+| LiteLLM Gateway 설정 | [LiteLLM Gateway ↗](../simple_proxy) |
+| 지원 엔드포인트 |`/chat/completions`, `/completions`, `/embeddings`, `/audio/speech`, `/audio/transcriptions`, `/images`, `/images/edits`, `/rerank` |
 
 
 
-## Required Variables
+## 필수 변수
 
 ```python
 os.environ["LITELLM_PROXY_API_KEY"] = "" # "sk-1234" your litellm proxy api key 
@@ -21,7 +21,7 @@ os.environ["LITELLM_PROXY_API_BASE"] = "" # "http://localhost:4000" your litellm
 ```
 
 
-## Usage (Non Streaming)
+## 사용법 (비스트리밍)
 ```python
 import os 
 import litellm
@@ -41,9 +41,9 @@ messages = [{ "content": "Hello, how are you?","role": "user"}]
 response = completion(model="litellm_proxy/your-model-name", messages)
 ```
 
-## Usage - passing `api_base`, `api_key` per request
+## 사용법 - 요청마다 `api_base`, `api_key` 전달하기
 
-If you need to set api_base dynamically, just pass it in completions instead - completions(...,api_base="your-proxy-api-base")
+`api_base`를 동적으로 설정해야 하는 경우에는 completions 호출에 직접 전달하세요. 예: completions(...,api_base="your-proxy-api-base")
 
 ```python
 import os 
@@ -62,7 +62,7 @@ response = completion(
     api_key = "your-litellm-proxy-api-key"
 )
 ```
-## Usage - Streaming
+## 사용법 - 스트리밍
 
 ```python
 import os 
@@ -85,7 +85,7 @@ for chunk in response:
     print(chunk)
 ```
 
-## Embeddings
+## 임베딩
 
 ```python
 import litellm
@@ -98,7 +98,7 @@ response = litellm.embedding(
 )
 ```
 
-## Image Generation
+## 이미지 생성
 
 ```python
 import litellm
@@ -111,7 +111,7 @@ response = litellm.image_generation(
 )
 ```
 
-## Image Edit
+## 이미지 편집
 
 ```python
 import litellm
@@ -126,7 +126,7 @@ with open("your-image.png", "rb") as f:
     )
 ```
 
-## Audio Transcription
+## 오디오 전사
 
 ```python
 import litellm
@@ -139,7 +139,7 @@ response = litellm.transcription(
 )
 ```
 
-## Text to Speech
+## 텍스트 음성 변환
 
 ```python
 import litellm
@@ -152,7 +152,7 @@ response = litellm.speech(
 )
 ``` 
 
-## Rerank
+## 재순위화
 
 ```python
 import litellm
@@ -172,27 +172,27 @@ response = litellm.rerank(
 ```
 
 
-## Integration with Other Libraries
+## 다른 라이브러리와의 통합
 
-LiteLLM Proxy works seamlessly with Langchain, LlamaIndex, OpenAI JS, Anthropic SDK, Instructor, and more.
+LiteLLM Proxy는 Langchain, LlamaIndex, OpenAI JS, Anthropic SDK, Instructor 등과 원활하게 작동합니다.
 
-[Learn how to use LiteLLM proxy with these libraries →](../proxy/user_keys)
+[이러한 라이브러리에서 LiteLLM Proxy를 사용하는 방법 알아보기 →](../proxy/user_keys)
 
-## Send all SDK requests to LiteLLM Proxy
+## 모든 SDK 요청을 LiteLLM Proxy로 보내기 {#send-all-sdk-requests-to-litellm-proxy}
 
 :::info
 
-Requires v1.72.1 or higher.
+v1.72.1 이상이 필요합니다.
 
 :::
 
-Use this when calling LiteLLM Proxy from any library / codebase already using the LiteLLM SDK.
+이미 LiteLLM SDK를 사용하는 라이브러리나 코드베이스에서 LiteLLM Proxy를 호출할 때 사용하세요.
 
-These flags will route all requests through your LiteLLM proxy, regardless of the model specified.
+이 플래그들은 지정된 모델과 관계없이 모든 요청을 LiteLLM 프록시를 통해 라우팅합니다.
 
-When enabled, requests will use `LITELLM_PROXY_API_BASE` with `LITELLM_PROXY_API_KEY` as the authentication.
+활성화하면 요청은 `LITELLM_PROXY_API_BASE`를 사용하고 `LITELLM_PROXY_API_KEY`를 인증 값으로 사용합니다.
 
-### Option 1: Set Globally in Code
+### 옵션 1: 코드에서 전역으로 설정하기
 
 ```python
 # Set the flag globally for all requests
@@ -204,7 +204,7 @@ response = litellm.completion(
 )
 ```
 
-### Option 2: Control via Environment Variable
+### 옵션 2: 환경 변수로 제어하기
 
 ```python
 # Control proxy usage through environment variable
@@ -216,7 +216,7 @@ response = litellm.completion(
 )
 ```
 
-### Option 3: Set Per Request
+### 옵션 3: 요청마다 설정하기
 
 ```python
 # Enable proxy for specific requests only
@@ -227,9 +227,9 @@ response = litellm.completion(
 )
 ```
 
-## OAuth2/JWT Authentication
+## OAuth2/JWT 인증
 
-If your LiteLLM Proxy requires OAuth2/JWT authentication (e.g., Azure AD, Keycloak, Okta), the SDK can automatically obtain and refresh tokens for you.
+LiteLLM Proxy에 OAuth2/JWT 인증이 필요한 경우(예: Azure AD, Keycloak, Okta), SDK가 토큰을 자동으로 가져오고 갱신할 수 있습니다.
 
 ```python
 import litellm
@@ -247,15 +247,15 @@ response = litellm.completion(
 )
 ```
 
-[Learn more about SDK Proxy Authentication (OAuth2/JWT Auto-Refresh) →](../proxy_auth)
+[SDK Proxy 인증(OAuth2/JWT 자동 갱신)에 대해 자세히 알아보기 →](../proxy_auth)
 
-## Sending `tags` to LiteLLM Proxy
+## LiteLLM Proxy로 `tags` 보내기
 
-Tags allow you to categorize and track your API requests for monitoring, debugging, and analytics purposes. You can send tags as a list of strings to the LiteLLM Proxy using the `extra_body` parameter.
+태그를 사용하면 모니터링, 디버깅, 분석 목적으로 API 요청을 분류하고 추적할 수 있습니다. `extra_body` 파라미터를 사용해 문자열 목록 형태의 태그를 LiteLLM Proxy로 보낼 수 있습니다.
 
-### Usage
+### 사용법
 
-Send tags by including them in the `extra_body` parameter of your completion request:
+completion 요청의 `extra_body` 파라미터에 태그를 포함해 보내세요.
 
 ```python showLineNumbers title="Usage"
 import litellm
@@ -269,7 +269,7 @@ response = litellm.completion(
 )
 ```
 
-### Async Usage
+### 비동기 사용법
 
 ```python showLineNumbers title="Async Usage"
 import litellm
@@ -282,4 +282,3 @@ response = await litellm.acompletion(
     extra_body={"tags": ["user:ishaan", "department:engineering"]}
 )
 ```
-

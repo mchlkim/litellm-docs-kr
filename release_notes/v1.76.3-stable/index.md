@@ -1,5 +1,5 @@
 ---
-title: "v1.76.3-stable - Performance, Video Generation & CloudZero Integration"
+title: "v1.76.3-stable - 성능, Video Generation 및 CloudZero 통합"
 slug: "v1-76-3"
 date: 2025-09-06T10:00:00
 authors:
@@ -21,12 +21,12 @@ import TabItem from '@theme/TabItem';
 
 :::warning
 
-This release has a known issue where startup is leading to Out of Memory errors when deploying on Kubernetes. We recommend waiting before upgrading to this version.
+이 릴리스에는 Kubernetes에 배포할 때 startup이 `Out of Memory` errors로 이어지는 알려진 문제가 있습니다. 이 버전으로 업그레이드하기 전에 기다리는 것을 권장합니다.
 
 :::
 
 
-## Deploy this version
+## 이 버전 배포하기 {#deploy-this-version}
 
 <Tabs>
 <TabItem value="docker" label="Docker">
@@ -50,56 +50,56 @@ pip install litellm==1.76.3
 
 ---
 
-## Key Highlights
+## 주요 하이라이트 {#key-highlights}
 
-- **Major Performance Improvements** +400 RPS when using correct amount of workers + CPU cores combination
-- **Video Generation Support** - Added Google AI Studio  and Vertex AI Veo Video Generation through LiteLLM Pass through routes
-- **CloudZero Integration** - New cost tracking integration for exporting LiteLLM Usage and Spend data to CloudZero. 
+- **주요 성능 개선** 올바른 workers 수와 CPU cores 조합을 사용할 때 +400 RPS
+- **Video Generation 지원** - LiteLLM Pass through routes를 통해 Google AI Studio 및 Vertex AI Veo Video Generation 추가
+- **CloudZero 통합** - LiteLLM usage 및 spend data를 CloudZero로 export하기 위한 새 cost tracking integration입니다.
 
-## Major Changes 
+## 주요 변경 사항 {#major-changes}
 - **Performance Optimization**: LiteLLM Proxy now achieves +400 RPS when using correct amount of CPU cores - [PR #14153](https://github.com/BerriAI/litellm/pull/14153), [PR #14242](https://github.com/BerriAI/litellm/pull/14242)
   
-  By default, LiteLLM will now use `num_workers = os.cpu_count()` to achieve optimal performance. 
+  이제 LiteLLM은 기본적으로 최적 성능을 위해 `num_workers = os.cpu_count()`를 사용합니다.
   
-  **Override Options:**
+  **Override 옵션:**
   
-  Set environment variable:
+  환경 변수를 설정합니다.
   ```bash
   DEFAULT_NUM_WORKERS_LITELLM_PROXY=1
   ```
   
-  Or start LiteLLM Proxy with:
+  또는 LiteLLM Proxy를 다음과 같이 시작합니다.
   ```bash
   litellm --num_workers 1
   ```
 
-- **Security Fix**: Fixed memory_usage_in_mem_cache cache endpoint vulnerability - [PR #14229](https://github.com/BerriAI/litellm/pull/14229)
+- **Security Fix**: memory_usage_in_mem_cache cache endpoint vulnerability 수정 - [PR #14229](https://github.com/BerriAI/litellm/pull/14229)
 
 ---
 
-## Performance Improvements
+## 성능 개선 {#performance-improvements}
 
-This release includes significant performance optimizations. On our internal benchmarks we saw 1 instance get +400 RPS when using correct amount of  workers + CPU cores combination.
+이번 릴리스에는 중요한 성능 최적화가 포함됩니다. 내부 benchmark에서 올바른 workers 수와 CPU cores 조합을 사용할 때 1개 instance가 +400 RPS를 달성했습니다.
 
-- **+400 RPS Performance Boost** - LiteLLM Proxy now uses correct amount of CPU cores for optimal performance - [PR #14153](https://github.com/BerriAI/litellm/pull/14153)
-- **Default CPU Workers** - Changed DEFAULT_NUM_WORKERS_LITELLM_PROXY default to number of CPUs - [PR #14242](https://github.com/BerriAI/litellm/pull/14242)
+- **+400 RPS 성능 향상** - LiteLLM Proxy가 이제 최적 성능을 위해 올바른 수의 CPU cores를 사용합니다 - [PR #14153](https://github.com/BerriAI/litellm/pull/14153)
+- **기본 CPU Workers** - DEFAULT_NUM_WORKERS_LITELLM_PROXY 기본값을 CPU 수로 변경 - [PR #14242](https://github.com/BerriAI/litellm/pull/14242)
 
 
 ---
 
-## New Models / Updated Models
+## New 모델 / Updated 모델
 
-#### New Model Support
+#### 신규 모델 지원 {#new-model-support}
 
-| Provider    | Model                                  | Context Window | Input ($/1M tokens) | Output ($/1M tokens) | Features |
+| Provider    | Model                                  | Context Window | Input ($/1M tokens) | Output ($/1M tokens) | 기능 |
 | ----------- | -------------------------------------- | -------------- | ------------------- | -------------------- | -------- |
-| OpenRouter | `openrouter/openai/gpt-4.1` | 1M | $2.00 | $8.00 | Chat completions with vision |
-| OpenRouter | `openrouter/openai/gpt-4.1-mini` | 1M | $0.40 | $1.60 | Efficient chat completions |
-| OpenRouter | `openrouter/openai/gpt-4.1-nano` | 1M | $0.10 | $0.40 | Ultra-efficient chat |
+| OpenRouter | `openrouter/openai/gpt-4.1` | 1M | $2.00 | $8.00 | vision 포함 chat completions |
+| OpenRouter | `openrouter/openai/gpt-4.1-mini` | 1M | $0.40 | $1.60 | 효율적인 chat completions |
+| OpenRouter | `openrouter/openai/gpt-4.1-nano` | 1M | $0.10 | $0.40 | 초고효율 chat |
 | Vertex AI | `vertex_ai/openai/gpt-oss-20b-maas` | 131K | $0.075 | $0.30 | Reasoning support |
-| Vertex AI | `vertex_ai/openai/gpt-oss-120b-maas` | 131K | $0.15 | $0.60 | Advanced reasoning |
+| Vertex AI | `vertex_ai/openai/gpt-oss-120b-maas` | 131K | $0.15 | $0.60 | 고급 reasoning |
 | Gemini | `gemini/veo-3.0-generate-preview` | 1K | - | $0.75/sec | Video generation |
-| Gemini | `gemini/veo-3.0-fast-generate-preview` | 1K | - | $0.40/sec | Fast video generation |
+| Gemini | `gemini/veo-3.0-fast-generate-preview` | 1K | - | $0.40/sec | 빠른 video generation |
 | Gemini | `gemini/veo-2.0-generate-001` | 1K | - | $0.35/sec | Video generation |
 | Volcengine | `doubao-embedding-large` | 4K | Free | Free | 2048-dim embeddings |
 | Together AI | `together_ai/deepseek-ai/DeepSeek-V3.1` | 128K | $0.60 | $1.70 | Reasoning support |
@@ -135,9 +135,9 @@ This release includes significant performance optimizations. On our internal ben
 ### Bug Fixes
 - **[Google Gemini (Google AI Studio + Vertex AI)](../../docs/providers/gemini)**
     - Fixed Gemini 2.5 Pro schema validation with OpenAI-style type arrays in tools - [PR #14154](https://github.com/BerriAI/litellm/pull/14154)
-    - Fixed Gemini Tool Calling empty enum property - [PR #14155](https://github.com/BerriAI/litellm/pull/14155)
+    - Fixed Gemini 도구 호출 empty enum property - [PR #14155](https://github.com/BerriAI/litellm/pull/14155)
 
-#### New Provider Support
+#### 신규 Provider 지원 {#new-provider-support}
 
 - **[Volcengine](../../docs/providers/volcengine)**
     - Added Volcengine embedding module with handler and transformation logic - [PR #14028](https://github.com/BerriAI/litellm/pull/14028)
@@ -171,7 +171,7 @@ This release includes significant performance optimizations. On our internal ben
 
 ---
 
-## Spend Tracking, Budgets and Rate Limiting
+## 비용 추적, 예산 및 속도 제한 {#cost-tracking-budgets-and-rate-limiting}
 
 ### Features
     - Added header support for spend_logs_metadata - [PR #14186](https://github.com/BerriAI/litellm/pull/14186)
@@ -183,20 +183,20 @@ This release includes significant performance optimizations. On our internal ben
 
 
 
-## Management Endpoints / UI
+## 관리 엔드포인트 / UI {#management-endpoints--ui}
 
 #### Features
 
 - **UI Improvements**
-    - Logs page screen size fixed - [PR #14135](https://github.com/BerriAI/litellm/pull/14135)
+    - 로그 page screen size fixed - [PR #14135](https://github.com/BerriAI/litellm/pull/14135)
     - Create Organization Tooltip added on Success - [PR #14132](https://github.com/BerriAI/litellm/pull/14132)
-    - Back to Keys should say Back to Logs - [PR #14134](https://github.com/BerriAI/litellm/pull/14134)
-    - Add client side pagination on All Models table - [PR #14136](https://github.com/BerriAI/litellm/pull/14136)
+    - Back to Keys should say Back to 로그 - [PR #14134](https://github.com/BerriAI/litellm/pull/14134)
+    - Add client side pagination on All 모델 table - [PR #14136](https://github.com/BerriAI/litellm/pull/14136)
     - Model Filters UI improvement - [PR #14131](https://github.com/BerriAI/litellm/pull/14131)
     - Remove table filter on user info page - [PR #14169](https://github.com/BerriAI/litellm/pull/14169)
     - Team name badge added on the User Details - [PR #14003](https://github.com/BerriAI/litellm/pull/14003)
     - Fix: Log page parameter passing error - [PR #14193](https://github.com/BerriAI/litellm/pull/14193)
-- **Authentication & Authorization**
+- **인증 & Authorization**
     - Support for ES256/ES384/ES512 and EdDSA JWT verification - [PR #14118](https://github.com/BerriAI/litellm/pull/14118)
     - Ensure `team_id` is a required field for generating service account keys - [PR #14270](https://github.com/BerriAI/litellm/pull/14270)
 
@@ -207,20 +207,20 @@ This release includes significant performance optimizations. On our internal ben
 
 ---
 
-## Logging / Guardrail Integrations
+## Logging / Guardrail 통합 {#logging--guardrail-integrations}
 
 #### Features
 
 - **[Datadog](../../docs/proxy/logging#datadog)**
-    - Ensure `apm_id` is set on DD LLM Observability traces - [PR #14272](https://github.com/BerriAI/litellm/pull/14272)
+    - Ensure `apm_id` is set on DD LLM 관측성 traces - [PR #14272](https://github.com/BerriAI/litellm/pull/14272)
 - **[Braintrust](../../docs/proxy/logging#braintrust)**
     - Fix logging when OTEL is enabled - [PR #14122](https://github.com/BerriAI/litellm/pull/14122)
 - **[OTEL](../../docs/proxy/logging#otel)**
-    - Optional Metrics and Logs following semantic conventions - [PR #14179](https://github.com/BerriAI/litellm/pull/14179)
+    - Optional Metrics and 로그 following semantic conventions - [PR #14179](https://github.com/BerriAI/litellm/pull/14179)
 - **[Slack Alerting](../../docs/proxy/alerting)**
     - Added alert type to alert message to slack for easier handling - [PR #14176](https://github.com/BerriAI/litellm/pull/14176)
 
-#### Guardrails
+#### 가드레일
     - Added guardrail to the Anthropic API endpoint - [PR #14107](https://github.com/BerriAI/litellm/pull/14107)
 
 #### New Integration
@@ -230,7 +230,7 @@ This release includes significant performance optimizations. On our internal ben
 
 ---
 
-## Performance / Loadbalancing / Reliability improvements
+## 성능 / Loadbalancing / Reliability 개선 {#performance--loadbalancing--reliability-improvements}
 
 #### Features
 
@@ -252,7 +252,7 @@ This release includes significant performance optimizations. On our internal ben
 
 ---
 
-## General Proxy Improvements
+## 일반 Proxy 개선 {#general-proxy-improvements}
 
 #### Features
 
@@ -286,4 +286,4 @@ This release includes significant performance optimizations. On our internal ben
 
 ---
 
-## **[Full Changelog](https://github.com/BerriAI/litellm/compare/v1.76.1-nightly...v1.76.3-nightly)**
+## **[Full 변경 이력](https://github.com/BerriAI/litellm/compare/v1.76.1-nightly...v1.76.3-nightly)**

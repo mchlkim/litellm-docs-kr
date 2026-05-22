@@ -4,13 +4,13 @@ import TabItem from '@theme/TabItem';
 # Mistral AI API
 https://docs.mistral.ai/api/
 
-## API Key
+## API 키 {#api-key}
 ```python
 # env variable
 os.environ['MISTRAL_API_KEY']
 ```
 
-## Sample Usage
+## 샘플 사용법 {#sample-usage}
 ```python
 from litellm import completion
 import os
@@ -25,7 +25,7 @@ response = completion(
 print(response)
 ```
 
-## Sample Usage - Streaming
+## 샘플 사용법 - Streaming {#sample-usage---streaming}
 ```python
 from litellm import completion
 import os
@@ -45,9 +45,9 @@ for chunk in response:
 
 
 
-## Usage with LiteLLM Proxy 
+## LiteLLM Proxy 사용법 {#usage-with-litellm-proxy}
 
-### 1. Set Mistral Models on config.yaml
+### 1. config.yaml에서 Mistral 모델 설정 {#1-set-mistral-model-on-configyaml}
 
 ```yaml
 model_list:
@@ -57,17 +57,17 @@ model_list:
       api_key: "os.environ/MISTRAL_API_KEY" # ensure you have `MISTRAL_API_KEY` in your .env
 ```
 
-### 2. Start Proxy 
+### 2. Proxy 시작 {#2-start-proxy}
 
 ```
 litellm --config config.yaml
 ```
 
-### 3. Test it
+### 3. 테스트 {#3-test-it}
 
 
 <Tabs>
-<TabItem value="Curl" label="Curl Request">
+<TabItem value="Curl" label="Curl 요청">
 
 ```shell
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -136,32 +136,32 @@ print(response)
 </TabItem>
 </Tabs>
 
-## Supported Models
+## 지원되는 모델 {#supported-models}
 
 :::info
-All models listed here https://docs.mistral.ai/platform/endpoints are supported. We actively maintain the list of models, pricing, token window, etc. [here](https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json).
+여기에 나열된 모든 모델 https://docs.mistral.ai/platform/endpoints 을 지원합니다. 모델, 가격, 토큰 윈도우 등의 목록은 [여기](https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json)에서 지속적으로 관리합니다.
 
 :::
 
 
-| Model Name     | Function Call                                                | Reasoning Support |
+| 모델 이름     | 함수 호출                                                | Reasoning 지원 |
 |----------------|--------------------------------------------------------------|-------------------|
-| Mistral Small  | `completion(model="mistral/mistral-small-latest", messages)` | No |
-| Mistral Medium | `completion(model="mistral/mistral-medium-latest", messages)`| No |
-| Mistral Large 2  | `completion(model="mistral/mistral-large-2407", messages)` | No |
-| Mistral Large Latest  | `completion(model="mistral/mistral-large-latest", messages)` | No |
-| **Magistral Small**  | `completion(model="mistral/magistral-small-2506", messages)` | Yes |
-| **Magistral Medium** | `completion(model="mistral/magistral-medium-2506", messages)`| Yes |
-| Mistral 7B     | `completion(model="mistral/open-mistral-7b", messages)`      | No |
-| Mixtral 8x7B   | `completion(model="mistral/open-mixtral-8x7b", messages)`    | No |
-| Mixtral 8x22B  | `completion(model="mistral/open-mixtral-8x22b", messages)`   | No |
-| Codestral      | `completion(model="mistral/codestral-latest", messages)`     | No |
-| Mistral NeMo      | `completion(model="mistral/open-mistral-nemo", messages)`     | No |
-| Mistral NeMo 2407      | `completion(model="mistral/open-mistral-nemo-2407", messages)`     | No |
-| Codestral Mamba      | `completion(model="mistral/open-codestral-mamba", messages)`     | No |
-| Codestral Mamba    | `completion(model="mistral/codestral-mamba-latest"", messages)`     | No |
+| Mistral Small  | `completion(model="mistral/mistral-small-latest", messages)` | 아니요 |
+| Mistral Medium | `completion(model="mistral/mistral-medium-latest", messages)`| 아니요 |
+| Mistral Large 2  | `completion(model="mistral/mistral-large-2407", messages)` | 아니요 |
+| Mistral Large Latest  | `completion(model="mistral/mistral-large-latest", messages)` | 아니요 |
+| **Magistral Small**  | `completion(model="mistral/magistral-small-2506", messages)` | 예 |
+| **Magistral Medium** | `completion(model="mistral/magistral-medium-2506", messages)`| 예 |
+| Mistral 7B     | `completion(model="mistral/open-mistral-7b", messages)`      | 아니요 |
+| Mixtral 8x7B   | `completion(model="mistral/open-mixtral-8x7b", messages)`    | 아니요 |
+| Mixtral 8x22B  | `completion(model="mistral/open-mixtral-8x22b", messages)`   | 아니요 |
+| Codestral      | `completion(model="mistral/codestral-latest", messages)`     | 아니요 |
+| Mistral NeMo      | `completion(model="mistral/open-mistral-nemo", messages)`     | 아니요 |
+| Mistral NeMo 2407      | `completion(model="mistral/open-mistral-nemo-2407", messages)`     | 아니요 |
+| Codestral Mamba      | `completion(model="mistral/open-codestral-mamba", messages)`     | 아니요 |
+| Codestral Mamba    | `completion(model="mistral/codestral-mamba-latest"", messages)`     | 아니요 |
 
-## Function Calling 
+## Function Calling {#function-calling}
 
 ```python
 from litellm import completion
@@ -205,22 +205,22 @@ assert isinstance(
 )
 ```
 
-## Reasoning
+## Reasoning {#reasoning}
 
-Mistral does not directly support reasoning, instead it recommends a specific [system prompt](https://docs.mistral.ai/capabilities/reasoning/) to use with their magistral models. By setting the `reasoning_effort` parameter, LiteLLM will prepend the system prompt to the request. 
+Mistral은 Reasoning을 직접 지원하지 않으며, 대신 Magistral 모델과 함께 사용할 특정 [system prompt](https://docs.mistral.ai/capabilities/reasoning/)를 권장합니다. `reasoning_effort` 파라미터를 설정하면 LiteLLM이 요청 앞에 system prompt를 추가합니다.
 
-If an existing system message is provided, LiteLLM will send both as a list of system messages (you can verify this by enabling `litellm._turn_on_debug()`).
+기존 system message가 제공되면 LiteLLM은 두 메시지를 system message 목록으로 함께 전송합니다. `litellm._turn_on_debug()`를 활성화해 이를 확인할 수 있습니다.
 
-### Supported Models
+### 지원되는 모델 {#supported-models-1}
 
-| Model Name     | Function Call                                                |
+| 모델 이름     | 함수 호출                                                |
 |----------------|--------------------------------------------------------------|
 | Magistral Small  | `completion(model="mistral/magistral-small-2506", messages)` |
 | Magistral Medium | `completion(model="mistral/magistral-medium-2506", messages)`|
 
-### Using Reasoning Effort
+### reasoning_effort 사용 {#using-reasoning-effort}
 
-The `reasoning_effort` parameter controls how much effort the model puts into reasoning. When used with magistral models.
+`reasoning_effort` 파라미터는 Magistral 모델과 함께 사용할 때 모델이 Reasoning에 들이는 노력의 정도를 제어합니다.
 
 ```python
 from litellm import completion
@@ -239,9 +239,9 @@ response = completion(
 print(response)
 ```
 
-### Example with System Message
+### System Message 예제 {#example-with-system-message}
 
-If you already have a system message, LiteLLM will prepend the reasoning instructions:
+이미 system message가 있는 경우 LiteLLM은 Reasoning 지침을 앞에 추가합니다.
 
 ```python
 response = completion(
@@ -259,12 +259,12 @@ response = completion(
 #  You are a helpful math tutor."
 ```
 
-### Usage with LiteLLM Proxy
+### LiteLLM Proxy 사용법 {#usage-with-litellm-proxy-1}
 
-You can also use reasoning capabilities through the LiteLLM proxy:
+LiteLLM Proxy를 통해서도 Reasoning 기능을 사용할 수 있습니다.
 
 <Tabs>
-<TabItem value="Curl" label="Curl Request">
+<TabItem value="Curl" label="Curl 요청">
 
 ```shell
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -306,16 +306,16 @@ print(response)
 </TabItem>
 </Tabs>
 
-### Important Notes
+### 중요 참고 사항 {#important-notes}
 
-- **Model Compatibility**: Reasoning parameters only work with magistral models
-- **Backward Compatibility**: Non-magistral models will ignore reasoning parameters and work normally
+- **모델 호환성**: Reasoning 파라미터는 Magistral 모델에서만 작동합니다.
+- **이전 버전 호환성**: Magistral이 아닌 모델은 Reasoning 파라미터를 무시하고 정상적으로 작동합니다.
 
-## Audio Transcription
+## 오디오 전사 {#audio-transcription}
 
-Use Mistral's Voxtral models for audio transcription via `litellm.transcription()`.
+`litellm.transcription()`을 통해 Mistral의 Voxtral 모델로 오디오 전사를 사용할 수 있습니다.
 
-### SDK Usage
+### SDK 사용법
 
 ```python
 from litellm import transcription
@@ -333,7 +333,7 @@ response = transcription(
 print(response.text)
 ```
 
-### With Optional Parameters
+### Optional Parameters 사용 {#with-optional-parameters}
 
 ```python
 response = transcription(
@@ -345,13 +345,13 @@ response = transcription(
 )
 ```
 
-### Mistral-Specific Parameters
+### Mistral 전용 파라미터 {#mistral-specific-parameters}
 
-Mistral supports additional parameters beyond the OpenAI-compatible ones:
+Mistral은 OpenAI 호환 파라미터 외에도 추가 파라미터를 지원합니다.
 
-| Parameter | Type | Description |
+| 파라미터 | 타입 | 설명 |
 |-----------|------|-------------|
-| `diarize` | `bool` | Enable speaker diarization |
+| `diarize` | `bool` | speaker diarization 활성화 |
 
 ```python
 response = transcription(
@@ -361,7 +361,7 @@ response = transcription(
 )
 ```
 
-### Usage with LiteLLM Proxy
+### LiteLLM Proxy 사용법 {#usage-with-litellm-proxy-2}
 
 ```yaml
 model_list:
@@ -384,7 +384,7 @@ curl --location 'http://0.0.0.0:4000/v1/audio/transcriptions' \
 --form 'model="voxtral"'
 ```
 
-## Sample Usage - Embedding
+## Embedding 샘플 사용법 {#sample-usage---embedding}
 ```python
 from litellm import embedding
 import os
@@ -398,11 +398,9 @@ print(response)
 ```
 
 
-## Supported Models
-All models listed here https://docs.mistral.ai/platform/endpoints are supported
+## 지원되는 모델 {#supported-models-2}
+여기에 나열된 모든 모델 https://docs.mistral.ai/platform/endpoints 을 지원합니다.
 
-| Model Name               | Function Call                                                                                                                                                      |
+| 모델 이름               | 함수 호출                                                                                                                                                      |
 |--------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Mistral Embeddings | `embedding(model="mistral/mistral-embed", input)` | 
-
-
+| `Mistral Embeddings` | `embedding(model="mistral/mistral-embed", input)` | 

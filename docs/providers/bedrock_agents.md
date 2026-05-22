@@ -3,32 +3,32 @@ import TabItem from '@theme/TabItem';
 
 # Bedrock Agents
 
-Call Bedrock Agents in the OpenAI Request/Response format.
+OpenAI request/response 형식으로 Bedrock Agents를 호출합니다.
 
 
-| Property | Details |
+| 속성 | 세부 정보 |
 |----------|---------|
-| Description | Amazon Bedrock Agents use the reasoning of foundation models (FMs), APIs, and data to break down user requests, gather relevant information, and efficiently complete tasks. |
-| Provider Route on LiteLLM | `bedrock/agent/{AGENT_ID}/{ALIAS_ID}` |
-| Provider Doc | [AWS Bedrock Agents ↗](https://aws.amazon.com/bedrock/agents/) |
+| 설명 | Amazon Bedrock Agents는 foundation model(FM), API, data의 reasoning을 사용해 user request를 세분화하고, 관련 정보를 수집하며, task를 효율적으로 완료합니다. |
+| LiteLLM provider 경로 | `bedrock/agent/{AGENT_ID}/{ALIAS_ID}` |
+| Provider 문서 | [AWS Bedrock Agents ↗](https://aws.amazon.com/bedrock/agents/) |
 
-## Quick Start
+## 빠른 시작
 
-### Model Format to LiteLLM
+### LiteLLM model 형식 {#model-format-to-litellm}
 
-To call a bedrock agent through LiteLLM, you need to use the following model format to call the agent.
+LiteLLM을 통해 Bedrock agent를 호출하려면 다음 model 형식을 사용합니다.
 
-Here the `model=bedrock/agent/` tells LiteLLM to call the bedrock `InvokeAgent` API.
+여기서 `model=bedrock/agent/`는 LiteLLM이 Bedrock `InvokeAgent` API를 호출하도록 지정합니다.
 
 ```shell showLineNumbers title="Model Format to LiteLLM"
 bedrock/agent/{AGENT_ID}/{ALIAS_ID}
 ```
 
-**Example:**
+**예제:**
 - `bedrock/agent/L1RT58GYRW/MFPSBCXYTW`
 - `bedrock/agent/ABCD1234/LIVE`
 
-You can find these IDs in your AWS Bedrock console under Agents.
+이 ID는 AWS Bedrock console의 Agents에서 확인할 수 있습니다.
 
 
 ### LiteLLM Python SDK
@@ -74,7 +74,7 @@ for chunk in response:
 
 ### LiteLLM Proxy
 
-#### 1. Configure your model in config.yaml
+#### 1. config.yaml에 model 구성 {#configure-your-model-in-configyaml}
 
 <Tabs>
 <TabItem value="config-yaml" label="config.yaml">
@@ -99,13 +99,13 @@ model_list:
 </TabItem>
 </Tabs>
 
-#### 2. Start the LiteLLM Proxy
+#### 2. LiteLLM Proxy 시작 {#start-the-litellm-proxy}
 
 ```bash showLineNumbers title="Start LiteLLM Proxy"
 litellm --config config.yaml
 ```
 
-#### 3. Make requests to your Bedrock Agents
+#### 3. Bedrock Agents에 request 전송 {#make-requests-to-your-bedrock-agents}
 
 <Tabs>
 <TabItem value="curl" label="Curl">
@@ -196,9 +196,9 @@ for chunk in stream:
 </TabItem>
 </Tabs>
 
-## Provider-specific Parameters
+## Provider별 parameter {#provider-specific-parameters}
 
-Any non-openai parameters will be passed to the agent as custom parameters.
+OpenAI parameter가 아닌 값은 custom parameter로 agent에 전달됩니다.
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -239,8 +239,7 @@ model_list:
 
 
 
-## Further Reading
+## 추가 자료 {#further-reading}
 
-- [AWS Bedrock Agents Documentation](https://aws.amazon.com/bedrock/agents/)
-- [LiteLLM Authentication to Bedrock](https://docs.litellm.ai/docs/providers/bedrock#boto3---authentication)
-
+- [AWS Bedrock Agents 문서](https://aws.amazon.com/bedrock/agents/)
+- [LiteLLM 인증 to Bedrock](https://docs.litellm.ai/docs/providers/bedrock#boto3---authentication)

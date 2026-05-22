@@ -2,32 +2,32 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Image from '@theme/IdealImage';
 
-# Comet Opik - Logging + Evals
-Opik is an open source end-to-end [LLM Evaluation Platform](https://www.comet.com/site/products/opik/?utm_source=litelllm&utm_medium=docs&utm_content=intro_paragraph) that helps developers track their LLM prompts and responses during both development and production. Users can define and run evaluations to test their LLMs apps before deployment to check for hallucinations, accuracy, context retrevial, and more!
+# Comet Opik - 로깅 + 평가 {#comet-opik---logging--evals}
+Opik은 개발과 프로덕션 모두에서 개발자가 LLM 프롬프트와 응답을 추적하도록 돕는 오픈 소스 엔드투엔드 [LLM Evaluation Platform](https://www.comet.com/site/products/opik/?utm_source=litelllm&utm_medium=docs&utm_content=intro_paragraph)입니다. 사용자는 평가를 정의하고 실행해 배포 전에 LLM 앱의 환각, 정확도, 컨텍스트 검색 등을 테스트할 수 있습니다!
 
 
 <Image img={require('../../img/opik.png')} />
 
 :::info
-We want to learn how we can make the callbacks better! Meet the LiteLLM [founders](https://calendly.com/d/4mp-gd3-k5k/berriai-1-1-onboarding-litellm-hosted-version) or
-join our [discord](https://discord.gg/wuPM9dRgDw)
+콜백을 더 개선할 방법을 알고 싶습니다! LiteLLM [창립자](https://calendly.com/d/4mp-gd3-k5k/berriai-1-1-onboarding-litellm-hosted-version)를 만나거나
+[discord](https://discord.gg/wuPM9dRgDw)에 참여하세요.
 :::
 
-## Pre-Requisites
+## 사전 요구 사항 {#pre-requisites}
 
-You can learn more about setting up Opik in the [Opik quickstart guide](https://www.comet.com/docs/opik/quickstart/). You can also learn more about self-hosting Opik in our [self-hosting guide](https://www.comet.com/docs/opik/self-host/local_deployment).
+[Opik quickstart guide](https://www.comet.com/docs/opik/quickstart/)에서 Opik 설정 방법을 자세히 알아볼 수 있습니다. [self-hosting guide](https://www.comet.com/docs/opik/self-host/local_deployment)에서 Opik 자체 호스팅 방법도 확인할 수 있습니다.
 
-## Quick Start
-Use just 4 lines of code, to instantly log your responses **across all providers** with Opik
+## 빠른 시작
+단 4줄의 코드로 **모든 provider**의 응답을 Opik에 즉시 로깅할 수 있습니다.
 
-Get your Opik API Key by signing up [here](https://www.comet.com/signup?utm_source=litelllm&utm_medium=docs&utm_content=api_key_cell)!
+[여기](https://www.comet.com/signup?utm_source=litelllm&utm_medium=docs&utm_content=api_key_cell)에서 가입해 Opik API Key를 발급받으세요!
 
 ```python
 import litellm
 litellm.callbacks = ["opik"]
 ```
 
-Full examples:
+전체 예시:
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -55,9 +55,8 @@ response = litellm.completion(
 )
 ```
 
-If you are using liteLLM within a function tracked using Opik's `@track` decorator,
-you will need provide the `current_span_data` field in the metadata attribute
-so that the LLM call is assigned to the correct trace:
+Opik의 `@track` 데코레이터로 추적되는 함수 안에서 liteLLM을 사용한다면,
+LLM 호출이 올바른 trace에 할당되도록 metadata 속성에 `current_span_data` 필드를 제공해야 합니다.
 
 ```python
 from opik import track
@@ -86,9 +85,9 @@ chunks = list(response)
 ```
 
 </TabItem>
-<TabItem value="proxy" label="Proxy">
+<TabItem value="proxy" label="프록시">
 
-1. Setup config.yaml
+1. config.yaml 설정
 
 ```yaml
 model_list:
@@ -105,13 +104,13 @@ environment_variables:
   OPIK_WORKSPACE: ""
 ```
 
-2. Run proxy
+2. 프록시 실행
 
 ```bash
 litellm --config config.yaml
 ```
 
-3. Test it! 
+3. 테스트
 
 ```bash
 curl -L -X POST 'http://0.0.0.0:4000/v1/chat/completions' \
@@ -131,18 +130,18 @@ curl -L -X POST 'http://0.0.0.0:4000/v1/chat/completions' \
 </TabItem>
 </Tabs>
 
-## Opik-Specific Parameters
+## Opik 전용 파라미터 {#opik-specific-parameters}
 
-These can be passed inside metadata with the `opik` key.
+이 값들은 metadata 안에서 `opik` 키로 전달할 수 있습니다.
 
-### Fields 
+### 필드 {#fields}
 
-- `project_name` - Name of the Opik project to send data to.
-- `current_span_data` - The current span data to be used for tracing.
-- `tags` - Tags to be used for tracing.
-- `thread_id` - The thread id to group together multiple related traces.
+- `project_name` - 데이터를 보낼 Opik 프로젝트 이름입니다.
+- `current_span_data` - 추적에 사용할 현재 span 데이터입니다.
+- `tags` - 추적에 사용할 태그입니다.
+- `thread_id` - 여러 관련 trace를 함께 그룹화할 thread id입니다.
 
-### Usage
+### 사용법
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -170,7 +169,7 @@ response = litellm.completion(
 return response
 ```
 </TabItem>
-<TabItem value="proxy" label="Proxy">
+<TabItem value="proxy" label="프록시">
 
 ```bash
 curl -L -X POST 'http://0.0.0.0:4000/v1/chat/completions' \
@@ -200,7 +199,7 @@ curl -L -X POST 'http://0.0.0.0:4000/v1/chat/completions' \
 
 
 
-You can also pass the fields as part of the request header with a `opik_*` prefix:
+`opik_*` prefix를 사용해 요청 헤더의 일부로 필드를 전달할 수도 있습니다.
 
 ```shell
 curl --location --request POST 'http://0.0.0.0:4000/chat/completions' \
@@ -220,24 +219,24 @@ curl --location --request POST 'http://0.0.0.0:4000/chat/completions' \
 }'
 ```
 
-## Automatic Metadata from API Keys
+## API Key의 자동 Metadata {#automatic-metadata-from-api-keys}
 
-In some cases, the requester may be unable or unaware of how to add Opik metadata to their requests. To ensure all Opik-related actions are properly tracked, LiteLLM Proxy can automatically associate metadata from a user-specific API key when none is provided in the request.
+경우에 따라 요청자가 요청에 Opik metadata를 추가할 수 없거나 추가 방법을 모를 수 있습니다. Opik 관련 모든 동작이 제대로 추적되도록, LiteLLM Proxy는 요청에 metadata가 제공되지 않았을 때 사용자별 API key의 metadata를 자동으로 연결할 수 있습니다.
 
-### How It Works
+### 작동 방식 {#how-it-works}
 
-When you create an API key in LiteLLM Proxy, you can attach Opik-specific metadata to the key itself. This metadata will be automatically applied to all requests made with that key, unless the request explicitly provides its own Opik metadata (which takes precedence).
+LiteLLM Proxy에서 API key를 만들 때 key 자체에 Opik 전용 metadata를 연결할 수 있습니다. 요청이 자체 Opik metadata를 명시적으로 제공하지 않는 한, 이 metadata는 해당 key로 수행되는 모든 요청에 자동 적용됩니다. 요청에 포함된 metadata가 있으면 그 값이 우선합니다.
 
 
-### Usage
+### 사용법
 
-**Step 1: Save Opik Metadata to the corresponding Api Key**
-Go to 'Virtual Keys', click on your choosen api key and edit 'Settings'.
-Now save the opik metadata as user api key metdata.
+**1단계: 해당 API Key에 Opik Metadata 저장**
+'가상 키'로 이동해 선택한 api key를 클릭하고 'Settings'를 편집합니다.
+그런 다음 opik metadata를 사용자 api key metadata로 저장합니다.
 
 <Image img={require('../../img/opik_key_metadata.png')} />
 
-**Step 2: Use the key - Opik metadata is automatically applied**
+**2단계: key 사용 - Opik metadata가 자동 적용됨**
 
 ```bash
 curl -L -X POST 'http://0.0.0.0:4000/v1/chat/completions' \
@@ -254,11 +253,11 @@ curl -L -X POST 'http://0.0.0.0:4000/v1/chat/completions' \
 }'
 ```
 
-All requests made with this key will automatically be tracked in the "TestProject" Opik project with the specified tags, without requiring the user to pass metadata in each request.
+이 key로 수행되는 모든 요청은 사용자가 각 요청마다 metadata를 전달하지 않아도 지정된 태그와 함께 "TestProject" Opik 프로젝트에서 자동으로 추적됩니다.
 
 
-## Support & Talk to Founders
+## 지원 및 창립자와 대화 {#support--talk-to-founders}
 
-- [Schedule Demo 👋](https://calendly.com/d/4mp-gd3-k5k/berriai-1-1-onboarding-litellm-hosted-version)
-- [Community Discord 💭](https://discord.gg/wuPM9dRgDw)
-- Our emails ✉️ ishaan@berri.ai / krrish@berri.ai
+- [데모 일정 잡기 👋](https://calendly.com/d/4mp-gd3-k5k/berriai-1-1-onboarding-litellm-hosted-version)
+- [커뮤니티 Discord 💭](https://discord.gg/wuPM9dRgDw)
+- 이메일 ✉️ ishaan@berri.ai / krrish@berri.ai

@@ -1,39 +1,39 @@
-# ✨ Event Hooks for SSO Login
+# ✨ SSO 로그인용 이벤트 Hook {#event-hooks-for-sso-login}
 
 :::info
-✨ SSO is free for up to 5 users. After that, an enterprise license is required. [Get Started with Enterprise here](https://www.litellm.ai/enterprise)
+✨ SSO는 최대 5명의 사용자까지 무료입니다. 그 이후에는 엔터프라이즈 라이선스가 필요합니다. [여기에서 엔터프라이즈 시작하기](https://www.litellm.ai/enterprise)
 :::
 
-## Overview
+## 개요
 
-LiteLLM provides two different SSO hooks depending on your authentication setup:
+LiteLLM은 인증 설정에 따라 두 가지 SSO hook을 제공합니다.
 
-| Hook Type | When to Use | What It Does |
+| Hook 유형 | 사용 시점 | 수행 작업 |
 |-----------|-------------|--------------|
-| **Custom UI SSO Sign-in Handler** | You have an OAuth proxy (oauth2-proxy, Gatekeeper, Vouch, etc.) in front of LiteLLM | Parses user info from request headers and signs user into UI |
-| **Custom SSO Handler** | You use direct SSO providers (Google, Microsoft, SAML) and want custom post-auth logic | Runs custom code after standard OAuth flow to set user permissions/teams |
+| **`Custom UI SSO Sign-in Handler`** | LiteLLM 앞단에 OAuth proxy(oauth2-proxy, Gatekeeper, Vouch 등)가 있는 경우 | 요청 헤더에서 사용자 정보를 파싱하고 사용자를 UI에 로그인시킵니다 |
+| **Custom SSO Handler** | 직접 SSO provider(Google, Microsoft, SAML)를 사용하며 인증 후 사용자 정의 로직을 실행하려는 경우 | 표준 OAuth 흐름 이후 사용자 정의 코드를 실행해 사용자 권한/팀을 설정합니다 |
 
-**Quick Decision Guide:**
-- ✅ **Use Custom UI SSO Sign-in Handler** if user authentication happens outside LiteLLM (via headers)
-- ✅ **Use Custom SSO Handler** if you want LiteLLM to handle OAuth flow + run custom logic afterward
+**빠른 결정 가이드:**
+- ✅ 사용자 인증이 LiteLLM 외부에서(headers를 통해) 처리되는 경우 **`Custom UI SSO Sign-in Handler`**를 사용하세요
+- ✅ LiteLLM이 OAuth 흐름을 처리하고 이후 사용자 정의 로직을 실행하게 하려는 경우 **Custom SSO Handler**를 사용하세요
 
 ---
 
-## Option 1: Custom UI SSO Sign-in Handler
+## 옵션 1: `Custom UI SSO Sign-in Handler` {#option-1-custom-ui-sso-sign-in-handler}
 
-Use this when you have an **OAuth proxy in front of LiteLLM** that has already authenticated the user and passes user information via request headers.
+이미 사용자를 인증하고 요청 헤더를 통해 사용자 정보를 전달하는 **LiteLLM 앞단의 OAuth proxy**가 있을 때 사용하세요.
 
-### How it works
-- User lands on Admin UI  
-- 👉 **Your custom SSO sign-in handler is called to parse request headers and return user info**
-- LiteLLM has retrieved user information from your custom handler
-- User signed in to UI
+### 동작 방식
+- 사용자가 관리자 UI에 도착합니다  
+- 👉 **`custom SSO sign-in handler`가 호출되어 요청 헤더를 파싱하고 사용자 정보를 반환합니다**
+- LiteLLM이 사용자 정의 handler에서 사용자 정보를 가져옵니다
+- 사용자가 UI에 로그인됩니다
 
-### Usage
+### 사용법
 
-#### 1. Create a custom UI SSO handler file
+#### 1. custom UI SSO handler 파일 생성 {#1-create-a-custom-ui-sso-handler-file}
 
-This handler parses request headers and returns user information as an OpenID object:
+이 handler는 요청 헤더를 파싱하고 사용자 정보를 OpenID 객체로 반환합니다.
 
 ```python
 from fastapi import Request
@@ -75,7 +75,7 @@ class MyCustomSSOLoginHandler(CustomSSOLoginHandler):
 custom_ui_sso_sign_in_handler = MyCustomSSOLoginHandler()
 ```
 
-#### 2. Configure in config.yaml
+#### 2. config.yaml에서 구성 {#2-configure-in-configyaml}
 
 ```yaml
 model_list: 
@@ -91,34 +91,34 @@ litellm_settings:
   set_verbose: True
 ```
 
-#### 3. Start the proxy
+#### 3. 프록시 시작
 ```shell
 $ litellm --config /path/to/config.yaml 
 ```
 
-#### 4. Navigate to the Admin UI
+#### 4. 관리자 UI로 이동 {#4-navigate-to-the-admin-ui}
 
-When a user attempts navigating to the LiteLLM Admin UI, the request will be routed to your custom UI SSO sign-in handler. 
+사용자가 LiteLLM 관리자 UI로 이동하려고 하면 요청이 `custom UI SSO sign-in handler`로 라우팅됩니다.
 
 ---
 
-## Option 2: Custom SSO Handler (Post-Authentication)
+## 옵션 2: Custom SSO Handler (인증 후) {#option-2-custom-sso-handler-post-auth}
 
-Use this if you want to run your own code **after** a user signs on to the LiteLLM UI using standard SSO providers (Google, Microsoft, etc.)
+사용자가 표준 SSO provider(Google, Microsoft 등)를 사용해 LiteLLM UI에 로그인한 **후** 직접 작성한 코드를 실행하려는 경우 사용하세요.
 
-### How it works
-- User lands on Admin UI
-- LiteLLM redirects user to your SSO provider (Google, Microsoft, etc.)
-- Your SSO provider redirects user back to LiteLLM  
-- LiteLLM has retrieved user information from your IDP
-- 👉 **Your custom SSO handler is called and returns an object of type SSOUserDefinedValues**
-- User signed in to UI
+### 동작 방식
+- 사용자가 관리자 UI에 도착합니다
+- LiteLLM이 사용자를 SSO provider(Google, Microsoft 등)로 리디렉션합니다
+- SSO provider가 사용자를 LiteLLM으로 다시 리디렉션합니다  
+- LiteLLM이 IDP에서 사용자 정보를 가져옵니다
+- 👉 **custom SSO handler가 호출되고 SSOUserDefinedValues 타입의 객체를 반환합니다**
+- 사용자가 UI에 로그인됩니다
 
-### Usage
+### 사용법
 
-#### 1. Create a custom SSO handler file
+#### 1. custom SSO handler 파일 생성 {#1-create-a-custom-sso-handler-file}
 
-Make sure the response type follows the `SSOUserDefinedValues` pydantic object. This is used for logging the user into the Admin UI:
+응답 타입이 `SSOUserDefinedValues` pydantic 객체를 따르는지 확인하세요. 이는 사용자를 관리자 UI에 로그인시키는 데 사용됩니다.
 
 ```python
 from fastapi_sso.sso.base import OpenID
@@ -174,11 +174,11 @@ async def custom_sso_handler(userIDPInfo: OpenID) -> SSOUserDefinedValues:
         raise Exception("Failed custom auth")
 ```
 
-#### 2. Configure in config.yaml
+#### 2. config.yaml에서 구성 {#2-configure-in-configyaml-1}
 
-Pass the filepath to the config.yaml. 
+config.yaml에 파일 경로를 전달하세요.
 
-e.g. if they're both in the same dir - `./config.yaml` and `./custom_sso.py`, this is what it looks like:
+예를 들어 `./config.yaml`과 `./custom_sso.py`가 같은 디렉터리에 있으면 다음과 같습니다.
 
 ```yaml 
 model_list: 
@@ -194,7 +194,7 @@ litellm_settings:
   set_verbose: True
 ```
 
-#### 3. Start the proxy
+#### 3. 프록시 시작
 ```shell
 $ litellm --config /path/to/config.yaml 
 ```

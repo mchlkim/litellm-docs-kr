@@ -1,15 +1,15 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# DynamoAI Guardrails
+# DynamoAI 가드레일
 
-LiteLLM supports DynamoAI guardrails for content moderation and policy enforcement on LLM inputs and outputs.
+LiteLLM은 LLM 입력과 출력에 대한 콘텐츠 조정 및 정책 적용을 위해 DynamoAI 가드레일을 지원합니다.
 
-## Quick Start
+## 빠른 시작
 
-### 1. Define Guardrails on your LiteLLM config.yaml
+### 1. LiteLLM config.yaml에 가드레일 정의하기
 
-Define your guardrails under the `guardrails` section:
+`guardrails` 섹션 아래에 가드레일을 정의합니다.
 
 ```yaml showLineNumbers title="config.yaml"
 model_list:
@@ -26,13 +26,13 @@ guardrails:
       api_key: os.environ/DYNAMOAI_API_KEY
 ```
 
-#### Supported values for `mode`
+#### `mode`에서 지원되는 값
 
-- `pre_call` - Run **before** LLM call, on **input**
-- `post_call` - Run **after** LLM call, on **output**
-- `during_call` - Run **during** LLM call, on **input**. Same as `pre_call` but runs in parallel as LLM call
+- `pre_call` - LLM 호출 **전**에 **입력**에 대해 실행
+- `post_call` - LLM 호출 **후**에 **출력**에 대해 실행
+- `during_call` - LLM 호출 **중**에 **입력**에 대해 실행. `pre_call`과 동일하지만 LLM 호출과 병렬로 실행
 
-### 2. Set Environment Variables
+### 2. 환경 변수 설정
 
 ```bash
 export DYNAMOAI_API_KEY="your-api-key"
@@ -40,20 +40,20 @@ export DYNAMOAI_API_KEY="your-api-key"
 export DYNAMOAI_POLICY_IDS="policy-id-1,policy-id-2,policy-id-3"
 ```
 
-### 3. Start LiteLLM Gateway
+### 3. LiteLLM Gateway 시작
 
 ```shell
 litellm --config config.yaml --detailed_debug
 ```
 
-### 4. Test Request
+### 4. 요청 테스트
 
-**[Langchain, OpenAI SDK Usage Examples](../proxy/user_keys#request-format)**
+**[Langchain, OpenAI SDK 사용법 예제](../proxy/user_keys#request-format)**
 
 <Tabs>
-<TabItem label="Successful Call" value="allowed">
+<TabItem label="성공한 호출" value="allowed">
 
-```shell showLineNumbers title="Successful Request"
+```shell showLineNumbers title="성공한 요청"
 curl -i http://localhost:4000/v1/chat/completions \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer sk-1234" \
@@ -63,18 +63,18 @@ curl -i http://localhost:4000/v1/chat/completions \
       {"role": "user", "content": "What is the capital of France?"}
     ],
     "guardrails": ["dynamoai-guard"]
-  }'
+}'
 ```
 
-**Response: HTTP 200 Success**
+**응답: HTTP 200 성공**
 
-Content passes all policy checks and is allowed through.
+콘텐츠가 모든 정책 검사를 통과하여 허용됩니다.
 
 </TabItem>
 
-<TabItem label="Blocked Call" value="not-allowed">
+<TabItem label="차단된 호출" value="not-allowed">
 
-```shell showLineNumbers title="Blocked Request"
+```shell showLineNumbers title="차단된 요청"
 curl -i http://localhost:4000/v1/chat/completions \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer sk-1234" \
@@ -84,10 +84,10 @@ curl -i http://localhost:4000/v1/chat/completions \
       {"role": "user", "content": "Content that violates policy"}
     ],
     "guardrails": ["dynamoai-guard"]
-  }'
+}'
 ```
 
-**Expected Response on Block: HTTP 400 Error**
+**차단 시 예상 응답: HTTP 400 오류**
 
 ```json showLineNumbers
 {
@@ -103,11 +103,11 @@ curl -i http://localhost:4000/v1/chat/completions \
 </TabItem>
 </Tabs>
 
-## Advanced Configuration
+## 고급 설정
 
-### Specify Policy IDs
+### 정책 ID 지정
 
-Configure specific DynamoAI policies to apply:
+적용할 특정 DynamoAI 정책을 구성합니다.
 
 ```yaml showLineNumbers title="config.yaml"
 guardrails:
@@ -122,9 +122,9 @@ guardrails:
         - "policy-id-3"
 ```
 
-### Custom API Base
+### 사용자 지정 API 기본 URL
 
-Specify a custom DynamoAI API endpoint:
+사용자 지정 DynamoAI API 엔드포인트를 지정합니다.
 
 ```yaml showLineNumbers title="config.yaml"
 guardrails:
@@ -136,9 +136,9 @@ guardrails:
       api_base: "https://custom.dynamo.ai"
 ```
 
-### Model ID for Tracking
+### 추적용 모델 ID
 
-Add a model ID for tracking and logging purposes:
+추적 및 로깅 목적으로 모델 ID를 추가합니다.
 
 ```yaml showLineNumbers title="config.yaml"
 guardrails:
@@ -150,9 +150,9 @@ guardrails:
       model_id: "gpt-4-production"
 ```
 
-### Input and Output Guardrails
+### 입력 및 출력 가드레일
 
-Configure separate guardrails for input and output:
+입력과 출력에 각각 별도의 가드레일을 구성합니다.
 
 ```yaml showLineNumbers title="config.yaml"
 guardrails:
@@ -171,44 +171,43 @@ guardrails:
       api_key: os.environ/DYNAMOAI_API_KEY
 ```
 
-## Configuration Options
+## 설정 옵션
 
-| Parameter | Type | Description | Default |
+| 파라미터 | 유형 | 설명 | 기본값 |
 |-----------|------|-------------|---------|
-| `api_key` | string | DynamoAI API key (required) | `DYNAMOAI_API_KEY` env var |
-| `api_base` | string | DynamoAI API base URL | `https://api.dynamo.ai` |
-| `policy_ids` | array | List of DynamoAI policy IDs to apply (optional) | `DYNAMOAI_POLICY_IDS` env var (comma-separated) |
-| `model_id` | string | Model ID for tracking/logging | `DYNAMOAI_MODEL_ID` env var |
-| `mode` | string | When to run: `pre_call`, `post_call`, or `during_call` | Required |
+| `api_key` | string | DynamoAI API 키(필수) | `DYNAMOAI_API_KEY` 환경 변수 |
+| `api_base` | string | DynamoAI API 기본 URL | `https://api.dynamo.ai` |
+| `policy_ids` | array | 적용할 DynamoAI 정책 ID 목록(선택 사항) | `DYNAMOAI_POLICY_IDS` 환경 변수(쉼표로 구분) |
+| `model_id` | string | 추적/로깅용 모델 ID | `DYNAMOAI_MODEL_ID` 환경 변수 |
+| `mode` | string | 실행 시점: `pre_call`, `post_call` 또는 `during_call` | 필수 |
 
-## Observability
+## 관측성
 
-DynamoAI guardrail logs include:
+DynamoAI 가드레일 로그에는 다음이 포함됩니다.
 
-- **guardrail_status**: `success`, `guardrail_intervened`, or `guardrail_failed_to_respond`
+- **guardrail_status**: `success`, `guardrail_intervened` 또는 `guardrail_failed_to_respond`
 - **guardrail_provider**: `dynamoai`
-- **guardrail_json_response**: Full API response with policy details
-- **duration**: Time taken for guardrail check
-- **start_time** and **end_time**: Timestamps
+- **guardrail_json_response**: 정책 세부 정보가 포함된 전체 API 응답
+- **duration**: 가드레일 검사에 걸린 시간
+- **start_time** 및 **end_time**: 타임스탬프
 
-These logs are available through your configured LiteLLM logging callbacks.
+이 로그는 구성된 LiteLLM 로깅 콜백을 통해 사용할 수 있습니다.
 
-## Error Handling
+## 오류 처리
 
-The guardrail handles errors gracefully:
+가드레일은 오류를 원활하게 처리합니다.
 
-- **API Failures**: Logs error and raises exception with status `guardrail_failed_to_respond`
-- **Policy Violations**: Raises `ValueError` with detailed violation information
-- **Invalid Configuration**: Raises `ValueError` on initialization if API key is missing
+- **API 실패**: 오류를 로그로 남기고 `guardrail_failed_to_respond` 상태와 함께 예외를 발생시킵니다.
+- **정책 위반**: 자세한 위반 정보와 함께 `ValueError`를 발생시킵니다.
+- **잘못된 설정**: API 키가 없으면 초기화 시 `ValueError`를 발생시킵니다.
 
-## Current Limitations
+## 현재 제한 사항
 
-- Only the `BLOCK` action is currently supported
-- `WARN`, `REDACT`, and `SANITIZE` actions are treated as success (pass through)
+- 현재는 `BLOCK` 작업만 지원됩니다.
+- `WARN`, `REDACT`, `SANITIZE` 작업은 성공으로 처리됩니다(통과).
 
-## Support
+## 지원
 
-For more information about DynamoAI:
-- Website: [https://dynamo.ai](https://dynamo.ai)
-- Documentation: Contact DynamoAI for API documentation
-
+DynamoAI에 대한 자세한 정보:
+- 웹사이트: [https://dynamo.ai](https://dynamo.ai)
+- 문서: API 문서는 DynamoAI에 문의하세요.

@@ -1,16 +1,16 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Perplexity AI (pplx-api)
+# Perplexity AI (`pplx-api`)
 https://www.perplexity.ai
 
-## API Key
+## API 키 {#api-key}
 ```python
 # env variable
 os.environ['PERPLEXITYAI_API_KEY']
 ```
 
-## Sample Usage
+## 샘플 사용법 {#sample-usage}
 ```python
 from litellm import completion
 import os
@@ -23,7 +23,7 @@ response = completion(
 print(response)
 ```
 
-## Sample Usage - Streaming
+## 샘플 사용법 - 스트리밍 {#sample-usage-streaming}
 ```python
 from litellm import completion
 import os
@@ -39,17 +39,17 @@ for chunk in response:
     print(chunk)
 ```
 
-## Reasoning Effort
+## 추론 노력 수준 {#reasoning-effort}
 
-Requires v1.72.6+
+v1.72.6 이상이 필요합니다.
 
 :::info
 
-See full guide on Reasoning with LiteLLM [here](../reasoning_content)
+LiteLLM에서 추론 기능을 사용하는 전체 가이드는 [여기](../reasoning_content)에서 확인하세요.
 
 :::
 
-You can set the reasoning effort by setting the `reasoning_effort` parameter.
+`reasoning_effort` 파라미터를 설정해 추론 노력 수준을 지정할 수 있습니다.
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -69,7 +69,7 @@ print(response)
 </TabItem>
 <TabItem value="proxy" label="Proxy">
 
-1. Setup config.yaml
+1. config.yaml 설정
 
 ```yaml
 model_list:
@@ -79,15 +79,15 @@ model_list:
         api_key: os.environ/PERPLEXITYAI_API_KEY
 ```
 
-2. Start proxy
+2. 프록시 시작
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-3. Test it! 
+3. 테스트
 
-Replace `anything` with your LiteLLM Proxy Virtual Key, if [setup](../proxy/virtual_keys).
+[설정](../proxy/virtual_keys)한 LiteLLM Proxy Virtual Key가 있다면 `anything`을 해당 키로 바꾸세요.
 
 ```bash
 curl http://0.0.0.0:4000/v1/chat/completions \
@@ -103,31 +103,31 @@ curl http://0.0.0.0:4000/v1/chat/completions \
 </TabItem>
 </Tabs>
 
-## Supported Models
-All models listed here https://docs.perplexity.ai/docs/model-cards are supported.  Just do `model=perplexity/<model-name>`.
+## 지원 모델 {#supported-models}
+여기에 나열된 모든 모델 https://docs.perplexity.ai/docs/model-cards 이 지원됩니다. `model=perplexity/<model-name>` 형식으로 사용하면 됩니다.
 
-| Model Name               | Function Call                                                                                                                                                      |
+| 모델 이름               | 함수 호출                                                                                                                                                      |
 |--------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| sonar-deep-research | `completion(model="perplexity/sonar-deep-research", messages)` | 
-| sonar-reasoning-pro | `completion(model="perplexity/sonar-reasoning-pro", messages)` | 
-| sonar-reasoning | `completion(model="perplexity/sonar-reasoning", messages)` | 
-| sonar-pro | `completion(model="perplexity/sonar-pro", messages)` | 
-| sonar | `completion(model="perplexity/sonar", messages)` | 
-| r1-1776 | `completion(model="perplexity/r1-1776", messages)` | 
+| `sonar-deep-research` | `completion(model="perplexity/sonar-deep-research", messages)` | 
+| `sonar-reasoning-pro` | `completion(model="perplexity/sonar-reasoning-pro", messages)` | 
+| `sonar-reasoning` | `completion(model="perplexity/sonar-reasoning", messages)` | 
+| `sonar-pro` | `completion(model="perplexity/sonar-pro", messages)` | 
+| `sonar` | `completion(model="perplexity/sonar", messages)` | 
+| `r1-1776` | `completion(model="perplexity/r1-1776", messages)` | 
 
 
 
 
 
 
-## Agent API (Responses API)
+## Agent API (Responses API) 개요 {#agent-api-responses-api}
 
-Requires v1.72.6+
+v1.72.6 이상이 필요합니다.
 
 
-### Using Presets
+### 프리셋 사용 {#using-presets}
 
-Presets provide optimized defaults for specific use cases. Start with a preset for quick setup:
+프리셋은 특정 사용 사례에 맞는 최적화된 기본값을 제공합니다. 빠르게 설정하려면 프리셋으로 시작하세요.
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -151,7 +151,7 @@ print(response.output)
 </TabItem>
 <TabItem value="proxy" label="Proxy">
 
-1. Setup config.yaml
+1. config.yaml 설정
 
 ```yaml
 model_list:
@@ -161,13 +161,13 @@ model_list:
         api_key: os.environ/PERPLEXITY_API_KEY
 ```
 
-2. Start proxy
+2. 프록시 시작
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-3. Test it!
+3. 테스트
 
 ```bash
 curl http://0.0.0.0:4000/v1/responses \
@@ -182,9 +182,9 @@ curl http://0.0.0.0:4000/v1/responses \
 </TabItem>
 </Tabs>
 
-### Using Third-Party Models
+### 서드파티 모델 사용 {#using-third-party-models}
 
-Access models from OpenAI, Anthropic, Google, xAI, and other providers through Perplexity's unified API:
+Perplexity의 통합 API를 통해 OpenAI, Anthropic, Google, xAI 및 기타 제공자의 모델에 접근할 수 있습니다.
 
 <Tabs>
 <TabItem value="openai" label="OpenAI">
@@ -265,9 +265,9 @@ print(response.output)
 </TabItem>
 </Tabs>
 
-### Web Search Tool
+### 웹 검색 도구 {#web-search-tool}
 
-Enable web search capabilities to access real-time information:
+실시간 정보에 접근하려면 웹 검색 기능을 활성화하세요.
 
 ```python
 from litellm import responses
@@ -286,9 +286,9 @@ response = responses(
 print(response.output)
 ```
 
-### Function Calling
+### 함수 호출 {#function-calling}
 
-The Agent API supports custom function tools. Pass function tools through unchanged:
+Agent API는 사용자 지정 함수 도구를 지원합니다. 함수 도구는 변경하지 않고 그대로 전달하세요.
 
 ```python
 from litellm import responses
@@ -323,9 +323,9 @@ response = responses(
 print(response.output)
 ```
 
-### Structured Outputs
+### 구조화된 출력 {#structured-outputs}
 
-Request JSON schema structured outputs via the `text` parameter:
+`text` 파라미터를 통해 JSON 스키마 구조화 출력을 요청할 수 있습니다.
 
 ```python
 from litellm import responses
@@ -359,9 +359,9 @@ print(response.output)
 ```
 
 
-### Reasoning Effort (Responses API)
+### 추론 노력 수준 (Responses API) {#reasoning-effort-responses-api}
 
-Control the reasoning effort level for reasoning-capable models:
+추론을 지원하는 모델의 추론 노력 수준을 제어합니다.
 
 ```python
 from litellm import responses
@@ -380,9 +380,9 @@ response = responses(
 print(response.output)
 ```
 
-### Multi-Turn Conversations
+### 멀티턴 대화 {#multi-turn-conversations}
 
-Use message arrays for multi-turn conversations with context:
+컨텍스트가 있는 멀티턴 대화에는 메시지 배열을 사용하세요.
 
 ```python
 from litellm import responses
@@ -404,9 +404,9 @@ response = responses(
 print(response.output)
 ```
 
-### Streaming Responses
+### 스트리밍 응답 {#streaming-responses}
 
-Stream responses for real-time output:
+실시간 출력에는 응답을 스트림으로 받으세요.
 
 ```python
 from litellm import responses
@@ -428,34 +428,34 @@ for chunk in response:
             print(chunk.delta, end="", flush=True)
 ```
 
-### Supported Third-Party Models
+### 지원되는 서드파티 모델 {#supported-third-party-models}
 
-| Provider | Model Name | Function Call |
+| 제공자 | 모델 이름 | 함수 호출 |
 |----------|------------|---------------|
-| OpenAI | gpt-5.2 | `responses(model="perplexity/openai/gpt-5.2", ...)` |
-| OpenAI | gpt-5.1 | `responses(model="perplexity/openai/gpt-5.1", ...)` |
-| OpenAI | gpt-5-mini | `responses(model="perplexity/openai/gpt-5-mini", ...)` |
-| Anthropic | claude-opus-4-6 | `responses(model="perplexity/anthropic/claude-opus-4-6", ...)` |
-| Anthropic | claude-opus-4-5 | `responses(model="perplexity/anthropic/claude-opus-4-5", ...)` |
-| Anthropic | claude-sonnet-4-5 | `responses(model="perplexity/anthropic/claude-sonnet-4-5", ...)` |
-| Anthropic | claude-haiku-4-5 | `responses(model="perplexity/anthropic/claude-haiku-4-5", ...)` |
-| Google | gemini-3-pro-preview | `responses(model="perplexity/google/gemini-3-pro-preview", ...)` |
-| Google | gemini-3-flash-preview | `responses(model="perplexity/google/gemini-3-flash-preview", ...)` |
-| Google | gemini-2.5-pro | `responses(model="perplexity/google/gemini-2.5-pro", ...)` |
-| Google | gemini-2.5-flash | `responses(model="perplexity/google/gemini-2.5-flash", ...)` |
-| xAI | grok-4-1-fast-non-reasoning | `responses(model="perplexity/xai/grok-4-1-fast-non-reasoning", ...)` |
-| Perplexity | sonar | `responses(model="perplexity/perplexity/sonar", ...)` |
+| OpenAI | `gpt-5.2` | `responses(model="perplexity/openai/gpt-5.2", ...)` |
+| OpenAI | `gpt-5.1` | `responses(model="perplexity/openai/gpt-5.1", ...)` |
+| OpenAI | `gpt-5-mini` | `responses(model="perplexity/openai/gpt-5-mini", ...)` |
+| Anthropic | `claude-opus-4-6` | `responses(model="perplexity/anthropic/claude-opus-4-6", ...)` |
+| Anthropic | `claude-opus-4-5` | `responses(model="perplexity/anthropic/claude-opus-4-5", ...)` |
+| Anthropic | `claude-sonnet-4-5` | `responses(model="perplexity/anthropic/claude-sonnet-4-5", ...)` |
+| Anthropic | `claude-haiku-4-5` | `responses(model="perplexity/anthropic/claude-haiku-4-5", ...)` |
+| Google | `gemini-3-pro-preview` | `responses(model="perplexity/google/gemini-3-pro-preview", ...)` |
+| Google | `gemini-3-flash-preview` | `responses(model="perplexity/google/gemini-3-flash-preview", ...)` |
+| Google | `gemini-2.5-pro` | `responses(model="perplexity/google/gemini-2.5-pro", ...)` |
+| Google | `gemini-2.5-flash` | `responses(model="perplexity/google/gemini-2.5-flash", ...)` |
+| xAI | `grok-4-1-fast-non-reasoning` | `responses(model="perplexity/xai/grok-4-1-fast-non-reasoning", ...)` |
+| Perplexity | `sonar` | `responses(model="perplexity/perplexity/sonar", ...)` |
 
-### Available Presets
+### 사용 가능한 프리셋 {#available-presets}
 
-| Preset Name | Function Call |
+| 프리셋 이름 | 함수 호출 |
 |-------------|---------------|
-| fast-search | `responses(model="perplexity/preset/fast-search", ...)` |
-| pro-search | `responses(model="perplexity/preset/pro-search", ...)` |
-| deep-research | `responses(model="perplexity/preset/deep-research", ...)` |
-| advanced-deep-research | `responses(model="perplexity/preset/advanced-deep-research", ...)` |
+| `fast-search` | `responses(model="perplexity/preset/fast-search", ...)` |
+| `pro-search` | `responses(model="perplexity/preset/pro-search", ...)` |
+| `deep-research` | `responses(model="perplexity/preset/deep-research", ...)` |
+| `advanced-deep-research` | `responses(model="perplexity/preset/advanced-deep-research", ...)` |
 
-### Complete Example
+### 전체 예제 {#complete-example}
 
 ```python
 from litellm import responses
@@ -486,5 +486,5 @@ print(f"Usage: {response.usage}")
 
 :::info
 
-For more information about passing provider-specific parameters, [go here](../completion/provider_specific_params.md)
+제공자별 파라미터 전달에 대한 자세한 내용은 [여기](../completion/provider_specific_params.md)를 참고하세요.
 :::

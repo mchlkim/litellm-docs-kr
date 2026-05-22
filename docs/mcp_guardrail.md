@@ -2,20 +2,20 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Image from '@theme/IdealImage';
 
-# MCP Guardrails
+# MCP 가드레일
 
-LiteLLM supports applying guardrails to MCP tool calls to ensure security and compliance. You can configure guardrails to run before or during MCP calls to validate inputs and block or mask sensitive information.
+LiteLLM은 보안과 컴플라이언스를 보장하기 위해 MCP 도구 호출에 가드레일을 적용할 수 있습니다. MCP 호출 전이나 호출 중에 가드레일이 실행되도록 구성하여 입력을 검증하고 민감한 정보를 차단하거나 마스킹할 수 있습니다.
 
-### Supported MCP Guardrail Modes
+### 지원되는 MCP 가드레일 모드 {#supported-mcp-guardrail-modes}
 
-MCP guardrails support the following modes:
+MCP 가드레일은 다음 모드를 지원합니다.
 
-- `pre_mcp_call`: Run **before** MCP call, on **input**. Use this mode when you want to apply validation/masking/blocking for MCP requests
-- `during_mcp_call`: Run **during** MCP call execution. Use this mode for real-time monitoring and intervention
+- `pre_mcp_call`: MCP 호출 **전**에 **입력**을 대상으로 실행됩니다. MCP 요청에 검증, 마스킹, 차단을 적용하려면 이 모드를 사용하세요.
+- `during_mcp_call`: MCP 호출 실행 **중**에 실행됩니다. 실시간 모니터링과 개입이 필요할 때 이 모드를 사용하세요.
 
-### Configuration Examples
+### 설정 예제
 
-Configure guardrails to run before MCP tool calls to validate and sanitize inputs:
+MCP 도구 호출 전에 가드레일을 실행하여 입력을 검증하고 정리하도록 구성합니다.
 
 ```yaml title="config.yaml" showLineNumbers
 guardrails:
@@ -31,11 +31,11 @@ guardrails:
 ```
 
 
-### Usage Examples
+### 사용법 예제
 
-#### Testing Pre-MCP Call Guardrails
+#### Pre-MCP Call 가드레일 테스트 {#testing-pre-mcp-call-guardrails}
 
-Test your MCP guardrails with a request that includes sensitive information:
+민감한 정보가 포함된 요청으로 MCP 가드레일을 테스트합니다.
 
 ```bash title="Test MCP Guardrail" showLineNumbers
 curl http://localhost:4000/chat/completions \
@@ -50,13 +50,13 @@ curl http://localhost:4000/chat/completions \
   }'
 ```
 
-The request will be processed as follows:
-1. Credit card number will be blocked (request rejected)
-2. Email address will be masked (e.g., replaced with `<EMAIL_ADDRESS>`)
+요청은 다음과 같이 처리됩니다.
+1. 신용카드 번호가 차단됩니다(요청 거부).
+2. 이메일 주소가 마스킹됩니다(예: `<EMAIL_ADDRESS>`로 대체).
 
-#### Using with MCP Tools
+#### MCP 도구와 함께 사용 {#using-with-mcp-tools}
 
-When using MCP tools, guardrails will be applied to the tool inputs:
+MCP 도구를 사용할 때 가드레일은 도구 입력에 적용됩니다.
 
 ```python title="Python Example with MCP Guardrails" showLineNumbers
 import openai
@@ -73,18 +73,18 @@ response = client.chat.completions.create(
         {"role": "user", "content": "Send an email to 555-123-4567 with my SSN 123-45-6789"}
     ],
     tools=[{"type": "mcp", "server_label": "litellm", "server_url": "litellm_proxy"}],
-    extra_body={"guardrails": ["mcp-input-validation"]},
+    guardrails=["mcp-input-validation"]
 )
 ```
 
-### Supported Guardrail Providers
+### 지원되는 가드레일 프로바이더 {#supported-guardrail-providers}
 
-MCP guardrails work with all LiteLLM-supported guardrail providers:
+MCP 가드레일은 LiteLLM이 지원하는 모든 가드레일 프로바이더와 함께 작동합니다.
 
-- **Presidio**: PII detection and masking
-- **Bedrock**: AWS Bedrock guardrails
-- **Lakera**: Content moderation
-- **Aporia**: Custom guardrails
+- **Presidio**: PII 탐지 및 마스킹
+- **Bedrock**: AWS Bedrock 가드레일
+- **Lakera**: 콘텐츠 모더레이션
+- **Aporia**: 사용자 지정 가드레일
 - **Noma**: Noma Security
-- **PANW Prisma AIRS**: Prisma AIRS guardrails
-- **Custom**: Your own guardrail implementations
+- **PANW Prisma AIRS**: Prisma AIRS 가드레일
+- **Custom**: 자체 가드레일 구현

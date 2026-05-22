@@ -1,72 +1,53 @@
 ---
 slug: cleaner-release-versions
-title: "LiteLLM release versioning is changing: standard names, MINOR for weekly, PATCH for hotfixes"
+title: "LiteLLM 릴리즈 버전 체계 변경: 표준 이름, 주간 릴리즈는 MINOR, hotfix는 PATCH"
 date: 2026-04-28
 authors:
   - yuneng
-description: "Dropping `-stable` and `-nightly` suffixes. Weekly releases bump MINOR; PATCH is now reserved for actual hotfixes. Old releases keep their tags forever; new ones start with `1.84.0`."
+description: "`-stable`, `-nightly` suffix를 제거합니다. 주간 릴리즈는 MINOR를 올리고, PATCH는 실제 hotfix에만 사용합니다. 기존 릴리즈 태그는 유지되며 새 체계는 `1.84.0`부터 시작합니다."
 tags: [release, packaging, docker]
 hide_table_of_contents: false
 ---
 
-*Last Updated: May 2026*
+LiteLLM 릴리즈 버전 이름이 변경됩니다. 이번 변경은 두 가지 문제를 해결하기 위한 것입니다.
 
-:::warning `main-stable` is deprecated — migrate to `:latest` by June 30, 2026
-The legacy `main-stable` Docker tag still advances each week so existing deployments keep working, but **we plan to stop publishing it on June 30, 2026 (end of Q2)**. Going forward, **`:latest`** is the canonical rolling pointer to the newest stable image — it advances automatically when each stable ships and matches the standard Docker convention.
+**1. `-stable`, `-nightly` suffix는 표준 형식이 아닙니다.**
 
-`main-stable` carries over from the previous naming scheme and doesn't fit modern conventions: it mixes "main" (typically a development branch) with "stable" (a release channel), and has no PyPI counterpart.
+`v1.83.3-stable`, `v1.83.0-nightly` 같은 버전은 PEP 440(PyPI) 또는 SemVer 2.0(Docker / Helm) 규칙과 맞지 않습니다. 표준 버전 문자열을 기대하는 사용자는 혼란을 겪고, 버전을 분류하는 도구는 suffix를 별도로 처리해야 합니다.
 
-**Migration:**
+**2. 주간 릴리즈가 PATCH를 올리면서 실제 hotfix를 위한 공간이 부족했습니다.**
 
-- **Rolling stable (Docker)** → `ghcr.io/berriai/litellm:latest`
-- **Reproducible pin (Docker)** → `ghcr.io/berriai/litellm:1.84.0`
-- **Reproducible pin (PyPI)** → `pip install litellm==1.84.0`
-
-This banner will be updated with reminders as the cutover approaches.
-:::
-
-LiteLLM release version names are changing. Two pain points have been driving this:
-
-**1. The `-stable` and `-nightly` suffixes aren't standard.**
-
-Versions like `v1.83.3-stable` and `v1.83.0-nightly` don't match PEP 440 (PyPI) or SemVer 2.0 (Docker / Helm) conventions. Users expecting standard version strings get confused, and tooling that classifies versions has to special-case the suffix.
-
-**2. Weekly releases were bumping PATCH, leaving no room for actual hotfixes.**
-
-Under the old model, each scheduled weekly release bumped the PATCH number: `1.83.0` -> `1.83.1` -> `1.83.2` -> `1.83.3`. When a real hotfix was needed for `1.83.3`, the next PATCH (`1.83.4`) was already reserved for the following week's release. The workaround on Docker was `v1.83.3-stable.patch.1` - but PyPI doesn't accept that syntax, so a hotfix that needed both a Docker image and a Python wheel had no clean way to ship.
+기존 모델에서는 예정된 주간 릴리즈마다 PATCH 번호가 올라갔습니다. 예를 들어 `1.83.0` -> `1.83.1` -> `1.83.2` -> `1.83.3` 방식입니다. `1.83.3`에 실제 hotfix가 필요해도 다음 PATCH인 `1.83.4`는 이미 다음 주 릴리즈용으로 예약되어 있었습니다. Docker에서는 `v1.83.3-stable.patch.1` 같은 우회 형식을 썼지만, PyPI는 이 문법을 허용하지 않기 때문에 Docker image와 Python wheel을 함께 배포해야 하는 hotfix를 깔끔하게 낼 방법이 없었습니다.
 
 <!-- truncate -->
 
-## What's new
+## 변경 사항
 
-Starting with **`1.84.0`**:
+**`1.84.0`**부터 다음 체계를 적용합니다.
 
-- **Drop the suffix.** Stable releases are plain PEP 440 / SemVer 2.0: `1.84.0`. Pre-releases use the standard PEP 440 (`1.84.0rc1`, `1.84.0.dev42`) and SemVer (`1.84.0-rc.1`, `1.84.0-dev.42`) shapes for PyPI and Docker respectively.
-- **MINOR bumps weekly.** Each scheduled stable bumps the MINOR component: `1.84.0` -> `1.85.0` -> `1.86.0`.
-- **PATCH is reserved for hotfixes.** When `1.84.0` needs a fix, it becomes `1.84.1`. Cleanly installs everywhere - `pip install litellm==1.84.1`, `docker pull ghcr.io/berriai/litellm:1.84.1`.
+- **suffix를 제거합니다.** Stable 릴리즈는 `1.84.0`처럼 PEP 440 / SemVer 2.0 형식을 그대로 사용합니다. Pre-release는 PyPI와 Docker에 맞춰 각각 표준 PEP 440(`1.84.0rc1`, `1.84.0.dev42`) 및 SemVer(`1.84.0-rc.1`, `1.84.0-dev.42`) 형식을 사용합니다.
+- **주간 릴리즈는 MINOR를 올립니다.** 예정된 stable 릴리즈마다 MINOR component를 올립니다. 예: `1.84.0` -> `1.85.0` -> `1.86.0`.
+- **PATCH는 hotfix에만 사용합니다.** `1.84.0`에 수정이 필요하면 `1.84.1`이 됩니다. `pip install litellm==1.84.1`, `docker pull ghcr.io/berriai/litellm:1.84.1`처럼 모든 배포 채널에서 일관되게 설치할 수 있습니다.
 
-## Side-by-side
+## 비교
 
-| Scenario | Old name | New name |
+| 시나리오 | 기존 이름 | 새 이름 |
 |---|---|---|
-| Weekly scheduled stable | `v1.83.3-stable` | `1.84.0` or `v1.84.0` (Docker) / `1.84.0` (PyPI) |
-| Hotfix on the current stable | `v1.83.3-stable.patch.1` (Docker only - no PyPI release) | `1.84.1` or `v1.84.1` (Docker) / `1.84.1` (PyPI) |
-| Release candidate | `v1.84.0-rc` | `1.84.0-rc.1` or `v1.84.0-rc.1` (Docker) / `1.84.0rc1` (PyPI) |
-| Nightly | `v1.83.0-nightly` | `1.84.0-dev.42` or `v1.84.0-dev.42` (Docker) / `1.84.0.dev42` (PyPI) |
+| 예정된 주간 stable | `v1.83.3-stable` | `1.84.0` (Docker + PyPI) |
+| 현재 stable에 대한 hotfix | `v1.83.3-stable.patch.1` (Docker 전용 - PyPI 릴리즈 없음) | `1.84.1` (Docker + PyPI) |
+| 릴리즈 후보 | `v1.84.0-rc` | `1.84.0-rc.1` (Docker) / `1.84.0rc1` (PyPI) |
+| Nightly | `v1.83.0-nightly` | `1.84.0-dev.42` (Docker) / `1.84.0.dev42` (PyPI) |
 
-On Docker, every channel is published in both bare (`1.84.0`) and `v`-prefixed (`v1.84.0`) form going forward — both resolve to the same image digest, so existing pins that include the `v` prefix keep working. On PyPI, every channel uses the bare PEP 440 form (`1.84.0`, never `v1.84.0`).
+가장 중요한 부분은 hotfix 행입니다. 기존 체계에서는 `v1.83.3-stable.patch.1`에 해당하는 PyPI 배포가 없었습니다. 새 체계에서는 hotfix가 일반 릴리즈처럼 registry와 PyPI에 모두 배포됩니다.
 
-The hotfix row is the meaningful one. Under the old scheme there was no PyPI publication for `v1.83.3-stable.patch.1`. Under the new scheme, hotfixes ship to both registries and PyPI as a normal release.
+## 하위 호환성
 
-## Backwards compatibility
+기존 이름으로 이미 배포된 릴리즈(`v1.83.x-stable`, `v1.83.x-stable.patch.N`, 기존 `1.83.x` PyPI 버전)는 **registry와 PyPI에 계속 유지됩니다**. 지금 고정해서 쓰는 버전은 계속 동작합니다. 새 이름 체계는 `1.84.0`부터 새로 나오는 릴리즈에 적용됩니다.
 
-Releases that already shipped with the old naming - `v1.83.x-stable`, `v1.83.x-stable.patch.N`, and existing `1.83.x` PyPI versions - **stay on the registries and PyPI forever**. Anything you currently pin to keeps working. The new naming applies to new releases starting `1.84.0`.
+전환 이전 릴리즈 라인에 유지보수 패치가 필요한 경우(예: 현재 버전이 `1.84.x`인 상태에서 `1.83.x`에 수정이 필요한 경우), 해당 라인 내 일관성을 위해 예전 이름 체계를 계속 사용할 수 있습니다. 릴리즈 노트에는 어떤 형식을 사용했는지 명시합니다. 장기적으로는 모든 새 릴리즈가 새 이름 체계로 이동합니다.
 
-If a maintenance patch is needed on a pre-cutover release line (e.g. a fix on `1.83.x` while `1.84.x` is current), that patch may continue to use the old naming for consistency within the line - release notes will call out which format was used. Long-term, all new releases move to the new naming.
+## 알아두면 좋은 점
 
-## A few things worth knowing
-
-- **The `v` prefix is optional on Docker tags.** Every Docker tag going forward is published in both bare and `v`-prefixed form — `ghcr.io/berriai/litellm:1.84.0` and `ghcr.io/berriai/litellm:v1.84.0` resolve to the same image (same `sha256` digest), and the same applies to release-candidate and dev/nightly tags. Existing pins that include the `v` prefix keep working without change. PyPI versions remain the bare PEP 440 form: `pip install litellm==1.84.0` (not `==v1.84.0`).
-- **`litellm-dev`** - there's a separate `litellm-dev` PyPI package and `*-dev` Docker image family for ad-hoc and one-off builds (e.g. testing a fix before it lands in a release). **Not for production use.** Anything pinned to the standard `litellm` package or `ghcr.io/berriai/litellm:*` Docker tags will never accidentally pick up a `litellm-dev` build.
-- **`:latest` Docker tag** points to the most recent stable release on each registry, advancing automatically when a new stable ships. For production deployments we still recommend pinning to a content tag (e.g. `:1.84.0`) so deploys are reproducible.
-- **Image signing** ([cosign verify](/blog/ci-cd-v2-improvements#verify-docker-image-signatures)) and verification commands continue to work unchanged with the new tag shapes.
+- **`litellm-dev`** - 임시 빌드와 일회성 빌드(예: 수정 사항이 정식 릴리즈에 들어가기 전에 테스트하는 빌드)를 위한 별도의 `litellm-dev` PyPI 패키지와 `*-dev` Docker image 계열이 있습니다. **프로덕션 용도가 아닙니다.** 표준 `litellm` 패키지나 `ghcr.io/berriai/litellm:*` Docker 태그에 고정한 환경은 실수로 `litellm-dev` 빌드를 가져오지 않습니다.
+- **`:latest` Docker tag**는 각 registry의 최신 stable 릴리즈를 가리키며, 새 stable이 배포되면 자동으로 이동합니다. 프로덕션 배포에서는 재현 가능한 배포를 위해 여전히 콘텐츠 태그(예: `:1.84.0`)에 고정하는 방식을 권장합니다.
+- **Image signing**([cosign verify](/blog/ci-cd-v2-improvements#verify-docker-image-signatures))과 검증 명령은 새 태그 형식에서도 변경 없이 계속 동작합니다.

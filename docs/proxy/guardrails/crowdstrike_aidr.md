@@ -1,50 +1,48 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# CrowdStrike AIDR
+# CrowdStrike AIDR {#crowdstrike-aidr}
 
-The CrowdStrike AIDR guardrail uses configurable detection policies to identify
-and mitigate risks in AI application traffic, including:
+CrowdStrike AIDR guardrail은 구성 가능한 탐지 정책을 사용하여 AI 애플리케이션 트래픽의 위험을 식별하고 완화합니다. 예를 들면 다음과 같습니다.
 
-- Prompt injection attacks (with over 99% efficacy)
-- 50+ types of PII and sensitive content, with support for custom patterns
-- Toxicity, violence, self-harm, and other unwanted content
-- Malicious links, IPs, and domains
-- 100+ spoken languages, with allowlist and denylist controls
+- 프롬프트 인젝션 공격(99% 이상의 효율)
+- 사용자 지정 패턴을 지원하는 50개 이상의 PII 및 민감 콘텐츠 유형
+- 유해성, 폭력, 자해 및 기타 원치 않는 콘텐츠
+- 악성 링크, IP 및 도메인
+- allowlist 및 denylist 제어를 지원하는 100개 이상의 구어
 
-All detections are logged for analysis, attribution, and incident response.
+모든 탐지는 분석, 귀속 및 사고 대응을 위해 기록됩니다.
 
-## Prerequisites
+## 사전 준비
 
-- CrowdStrike Falcon account with AIDR enabled
+- AIDR이 활성화된 CrowdStrike Falcon 계정
 
-  For detailed information about CrowdStrike AIDR features, policy configuration, and advanced usage, see the [official CrowdStrike AIDR documentation](https://aidr-docs.crowdstrike.com/docs/aidr/).
+  CrowdStrike AIDR 기능, 정책 구성 및 고급 사용법에 대한 자세한 내용은 [공식 CrowdStrike AIDR 문서](https://aidr-docs.crowdstrike.com/docs/aidr/)를 참조하세요.
 
-- LiteLLM installed (via pip or Docker)
-- API key for your LLM provider
+- LiteLLM 설치(pip 또는 Docker 사용)
+- LLM provider용 API key
 
-  To follow examples in this guide, you need an OpenAI API key.
+  이 가이드의 예제를 따라 하려면 OpenAI API key가 필요합니다.
 
-## Quick Start
+## 빠른 시작
 
-In the Falcon console, click **Open menu** (**☰**) and go to **AI detection and response** > **Collectors**.
+Falcon console에서 **Open menu**(**☰**)를 클릭하고 **AI 탐지 및 대응**(`AI detection and response`) > **Collectors**로 이동합니다.
 
-### 1. Register LiteLLM collector
+### 1. LiteLLM collector 등록 {#1-register-litellm-collector}
 
-1. On the **Collectors** page, click **+ Collector**.
-1. Choose **Gateway** as the collector type, then select **LiteLLM** and click **Next**.
-1. On the **Add a Collector** screen:
-   - **Collector Name** - Enter a descriptive name for the collector to appear in dashboards and reports.
-   - **Logging** - Select whether to log incoming (prompt) data and model responses, or only metadata submitted to AIDR.
-   - **Policy** (optional) - Assign a policy to apply to incoming data and model responses.
-     - Policies detect malicious activity, sensitive data exposure, topic violations, and other risks in AI traffic.
-     - When no policy is assigned, AIDR records activity for visibility and analysis, but does not apply detection rules to the data.
-1. Click **Save** to complete collector registration.
+1. **Collectors** 페이지에서 **+ Collector**를 클릭합니다.
+1. collector 유형으로 **Gateway**를 선택한 다음 **LiteLLM**을 선택하고 **Next**를 클릭합니다.
+1. **Add a Collector** 화면에서 다음을 설정합니다.
+   - **Collector Name** - 대시보드와 보고서에 표시될 collector의 설명적인 이름을 입력합니다.
+   - **Logging** - 수신(프롬프트) 데이터와 모델 응답을 기록할지, 또는 AIDR에 제출된 메타데이터만 기록할지 선택합니다.
+   - **Policy**(선택 사항) - 수신 데이터와 모델 응답에 적용할 정책을 할당합니다.
+     - 정책은 AI 트래픽에서 악성 활동, 민감 데이터 노출, 주제 위반 및 기타 위험을 탐지합니다.
+     - 정책이 할당되지 않으면 AIDR은 가시성과 분석을 위해 활동을 기록하지만 데이터에 탐지 규칙을 적용하지 않습니다.
+1. **Save**를 클릭하여 collector 등록을 완료합니다.
 
-### 2. Add CrowdStrike AIDR to your LiteLLM config.yaml
+### 2. LiteLLM config.yaml에 CrowdStrike AIDR 추가 {#2-add-crowdstrike-aidr-to-your-litellm-configyaml}
 
-Define the CrowdStrike AIDR guardrail under the `guardrails` section of your
-configuration file.
+구성 파일의 `guardrails` 섹션 아래에 CrowdStrike AIDR guardrail을 정의합니다.
 
 ```yaml title="config.yaml - Example LiteLLM configuration with CrowdStrike AIDR guardrail"
 model_list:
@@ -65,10 +63,10 @@ guardrails:
       api_base: os.environ/CS_AIDR_BASE_URL  # CrowdStrike AIDR base URL
 ```
 
-### 3. Start LiteLLM Proxy (AI Gateway)
+### 3. LiteLLM Proxy (AI Gateway) 시작 {#3-start-litellm-proxy-ai-gateway}
 
-Export the AIDR token and base URL as environment variables, along with the provider API key.
-You can find your AIDR token and base URL on the collector details page under the **Config** tab.
+AIDR token 및 base URL을 provider API key와 함께 환경 변수로 내보냅니다.
+AIDR token과 base URL은 collector 세부 정보 페이지의 **Config** 탭에서 확인할 수 있습니다.
 
 ```bash title="Set environment variables"
 export CS_AIDR_TOKEN="pts_5i47n5...m2zbdt"
@@ -101,9 +99,9 @@ docker run --rm \
 </TabItem>
 </Tabs>
 
-### 4. Make request
+### 4. 요청 보내기 {#4-make-request}
 
-This example requires the **Malicious Prompt** detector to be enabled in your collector's policy input rules.
+이 예제에서는 collector의 정책 입력 규칙에서 **Malicious Prompt** detector가 활성화되어 있어야 합니다.
 
 <Tabs>
 <TabItem label="Blocked request" value = "blocked">
@@ -141,12 +139,12 @@ curl -sSLX POST 'http://localhost:4000/v1/chat/completions' \
 
 <TabItem label="Redacted response" value="redacted">
 
-In this example, we simulate a response from a privately hosted LLM that inadvertently includes information that should not be exposed by the AI assistant.
-This example requires the **Confidential and PII** detector enabled in your collector's policy output rules and its **US Social Security Number** rule set to use a redact method.
+이 예제에서는 비공개로 호스팅되는 LLM이 AI assistant에서 노출되어서는 안 되는 정보를 실수로 포함하는 응답을 시뮬레이션합니다.
+이 예제에서는 collector의 정책 출력 규칙에서 **기밀 및 PII**(`Confidential and PII`) detector가 활성화되어 있고, 해당 **US Social Security Number** 규칙이 redact method를 사용하도록 설정되어 있어야 합니다.
 
 :::note
 
-If the policy input rules redact a sensitive value, you will not see redaction applied by the output rules in this test.
+정책 입력 규칙이 민감 값을 redact하면 이 테스트에서는 출력 규칙에 의해 적용된 redaction을 볼 수 없습니다.
 
 :::
 
@@ -169,7 +167,7 @@ curl -sSLX POST 'http://localhost:4000/v1/chat/completions' \
 -w "%{http_code}"
 ```
 
-When the guardrail detects PII, it redacts the sensitive content before returning the response to the user:
+guardrail이 PII를 탐지하면 사용자에게 응답을 반환하기 전에 민감 콘텐츠를 redact합니다.
 
 ```json
 {
@@ -204,7 +202,7 @@ curl -sSLX POST http://localhost:4000/v1/chat/completions \
 -w "%{http_code}"
 ```
 
-The above request should not be blocked, and you should receive a regular LLM response (simplified for brevity):
+위 요청은 차단되지 않아야 하며, 일반 LLM 응답을 받아야 합니다(간결성을 위해 단순화됨).
 
 ```json
 {
@@ -227,6 +225,6 @@ The above request should not be blocked, and you should receive a regular LLM re
 
 </Tabs>
 
-## Next Steps
+## 다음 단계 {#next-steps}
 
-For more details, see the [CrowdStrike AIDR LiteLLM integration guide](https://aidr-docs.crowdstrike.com/docs/aidr/collectors/gateway/litellm).
+자세한 내용은 [CrowdStrike AIDR LiteLLM 통합 가이드](https://aidr-docs.crowdstrike.com/docs/aidr/collectors/gateway/litellm)를 참조하세요.

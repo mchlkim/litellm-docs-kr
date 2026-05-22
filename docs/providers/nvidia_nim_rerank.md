@@ -1,38 +1,38 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Nvidia NIM - Rerank
+# `Nvidia NIM` 재순위화 {#nvidia-nim-rerank}
 
-Use Nvidia NIM Rerank models through LiteLLM.
+LiteLLM을 통해 Nvidia NIM Rerank 모델을 사용합니다.
 
-| Property | Details |
+| 속성 | 세부 정보 |
 |----------|---------|
-| Description | Nvidia NIM provides high-performance reranking models for semantic search and retrieval-augmented generation (RAG) |
-| Provider Doc | [Nvidia NIM Rerank API ↗](https://docs.api.nvidia.com/nim/reference/nvidia-llama-3_2-nv-rerankqa-1b-v2-infer) |
-| Supported Endpoint | `/rerank` |
+| 설명 | Nvidia NIM은 시맨틱 검색과 retrieval-augmented generation (RAG)을 위한 고성능 rerank 모델을 제공합니다 |
+| 프로바이더 문서 | [Nvidia NIM Rerank API ↗](https://docs.api.nvidia.com/nim/reference/nvidia-llama-3_2-nv-rerankqa-1b-v2-infer) |
+| 지원 엔드포인트 | `/rerank` |
 
-## Overview
+## 개요
 
-Nvidia NIM rerank models help you:
-- Reorder search results by relevance to a query
-- Improve RAG (Retrieval-Augmented Generation) accuracy
-- Filter and rank large document sets efficiently
+Nvidia NIM rerank 모델은 다음 작업에 도움이 됩니다.
+- 쿼리 관련도에 따라 검색 결과를 다시 정렬
+- RAG (Retrieval-Augmented Generation) 정확도 향상
+- 대규모 문서 세트를 효율적으로 필터링하고 순위화
 
-**Supported Models:**
-- All Nvidia NIM rerank models on their platform
+**지원 모델:**
+- Nvidia NIM 플랫폼의 모든 rerank 모델
 
 :::tip
 
-See the full list of LiteLLM supported Nvidia NIM rerank models on [Nvidia NIM](https://models.litellm.ai)
+LiteLLM이 지원하는 Nvidia NIM rerank 모델의 전체 목록은 [Nvidia NIM](https://models.litellm.ai)에서 확인하세요.
 
 :::
 
-## Usage
+## 사용법
 
 ### LiteLLM Python SDK
 
 <Tabs>
-<TabItem value="llama-1b" label="LLaMa 1B Model">
+<TabItem value="llama-1b" label="LLaMa 1B 모델">
 
 ```python
 import litellm
@@ -55,7 +55,7 @@ print(response)
 ```
 
 </TabItem>
-<TabItem value="mistral-4b" label="Mistral 4B Model">
+<TabItem value="mistral-4b" label="Mistral 4B 모델">
 
 ```python
 import litellm
@@ -80,7 +80,7 @@ print(response)
 </TabItem>
 </Tabs>
 
-**Response:**
+**응답:**
 ```json
 {
     "results": [
@@ -103,11 +103,11 @@ print(response)
 ```
 
 
-## Usage with LiteLLM Proxy
+## LiteLLM Proxy 사용법 {#usage-with-litellm-proxy}
 
-### 1. Setup Config
+### 1. Config 설정 {#1-setup-config}
 
-Add Nvidia NIM rerank models to your proxy configuration:
+Proxy 설정에 Nvidia NIM rerank 모델을 추가합니다.
 
 ```yaml
 model_list:
@@ -117,13 +117,13 @@ model_list:
       api_key: os.environ/NVIDIA_NIM_API_KEY
 ```
 
-### 2. Start Proxy
+### 2. Proxy 시작 {#2-start-proxy}
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-### 3. Make Rerank Requests
+### 3. Rerank 요청 보내기 {#3-make-rerank-requests}
 
 ```bash
 curl -X POST http://0.0.0.0:4000/rerank \
@@ -141,11 +141,11 @@ curl -X POST http://0.0.0.0:4000/rerank \
   }'
 ```
 
-## `/v1/ranking` Models (llama-3.2-nv-rerankqa-1b-v2)
+## `/v1/ranking` 모델 (llama-3.2-nv-rerankqa-1b-v2)
 
-Some Nvidia NIM rerank models use the `/v1/ranking` endpoint instead of the default `/v1/retrieval/{model}/reranking` endpoint.
+일부 Nvidia NIM rerank 모델은 기본 `/v1/retrieval/{model}/reranking` 엔드포인트 대신 `/v1/ranking` 엔드포인트를 사용합니다.
 
-Use the `ranking/` prefix to force requests to the `/v1/ranking` endpoint:
+요청을 `/v1/ranking` 엔드포인트로 강제하려면 `ranking/` prefix를 사용합니다.
 
 ### LiteLLM Python SDK
 
@@ -171,7 +171,7 @@ response = litellm.rerank(
 print(response)
 ```
 
-### LiteLLM Proxy
+### `LiteLLM Proxy`
 
 ```yaml showLineNumbers title="config.yaml"
 model_list:
@@ -196,7 +196,7 @@ curl -X POST http://0.0.0.0:4000/rerank \
   }'
 ```
 
-### Understanding Model Resolution
+### 모델 해석 방식 이해 {#understanding-model-resolution}
 
 **Ranking Endpoint (`/v1/ranking`):**
 
@@ -213,7 +213,7 @@ model: nvidia_nim/ranking/nvidia/llama-3.2-nv-rerankqa-1b-v2
 API URL: https://ai.api.nvidia.com/v1/ranking
 ```
 
-**Visual Flow:**
+**시각적 흐름:**
 
 ```
 Client Request                LiteLLM                              Provider API
@@ -233,40 +233,40 @@ model: "nvidia_nim/ranking/nvidia/model-name"
                                                                   Body: {"model": "nvidia/model-name", ...}
 ```
 
-**When to use each endpoint:**
+**각 엔드포인트를 사용할 때:**
 
-| Endpoint | Model Prefix | Use Case |
+| 엔드포인트 | 모델 Prefix | 사용 사례 |
 |----------|--------------|----------|
-| `/v1/retrieval/{model}/reranking` | `nvidia_nim/<model>` | Default for most rerank models |
-| `/v1/ranking` | `nvidia_nim/ranking/<model>` | For models like `nvidia/llama-3.2-nv-rerankqa-1b-v2` that require this endpoint |
+| `/v1/retrieval/{model}/reranking` | `nvidia_nim/<model>` | 대부분의 rerank 모델에 대한 기본값 |
+| `/v1/ranking` | `nvidia_nim/ranking/<model>` | 이 엔드포인트가 필요한 `nvidia/llama-3.2-nv-rerankqa-1b-v2` 같은 모델용 |
 
 :::tip
 
-Check the [Nvidia NIM model deployment page](https://build.nvidia.com/nvidia/llama-3_2-nv-rerankqa-1b-v2/deploy) to see which endpoint your model requires.
+모델에 필요한 엔드포인트는 [Nvidia NIM 모델 배포 페이지](https://build.nvidia.com/nvidia/llama-3_2-nv-rerankqa-1b-v2/deploy)에서 확인하세요.
 
 :::
 
-## API Parameters
+## API 매개변수 {#api-parameters}
 
-### Required Parameters
+### 필수 매개변수 {#required-parameters}
 
-| Parameter | Type | Description |
+| 매개변수 | Type | 설명 |
 |-----------|------|-------------|
-| `model` | string | The Nvidia NIM rerank model name with `nvidia_nim/` prefix |
-| `query` | string | The search query to rank documents against |
-| `documents` | array | List of documents to rank (1-1000 documents) |
+| `model` | string | `nvidia_nim/` prefix가 붙은 Nvidia NIM rerank 모델 이름 |
+| `query` | string | 문서 순위를 매길 기준 검색 쿼리 |
+| `documents` | array | 순위를 매길 문서 목록(문서 1-1000개) |
 
-### Optional Parameters
+### 선택 매개변수 {#optional-parameters}
 
-| Parameter | Type | Default | Description |
+| 매개변수 | Type | Default | 설명 |
 |-----------|------|---------|-------------|
-| `top_n` | integer | All documents | Number of top-ranked documents to return |
+| `top_n` | integer | 모든 문서 | 반환할 상위 순위 문서 수 |
 
-### Nvidia-Specific Parameters
+### Nvidia 전용 매개변수 {#nvidia-specific-parameters}
 
-**`truncate`**: Controls how text is truncated if it exceeds the model's context window
-- `"NONE"`: No truncation (request may fail if too long)
-- `"END"`: Truncate from the end of the text
+**`truncate`**: 텍스트가 모델의 context window를 초과할 때 잘라내는 방식을 제어합니다.
+- `"NONE"`: 잘라내지 않음(너무 길면 요청이 실패할 수 있음)
+- `"END"`: 텍스트 끝부분부터 잘라냄
 
 ```python
 response = litellm.rerank(
@@ -278,12 +278,12 @@ response = litellm.rerank(
 )
 ```
 
-## Authentication
+## 인증
 
-Set your Nvidia NIM API key:
+Nvidia NIM API key를 설정합니다.
 
 <Tabs>
-<TabItem value="env" label="Environment Variable">
+<TabItem value="env" label="환경 변수">
 
 ```bash
 export NVIDIA_NIM_API_KEY="nvapi-..."
@@ -308,17 +308,17 @@ response = litellm.rerank(
 </TabItem>
 </Tabs>
 
-## Custom API Base URL
+## 사용자 지정 API Base URL {#custom-api-base-url}
 
-You can override the default base URL in several ways:
+다음 여러 방식으로 기본 base URL을 재정의할 수 있습니다.
 
-**Option 1: Environment Variable**
+**옵션 1: 환경 변수**
 
 ```bash
 export NVIDIA_NIM_API_BASE="https://your-custom-endpoint.com"
 ```
 
-**Option 2: Pass as parameter**
+**옵션 2: 매개변수로 전달**
 
 ```python
 response = litellm.rerank(
@@ -329,9 +329,9 @@ response = litellm.rerank(
 )
 ```
 
-**Option 3: Full URL (including model path)**
+**옵션 3: 전체 URL(모델 경로 포함)**
 
-If you have the complete endpoint URL, you can pass it directly:
+전체 엔드포인트 URL이 있다면 직접 전달할 수 있습니다.
 
 ```python
 response = litellm.rerank(
@@ -342,15 +342,15 @@ response = litellm.rerank(
 )
 ```
 
-LiteLLM will detect the full URL (by checking for `/retrieval/` in the path) and use it as-is.
+LiteLLM은 전체 URL을 감지하고(경로의 `/retrieval/` 확인) 그대로 사용합니다.
 
-### How do I get an API key?
+### API key는 어떻게 받나요? {#how-do-i-get-an-api-key}
 
-Get your Nvidia NIM API key from [Nvidia's website](https://developer.nvidia.com/nim/).
+[Nvidia 웹사이트](https://developer.nvidia.com/nim/)에서 Nvidia NIM API key를 받을 수 있습니다.
 
-## Related Documentation
+## 관련 문서
 
-- [Nvidia NIM - Main Documentation](./nvidia_nim)
-- [Nvidia NIM Chat Completions](./nvidia_nim#sample-usage)
-- [LiteLLM Rerank Endpoint](../rerank)
-- [Nvidia NIM Official Docs ↗](https://docs.api.nvidia.com/nim/reference/)
+- [Nvidia NIM - 메인 문서](./nvidia_nim)
+- [`Nvidia NIM` 채팅 완료](./nvidia_nim#sample-usage)
+- [LiteLLM Rerank 엔드포인트](../rerank)
+- [Nvidia NIM Official 문서 ↗](https://docs.api.nvidia.com/nim/reference/)

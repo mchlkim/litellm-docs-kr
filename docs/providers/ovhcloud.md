@@ -1,21 +1,21 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# 🆕 OVHCloud AI Endpoints
-Leading French Cloud provider in Europe with data sovereignty and privacy.
+# 🆕 `OVHCloud AI Endpoints`
+데이터 주권과 개인정보 보호를 중시하는 유럽의 대표적인 프랑스 cloud provider입니다.
 
-You can explore the last models we made available in our [catalog](https://endpoints.ai.cloud.ovh.net/catalog).
+최근 제공되는 모델은 [catalog](https://endpoints.ai.cloud.ovh.net/catalog)에서 확인할 수 있습니다.
 
 :::tip
 
-We support ALL OVHCloud AI Endpoints models, just set `model=ovhcloud/<any-model-on-ai-endpoints>` as a prefix when sending litellm requests.
-For the complete models catalog, visit https://endpoints.ai.cloud.ovh.net/catalog. **
+모든 `OVHCloud AI Endpoints` 모델을 지원합니다. LiteLLM request를 보낼 때 `model=ovhcloud/<any-model-on-ai-endpoints>` prefix만 설정하세요.
+전체 모델 catalog는 https://endpoints.ai.cloud.ovh.net/catalog 에서 확인할 수 있습니다.
 
 :::
 
-## Sample usage
-### Chat completion
-You can define your API key by setting the `OVHCLOUD_API_KEY` environment variable or by overriding the `api_key` parameter. You can generate a key on the [OVHCloud Manager](https://www.ovh.com/manager).
+## 샘플 사용법 {#sample-usage}
+### Chat completion {#chat-completion}
+`OVHCLOUD_API_KEY` environment variable을 설정하거나 `api_key` parameter를 override해 API key를 지정할 수 있습니다. key는 [OVHCloud Manager](https://www.ovh.com/manager)에서 생성할 수 있습니다.
 
 ```python
 from litellm import completion
@@ -43,8 +43,8 @@ response = completion(
 print(response)
 ```
 
-### Streaming
-Set the parameter `stream` to `True` to stream a response.
+### Streaming {#streaming}
+response를 streaming하려면 `stream` parameter를 `True`로 설정하세요.
 ```python
 from litellm import completion
 import os
@@ -72,7 +72,7 @@ for part in response:
     print(response)
 ```
 
-### Tool Calling
+### 도구 호출
 
 ```python
 from litellm import completion
@@ -205,7 +205,7 @@ else:
     print_message("assistant", response_message.content)
 ```
 
-### Vision Example
+### Vision 예제 {#vision-example}
 
 ```python
 from base64 import b64encode
@@ -251,7 +251,7 @@ print(response.choices[0].message.content)
 ```
 
 
-### Structured Output
+### Structured Output {#structured-output}
 
 ```python
 from litellm import completion
@@ -298,7 +298,7 @@ response = completion(
 print(response.choices[0].message.content)
 ```
 
-### Embeddings
+### Embeddings {#embeddings}
 
 ```python
 from litellm import embedding
@@ -311,7 +311,7 @@ response = embedding(
 print(response.data)
 ```
 
-### Audio Transcription
+### 오디오 전사 {#audio-transcription}
 
 ```python
 from litellm import transcription
@@ -326,11 +326,11 @@ response = transcription(
 print(response.text)
 ```
 
-## Usage with LiteLLM Proxy Server
+## LiteLLM Proxy Server 사용법 {#usage-with-litellm-proxy-server}
 
-Here's how to call a OVHCloud AI Endpoints model with the LiteLLM Proxy Server
+LiteLLM Proxy Server로 `OVHCloud AI Endpoints` 모델을 호출하는 방법은 다음과 같습니다.
 
-1. Modify the config.yaml 
+1. `config.yaml` 수정
 
   ```yaml
   model_list:
@@ -341,13 +341,13 @@ Here's how to call a OVHCloud AI Endpoints model with the LiteLLM Proxy Server
   ```
 
 
-2. Start the proxy 
+2. 프록시 시작 
 
   ```bash
   $ litellm --config /path/to/config.yaml
   ```
 
-3. Send Request to LiteLLM Proxy Server
+3. LiteLLM Proxy Server로 request 전송
 
   <Tabs>
 

@@ -2,34 +2,34 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Image from '@theme/IdealImage';
 
-# Agent Permission Management
+# Agent 권한 관리
 
-Control which A2A agents can be accessed by specific keys or teams in LiteLLM.
+LiteLLM에서 특정 key 또는 team이 접근할 수 있는 A2A agent를 제어합니다.
 
-## Overview
+## 개요
 
-Agent Permission Management lets you restrict which agents a LiteLLM Virtual Key or Team can access. This is useful for:
+Agent 권한 관리를 사용하면 LiteLLM Virtual Key 또는 Team이 접근할 수 있는 agent를 제한할 수 있습니다. 다음 상황에 유용합니다.
 
-- **Multi-tenant environments**: Give different teams access to different agents
-- **Security**: Prevent keys from invoking agents they shouldn't have access to
-- **Compliance**: Enforce access policies for sensitive agent workflows
+- **Multi-tenant environments**: team별로 서로 다른 agent 접근 권한 부여
+- **Security**: 접근 권한이 없는 agent를 key가 호출하지 못하도록 방지
+- **Compliance**: 민감한 agent workflow에 접근 정책 적용
 
-When permissions are configured:
-- `GET /v1/agents` only returns agents the key/team can access
-- `POST /a2a/{agent_id}` (Invoking an agent) returns `403 Forbidden` if access is denied
+권한이 설정되면 다음처럼 동작합니다.
+- `GET /v1/agents`는 key/team이 접근할 수 있는 agent만 반환합니다.
+- `POST /a2a/{agent_id}`(agent 호출)는 접근이 거부되면 `403 Forbidden`을 반환합니다.
 
-## Setting Permissions on a Key
+## Key에 권한 설정
 
-This example shows how to create a key with agent permissions and test access.
+이 예제는 agent 권한이 포함된 key를 만들고 접근을 테스트하는 방법을 보여줍니다.
 
-### 1. Get Your Agent ID
+### 1. Agent ID 확인
 
 <Tabs>
 <TabItem value="ui" label="UI">
 
-1. Go to **Agents** in the sidebar
-2. Click into the agent you want
-3. Copy the **Agent ID**
+1. sidebar에서 **Agents**로 이동합니다.
+2. 원하는 agent를 클릭합니다.
+3. **Agent ID**를 복사합니다.
 
 <Image 
   img={require('../img/agent_id.png')}
@@ -57,14 +57,14 @@ Response:
 </TabItem>
 </Tabs>
 
-### 2. Create a Key with Agent Permissions
+### 2. Agent 권한이 있는 Key 생성
 
 <Tabs>
 <TabItem value="ui" label="UI">
 
-1. Go to **Keys** → **Create Key**
-2. Expand **Agent Settings**
-3. Select the agents you want to allow
+1. **Keys** -> **Create Key**로 이동합니다.
+2. **Agent Settings**를 펼칩니다.
+3. 허용할 agent를 선택합니다.
 
 <Image 
   img={require('../img/agent_key.png')}
@@ -88,9 +88,9 @@ curl -X POST "http://localhost:4000/key/generate" \
 </TabItem>
 </Tabs>
 
-### 3. Test Access
+### 3. 접근 테스트
 
-**Allowed agent (succeeds):**
+**허용된 agent(성공):**
 ```bash title="Invoke allowed agent" showLineNumbers
 curl -X POST "http://localhost:4000/a2a/agent-123" \
   -H "Authorization: Bearer sk-your-new-key" \
@@ -98,7 +98,7 @@ curl -X POST "http://localhost:4000/a2a/agent-123" \
   -d '{"message": {"role": "user", "parts": [{"type": "text", "text": "Hello"}]}}'
 ```
 
-**Blocked agent (fails with 403):**
+**차단된 agent(403으로 실패):**
 ```bash title="Invoke blocked agent" showLineNumbers
 curl -X POST "http://localhost:4000/a2a/agent-456" \
   -H "Authorization: Bearer sk-your-new-key" \
@@ -116,18 +116,18 @@ Response:
 }
 ```
 
-## Setting Permissions on a Team
+## Team에 권한 설정
 
-Restrict all keys belonging to a team to only access specific agents.
+team에 속한 모든 key가 특정 agent에만 접근하도록 제한합니다.
 
-### 1. Create a Team with Agent Permissions
+### 1. Agent 권한이 있는 Team 생성
 
 <Tabs>
 <TabItem value="ui" label="UI">
 
-1. Go to **Teams** → **Create Team**
-2. Expand **Agent Settings**
-3. Select the agents you want to allow for this team
+1. **Teams** -> **Create Team**으로 이동합니다.
+2. **Agent Settings**를 펼칩니다.
+3. 이 team에 허용할 agent를 선택합니다.
 
 <Image 
   img={require('../img/agent_key.png')}
@@ -160,13 +160,13 @@ Response:
 </TabItem>
 </Tabs>
 
-### 2. Create a Key for the Team
+### 2. Team용 Key 생성
 
 <Tabs>
 <TabItem value="ui" label="UI">
 
-1. Go to **Keys** → **Create Key**
-2. Select the **Team** from the dropdown
+1. **Keys** -> **Create Key**로 이동합니다.
+2. dropdown에서 **Team**을 선택합니다.
 
 <Image 
   img={require('../img/agent_team.png')}
@@ -188,11 +188,11 @@ curl -X POST "http://localhost:4000/key/generate" \
 </TabItem>
 </Tabs>
 
-### 3. Test Access
+### 3. 접근 테스트
 
-The key inherits agent permissions from the team.
+key는 team의 agent 권한을 상속합니다.
 
-**Allowed agent (succeeds):**
+**허용된 agent(성공):**
 ```bash title="Invoke allowed agent" showLineNumbers
 curl -X POST "http://localhost:4000/a2a/agent-123" \
   -H "Authorization: Bearer sk-team-key" \
@@ -200,7 +200,7 @@ curl -X POST "http://localhost:4000/a2a/agent-123" \
   -d '{"message": {"role": "user", "parts": [{"type": "text", "text": "Hello"}]}}'
 ```
 
-**Blocked agent (fails with 403):**
+**차단된 agent(403으로 실패):**
 ```bash title="Invoke blocked agent" showLineNumbers
 curl -X POST "http://localhost:4000/a2a/agent-456" \
   -H "Authorization: Bearer sk-team-key" \
@@ -208,81 +208,44 @@ curl -X POST "http://localhost:4000/a2a/agent-456" \
   -d '{"message": {"role": "user", "parts": [{"type": "text", "text": "Hello"}]}}'
 ```
 
-## Agent Access Groups
-
-Granting individual agents to every key or team gets unwieldy as the agent catalog grows. **Agent access groups** let you tag agents with logical labels in the dashboard, then grant the **group** to a key or team — adding a new agent to the group automatically makes it available to every key/team that holds the group.
-
-### 1. Tag the agent with one or more groups
-
-In the LiteLLM dashboard:
-
-1. Go to **Agents**.
-2. Create or edit an agent.
-3. Under **Access Groups**, type a group name (e.g. `clinical-tools`) and press Enter.
-
-:::note
-Tagging an agent with access groups is currently a dashboard-only operation. The `POST /v1/agents` body schema does not expose `agent_access_groups` as a top-level field; the group tags persist via the underlying DB column and are consumed during permission resolution.
-:::
-
-### 2. Grant a key or team the group
-
-```bash title="Key with access to two agent groups" showLineNumbers
-curl -X POST "http://localhost:4000/key/generate" \
-  -H "Authorization: Bearer sk-master-key" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "object_permission": {
-      "agent_access_groups": ["clinical-tools", "research-tools"]
-    }
-  }'
-```
-
-The key now has access to every agent tagged with either group — no per-agent enumeration required. The same `agent_access_groups` field is also valid on a team's `object_permission`.
-
-When a key has **both** a direct `agents` list and `agent_access_groups`, the union is computed (any agent reached by either path is allowed), and then the team-level intersection is applied as described below.
-
-## How It Works
+## 동작 방식
 
 ```mermaid
 flowchart TD
     A[Request to invoke agent] --> B{LiteLLM Virtual Key has agent restrictions?}
     B -->|Yes| C{LiteLLM Team has agent restrictions?}
     B -->|No| D{LiteLLM Team has agent restrictions?}
-
+    
     C -->|Yes| E[Use intersection of key + team permissions]
     C -->|No| F[Use key permissions only]
-
+    
     D -->|Yes| G[Inherit team permissions]
     D -->|No| H[Allow ALL agents]
-
+    
     E --> I{Agent in allowed list?}
     F --> I
     G --> I
     H --> J[Allow request]
-
+    
     I -->|Yes| J
     I -->|No| K[Return 403 Forbidden]
 ```
 
-A2A permission resolution operates over two levels: Key and Team. (MCP's [permission hierarchy](./mcp_control#permission-hierarchy) extends to End-user / Agent / Org additionally — agent permissions are a narrower model today.)
-
-| Key Permissions | Team Permissions | Result | Notes |
+| Key 권한 | Team 권한 | 결과 | 참고 |
 |-----------------|------------------|--------|-------|
-| None | None | Key can access **all** agents | Open access by default when no restrictions are set |
-| `["agent-1", "agent-2"]` | None | Key can access `agent-1` and `agent-2` | Key uses its own permissions |
-| None | `["agent-1", "agent-3"]` | Key can access `agent-1` and `agent-3` | Key inherits team's permissions |
-| `["agent-1", "agent-2"]` | `["agent-1", "agent-3"]` | Key can access `agent-1` only | Intersection of both lists (most restrictive wins) |
-| `agent_access_groups: ["clinical"]` | None | Key can access every agent tagged `clinical` | Access groups resolved to concrete agent IDs |
-| `agent_access_groups: ["clinical"]` | `agents: ["agent-1"]` | Intersection of (every agent tagged `clinical`) and `["agent-1"]` | Mixing direct and group grants is supported |
+| None | None | Key가 **모든** agent에 접근 가능 | 제한이 없으면 기본적으로 open access |
+| `["agent-1", "agent-2"]` | None | Key가 `agent-1`, `agent-2`에 접근 가능 | Key 자체 권한 사용 |
+| None | `["agent-1", "agent-3"]` | Key가 `agent-1`, `agent-3`에 접근 가능 | Key가 team 권한 상속 |
+| `["agent-1", "agent-2"]` | `["agent-1", "agent-3"]` | Key가 `agent-1`에만 접근 가능 | 두 목록의 교집합 사용(가장 제한적인 설정 우선) |
 
-## Viewing Permissions
+## 권한 보기
 
 <Tabs>
 <TabItem value="ui" label="UI">
 
-1. Go to **Keys** or **Teams**
-2. Click into the key/team you want to view
-3. Agent permissions are displayed in the info view
+1. **Keys** 또는 **Teams**로 이동합니다.
+2. 확인할 key/team을 클릭합니다.
+3. info view에 agent 권한이 표시됩니다.
 
 </TabItem>
 <TabItem value="api" label="API">

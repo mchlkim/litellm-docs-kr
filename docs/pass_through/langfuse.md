@@ -1,10 +1,10 @@
 # Langfuse SDK
 
-Pass-through endpoints for Langfuse - call langfuse endpoints with LiteLLM Virtual Key.
+Langfuse용 패스스루 엔드포인트입니다. LiteLLM Virtual Key로 langfuse 엔드포인트를 호출하세요.
 
-Just replace `https://us.cloud.langfuse.com` with `LITELLM_PROXY_BASE_URL/langfuse` 🚀
+`https://us.cloud.langfuse.com`을 `LITELLM_PROXY_BASE_URL/langfuse`로 바꾸기만 하면 됩니다. 🚀
 
-#### **Example Usage**
+#### **예제 사용법**
 ```python
 from langfuse import Langfuse
 
@@ -22,22 +22,22 @@ langfuse.flush()
 print("flushed langfuse request")
 ```
 
-Supports **ALL** Langfuse Endpoints.
+**모든** Langfuse Endpoints를 지원합니다.
 
-[**See All Langfuse Endpoints**](https://api.reference.langfuse.com/)
+[**모든 Langfuse Endpoints 보기**](https://api.reference.langfuse.com/)
 
-## Quick Start
+## 빠른 시작
 
-Let's log a trace to Langfuse.
+Langfuse에 trace를 기록해 보겠습니다.
 
-1. Add Langfuse Public/Private keys to environment
+1. 환경에 Langfuse Public/Private keys 추가
 
 ```bash
 export LANGFUSE_PUBLIC_KEY=""
 export LANGFUSE_PRIVATE_KEY=""
 ```
 
-2. Start LiteLLM Proxy 
+2. LiteLLM Proxy 시작
 
 ```bash
 litellm
@@ -45,9 +45,9 @@ litellm
 # RUNNING on http://0.0.0.0:4000
 ```
 
-3. Test it! 
+3. 테스트
 
-Let's log a trace to Langfuse! 
+Langfuse에 trace를 기록해 보겠습니다.
 
 ```python
 from langfuse import Langfuse
@@ -67,16 +67,16 @@ print("flushed langfuse request")
 ```
 
 
-## Advanced - Use with Virtual Keys 
+## 고급 - 가상 키와 함께 사용 {#advanced-use-with-가상-키}
 
-Pre-requisites
-- [Setup proxy with DB](../proxy/virtual_keys.md#setup)
+사전 요구 사항
+- [DB로 proxy 설정](../proxy/virtual_keys.md#setup)
 
-Use this, to avoid giving developers the raw Google AI Studio key, but still letting them use Google AI Studio endpoints.
+개발자에게 원본 Google AI Studio key를 제공하지 않으면서도 Google AI Studio endpoints를 사용할 수 있게 하려면 이 방식을 사용하세요.
 
-### Usage
+### 사용법
 
-1. Setup environment
+1. 환경 설정
 
 ```bash
 export DATABASE_URL=""
@@ -91,7 +91,7 @@ litellm
 # RUNNING on http://0.0.0.0:4000
 ```
 
-2. Generate virtual key 
+2. virtual key 생성
 
 ```bash
 curl -X POST 'http://0.0.0.0:4000/key/generate' \
@@ -100,7 +100,7 @@ curl -X POST 'http://0.0.0.0:4000/key/generate' \
 -d '{}'
 ```
 
-Expected Response 
+예상 응답
 
 ```bash
 {
@@ -109,7 +109,7 @@ Expected Response
 }
 ```
 
-3. Test it! 
+3. 테스트
 
 
 ```python
@@ -129,4 +129,4 @@ langfuse.flush()
 print("flushed langfuse request")
 ```
 
-## [Advanced - Log to separate langfuse projects (by key/team)](../proxy/team_logging.md)
+## [고급 - 별도 langfuse projects에 로그 기록(key/team 기준)](../proxy/team_logging.md) {#advanced-log-to-separate-langfuse-projects-by-keyteam}

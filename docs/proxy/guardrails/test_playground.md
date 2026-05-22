@@ -1,46 +1,46 @@
 import Image from '@theme/IdealImage';
 
-# Guardrail Testing Playground
+# 가드레일 테스트 플레이그라운드
 
-Test and compare multiple guardrails in real-time with an interactive playground interface.
+대화형 플레이그라운드 인터페이스에서 여러 가드레일을 실시간으로 테스트하고 비교합니다.
 
 <Image img={require('../../../img/guardrail_playground.png')} alt="Guardrail Test Playground" />
 
-## How to Use the Guardrail Testing Playground
+## 가드레일 테스트 플레이그라운드 사용 방법
 
-The Guardrail Testing Playground allows you to quickly test and compare the behavior of different guardrails with sample inputs.
+가드레일 테스트 플레이그라운드를 사용하면 샘플 입력으로 다양한 가드레일의 동작을 빠르게 테스트하고 비교할 수 있습니다.
 
-### Steps to Test Guardrails
+### 가드레일 테스트 단계
 
-1. **Navigate to the Guardrails Section**
-   - Open the LiteLLM Admin UI
-   - Go to the **Guardrails** section
+1. **가드레일 섹션으로 이동**
+   - LiteLLM 관리자 UI를 엽니다.
+   - **가드레일** 섹션으로 이동합니다.
 
-2. **Open Test Playground**
-   - Click on the **Test Playground** tab at the top of the page
+2. **Test Playground 열기**
+   - 페이지 상단의 **Test Playground** 탭을 클릭합니다.
 
-3. **Select Guardrails to Test**
-   - Check the guardrails you want to compare
-   - You can select multiple guardrails to see how they each respond to the same input
+3. **테스트할 가드레일 선택**
+   - 비교하려는 가드레일을 선택합니다.
+   - 여러 가드레일을 선택하여 동일한 입력에 각각 어떻게 응답하는지 확인할 수 있습니다.
 
-4. **Enter Your Input**
-   - Type or paste your test input in the text area
-   - This could be a prompt, message, or any text you want to validate against the guardrails
+4. **입력값 입력**
+   - 텍스트 영역에 테스트 입력값을 입력하거나 붙여넣습니다.
+   - 프롬프트, 메시지 또는 가드레일로 검증하려는 모든 텍스트를 사용할 수 있습니다.
 
-5. **Run the Test**
-   - Click the **Test guardrails** button (or press Enter)
+5. **테스트 실행**
+   - **Test guardrails** 버튼을 클릭합니다(또는 Enter 키를 누릅니다).
 
-6. **View Results**
-   - See the output from each selected guardrail
-   - Compare how different guardrails handle the same input
-   - Results will show whether the input passed or was blocked by each guardrail
+6. **결과 확인**
+   - 선택한 각 가드레일의 출력을 확인합니다.
+   - 여러 가드레일이 동일한 입력을 어떻게 처리하는지 비교합니다.
+   - 결과에는 각 가드레일에서 입력이 통과되었는지 또는 차단되었는지가 표시됩니다.
 
-## Use Cases
+## 사용 사례
 
-This is ideal for **Security Teams** & **LiteLLM Admins** evaluating guardrail solutions.
+가드레일 솔루션을 평가하는 **Security Teams** 및 **LiteLLM Admins**에게 적합합니다.
 
-This brings the following benefits for LiteLLM users:
+LiteLLM 사용자에게는 다음과 같은 이점이 있습니다.
 
-- **Compare guardrail responses**: test the same prompt across multiple providers (Lakera, Noma AI, Bedrock Guardrails, etc.) simultaneously.
+- **가드레일 응답 비교**: 여러 제공자(Lakera, Noma AI, Bedrock 가드레일 등)에서 동일한 프롬프트를 동시에 테스트합니다.
 
-- **Validate configurations**: verify your guardrails catch the threats you care about before production deployment.
+- **구성 검증**: 프로덕션 배포 전에 가드레일이 중요하게 보는 위협을 감지하는지 확인합니다.

@@ -1,16 +1,16 @@
-# Agentic Loop Hook
+# 에이전틱 루프 훅
 
-Build a `CustomLogger` callback that intercepts a model response, fulfills tool calls server-side, and reruns the model — transparently to the caller.
+모델 응답을 가로채고, 서버 측에서 도구 호출을 처리한 뒤, 호출자에게는 투명하게 모델을 다시 실행하는 `CustomLogger` 콜백을 빌드합니다.
 
-:::info Supported call types
-- `async` only (sync calls do not trigger the hook)
-- Non-streaming only (streaming responses cannot be inspected for tool calls)
-- Works on both `/v1/messages` and `/v1/chat/completions`
+:::info 지원되는 호출 유형
+- `async`만 지원합니다. 동기 호출은 훅을 트리거하지 않습니다.
+- 비스트리밍만 지원합니다. 스트리밍 응답은 도구 호출 여부를 검사할 수 없습니다.
+- `/v1/messages`와 `/v1/chat/completions` 모두에서 작동합니다.
 :::
 
-## Implement the callback
+## 콜백 구현하기
 
-Override two methods on `CustomLogger`:
+`CustomLogger`에서 두 메서드를 재정의합니다.
 
 ```python
 from litellm.integrations.custom_logger import CustomLogger
@@ -56,40 +56,40 @@ class MyToolCallback(CustomLogger):
         )
 ```
 
-For `/v1/chat/completions`, override `async_build_chat_completion_agentic_loop_plan` instead — same idea, `optional_params` replaces `anthropic_messages_optional_request_params`.
+`/v1/chat/completions`의 경우 대신 `async_build_chat_completion_agentic_loop_plan`을 재정의합니다. 개념은 동일하며, `optional_params`가 `anthropic_messages_optional_request_params`를 대체합니다.
 
-## Register it
+## 등록하기
 
 ```python
 import litellm
 litellm.callbacks = [MyToolCallback()]
 ```
 
-Or in `config.yaml`:
+또는 `config.yaml`에서 등록합니다.
 
 ```yaml
 litellm_settings:
   callbacks: ["my_module.MyToolCallback"]
 ```
 
-## `AgenticLoopPlan` fields
+## `AgenticLoopPlan` 필드
 
-| Field | Effect |
+| 필드 | 효과 |
 |---|---|
-| `run_agentic_loop=True` + `request_patch` | Reruns the model with the patched request |
-| `response_override` | Returns this value directly to the caller (no rerun) |
-| `terminate=True` | Stops the loop, returns the current response |
-| `run_agentic_loop=False` (default) | Skips; next callback is checked |
+| `run_agentic_loop=True` + `request_patch` | 패치된 요청으로 모델을 다시 실행합니다. |
+| `response_override` | 이 값을 호출자에게 직접 반환합니다. 다시 실행하지 않습니다. |
+| `terminate=True` | 루프를 중지하고 현재 응답을 반환합니다. |
+| `run_agentic_loop=False` (기본값) | 건너뛰고 다음 콜백을 확인합니다. |
 
-`AgenticLoopRequestPatch` accepts: `model`, `messages`, `tools`, `max_tokens`, `optional_params`, `kwargs`.
+`AgenticLoopRequestPatch`는 `model`, `messages`, `tools`, `max_tokens`, `optional_params`, `kwargs`를 허용합니다.
 
-## Loop safety
+## 루프 안전성
 
-- Default max reruns: `3` — override per-request with `kwargs["max_agentic_loops"]`
-- Identical tool-call fingerprints abort the loop automatically
-- Current depth is in `kwargs["_agentic_loop_depth"]`
+- 기본 최대 재실행 횟수: `3`. 요청별로 `kwargs["max_agentic_loops"]`를 사용해 재정의할 수 있습니다.
+- 동일한 도구 호출 지문이 감지되면 루프를 자동으로 중단합니다.
+- 현재 깊이는 `kwargs["_agentic_loop_depth"]`에 있습니다.
 
-## Examples in this repo
+## 이 저장소의 예제
 
 - `litellm/integrations/compression_interception/handler.py`
 - `litellm/integrations/websearch_interception/handler.py`

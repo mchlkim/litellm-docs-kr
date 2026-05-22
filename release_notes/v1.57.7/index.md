@@ -15,45 +15,44 @@ tags: [langfuse, management endpoints, ui, prometheus, secret management]
 hide_table_of_contents: false
 ---
 
-`langfuse`, `management endpoints`, `ui`, `prometheus`, `secret management`
+`langfuse`, `관리 엔드포인트`, `UI`, `prometheus`, `시크릿 관리`
 
-## Langfuse Prompt Management 
+## Langfuse Prompt 관리 {#langfuse-prompt-management}
 
-Langfuse Prompt Management is being labelled as BETA. This allows us to iterate quickly on the feedback we're receiving, and making the status clearer to users. We expect to make this feature to be stable by next month (February 2025).
+Langfuse Prompt Management는 BETA로 표시됩니다. 이렇게 하면 받은 피드백을 빠르게 반영하면서 사용자에게 현재 상태를 더 명확하게 알릴 수 있습니다. 이 기능은 다음 달(2025년 2월)까지 안정화될 것으로 예상합니다.
 
-Changes:
-- Include the client message in the LLM API Request. (Previously only the prompt template was sent, and the client message was ignored).
-- Log the prompt template in the logged request (e.g. to s3/langfuse). 
-- Log the 'prompt_id' and 'prompt_variables' in the logged request (e.g. to s3/langfuse). 
+변경 사항:
+- LLM API Request에 클라이언트 메시지를 포함합니다. 이전에는 prompt template만 전송되고 클라이언트 메시지는 무시되었습니다.
+- 기록된 요청에 prompt template을 로그로 남깁니다(예: s3/langfuse).
+- 기록된 요청에 `prompt_id`와 `prompt_variables`를 로그로 남깁니다(예: s3/langfuse).
 
 
-[Start Here](https://docs.litellm.ai/docs/proxy/prompt_management)
+[여기서 시작](https://docs.litellm.ai/docs/proxy/prompt_management)
 
-## Team/Organization Management + UI Improvements
+## 팀/조직 관리 + UI 개선 {#teamorganization-management--ui-improvements}
 
-Managing teams and organizations on the UI is now easier. 
+이제 UI에서 팀과 조직을 더 쉽게 관리할 수 있습니다.
 
-Changes:
-- Support for editing user role within team on UI. 
-- Support updating team member role to admin via api - `/team/member_update`
-- Show team admins all keys for their team. 
-- Add organizations with budgets
-- Assign teams to orgs on the UI
-- Auto-assign SSO users to teams
+변경 사항:
+- UI에서 팀 내 사용자 역할 편집을 지원합니다.
+- API를 통해 팀 멤버 역할을 admin으로 업데이트하는 기능을 지원합니다 - `/team/member_update`
+- 팀 관리자에게 해당 팀의 모든 키를 표시합니다.
+- 예산이 포함된 조직을 추가합니다.
+- UI에서 팀을 조직에 할당할 수 있습니다.
+- SSO 사용자를 팀에 자동 할당합니다.
 
-[Start Here](https://docs.litellm.ai/docs/proxy/self_serve)
+[여기서 시작](https://docs.litellm.ai/docs/proxy/self_serve)
 
-## Hashicorp Vault Support
+## Hashicorp Vault 지원 {#hashicorp-vault-support}
 
-We now support writing LiteLLM Virtual API keys to Hashicorp Vault. 
+이제 LiteLLM Virtual API key를 Hashicorp Vault에 쓰는 기능을 지원합니다.
 
-[Start Here](https://docs.litellm.ai/docs/proxy/vault)
+[여기서 시작](https://docs.litellm.ai/docs/proxy/vault)
 
-## Custom Prometheus Metrics
+## 커스텀 Prometheus Metrics {#custom-prometheus-metrics}
 
-Define custom prometheus metrics, and track usage/latency/no. of requests against them
+커스텀 prometheus metrics를 정의하고, 해당 metrics 기준으로 사용량, 지연 시간, 요청 수를 추적할 수 있습니다.
 
-This allows for more fine-grained tracking - e.g. on prompt template passed in request metadata
+이를 통해 더 세밀하게 추적할 수 있습니다. 예를 들어 요청 metadata로 전달된 prompt template을 기준으로 추적할 수 있습니다.
 
-[Start Here](https://docs.litellm.ai/docs/proxy/prometheus#beta-custom-metrics)
-
+[여기서 시작](https://docs.litellm.ai/docs/proxy/prometheus#beta-custom-metrics)

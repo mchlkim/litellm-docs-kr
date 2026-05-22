@@ -1,23 +1,23 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Milvus - Vector Store
+# Milvus - 벡터 스토어
 
-Use Milvus as a vector store for RAG.
+RAG용 벡터 스토어로 Milvus를 사용합니다.
 
-## Quick Start
+## 빠른 시작
 
-You need three things:
-1. A Milvus instance (cloud or self-hosted)
-2. An embedding model (to convert your queries to vectors)
-3. A Milvus collection with vector fields
+다음 세 가지가 필요합니다.
+1. Milvus 인스턴스(클라우드 또는 자체 호스팅)
+2. 임베딩 모델(쿼리를 벡터로 변환)
+3. 벡터 필드가 있는 Milvus 컬렉션
 
-## Usage
+## 사용법
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
 
-### Basic Search
+### 기본 검색
 
 ```python
 from litellm import vector_stores
@@ -45,7 +45,7 @@ response = vector_stores.search(
 print(response)
 ```
 
-### Async Search
+### 비동기 검색
 
 ```python
 from litellm import vector_stores
@@ -67,7 +67,7 @@ response = await vector_stores.asearch(
 print(response)
 ```
 
-### Advanced Options
+### 고급 옵션
 
 ```python
 from litellm import vector_stores
@@ -100,9 +100,9 @@ print(response)
 
 <TabItem value="proxy" label="PROXY">
 
-### Setup Config
+### 설정 구성
 
-Add this to your config.yaml:
+다음을 config.yaml에 추가합니다.
 
 ```yaml
 vector_store_registry:
@@ -123,13 +123,13 @@ vector_store_registry:
         limit: 10
 ```
 
-### Start Proxy
+### 프록시 시작
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-### Search via API
+### API로 검색
 
 ```bash
 curl -X POST 'http://0.0.0.0:4000/v1/vector_stores/my-collection-name/search' \
@@ -143,46 +143,46 @@ curl -X POST 'http://0.0.0.0:4000/v1/vector_stores/my-collection-name/search' \
 </TabItem>
 </Tabs>
 
-## Required Parameters
+## 필수 매개변수
 
-| Parameter | Type | Description |
+| 매개변수 | 유형 | 설명 |
 |-----------|------|-------------|
-| `vector_store_id` | string | Your Milvus collection name |
-| `custom_llm_provider` | string | Set to `"milvus"` |
-| `litellm_embedding_model` | string | Model to generate query embeddings (e.g., `"azure/text-embedding-3-large"`) |
-| `litellm_embedding_config` | dict | Config for the embedding model (api_base, api_key, api_version) |
-| `milvus_text_field` | string | Field name in your collection that contains text content |
-| `api_key` | string | Your Milvus API key (or set `MILVUS_API_KEY` env var) |
-| `api_base` | string | Your Milvus API base URL (or set `MILVUS_API_BASE` env var) |
+| `vector_store_id` | string | Milvus 컬렉션 이름 |
+| `custom_llm_provider` | string | `"milvus"`로 설정 |
+| `litellm_embedding_model` | string | 쿼리 임베딩을 생성할 모델(예: `"azure/text-embedding-3-large"`) |
+| `litellm_embedding_config` | dict | 임베딩 모델 설정(api_base, api_key, api_version) |
+| `milvus_text_field` | string | 텍스트 콘텐츠가 포함된 컬렉션의 필드 이름 |
+| `api_key` | string | Milvus API 키(또는 `MILVUS_API_KEY` 환경 변수 설정) |
+| `api_base` | string | Milvus API 기본 URL(또는 `MILVUS_API_BASE` 환경 변수 설정) |
 
-## Optional Parameters
+## 선택적 매개변수
 
-| Parameter | Type | Description |
+| 매개변수 | 유형 | 설명 |
 |-----------|------|-------------|
-| `dbName` | string | Database name (default: "default") |
-| `annsField` | string | Vector field name to search (default: "book_intro_vector") |
-| `limit` | integer | Maximum number of results to return |
-| `offset` | integer | Pagination offset |
-| `filter` | string | Filter expression for metadata filtering |
-| `groupingField` | string | Field to group results by |
-| `outputFields` | list | List of fields to return in results |
-| `searchParams` | dict | Search parameters like metric type and search parameters |
-| `partitionNames` | list | List of partition names to search |
-| `consistencyLevel` | string | Consistency level for the search |
+| `dbName` | string | 데이터베이스 이름(기본값: "default") |
+| `annsField` | string | 검색할 벡터 필드 이름(기본값: "book_intro_vector") |
+| `limit` | integer | 반환할 최대 결과 수 |
+| `offset` | integer | 페이지네이션 오프셋 |
+| `filter` | string | 메타데이터 필터링에 사용할 필터 표현식 |
+| `groupingField` | string | 결과를 그룹화할 필드 |
+| `outputFields` | list | 결과에 반환할 필드 목록 |
+| `searchParams` | dict | 메트릭 유형 및 검색 매개변수 같은 검색 설정 |
+| `partitionNames` | list | 검색할 파티션 이름 목록 |
+| `consistencyLevel` | string | 검색에 사용할 일관성 수준 |
 
-## Supported Features
+## 지원 기능
 
-| Feature | Status | Notes |
+| 기능 | 상태 | 참고 |
 |---------|--------|-------|
-| Logging | ✅ Supported | Full logging support available |
-| Guardrails | ❌ Not Yet Supported | Guardrails are not currently supported for vector stores |
-| Cost Tracking | ✅ Supported | Cost is $0 for Milvus searches |
-| Unified API | ✅ Supported | Call via OpenAI compatible `/v1/vector_stores/search` endpoint |
-| Passthrough | ✅ Supported | Use native Milvus API format |
+| 로깅 | ✅ 지원됨 | 전체 로깅 지원 사용 가능 |
+| 가드레일 | ❌ 아직 지원되지 않음 | 벡터 스토어에는 현재 가드레일이 지원되지 않습니다 |
+| 비용 추적 | ✅ 지원됨 | Milvus 검색 비용은 $0입니다 |
+| 통합 API | ✅ 지원됨 | OpenAI 호환 `/v1/vector_stores/search` 엔드포인트로 호출 |
+| Passthrough | ✅ 지원됨 | 네이티브 Milvus API 형식 사용 |
 
-## Response Format
+## 응답 형식
 
-The response follows the standard LiteLLM vector store format:
+응답은 표준 LiteLLM 벡터 스토어 형식을 따릅니다.
 
 ```json
 {
@@ -208,15 +208,15 @@ The response follows the standard LiteLLM vector store format:
 }
 ```
 
-## Passthrough API (Native Milvus Format)
+## Passthrough API(네이티브 Milvus 형식)
 
-Use this to allow developers to **create** and **search** vector stores using the native Milvus API format, without giving them the Milvus credentials.
+개발자에게 Milvus 자격 증명을 제공하지 않고도 네이티브 Milvus API 형식으로 벡터 스토어를 **생성**하고 **검색**할 수 있게 하려면 이를 사용합니다.
 
-This is for the proxy only.
+이는 프록시 전용입니다.
 
-### Admin Flow
+### 관리자 흐름
 
-#### 1. Add the vector store to LiteLLM
+#### 1. LiteLLM에 벡터 스토어 추가
 
 ```yaml
 model_list:  
@@ -240,9 +240,9 @@ general_settings:
     master_key: "sk-1234"
 ```
 
-Add your vector store credentials to LiteLLM.
+벡터 스토어 자격 증명을 LiteLLM에 추가합니다.
 
-#### 2. Start the proxy
+#### 2. 프록시 시작
 
 ```bash
 litellm --config /path/to/config.yaml
@@ -250,7 +250,7 @@ litellm --config /path/to/config.yaml
 # RUNNING on http://0.0.0.0:4000
 ```
 
-#### 3. Create a virtual index
+#### 3. 가상 인덱스 생성
 
 ```bash
 curl -L -X POST 'http://0.0.0.0:4000/v1/indexes' \
@@ -265,9 +265,9 @@ curl -L -X POST 'http://0.0.0.0:4000/v1/indexes' \
 }'
 ```
 
-This is a virtual index, which the developer can use to create and search vector stores.
+이는 개발자가 벡터 스토어를 생성하고 검색하는 데 사용할 수 있는 가상 인덱스입니다.
 
-#### 4. Create a key with the vector store permissions
+#### 4. 벡터 스토어 권한이 있는 키 생성
 
 ```bash
 curl -L -X POST 'http://0.0.0.0:4000/key/generate' \
@@ -279,9 +279,9 @@ curl -L -X POST 'http://0.0.0.0:4000/key/generate' \
 }'
 ```
 
-Give the key access to the virtual index and the embedding model.
+키에 가상 인덱스 및 임베딩 모델 접근 권한을 부여합니다.
 
-**Expected response**
+**예상 응답**
 
 ```json
 {
@@ -289,14 +289,14 @@ Give the key access to the virtual index and the embedding model.
 }
 ```
 
-### Developer Flow
+### 개발자 흐름
 
 #### MilvusRESTClient
 
-To use the passthrough API, you need a simple REST client. Copy this `milvus_rest_client.py` file to your project:
+Passthrough API를 사용하려면 간단한 REST 클라이언트가 필요합니다. 이 `milvus_rest_client.py` 파일을 프로젝트에 복사합니다.
 
 <details>
-<summary>Click to expand milvus_rest_client.py</summary>
+<summary>milvus_rest_client.py 펼치기</summary>
 
 ```python
 """
@@ -544,9 +544,9 @@ class MilvusRESTClient:
 
 </details>
 
-#### 1. Create a collection with schema
+#### 1. 스키마로 컬렉션 생성
 
-Note: Use the `/milvus` endpoint for the passthrough api that uses the `milvus` provider in your config.
+참고: 설정의 `milvus` 공급자를 사용하는 passthrough api에는 `/milvus` 엔드포인트를 사용합니다.
 
 ```python
 from milvus_rest_client import MilvusRESTClient, DataType  # Use the client from above
@@ -595,7 +595,7 @@ collection_property = milvus_client.describe_collection(collection_name)
 print("Collection details: %s" % collection_property)
 ```
 
-#### 2. Insert data into the collection
+#### 2. 컬렉션에 데이터 삽입
 
 ```python
 # Insert data with customized ids
@@ -628,7 +628,7 @@ end_flush = time.time()
 print(f"Flush completed in {round(end_flush - start_flush, 4)} seconds")
 ```
 
-#### 3. Search the collection
+#### 3. 컬렉션 검색
 
 ```python
 # Search configuration
@@ -652,9 +652,9 @@ for i in range(5):
     print(f"Search {i} latency: {round(t1-t0, 4)} seconds")
 ```
 
-#### Complete Example
+#### 전체 예제
 
-Here's a full working example:
+다음은 전체 동작 예제입니다.
 
 ```python
 from milvus_rest_client import MilvusRESTClient, DataType  # Use the client from above
@@ -768,14 +768,13 @@ for i in range(5):
     print(f"   Search {i} latency: {round(t1-t0, 4)} seconds")
 ```
 
-## How It Works
+## 작동 방식
 
-When you search:
+검색할 때의 동작은 다음과 같습니다.
 
-1. LiteLLM converts your query to a vector using the embedding model you specified
-2. It sends the vector to your Milvus instance via the `/v2/vectordb/entities/search` endpoint
-3. Milvus finds the most similar documents in your collection using vector similarity search
-4. Results come back with distance scores
+1. LiteLLM이 지정한 임베딩 모델을 사용해 쿼리를 벡터로 변환합니다
+2. `/v2/vectordb/entities/search` 엔드포인트를 통해 벡터를 Milvus 인스턴스로 보냅니다
+3. Milvus가 벡터 유사도 검색을 사용해 컬렉션에서 가장 유사한 문서를 찾습니다
+4. 결과가 거리 점수와 함께 반환됩니다
 
-The embedding model can be any model supported by LiteLLM - Azure OpenAI, OpenAI, Bedrock, etc.
-
+임베딩 모델은 Azure OpenAI, OpenAI, Bedrock 등 LiteLLM이 지원하는 어떤 모델이든 사용할 수 있습니다.

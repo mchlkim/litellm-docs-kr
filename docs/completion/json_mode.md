@@ -1,9 +1,9 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Structured Outputs (JSON Mode)
+# 구조화된 출력 (JSON Mode) {#structured-outputs-json-mode}
 
-## Quick Start 
+## 빠른 시작 
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -49,12 +49,12 @@ curl http://0.0.0.0:4000/v1/chat/completions \
 </TabItem>
 </Tabs>
 
-## Check Model Support 
+## 모델 지원 확인 {#check-model-support}
 
 
-### 1. Check if model supports `response_format`
+### 1. 모델이 `response_format`을 지원하는지 확인 {#1-check-if-model-supports-response_format}
 
-Call `litellm.get_supported_openai_params` to check if a model/provider supports `response_format`. 
+모델/제공자가 `response_format`을 지원하는지 확인하려면 `litellm.get_supported_openai_params`를 호출하세요.
 
 ```python
 from litellm import get_supported_openai_params
@@ -64,9 +64,9 @@ params = get_supported_openai_params(model="anthropic.claude-3", custom_llm_prov
 assert "response_format" in params
 ```
 
-### 2. Check if model supports `json_schema`
+### 2. 모델이 `json_schema`를 지원하는지 확인 {#2-check-if-model-supports-json_schema}
 
-This is used to check if you can pass 
+다음을 전달할 수 있는지 확인할 때 사용합니다.
 - `response_format={ "type": "json_schema", "json_schema": … , "strict": true }`
 - `response_format=<Pydantic Model>`
 
@@ -76,27 +76,27 @@ from litellm import supports_response_schema
 assert supports_response_schema(model="gemini-1.5-pro-preview-0215", custom_llm_provider="bedrock")
 ```
 
-Check out [model_prices_and_context_window.json](https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json) for a full list of models and their support for `response_schema`.
+[model_prices_and_context_window.json](https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json)에서 전체 모델 목록과 `response_schema` 지원 여부를 확인하세요.
 
-## Pass in 'json_schema' 
+## 'json_schema' 전달 {#pass-in-json_schema}
 
-To use Structured Outputs, simply specify
+구조화된 출력을 사용하려면 다음만 지정하면 됩니다.
 
 ```
 response_format: { "type": "json_schema", "json_schema": … , "strict": true }
 ```
 
-Works for:
-- OpenAI models 
-- Azure OpenAI models
-- xAI models (Grok-2 or later)
-- Google AI Studio - Gemini models
-- Vertex AI models (Gemini + Anthropic)
-- Bedrock Models
-- Anthropic API Models
-- Groq Models
-- Ollama Models
-- Databricks Models
+지원 대상:
+- OpenAI 모델
+- Azure OpenAI 모델
+- xAI 모델(Grok-2 이상)
+- Google AI Studio - Gemini 모델
+- Vertex AI 모델(Gemini + Anthropic)
+- Bedrock 모델
+- Anthropic API 모델
+- Groq 모델
+- Ollama 모델
+- Databricks 모델
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -132,7 +132,7 @@ events_list = EventsList.model_validate_json(resp.choices[0].message.content)
 </TabItem>
 <TabItem value="proxy" label="PROXY">
 
-1. Add openai model to config.yaml
+1. config.yaml에 openai 모델 추가
 
 ```yaml
 model_list:
@@ -141,15 +141,15 @@ model_list:
       model: "gpt-4o-2024-08-06"
 ```
 
-2. Start proxy with config.yaml
+2. config.yaml로 프록시 시작
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-3. Call with OpenAI SDK / Curl!
+3. OpenAI SDK / Curl로 호출하세요!
 
-Just replace the 'base_url' in the openai sdk, to call the proxy with 'json_schema' for openai models
+OpenAI 모델에서 `json_schema`로 프록시를 호출하려면 openai sdk의 `base_url`만 바꾸면 됩니다.
 
 **OpenAI SDK**
 ```python
@@ -233,17 +233,17 @@ curl -X POST 'http://0.0.0.0:4000/v1/chat/completions' \
 </Tabs>
 
 
-## Validate JSON Schema 
+## JSON Schema 검증 {#validate-json-schema}
 
 
-Not all vertex models support passing the json_schema to them (e.g. `gemini-1.5-flash`). To solve this, LiteLLM supports client-side validation of the json schema. 
+모든 vertex 모델이 json_schema 전달을 지원하는 것은 아닙니다(예: `gemini-1.5-flash`). 이를 해결하기 위해 LiteLLM은 json schema의 클라이언트 측 검증을 지원합니다.
 
 ```
 litellm.enable_json_schema_validation=True
 ```
-If `litellm.enable_json_schema_validation=True` is set, LiteLLM will validate the json response using `jsonvalidator`. 
+`litellm.enable_json_schema_validation=True`가 설정되어 있으면 LiteLLM은 `jsonvalidator`를 사용해 json 응답을 검증합니다.
 
-[**See Code**](https://github.com/BerriAI/litellm/blob/671d8ac496b6229970c7f2a3bdedd6cb84f0746b/litellm/litellm_core_utils/json_validation_rule.py#L4)
+[**코드 보기**](https://github.com/BerriAI/litellm/blob/671d8ac496b6229970c7f2a3bdedd6cb84f0746b/litellm/litellm_core_utils/json_validation_rule.py#L4)
 
 
 <Tabs>
@@ -280,7 +280,7 @@ print("Received={}".format(resp))
 </TabItem>
 <TabItem value="proxy" label="PROXY">
 
-1. Create config.yaml
+1. config.yaml 생성
 ```yaml
 model_list:
   - model_name: "gemini-1.5-flash"
@@ -292,13 +292,13 @@ litellm_settings:
   enable_json_schema_validation: True
 ```
 
-2. Start proxy 
+2. 프록시 시작
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-3. Test it! 
+3. 테스트하세요!
 
 ```bash
 curl http://0.0.0.0:4000/v1/chat/completions \
@@ -343,17 +343,17 @@ curl http://0.0.0.0:4000/v1/chat/completions \
 </TabItem>
 </Tabs>
 
-## Gemini - Native JSON Schema Format (Gemini 2.0+)
+## Gemini - 네이티브 JSON Schema 형식 (Gemini 2.0+) {#gemini---native-json-schema-format-gemini-20}
 
-Gemini 2.0+ models automatically use the native `responseJsonSchema` parameter, which provides better compatibility with standard JSON Schema format.
+Gemini 2.0+ 모델은 네이티브 `responseJsonSchema` 파라미터를 자동으로 사용하며, 이 파라미터는 표준 JSON Schema 형식과 더 나은 호환성을 제공합니다.
 
-### Benefits (Gemini 2.0+):
-- Standard JSON Schema format (lowercase types like `string`, `object`)
-- Supports `additionalProperties: false` for stricter validation
-- Better compatibility with Pydantic's `model_json_schema()`
-- No `propertyOrdering` required
+### 장점 (Gemini 2.0+) {#benefits-gemini-20}
+- 표준 JSON Schema 형식(`string`, `object` 같은 소문자 타입)
+- 더 엄격한 검증을 위한 `additionalProperties: false` 지원
+- Pydantic의 `model_json_schema()`와 더 나은 호환성
+- `propertyOrdering`이 필요 없음
 
-### Usage
+### 사용법
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -420,11 +420,11 @@ curl http://0.0.0.0:4000/v1/chat/completions \
 </TabItem>
 </Tabs>
 
-### Model Behavior
+### 모델 동작 {#model-behavior}
 
-| Model | Format Used | `additionalProperties` Support |
+| 모델 | 사용되는 형식 | `additionalProperties` 지원 |
 |-------|-------------|-------------------------------|
-| Gemini 2.0+ | `responseJsonSchema` (JSON Schema) | ✅ Yes |
-| Gemini 1.5 | `responseSchema` (OpenAPI) | ❌ No |
+| Gemini 2.0+ | `responseJsonSchema` (JSON Schema) | ✅ 예 |
+| Gemini 1.5 | `responseSchema` (OpenAPI) | ❌ 아니요 |
 
-LiteLLM automatically selects the appropriate format based on the model version.
+LiteLLM은 모델 버전에 따라 적절한 형식을 자동으로 선택합니다.

@@ -4,25 +4,25 @@ import TabItem from '@theme/TabItem';
 
 # Novita AI
 
-| Property | Details |
+| 속성 | 세부 정보 |
 |-------|-------|
-| Description | Novita AI is an AI cloud platform that helps developers easily deploy AI models through a simple API, backed by affordable and reliable GPU cloud infrastructure. LiteLLM supports all models from [Novita AI](https://novita.ai/models/llm?utm_source=github_litellm&utm_medium=github_readme&utm_campaign=github_link) |
-| Provider Route on LiteLLM | `novita/` |
-| Provider Doc | [Novita AI Docs ↗](https://novita.ai/docs/guides/introduction) |
-| API Endpoint for Provider | https://api.novita.ai/v3/openai |
-| Supported OpenAI Endpoints | `/chat/completions`, `/completions` |
+| 설명 | Novita AI는 경제적이고 안정적인 GPU 클라우드 인프라를 기반으로, 개발자가 간단한 API를 통해 AI 모델을 쉽게 배포할 수 있도록 돕는 AI 클라우드 플랫폼입니다. LiteLLM은 [Novita AI](https://novita.ai/models/llm?utm_source=github_litellm&utm_medium=github_readme&utm_campaign=github_link)의 모든 모델을 지원합니다. |
+| LiteLLM의 Provider 라우트 | `novita/` |
+| Provider 문서 | [Novita AI 문서 ↗](https://novita.ai/docs/guides/introduction) |
+| Provider API 엔드포인트 | https://api.novita.ai/v3/openai |
+| 지원되는 OpenAI 엔드포인트 | `/chat/completions`, `/completions` |
 
 <br />
 
-## API Keys
+## API 키 {#api-key}
 
-Get your API key [here](https://novita.ai/settings/key-management)
+[여기](https://novita.ai/settings/key-management)에서 API 키를 발급받으세요.
 ```python
 import os
 os.environ["NOVITA_API_KEY"] = "your-api-key"
 ```
 
-## Supported OpenAI Params
+## 지원되는 OpenAI 파라미터 {#supported-openai-params}
 - max_tokens
 - stream
 - stream_options
@@ -44,7 +44,7 @@ os.environ["NOVITA_API_KEY"] = "your-api-key"
 - separate_reasoning
 
 
-## Sample Usage
+## 예제 사용법 {#usage-example}
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -66,7 +66,7 @@ print(content)
 </TabItem>
 <TabItem value="proxy" label="PROXY">
 
-1. Add model to config.yaml
+1. config.yaml에 모델 추가
 ```yaml
 model_list:
   - model_name: deepseek-r1-turbo
@@ -75,13 +75,13 @@ model_list:
       api_key: os.environ/NOVITA_API_KEY
 ```
 
-2. Start Proxy 
+2. Proxy 시작
 
 ```
 $ litellm --config /path/to/config.yaml
 ```
 
-3. Make Request!
+3. 요청 보내기
 
 ```bash
 curl -X POST 'http://0.0.0.0:4000/chat/completions' \
@@ -100,7 +100,7 @@ curl -X POST 'http://0.0.0.0:4000/chat/completions' \
 </Tabs>
 
 
-## Tool Calling
+## 도구 호출 {#tool-calling}
 
 ```python
 from litellm import completion
@@ -144,7 +144,7 @@ assert isinstance(
 
 ```
 
-## JSON Mode
+## JSON 모드 {#json-mode}
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -175,7 +175,7 @@ print(json.loads(completion.choices[0].message.content))
 </TabItem>
 <TabItem value="proxy" label="PROXY">
 
-1. Add model to config.yaml
+1. config.yaml에 모델 추가
 ```yaml
 model_list:
   - model_name: deepseek-r1-turbo
@@ -184,13 +184,13 @@ model_list:
       api_key: os.environ/NOVITA_API_KEY
 ```
 
-2. Start Proxy 
+2. Proxy 시작
 
 ```
 $ litellm --config /path/to/config.yaml
 ```
 
-3. Make Request!
+3. 요청 보내기
 
 ```bash
 curl -X POST 'http://0.0.0.0:4000/chat/completions' \
@@ -210,25 +210,25 @@ curl -X POST 'http://0.0.0.0:4000/chat/completions' \
 </Tabs>
 
 
-## Chat Models
+## 채팅 모델 {#chat-models}
 
-🚨 LiteLLM supports ALL Novita AI models, send `model=novita/<your-novita-model>` to send it to Novita AI. See all Novita AI models [here](https://novita.ai/models/llm?utm_source=github_litellm&utm_medium=github_readme&utm_campaign=github_link)
+🚨 LiteLLM은 모든 Novita AI 모델을 지원합니다. Novita AI로 요청을 보내려면 `model=novita/<your-novita-model>`을 전송하세요. 모든 Novita AI 모델은 [여기](https://novita.ai/models/llm?utm_source=github_litellm&utm_medium=github_readme&utm_campaign=github_link)에서 확인할 수 있습니다.
 
-| Model Name                | Function Call                                       |
+| 모델 이름                | 함수 호출                                       |
 |---------------------------|-----------------------------------------------------|
-| novita/deepseek/deepseek-r1-turbo | `completion('novita/deepseek/deepseek-r1-turbo', messages)` | `os.environ['NOVITA_API_KEY']` |
-| novita/deepseek/deepseek-v3-turbo | `completion('novita/deepseek/deepseek-v3-turbo', messages)` | `os.environ['NOVITA_API_KEY']` |
-| novita/deepseek/deepseek-v3-0324 | `completion('novita/deepseek/deepseek-v3-0324', messages)` | `os.environ['NOVITA_API_KEY']` |
-| novita/qwen/qwen3-235b-a22b-fp8 | `completion('novita/qwen/qwen/qwen3-235b-a22b-fp8', messages)` | `os.environ['NOVITA_API_KEY']` |
-| novita/qwen/qwen3-30b-a3b-fp8 | `completion('novita/qwen/qwen3-30b-a3b-fp8', messages)` | `os.environ['NOVITA_API_KEY']` |
-| novita/qwen/qwen/qwen3-32b-fp8 | `completion('novita/qwen/qwen3-32b-fp8', messages)` | `os.environ['NOVITA_API_KEY']` |
-| novita/qwen/qwen3-30b-a3b-fp8 | `completion('novita/qwen/qwen3-30b-a3b-fp8', messages)` | `os.environ['NOVITA_API_KEY']` |
-| novita/qwen/qwen2.5-vl-72b-instruct | `completion('novita/qwen/qwen2.5-vl-72b-instruct', messages)` | `os.environ['NOVITA_API_KEY']` |
-| novita/meta-llama/llama-4-maverick-17b-128e-instruct-fp8 | `completion('novita/meta-llama/llama-4-maverick-17b-128e-instruct-fp8', messages)` | `os.environ['NOVITA_API_KEY']` |
-| novita/meta-llama/llama-3.3-70b-instruct | `completion('novita/meta-llama/llama-3.3-70b-instruct', messages)` | `os.environ['NOVITA_API_KEY']` |
-| novita/meta-llama/llama-3.1-8b-instruct | `completion('novita/meta-llama/llama-3.1-8b-instruct', messages)` | `os.environ['NOVITA_API_KEY']` |
-| novita/meta-llama/llama-3.1-8b-instruct-max | `completion('novita/meta-llama/llama-3.1-8b-instruct-max', messages)` | `os.environ['NOVITA_API_KEY']` |
-| novita/meta-llama/llama-3.1-70b-instruct | `completion('novita/meta-llama/llama-3.1-70b-instruct', messages)` | `os.environ['NOVITA_API_KEY']` |
-| novita/gryphe/mythomax-l2-13b | `completion('novita/gryphe/mythomax-l2-13b', messages)` | `os.environ['NOVITA_API_KEY']` |
-| novita/google/gemma-3-27b-it | `completion('novita/google/gemma-3-27b-it', messages)` | `os.environ['NOVITA_API_KEY']` |
-| novita/mistralai/mistral-nemo | `completion('novita/mistralai/mistral-nemo', messages)` | `os.environ['NOVITA_API_KEY']` |
+| `novita/deepseek/deepseek-r1-turbo` | `completion('novita/deepseek/deepseek-r1-turbo', messages)` | `os.environ['NOVITA_API_KEY']` |
+| `novita/deepseek/deepseek-v3-turbo` | `completion('novita/deepseek/deepseek-v3-turbo', messages)` | `os.environ['NOVITA_API_KEY']` |
+| `novita/deepseek/deepseek-v3-0324` | `completion('novita/deepseek/deepseek-v3-0324', messages)` | `os.environ['NOVITA_API_KEY']` |
+| `novita/qwen/qwen3-235b-a22b-fp8` | `completion('novita/qwen/qwen/qwen3-235b-a22b-fp8', messages)` | `os.environ['NOVITA_API_KEY']` |
+| `novita/qwen/qwen3-30b-a3b-fp8` | `completion('novita/qwen/qwen3-30b-a3b-fp8', messages)` | `os.environ['NOVITA_API_KEY']` |
+| `novita/qwen/qwen/qwen3-32b-fp8` | `completion('novita/qwen/qwen3-32b-fp8', messages)` | `os.environ['NOVITA_API_KEY']` |
+| `novita/qwen/qwen3-30b-a3b-fp8` | `completion('novita/qwen/qwen3-30b-a3b-fp8', messages)` | `os.environ['NOVITA_API_KEY']` |
+| `novita/qwen/qwen2.5-vl-72b-instruct` | `completion('novita/qwen/qwen2.5-vl-72b-instruct', messages)` | `os.environ['NOVITA_API_KEY']` |
+| `novita/meta-llama/llama-4-maverick-17b-128e-instruct-fp8` | `completion('novita/meta-llama/llama-4-maverick-17b-128e-instruct-fp8', messages)` | `os.environ['NOVITA_API_KEY']` |
+| `novita/meta-llama/llama-3.3-70b-instruct` | `completion('novita/meta-llama/llama-3.3-70b-instruct', messages)` | `os.environ['NOVITA_API_KEY']` |
+| `novita/meta-llama/llama-3.1-8b-instruct` | `completion('novita/meta-llama/llama-3.1-8b-instruct', messages)` | `os.environ['NOVITA_API_KEY']` |
+| `novita/meta-llama/llama-3.1-8b-instruct-max` | `completion('novita/meta-llama/llama-3.1-8b-instruct-max', messages)` | `os.environ['NOVITA_API_KEY']` |
+| `novita/meta-llama/llama-3.1-70b-instruct` | `completion('novita/meta-llama/llama-3.1-70b-instruct', messages)` | `os.environ['NOVITA_API_KEY']` |
+| `novita/gryphe/mythomax-l2-13b` | `completion('novita/gryphe/mythomax-l2-13b', messages)` | `os.environ['NOVITA_API_KEY']` |
+| `novita/google/gemma-3-27b-it` | `completion('novita/google/gemma-3-27b-it', messages)` | `os.environ['NOVITA_API_KEY']` |
+| `novita/mistralai/mistral-nemo` | `completion('novita/mistralai/mistral-nemo', messages)` | `os.environ['NOVITA_API_KEY']` |

@@ -1,30 +1,30 @@
 import Image from '@theme/IdealImage';
 
-# Deleted Keys & Teams Audit Logs
+# 삭제된 키 및 팀 감사 로그
 
 <Image img={require('../../img/ui_deleted_keys_table.png')} />
 
-View deleted API keys and teams along with their spend and budget information at the time of deletion for auditing and compliance purposes.
+감사 및 컴플라이언스 목적으로 삭제된 API 키와 팀을 삭제 시점의 사용 금액 및 예산 정보와 함께 확인합니다.
 
-## Overview
+## 개요
 
-The Deleted Keys & Teams feature provides a comprehensive audit trail for deleted entities in your LiteLLM proxy. This feature was implemented to easily allow audits of which key or team was deleted along with the spend/budget at the time of deletion.
+삭제된 키 및 팀 기능은 LiteLLM 프록시에서 삭제된 엔터티에 대한 포괄적인 감사 추적을 제공합니다. 이 기능은 삭제된 키 또는 팀과 삭제 시점의 사용 금액/예산을 쉽게 감사할 수 있도록 구현되었습니다.
 
-When a key or team is deleted, LiteLLM automatically captures:
+키 또는 팀이 삭제되면 LiteLLM은 다음 정보를 자동으로 캡처합니다.
 
-- **Deletion timestamp** - When the entity was deleted
-- **Deleted by** - Who performed the deletion action
-- **Spend at deletion** - The total spend accumulated at the time of deletion
-- **Original budget** - The budget that was set for the entity before deletion
-- **Entity details** - Key or team identification information
+- **삭제 타임스탬프** - 엔터티가 삭제된 시점
+- **삭제한 사용자** - 삭제 작업을 수행한 사람
+- **삭제 시점 사용 금액** - 삭제 시점까지 누적된 총 사용 금액
+- **원래 예산** - 삭제 전에 엔터티에 설정되어 있던 예산
+- **엔터티 세부 정보** - 키 또는 팀 식별 정보
 
-This information is preserved even after deletion, allowing you to maintain accurate financial records and audit trails for compliance purposes.
+이 정보는 삭제 후에도 보존되므로 컴플라이언스 목적에 맞는 정확한 재무 기록과 감사 추적을 유지할 수 있습니다.
 
-## Viewing Deleted Keys
+## 삭제된 키 보기
 
-### Step 1: Navigate to API Keys Page
+### 1단계: API 키 페이지로 이동
 
-Navigate to the API Keys page in the LiteLLM UI:
+LiteLLM UI에서 API 키 페이지로 이동합니다.
 
 ```
 http://localhost:4000/ui/?login=success&page=api-keys
@@ -32,75 +32,75 @@ http://localhost:4000/ui/?login=success&page=api-keys
 
 ![](https://colony-recorder.s3.amazonaws.com/files/2026-01-17/73b97ba9-0ab5-4140-aee2-05fa90463461/ascreenshot_5e6d9f05d452405c83d7a368349d087d_text_export.jpeg)
 
-### Step 2: Access Logs Section
+### 2단계: 로그 섹션 접근
 
-Click on the "Logs" menu item in the navigation.
+탐색 메뉴에서 "로그" 메뉴 항목을 클릭합니다.
 
 ![](https://colony-recorder.s3.amazonaws.com/files/2026-01-17/73b97ba9-0ab5-4140-aee2-05fa90463461/ascreenshot_8ebab354b1e542e59e1082e519927edd_text_export.jpeg)
 
-### Step 3: View Deleted Keys
+### 3단계: 삭제된 키 보기
 
-Click on "Deleted Keys" to view the table of all deleted API keys.
+"Deleted Keys"를 클릭하여 삭제된 모든 API 키의 테이블을 확인합니다.
 
 ![](https://colony-recorder.s3.amazonaws.com/files/2026-01-17/00668558-9326-4a6f-8e87-159d54b17a72/ascreenshot_d0e50e49e9aa43d4a22ada6f12a78b12_text_export.jpeg)
 
-### Step 4: Review Deletion Information
+### 4단계: 삭제 정보 검토
 
-The Deleted Keys table includes comprehensive information about each deleted key:
+Deleted Keys 테이블에는 삭제된 각 키에 대한 포괄적인 정보가 포함됩니다.
 
-- **When** the key was deleted (timestamp)
-- **Who** deleted the key (user/admin information)
-- **Key identification** details
+- 키가 삭제된 **시점**(타임스탬프)
+- 키를 삭제한 **사용자**(사용자/관리자 정보)
+- **키 식별** 세부 정보
 
 ![](https://colony-recorder.s3.amazonaws.com/files/2026-01-17/8538f7c4-634e-44c8-8d7d-fafbd6da0b02/ascreenshot_6b73f9c6a52d4e40a2368ef441cf6c8f_text_export.jpeg)
 
-### Step 5: View Financial Information
+### 5단계: 재무 정보 보기
 
-The table also displays financial information captured at the time of deletion:
+테이블에는 삭제 시점에 캡처된 재무 정보도 표시됩니다.
 
-- **Spend at deletion** - Total spend accumulated when the key was deleted
-- **Original budget** - The budget limit that was set for the key
+- **삭제 시점 사용 금액** - 키가 삭제되었을 때 누적된 총 사용 금액
+- **원래 예산** - 키에 설정되어 있던 예산 한도
 
 ![](https://colony-recorder.s3.amazonaws.com/files/2026-01-17/f8b03850-b17c-490c-a507-c3b0b6c050ab/ascreenshot_070b139f111844bba38fbed8835b097b_text_export.jpeg)
 
-## Viewing Deleted Teams
+## 삭제된 팀 보기
 
-### Step 1: Access Deleted Teams
+### 1단계: 삭제된 팀 접근
 
-From the Logs section, click on "Deleted Teams" to view all deleted teams.
+로그 섹션에서 "Deleted Teams"를 클릭하여 삭제된 모든 팀을 확인합니다.
 
 ![](https://colony-recorder.s3.amazonaws.com/files/2026-01-17/716ce26f-09af-4a6d-99c5-921d6b6a8555/ascreenshot_d36c16f1cf894340aa8bc20ada5922ac_text_export.jpeg)
 
-### Step 2: Review Team Deletion Information
+### 2단계: 팀 삭제 정보 검토
 
-The Deleted Teams table provides detailed information about each deleted team:
+Deleted Teams 테이블은 삭제된 각 팀에 대한 자세한 정보를 제공합니다.
 
-- **When** the team was deleted (timestamp)
-- **Who** deleted the team (user/admin information)
-- **Team identification** details
+- 팀이 삭제된 **시점**(타임스탬프)
+- 팀을 삭제한 **사용자**(사용자/관리자 정보)
+- **팀 식별** 세부 정보
 
 ![](https://colony-recorder.s3.amazonaws.com/files/2026-01-17/0a3f2d3f-179a-4ad7-916e-b77a13dca01d/ascreenshot_ded5970762d54528ae656421148116c4_text_export.jpeg)
 
-### Step 3: View Team Financial Information
+### 3단계: 팀 재무 정보 보기
 
-Similar to deleted keys, the Deleted Teams table shows financial information:
+삭제된 키와 마찬가지로 Deleted Teams 테이블은 재무 정보를 표시합니다.
 
-- **Spend at deletion** - Total spend accumulated when the team was deleted
-- **Original budget** - The budget limit that was set for the team
+- **삭제 시점 사용 금액** - 팀이 삭제되었을 때 누적된 총 사용 금액
+- **원래 예산** - 팀에 설정되어 있던 예산 한도
 
 ![](https://colony-recorder.s3.amazonaws.com/files/2026-01-17/5b24871f-b57e-404d-8fbe-a4b27cb2a6a0/ascreenshot_3121fbafbd6b4abf90993ce6c03c608d_text_export.jpeg)
 
-## Use Cases
+## 사용 사례
 
-This feature is particularly useful for:
+이 기능은 특히 다음에 유용합니다.
 
-- **Financial Auditing** - Track spend and budgets for deleted entities
-- **Compliance** - Maintain records of who deleted what and when
-- **Cost Analysis** - Understand spending patterns before deletion
-- **Accountability** - Identify which admin or user performed deletions
-- **Historical Records** - Preserve financial data even after entity deletion
+- **재무 감사** - 삭제된 엔터티의 사용 금액과 예산 추적
+- **컴플라이언스** - 누가 무엇을 언제 삭제했는지에 대한 기록 유지
+- **비용 분석** - 삭제 전 지출 패턴 파악
+- **책임 추적** - 삭제를 수행한 관리자 또는 사용자 식별
+- **기록 보존** - 엔터티 삭제 후에도 재무 데이터 보존
 
-## Related Features
+## 관련 기능
 
-- [Audit Logs](./multiple_admins.md) - View comprehensive audit logs for all entity changes
-- [UI Logs](./ui_logs.md) - View request logs and spend tracking
+- [Audit 로그](./multiple_admins.md) - 모든 엔터티 변경에 대한 포괄적인 감사 로그 보기
+- [UI 로그](./ui_logs.md) - 요청 로그 및 사용 금액 추적 보기

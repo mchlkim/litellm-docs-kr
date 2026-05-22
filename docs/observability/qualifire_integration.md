@@ -1,34 +1,34 @@
 import Image from '@theme/IdealImage';
 
-# Qualifire - LLM Evaluation, Guardrails & Observability
+# Qualifire - LLM Evaluation, 가드레일 & 관측성
 
-[Qualifire](https://qualifire.ai/) provides real-time Agentic evaluations, guardrails and observability for production AI applications.
+[Qualifire](https://qualifire.ai/)는 production AI 애플리케이션을 위한 실시간 Agentic evaluation, guardrail, observability를 제공합니다.
 
-**Key Features:**
+**주요 기능:**
 
-- **Evaluation** - Systematically assess AI behavior to detect hallucinations, jailbreaks, policy breaches, and other vulnerabilities
-- **Guardrails** - Real-time interventions to prevent risks like brand damage, data leaks, and compliance breaches
-- **Observability** - Complete tracing and logging for RAG pipelines, chatbots, and AI agents
-- **Prompt Management** - Centralized prompt management with versioning and no-code studio
+- **Evaluation** - AI 동작을 체계적으로 평가해 hallucination, jailbreak, policy breach, 기타 취약점을 탐지합니다.
+- **가드레일** - 브랜드 손상, 데이터 유출, compliance 위반 같은 위험을 막기 위해 실시간으로 개입합니다.
+- **관측성** - RAG pipeline, chatbot, AI agent를 위한 완전한 tracing과 logging을 제공합니다.
+- **Prompt Management** - versioning과 no-code studio를 포함한 중앙화된 prompt management를 제공합니다.
 
 :::tip
 
-Looking for Qualifire Guardrails? Check out the [Qualifire Guardrails Integration](../proxy/guardrails/qualifire.md) for real-time content moderation, prompt injection detection, PII checks, and more.
+Qualifire 가드레일을 찾고 있나요? 실시간 content moderation, prompt injection detection, PII check 등을 보려면 [Qualifire 가드레일 Integration](../proxy/guardrails/qualifire.md)을 확인하세요.
 
 :::
 
-## Pre-Requisites
+## 사전 요구 사항
 
-1. Create an account on [Qualifire](https://app.qualifire.ai/)
-2. Get your API key and webhook URL from the Qualifire dashboard
+1. [Qualifire](https://app.qualifire.ai/)에서 계정을 만듭니다.
+2. Qualifire dashboard에서 API key와 webhook URL을 가져옵니다.
 
 ```bash
 uv add litellm
 ```
 
-## Quick Start
+## 빠른 시작
 
-Use just 2 lines of code to instantly log your responses **across all providers** with Qualifire.
+코드 두 줄만으로 **모든 provider**의 응답을 Qualifire에 즉시 기록할 수 있습니다.
 
 ```python
 litellm.callbacks = ["qualifire_eval"]
@@ -57,9 +57,9 @@ response = litellm.completion(
 )
 ```
 
-## Using with LiteLLM Proxy
+## LiteLLM Proxy와 함께 사용
 
-1. Setup config.yaml
+1. `config.yaml` 설정
 
 ```yaml
 model_list:
@@ -79,13 +79,13 @@ environment_variables:
   QUALIFIRE_WEBHOOK_URL: "https://app.qualifire.ai/api/v1/webhooks/evaluations"
 ```
 
-2. Start the proxy
+2. 프록시 시작
 
 ```bash
 litellm --config config.yaml
 ```
 
-3. Test it!
+3. 테스트
 
 ```bash
 curl -X POST 'http://0.0.0.0:4000/chat/completions' \
@@ -94,29 +94,29 @@ curl -X POST 'http://0.0.0.0:4000/chat/completions' \
 -d '{ "model": "gpt-4o", "messages": [{"role": "user", "content": "Hi 👋 - i'm openai"}]}'
 ```
 
-## Environment Variables
+## 환경 변수
 
-| Variable                | Description                                            |
+| 변수                    | 설명                                                   |
 | ----------------------- | ------------------------------------------------------ |
-| `QUALIFIRE_API_KEY`     | Your Qualifire API key for authentication              |
-| `QUALIFIRE_WEBHOOK_URL` | The Qualifire webhook endpoint URL from your dashboard |
+| `QUALIFIRE_API_KEY`     | 인증에 사용할 Qualifire API key                        |
+| `QUALIFIRE_WEBHOOK_URL` | dashboard에서 가져온 Qualifire webhook endpoint URL    |
 
-## What Gets Logged?
+## 어떤 데이터가 기록되나요?
 
-The [LiteLLM Standard Logging Payload](https://docs.litellm.ai/docs/proxy/logging_spec) is sent to your Qualifire endpoint on each successful LLM API call.
+LLM API 호출이 성공할 때마다 [LiteLLM Standard Logging Payload](https://docs.litellm.ai/docs/proxy/logging_spec)가 Qualifire 엔드포인트로 전송됩니다.
 
-This includes:
+여기에는 다음이 포함됩니다:
 
-- Request messages and parameters
-- Response content and metadata
-- Token usage statistics
-- Latency metrics
-- Model information
-- Cost data
+- 요청 메시지와 파라미터
+- 응답 content와 metadata
+- 토큰 사용량 통계
+- 지연 시간 metric
+- 모델 정보
+- 비용 데이터
 
-Once data is in Qualifire, you can:
+데이터가 Qualifire에 들어오면 다음을 할 수 있습니다:
 
-- Run evaluations to detect hallucinations, toxicity, and policy violations
-- Set up guardrails to block or modify responses in real-time
-- View traces across your entire AI pipeline
-- Track performance and quality metrics over time
+- hallucination, toxicity, policy violation을 탐지하는 evaluation 실행
+- 응답을 실시간으로 차단하거나 수정하는 guardrail 설정
+- 전체 AI pipeline의 trace 확인
+- 시간에 따른 성능과 품질 metric 추적

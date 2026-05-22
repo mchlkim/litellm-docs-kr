@@ -1,20 +1,20 @@
 import Image from '@theme/IdealImage';
 
-# Literal AI - Log, Evaluate, Monitor
+# Literal AI - 로깅, 평가, 모니터링 {#literal-ai---log-evaluate-monitor}
 
-[Literal AI](https://literalai.com) is a collaborative observability, evaluation and analytics platform for building production-grade LLM apps.
+[Literal AI](https://literalai.com)는 프로덕션급 LLM 앱을 구축하기 위한 협업형 관측성, 평가, 분석 플랫폼입니다.
 
 <Image img={require('../../img/literalai.png')} />
 
-## Pre-Requisites
+## 사전 요구 사항 {#pre-requisites}
 
-Ensure you have the `literalai` package installed:
+`literalai` 패키지가 설치되어 있는지 확인하세요.
 
 ```shell
 uv add literalai litellm
 ```
 
-## Quick Start
+## 빠른 시작
 
 ```python
 import litellm
@@ -36,9 +36,9 @@ response = litellm.completion(
 )
 ```
 
-## Multi Step Traces
+## 다단계 트레이스 {#multi-step-traces}
 
-This integration is compatible with the Literal AI SDK decorators, enabling conversation and agent tracing
+이 통합은 Literal AI SDK 데코레이터와 호환되므로 대화 및 에이전트 트레이싱을 사용할 수 있습니다.
 
 ```py
 import litellm
@@ -73,17 +73,17 @@ my_agent("Hello world")
 literalai_client.flush()
 ```
 
-Learn more about [Literal AI logging capabilities](https://docs.literalai.com/guides/logs).
+[Literal AI 로깅 기능](https://docs.literalai.com/guides/logs)에 대해 자세히 알아보세요.
 
-## Bind a Generation to its Prompt Template
+## 생성을 프롬프트 템플릿에 바인딩 {#bind-a-generation-to-its-prompt-template}
 
-This integration works out of the box with prompts managed on Literal AI. This means that a specific LLM generation will be bound to its template.
+이 통합은 Literal AI에서 관리되는 프롬프트와 별도 설정 없이 바로 작동합니다. 즉, 특정 LLM 생성이 해당 템플릿에 바인딩됩니다.
 
-Learn more about [Prompt Management](https://docs.literalai.com/guides/prompt-management#pull-a-prompt-template-from-literal-ai) on Literal AI.
+Literal AI의 [프롬프트 관리](https://docs.literalai.com/guides/prompt-management#pull-a-prompt-template-from-literal-ai)에 대해 자세히 알아보세요.
 
-## OpenAI Proxy Usage
+## OpenAI Proxy 사용법
 
-If you are using the Lite LLM proxy, you can use the Literal AI OpenAI instrumentation to log your calls.
+Lite LLM 프록시를 사용하는 경우 Literal AI OpenAI 계측을 사용해 호출을 로깅할 수 있습니다.
 
 ```py
 from literalai import LiteralClient

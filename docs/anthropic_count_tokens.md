@@ -3,20 +3,20 @@ import TabItem from '@theme/TabItem';
 
 # /v1/messages/count_tokens
 
-## Overview
+## 개요
 
-Anthropic-compatible token counting endpoint. Count tokens for messages before sending them to the model.
+Anthropic 호환 토큰 계산 엔드포인트입니다. 메시지를 모델로 보내기 전에 토큰 수를 계산합니다.
 
-| Feature | Supported | Notes |
+| 기능 | 지원 여부 | 참고 |
 |---------|-----------|-------|
-| Cost Tracking | ❌ | Token counting only, no cost incurred |
-| Logging | ✅ | Works across all integrations |
-| End-user Tracking | ✅ | |
-| Supported Providers | Anthropic, Vertex AI (Claude), Bedrock (Claude), Gemini, Vertex AI | Auto-routes to provider-specific token counting APIs |
+| 비용 추적 | ❌ | 토큰 계산만 수행하며 비용은 발생하지 않습니다 |
+| 로깅 | ✅ | 모든 통합에서 작동합니다 |
+| 최종 사용자 추적 | ✅ | |
+| 지원 프로바이더 | Anthropic, Vertex AI (Claude), Bedrock (Claude), Gemini, Vertex AI | 프로바이더별 토큰 계산 API로 자동 라우팅됩니다 |
 
-## Quick Start
+## 빠른 시작
 
-### 1. Start LiteLLM Proxy
+### 1. LiteLLM Proxy 시작
 
 ```bash
 litellm --config /path/to/config.yaml
@@ -24,7 +24,7 @@ litellm --config /path/to/config.yaml
 # RUNNING on http://0.0.0.0:4000
 ```
 
-### 2. Count Tokens
+### 2. 토큰 계산
 
 <Tabs>
 <TabItem value="curl" label="curl">
@@ -68,7 +68,7 @@ print(response.json())
 </TabItem>
 </Tabs>
 
-**Expected Response:**
+**예상 응답:**
 
 ```json
 {
@@ -76,9 +76,9 @@ print(response.json())
 }
 ```
 
-## LiteLLM Proxy Configuration
+## LiteLLM Proxy 설정
 
-Add models to your `config.yaml`:
+`config.yaml`에 모델을 추가합니다.
 
 ```yaml
 model_list:
@@ -100,14 +100,14 @@ model_list:
       aws_region_name: us-west-2
 ```
 
-## Request Parameters
+## 요청 파라미터
 
-| Parameter | Type | Required | Description |
+| 파라미터 | 타입 | 필수 여부 | 설명 |
 |-----------|------|----------|-------------|
-| `model` | string | ✅ | The model to use for token counting |
-| `messages` | array | ✅ | Array of messages in Anthropic format |
+| `model` | string | ✅ | 토큰 계산에 사용할 모델 |
+| `messages` | array | ✅ | Anthropic 형식의 메시지 배열 |
 
-### Messages Format
+### 메시지 형식
 
 ```json
 {
@@ -119,7 +119,7 @@ model_list:
 }
 ```
 
-## Response Format
+## 응답 형식
 
 ```json
 {
@@ -127,26 +127,26 @@ model_list:
 }
 ```
 
-| Field | Type | Description |
+| 필드 | 타입 | 설명 |
 |-------|------|-------------|
-| `input_tokens` | integer | Number of tokens in the input messages |
+| `input_tokens` | integer | 입력 메시지의 토큰 수 |
 
-## Supported Providers
+## 지원 프로바이더
 
-The `/v1/messages/count_tokens` endpoint automatically routes to the appropriate provider-specific token counting API:
+`/v1/messages/count_tokens` 엔드포인트는 적절한 프로바이더별 토큰 계산 API로 자동 라우팅됩니다.
 
-| Provider | Token Counting Method |
+| 프로바이더 | 토큰 계산 방식 |
 |----------|----------------------|
-| Anthropic | [Anthropic Token Counting API](https://docs.anthropic.com/en/docs/build-with-claude/token-counting) |
-| OpenAI | [OpenAI Responses API `/input_tokens`](https://platform.openai.com/docs/api-reference/responses/input-tokens) — see [Token Counting](./count_tokens.md) |
-| Vertex AI (Claude) | Vertex AI Partner Models Token Counter |
-| Bedrock (Claude) | AWS Bedrock CountTokens API |
-| Gemini | Google AI Studio countTokens API |
-| Vertex AI (Gemini) | Vertex AI countTokens API |
+| Anthropic | [Anthropic 토큰 계산 API](https://docs.anthropic.com/en/docs/build-with-claude/token-counting) |
+| OpenAI | [OpenAI Responses API `/input_tokens`](https://platform.openai.com/docs/api-reference/responses/input-tokens) — [토큰 계산](./count_tokens.md) 참조 |
+| Vertex AI (Claude) | Vertex AI Partner 모델 토큰 카운터 |
+| Bedrock (Claude) | AWS Bedrock `CountTokens` API |
+| Gemini | Google AI Studio의 `countTokens` API |
+| Vertex AI (Gemini) | Vertex AI `countTokens` API |
 
-## Examples
+## 예제
 
-### Count Tokens with System Message
+### 시스템 메시지로 토큰 계산
 
 ```bash
 curl -X POST "http://localhost:4000/v1/messages/count_tokens" \
@@ -160,7 +160,7 @@ curl -X POST "http://localhost:4000/v1/messages/count_tokens" \
   }'
 ```
 
-### Count Tokens for Multi-turn Conversation
+### 멀티턴 대화의 토큰 계산
 
 ```bash
 curl -X POST "http://localhost:4000/v1/messages/count_tokens" \
@@ -176,7 +176,7 @@ curl -X POST "http://localhost:4000/v1/messages/count_tokens" \
   }'
 ```
 
-### Using with Vertex AI Claude
+### Vertex AI Claude와 함께 사용
 
 ```bash
 curl -X POST "http://localhost:4000/v1/messages/count_tokens" \
@@ -190,7 +190,7 @@ curl -X POST "http://localhost:4000/v1/messages/count_tokens" \
   }'
 ```
 
-### Using with Bedrock Claude
+### Bedrock Claude와 함께 사용
 
 ```bash
 curl -X POST "http://localhost:4000/v1/messages/count_tokens" \
@@ -204,18 +204,18 @@ curl -X POST "http://localhost:4000/v1/messages/count_tokens" \
   }'
 ```
 
-## Comparison with Anthropic Passthrough
+## Anthropic 패스스루와 비교
 
-LiteLLM provides two ways to count tokens:
+LiteLLM은 토큰을 계산하는 두 가지 방법을 제공합니다.
 
-| Endpoint | Description | Use Case |
+| 엔드포인트 | 설명 | 사용 사례 |
 |----------|-------------|----------|
-| `/v1/messages/count_tokens` | LiteLLM's Anthropic-compatible endpoint | Works with all supported providers (Anthropic, Vertex AI, Bedrock, etc.) |
-| `/anthropic/v1/messages/count_tokens` | [Pass-through to Anthropic API](./pass_through/anthropic_completion.md#example-2-token-counting-api) | Direct Anthropic API access with native headers |
+| `/v1/messages/count_tokens` | LiteLLM의 Anthropic 호환 엔드포인트 | 지원되는 모든 프로바이더에서 작동합니다(Anthropic, Vertex AI, Bedrock 등) |
+| `/anthropic/v1/messages/count_tokens` | [Anthropic API로 패스스루](./pass_through/anthropic_completion.md#example-2-token-counting-api) | 네이티브 헤더로 Anthropic API에 직접 접근 |
 
-### Pass-through Example
+### 패스스루 예제
 
-For direct Anthropic API access with full native headers:
+전체 네이티브 헤더로 Anthropic API에 직접 접근하려면 다음을 사용합니다.
 
 ```bash
 curl --request POST \

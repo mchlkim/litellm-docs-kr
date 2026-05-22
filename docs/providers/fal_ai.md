@@ -3,20 +3,20 @@ import TabItem from '@theme/TabItem';
 
 # Fal AI
 
-Fal AI provides fast, scalable access to state-of-the-art image generation models including FLUX, Stable Diffusion, Imagen, and more.
+Fal AI는 FLUX, Stable Diffusion, Imagen 등 최신 이미지 생성 모델에 빠르고 확장 가능한 액세스를 제공합니다.
 
-## Overview
+## 개요
 
-| Property | Details |
+| 속성 | 세부 정보 |
 |----------|---------|
-| Description | Fal AI offers optimized infrastructure for running image generation models at scale with low latency. |
-| Provider Route on LiteLLM | `fal_ai/` |
-| Provider Doc | [Fal AI Documentation ↗](https://fal.ai/models) |
-| Supported Operations | [`/images/generations`](#image-generation) |
+| 설명 | Fal AI는 낮은 지연 시간으로 이미지 생성 모델을 대규모로 실행할 수 있는 최적화된 인프라를 제공합니다. |
+| LiteLLM의 공급자 라우트 | `fal_ai/` |
+| 공급자 문서 | [Fal AI 문서 ↗](https://fal.ai/models) |
+| 지원 작업 | [`/images/generations`](#image-generation) |
 
-## Setup
+## 설정 {#setup}
 
-### API Key
+### API 키 {#api-key}
 
 ```python showLineNumbers
 import os
@@ -25,29 +25,29 @@ import os
 os.environ["FAL_AI_API_KEY"] = "your-fal-api-key"
 ```
 
-Get your API key from [fal.ai](https://fal.ai/).
+API 키는 [fal.ai](https://fal.ai/)에서 받을 수 있습니다.
 
-## Supported Models
+## 지원 모델 {#supported-models}
 
-| Model Name | Description | Documentation |
+| 모델 이름 | 설명 | 문서 |
 |------------|-------------|---------------|
-| `fal_ai/fal-ai/flux-pro/v1.1` | FLUX Pro v1.1 - Balanced speed and quality | [Docs ↗](https://fal.ai/models/fal-ai/flux-pro/v1.1) |
-| `fal_ai/flux/schnell` | Flux Schnell - Low-latency generation with `image_size` support | [Docs ↗](https://fal.ai/models/fal-ai/flux/schnell) |
-| `fal_ai/fal-ai/bytedance/seedream/v3/text-to-image` | ByteDance Seedream v3 - Text-to-image with `image_size` control | [Docs ↗](https://fal.ai/models/fal-ai/bytedance/seedream/v3/text-to-image) |
-| `fal_ai/fal-ai/bytedance/dreamina/v3.1/text-to-image` | ByteDance Dreamina v3.1 - Text-to-image with `image_size` control | [Docs ↗](https://fal.ai/models/fal-ai/bytedance/dreamina/v3.1/text-to-image) |
-| `fal_ai/fal-ai/flux-pro/v1.1-ultra` | FLUX Pro v1.1 Ultra - High-quality image generation | [Docs ↗](https://fal.ai/models/fal-ai/flux-pro/v1.1-ultra) |
-| `fal_ai/fal-ai/imagen4/preview` | Google's Imagen 4 - Highest quality model | [Docs ↗](https://fal.ai/models/fal-ai/imagen4/preview) |
-| `fal_ai/fal-ai/recraft/v3/text-to-image` | Recraft v3 - Multiple style options | [Docs ↗](https://fal.ai/models/fal-ai/recraft/v3/text-to-image) |
-| `fal_ai/fal-ai/ideogram/v3` | Ideogram v3 - Lettering-first creative model (Balanced: $0.06/image) | [Docs ↗](https://fal.ai/models/fal-ai/ideogram/v3) |
-| `fal_ai/fal-ai/stable-diffusion-v35-medium` | Stable Diffusion v3.5 Medium | [Docs ↗](https://fal.ai/models/fal-ai/stable-diffusion-v35-medium) |
-| `fal_ai/bria/text-to-image/3.2` | Bria 3.2 - Commercial-grade generation | [Docs ↗](https://fal.ai/models/bria/text-to-image/3.2) |
+| `fal_ai/fal-ai/flux-pro/v1.1` | FLUX Pro v1.1 - 속도와 품질의 균형 | [문서 ↗](https://fal.ai/models/fal-ai/flux-pro/v1.1) |
+| `fal_ai/flux/schnell` | Flux Schnell - `image_size`를 지원하는 낮은 지연 시간 생성 | [문서 ↗](https://fal.ai/models/fal-ai/flux/schnell) |
+| `fal_ai/fal-ai/bytedance/seedream/v3/text-to-image` | ByteDance Seedream v3 - `image_size` 제어를 지원하는 텍스트-이미지 변환 | [문서 ↗](https://fal.ai/models/fal-ai/bytedance/seedream/v3/text-to-image) |
+| `fal_ai/fal-ai/bytedance/dreamina/v3.1/text-to-image` | ByteDance Dreamina v3.1 - `image_size` 제어를 지원하는 텍스트-이미지 변환 | [문서 ↗](https://fal.ai/models/fal-ai/bytedance/dreamina/v3.1/text-to-image) |
+| `fal_ai/fal-ai/flux-pro/v1.1-ultra` | FLUX Pro v1.1 Ultra - 고품질 이미지 생성 | [문서 ↗](https://fal.ai/models/fal-ai/flux-pro/v1.1-ultra) |
+| `fal_ai/fal-ai/imagen4/preview` | Google Imagen 4 - 최고 품질 모델 | [문서 ↗](https://fal.ai/models/fal-ai/imagen4/preview) |
+| `fal_ai/fal-ai/recraft/v3/text-to-image` | Recraft v3 - 여러 스타일 옵션 | [문서 ↗](https://fal.ai/models/fal-ai/recraft/v3/text-to-image) |
+| `fal_ai/fal-ai/ideogram/v3` | Ideogram v3 - 레터링 우선 크리에이티브 모델(Balanced: $0.06/image) | [문서 ↗](https://fal.ai/models/fal-ai/ideogram/v3) |
+| `fal_ai/fal-ai/stable-diffusion-v35-medium` | Stable Diffusion v3.5 Medium | [문서 ↗](https://fal.ai/models/fal-ai/stable-diffusion-v35-medium) |
+| `fal_ai/bria/text-to-image/3.2` | Bria 3.2 - 상용 등급 생성 | [문서 ↗](https://fal.ai/models/bria/text-to-image/3.2) |
 
-## Image Generation
+## 이미지 생성 {#image-generation}
 
-### Usage - LiteLLM Python SDK
+### 사용법 - LiteLLM Python SDK
 
 <Tabs>
-<TabItem value="basic" label="Basic Usage">
+<TabItem value="basic" label="기본 사용법">
 
 ```python showLineNumbers title="Basic Image Generation"
 import litellm
@@ -109,7 +109,7 @@ print(response.data[0].url)
 
 </TabItem>
 
-<TabItem value="async" label="Async Usage">
+<TabItem value="async" label="비동기 사용법">
 
 ```python showLineNumbers title="Async Image Generation"
 import litellm
@@ -134,7 +134,7 @@ asyncio.run(generate_image())
 
 </TabItem>
 
-<TabItem value="advanced" label="Advanced Parameters">
+<TabItem value="advanced" label="고급 파라미터">
 
 ```python showLineNumbers title="Advanced FLUX Pro Generation"
 import litellm
@@ -160,9 +160,9 @@ for image in response.data:
 </TabItem>
 </Tabs>
 
-### Usage - LiteLLM Proxy Server
+### 사용법 - LiteLLM Proxy Server
 
-#### 1. Configure your config.yaml
+#### 1. config.yaml 구성 {#1-configure-your-configyaml}
 
 ```yaml showLineNumbers title="Fal AI Image Generation Configuration"
 model_list:
@@ -191,7 +191,7 @@ general_settings:
   master_key: sk-1234
 ```
 
-#### 2. Start LiteLLM Proxy Server
+#### 2. LiteLLM Proxy Server 시작 {#2-start-litellm-proxy-server}
 
 ```bash showLineNumbers title="Start Proxy Server"
 litellm --config /path/to/config.yaml
@@ -199,7 +199,7 @@ litellm --config /path/to/config.yaml
 # RUNNING on http://0.0.0.0:4000
 ```
 
-#### 3. Make requests
+#### 3. 요청 보내기 {#3-make-requests}
 
 <Tabs>
 <TabItem value="openai-sdk" label="OpenAI SDK">
@@ -258,11 +258,9 @@ curl --location 'http://localhost:4000/v1/images/generations' \
 </TabItem>
 </Tabs>
 
+## 모델별 파라미터 사용 {#using-model-specific-parameters}
 
-
-## Using Model-Specific Parameters
-
-LiteLLM forwards any additional parameters directly to the Fal AI API. You can pass model-specific parameters in your request and they will be sent to Fal AI.
+LiteLLM은 추가 파라미터를 Fal AI API로 직접 전달합니다. 요청에 모델별 파라미터를 넣으면 해당 값이 Fal AI로 전송됩니다.
 
 ```python showLineNumbers title="Pass Model-Specific Parameters"
 import litellm
@@ -279,37 +277,36 @@ response = litellm.image_generation(
 )
 ```
 
-For the complete list of parameters supported by each model, see:
-- [FLUX Pro v1.1-ultra Parameters ↗](https://fal.ai/models/fal-ai/flux-pro/v1.1-ultra/api)
-- [Imagen 4 Parameters ↗](https://fal.ai/models/fal-ai/imagen4/preview/api)
-- [Recraft v3 Parameters ↗](https://fal.ai/models/fal-ai/recraft/v3/text-to-image/api)
-- [Stable Diffusion v3.5 Parameters ↗](https://fal.ai/models/fal-ai/stable-diffusion-v35-medium/api)
-- [Bria 3.2 Parameters ↗](https://fal.ai/models/bria/text-to-image/3.2/api)
+각 모델에서 지원하는 전체 파라미터 목록은 다음을 참조하세요.
+- [FLUX Pro v1.1-ultra 파라미터 ↗](https://fal.ai/models/fal-ai/flux-pro/v1.1-ultra/api)
+- [Imagen 4 파라미터 ↗](https://fal.ai/models/fal-ai/imagen4/preview/api)
+- [Recraft v3 파라미터 ↗](https://fal.ai/models/fal-ai/recraft/v3/text-to-image/api)
+- [Stable Diffusion v3.5 파라미터 ↗](https://fal.ai/models/fal-ai/stable-diffusion-v35-medium/api)
+- [Bria 3.2 파라미터 ↗](https://fal.ai/models/bria/text-to-image/3.2/api)
 
-## Supported Parameters
+## 지원 파라미터
 
-Standard OpenAI-compatible parameters that work across all models:
+모든 모델에서 동작하는 표준 OpenAI 호환 파라미터:
 
-| Parameter | Type | Description | Default |
+| 파라미터 | 유형 | 설명 | 기본값 |
 |-----------|------|-------------|---------|
-| `prompt` | string | Text description of desired image | Required |
-| `model` | string | Fal AI model to use | Required |
-| `n` | integer | Number of images to generate (1-4) | `1` |
-| `size` | string | Image dimensions (maps to model-specific format) | Model default |
-| `api_key` | string | Your Fal AI API key | Environment variable |
+| `prompt` | string | 원하는 이미지의 텍스트 설명 | 필수 |
+| `model` | string | 사용할 Fal AI 모델 | 필수 |
+| `n` | integer | 생성할 이미지 수(1-4) | `1` |
+| `size` | string | 이미지 크기(모델별 형식으로 매핑됨) | 모델 기본값 |
+| `api_key` | string | Fal AI API 키 | 환경 변수 |
 
-## Getting Started
+## 시작하기
 
-1. Sign up at [fal.ai](https://fal.ai/)
-2. Get your API key from your account settings
-3. Set `FAL_AI_API_KEY` environment variable
-4. Choose a model from the [Fal AI model gallery](https://fal.ai/models)
-5. Start generating images with LiteLLM
+1. [fal.ai](https://fal.ai/)에 가입합니다.
+2. 계정 설정에서 API 키를 가져옵니다.
+3. `FAL_AI_API_KEY` 환경 변수를 설정합니다.
+4. [Fal AI 모델 갤러리](https://fal.ai/models)에서 모델을 선택합니다.
+5. LiteLLM으로 이미지 생성을 시작합니다.
 
-## Additional Resources
+## 추가 자료 {#additional-resources}
 
-- [Fal AI Documentation](https://fal.ai/docs)
-- [Model Gallery](https://fal.ai/models)
-- [API Reference](https://fal.ai/docs/api-reference)
-- [Pricing](https://fal.ai/pricing)
-
+- [Fal AI 문서](https://fal.ai/docs)
+- [모델 갤러리](https://fal.ai/models)
+- [API 참조](https://fal.ai/docs/api-reference)
+- [가격](https://fal.ai/pricing)

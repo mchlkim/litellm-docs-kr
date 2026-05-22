@@ -1,36 +1,36 @@
 import Image from '@theme/IdealImage';
 
-# Promptlayer Tutorial
+# Promptlayer 튜토리얼 {#promptlayer-tutorial}
 
 
 :::tip
 
-This is community maintained, Please make an issue if you run into a bug
+이 문서는 커뮤니티에서 관리합니다. 버그가 발생하면 이슈를 생성해 주세요.
 https://github.com/BerriAI/litellm
 
 :::
 
 
-Promptlayer is a platform for prompt engineers. Log OpenAI requests. Search usage history. Track performance. Visually manage prompt templates.
+Promptlayer는 프롬프트 엔지니어를 위한 플랫폼입니다. OpenAI 요청을 기록하고, 사용 기록을 검색하고, 성능을 추적하고, 프롬프트 템플릿을 시각적으로 관리할 수 있습니다.
 
 <Image img={require('../../img/promptlayer.png')} />
 
-## Use Promptlayer to log requests across all LLM Providers (OpenAI, Azure, Anthropic, Cohere, Replicate, PaLM)
+## Promptlayer를 사용해 모든 LLM Provider(OpenAI, Azure, Anthropic, Cohere, Replicate, PaLM)의 요청 로깅하기 {#use-promptlayer-to-log-requests-across-all-llm-providers-openai-azure-anthropic-cohere-replicate-palm}
 
-liteLLM provides `callbacks`, making it easy for you to log data depending on the status of your responses.
+liteLLM은 `callbacks`를 제공하므로 응답 상태에 따라 데이터를 쉽게 로깅할 수 있습니다.
 
-### Using Callbacks
+### Callbacks 사용하기 {#using-callbacks}
 
-Get your PromptLayer API Key from https://promptlayer.com/
+https://promptlayer.com/ 에서 PromptLayer API Key를 가져오세요.
 
-Use just 2 lines of code, to instantly log your responses **across all providers** with promptlayer:
+코드 2줄만 사용하면 promptlayer로 **모든 provider의** 응답을 즉시 로깅할 수 있습니다.
 
 ```python
 litellm.success_callback = ["promptlayer"]
 
 ```
 
-Complete code
+전체 코드
 
 ```python
 from litellm import completion
@@ -50,16 +50,16 @@ response = completion(model="gpt-3.5-turbo", messages=[{"role": "user", "content
 response = completion(model="command-nightly", messages=[{"role": "user", "content": "Hi 👋 - i'm cohere"}])
 ```
 
-### Logging Metadata 
+### 메타데이터 로깅 {#logging-metadata}
 
-You can also log completion call metadata to Promptlayer. 
+completion 호출 메타데이터도 Promptlayer에 로깅할 수 있습니다.
 
-You can add metadata to a completion call through the metadata param: 
+`metadata` 매개변수를 통해 completion 호출에 메타데이터를 추가할 수 있습니다.
 ```python 
 completion(model,messages, metadata={"model": "ai21"})
 ```
 
-**Complete Code**
+**전체 코드**
 ```python
 from litellm import completion
 
@@ -78,10 +78,10 @@ response = completion(model="gpt-3.5-turbo", messages=[{"role": "user", "content
 response = completion(model="command-nightly", messages=[{"role": "user", "content": "Hi 👋 - i'm cohere"}], metadata={"provider": "cohere"})
 ```
 
-Credits to [Nick Bradford](https://github.com/nsbradford), from [Vim-GPT](https://github.com/nsbradford/VimGPT), for the suggestion. 
+이 제안은 [Vim-GPT](https://github.com/nsbradford/VimGPT)의 [Nick Bradford](https://github.com/nsbradford) 님이 제공해 주셨습니다.
 
-## Support & Talk to Founders
+## 지원 및 창립자와 상담하기 {#support--talk-to-founders}
 
-- [Schedule Demo 👋](https://calendly.com/d/4mp-gd3-k5k/berriai-1-1-onboarding-litellm-hosted-version)
-- [Community Discord 💭](https://discord.gg/wuPM9dRgDw)
-- Our emails ✉️ ishaan@berri.ai / krrish@berri.ai
+- [데모 일정 잡기 👋](https://calendly.com/d/4mp-gd3-k5k/berriai-1-1-onboarding-litellm-hosted-version)
+- [커뮤니티 Discord 💭](https://discord.gg/wuPM9dRgDw)
+- 이메일 ✉️ ishaan@berri.ai / krrish@berri.ai

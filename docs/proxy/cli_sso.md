@@ -1,26 +1,26 @@
-# CLI Authentication
+# CLI 인증
 
-Use the litellm cli to authenticate to the LiteLLM Gateway. This is great if you're trying to give a large number of developers self-serve access to the LiteLLM Gateway.
+litellm CLI를 사용해 LiteLLM Gateway에 인증합니다. 많은 개발자에게 LiteLLM Gateway 셀프서비스 접근 권한을 제공하려는 경우 유용합니다.
 
 
-## Demo
+## 데모
 
 <iframe width="840" height="500" src="https://www.loom.com/embed/87c5d243cde642ff942783024ff037e3" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
 
-## Usage 
+## 사용법 
 
-### Prerequisites - Start LiteLLM Proxy with Beta Flag
+### 사전 준비 - 베타 플래그로 LiteLLM Proxy 시작
 
-:::warning[Beta Feature - Required]
+:::warning[베타 기능 - 필수]
 
-CLI SSO Authentication is currently in beta. You must set this environment variable **when starting up your LiteLLM Proxy**:
+CLI SSO 인증은 현재 베타 상태입니다. **LiteLLM Proxy를 시작할 때** 이 환경 변수를 설정해야 합니다.
 
 ```bash
 export EXPERIMENTAL_UI_LOGIN="True"
 litellm --config config.yaml
 ```
 
-Or add it to your proxy startup command:
+또는 프록시 시작 명령에 추가합니다.
 
 ```bash
 EXPERIMENTAL_UI_LOGIN="True" litellm --config config.yaml
@@ -28,11 +28,11 @@ EXPERIMENTAL_UI_LOGIN="True" litellm --config config.yaml
 
 :::
 
-### Configuration
+### 설정
 
-#### JWT Token Expiration
+#### JWT 토큰 만료
 
-By default, CLI authentication tokens expire after **24 hours**. You can customize this expiration time by setting the `LITELLM_CLI_JWT_EXPIRATION_HOURS` environment variable when starting your LiteLLM Proxy:
+기본적으로 CLI 인증 토큰은 **24시간** 후 만료됩니다. LiteLLM Proxy를 시작할 때 `LITELLM_CLI_JWT_EXPIRATION_HOURS` 환경 변수를 설정해 이 만료 시간을 사용자 지정할 수 있습니다.
 
 ```bash
 # Set CLI JWT tokens to expire after 48 hours
@@ -41,73 +41,73 @@ export EXPERIMENTAL_UI_LOGIN="True"
 litellm --config config.yaml
 ```
 
-Or in a single command:
+또는 단일 명령으로 실행할 수 있습니다.
 
 ```bash
 LITELLM_CLI_JWT_EXPIRATION_HOURS=48 EXPERIMENTAL_UI_LOGIN="True" litellm --config config.yaml
 ```
 
-**Examples:**
-- `LITELLM_CLI_JWT_EXPIRATION_HOURS=12` - Tokens expire after 12 hours
-- `LITELLM_CLI_JWT_EXPIRATION_HOURS=168` - Tokens expire after 7 days (168 hours)
-- `LITELLM_CLI_JWT_EXPIRATION_HOURS=720` - Tokens expire after 30 days (720 hours)
+**예제:**
+- `LITELLM_CLI_JWT_EXPIRATION_HOURS=12` - 토큰이 12시간 후 만료됩니다.
+- `LITELLM_CLI_JWT_EXPIRATION_HOURS=168` - 토큰이 7일(168시간) 후 만료됩니다.
+- `LITELLM_CLI_JWT_EXPIRATION_HOURS=720` - 토큰이 30일(720시간) 후 만료됩니다.
 
-:::note[Experimental UI Session]
-When `EXPERIMENTAL_UI_LOGIN` is enabled, the **browser UI login** session uses a fixed 10-minute expiry (not configurable). `LITELLM_UI_SESSION_DURATION` applies only to non-experimental flows.
+:::note[실험적 UI 세션]
+`EXPERIMENTAL_UI_LOGIN`이 활성화되면 **브라우저 UI 로그인** 세션은 고정된 10분 만료 시간(설정 불가)을 사용합니다. `LITELLM_UI_SESSION_DURATION`은 비실험 플로우에만 적용됩니다.
 :::
 
 :::tip
-You can check your current token's age and expiration status using:
+현재 토큰의 사용 시간과 만료 상태는 다음 명령으로 확인할 수 있습니다.
 ```bash
 litellm-proxy whoami
 ```
 :::
 
-### Steps
+### 단계
 
-1. **Install the CLI**
+1. **CLI 설치**
 
-   If you have [uv](https://github.com/astral-sh/uv) installed, you can try this:
+   [uv](https://github.com/astral-sh/uv)가 설치되어 있다면 다음을 시도할 수 있습니다.
 
    ```shell
    uv tool install 'litellm[proxy]'
    ```
 
-   If that works, you'll see something like this:
+   정상적으로 실행되면 다음과 비슷한 출력이 표시됩니다.
 
    ```shell
    ...
    Installed 2 executables: litellm, litellm-proxy
    ```
 
-   and now you can use the tool by just typing `litellm-proxy` in your terminal:
+   이제 터미널에서 `litellm-proxy`를 입력해 도구를 사용할 수 있습니다.
 
    ```shell
    litellm-proxy
    ```
 
-2. **Set up environment variables**
+2. **환경 변수 설정**
 
-   On your local machine, set the proxy URL:
+   로컬 머신에서 프록시 URL을 설정합니다.
 
    ```bash
    export LITELLM_PROXY_URL=http://localhost:4000
    ```
 
-   *(Replace with your actual proxy URL)*
+   *(실제 프록시 URL로 바꾸세요)*
 
-3. **Login**
+3. **로그인**
 
    ```shell
    litellm-proxy login
    ```
 
-   This will open a browser window to authenticate. If you have connected LiteLLM Proxy to your SSO provider, you should be able to login with your SSO credentials. Once logged in, you can use the CLI to make requests to the LiteLLM Gateway.
+   인증을 위해 브라우저 창이 열립니다. LiteLLM Proxy를 SSO 공급자에 연결했다면 SSO 자격 증명으로 로그인할 수 있습니다. 로그인 후에는 CLI를 사용해 LiteLLM Gateway로 요청을 보낼 수 있습니다.
 
-4. **Make a test request to view models**
+4. **모델 조회 테스트 요청 실행**
 
    ```shell
    litellm-proxy models list
    ```
 
-   This will list all the models available to you.
+   사용할 수 있는 모든 모델이 나열됩니다.

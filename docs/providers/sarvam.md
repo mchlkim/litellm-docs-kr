@@ -3,9 +3,9 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-LiteLLM supports all the text models from [Sarvam ai](https://docs.sarvam.ai/api-reference-docs/chat/chat-completions)
+LiteLLM은 [Sarvam ai](https://docs.sarvam.ai/api-reference-docs/chat/chat-completions)의 모든 text model을 지원합니다.
 
-## Usage
+## 사용법
 
 ```python
 import os
@@ -23,9 +23,9 @@ response = completion(
 print(response)
 ```
 
-## Usage with LiteLLM Proxy Server
+## LiteLLM Proxy Server와 함께 사용 {#litellm-proxy-server-usage}
 
-Here's how to call a Sarvam.ai model with the LiteLLM Proxy Server
+LiteLLM Proxy Server로 Sarvam.ai 모델을 호출하는 방법은 다음과 같습니다.
 
 1. **Modify the `config.yaml`:**
 
@@ -37,13 +37,13 @@ Here's how to call a Sarvam.ai model with the LiteLLM Proxy Server
           api_key: api-key                 # api key to send your model
     ```
 
-2. **Start the proxy:**
+2. **프록시 시작:**
 
     ```bash
     $ litellm --config /path/to/config.yaml
     ```
 
-3. **Send a request to LiteLLM Proxy Server:**
+3. **LiteLLM Proxy Server로 요청 전송:**
 
     <Tabs>
 

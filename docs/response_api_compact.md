@@ -3,14 +3,14 @@ import TabItem from '@theme/TabItem';
 
 # /responses/compact
 
-Compress conversation history using OpenAI's `/responses/compact` endpoint.
+OpenAI의 `/responses/compact` 엔드포인트를 사용해 대화 기록을 압축합니다.
 
-| Feature | Supported |
+| 기능 | 지원 여부 |
 |---------|-----------|
-| Supported LiteLLM Versions | 1.72.0+ |
-| Supported Providers | `openai` |
+| 지원되는 LiteLLM 버전 | 1.72.0+ |
+| 지원 프로바이더 | `openai` |
 
-## Usage
+## 사용법
 
 ### LiteLLM Python SDK
 
@@ -67,16 +67,16 @@ print(response.json())
 </TabItem>
 </Tabs>
 
-## Request Parameters
+## 요청 파라미터 {#request-parameters}
 
-| Parameter | Type | Required | Description |
+| 파라미터 | 타입 | 필수 여부 | 설명 |
 |-----------|------|----------|-------------|
-| `model` | string | Yes | Model to use for compaction |
-| `input` | string or array | Yes | Input messages to compact |
-| `instructions` | string | No | System instructions |
-| `previous_response_id` | string | No | ID of previous response to continue from |
+| `model` | string | 예 | 압축에 사용할 모델 |
+| `input` | string 또는 array | 예 | 압축할 입력 메시지 |
+| `instructions` | string | 아니요 | 시스템 지침 |
+| `previous_response_id` | string | 아니요 | 이어서 처리할 이전 응답의 ID |
 
-## Response Format
+## 응답 형식
 
 ```json
 {
@@ -101,4 +101,3 @@ print(response.json())
   }
 }
 ```
-

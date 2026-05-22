@@ -3,18 +3,18 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Image from '@theme/IdealImage';
 
-# MCP Cost Tracking
+# MCP 비용 추적
 
-LiteLLM provides two ways to track costs for MCP tool calls:
+LiteLLM은 MCP tool call 비용을 추적하는 두 가지 방법을 제공합니다.
 
-| Method | When to Use | What It Does |
+| 방식 | 사용 시점 | 동작 |
 |--------|-------------|--------------|
-| **Config-based Cost Tracking** | Simple cost tracking with fixed costs per tool/server | Automatically tracks costs based on configuration |
-| **Custom Post-MCP Hook** | Dynamic cost tracking with custom logic | Allows custom cost calculations and response modifications |
+| **Config 기반 비용 추적** | tool/server별 고정 비용으로 단순하게 추적할 때 | 설정을 기준으로 비용을 자동 추적 |
+| **Custom Post-MCP Hook** | custom logic으로 동적 비용 추적이 필요할 때 | custom 비용 계산과 응답 수정을 허용 |
 
-### Config-based Cost Tracking
+### Config 기반 비용 추적
 
-Configure fixed costs for MCP servers directly in your config.yaml:
+`config.yaml`에서 MCP 서버별 고정 비용을 직접 설정합니다.
 
 ```yaml title="config.yaml" showLineNumbers
 model_list:
@@ -42,11 +42,11 @@ mcp_servers:
         default_cost_per_query: 1.50
 ```
 
-### Custom Post-MCP Hook
+### `Custom Post-MCP Hook`
 
-Use this when you need dynamic cost calculation or want to modify the MCP response before it's returned to the user.
+동적 비용 계산이 필요하거나 MCP 응답을 사용자에게 반환하기 전에 수정하고 싶을 때 사용합니다.
 
-#### 1. Create a custom MCP hook file
+#### 1. custom MCP hook 파일 생성
 
 ```python title="custom_mcp_hook.py" showLineNumbers
 from typing import Optional
@@ -90,7 +90,7 @@ class CustomMCPCostTracker(CustomLogger):
 custom_mcp_cost_tracker = CustomMCPCostTracker()
 ```
 
-#### 2. Configure in config.yaml
+#### 2. `config.yaml`에서 설정
 
 ```yaml title="config.yaml" showLineNumbers
 model_list:
@@ -108,14 +108,13 @@ mcp_servers:
     url: "https://actions.zapier.com/mcp/sk-xxxxx/sse"
 ```
 
-#### 3. Start the proxy
+#### 3. 프록시 시작
 
 ```shell
 $ litellm --config /path/to/config.yaml 
 ```
 
-When MCP tools are called, your custom hook will:
-1. Calculate costs based on your custom logic
-2. Modify the response if needed
-3. Track costs in LiteLLM's logging system
-
+MCP tool이 호출되면 custom hook은 다음을 수행합니다.
+1. custom logic을 기준으로 비용을 계산합니다.
+2. 필요한 경우 응답을 수정합니다.
+3. LiteLLM logging system에 비용을 기록합니다.

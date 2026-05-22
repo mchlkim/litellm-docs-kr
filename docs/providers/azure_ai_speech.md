@@ -1,20 +1,20 @@
-# Azure AI Speech (Cognitive Services)
+# `Azure AI Speech(Cognitive Services)` 제공자 {#azure-ai-speech-cognitive-services}
 
-Azure AI Speech is Azure's Cognitive Services text-to-speech API, separate from Azure OpenAI. It provides high-quality neural voices with broader language support and advanced speech customization.
+Azure AI Speech는 Azure OpenAI와 별도로 제공되는 Azure Cognitive Services의 텍스트 음성 변환 API입니다. 더 폭넓은 언어 지원과 고급 음성 사용자 지정 기능을 갖춘 고품질 신경망 음성을 제공합니다.
 
-**When to use this vs Azure OpenAI TTS:**
-- **Azure AI Speech** - More languages, neural voices, SSML support, speech customization
-- **Azure OpenAI TTS** - OpenAI models, integrated with Azure OpenAI services
+**Azure OpenAI TTS 대신 이 서비스를 사용할 때:**
+- **Azure AI Speech** - 더 많은 언어, 신경망 음성, SSML 지원, 음성 사용자 지정
+- **Azure OpenAI TTS** - OpenAI 모델, Azure OpenAI 서비스와의 통합
 
 
-## Overview
+## 개요 {#overview}
 
-| Property | Details |
+| 속성 | 세부 정보 |
 |-------|-------|
-| Description | Azure AI Speech is Azure's Cognitive Services text-to-speech API, separate from Azure OpenAI. It provides high-quality neural voices with broader language support and advanced speech customization. |
-| Provider Route on LiteLLM | `azure/speech/` |
+| 설명 | Azure AI Speech는 Azure OpenAI와 별도로 제공되는 Azure Cognitive Services의 텍스트 음성 변환 API입니다. 더 폭넓은 언어 지원과 고급 음성 사용자 지정 기능을 갖춘 고품질 신경망 음성을 제공합니다. |
+| LiteLLM Provider 경로 | `azure/speech/` |
 
-## Quick Start
+## 빠른 시작 {#quick-start}
 
 **LiteLLM SDK**
 
@@ -47,30 +47,30 @@ model_list:
       api_key: os.environ/AZURE_TTS_API_KEY
 ```
 
-## Setup
+## 설정 {#setup}
 
-1. Create an Azure Cognitive Services resource in the [Azure Portal](https://portal.azure.com)
-2. Get your API key from the resource
-3. Note your region (e.g., `eastus`, `westus`, `westeurope`)
-4. Use the regional endpoint: `https://{region}.tts.speech.microsoft.com`
+1. [Azure Portal](https://portal.azure.com)에서 Azure Cognitive Services 리소스를 만듭니다.
+2. 리소스에서 API 키를 가져옵니다.
+3. 리전 값을 확인합니다. 예: `eastus`, `westus`, `westeurope`
+4. 리전별 엔드포인트를 사용합니다: `https://{region}.tts.speech.microsoft.com`
 
-## Cost Tracking (Pricing)
+## 비용 추적(가격) {#cost-tracking-pricing}
 
-LiteLLM automatically tracks costs for Azure AI Speech based on the number of characters processed.
+LiteLLM은 처리된 문자 수를 기준으로 Azure AI Speech 비용을 자동으로 추적합니다.
 
-### Available Models
+### 사용 가능한 모델 {#available-models}
 
-| Model | Voice Type | Cost per 1M Characters |
+| 모델 | 음성 유형 | 100만 자당 비용 |
 |-------|-----------|----------------------|
 | `azure/speech/azure-tts` | Neural | $15 |
 | `azure/speech/azure-tts-hd` | Neural HD | $30 |
 
-### How Costs are Calculated
+### 비용 계산 방식 {#how-cost-calculation-works}
 
-Azure AI Speech charges based on the number of characters in your input text. LiteLLM automatically:
-- Counts the number of characters in your `input` parameter
-- Calculates the cost based on the model pricing
-- Returns the cost in the response object
+Azure AI Speech는 입력 텍스트의 문자 수를 기준으로 과금합니다. LiteLLM은 자동으로 다음을 수행합니다.
+- `input` 파라미터의 문자 수를 계산합니다.
+- 모델 가격을 기준으로 비용을 계산합니다.
+- 응답 객체에 비용을 반환합니다.
 
 ```python showLineNumbers title="View Request Cost"
 from litellm import speech
@@ -88,32 +88,32 @@ cost = response._hidden_params.get("response_cost")
 print(f"Request cost: ${cost}")
 ```
 
-### Verify Azure Pricing
+### Azure 가격 확인 {#checking-azure-pricing}
 
-To check the latest Azure AI Speech pricing:
+최신 Azure AI Speech 가격을 확인하려면:
 
-1. Visit the [Azure Pricing Calculator](https://azure.microsoft.com/en-us/pricing/calculator/)
-2. Set **Service** to "AI Services"
-3. Set **API** to "Azure AI Speech"
-4. Select **Text to Speech** and your region
-5. View the current pricing per million characters
+1. [Azure Pricing Calculator](https://azure.microsoft.com/en-us/pricing/calculator/)로 이동합니다.
+2. **Service**를 "AI Services"로 설정합니다.
+3. **API**를 "Azure AI Speech"로 설정합니다.
+4. **Text to Speech**와 리전을 선택합니다.
+5. 현재 100만 자당 가격을 확인합니다.
 
-**Note:** Pricing may vary by region and Azure subscription type.
+**참고:** 가격은 리전과 Azure 구독 유형에 따라 달라질 수 있습니다.
 
-## Voice Mapping
+## 음성 매핑 {#voice-mapping}
 
-LiteLLM automatically maps OpenAI voice names to Azure Neural voices:
+LiteLLM은 OpenAI 음성 이름을 Azure Neural 음성에 자동으로 매핑합니다.
 
-| OpenAI Voice | Azure Neural Voice | Description |
+| OpenAI 음성 | Azure Neural 음성 | 설명 |
 |-------------|-------------------|-------------|
-| `alloy` | en-US-JennyNeural | Neutral and balanced |
-| `echo` | en-US-GuyNeural | Warm and upbeat |
-| `fable` | en-GB-RyanNeural | Expressive and dramatic |
-| `onyx` | en-US-DavisNeural | Deep and authoritative |
-| `nova` | en-US-AmberNeural | Friendly and conversational |
-| `shimmer` | en-US-AriaNeural | Bright and cheerful |
+| `alloy` | en-US-JennyNeural | 중립적이고 균형 잡힌 음성 |
+| `echo` | en-US-GuyNeural | 따뜻하고 경쾌한 음성 |
+| `fable` | en-GB-RyanNeural | 표현력이 풍부하고 극적인 음성 |
+| `onyx` | en-US-DavisNeural | 깊이 있고 권위적인 음성 |
+| `nova` | en-US-AmberNeural | 친근하고 대화체에 가까운 음성 |
+| `shimmer` | en-US-AriaNeural | 밝고 명랑한 음성 |
 
-## Supported Parameters
+## 지원 파라미터 {#supported-parameters}
 
 ```python showLineNumbers title="All Parameters"
 response = speech(
@@ -127,25 +127,25 @@ response = speech(
 )
 ```
 
-### Response Formats
+### 응답 형식 {#response-formats}
 
-| Format | Azure Output Format | Sample Rate |
+| 형식 | Azure 출력 형식 | 샘플 레이트 |
 |--------|-------------------|-------------|
-| `mp3` | audio-24khz-48kbitrate-mono-mp3 | 24kHz |
-| `opus` | ogg-48khz-16bit-mono-opus | 48kHz |
-| `wav` | riff-24khz-16bit-mono-pcm | 24kHz |
-| `pcm` | raw-24khz-16bit-mono-pcm | 24kHz |
+| `mp3` | `audio-24khz-48kbitrate-mono-mp3` | 24kHz |
+| `opus` | `ogg-48khz-16bit-mono-opus` | 48kHz |
+| `wav` | `riff-24khz-16bit-mono-pcm` | 24kHz |
+| `pcm` | `raw-24khz-16bit-mono-pcm` | 24kHz |
 
-## Passing Raw SSML
+## 원시 SSML 전달 {#raw-ssml-passthrough}
 
-LiteLLM automatically detects when your `input` contains SSML (by checking for `<speak>` tags) and passes it through to Azure without any transformation. This gives you complete control over speech synthesis.
+LiteLLM은 `input`에 SSML이 포함되어 있는지(`<speak>` 태그 확인) 자동으로 감지하고, 변환 없이 그대로 Azure에 전달합니다. 이를 통해 음성 합성을 완전히 제어할 수 있습니다.
 
-**When to use raw SSML:**
-- Using the `<lang>` element with multilingual voices to translate text (e.g., English text → Spanish speech)
-- Complex SSML structures with multiple voices or prosody changes
-- Fine-grained control over pronunciation, breaks, emphasis, and other speech features
+**원시 SSML을 사용할 때:**
+- 다국어 음성과 함께 `<lang>` 요소를 사용해 텍스트를 변환할 때. 예: 영어 텍스트 → 스페인어 음성
+- 여러 음성 또는 운율 변경을 포함하는 복잡한 SSML 구조가 필요할 때
+- 발음, 휴지, 강조 및 기타 음성 기능을 세밀하게 제어해야 할 때
 
-### LiteLLM SDK
+### LiteLLM SDK {#litellm-sdk}
 
 ```python showLineNumbers title="Raw SSML for Multilingual Translation"
 from litellm import speech
@@ -204,7 +204,7 @@ response = speech(
 response.stream_to_file("speech.mp3")
 ```
 
-### LiteLLM Proxy
+### LiteLLM Proxy {#litellm-proxy}
 
 ```bash
 curl http://0.0.0.0:4000/v1/audio/speech \
@@ -219,18 +219,18 @@ curl http://0.0.0.0:4000/v1/audio/speech \
 ```
 
 
-## Sending Azure-Specific Params
+## Azure 전용 파라미터 보내기 {#sending-azure-specific-parameters}
 
-Azure AI Speech supports advanced SSML features through optional parameters:
+Azure AI Speech는 선택적 파라미터를 통해 고급 SSML 기능을 지원합니다.
 
-- `style`: Speaking style (e.g., "cheerful", "sad", "angry", "whispering")
-- `styledegree`: Style intensity (0.01 to 2)
-- `role`: Voice role (e.g., "Girl", "Boy", "SeniorFemale", "SeniorMale")
-- `lang`: Language code for multilingual voices (e.g., "es-ES", "fr-FR", "hi-IN")
+- `style`: 말하기 스타일. 예: "cheerful", "sad", "angry", "whispering"
+- `styledegree`: 스타일 강도(0.01~2)
+- `role`: 음성 역할. 예: "Girl", "Boy", "SeniorFemale", "SeniorMale"
+- `lang`: 다국어 음성용 언어 코드. 예: "es-ES", "fr-FR", "hi-IN"
 
-### **LiteLLM SDK**
+### **LiteLLM SDK** {#litellm-sdk-1}
 
-#### Custom Azure Voice
+#### 사용자 지정 Azure 음성 {#custom-azure-voice}
 
 ```python showLineNumbers title="Custom Azure Voice"
 from litellm import speech
@@ -246,7 +246,7 @@ response = speech(
 response.stream_to_file("speech.mp3")
 ```
 
-#### Speaking Style
+#### 말하기 스타일 {#speaking-style}
 
 ```python showLineNumbers title="Speaking Style"
 from litellm import speech
@@ -262,7 +262,7 @@ response = speech(
 response.stream_to_file("speech.mp3")
 ```
 
-#### Style with Degree and Role
+#### 강도와 역할이 포함된 스타일 {#style-with-degree-and-role}
 
 ```python showLineNumbers title="Style with Degree and Role"
 from litellm import speech
@@ -280,7 +280,7 @@ response = speech(
 response.stream_to_file("speech.mp3")
 ```
 
-#### Language Override for Multilingual Voices
+#### 다국어 음성의 언어 재정의 {#language-override-for-multilingual-voices}
 
 ```python showLineNumbers title="Language Override"
 from litellm import speech
@@ -296,11 +296,11 @@ response = speech(
 response.stream_to_file("speech.mp3")
 ```
 
-### **LiteLLM AI Gateway (CURL)**
+### **`LiteLLM AI Gateway(CURL)` 사용법** {#litellm-ai-gateway-curl}
 
-First, ensure you have set up your proxy config as shown in the [LiteLLM Proxy setup](#quick-start) above.
+먼저 위의 [LiteLLM Proxy 설정](#quick-start)에 표시된 대로 프록시 설정을 완료했는지 확인합니다.
 
-**Using the model name from your config:**
+**설정의 모델 이름 사용:**
 
 ```yaml
 model_list:
@@ -311,7 +311,7 @@ model_list:
       api_key: os.environ/AZURE_TTS_API_KEY
 ```
 
-#### Custom Azure Voice
+#### 사용자 지정 Azure 음성 {#custom-azure-voice-1}
 
 ```bash
 curl http://0.0.0.0:4000/v1/audio/speech \
@@ -325,7 +325,7 @@ curl http://0.0.0.0:4000/v1/audio/speech \
   --output speech.mp3
 ```
 
-#### Speaking Style
+#### 말하기 스타일 {#speaking-style-1}
 
 ```bash
 curl http://0.0.0.0:4000/v1/audio/speech \
@@ -340,7 +340,7 @@ curl http://0.0.0.0:4000/v1/audio/speech \
   --output speech.mp3
 ```
 
-#### Style with Degree and Role
+#### 강도와 역할이 포함된 스타일 {#style-with-degree-and-role-1}
 
 ```bash
 curl http://0.0.0.0:4000/v1/audio/speech \
@@ -357,7 +357,7 @@ curl http://0.0.0.0:4000/v1/audio/speech \
   --output speech.mp3
 ```
 
-#### Language Override
+#### 언어 재정의 {#language-override}
 
 ```bash
 curl http://0.0.0.0:4000/v1/audio/speech \
@@ -372,16 +372,16 @@ curl http://0.0.0.0:4000/v1/audio/speech \
   --output speech.mp3
 ```
 
-### Azure-Specific Parameters Reference
+### Azure 전용 파라미터 참조 {#azure-specific-parameters-reference}
 
-| Parameter | Description | Example Values | Notes |
+| 파라미터 | 설명 | 예시 값 | 참고 |
 |-----------|-------------|----------------|-------|
-| `style` | Speaking style | `cheerful`, `sad`, `angry`, `excited`, `friendly`, `hopeful`, `shouting`, `terrified`, `unfriendly`, `whispering` | Only supported by certain voices. See [Azure voice styles documentation](https://learn.microsoft.com/en-us/azure/ai-services/speech-service/speech-synthesis-markup-voice#use-speaking-styles-and-roles) |
-| `styledegree` | Style intensity | `0.01` to `2` | Higher values = more intense. Default is `1` |
-| `role` | Voice role | `Girl`, `Boy`, `YoungAdultFemale`, `YoungAdultMale`, `OlderAdultFemale`, `OlderAdultMale`, `SeniorFemale`, `SeniorMale` | Only supported by certain voices |
-| `lang` | Language code | `es-ES`, `fr-FR`, `de-DE`, `hi-IN`, etc. | For multilingual voices. Overrides the default language |
+| `style` | 말하기 스타일 | `cheerful`, `sad`, `angry`, `excited`, `friendly`, `hopeful`, `shouting`, `terrified`, `unfriendly`, `whispering` | 일부 음성에서만 지원됩니다. [Azure 음성 스타일 문서](https://learn.microsoft.com/en-us/azure/ai-services/speech-service/speech-synthesis-markup-voice#use-speaking-styles-and-roles)를 참고하세요. |
+| `styledegree` | 스타일 강도 | `0.01`~`2` | 값이 높을수록 강도가 커집니다. 기본값은 `1`입니다. |
+| `role` | 음성 역할 | `Girl`, `Boy`, `YoungAdultFemale`, `YoungAdultMale`, `OlderAdultFemale`, `OlderAdultMale`, `SeniorFemale`, `SeniorMale` | 일부 음성에서만 지원됩니다. |
+| `lang` | 언어 코드 | `es-ES`, `fr-FR`, `de-DE`, `hi-IN` 등 | 다국어 음성에 사용합니다. 기본 언어를 재정의합니다. |
 
-## Async Support
+## 비동기 지원 {#async-support}
 
 ```python showLineNumbers title="Async Usage"
 import asyncio
@@ -403,22 +403,22 @@ async def generate_speech():
 asyncio.run(generate_speech())
 ```
 
-## Regional Endpoints
+## 리전별 엔드포인트 {#regional-endpoints}
 
-Replace `{region}` with your Azure resource region:
+`{region}`을 Azure 리소스 리전으로 바꿉니다.
 
-- US East: `https://eastus.tts.speech.microsoft.com`
-- US West: `https://westus.tts.speech.microsoft.com`
-- Europe West: `https://westeurope.tts.speech.microsoft.com`
-- Asia Southeast: `https://southeastasia.tts.speech.microsoft.com`
+- 미국 동부: `https://eastus.tts.speech.microsoft.com`
+- 미국 서부: `https://westus.tts.speech.microsoft.com`
+- 서유럽: `https://westeurope.tts.speech.microsoft.com`
+- 동남아시아: `https://southeastasia.tts.speech.microsoft.com`
 
-[Full list of regions](https://learn.microsoft.com/en-us/azure/ai-services/speech-service/regions)
+[전체 리전 목록](https://learn.microsoft.com/en-us/azure/ai-services/speech-service/regions)
 
-## Advanced Features
+## 고급 기능 {#advanced-features}
 
-### Custom Neural Voices
+### 사용자 지정 Neural 음성 {#custom-neural-voices}
 
-You can use any Azure Neural voice by passing the full voice name:
+전체 음성 이름을 전달하면 원하는 Azure Neural 음성을 사용할 수 있습니다.
 
 ```python showLineNumbers title="Custom Voice"
 response = speech(
@@ -430,9 +430,9 @@ response = speech(
 )
 ```
 
-Browse available voices in the [Azure Speech Gallery](https://speech.microsoft.com/portal/voicegallery).
+[Azure Speech Gallery](https://speech.microsoft.com/portal/voicegallery)에서 사용 가능한 음성을 찾아볼 수 있습니다.
 
-## Error Handling
+## 오류 처리 {#error-handling}
 
 ```python showLineNumbers title="Error Handling"
 from litellm import speech
@@ -450,8 +450,7 @@ except APIError as e:
     print(f"Azure Speech error: {e}")
 ```
 
-## Reference
+## 참고 자료 {#resources}
 
-- [Azure Speech Service Documentation](https://learn.microsoft.com/en-us/azure/ai-services/speech-service/)
+- [Azure Speech Service 문서](https://learn.microsoft.com/en-us/azure/ai-services/speech-service/)
 - [Text-to-Speech REST API](https://learn.microsoft.com/en-us/azure/ai-services/speech-service/rest-text-to-speech)
-

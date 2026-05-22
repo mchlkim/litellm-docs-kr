@@ -1,31 +1,31 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Nvidia Riva (Speech-to-Text)
+# Nvidia Riva (음성 텍스트 변환)
 
-LiteLLM supports NVIDIA Riva for speech-to-text via `/audio/transcriptions`. Works with both the **NVCF-hosted** Riva endpoint (e.g. Parakeet on `build.nvidia.com`) and **self-hosted** Riva deployments.
+LiteLLM은 `/audio/transcriptions`를 통해 NVIDIA Riva 음성 텍스트 변환을 지원합니다. **NVCF 호스팅** Riva 엔드포인트(예: `build.nvidia.com`의 Parakeet)와 **셀프 호스팅** Riva 배포 모두에서 작동합니다.
 
-| Property | Details |
+| 속성 | 세부 정보 |
 |-------|-------|
-| Description | Riva is NVIDIA's GPU-accelerated speech AI. LiteLLM streams the audio to Riva over gRPC and returns OpenAI-compatible transcripts. |
-| Provider Route on LiteLLM | `nvidia_riva/` |
-| Provider Doc | [Riva ASR docs ↗](https://docs.nvidia.com/deeplearning/riva/user-guide/docs/asr/asr-overview.html) |
-| Transport | gRPC (not HTTP) |
-| Supported OpenAI Endpoints | `/audio/transcriptions` |
+| 설명 | Riva는 NVIDIA의 GPU 가속 음성 AI입니다. LiteLLM은 gRPC를 통해 오디오를 Riva로 스트리밍하고 OpenAI 호환 전사 결과를 반환합니다. |
+| LiteLLM의 공급자 라우트 | `nvidia_riva/` |
+| 공급자 문서 | [Riva ASR 문서 ↗](https://docs.nvidia.com/deeplearning/riva/user-guide/docs/asr/asr-overview.html) |
+| 전송 방식 | gRPC(HTTP 아님) |
+| 지원되는 OpenAI 엔드포인트 | `/audio/transcriptions` |
 
-:::info Optional install
+:::info 선택적 설치
 
-`nvidia_riva` requires the gRPC client and audio decoding libraries. Install them with:
+`nvidia_riva`에는 gRPC 클라이언트와 오디오 디코딩 라이브러리가 필요합니다. 다음 명령으로 설치하세요.
 
 ```bash
 pip install 'litellm[stt-nvidia-riva]'
 ```
 
-This pulls in `nvidia-riva-client`, `soundfile`, `audioread`, and `numpy`. They are imported lazily so the rest of LiteLLM keeps working without them.
+이 명령은 `nvidia-riva-client`, `soundfile`, `audioread`, `numpy`를 함께 설치합니다. 이 패키지들은 지연 로드되므로, 설치되어 있지 않아도 LiteLLM의 나머지 기능은 계속 작동합니다.
 
 :::
 
-## Quick Start
+## 빠른 시작
 
 ```python
 from litellm import transcription
@@ -45,13 +45,13 @@ response = transcription(
 print(response.text)
 ```
 
-LiteLLM resamples the audio to 16 kHz mono LINEAR_PCM (Riva's required wire format) before streaming, so you can send mp3 / wav / flac / ogg directly. No need to preprocess.
+LiteLLM은 스트리밍 전에 오디오를 16 kHz 모노 LINEAR_PCM(Riva가 요구하는 전송 형식)으로 리샘플링하므로 mp3 / wav / flac / ogg를 바로 보낼 수 있습니다. 별도 전처리는 필요하지 않습니다.
 
-## Deployment modes
+## 배포 모드
 
-Riva runs in two very different shapes. The presence of `nvcf_function_id` is the signal LiteLLM uses to default `use_ssl`, but you can always override it.
+Riva는 서로 매우 다른 두 가지 형태로 실행됩니다. LiteLLM은 `nvcf_function_id` 존재 여부를 기준으로 `use_ssl` 기본값을 정하지만, 언제든 직접 재정의할 수 있습니다.
 
-### NVCF (NVIDIA-hosted)
+### NVCF(NVIDIA 호스팅)
 
 ```yaml
 model_list:
@@ -63,12 +63,12 @@ model_list:
       nvcf_function_id: 1598d209-5e27-4d3c-8079-4751568b1081
 ```
 
-When `nvcf_function_id` is set, LiteLLM:
-- enables TLS (`use_ssl=True`)
-- attaches the `function-id` gRPC metadata
-- attaches `authorization: Bearer <api_key>`
+`nvcf_function_id`가 설정되면 LiteLLM은 다음을 수행합니다.
+- TLS를 활성화합니다(`use_ssl=True`).
+- `function-id` gRPC 메타데이터를 첨부합니다.
+- `authorization: Bearer <api_key>`를 첨부합니다.
 
-### Self-hosted (no TLS)
+### 셀프 호스팅(TLS 없음)
 
 ```yaml
 model_list:
@@ -78,7 +78,7 @@ model_list:
       api_base: localhost:50051
 ```
 
-### Self-hosted behind an ingress with TLS
+### TLS ingress 뒤의 셀프 호스팅
 
 ```yaml
 model_list:
@@ -89,9 +89,9 @@ model_list:
       use_ssl: true
 ```
 
-## LiteLLM Proxy Usage
+## LiteLLM Proxy 사용법
 
-### 1. Add the model to your config
+### 1. 구성에 모델 추가
 
 ```yaml
 model_list:
@@ -108,7 +108,7 @@ general_settings:
   master_key: sk-1234
 ```
 
-### 2. Start the proxy
+### 2. 프록시 시작
 
 ```bash
 litellm --config /path/to/config.yaml
@@ -116,7 +116,7 @@ litellm --config /path/to/config.yaml
 # RUNNING on http://0.0.0.0:4000
 ```
 
-### 3. Send a request
+### 3. 요청 보내기
 
 <Tabs>
 <TabItem value="curl" label="curl">
@@ -150,51 +150,51 @@ print(transcript.text)
 </TabItem>
 </Tabs>
 
-## Supported parameters
+## 지원되는 매개변수
 
-OpenAI parameters that map cleanly to Riva:
+Riva에 명확하게 매핑되는 OpenAI 매개변수:
 
-| OpenAI param | Behavior |
+| OpenAI 매개변수 | 동작 |
 |---|---|
-| `language` | Mapped to Riva `language_code`. Bare codes like `en` are normalized to `en-US`. BCP-47 codes like `de-DE` pass through. |
-| `response_format` | `json` (default) returns `{ "text": "..." }`. `verbose_json` adds `duration` and `words` (timestamps in seconds). |
-| `timestamp_granularities` | Pass `["word"]` to enable word-level timestamps. |
+| `language` | Riva `language_code`에 매핑됩니다. `en` 같은 단순 코드는 `en-US`로 정규화됩니다. `de-DE` 같은 BCP-47 코드는 그대로 전달됩니다. |
+| `response_format` | `json`(기본값)은 `{ "text": "..." }`를 반환합니다. `verbose_json`은 `duration`과 `words`(초 단위 타임스탬프)를 추가합니다. |
+| `timestamp_granularities` | 단어 수준 타임스탬프를 활성화하려면 `["word"]`를 전달하세요. |
 
-Riva-specific parameters you can set in `litellm_params` (or pass directly to `transcription(...)`):
+`litellm_params`에 설정하거나 `transcription(...)`에 직접 전달할 수 있는 Riva 전용 매개변수:
 
-| Param | Default | Purpose |
+| 매개변수 | 기본값 | 목적 |
 |---|---|---|
-| `nvcf_function_id` | unset | NVCF function id. When set, defaults `use_ssl=True` and attaches NVCF metadata. |
-| `use_ssl` | `True` if `nvcf_function_id` is set, else `False` | Force TLS on or off. Useful for self-hosted Riva behind a TLS ingress. |
-| `riva_model_name` | `""` (auto-select) | Override the internal Riva model name. Leaving it empty lets Riva pick based on `language_code` + `sample_rate_hertz`. Recommended unless you know exactly what you want. |
-| `enable_automatic_punctuation` | `True` | Standard Riva flag. |
-| `endpointing_config` | unset | Pass a dict that mirrors Riva's `EndpointingConfig` (`start_threshold`, `stop_threshold`, `stop_history`, `stop_history_eou`, ...). |
-| `chunking_strategy` | unset | OpenAI-style VAD config (`{"type": "server_vad", "threshold": 0.5, "silence_duration_ms": 700, "prefix_padding_ms": 250}`). LiteLLM translates it to Riva's `EndpointingConfig`. |
+| `nvcf_function_id` | 미설정 | NVCF function id입니다. 설정하면 기본값으로 `use_ssl=True`가 적용되고 NVCF 메타데이터가 첨부됩니다. |
+| `use_ssl` | `nvcf_function_id`가 설정되어 있으면 `True`, 아니면 `False` | TLS 사용 여부를 강제합니다. TLS ingress 뒤의 셀프 호스팅 Riva에 유용합니다. |
+| `riva_model_name` | `""`(자동 선택) | 내부 Riva 모델 이름을 재정의합니다. 비워 두면 Riva가 `language_code` + `sample_rate_hertz`를 기준으로 선택합니다. 정확히 원하는 모델을 알고 있는 경우가 아니라면 권장됩니다. |
+| `enable_automatic_punctuation` | `True` | 표준 Riva 플래그입니다. |
+| `endpointing_config` | 미설정 | Riva의 `EndpointingConfig`(`start_threshold`, `stop_threshold`, `stop_history`, `stop_history_eou`, ...)와 같은 구조의 dict를 전달합니다. |
+| `chunking_strategy` | 미설정 | OpenAI 스타일 VAD 구성(`{"type": "server_vad", "threshold": 0.5, "silence_duration_ms": 700, "prefix_padding_ms": 250}`)입니다. LiteLLM이 이를 Riva의 `EndpointingConfig`로 변환합니다. |
 
-### Why is `riva_model_name` empty by default?
+### `riva_model_name`이 기본적으로 비어 있는 이유
 
-Internal Riva deployment names like `parakeet-1.1b-en-US-asr-streaming-silero-vad-sortformer` are NVIDIA's deployment identifiers. They change across NIM versions, regions, and self-hosted builds. Leaving `model=""` in `RecognitionConfig` lets Riva auto-select the right one based on `language_code` and `sample_rate_hertz` — which is what you almost always want. Only set `riva_model_name` if you have a specific deployed model you need to pin.
+`parakeet-1.1b-en-US-asr-streaming-silero-vad-sortformer` 같은 내부 Riva 배포 이름은 NVIDIA의 배포 식별자입니다. 이러한 이름은 NIM 버전, 리전, 셀프 호스팅 빌드에 따라 달라집니다. `RecognitionConfig`에서 `model=""`로 두면 Riva가 `language_code`와 `sample_rate_hertz`를 기준으로 적절한 모델을 자동 선택하며, 대부분의 경우 이 동작이 적합합니다. 고정해야 하는 특정 배포 모델이 있을 때만 `riva_model_name`을 설정하세요.
 
-## Audio formats
+## 오디오 형식
 
-LiteLLM decodes inbound audio with `soundfile` (wav / flac / ogg) and falls back to `audioread` for `mp3` / `m4a` / `mp4` / `webm`. Audio is then resampled to 16 kHz mono LINEAR_PCM before streaming to Riva.
+LiteLLM은 수신 오디오를 `soundfile`(wav / flac / ogg)로 디코딩하고, `mp3` / `m4a` / `mp4` / `webm`에는 `audioread`를 폴백으로 사용합니다. 그런 다음 Riva로 스트리밍하기 전에 오디오를 16 kHz 모노 LINEAR_PCM으로 리샘플링합니다.
 
-If decoding fails (e.g. exotic codecs, DRM, or `audioread` not installed), LiteLLM raises a clear error asking you to convert upstream:
+디코딩에 실패하면(예: 특수 코덱, DRM 또는 `audioread` 미설치) LiteLLM은 업스트림에서 변환하라는 명확한 오류를 발생시킵니다.
 
 ```bash
 ffmpeg -i input.mp3 -ac 1 -ar 16000 -sample_fmt s16 output.wav
 ```
 
-## Environment variables
+## 환경 변수
 
-| Variable | Purpose |
+| 변수 | 목적 |
 |---|---|
-| `NVIDIA_RIVA_API_KEY` | API key sent as `authorization: Bearer ...`. NVCF expects `nvapi-...`. |
-| `NVIDIA_RIVA_API_BASE` | Default `host:port` for the gRPC endpoint. Same effect as setting `api_base` in `litellm_params`. |
-| `NVIDIA_NIM_API_KEY` | Used as a fallback for `NVIDIA_RIVA_API_KEY` since most users reuse the same `nvapi-...` key across NVCF services. |
+| `NVIDIA_RIVA_API_KEY` | `authorization: Bearer ...`로 전송되는 API 키입니다. NVCF는 `nvapi-...`를 기대합니다. |
+| `NVIDIA_RIVA_API_BASE` | gRPC 엔드포인트의 기본 `host:port`입니다. `litellm_params`에서 `api_base`를 설정하는 것과 같은 효과입니다. |
+| `NVIDIA_NIM_API_KEY` | 대부분의 사용자가 NVCF 서비스 전반에서 동일한 `nvapi-...` 키를 재사용하므로 `NVIDIA_RIVA_API_KEY`의 폴백으로 사용됩니다. |
 
-## Notes & limitations
+## 참고 및 제한 사항
 
-- Transport is gRPC streaming. NVCF only supports streaming ASR today, so even short files are sent as a stream.
-- Diarization (`diarization_config`) and `srt` / `vtt` response formats aren't wired up yet — open an issue if you need them.
-- Cost calc: Riva doesn't return token usage. LiteLLM stores the audio duration on `_hidden_params["audio_transcription_duration"]` so cost can be derived externally.
+- 전송 방식은 gRPC 스트리밍입니다. 현재 NVCF는 스트리밍 ASR만 지원하므로 짧은 파일도 스트림으로 전송됩니다.
+- 화자 분리(`diarization_config`)와 `srt` / `vtt` 응답 형식은 아직 연결되어 있지 않습니다. 필요하면 이슈를 열어 주세요.
+- 비용 계산: Riva는 토큰 사용량을 반환하지 않습니다. LiteLLM은 외부에서 비용을 산출할 수 있도록 오디오 길이를 `_hidden_params["audio_transcription_duration"]`에 저장합니다.

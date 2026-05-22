@@ -2,12 +2,12 @@ import Image from '@theme/IdealImage';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Evaluate LLMs - MLflow Evals, Auto Eval
+# LLM 평가 - MLflow Evals, Auto Eval {#evaluate-llms-mlflow-evals-auto-eval}
 
-## Using LiteLLM with MLflow
-MLflow provides an API `mlflow.evaluate()` to help evaluate your LLMs https://mlflow.org/docs/latest/llms/llm-evaluate/index.html
+## MLflow와 LiteLLM 사용하기 {#using-litellm-with-mlflow}
+MLflow는 LLM 평가를 돕는 API `mlflow.evaluate()`를 제공합니다. https://mlflow.org/docs/latest/llms/llm-evaluate/index.html
 
-### Pre Requisites
+### 사전 요구 사항 {#pre-requisites}
 ```shell
 uv add litellm
 ```
@@ -16,8 +16,8 @@ uv add mlflow
 ```
 
 
-### Step 1: Start LiteLLM Proxy on the CLI
-LiteLLM allows you to create an OpenAI compatible server for all supported LLMs. [More information on litellm proxy here](https://docs.litellm.ai/docs/simple_proxy)
+### 1단계: CLI에서 LiteLLM Proxy 시작하기 {#step-1-start-litellm-proxy-on-the-cli}
+LiteLLM을 사용하면 지원되는 모든 LLM에 대해 OpenAI 호환 서버를 만들 수 있습니다. [litellm 프록시에 대한 자세한 정보는 여기에서 확인하세요](https://docs.litellm.ai/docs/simple_proxy)
 
 ```shell
 $ litellm --model huggingface/bigcode/starcoder
@@ -25,7 +25,7 @@ $ litellm --model huggingface/bigcode/starcoder
 #INFO: Proxy running on http://0.0.0.0:8000
 ```
 
-**Here's how you can create the proxy for other supported llms**
+**지원되는 다른 LLM용 프록시를 만드는 방법은 다음과 같습니다**
 <Tabs>
 <TabItem value="bedrock" label="Bedrock">
 
@@ -60,7 +60,7 @@ $ litellm --model claude-instant-1
 
 </TabItem>
 <TabItem value="vllm-local" label="VLLM">
-Assuming you're running vllm locally
+vllm을 로컬에서 실행 중이라고 가정합니다
 
 ```shell
 $ litellm --model vllm/facebook/opt-125m
@@ -153,8 +153,8 @@ $ litellm --model command-nightly
 </Tabs>
 
 
-### Step 2: Run MLflow
-Before running the eval we will set `openai.api_base` to the litellm proxy from Step 1
+### 2단계: MLflow 실행하기 {#step-2-run-mlflow}
+평가를 실행하기 전에 `openai.api_base`를 1단계의 litellm 프록시로 설정합니다
 
 ```python
 openai.api_base = "http://0.0.0.0:8000"
@@ -209,7 +209,7 @@ with mlflow.start_run() as run:
 
 ```
 
-### MLflow Output
+### MLflow 출력 {#mlflow-output}
 ```
 {'toxicity/v1/mean': 0.00014476531214313582, 'toxicity/v1/variance': 2.5759661361262862e-12, 'toxicity/v1/p90': 0.00014604929747292773, 'toxicity/v1/ratio': 0.0, 'exact_match/v1': 0.0}
 Downloading artifacts: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 1890.18it/s]
@@ -220,11 +220,11 @@ See evaluation table below:
 ```
 
 
-## Using LiteLLM with AutoEval
-AutoEvals is a tool for quickly and easily evaluating AI model outputs using best practices.
+## AutoEval과 LiteLLM 사용하기 {#using-litellm-with-autoeval}
+AutoEvals는 모범 사례를 사용해 AI 모델 출력을 빠르고 쉽게 평가하는 도구입니다.
 https://github.com/braintrustdata/autoevals
 
-### Pre Requisites
+### 사전 요구 사항 {#pre-requisites-1}
 ```shell
 uv add litellm
 ```
@@ -232,12 +232,12 @@ uv add litellm
 uv add autoevals
 ```
 
-### Quick Start
-In this code sample we use the `Factuality()` evaluator from `autoevals.llm` to test whether an output is factual, compared to an original (expected) value.
+### 빠른 시작 {#quick-start}
+이 코드 샘플에서는 `autoevals.llm`의 `Factuality()` 평가기를 사용해 출력이 원본(예상) 값과 비교했을 때 사실에 부합하는지 테스트합니다.
 
-**Autoevals uses gpt-3.5-turbo / gpt-4-turbo by default to evaluate responses**
+**AutoEvals는 기본적으로 gpt-3.5-turbo / gpt-4-turbo를 사용해 응답을 평가합니다**
 
-See autoevals docs on the [supported evaluators](https://www.braintrustdata.com/docs/autoevals/python#autoevalsllm) - Translation, Summary, Security Evaluators etc
+[지원되는 평가기](https://www.braintrustdata.com/docs/autoevals/python#autoevalsllm)에 대한 AutoEvals 문서를 참조하세요 - Translation, Summary, Security Evaluators 등
 
 ```python
 # auto evals imports 
@@ -268,7 +268,7 @@ result = evaluator(
 print(result)
 ```
 
-#### Output of Evaluation - from AutoEvals
+#### 평가 출력 - AutoEvals 기준 {#output-of-evaluation-from-autoevals}
 ```shell
 Score(
     name='Factuality', 
@@ -280,8 +280,6 @@ Score(
     error=None
 )
 ```
-
-
 
 
 

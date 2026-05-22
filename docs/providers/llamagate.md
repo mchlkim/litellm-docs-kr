@@ -1,40 +1,40 @@
 # LlamaGate
 
-## Overview
+## 개요
 
-| Property | Details |
+| 속성 | 세부 정보 |
 |-------|-------|
-| Description | LlamaGate is an OpenAI-compatible API gateway for open-source LLMs with credit-based billing. Access 26+ open-source models including Llama, Mistral, DeepSeek, and Qwen at competitive prices. |
-| Provider Route on LiteLLM | `llamagate/` |
-| Link to Provider Doc | [LlamaGate Documentation ↗](https://llamagate.dev/docs) |
-| Base URL | `https://api.llamagate.dev/v1` |
-| Supported Operations | [`/chat/completions`](#sample-usage), [`/embeddings`](#embeddings) |
+| 설명 | LlamaGate는 크레딧 기반 과금이 적용되는 오픈 소스 LLM용 OpenAI 호환 API 게이트웨이입니다. Llama, Mistral, DeepSeek, Qwen을 포함한 26개 이상의 오픈 소스 모델을 경쟁력 있는 가격으로 사용할 수 있습니다. |
+| LiteLLM의 공급자 라우트 | `llamagate/` |
+| 공급자 문서 링크 | [LlamaGate 문서 ↗](https://llamagate.dev/docs) |
+| 기본 URL | `https://api.llamagate.dev/v1` |
+| 지원 작업 | [`/chat/completions`](#sample-usage), [`/embeddings`](#embeddings) |
 
 <br />
 
-## What is LlamaGate?
+## LlamaGate란 무엇인가요?
 
-LlamaGate provides access to open-source LLMs through an OpenAI-compatible API:
-- **26+ Open-Source Models**: Llama 3.1/3.2, Mistral, Qwen, DeepSeek R1, and more
-- **OpenAI-Compatible API**: Drop-in replacement for OpenAI SDK
-- **Vision Models**: Qwen VL, LLaVA, olmOCR, UI-TARS for multimodal tasks
-- **Reasoning Models**: DeepSeek R1, OpenThinker for complex problem-solving
-- **Code Models**: CodeLlama, DeepSeek Coder, Qwen Coder, StarCoder2
-- **Embedding Models**: Nomic, Qwen3 Embedding for RAG and search
-- **Competitive Pricing**: $0.02-$0.55 per 1M tokens
+LlamaGate는 OpenAI 호환 API를 통해 오픈 소스 LLM에 접근할 수 있도록 합니다.
+- **26개 이상의 오픈 소스 모델**: Llama 3.1/3.2, Mistral, Qwen, DeepSeek R1 등
+- **OpenAI 호환 API**: OpenAI SDK를 그대로 대체할 수 있습니다.
+- **비전 모델**: 멀티모달 작업을 위한 Qwen VL, LLaVA, olmOCR, UI-TARS
+- **추론 모델**: 복잡한 문제 해결을 위한 DeepSeek R1, OpenThinker
+- **코드 모델**: CodeLlama, DeepSeek Coder, Qwen Coder, StarCoder2
+- **임베딩 모델**: RAG와 검색을 위한 Nomic, Qwen3 Embedding
+- **경쟁력 있는 가격**: 100만 토큰당 $0.02-$0.55
 
-## Required Variables
+## 필수 변수
 
 ```python showLineNumbers title="Environment Variables"
 os.environ["LLAMAGATE_API_KEY"] = ""  # your LlamaGate API key
 ```
 
-Get your API key from [llamagate.dev](https://llamagate.dev).
+[llamagate.dev](https://llamagate.dev)에서 API 키를 발급받으세요.
 
-## Supported Models
+## 지원 모델
 
-### General Purpose
-| Model | Model ID |
+### 범용
+| 모델 | 모델 ID |
 |-------|----------|
 | Llama 3.1 8B | `llamagate/llama-3.1-8b` |
 | Llama 3.2 3B | `llamagate/llama-3.2-3b` |
@@ -42,24 +42,24 @@ Get your API key from [llamagate.dev](https://llamagate.dev).
 | Qwen 3 8B | `llamagate/qwen3-8b` |
 | Dolphin 3 8B | `llamagate/dolphin3-8b` |
 
-### Reasoning Models
-| Model | Model ID |
+### 추론 모델
+| 모델 | 모델 ID |
 |-------|----------|
-| DeepSeek R1 8B | `llamagate/deepseek-r1-8b` |
-| DeepSeek R1 Distill Qwen 7B | `llamagate/deepseek-r1-7b-qwen` |
+| `DeepSeek R1 8B` | `llamagate/deepseek-r1-8b` |
+| `DeepSeek R1 Distill Qwen 7B` | `llamagate/deepseek-r1-7b-qwen` |
 | OpenThinker 7B | `llamagate/openthinker-7b` |
 
-### Code Models
-| Model | Model ID |
+### 코드 모델
+| 모델 | 모델 ID |
 |-------|----------|
 | Qwen 2.5 Coder 7B | `llamagate/qwen2.5-coder-7b` |
-| DeepSeek Coder 6.7B | `llamagate/deepseek-coder-6.7b` |
+| `DeepSeek Coder 6.7B` | `llamagate/deepseek-coder-6.7b` |
 | CodeLlama 7B | `llamagate/codellama-7b` |
 | CodeGemma 7B | `llamagate/codegemma-7b` |
 | StarCoder2 7B | `llamagate/starcoder2-7b` |
 
-### Vision Models
-| Model | Model ID |
+### 비전 모델
+| 모델 | 모델 ID |
 |-------|----------|
 | Qwen 3 VL 8B | `llamagate/qwen3-vl-8b` |
 | LLaVA 1.5 7B | `llamagate/llava-7b` |
@@ -67,16 +67,16 @@ Get your API key from [llamagate.dev](https://llamagate.dev).
 | olmOCR 7B | `llamagate/olmocr-7b` |
 | UI-TARS 1.5 7B | `llamagate/ui-tars-7b` |
 
-### Embedding Models
-| Model | Model ID |
+### 임베딩 모델
+| 모델 | 모델 ID |
 |-------|----------|
 | Nomic Embed Text | `llamagate/nomic-embed-text` |
-| Qwen 3 Embedding 8B | `llamagate/qwen3-embedding-8b` |
-| EmbeddingGemma 300M | `llamagate/embeddinggemma-300m` |
+| `Qwen 3 Embedding 8B` | `llamagate/qwen3-embedding-8b` |
+| `EmbeddingGemma 300M` | `llamagate/embeddinggemma-300m` |
 
-## Usage - LiteLLM Python SDK
+## 사용법 - LiteLLM Python SDK
 
-### Non-streaming
+### 비스트리밍
 
 ```python showLineNumbers title="LlamaGate Non-streaming Completion"
 import os
@@ -96,7 +96,7 @@ response = completion(
 print(response)
 ```
 
-### Streaming
+### 스트리밍
 
 ```python showLineNumbers title="LlamaGate Streaming Completion"
 import os
@@ -118,7 +118,7 @@ for chunk in response:
     print(chunk)
 ```
 
-### Vision
+### 비전
 
 ```python showLineNumbers title="LlamaGate Vision Completion"
 import os
@@ -146,7 +146,7 @@ response = completion(
 print(response)
 ```
 
-### Embeddings
+### 임베딩
 
 ```python showLineNumbers title="LlamaGate Embeddings"
 import os
@@ -164,15 +164,15 @@ response = embedding(
 print(response)
 ```
 
-## Usage - LiteLLM Proxy Server
+## 사용법 - LiteLLM 프록시 서버
 
-### 1. Save key in your environment
+### 1. 환경에 키 저장
 
 ```bash
 export LLAMAGATE_API_KEY=""
 ```
 
-### 2. Start the proxy
+### 2. 프록시 시작
 
 ```yaml
 model_list:
@@ -190,39 +190,39 @@ model_list:
       api_key: os.environ/LLAMAGATE_API_KEY
 ```
 
-## Supported OpenAI Parameters
+## 지원되는 OpenAI 파라미터
 
-LlamaGate supports all standard OpenAI-compatible parameters:
+LlamaGate는 모든 표준 OpenAI 호환 파라미터를 지원합니다.
 
-| Parameter | Type | Description |
+| 파라미터 | 유형 | 설명 |
 |-----------|------|-------------|
-| `messages` | array | **Required**. Array of message objects with 'role' and 'content' |
-| `model` | string | **Required**. Model ID |
-| `stream` | boolean | Optional. Enable streaming responses |
-| `temperature` | float | Optional. Sampling temperature (0-2) |
-| `top_p` | float | Optional. Nucleus sampling parameter |
-| `max_tokens` | integer | Optional. Maximum tokens to generate |
-| `frequency_penalty` | float | Optional. Penalize frequent tokens |
-| `presence_penalty` | float | Optional. Penalize tokens based on presence |
-| `stop` | string/array | Optional. Stop sequences |
-| `tools` | array | Optional. List of available tools/functions |
-| `tool_choice` | string/object | Optional. Control tool/function calling |
-| `response_format` | object | Optional. JSON mode or JSON schema |
+| `messages` | array | **필수**. `role`과 `content`가 있는 메시지 객체 배열 |
+| `model` | string | **필수**. 모델 ID |
+| `stream` | boolean | 선택 사항. 스트리밍 응답 활성화 |
+| `temperature` | float | 선택 사항. 샘플링 온도(0-2) |
+| `top_p` | float | 선택 사항. 뉴클리어스 샘플링 파라미터 |
+| `max_tokens` | integer | 선택 사항. 생성할 최대 토큰 수 |
+| `frequency_penalty` | float | 선택 사항. 자주 등장하는 토큰에 페널티 적용 |
+| `presence_penalty` | float | 선택 사항. 등장 여부를 기준으로 토큰에 페널티 적용 |
+| `stop` | string/array | 선택 사항. 중지 시퀀스 |
+| `tools` | array | 선택 사항. 사용 가능한 도구/함수 목록 |
+| `tool_choice` | string/object | 선택 사항. 도구/함수 호출 제어 |
+| `response_format` | object | 선택 사항. JSON 모드 또는 JSON 스키마 |
 
-## Pricing
+## 가격
 
-LlamaGate offers competitive per-token pricing:
+LlamaGate는 경쟁력 있는 토큰당 가격을 제공합니다.
 
-| Model Category | Input (per 1M) | Output (per 1M) |
+| 모델 범주 | 입력(100만 토큰당) | 출력(100만 토큰당) |
 |----------------|----------------|-----------------|
-| Embeddings | $0.02 | - |
-| Small (3-4B) | $0.03-$0.04 | $0.08 |
-| Medium (7-8B) | $0.03-$0.15 | $0.05-$0.55 |
-| Code Models | $0.06-$0.10 | $0.12-$0.20 |
-| Reasoning | $0.08-$0.10 | $0.15-$0.20 |
+| 임베딩 | $0.02 | - |
+| 소형(3-4B) | $0.03-$0.04 | $0.08 |
+| 중형(7-8B) | $0.03-$0.15 | $0.05-$0.55 |
+| 코드 모델 | $0.06-$0.10 | $0.12-$0.20 |
+| 추론 | $0.08-$0.10 | $0.15-$0.20 |
 
-## Additional Resources
+## 추가 리소스
 
-- [LlamaGate Documentation](https://llamagate.dev/docs)
-- [LlamaGate Pricing](https://llamagate.dev/pricing)
-- [LlamaGate API Reference](https://llamagate.dev/docs/api)
+- [LlamaGate 문서](https://llamagate.dev/docs)
+- [LlamaGate 가격](https://llamagate.dev/pricing)
+- [LlamaGate API 참조](https://llamagate.dev/docs/api)

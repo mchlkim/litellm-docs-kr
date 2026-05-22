@@ -3,7 +3,7 @@ import TabItem from '@theme/TabItem';
 import Image from '@theme/IdealImage';
 
 
-# ✨ Audit Logs
+# ✨ 감사 로그
 
 <Image 
   img={require('../../img/release_notes/ui_audit_log.png')}
@@ -11,31 +11,31 @@ import Image from '@theme/IdealImage';
 />
 
 
-As a Proxy Admin, you can check if and when a entity (key, team, user, model) was created, updated, deleted, or regenerated, along with who performed the action. This is useful for auditing and compliance.
+Proxy Admin은 엔터티(key, team, user, model)가 생성, 업데이트, 삭제 또는 재생성되었는지와 그 시점, 그리고 작업을 수행한 사용자를 확인할 수 있습니다. 이는 감사와 컴플라이언스에 유용합니다.
 
-LiteLLM tracks changes to the following entities and actions:
+LiteLLM은 다음 엔터티와 작업의 변경 사항을 추적합니다.
 
-- **Entities:** Keys, Teams, Users, Models
-- **Actions:** Create, Update, Delete, Regenerate
+- **엔터티:** 키, 팀, 사용자, 모델
+- **작업:** 생성, 업데이트, 삭제, 재생성
 
 :::tip
 
-Requires Enterprise License, Get in touch with us [here](https://enterprise.litellm.ai/demo)
+엔터프라이즈 라이선스가 필요합니다. [여기](https://enterprise.litellm.ai/demo)로 문의하세요.
 
 :::
 
-## Usage
+## 사용법
 
-### 1. Switch on audit Logs 
-Add `store_audit_logs` to your litellm config.yaml and then start the proxy
+### 1. 감사 로그 켜기
+litellm config.yaml에 `store_audit_logs`를 추가한 다음 프록시를 시작합니다.
 ```shell
 litellm_settings:
   store_audit_logs: true
 ```
 
-### 2. Make a change to an entity
+### 2. 엔터티 변경하기
 
-In this example, we will delete a key.
+이 예제에서는 key를 삭제합니다.
 
 ```shell
 curl -X POST 'http://0.0.0.0:4000/key/delete' \
@@ -46,9 +46,9 @@ curl -X POST 'http://0.0.0.0:4000/key/delete' \
     }'
 ```
 
-### 3. View the audit log on LiteLLM UI
+### 3. LiteLLM UI에서 감사 로그 보기
 
-On the LiteLLM UI, navigate to Logs -> Audit Logs. You should see the audit log for the key deletion.
+LiteLLM UI에서 로그 -> 감사 로그로 이동합니다. key 삭제에 대한 감사 로그가 표시됩니다.
 
 <Image 
   img={require('../../img/key_delete.png')}
@@ -56,13 +56,13 @@ On the LiteLLM UI, navigate to Logs -> Audit Logs. You should see the audit log 
 />
 
 
-## Export Audit Logs to External Storage
+## 감사 로그를 외부 스토리지로 내보내기
 
-You can export audit logs to an external storage backend (e.g. S3) in addition to storing them in the database. Logs are batched and uploaded asynchronously, so they do not block your proxy requests.
+감사 로그는 데이터베이스에 저장하는 것 외에도 외부 스토리지 백엔드(예: S3)로 내보낼 수 있습니다. 로그는 배치 처리되어 비동기로 업로드되므로 프록시 요청을 차단하지 않습니다.
 
-### S3 Example
+### S3 예제
 
-Add `audit_log_callbacks` and `s3_callback_params` to your `litellm_settings`:
+`litellm_settings`에 `audit_log_callbacks`와 `s3_callback_params`를 추가합니다.
 
 ```yaml
 litellm_settings:
@@ -76,7 +76,7 @@ litellm_settings:
     s3_path: litellm-audit                   # [OPTIONAL] prefix path in the bucket
 ```
 
-Audit logs are written as JSON files to:
+감사 로그는 JSON 파일로 다음 위치에 기록됩니다.
 
 ```
 s3://<bucket>/audit_logs/<YYYY-MM-DD>/<HH-MM-SS>_<audit-log-id>.json
@@ -86,13 +86,13 @@ s3://<bucket>/<s3_path>/audit_logs/<YYYY-MM-DD>/<HH-MM-SS>_<audit-log-id>.json
 
 :::info
 
-Both `store_audit_logs: true` and `audit_log_callbacks` must be set. If `store_audit_logs` is not enabled, the callbacks will not fire.
+`store_audit_logs: true`와 `audit_log_callbacks`를 모두 설정해야 합니다. `store_audit_logs`가 활성화되어 있지 않으면 콜백이 실행되지 않습니다.
 
 :::
 
-### Send Audit Logs to a Separate S3 Bucket
+### 감사 로그를 별도 S3 버킷으로 보내기
 
-If you also send normal request/response logs to S3 via `callbacks: ["s3_v2"]`, by default both streams share `s3_callback_params` and land in the same bucket. To send audit logs to a different bucket (e.g. a compliance-only bucket with stricter access controls or longer retention), add an `s3_audit_callback_params` block. It accepts the same fields as `s3_callback_params` and only applies to audit logs.
+`callbacks: ["s3_v2"]`를 통해 일반 요청/응답 로그도 S3로 보내는 경우, 기본적으로 두 스트림은 `s3_callback_params`를 공유하고 같은 버킷에 저장됩니다. 감사 로그를 다른 버킷(예: 더 엄격한 접근 제어 또는 더 긴 보존 기간이 적용되는 컴플라이언스 전용 버킷)으로 보내려면 `s3_audit_callback_params` 블록을 추가합니다. 이 블록은 `s3_callback_params`와 동일한 필드를 받으며 감사 로그에만 적용됩니다.
 
 ```yaml
 litellm_settings:
@@ -115,20 +115,20 @@ litellm_settings:
     s3_path: litellm-audit
 ```
 
-## Advanced
+## 고급
 
-### Attribute Management changes to Users
+### 관리 작업 변경 사항을 사용자에게 귀속하기
 
-Call management endpoints on behalf of a user. (Useful when connecting proxy to your development platform).
+사용자를 대신해 관리 엔드포인트를 호출합니다. 프록시를 개발 플랫폼에 연결할 때 유용합니다.
 
-## 1. Set `LiteLLM-Changed-By` in request headers
+## 1. 요청 헤더에 `LiteLLM-Changed-By` 설정하기
 
-Set the 'user_id' in request headers, when calling a management endpoint. [View Full List](https://litellm-api.up.railway.app/#/team%20management).
+관리 엔드포인트를 호출할 때 요청 헤더에 'user_id'를 설정합니다. [전체 목록 보기](https://litellm-api.up.railway.app/#/team%20management).
 
-- Update Team budget with master key. 
-- Attribute change to 'krrish@berri.ai'. 
+- 마스터 키로 팀 예산을 업데이트합니다.
+- 변경 사항을 'krrish@berri.ai'에게 귀속합니다.
 
-**👉 Key change:** Passing `-H 'LiteLLM-Changed-By: krrish@berri.ai'`
+**👉 주요 변경 사항:** `-H 'LiteLLM-Changed-By: krrish@berri.ai'` 전달
 
 ```shell
 curl -X POST 'http://0.0.0.0:4000/team/update' \
@@ -141,7 +141,7 @@ curl -X POST 'http://0.0.0.0:4000/team/update' \
     }'
 ```
 
-## 2. Emitted Audit Log 
+## 2. 생성된 감사 로그
 
 ```bash
 {
@@ -163,42 +163,42 @@ curl -X POST 'http://0.0.0.0:4000/team/update' \
  }
 ```
 
-## API SPEC of Audit Log 
+## 감사 로그 API 사양
 
 
 ### `id`
-- **Type:** `String`
-- **Description:** This is the unique identifier for each audit log entry. It is automatically generated as a UUID (Universally Unique Identifier) by default.
+- **타입:** `String`
+- **설명:** 각 감사 로그 항목의 고유 식별자입니다. 기본적으로 UUID(범용 고유 식별자)로 자동 생성됩니다.
 
 ### `updated_at`
-- **Type:** `DateTime`
-- **Description:** This field stores the timestamp of when the audit log entry was created or updated. It is automatically set to the current date and time by default.
+- **타입:** `DateTime`
+- **설명:** 감사 로그 항목이 생성되거나 업데이트된 시점의 타임스탬프를 저장하는 필드입니다. 기본적으로 현재 날짜와 시간으로 자동 설정됩니다.
 
 ### `changed_by`
-- **Type:** `String`
-- **Description:** The `user_id` that performed the audited action. If `LiteLLM-Changed-By` Header is passed then `changed_by=<value passed for LiteLLM-Changed-By header>`
+- **타입:** `String`
+- **설명:** 감사 대상 작업을 수행한 `user_id`입니다. `LiteLLM-Changed-By` 헤더가 전달되면 `changed_by=<LiteLLM-Changed-By 헤더로 전달된 값>`이 됩니다.
 
 ### `changed_by_api_key`
-- **Type:** `String`
-- **Description:** This field stores the hashed API key that was used to perform the audited action. If left blank, it defaults to an empty string.
+- **타입:** `String`
+- **설명:** 감사 대상 작업을 수행하는 데 사용된 해시된 API key를 저장하는 필드입니다. 비워 두면 기본값은 빈 문자열입니다.
 
 ### `action`
-- **Type:** `String`
-- **Description:** The type of action that was performed. One of "create", "update", or "delete".
+- **타입:** `String`
+- **설명:** 수행된 작업의 유형입니다. "create", "update", "delete" 중 하나입니다.
 
 ### `table_name`
-- **Type:** `String`
-- **Description:** This field stores the name of the table that was affected by the audited action. It can be one of the following values: `LiteLLM_TeamTable`, `LiteLLM_UserTable`, `LiteLLM_VerificationToken`
+- **타입:** `String`
+- **설명:** 감사 대상 작업의 영향을 받은 테이블 이름을 저장하는 필드입니다. 다음 값 중 하나일 수 있습니다. `LiteLLM_TeamTable`, `LiteLLM_UserTable`, `LiteLLM_VerificationToken`
 
 
 ### `object_id`
-- **Type:** `String`
-- **Description:** This field stores the ID of the object that was affected by the audited action. It can be the key ID, team ID, user ID
+- **타입:** `String`
+- **설명:** 감사 대상 작업의 영향을 받은 객체의 ID를 저장하는 필드입니다. key ID, team ID, user ID일 수 있습니다.
 
 ### `before_value`
-- **Type:** `Json?`
-- **Description:** This field stores the value of the row before the audited action was performed. It is optional and can be null.
+- **타입:** `Json?`
+- **설명:** 감사 대상 작업이 수행되기 전 행 값을 저장하는 필드입니다. 선택 사항이며 null일 수 있습니다.
 
 ### `updated_values`
-- **Type:** `Json?`
-- **Description:** This field stores the values of the row that were updated after the audited action was performed
+- **타입:** `Json?`
+- **설명:** 감사 대상 작업이 수행된 후 업데이트된 행 값을 저장하는 필드입니다.

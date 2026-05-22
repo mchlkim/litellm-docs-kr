@@ -1,35 +1,35 @@
 ---
 slug: anthropic_advanced_features
-title: "Day 0 Support: Claude 4.5 Opus (+Advanced Features)"
+title: "출시 당일 지원: Claude Opus 4.5와 고급 기능"
 date: 2025-11-25T10:00:00
 authors:
   - sameer
   - krrish
   - ishaan-alt
-description: "Guide to Claude Opus 4.5 and advanced features in LiteLLM: Tool Search, Programmatic Tool Calling, and Effort Parameter."
-tags: [anthropic, claude, tool search, programmatic tool calling, effort, advanced features]
+description: "LiteLLM에서 Claude Opus 4.5와 도구 검색, 프로그래밍 방식 도구 호출, effort parameter 같은 고급 기능을 사용하는 방법입니다."
+tags: [anthropic, claude, 도구-검색, 프로그래밍-도구-호출, effort, 고급-기능]
 hide_table_of_contents: false
 ---
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-This guide covers Anthropic's latest model (Claude Opus 4.5) and its advanced features now available in LiteLLM: Tool Search, Programmatic Tool Calling, Tool Input Examples, and the Effort Parameter.
+이 가이드는 Anthropic의 Claude Opus 4.5와 LiteLLM에서 사용할 수 있는 고급 기능을 다룹니다. 포함되는 기능은 도구 검색, 프로그래밍 방식 도구 호출, 도구 입력 예제, effort parameter입니다.
 
 {/* truncate */}
 
 ---
 
-| Feature | Supported Models |
+| 기능 | 지원 모델 |
 |---------|-----------------|
-| Tool Search | Claude Opus 4.5, Sonnet 4.5 |
-| Programmatic Tool Calling | Claude Opus 4.5, Sonnet 4.5 |
-| Input Examples | Claude Opus 4.5, Sonnet 4.5 |
-| Effort Parameter | Claude Opus 4.5 only |
+| 도구 검색 | Claude Opus 4.5, Sonnet 4.5 |
+| 프로그래밍 방식 도구 호출 | Claude Opus 4.5, Sonnet 4.5 |
+| 입력 예제 | Claude Opus 4.5, Sonnet 4.5 |
+| effort parameter | Claude Opus 4.5 전용 |
 
-Supported Providers: [Anthropic](../../docs/providers/anthropic), [Bedrock](../../docs/providers/bedrock), [Vertex AI](../../docs/providers/vertex_partner#vertex-ai---anthropic-claude), [Azure AI](../../docs/providers/azure_ai).
+지원 프로바이더: [Anthropic](../../docs/providers/anthropic), [Bedrock](../../docs/providers/bedrock), [Vertex AI](../../docs/providers/vertex_partner#vertex-ai---anthropic-claude), [Azure AI](../../docs/providers/azure_ai).
 
-## Usage
+## 사용법
 
 <Tabs>
 <TabItem value="sdk" label="LiteLLM Python SDK">
@@ -53,7 +53,7 @@ print(response)
 </TabItem>
 <TabItem value="proxy" label="LiteLLM Proxy">
 
-**1. Setup config.yaml**
+**1. config.yaml 설정**
 
 ```yaml
 model_list:
@@ -63,13 +63,13 @@ model_list:
       api_key: "os.environ/ANTHROPIC_API_KEY" # does os.getenv("ANTHROPIC_API_KEY")
 ```
 
-**2. Start the proxy**
+**2. 프록시 시작**
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-**3. Test it!**
+**3. 테스트**
 
 <Tabs>
 <TabItem value="curl" label="OpenAI Chat Completions">
@@ -111,13 +111,13 @@ curl --location 'http://0.0.0.0:4000/v1/messages' \
 </TabItem>
 </Tabs>
 
-## Usage - Bedrock
+## 사용법 - Bedrock
 
 :::info
 
-LiteLLM uses the boto3 library to authenticate with Bedrock.
+LiteLLM은 Bedrock 인증에 boto3 라이브러리를 사용합니다.
 
-For more ways to authenticate with Bedrock, see the [Bedrock documentation](../../docs/providers/bedrock#authentication).
+Bedrock 인증 방식은 [Bedrock 문서](../../docs/providers/bedrock#authentication)를 참고하세요.
 
 :::
 
@@ -143,7 +143,7 @@ response = completion(
 </TabItem>
 <TabItem value="proxy" label="LiteLLM Proxy">
 
-**1. Setup config.yaml**
+**1. config.yaml 설정**
 
 ```yaml
 model_list:
@@ -155,13 +155,13 @@ model_list:
       aws_region_name: os.environ/AWS_REGION_NAME
 ```
 
-**2. Start the proxy**
+**2. 프록시 시작**
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-**3. Test it!**
+**3. 테스트**
 
 <Tabs>
 <TabItem value="curl" label="OpenAI Chat Completions">
@@ -225,7 +225,7 @@ curl --location 'http://0.0.0.0:4000/bedrock/model/claude-4/converse' \
 </Tabs>
 
 
-## Usage - Vertex AI
+## 사용법 - Vertex AI
 
 
 <Tabs>
@@ -261,7 +261,7 @@ response = completion(
 </TabItem>
 <TabItem value="proxy" label="LiteLLM Proxy">
 
-**1. Setup config.yaml**
+**1. config.yaml 설정**
 
 ```yaml
 model_list:
@@ -273,13 +273,13 @@ model_list:
         vertex_location: "us-east5"
 ```
 
-**2. Start the proxy**
+**2. 프록시 시작**
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-**3. Test it!**
+**3. 테스트**
 
 <Tabs>
 <TabItem value="curl" label="OpenAI Chat Completions">
@@ -321,9 +321,9 @@ curl --location 'http://0.0.0.0:4000/v1/messages' \
 </TabItem>
 </Tabs>
 
-## Usage - Azure Anthropic (Azure Foundry Claude)
+## 사용법 - Azure Anthropic(Azure Foundry Claude)
 
-LiteLLM funnels Azure Claude deployments through the `azure_ai/` provider so Claude Opus models on Azure Foundry keep working with Tool Search, Effort, streaming, and the rest of the advanced feature set. Point `AZURE_AI_API_BASE` to `https://<resource>.services.ai.azure.com/anthropic` (LiteLLM appends `/v1/messages` automatically) and authenticate with `AZURE_AI_API_KEY` or an Azure AD token.
+LiteLLM은 Azure Claude 배포를 `azure_ai/` provider로 라우팅합니다. 그래서 Azure Foundry의 Claude Opus 모델에서도 도구 검색, effort, 스트리밍과 나머지 고급 기능을 계속 사용할 수 있습니다. `AZURE_AI_API_BASE`는 `https://<resource>.services.ai.azure.com/anthropic`로 지정하세요. LiteLLM이 `/v1/messages`를 자동으로 붙이며, 인증에는 `AZURE_AI_API_KEY` 또는 Azure AD 토큰을 사용합니다.
 
 <Tabs>
 <TabItem value="sdk" label="LiteLLM Python SDK">
@@ -352,14 +352,14 @@ for chunk in response:
 </TabItem>
 <TabItem value="proxy" label="LiteLLM Proxy">
 
-**1. Set environment variables**
+**1. 환경 변수 설정**
 
 ```bash
 export AZURE_AI_API_KEY="your-azure-ai-api-key"
 export AZURE_AI_API_BASE="https://my-resource.services.ai.azure.com/anthropic"
 ```
 
-**2. Configure the proxy**
+**2. 프록시 설정**
 
 ```yaml
 model_list:
@@ -370,13 +370,13 @@ model_list:
       api_base: os.environ/AZURE_AI_API_BASE
 ```
 
-**3. Start LiteLLM**
+**3. LiteLLM 시작**
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-**4. Test the Azure Claude route**
+**4. Azure Claude 라우트 테스트**
 
 ```bash
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -398,11 +398,11 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 </Tabs>
 
 
-## Tool Search {#tool-search}
+## 도구 검색 {#tool-search}
 
-This lets Claude work with thousands of tools, by dynamically loading tools on-demand, instead of loading all tools into the context window upfront.
+이 기능은 모든 도구를 처음부터 컨텍스트 창에 넣는 대신, 필요한 도구를 요청 시 동적으로 로드해 Claude가 수천 개의 도구를 다룰 수 있게 합니다.
 
-### Usage Example
+### 사용법 예제
 
 <Tabs>
 <TabItem value="sdk" label="LiteLLM Python SDK">
@@ -501,7 +501,7 @@ if hasattr(response.usage, 'server_tool_use'):
 </TabItem>
 <TabItem value="proxy" label="LiteLLM Proxy">
 
-1. Setup config.yaml
+1. `config.yaml` 설정
 
 ```yaml
 model_list:
@@ -511,13 +511,13 @@ model_list:
       api_key: os.environ/ANTHROPIC_API_KEY
 ```
 
-2. Start the proxy
+2. 프록시 시작
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-3. Test it!
+3. 테스트
 
 
 ```bash
@@ -601,9 +601,9 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 </TabItem>
 </Tabs>
 
-### BM25 Variant (Natural Language Search)
+### BM25 변형(자연어 검색)
 
-For natural language queries instead of regex patterns:
+regex pattern 대신 자연어 query를 사용하려면 다음을 사용하세요.
 
 ```python
 tools = [
@@ -617,9 +617,9 @@ tools = [
 
 ---
 
-## Programmatic Tool Calling {#programmatic-tool-calling}
+## 프로그래밍 방식 도구 호출 {#programmatic-tool-calling}
 
-Programmatic tool calling allows Claude to write code that calls your tools programmatically. [Learn more](https://platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling)
+프로그래밍 방식 도구 호출은 Claude가 도구를 프로그래밍 방식으로 호출하는 코드를 작성할 수 있게 합니다. [자세히 보기](https://platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling)
 
 <Tabs>
 <TabItem value="sdk" label="LiteLLM Python SDK">
@@ -713,7 +713,7 @@ print("\nFinal answer:", final_response.choices[0].message.content)
 </TabItem>
 <TabItem value="proxy" label="LiteLLM Proxy">
 
-1. Setup config.yaml
+1. `config.yaml` 설정
 
 ```yaml
 model_list:
@@ -723,13 +723,13 @@ model_list:
       api_key: os.environ/ANTHROPIC_API_KEY
 ```
 
-2. Start the proxy
+2. 프록시 시작
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-3. Test it!
+3. 테스트
 
 
 ```bash
@@ -776,9 +776,9 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 
 ---
 
-## Tool Input Examples {#tool-input-examples}
+## 도구 입력 예제 {#tool-input-examples}
 
-You can now provide Claude with examples of how to use your tools. [Learn more](https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-input-examples)
+이제 Claude에 도구 사용 예제를 제공할 수 있습니다. [자세히 보기](https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-input-examples)
 
 
 <Tabs>
@@ -865,7 +865,7 @@ print("Tool call:", response.choices[0].message.tool_calls[0].function.arguments
 </TabItem>
 <TabItem value="proxy" label="LiteLLM Proxy">
 
-1. Setup config.yaml
+1. `config.yaml` 설정
 
 ```yaml
 model_list:
@@ -875,13 +875,13 @@ model_list:
       api_key: os.environ/ANTHROPIC_API_KEY
 ```
 
-2. Start the proxy
+2. 프록시 시작
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-3. Test it!
+3. 테스트
 
 
 ```bash
@@ -964,17 +964,17 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 
 ---
 
-## Effort Parameter: Control Token Usage {#effort-parameter}
+## effort parameter: 토큰 사용량 제어 {#effort-parameter}
 
-Control how much effort Claude puts into its response using the `reasoning_effort` parameter. This allows you to trade off between response thoroughness and token efficiency.
+`reasoning_effort` parameter로 Claude가 응답에 들이는 추론 강도를 조절할 수 있습니다. 이를 통해 응답의 상세함과 토큰 효율 사이의 균형을 선택합니다.
 
 :::info
-LiteLLM automatically maps `reasoning_effort` to Anthropic's `output_config` format and adds the required `effort-2025-11-24` beta header for Claude Opus 4.5.
+LiteLLM은 `reasoning_effort`를 Anthropic의 `output_config` 형식으로 자동 매핑하고, Claude Opus 4.5에 필요한 `effort-2025-11-24` beta header를 추가합니다.
 :::
 
-Potential values for `reasoning_effort` parameter: `"high"`, `"medium"`, `"low"`.
+사용 가능한 `reasoning_effort` 값은 `"high"`, `"medium"`, `"low"`입니다.
 
-### Usage Example
+### 사용법 예제
 
 <Tabs>
 <TabItem value="sdk" label="LiteLLM Python SDK">
@@ -1027,7 +1027,7 @@ print(f"Low:    {response_low.usage.completion_tokens} tokens")
 </TabItem>
 <TabItem value="proxy" label="LiteLLM Proxy">
 
-1. Setup config.yaml
+1. `config.yaml` 설정
 
 ```yaml
 model_list:
@@ -1037,13 +1037,13 @@ model_list:
       api_key: os.environ/ANTHROPIC_API_KEY
 ```
 
-2. Start the proxy
+2. 프록시 시작
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-3. Test it!
+3. 테스트
 
 ```bash
 curl --location 'http://0.0.0.0:4000/chat/completions' \

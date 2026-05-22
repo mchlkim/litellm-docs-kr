@@ -6,17 +6,17 @@ https://groq.com/
 
 :::tip
 
-**We support ALL Groq models, just set `model=groq/<any-model-on-groq>` as a prefix when sending litellm requests**
+**모든 Groq 모델을 지원합니다. LiteLLM 요청을 보낼 때 `model=groq/<any-model-on-groq>` 형식의 접두사만 설정하면 됩니다.**
 
 :::
 
-## API Key
+## API 키 {#api-key}
 ```python
 # env variable
 os.environ['GROQ_API_KEY']
 ```
 
-## Sample Usage
+## 샘플 사용법 {#sample-사용법}
 ```python
 from litellm import completion
 import os
@@ -31,7 +31,7 @@ response = completion(
 print(response)
 ```
 
-## Sample Usage - Streaming
+## 샘플 사용법 - 스트리밍 {#sample-사용법---streaming}
 ```python
 from litellm import completion
 import os
@@ -51,9 +51,9 @@ for chunk in response:
 
 
 
-## Usage with LiteLLM Proxy 
+## LiteLLM Proxy 사용법 {#사용법-with-litellm-proxy}
 
-### 1. Set Groq Models on config.yaml
+### 1. config.yaml에 Groq 모델 설정 {#1-set-groq-모델-on-configyaml}
 
 ```yaml
 model_list:
@@ -63,15 +63,15 @@ model_list:
       api_key: "os.environ/GROQ_API_KEY" # ensure you have `GROQ_API_KEY` in your .env
 ```
 
-### 2. Start Proxy 
+### 2. Proxy 시작 {#2-start-proxy}
 
 ```
 litellm --config config.yaml
 ```
 
-### 3. Test it
+### 3. 테스트 {#3-test-it}
 
-Make request to litellm proxy
+LiteLLM Proxy로 요청을 보냅니다.
 
 <Tabs>
 <TabItem value="Curl" label="Curl Request">
@@ -145,23 +145,23 @@ print(response)
 
 
 
-## Supported Models - ALL Groq Models Supported!
-We support ALL Groq models, just set `groq/` as a prefix when sending completion requests
+## 지원 모델 - 모든 Groq 모델 지원 {#supported-모델---all-groq-모델-supported}
+모든 Groq 모델을 지원합니다. completion 요청을 보낼 때 `groq/`를 접두사로 설정하면 됩니다.
 
-| Model Name         | Usage                                           |
+| 모델 이름         | 사용법                                           |
 |--------------------|---------------------------------------------------------|
-| llama-3.3-70b-versatile     | `completion(model="groq/llama-3.3-70b-versatile", messages)`     |
-| llama-3.1-8b-instant     | `completion(model="groq/llama-3.1-8b-instant", messages)`     |
-| meta-llama/llama-4-scout-17b-16e-instruct | `completion(model="groq/meta-llama/llama-4-scout-17b-16e-instruct", messages)` |
-| meta-llama/llama-4-maverick-17b-128e-instruct | `completion(model="groq/meta-llama/llama-4-maverick-17b-128e-instruct", messages)` |
-| meta-llama/llama-guard-4-12b | `completion(model="groq/meta-llama/llama-guard-4-12b", messages)` |
-| qwen/qwen3-32b       | `completion(model="groq/qwen/qwen3-32b", messages)`       |
-| moonshotai/kimi-k2-instruct-0905 | `completion(model="groq/moonshotai/kimi-k2-instruct-0905", messages)` |
-| openai/gpt-oss-120b | `completion(model="groq/openai/gpt-oss-120b", messages)` |
-| openai/gpt-oss-20b | `completion(model="groq/openai/gpt-oss-20b", messages)` |
-| openai/gpt-oss-safeguard-20b | `completion(model="groq/openai/gpt-oss-safeguard-20b", messages)` |
+| `llama-3.3-70b-versatile`     | `completion(model="groq/llama-3.3-70b-versatile", messages)`     |
+| `llama-3.1-8b-instant`     | `completion(model="groq/llama-3.1-8b-instant", messages)`     |
+| `meta-llama/llama-4-scout-17b-16e-instruct` | `completion(model="groq/meta-llama/llama-4-scout-17b-16e-instruct", messages)` |
+| `meta-llama/llama-4-maverick-17b-128e-instruct` | `completion(model="groq/meta-llama/llama-4-maverick-17b-128e-instruct", messages)` |
+| `meta-llama/llama-guard-4-12b` | `completion(model="groq/meta-llama/llama-guard-4-12b", messages)` |
+| `qwen/qwen3-32b`       | `completion(model="groq/qwen/qwen3-32b", messages)`       |
+| `moonshotai/kimi-k2-instruct-0905` | `completion(model="groq/moonshotai/kimi-k2-instruct-0905", messages)` |
+| `openai/gpt-oss-120b` | `completion(model="groq/openai/gpt-oss-120b", messages)` |
+| `openai/gpt-oss-20b` | `completion(model="groq/openai/gpt-oss-20b", messages)` |
+| `openai/gpt-oss-safeguard-20b` | `completion(model="groq/openai/gpt-oss-safeguard-20b", messages)` |
 
-## Groq - Tool / Function Calling Example
+## Groq - Tool / Function Calling 예제 {#groq---tool--function-calling-예제}
 
 ```python
 # Example dummy function hard coded to return the current weather
@@ -262,9 +262,9 @@ if tool_calls:
     print("second response\n", second_response)
 ```
 
-## Groq - Vision Example
+## Groq - Vision 예제 {#groq---vision-예제}
 
-Groq's Llama 4 models support vision. Check out their [model list](https://console.groq.com/docs/vision) for more details.
+Groq의 Llama 4 모델은 vision을 지원합니다. 자세한 내용은 [모델 목록](https://console.groq.com/docs/vision)을 확인하세요.
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -301,7 +301,7 @@ response = completion(
 </TabItem>
 <TabItem value="proxy" label="PROXY">
 
-1. Add Groq models to config.yaml   
+1. config.yaml에 Groq 모델을 추가합니다.
 
 ```yaml
 model_list:
@@ -311,13 +311,13 @@ model_list:
       api_key: "os.environ/GROQ_API_KEY" # ensure you have `GROQ_API_KEY` in your .env
 ```
 
-2. Start Proxy
+2. Proxy를 시작합니다.
 
 ```bash
 litellm --config config.yaml
 ```
 
-3. Test it
+3. 테스트합니다.
 
 ```python
 import os 
@@ -352,7 +352,7 @@ response = client.chat.completions.create(
 </TabItem>
 </Tabs>
 
-## Speech to Text - Whisper
+## 음성-텍스트 변환 - Whisper {#speech-to-text---whisper}
 
 ```python
 os.environ["GROQ_API_KEY"] = ""
@@ -368,4 +368,3 @@ transcript = litellm.transcription(
 
 print("response=", transcript)
 ```
-

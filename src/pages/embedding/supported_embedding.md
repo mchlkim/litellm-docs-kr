@@ -1,5 +1,5 @@
-# Embedding Models
+# 임베딩 모델
 
-| Model Name           | Function Call                               | Required OS Variables                |
+| 모델 이름           | 함수 호출                               | 필수 OS 변수                |
 |----------------------|---------------------------------------------|--------------------------------------|
 | text-embedding-ada-002 | `embedding('text-embedding-ada-002', input)` | `os.environ['OPENAI_API_KEY']`       |

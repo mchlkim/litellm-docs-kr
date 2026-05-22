@@ -3,7 +3,7 @@ import styles from './styles.module.css';
 
 /* ── Constants ── */
 const TOTAL_REQUESTS = 50_000;
-const DURATION_AFTER_MS = 8_000; // "After" column finishes in 8s
+const DURATION_AFTER_MS = 8_000; // "After" 열은 8초에 완료
 const DURATION_BEFORE_MS = 13_920; // 74% slower → 8000 * 1.74
 const TICK_MS = 50;
 const RESET_PAUSE_MS = 2_000;
@@ -31,12 +31,12 @@ const AFTER_LAYERS = [
 ];
 
 const BENCHMARK_RUNS = [
-  { config: 'Before (1 ASGI + 1 BaseHTTP)', run: 1, rps: 3596, p50: 21 },
-  { config: 'Before (1 ASGI + 1 BaseHTTP)', run: 2, rps: 3599, p50: 21 },
-  { config: 'Before (1 ASGI + 1 BaseHTTP)', run: 3, rps: 4161, p50: 21 },
-  { config: 'After (2x Pure ASGI)', run: 1, rps: 6504, p50: 13 },
-  { config: 'After (2x Pure ASGI)', run: 2, rps: 6631, p50: 13 },
-  { config: 'After (2x Pure ASGI)', run: 3, rps: 6595, p50: 13 },
+  { config: '이전 (1 ASGI + 1 BaseHTTP)', run: 1, rps: 3596, p50: 21 },
+  { config: '이전 (1 ASGI + 1 BaseHTTP)', run: 2, rps: 3599, p50: 21 },
+  { config: '이전 (1 ASGI + 1 BaseHTTP)', run: 3, rps: 4161, p50: 21 },
+  { config: '이후 (2x Pure ASGI)', run: 1, rps: 6504, p50: 13 },
+  { config: '이후 (2x Pure ASGI)', run: 2, rps: 6631, p50: 13 },
+  { config: '이후 (2x Pure ASGI)', run: 3, rps: 6595, p50: 13 },
 ];
 
 /* ── Dot type ── */
@@ -198,7 +198,7 @@ export default function BenchmarkVisualization() {
             className={`${styles.flowLayer} ${layer.warning ? styles.flowLayerWarning : ''}`}
           >
             {layer.label}
-            {layer.warning && <span className={styles.overheadTag}>&larr; overhead</span>}
+            {layer.warning && <span className={styles.overheadTag}>&larr; 오버헤드</span>}
           </div>
         </React.Fragment>
       ))}
@@ -210,16 +210,16 @@ export default function BenchmarkVisualization() {
   return (
     <div className={styles.benchmarkWrapper} ref={wrapperRef}>
       <div className={styles.benchmarkConfig}>
-        50,000 requests &middot; 1,000 concurrent &middot; 1 worker
+        요청 50,000개 &middot; 동시성 1,000 &middot; worker 1개
       </div>
 
       <div className={styles.benchmarkColumns}>
         {/* Before column */}
         <div className={styles.benchmarkColumn}>
           <div className={`${styles.columnTitle} ${styles.columnTitleBefore}`}>
-            Before (1 ASGI + 1 BaseHTTP)
+            이전 (1 ASGI + 1 BaseHTTP)
             {beforeDone && (
-              <span className={`${styles.doneBadge} ${styles.doneBadgeBefore}`}>done</span>
+              <span className={`${styles.doneBadge} ${styles.doneBadgeBefore}`}>완료</span>
             )}
           </div>
           {renderFlowStack(BEFORE_LAYERS, beforeDots, true)}
@@ -230,7 +230,7 @@ export default function BenchmarkVisualization() {
             </div>
             <div className={styles.stat}>
               <div className={styles.statValue}>{formatNum(beforeCompleted)}</div>
-              <div className={styles.statLabel}>Completed</div>
+              <div className={styles.statLabel}>완료</div>
             </div>
             <div className={styles.stat}>
               <div className={styles.statValue}>{BEFORE_P50}ms</div>
@@ -248,9 +248,9 @@ export default function BenchmarkVisualization() {
         {/* After column */}
         <div className={styles.benchmarkColumn}>
           <div className={`${styles.columnTitle} ${styles.columnTitleAfter}`}>
-            After (2x Pure ASGI)
+            이후 (2x Pure ASGI)
             {afterDone && (
-              <span className={`${styles.doneBadge} ${styles.doneBadgeAfter}`}>done</span>
+              <span className={`${styles.doneBadge} ${styles.doneBadgeAfter}`}>완료</span>
             )}
           </div>
           {renderFlowStack(AFTER_LAYERS, afterDots, false)}
@@ -261,7 +261,7 @@ export default function BenchmarkVisualization() {
             </div>
             <div className={styles.stat}>
               <div className={styles.statValue}>{formatNum(afterCompleted)}</div>
-              <div className={styles.statLabel}>Completed</div>
+              <div className={styles.statLabel}>완료</div>
             </div>
             <div className={styles.stat}>
               <div className={styles.statValue}>{AFTER_P50}ms</div>
@@ -281,11 +281,11 @@ export default function BenchmarkVisualization() {
       <div className={styles.summaryStats}>
         <div className={styles.summaryItem}>
           <div className={styles.summaryValue}>+74%</div>
-          <div className={styles.summaryLabel}>Throughput (RPS)</div>
+          <div className={styles.summaryLabel}>처리량 (RPS)</div>
         </div>
         <div className={styles.summaryItem}>
           <div className={styles.summaryValue}>-38%</div>
-          <div className={styles.summaryLabel}>Median Latency (P50)</div>
+          <div className={styles.summaryLabel}>중앙값 지연 시간 (P50)</div>
         </div>
       </div>
 
@@ -302,7 +302,7 @@ export default function BenchmarkVisualization() {
           >
             &#9654;
           </span>
-          Per-run data (3 runs each)
+          실행별 데이터 (각 3회)
         </button>
         <div
           className={`${styles.collapsibleContent} ${
@@ -312,8 +312,8 @@ export default function BenchmarkVisualization() {
           <table className={styles.dataTable}>
             <thead>
               <tr>
-                <th>Config</th>
-                <th>Run</th>
+                <th>구성</th>
+                <th>실행</th>
                 <th>RPS</th>
                 <th>P50 (ms)</th>
               </tr>

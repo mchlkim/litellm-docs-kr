@@ -4,26 +4,26 @@ import TabItem from '@theme/TabItem';
 
 # Pangea
 
-The Pangea guardrail uses configurable detection policies (called *recipes*) from its AI Guard service to identify and mitigate risks in AI application traffic, including:
+Pangea guardrail은 AI Guard 서비스의 구성 가능한 탐지 정책(*recipes*)을 사용해 AI 애플리케이션 트래픽의 위험을 식별하고 완화합니다. 포함되는 항목은 다음과 같습니다.
 
-- Prompt injection attacks (with over 99% efficacy)
-- 50+ types of PII and sensitive content, with support for custom patterns
-- Toxicity, violence, self-harm, and other unwanted content
-- Malicious links, IPs, and domains
-- 100+ spoken languages, with allowlist and denylist controls
+- 프롬프트 인젝션 공격(99% 이상의 효율)
+- 사용자 지정 패턴을 지원하는 50개 이상의 PII 및 민감한 콘텐츠 유형
+- 유해성, 폭력, 자해 및 기타 원치 않는 콘텐츠
+- 악성 링크, IP, 도메인
+- 허용 목록 및 차단 목록 제어를 지원하는 100개 이상의 음성 언어
 
-All detections are logged in an audit trail for analysis, attribution, and incident response.
-You can also configure webhooks to trigger alerts for specific detection types.
+모든 탐지는 분석, 원인 추적, 사고 대응을 위해 감사 추적에 기록됩니다.
+특정 탐지 유형에 대해 알림을 트리거하도록 웹훅을 구성할 수도 있습니다.
 
-## Quick Start
+## 빠른 시작
 
-### 1. Configure the Pangea AI Guard service
+### 1. Pangea AI Guard 서비스 구성
 
-Get an [API token and the base URL for the AI Guard service](https://pangea.cloud/docs/ai-guard/#get-a-free-pangea-account-and-enable-the-ai-guard-service).
+[AI Guard 서비스용 API 토큰과 기본 URL](https://pangea.cloud/docs/ai-guard/#get-a-free-pangea-account-and-enable-the-ai-guard-service)을 가져옵니다.
 
-### 2. Add Pangea to your LiteLLM config.yaml
+### 2. LiteLLM config.yaml에 Pangea 추가
 
-Define the Pangea guardrail under the `guardrails` section of your configuration file.
+구성 파일의 `guardrails` 섹션 아래에 Pangea guardrail을 정의합니다.
 
 ```yaml title="config.yaml"
 model_list:
@@ -43,7 +43,7 @@ guardrails:
       pangea_output_recipe: "pangea_llm_response_guard"  # Recipe for response processing
 ```
 
-### 4. Start LiteLLM Proxy (AI Gateway)
+### 4. LiteLLM Proxy(AI Gateway) 시작
 
 ```bash title="Set environment variables"
 export PANGEA_AI_GUARD_TOKEN="pts_5i47n5...m2zbdt"
@@ -51,14 +51,14 @@ export OPENAI_API_KEY="sk-proj-54bgCI...jX6GMA"
 ```
 
 <Tabs>
-<TabItem label="LiteLLM CLI (Pip package)" value="litellm-cli">
+<TabItem label="LiteLLM CLI (Pip 패키지)" value="litellm-cli">
 
 ```shell
 litellm --config config.yaml
 ```
 
 </TabItem>
-<TabItem label="LiteLLM Docker (Container)" value="litellm-docker">
+<TabItem label="LiteLLM Docker (컨테이너)" value="litellm-docker">
 
 ```shell
 docker run --rm \
@@ -74,12 +74,12 @@ docker run --rm \
 </TabItem>
 </Tabs>
 
-### 5. Make your first request
+### 5. 첫 요청 보내기
 
-The example below assumes the **Malicious Prompt** detector is enabled in your input recipe.
+아래 예시는 입력 recipe에서 **Malicious Prompt** 탐지기가 활성화되어 있다고 가정합니다.
 
 <Tabs>
-<TabItem label="Blocked request" value = "blocked">
+<TabItem label="차단된 요청" value = "blocked">
 
 ```shell
 curl -sSLX POST 'http://0.0.0.0:4000/v1/chat/completions' \
@@ -112,7 +112,7 @@ curl -sSLX POST 'http://0.0.0.0:4000/v1/chat/completions' \
 
 </TabItem>
 
-<TabItem label="Permitted request" value = "allowed">
+<TabItem label="허용된 요청" value = "allowed">
 
 ```shell
 curl -sSLX POST http://localhost:4000/v1/chat/completions \
@@ -127,7 +127,7 @@ curl -sSLX POST http://localhost:4000/v1/chat/completions \
 -w "%{http_code}"
 ```
 
-The above request should not be blocked, and you should receive a regular LLM response (simplified for brevity):
+위 요청은 차단되지 않아야 하며, 일반 LLM 응답을 받아야 합니다(간결성을 위해 단순화됨).
 
 ```json
 {
@@ -151,10 +151,10 @@ The above request should not be blocked, and you should receive a regular LLM re
 
 </TabItem>
 
-<TabItem label="Redacted response" value="redacted">
+<TabItem label="마스킹된 응답" value="redacted">
 
-In this example, we simulate a response from a privately hosted LLM that inadvertently includes information that should not be exposed by the AI assistant.
-It assumes the **Confidential and PII** detector is enabled in your output recipe, and that the **US Social Security Number** rule is set to use the replacement method.
+이 예시에서는 비공개로 호스팅되는 LLM이 AI 어시스턴트가 노출해서는 안 되는 정보를 실수로 포함한 응답을 시뮬레이션합니다.
+출력 recipe에서 **기밀 정보 및 PII**(`Confidential and PII`) 탐지기가 활성화되어 있고, **미국 사회보장번호**(`US Social Security Number`) 규칙이 대체 방식을 사용하도록 설정되어 있다고 가정합니다.
 
 
 ```shell
@@ -176,7 +176,7 @@ curl -sSLX POST 'http://0.0.0.0:4000/v1/chat/completions' \
 -w "%{http_code}"
 ```
 
-When the recipe configured in the `pangea-ai-guard-response` plugin detects PII, it redacts the sensitive content before returning the response to the user:
+`pangea-ai-guard-response` 플러그인에 구성된 recipe가 PII를 탐지하면, 사용자에게 응답을 반환하기 전에 민감한 콘텐츠를 마스킹합니다.
 
 ```json
 {
@@ -202,9 +202,9 @@ When the recipe configured in the `pangea-ai-guard-response` plugin detects PII,
 
 </Tabs>
 
-### 6. Next steps
+### 6. 다음 단계
 
-- Find additional information on using Pangea AI Guard with LiteLLM in the [Pangea Integration Guide](https://pangea.cloud/docs/integration-options/api-gateways/litellm).
-- Adjust your Pangea AI Guard detection policies to fit your use case. See the [Pangea AI Guard Recipes](https://pangea.cloud/docs/ai-guard/recipes) documentation for details.
-- Stay informed about detections in your AI applications by enabling [AI Guard webhooks](https://pangea.cloud/docs/ai-guard/recipes#add-webhooks-to-detectors).
-- Monitor and analyze detection events in the AI Guard’s immutable [Activity Log](https://pangea.cloud/docs/ai-guard/activity-log).
+- LiteLLM에서 Pangea AI Guard를 사용하는 방법에 대한 추가 정보는 [Pangea Integration Guide](https://pangea.cloud/docs/integration-options/api-gateways/litellm)에서 확인하세요.
+- 사용 사례에 맞게 Pangea AI Guard 탐지 정책을 조정하세요. 자세한 내용은 [Pangea AI Guard Recipes](https://pangea.cloud/docs/ai-guard/recipes) 문서를 참고하세요.
+- [AI Guard webhooks](https://pangea.cloud/docs/ai-guard/recipes#add-webhooks-to-detectors)를 활성화해 AI 애플리케이션의 탐지 상황을 계속 파악하세요.
+- AI Guard의 변경 불가능한 [Activity Log](https://pangea.cloud/docs/ai-guard/activity-log)에서 탐지 이벤트를 모니터링하고 분석하세요.

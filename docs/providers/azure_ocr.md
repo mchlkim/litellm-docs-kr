@@ -1,17 +1,17 @@
-# Azure AI OCR (Mistral)
+# Azure AI OCR(Mistral) 설정
 
-## Overview
+## 개요
 
-| Property | Details |
+| 속성 | 세부 정보 |
 |-------|-------|
-| Description | Azure AI OCR provides document intelligence capabilities powered by Mistral, enabling text extraction from PDFs and images |
-| Provider Route on LiteLLM | `azure_ai/` |
-| Supported Operations | `/ocr` |
-| Link to Provider Doc | [Azure AI ↗](https://ai.azure.com/)
+| 설명 | Azure AI OCR은 Mistral 기반 문서 인텔리전스 기능을 제공하며, PDF와 이미지에서 텍스트를 추출할 수 있습니다 |
+| LiteLLM 제공자 라우트 | `azure_ai/` |
+| 지원 작업 | `/ocr` |
+| 제공자 문서 링크 | [Azure AI ↗](https://ai.azure.com/)
 
-Extract text from documents and images using Azure AI's OCR models, powered by Mistral.
+Mistral 기반 Azure AI OCR 모델을 사용해 문서와 이미지에서 텍스트를 추출합니다.
 
-## Quick Start
+## 빠른 시작
 
 ### **LiteLLM SDK**
 
@@ -50,11 +50,11 @@ model_list:
       mode: ocr
 ```
 
-## Document Types
+## 문서 유형 {#document-types}
 
-Azure AI OCR supports both PDFs and images.
+Azure AI OCR은 PDF와 이미지를 모두 지원합니다.
 
-### PDF Documents
+### PDF 문서 {#pdf-documents}
 
 ```python showLineNumbers title="PDF OCR"
 response = litellm.ocr(
@@ -66,7 +66,7 @@ response = litellm.ocr(
 )
 ```
 
-### Image Documents
+### 이미지 문서 {#image-documents}
 
 ```python showLineNumbers title="Image OCR"
 response = litellm.ocr(
@@ -78,7 +78,7 @@ response = litellm.ocr(
 )
 ```
 
-### Base64 Encoded Documents
+### Base64 인코딩 문서 {#base64-encoded-documents}
 
 ```python showLineNumbers title="Base64 PDF"
 import base64
@@ -96,7 +96,7 @@ response = litellm.ocr(
 )
 ```
 
-## Supported Parameters
+## 지원 파라미터
 
 ```python showLineNumbers title="All Parameters"
 response = litellm.ocr(
@@ -111,7 +111,7 @@ response = litellm.ocr(
 )
 ```
 
-## Response Format
+## 응답 형식
 
 ```python showLineNumbers title="Response Structure"
 # Response has the following structure
@@ -126,7 +126,7 @@ for page in response.pages:
     print(page.text)
 ```
 
-## Async Support
+## 비동기 지원 {#async-support}
 
 ```python showLineNumbers title="Async Usage"
 import litellm
@@ -140,15 +140,14 @@ response = await litellm.aocr(
 )
 ```
 
-## Important Notes
+## 중요 참고 사항 {#important-참고}
 
-:::info URL Conversion
-Azure AI OCR endpoints don't have internet access. LiteLLM automatically converts public URLs to base64 data URIs before sending requests to Azure AI.
+:::info URL 변환
+Azure AI OCR 엔드포인트는 인터넷에 접근할 수 없습니다. LiteLLM은 Azure AI로 요청을 보내기 전에 공개 URL을 base64 data URI로 자동 변환합니다.
 :::
 
-## Supported Models
+## 지원 모델 {#supported-모델}
 
-- `mistral-document-ai-2505` - Latest Mistral OCR model on Azure AI
+- `mistral-document-ai-2505` - Azure AI의 최신 Mistral OCR 모델
 
-Use the Azure AI provider prefix: `azure_ai/<model-name>`
-
+Azure AI 제공자 접두사를 사용하세요: `azure_ai/<model-name>`

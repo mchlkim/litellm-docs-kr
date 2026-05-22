@@ -2,7 +2,7 @@
 
 Get started by creating a free API key via https://brave.com/search/api/.
 
-For documentation on other parameters supported by the Brave Search API, visit https://api-dashboard.search.brave.com/api-reference/web/search/post.
+For documentation on other parameters supported by the Brave Search API, visit https://api-dashboard.search.brave.com/api-reference/web/search.
 
 ## LiteLLM Python SDK
 
@@ -37,7 +37,7 @@ search_tools:
       api_key: os.environ/BRAVE_API_KEY
 ```
 
-### 2. Start the proxy
+### 2. 프록시 시작
 
 ```bash
 litellm --config /path/to/config.yaml
@@ -45,7 +45,7 @@ litellm --config /path/to/config.yaml
 # RUNNING on http://0.0.0.0:4000
 ```
 
-### 3. Test the search endpoint
+### 3. 검색 엔드포인트 테스트
 
 ```bash showLineNumbers title="Test Request"
 curl http://0.0.0.0:4000/v1/search/brave-search \

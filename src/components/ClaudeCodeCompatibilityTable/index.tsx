@@ -56,8 +56,8 @@ const STATUS_GLYPH: Record<CellStatus, string> = {
 function cellTitle(cell: Cell): string {
   if (cell.status === "fail" && cell.error) return cell.error;
   if (cell.status === "not_applicable" && cell.reason) return cell.reason;
-  if (cell.status === "not_tested") return "no test ran for this combination";
-  return "passing";
+  if (cell.status === "not_tested") return "이 조합에서는 테스트가 실행되지 않았습니다";
+  return "통과";
 }
 
 export default function ClaudeCodeCompatibilityTable(): JSX.Element {
@@ -72,13 +72,13 @@ export default function ClaudeCodeCompatibilityTable(): JSX.Element {
           claude code <code>{m.claude_code_version}</code>
         </span>
         <span>
-          generated <code>{m.generated_at}</code>
+          생성 시각 <code>{m.generated_at}</code>
         </span>
       </div>
       <table className={styles.table}>
         <thead>
           <tr>
-            <th className={styles.featureCol}>Feature</th>
+            <th className={styles.featureCol}>기능</th>
             {m.providers.map((p) => (
               <th key={p}>{PROVIDER_LABELS[p] ?? p}</th>
             ))}

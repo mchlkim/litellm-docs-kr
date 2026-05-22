@@ -3,26 +3,26 @@ import TabItem from '@theme/TabItem';
 
 # MiniMax  
 
-# MiniMax - v1/messages
+# `MiniMax - v1/messages` {#minimax-v1messages}
 
-## Overview
+## 개요
 
-Litellm provides anthropic specs compatible support for minmax
+LiteLLM은 MiniMax에 대해 Anthropic spec 호환 지원을 제공합니다.
 
-## Supported Models
+## Supported 모델
 
-MiniMax offers three models through their Anthropic-compatible API:
+MiniMax는 Anthropic 호환 API를 통해 세 가지 모델을 제공합니다.
 
-| Model | Description | Input Cost | Output Cost | Prompt Caching Read | Prompt Caching Write |
+| 모델 | 설명 | 입력 비용 | 출력 비용 | Prompt 캐싱 읽기 | Prompt 캐싱 쓰기 |
 |-------|-------------|------------|-------------|---------------------|----------------------|
-| **MiniMax-M2.1** | Powerful Multi-Language Programming with Enhanced Programming Experience (~60 tps) | $0.3/M tokens | $1.2/M tokens | $0.03/M tokens | $0.375/M tokens |
-| **MiniMax-M2.1-lightning** | Faster and More Agile (~100 tps) | $0.3/M tokens | $2.4/M tokens | $0.03/M tokens | $0.375/M tokens |
-| **MiniMax-M2** | Agentic capabilities, Advanced reasoning | $0.3/M tokens | $1.2/M tokens | $0.03/M tokens | $0.375/M tokens |
+| **MiniMax-M2.1** | 향상된 프로그래밍 경험을 제공하는 강력한 다국어 프로그래밍 모델(~60 tps) | $0.3/M tokens | $1.2/M tokens | $0.03/M tokens | $0.375/M tokens |
+| **MiniMax-M2.1-lightning** | 더 빠르고 민첩한 모델(~100 tps) | $0.3/M tokens | $2.4/M tokens | $0.03/M tokens | $0.375/M tokens |
+| **MiniMax-M2** | agentic 기능과 고급 reasoning 지원 | $0.3/M tokens | $1.2/M tokens | $0.03/M tokens | $0.375/M tokens |
 
 
-## Usage Examples
+## 사용법 예제
 
-### Basic Chat Completion
+### 기본 Chat Completion
 
 ```python
 import litellm
@@ -38,7 +38,7 @@ response = litellm.anthropic.messages.acreate(
 print(response.choices[0].message.content)
 ```
 
-### Using Environment Variables
+### 환경 변수 사용
 
 ```bash
 export MINIMAX_API_KEY="your-minimax-api-key"
@@ -55,7 +55,7 @@ response = litellm.anthropic.messages.acreate(
 )
 ```
 
-### With Thinking (M2.1 Feature)
+### Thinking 사용(M2.1 기능)
 
 ```python
 response = litellm.anthropic.messages.acreate(
@@ -71,7 +71,7 @@ for block in response.choices[0].message.content:
         print(f"Thinking: {block.thinking}")
 ```
 
-### With Tool Calling
+### With 도구 호출
 
 ```python
 tools = [
@@ -102,19 +102,19 @@ response = litellm.anthropic.messages.acreate(
 
 
 
-## Usage with LiteLLM Proxy 
+## LiteLLM Proxy 사용법 
 
-You can use MiniMax models with the Anthropic SDK by routing through LiteLLM Proxy:
+LiteLLM Proxy를 통해 routing하면 Anthropic SDK에서 MiniMax 모델을 사용할 수 있습니다.
 
-| Step | Description |
+| 단계 | 설명 |
 |------|-------------|
-| **1. Start LiteLLM Proxy** | Configure proxy with MiniMax models in `config.yaml` |
-| **2. Set Environment Variables** | Point Anthropic SDK to proxy endpoint |
-| **3. Use Anthropic SDK** | Call MiniMax models using native Anthropic SDK |
+| **1. LiteLLM Proxy 시작** | `config.yaml`에 MiniMax 모델을 포함해 proxy를 설정합니다. |
+| **2. 환경 변수 설정** | Anthropic SDK가 proxy endpoint를 바라보도록 설정합니다. |
+| **3. Anthropic SDK 사용** | native Anthropic SDK로 MiniMax 모델을 호출합니다. |
 
-### Step 1: Configure LiteLLM Proxy
+### 1단계: LiteLLM Proxy 설정
 
-Create a `config.yaml`:
+`config.yaml`을 생성합니다.
 
 ```yaml
 model_list:
@@ -125,13 +125,13 @@ model_list:
       api_base: https://api.minimax.io/anthropic/v1/messages
 ```
 
-Start the proxy:
+프록시 시작:
 
 ```bash
 litellm --config config.yaml
 ```
 
-### Step 2: Use with Anthropic SDK
+### 2단계: Anthropic SDK와 함께 사용
 
 ```python
 import os
@@ -166,13 +166,13 @@ for block in message.content:
         print(f"Text:\n{block.text}\n")
 ```
 
-# MiniMax - v1/chat/completions
+# `MiniMax - v1/chat/completions` {#minimax-v1chatcompletions}
 
-## Usage with LiteLLM SDK
+## LiteLLM SDK 사용법
 
-You can use MiniMax's OpenAI-compatible API directly with LiteLLM:
+LiteLLM에서 MiniMax의 OpenAI 호환 API를 직접 사용할 수 있습니다.
 
-### Basic Chat Completion
+### 기본 Chat Completion
 
 ```python
 import litellm
@@ -190,7 +190,7 @@ response = litellm.completion(
 print(response.choices[0].message.content)
 ```
 
-### Using Environment Variables
+### 환경 변수 사용
 
 ```bash
 export MINIMAX_API_KEY="your-minimax-api-key"
@@ -206,7 +206,7 @@ response = litellm.completion(
 )
 ```
 
-### With Reasoning Split
+### Reasoning Split 사용
 
 ```python
 response = litellm.completion(
@@ -226,7 +226,7 @@ if hasattr(response.choices[0].message, 'reasoning_details'):
 print(f"Response: {response.choices[0].message.content}")
 ```
 
-### With Tool Calling
+### With 도구 호출
 
 ```python
 tools = [
@@ -272,19 +272,19 @@ for chunk in response:
 ```
 
 
-## Usage with OpenAI SDK via LiteLLM Proxy
+## LiteLLM Proxy를 통한 OpenAI SDK 사용법
 
-You can also use MiniMax models with the OpenAI SDK by routing through LiteLLM Proxy:
+LiteLLM Proxy를 통해 routing하면 OpenAI SDK에서도 MiniMax 모델을 사용할 수 있습니다.
 
-| Step | Description |
+| 단계 | 설명 |
 |------|-------------|
-| **1. Start LiteLLM Proxy** | Configure proxy with MiniMax models in `config.yaml` |
-| **2. Set Environment Variables** | Point OpenAI SDK to proxy endpoint |
-| **3. Use OpenAI SDK** | Call MiniMax models using native OpenAI SDK |
+| **1. LiteLLM Proxy 시작** | `config.yaml`에 MiniMax 모델을 포함해 proxy를 설정합니다. |
+| **2. 환경 변수 설정** | OpenAI SDK가 proxy endpoint를 바라보도록 설정합니다. |
+| **3. OpenAI SDK 사용** | native OpenAI SDK로 MiniMax 모델을 호출합니다. |
 
-### Step 1: Configure LiteLLM Proxy
+### 1단계: LiteLLM Proxy 설정
 
-Create a `config.yaml`:
+`config.yaml`을 생성합니다.
 
 ```yaml
 model_list:
@@ -295,13 +295,13 @@ model_list:
       api_base: https://api.minimax.io/v1
 ```
 
-Start the proxy:
+프록시 시작:
 
 ```bash
 litellm --config config.yaml
 ```
 
-### Step 2: Use with OpenAI SDK
+### 2단계: OpenAI SDK와 함께 사용
 
 ```python
 import os
@@ -328,7 +328,7 @@ if hasattr(response.choices[0].message, 'reasoning_details'):
 print(f"Text:\n{response.choices[0].message.content}\n")
 ```
 
-### Streaming with OpenAI SDK
+### OpenAI SDK로 Streaming
 
 ```python
 from openai import OpenAI
@@ -366,11 +366,11 @@ for chunk in stream:
             text_buffer = content_text
 ```
 
-## Cost Calculation
+## 비용 계산
 
-Cost calculation works automatically using the pricing information in `model_prices_and_context_window.json`.
+비용 계산은 `model_prices_and_context_window.json`의 pricing 정보를 사용해 자동으로 동작합니다.
 
-Example:
+예제:
 ```python
 response = litellm.completion(
     model="minimax/MiniMax-M2.1",
@@ -382,13 +382,13 @@ response = litellm.completion(
 print(f"Cost: ${response._hidden_params.get('response_cost', 0)}")
 ```
 
-# MiniMax - Text-to-Speech
+# `MiniMax - Text-to-Speech` {#minimax-text-to-speech}
 
-## Quick Start
+## 빠른 시작
 
-## **LiteLLM Python SDK Usage**
+## **LiteLLM Python SDK 사용법**
 
-### Basic Usage
+### 기본 사용법
 
 ```python
 from pathlib import Path
@@ -406,7 +406,7 @@ response = speech(
 response.stream_to_file(speech_file_path)
 ```
 
-### Async Usage
+### 비동기 사용법
 
 ```python
 from litellm import aspeech
@@ -427,9 +427,9 @@ async def test_async_speech():
 asyncio.run(test_async_speech())
 ```
 
-### Voice Selection
+### Voice 선택
 
-MiniMax supports many voices. LiteLLM provides OpenAI-compatible voice names that map to MiniMax voices:
+MiniMax는 다양한 voice를 지원합니다. LiteLLM은 MiniMax voice로 매핑되는 OpenAI 호환 voice 이름을 제공합니다.
 
 ```python
 from litellm import speech
@@ -446,7 +446,7 @@ for voice in voices:
     response.stream_to_file(f"speech_{voice}.mp3")
 ```
 
-You can also use MiniMax-native voice IDs directly:
+MiniMax native voice ID를 직접 사용할 수도 있습니다.
 
 ```python
 response = speech(
@@ -456,9 +456,9 @@ response = speech(
 )
 ```
 
-### Custom Parameters
+### 사용자 지정 파라미터
 
-MiniMax TTS supports additional parameters for fine-tuning audio output:
+MiniMax TTS는 audio output을 세밀하게 조정하기 위한 추가 파라미터를 지원합니다.
 
 ```python
 from litellm import speech
@@ -480,7 +480,7 @@ response = speech(
 response.stream_to_file("custom_speech.mp3")
 ```
 
-### Response Formats
+### 응답 형식
 
 ```python
 from litellm import speech
@@ -518,13 +518,13 @@ response = speech(
 )
 ```
 
-## **LiteLLM Proxy Usage**
+## **LiteLLM Proxy 사용법**
 
-LiteLLM provides an OpenAI-compatible `/audio/speech` endpoint for MiniMax TTS.
+LiteLLM은 MiniMax TTS용 OpenAI 호환 `/audio/speech` 엔드포인트를 제공합니다.
 
-### Setup
+### 설정
 
-Add MiniMax to your proxy configuration:
+proxy 구성에 MiniMax를 추가합니다.
 
 ```yaml
 model_list:
@@ -539,7 +539,7 @@ model_list:
       api_key: os.environ/MINIMAX_API_KEY
 ```
 
-Start the proxy:
+프록시 시작:
 
 ```bash
 litellm --config /path/to/config.yaml
@@ -547,7 +547,7 @@ litellm --config /path/to/config.yaml
 # RUNNING on http://0.0.0.0:4000
 ```
 
-### Making Requests
+### 요청 보내기
 
 ```bash
 curl http://0.0.0.0:4000/v1/audio/speech \
@@ -561,7 +561,7 @@ curl http://0.0.0.0:4000/v1/audio/speech \
   --output speech.mp3
 ```
 
-With custom parameters:
+사용자 지정 파라미터 사용:
 
 ```bash
 curl http://0.0.0.0:4000/v1/audio/speech \
@@ -582,29 +582,29 @@ curl http://0.0.0.0:4000/v1/audio/speech \
   --output custom_speech.mp3
 ```
 
-## Voice Mappings
+## Voice 매핑
 
-LiteLLM maps OpenAI-compatible voice names to MiniMax voice IDs:
+LiteLLM은 OpenAI 호환 voice 이름을 MiniMax voice ID로 매핑합니다.
 
-| OpenAI Voice | MiniMax Voice ID | Description |
+| OpenAI Voice | MiniMax Voice ID | 설명 |
 |--------------|------------------|-------------|
-| alloy | male-qn-qingse | Male voice |
-| echo | male-qn-jingying | Male voice |
-| fable | female-shaonv | Female voice |
-| onyx | male-qn-badao | Male voice |
-| nova | female-yujie | Female voice |
-| shimmer | female-tianmei | Female voice |
+| alloy | male-qn-qingse | 남성 voice |
+| echo | male-qn-jingying | 남성 voice |
+| fable | female-shaonv | 여성 voice |
+| onyx | male-qn-badao | 남성 voice |
+| nova | female-yujie | 여성 voice |
+| shimmer | female-tianmei | 여성 voice |
 
-You can also use any MiniMax-native voice ID directly by passing it as the `voice` parameter.
+MiniMax native voice ID를 `voice` 파라미터로 전달해 직접 사용할 수도 있습니다.
 
 
-### Streaming (WebSocket)
+### `Streaming(WebSocket)` {#streaming-websocket}
 
 :::note
-The current implementation uses MiniMax's HTTP endpoint. For WebSocket streaming support, please refer to MiniMax's official documentation at [https://platform.minimax.io/docs](https://platform.minimax.io/docs).
+현재 구현은 MiniMax의 HTTP endpoint를 사용합니다. WebSocket streaming 지원은 MiniMax 공식 문서 [https://platform.minimax.io/docs](https://platform.minimax.io/docs)를 참고하세요.
 :::
 
-## Error Handling
+## 오류 처리
 
 ```python
 from litellm import speech
@@ -625,15 +625,15 @@ except Exception as e:
     print(f"Error: {e}")
 ```
 
-### Extra Body Parameters
+### Extra Body 파라미터
 
-Pass these via `extra_body`:
+다음 값을 `extra_body`로 전달합니다.
 
-| Parameter | Type | Description | Default |
+| 파라미터 | 타입 | 설명 | 기본값 |
 |-----------|------|-------------|---------|
-| vol | float | Volume (0.1 to 10) | 1.0 |
-| pitch | int | Pitch adjustment (-12 to 12) | 0 |
-| sample_rate | int | Sample rate: 16000, 24000, 32000 | 32000 |
-| bitrate | int | Bitrate for MP3: 64000, 128000, 192000, 256000 | 128000 |
-| channel | int | Audio channels: 1 (mono) or 2 (stereo) | 1 |
-| output_format | string | Output format: "hex" or "url" (url returns a URL valid for 24 hours) | hex |
+| vol | float | volume(0.1~10) | 1.0 |
+| pitch | int | pitch 조정(-12~12) | 0 |
+| sample_rate | int | sample rate 값: 16000, 24000, 32000 | 32000 |
+| bitrate | int | MP3 bitrate 값: 64000, 128000, 192000, 256000 | 128000 |
+| channel | int | audio channel: 1(mono) 또는 2(stereo) | 1 |
+| output_format | string | output format: "hex" 또는 "url"(`url`은 24시간 유효한 URL 반환) | hex |

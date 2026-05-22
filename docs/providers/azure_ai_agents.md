@@ -1,23 +1,23 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Azure AI Foundry Agents
+# Azure AI Foundry Agents 사용하기 {#azure-ai-foundry-agents}
 
-Call Azure AI Foundry Agents in the OpenAI Request/Response format.
+OpenAI 요청/응답 형식으로 Azure AI Foundry Agents를 호출합니다.
 
-| Property | Details |
+| 속성 | 상세 |
 |----------|---------|
-| Description | Azure AI Foundry Agents provides hosted agent runtimes that can execute agentic workflows with foundation models, tools, and code interpreters. |
-| Provider Route on LiteLLM | `azure_ai/agents/{AGENT_ID}` |
-| Provider Doc | [Azure AI Foundry Agents ↗](https://learn.microsoft.com/en-us/azure/ai-foundry/agents/quickstart) |
+| 설명 | Azure AI Foundry Agents는 foundation model, tool, code interpreter로 agentic workflow를 실행할 수 있는 hosted agent runtime을 제공합니다. |
+| LiteLLM provider route(경로) | `azure_ai/agents/{AGENT_ID}` |
+| provider 문서 | [Azure AI Foundry Agents ↗](https://learn.microsoft.com/en-us/azure/ai-foundry/agents/quickstart) |
 
-## Authentication
+## 인증
 
-Azure AI Foundry Agents require **Azure AD authentication** (not API keys). You can authenticate using:
+Azure AI Foundry Agents는 API key가 아니라 **Azure AD 인증**이 필요합니다. 다음 방식으로 인증할 수 있습니다.
 
-### Option 1: Service Principal (Recommended for Production)
+### 옵션 1: Service Principal(production 권장) {#option-1-service-principal-production-recommended}
 
-Set these environment variables:
+다음 환경 변수를 설정합니다.
 
 ```bash
 export AZURE_TENANT_ID="your-tenant-id"
@@ -25,22 +25,22 @@ export AZURE_CLIENT_ID="your-client-id"
 export AZURE_CLIENT_SECRET="your-client-secret"
 ```
 
-LiteLLM will automatically obtain an Azure AD token using these credentials.
+LiteLLM은 이 credential을 사용해 Azure AD token을 자동으로 가져옵니다.
 
-### Option 2: Azure AD Token (Manual)
+### 옵션 2: Azure AD token(수동) {#option-2-azure-ad-token-manual}
 
-Pass a token directly via `api_key`:
+`api_key`로 token을 직접 전달합니다.
 
 ```bash
 # Get token via Azure CLI
 az account get-access-token --resource "https://ai.azure.com" --query accessToken -o tsv
 ```
 
-### Required Azure Role
+### 필요한 Azure role {#required-azure-role}
 
-Your Service Principal or user must have the **Azure AI Developer** or **Azure AI User** role on your Azure AI Foundry project.
+Service Principal 또는 user는 Azure AI Foundry project에서 **Azure AI Developer** 또는 **Azure AI User** role을 가져야 합니다.
 
-To assign via Azure CLI:
+Azure CLI로 할당하려면:
 ```bash
 az role assignment create \
   --assignee-object-id "<service-principal-object-id>" \
@@ -49,24 +49,24 @@ az role assignment create \
   --scope "/subscriptions/<sub>/resourceGroups/<rg>/providers/Microsoft.CognitiveServices/accounts/<resource>"
 ```
 
-Or add via **Azure AI Foundry Portal** → Your Project → **Project users** → **+ New user**.
+또는 **Azure AI Foundry Portal** → 대상 project → **Project users** → **+ New user**에서 추가합니다.
 
-## Quick Start
+## 빠른 시작
 
-### Model Format to LiteLLM
+### LiteLLM model 형식
 
-To call an Azure AI Foundry Agent through LiteLLM, use the following model format.
+LiteLLM을 통해 Azure AI Foundry Agent를 호출하려면 다음 model 형식을 사용합니다.
 
-Here the `model=azure_ai/agents/` tells LiteLLM to call the Azure AI Foundry Agent Service API.
+여기서 `model=azure_ai/agents/`는 LiteLLM에 Azure AI Foundry Agent Service API를 호출하라고 알려줍니다.
 
 ```shell showLineNumbers title="Model Format to LiteLLM"
 azure_ai/agents/{AGENT_ID}
 ```
 
-**Example:**
+**예제:**
 - `azure_ai/agents/asst_abc123`
 
-You can find the Agent ID in your Azure AI Foundry portal under Agents.
+Agent ID는 Azure AI Foundry portal의 Agents에서 찾을 수 있습니다.
 
 ### LiteLLM Python SDK
 
@@ -113,7 +113,7 @@ async for chunk in response:
 
 ### LiteLLM Proxy
 
-#### 1. Configure your model in config.yaml
+#### 1. config.yaml에 model 설정 {#1-set-model-in-configyaml}
 
 <Tabs>
 <TabItem value="config-yaml" label="config.yaml">
@@ -140,13 +140,13 @@ model_list:
 </TabItem>
 </Tabs>
 
-#### 2. Start the LiteLLM Proxy
+#### 2. LiteLLM Proxy 시작 {#2-start-litellm-proxy}
 
 ```bash showLineNumbers title="Start LiteLLM Proxy"
 litellm --config config.yaml
 ```
 
-#### 3. Make requests to your Azure AI Foundry Agents
+#### 3. Azure AI Foundry Agents로 요청 보내기 {#3-send-requests-to-azure-ai-foundry-agents}
 
 <Tabs>
 <TabItem value="curl" label="Curl">
@@ -237,13 +237,13 @@ for chunk in stream:
 </TabItem>
 </Tabs>
 
-## Environment Variables
+## 환경 변수 {#environment-variable}
 
-| Variable | Description |
+| 변수 | 설명 |
 |----------|-------------|
-| `AZURE_TENANT_ID` | Azure AD tenant ID for Service Principal auth |
-| `AZURE_CLIENT_ID` | Application (client) ID of your Service Principal |
-| `AZURE_CLIENT_SECRET` | Client secret for your Service Principal |
+| `AZURE_TENANT_ID` | Service Principal 인증용 Azure AD tenant ID |
+| `AZURE_CLIENT_ID` | Service Principal의 application(client) ID |
+| `AZURE_CLIENT_SECRET` | Service Principal의 client secret |
 
 ```bash
 export AZURE_TENANT_ID="your-tenant-id"
@@ -251,9 +251,9 @@ export AZURE_CLIENT_ID="your-client-id"
 export AZURE_CLIENT_SECRET="your-client-secret"
 ```
 
-## Conversation Continuity (Thread Management)
+## 대화 연속성(thread management) {#thread-management}
 
-Azure AI Foundry Agents use threads to maintain conversation context. LiteLLM automatically manages threads for you, but you can also pass an existing thread ID to continue a conversation.
+Azure AI Foundry Agents는 thread를 사용해 conversation context를 유지합니다. LiteLLM이 thread를 자동으로 관리하지만, 기존 thread ID를 전달해 대화를 이어갈 수도 있습니다.
 
 ```python showLineNumbers title="Continuing a Conversation"
 import litellm
@@ -279,9 +279,9 @@ response2 = await litellm.acompletion(
 print(response2.choices[0].message.content)  # Should mention "Alice"
 ```
 
-## Provider-specific Parameters
+## provider별 parameter {#provider-specific-parameters}
 
-Azure AI Foundry Agents support additional parameters that can be passed to customize the agent invocation.
+Azure AI Foundry Agents는 agent invocation을 custom하기 위한 추가 parameter를 지원합니다.
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -321,107 +321,107 @@ model_list:
 </TabItem>
 </Tabs>
 
-### Available Parameters
+### 사용 가능한 parameter {#available-parameters}
 
-| Parameter | Type | Description |
+| parameter | type | 설명 |
 |-----------|------|-------------|
-| `thread_id` | string | Optional thread ID to continue an existing conversation |
-| `instructions` | string | Optional instructions to override the agent's default instructions for this run |
+| `thread_id` | string | 기존 conversation을 이어가기 위한 선택적 thread ID |
+| `instructions` | string | 이번 run에서 agent의 기본 instruction을 override하는 선택적 instruction |
 
-## LiteLLM A2A Gateway
+## LiteLLM `A2A` Gateway 사용하기 {#litellm-a2a-gateway}
 
-You can also connect to Azure AI Foundry Agents through LiteLLM's A2A (Agent-to-Agent) Gateway UI. This provides a visual way to register and test agents without writing code.
+LiteLLM의 A2A Gateway UI를 통해 Azure AI Foundry Agents에 연결할 수도 있습니다. 코드 작성 없이 agent를 등록하고 테스트할 수 있는 시각적인 방식입니다.
 
-### 1. Navigate to Agents
+### 1. Agents로 이동 {#1-navigate-to-agents}
 
-From the sidebar, click "Agents" to open the agent management page, then click "+ Add New Agent".
+sidebar에서 "Agents"를 클릭해 agent 관리 page를 열고, "+ Add New Agent"를 클릭합니다.
 
-![Add New Agent](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-14/f8efe335-a08a-4f2b-9f7f-de28e4d58b05/ascreenshot.jpeg?tl_px=0,0&br_px=2201,1230&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=217,118)
+![새 agent 추가](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-14/f8efe335-a08a-4f2b-9f7f-de28e4d58b05/ascreenshot.jpeg?tl_px=0,0&br_px=2201,1230&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=217,118)
 
-### 2. Select Azure AI Foundry Agent Type
+### 2. Azure AI Foundry agent type 선택 {#2-select-azure-ai-foundry-agent-type}
 
-Click "A2A Standard" to see available agent types, then select "Azure AI Foundry".
+"A2A Standard"를 클릭해 사용 가능한 agent type을 확인한 뒤 "Azure AI Foundry"를 선택합니다.
 
-![Select A2A Standard](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-14/ede38044-3e18-43b9-afe3-b7513bf9963e/ascreenshot.jpeg?tl_px=0,0&br_px=2201,1230&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=409,143)
+![A2A Standard 선택](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-14/ede38044-3e18-43b9-afe3-b7513bf9963e/ascreenshot.jpeg?tl_px=0,0&br_px=2201,1230&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=409,143)
 
-![Select Azure AI Foundry](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-14/33c396fc-a927-4b03-8ee2-ea04950b12c1/ascreenshot.jpeg?tl_px=0,86&br_px=2201,1317&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=433,277)
+![Azure AI Foundry 선택](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-14/33c396fc-a927-4b03-8ee2-ea04950b12c1/ascreenshot.jpeg?tl_px=0,86&br_px=2201,1317&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=433,277)
 
-### 3. Configure the Agent
+### 3. agent 설정
 
-Fill in the following fields:
+다음 field를 입력합니다.
 
-#### Agent Name
+#### Agent Name {#agent-name}
 
-Enter a friendly agent name - callers will see this name as the agent available.
+읽기 쉬운 agent name을 입력합니다. caller는 이 이름을 사용 가능한 agent 이름으로 보게 됩니다.
 
-![Enter Agent Name](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-14/18c02804-7612-40c4-9ba4-3f1a4c0725d5/ascreenshot.jpeg?tl_px=0,0&br_px=2617,1463&force_format=jpeg&q=100&width=1120.0)
+![agent name 입력](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-14/18c02804-7612-40c4-9ba4-3f1a4c0725d5/ascreenshot.jpeg?tl_px=0,0&br_px=2617,1463&force_format=jpeg&q=100&width=1120.0)
 
-#### Agent ID
+#### Agent ID {#agent-id}
 
-Get the Agent ID from your Azure AI Foundry portal:
+Azure AI Foundry portal에서 Agent ID를 가져옵니다.
 
-1. Go to [https://ai.azure.com/](https://ai.azure.com/) and click "Agents"
+1. [https://ai.azure.com/](https://ai.azure.com/)으로 이동해 "Agents"를 클릭합니다.
 
-![Azure Agents](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-14/5e29fc48-c0f7-4b6d-8313-2063d1240d15/ascreenshot.jpeg?tl_px=0,0&br_px=2618,1463&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=39,187)
+![Azure agents](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-14/5e29fc48-c0f7-4b6d-8313-2063d1240d15/ascreenshot.jpeg?tl_px=0,0&br_px=2618,1463&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=39,187)
 
-2. Copy the "ID" of the agent you want to add (e.g., `asst_hbnoK9BOCcHhC3lC4MDroVGG`)
+2. 추가하려는 agent의 "ID"를 복사합니다(예: `asst_hbnoK9BOCcHhC3lC4MDroVGG`).
 
-![Copy Agent ID](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-14/bf17dfec-a627-41c6-9121-3935e86d3700/ascreenshot.jpeg?tl_px=0,0&br_px=2618,1463&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=504,241)
+![Agent ID 복사](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-14/bf17dfec-a627-41c6-9121-3935e86d3700/ascreenshot.jpeg?tl_px=0,0&br_px=2618,1463&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=504,241)
 
-3. Paste the Agent ID in LiteLLM - this tells LiteLLM which agent to invoke on Azure Foundry
+3. LiteLLM에 Agent ID를 붙여넣습니다. 이를 통해 LiteLLM은 Azure Foundry에서 어떤 agent를 호출할지 알 수 있습니다.
 
-![Paste Agent ID](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-14/45230c28-54f6-441c-9a20-4ef8b74076e2/ascreenshot.jpeg?tl_px=0,97&br_px=2617,1560&force_format=jpeg&q=100&width=1120.0)
+![Agent ID 붙여넣기](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-14/45230c28-54f6-441c-9a20-4ef8b74076e2/ascreenshot.jpeg?tl_px=0,97&br_px=2617,1560&force_format=jpeg&q=100&width=1120.0)
 
-#### Azure AI API Base
+#### Azure AI API Base {#azure-ai-api-base}
 
-Get your API base URL from Azure AI Foundry:
+Azure AI Foundry에서 API base URL을 가져옵니다.
 
-1. Go to [https://ai.azure.com/](https://ai.azure.com/) and click "Overview"
-2. Under libraries, select Microsoft Foundry
-3. Get your endpoint - it should look like `https://<domain>.services.ai.azure.com/api/projects/<project-name>`
+1. [https://ai.azure.com/](https://ai.azure.com/)으로 이동해 "개요"를 클릭합니다.
+2. libraries 아래에서 Microsoft Foundry를 선택합니다.
+3. endpoint를 가져옵니다. `https://<domain>.services.ai.azure.com/api/projects/<project-name>` 형태여야 합니다.
 
-![Get API Base](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-14/60e2c735-4480-44b7-ab12-d69f4200b12c/ascreenshot.jpeg?tl_px=0,40&br_px=2618,1503&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=278,277)
+![API base 가져오기](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-14/60e2c735-4480-44b7-ab12-d69f4200b12c/ascreenshot.jpeg?tl_px=0,40&br_px=2618,1503&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=278,277)
 
-4. Paste the URL in LiteLLM
+4. LiteLLM에 URL을 붙여넣습니다.
 
-![Paste API Base](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-14/e9c6f48e-7602-449a-9261-0df4a0a66876/ascreenshot.jpeg?tl_px=267,456&br_px=2468,1687&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=524,277)
+![API base 붙여넣기](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-14/e9c6f48e-7602-449a-9261-0df4a0a66876/ascreenshot.jpeg?tl_px=267,456&br_px=2468,1687&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=524,277)
 
-#### Authentication
+#### 인증
 
-Add your Azure AD credentials for authentication:
-- **Azure Tenant ID**
-- **Azure Client ID** 
-- **Azure Client Secret**
+인증을 위해 Azure AD credential을 추가합니다.
+- **Azure Tenant ID** 값
+- **Azure Client ID** 값
+- **Azure Client Secret** 값
 
-![Add Auth](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-14/e5e2b636-cf2e-4283-a1cc-8d497d349243/ascreenshot.jpeg?tl_px=0,653&br_px=2201,1883&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=339,405)
+![인증 정보 추가](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-14/e5e2b636-cf2e-4283-a1cc-8d497d349243/ascreenshot.jpeg?tl_px=0,653&br_px=2201,1883&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=339,405)
 
-Click "Create Agent" to save.
+"Create Agent"를 클릭해 저장합니다.
 
-![Create Agent](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-14/799a720a-639e-4217-a6f5-51687fc07611/ascreenshot.jpeg?tl_px=416,653&br_px=2618,1883&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=693,519)
+![agent 생성](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-14/799a720a-639e-4217-a6f5-51687fc07611/ascreenshot.jpeg?tl_px=416,653&br_px=2618,1883&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=693,519)
 
-### 4. Test in Playground
+### 4. Playground에서 테스트 {#4-test-in-playground}
 
-Go to "Playground" in the sidebar to test your agent.
+agent를 테스트하려면 sidebar의 "Playground"로 이동합니다.
 
-![Go to Playground](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-14/7da84247-db1c-4d55-9015-6e3d60ea63ce/ascreenshot.jpeg?tl_px=0,0&br_px=2201,1230&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=63,106)
+![Playground로 이동](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-14/7da84247-db1c-4d55-9015-6e3d60ea63ce/ascreenshot.jpeg?tl_px=0,0&br_px=2201,1230&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=63,106)
 
-Change the endpoint type to `/v1/a2a/message/send`.
+endpoint type을 `/v1/a2a/message/send`로 변경합니다.
 
-![Select A2A Endpoint](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-14/733265a8-412d-4eac-bc19-03436d7846c4/ascreenshot.jpeg?tl_px=0,0&br_px=2201,1230&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=286,234)
+![A2A endpoint 선택](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-14/733265a8-412d-4eac-bc19-03436d7846c4/ascreenshot.jpeg?tl_px=0,0&br_px=2201,1230&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=286,234)
 
-### 5. Select Your Agent and Send a Message
+### 5. agent 선택 후 message 보내기 {#5-select-agent-and-send-message}
 
-Pick your Azure AI Foundry agent from the dropdown and send a test message.
+dropdown에서 Azure AI Foundry agent를 선택하고 테스트 message를 보냅니다.
 
-![Select Agent](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-14/59a8e66e-6f82-42e3-ab48-78355464e6be/ascreenshot.jpeg?tl_px=0,28&br_px=2201,1259&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=269,277)
+![agent 선택](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-14/59a8e66e-6f82-42e3-ab48-78355464e6be/ascreenshot.jpeg?tl_px=0,28&br_px=2201,1259&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=269,277)
 
-The agent responds with its capabilities. You can now interact with your Azure AI Foundry agent through the A2A protocol.
+agent가 자신의 capability로 응답합니다. 이제 A2A protocol을 통해 Azure AI Foundry agent와 상호작용할 수 있습니다.
 
-![Agent Response](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-14/a0aafb69-6c28-4977-8210-96f9de750cdf/ascreenshot.jpeg?tl_px=0,0&br_px=2201,1230&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=487,272)
+![agent 응답](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-14/a0aafb69-6c28-4977-8210-96f9de750cdf/ascreenshot.jpeg?tl_px=0,0&br_px=2201,1230&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=487,272)
 
-## Further Reading
+## 추가 자료
 
-- [Azure AI Foundry Agents Documentation](https://learn.microsoft.com/en-us/azure/ai-services/agents/)
-- [Create Thread and Run API Reference](https://learn.microsoft.com/en-us/rest/api/aifoundry/aiagents/create-thread-and-run/create-thread-and-run)
-- [A2A Agent Gateway](../a2a.md)
-- [A2A Cost Tracking](../a2a_cost_tracking.md)
+- [Azure AI Foundry Agents 문서](https://learn.microsoft.com/en-us/azure/ai-services/agents/)
+- [Create Thread and Run API 참조](https://learn.microsoft.com/en-us/rest/api/aifoundry/aiagents/create-thread-and-run/create-thread-and-run)
+- [A2A Agent Gateway 문서](../a2a.md)
+- [A2A 비용 추적](../a2a_cost_tracking.md)

@@ -1,15 +1,15 @@
-# ✨ [Beta] Project Management
+# ✨ [Beta] 프로젝트 관리
 
 :::info
 
-This is an Enterprise feature.
-[Enterprise Pricing](https://www.litellm.ai/#pricing)
+엔터프라이즈 기능입니다.
+[엔터프라이즈 가격](https://www.litellm.ai/#pricing)
 
-[Contact us here to get a free trial](https://enterprise.litellm.ai/demo)
+[무료 체험판을 받으려면 여기로 문의하세요](https://enterprise.litellm.ai/demo)
 
 :::
 
-Projects in LiteLLM sit between teams and keys in the organizational hierarchy, enabling fine-grained access control and budget management for specific use cases or applications.
+LiteLLM의 프로젝트는 조직 계층에서 팀과 키 사이에 위치하며, 특정 사용 사례나 애플리케이션에 대해 세분화된 액세스 제어와 예산 관리를 제공합니다.
 
 ```mermaid
 graph TD
@@ -35,13 +35,13 @@ graph TD
     style J fill:#e8f5e9
 ```
 
-**Hierarchy**: `Organizations > Teams > Projects > Keys`
+**계층 구조**: `Organizations > Teams > Projects > Keys`
 
-## Quick Start
+## 빠른 시작
 
-This walkthrough shows how to create a project, generate an API key, make requests, and view project-level spend tracking in the UI.
+이 안내에서는 프로젝트 생성, API 키 생성, 요청 전송, UI에서 프로젝트 수준 비용 추적 확인 방법을 보여줍니다.
 
-### Step 1: Create a Project
+### 1단계: 프로젝트 생성
 
 ```bash showLineNumbers
 curl --location 'http://0.0.0.0:4000/project/new' \
@@ -59,7 +59,7 @@ curl --location 'http://0.0.0.0:4000/project/new' \
 }' | jq
 ```
 
-**Response:**
+**응답:**
 ```json
 {
   "project_id": "e402a141-725a-4437-bff5-d47459189716",
@@ -71,7 +71,7 @@ curl --location 'http://0.0.0.0:4000/project/new' \
 }
 ```
 
-### Step 2: Generate API Key for Project
+### 2단계: 프로젝트용 API 키 생성
 
 ```bash showLineNumbers
 curl 'http://0.0.0.0:4000/key/generate' \
@@ -84,7 +84,7 @@ curl 'http://0.0.0.0:4000/key/generate' \
 }' | jq
 ```
 
-**Response:**
+**응답:**
 ```json
 {
   "key": "sk-W8VbscpfuyvHm5TkxRYiXA",
@@ -94,7 +94,7 @@ curl 'http://0.0.0.0:4000/key/generate' \
 }
 ```
 
-### Step 3: Use API Key in Chat Completions
+### 3단계: Chat Completions에서 API 키 사용
 
 ```bash showLineNumbers
 curl http://localhost:4000/v1/chat/completions \
@@ -106,37 +106,37 @@ curl http://localhost:4000/v1/chat/completions \
 }' | jq
 ```
 
-### Step 4: View Project Spend in UI
+### 4단계: UI에서 프로젝트 비용 확인
 
-Navigate to the **Logs** page in the LiteLLM Admin UI. You'll see the `user_api_key_project_id` tracked in the request metadata:
+LiteLLM 관리자 UI의 **로그** 페이지로 이동합니다. 요청 메타데이터에서 추적되는 `user_api_key_project_id`를 확인할 수 있습니다.
 
-![Project Spend Tracking](/img/project_spend.png)
+![Project 비용 추적](/img/project_spend.png)
 
-As shown above, the spend logs metadata includes:
-- `"user_api_key_project_id": "e402a141-725a-4437-bff5-d47459189716"` - Links the request to your project
-- All costs and token usage are automatically attributed to the project
-- You can query and filter logs by project ID for detailed reporting
+위와 같이 비용 로그 메타데이터에는 다음이 포함됩니다.
+- `"user_api_key_project_id": "e402a141-725a-4437-bff5-d47459189716"` - 요청을 프로젝트에 연결합니다.
+- 모든 비용과 토큰 사용량은 프로젝트에 자동으로 귀속됩니다.
+- 자세한 보고를 위해 프로젝트 ID로 로그를 쿼리하고 필터링할 수 있습니다.
 
-## API Endpoints
+## API 엔드포인트
 
-### POST /project/new
+### `POST /project/new`
 
-Create a new project.
+새 프로젝트를 생성합니다.
 
-**Who can call**: Admins or Team Admins
+**호출 가능 사용자**: 관리자 또는 팀 관리자
 
-**Parameters**:
-- `project_alias` (string, optional): Human-readable name for the project
-- `team_id` (string, required): The team this project belongs to
-- `models` (array, optional): List of models the project can access
-- `max_budget` (float, optional): Maximum spend budget for the project
-- `tpm_limit` (int, optional): Tokens per minute limit
-- `rpm_limit` (int, optional): Requests per minute limit
-- `budget_duration` (string, optional): Budget reset period (e.g., "30d", "1mo")
-- `metadata` (object, optional): Custom metadata for the project
-- `blocked` (boolean, optional): Block all API calls for this project
+**매개변수**:
+- `project_alias` (string, optional): 사람이 읽기 쉬운 프로젝트 이름
+- `team_id` (string, required): 이 프로젝트가 속한 팀
+- `models` (array, optional): 프로젝트가 액세스할 수 있는 모델 목록
+- `max_budget` (float, optional): 프로젝트의 최대 비용 예산
+- `tpm_limit` (int, optional): 분당 토큰 제한
+- `rpm_limit` (int, optional): 분당 요청 제한
+- `budget_duration` (string, optional): 예산 재설정 주기(예: "30d", "1mo")
+- `metadata` (object, optional): 프로젝트용 사용자 지정 메타데이터
+- `blocked` (boolean, optional): 이 프로젝트의 모든 API 호출 차단
 
-**Example**:
+**예제**:
 
 ```bash
 curl --location 'http://0.0.0.0:4000/project/new' \
@@ -155,7 +155,7 @@ curl --location 'http://0.0.0.0:4000/project/new' \
 }'
 ```
 
-**Response**:
+**응답**:
 
 ```json
 {
@@ -174,24 +174,24 @@ curl --location 'http://0.0.0.0:4000/project/new' \
 }
 ```
 
-### POST /project/update
+### `POST /project/update`
 
-Update an existing project.
+기존 프로젝트를 업데이트합니다.
 
-**Who can call**: Admins or Team Admins
+**호출 가능 사용자**: 관리자 또는 팀 관리자
 
-**Parameters**:
-- `project_id` (string, required): The project to update
-- `project_alias` (string, optional): Updated project name
-- `team_id` (string, optional): Move project to different team
-- `models` (array, optional): Updated list of allowed models
-- `max_budget` (float, optional): Updated budget
-- `tpm_limit` (int, optional): Updated TPM limit
-- `rpm_limit` (int, optional): Updated RPM limit
-- `metadata` (object, optional): Updated metadata
-- `blocked` (boolean, optional): Updated blocked status
+**매개변수**:
+- `project_id` (string, required): 업데이트할 프로젝트
+- `project_alias` (string, optional): 업데이트된 프로젝트 이름
+- `team_id` (string, optional): 프로젝트를 다른 팀으로 이동
+- `models` (array, optional): 업데이트된 허용 모델 목록
+- `max_budget` (float, optional): 업데이트된 예산
+- `tpm_limit` (int, optional): 업데이트된 TPM 제한
+- `rpm_limit` (int, optional): 업데이트된 RPM 제한
+- `metadata` (object, optional): 업데이트된 메타데이터
+- `blocked` (boolean, optional): 업데이트된 차단 상태
 
-**Example**:
+**예제**:
 
 ```bash
 curl --location 'http://0.0.0.0:4000/project/update' \
@@ -209,19 +209,19 @@ curl --location 'http://0.0.0.0:4000/project/update' \
 
 ### GET /project/info
 
-Get information about a specific project.
+특정 프로젝트에 대한 정보를 가져옵니다.
 
-**Parameters**:
-- `project_id` (string, required): Query parameter
+**매개변수**:
+- `project_id` (string, required): 쿼리 매개변수
 
-**Example**:
+**예제**:
 
 ```bash
 curl --location 'http://0.0.0.0:4000/project/info?project_id=project-abc' \
 --header 'Authorization: Bearer sk-1234'
 ```
 
-**Response**:
+**응답**:
 
 ```json
 {
@@ -248,16 +248,16 @@ curl --location 'http://0.0.0.0:4000/project/info?project_id=project-abc' \
 
 ### GET /project/list
 
-List all projects the user has access to.
+사용자가 액세스할 수 있는 모든 프로젝트를 나열합니다.
 
-**Example**:
+**예제**:
 
 ```bash
 curl --location 'http://0.0.0.0:4000/project/list' \
 --header 'Authorization: Bearer sk-1234'
 ```
 
-**Response**:
+**응답**:
 
 ```json
 [
@@ -276,16 +276,16 @@ curl --location 'http://0.0.0.0:4000/project/list' \
 ]
 ```
 
-### DELETE /project/delete
+### `DELETE /project/delete`
 
-Delete one or more projects.
+하나 이상의 프로젝트를 삭제합니다.
 
-**Who can call**: Admins only
+**호출 가능 사용자**: 관리자만
 
-**Parameters**:
-- `project_ids` (array, required): List of project IDs to delete
+**매개변수**:
+- `project_ids` (array, required): 삭제할 프로젝트 ID 목록
 
-**Example**:
+**예제**:
 
 ```bash
 curl --location --request DELETE 'http://0.0.0.0:4000/project/delete' \
@@ -296,11 +296,11 @@ curl --location --request DELETE 'http://0.0.0.0:4000/project/delete' \
 }'
 ```
 
-**Note**: Projects with associated API keys cannot be deleted. Delete or reassign the keys first.
+**참고**: 연결된 API 키가 있는 프로젝트는 삭제할 수 없습니다. 먼저 키를 삭제하거나 다시 할당하세요.
 
-## Model-Specific Quotas
+## 모델별 할당량
 
-You can set different quotas for different models within a project:
+프로젝트 내에서 모델별로 서로 다른 할당량을 설정할 수 있습니다.
 
 ```bash
 curl --location 'http://0.0.0.0:4000/project/new' \

@@ -1,78 +1,78 @@
 ---
 slug: guardrail-logging-secret-exposure-incident
-title: "Incident Report: Guardrail logging exposed secret headers in spend logs and traces"
+title: "사고 보고서: Guardrail 로깅이 spend log와 trace에 secret header를 노출한 문제"
 date: 2026-03-18T10:00:00
 authors:
   - litellm
-tags: [incident-report, security, guardrails]
+tags: [사고-보고, 보안, guardrails]
 hide_table_of_contents: false
 ---
 
-**Date:** March 18, 2026
-**Duration:** Unknown
-**Severity:** High
-**Status:** Resolved
+**날짜:** 2026년 3월 18일
+**지속 시간:** 알 수 없음
+**심각도:** 높음
+**상태:** 해결됨
 
-## Summary
+## 요약
 
-When a custom guardrail returned the full LiteLLM request/data dictionary, the guardrail response logged by LiteLLM could include `secret_fields.raw_headers`, including plaintext `Authorization` headers containing API keys or other credentials.
+custom guardrail이 전체 LiteLLM 요청/데이터 dictionary를 반환하면, LiteLLM이 기록하는 guardrail 응답에 `secret_fields.raw_headers`가 포함될 수 있었습니다. 여기에는 API key나 기타 자격 증명이 들어 있는 평문 `Authorization` header도 포함될 수 있었습니다.
 
-This information could then propagate to logging and observability surfaces that consume guardrail metadata, including:
+이 정보는 guardrail metadata를 소비하는 로깅 및 관측성 표면으로 전파될 수 있었습니다. 예를 들면 다음과 같습니다.
 
-- **Spend logs in the LiteLLM UI:** visible to admins with access to spend-log data
-- **OpenTelemetry traces:** visible to anyone with access to the relevant telemetry backend
+- **LiteLLM UI의 spend log:** spend-log data 접근 권한이 있는 관리자에게 표시될 수 있음
+- **OpenTelemetry trace:** 관련 telemetry backend 접근 권한이 있는 사람에게 표시될 수 있음
 
-LLM calls, proxy routing, and provider execution were not blocked by this bug. The impact was exposure of sensitive request headers in observability and logging paths.
+이 버그로 인해 LLM 호출, proxy routing, provider 실행이 차단되지는 않았습니다. 영향 범위는 관측성 및 로깅 경로에서 민감한 request header가 노출될 수 있다는 점이었습니다.
 
 {/* truncate */}
 
 ---
 
-## Background
+## 배경
 
-LiteLLM keeps internal request data (including request headers) for use during the call. That data is not meant to be written to logs or telemetry.
+LiteLLM은 호출 중 사용하기 위해 내부 요청 데이터(request header 포함)를 보관합니다. 이 데이터는 로그나 telemetry에 기록되면 안 됩니다.
 
-When custom guardrails run, their outcomes are logged so they can appear in spend logs, OpenTelemetry traces, and other observability backends. If a guardrail returned the full request payload instead of a minimal result, that internal request data could be included in what was logged. Before the fix, the guardrail logging path did not strip that data before sending it to those systems.
+custom guardrail이 실행되면 그 결과가 기록되어 spend log, OpenTelemetry trace, 기타 관측성 backend에 표시될 수 있습니다. guardrail이 최소 결과 대신 전체 request payload를 반환하면, 내부 요청 데이터가 로깅 대상에 포함될 수 있었습니다. 수정 전에는 guardrail 로깅 경로가 해당 데이터를 제거하지 않은 채 시스템으로 전송했습니다.
 
 ```mermaid
 flowchart TD
-    inboundRequest["1. Incoming proxy request"] --> storeSecrets["2. Store internal request data"]
-    storeSecrets --> guardrailRuns["3. Custom guardrail runs"]
-    guardrailRuns --> fullDataReturn["4. Guardrail returns full request payload"]
-    fullDataReturn --> loggingBuild["5. Build guardrail log payload"]
-    loggingBuild --> spendLogs["6a. Persist to spend logs / UI"]
-    loggingBuild --> otelTraces["6b. Attach to OTEL guardrail spans"]
+    inboundRequest["1. proxy request 수신"] --> storeSecrets["2. 내부 요청 데이터 저장"]
+    storeSecrets --> guardrailRuns["3. Custom guardrail 실행"]
+    guardrailRuns --> fullDataReturn["4. Guardrail이 전체 request payload 반환"]
+    fullDataReturn --> loggingBuild["5. guardrail log payload 생성"]
+    loggingBuild --> spendLogs["6a. spend log / UI에 저장"]
+    loggingBuild --> otelTraces["6b. OTEL guardrail span에 첨부"]
 ```
 
 ---
 
-## Root Cause
+## 근본 원인
 
-The root cause was incomplete sanitization in the guardrail logging path. When building the payload that gets sent to spend logs and traces, LiteLLM prepared guardrail responses for logging but did not strip internal request data (such as headers) from them. If a guardrail returned a response that included that data, it was passed through to the logging and observability systems unchanged.
-
----
-
-## Impact
-
-This issue required all of the following:
-
-1. A custom guardrail returned the full LiteLLM request/data dictionary, or another response object containing `secret_fields`.
-2. LiteLLM logged that guardrail response through the standard guardrail logging path.
-3. An operator, admin, or telemetry consumer had access to the resulting logs or traces.
-
-When those conditions were met, sensitive values could become visible through:
-
-- **Spend logs / UI responses:** guardrail metadata could be included in spend-log payloads rendered in the admin UI.
-- **OpenTelemetry traces:** `guardrail_response` could be written as a span attribute on guardrail spans.
-- **Other downstream observability backends:** any integration consuming the same guardrail metadata could receive the leaked values.
-
-This was a logging and telemetry exposure bug. It did not let callers bypass auth, access other tenants directly, or change model behavior, but it could expose plaintext credentials to people with access to those observability systems.
+근본 원인은 guardrail 로깅 경로의 sanitization이 불완전했다는 점입니다. spend log와 trace로 전송할 payload를 만들 때 LiteLLM은 guardrail response를 로깅용으로 준비했지만, header 같은 내부 요청 데이터를 제거하지 않았습니다. guardrail이 해당 데이터를 포함한 response를 반환하면, 그 값이 변경 없이 로깅 및 관측성 시스템으로 전달되었습니다.
 
 ---
 
-## Guidance For Users
+## 영향
 
-- Upgrade to LiteLLM 1.82.3+.
-- If you operated custom guardrails that return the full request/data dict, review whether spend logs or telemetry traces were retained during the affected period.
-- Rotate any credentials that may have appeared in `Authorization` or other forwarded request headers in those systems.
-- Apply least-privilege access controls to spend-log views and telemetry backends that may contain request-derived metadata.
+이 문제가 발생하려면 다음 조건이 모두 필요했습니다.
+
+1. custom guardrail이 전체 LiteLLM 요청/데이터 dictionary 또는 `secret_fields`를 포함한 다른 response object를 반환함.
+2. LiteLLM이 표준 guardrail 로깅 경로를 통해 해당 guardrail response를 기록함.
+3. 운영자, 관리자 또는 telemetry consumer가 생성된 log나 trace에 접근할 수 있음.
+
+이 조건이 충족되면 민감한 값이 다음 경로로 표시될 수 있었습니다.
+
+- **Spend log / UI response:** 관리자 UI에 렌더링되는 spend-log payload에 guardrail metadata가 포함될 수 있음.
+- **OpenTelemetry trace:** `guardrail_response`가 guardrail span의 span attribute로 기록될 수 있음.
+- **기타 downstream 관측성 backend:** 동일한 guardrail metadata를 소비하는 integration이 유출된 값을 받을 수 있음.
+
+이 문제는 로깅 및 telemetry 노출 버그였습니다. 호출자가 auth를 우회하거나, 다른 tenant에 직접 접근하거나, model behavior를 바꿀 수 있게 하지는 않았지만, 해당 관측성 시스템 접근 권한이 있는 사람에게 평문 자격 증명이 노출될 수 있었습니다.
+
+---
+
+## 사용자 조치
+
+- LiteLLM 1.82.3 이상으로 업그레이드하세요.
+- 전체 request/data dict를 반환하는 custom guardrail을 운영했다면, 영향 기간 동안 spend log 또는 telemetry trace가 보관되었는지 검토하세요.
+- 해당 시스템의 `Authorization` 또는 기타 전달된 request header에 표시되었을 수 있는 자격 증명을 rotate하세요.
+- 요청에서 파생된 metadata가 포함될 수 있는 spend-log view와 telemetry backend에 최소 권한 access control을 적용하세요.

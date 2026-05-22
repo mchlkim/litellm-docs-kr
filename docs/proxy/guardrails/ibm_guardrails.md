@@ -1,29 +1,29 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# IBM Guardrails
+# IBM 가드레일
 
-LiteLLM works with [IBM's FMS Guardrails](https://github.com/foundation-model-stack/fms-guardrails-orchestrator) for content safety. You can use it to detect jailbreaks, PII, hate speech, and more. 
+LiteLLM은 콘텐츠 안전을 위해 [IBM FMS 가드레일](https://github.com/foundation-model-stack/fms-guardrails-orchestrator)과 함께 동작합니다. 이를 사용해 jailbreak, PII, 혐오 표현 등을 감지할 수 있습니다.
 
-## What it does
+## 기능
 
-IBM's FMS Guardrails is a framework for invoking detectors on LLM inputs and outputs. To configure these detectors, you can use e.g. [TrustyAI detectors](https://github.com/trustyai-explainability/guardrails-detectors), an open-source project maintained by the Red Hat's [TrustyAI team](https://github.com/trustyai-explainability) that allows the user to configure detectors that are: 
+IBM FMS 가드레일은 LLM 입력과 출력에 대해 detector를 호출하는 프레임워크입니다. 이러한 detector를 구성하려면 Red Hat의 [TrustyAI team](https://github.com/trustyai-explainability)이 유지 관리하는 오픈 소스 프로젝트인 [TrustyAI detectors](https://github.com/trustyai-explainability/guardrails-detectors) 등을 사용할 수 있습니다. 사용자는 다음과 같은 detector를 구성할 수 있습니다.
 
 - regex patterns
-- file type validators
-- custom Python functions
+- 파일 유형 validator
+- 사용자 지정 Python 함수
 - Hugging Face [AutoModelForSequenceClassification](https://huggingface.co/docs/transformers/en/model_doc/auto#transformers.AutoModelForSequenceClassification), i.e. sequence classification models
 
-Each detector outputs an API response based on the following [openapi schema](https://foundation-model-stack.github.io/fms-guardrails-orchestrator/docs/api/openapi_detector_api.yaml). 
+각 detector는 다음 [openapi schema](https://foundation-model-stack.github.io/fms-guardrails-orchestrator/docs/api/openapi_detector_api.yaml)를 기반으로 API 응답을 출력합니다.
 
-You can run these checks:
-- Before sending to the LLM (on user input)
-- After getting LLM response (on output)  
-- During the call (parallel to LLM)
+다음 시점에 검사를 실행할 수 있습니다.
+- LLM으로 보내기 전(사용자 입력 기준)
+- LLM 응답을 받은 후(출력 기준)
+- 호출 중(LLM과 병렬)
 
-## Quick Start
+## 빠른 시작
 
-### 1. Add to your config.yaml
+### 1. config.yaml에 추가
 
 ```yaml
 model_list:
@@ -47,19 +47,19 @@ guardrails:
         block_on_detection: true
 ```
 
-### 2. Set your auth token
+### 2. auth token 설정
 
 ```bash
 export IBM_GUARDRAILS_AUTH_TOKEN="your-token"
 ```
 
-### 3. Start the proxy
+### 3. 프록시 시작
 
 ```shell
 litellm --config config.yaml --detailed_debug
 ```
 
-### 4. Make a request
+### 4. 요청 보내기
 
 ```shell
 curl -i http://localhost:4000/v1/chat/completions \
@@ -74,38 +74,38 @@ curl -i http://localhost:4000/v1/chat/completions \
   }'
 ```
 
-## Configuration
+## 설정
 
-### Required params
+### 필수 파라미터
 
-- `guardrail` - str - Set to `ibm_guardrails`
-- `auth_token` - str - Your IBM Guardrails auth token. Can use `os.environ/IBM_GUARDRAILS_AUTH_TOKEN`
-- `base_url` - str - URL of your IBM Detector or Guardrails server 
-- `detector_id` - str - Which detector to use (e.g., "jailbreak-detector", "pii-detector")
+- `guardrail` - str - `ibm_guardrails`로 설정합니다.
+- `auth_token` - str - IBM 가드레일 auth token입니다. `os.environ/IBM_GUARDRAILS_AUTH_TOKEN`을 사용할 수 있습니다.
+- `base_url` - str - IBM Detector 또는 가드레일 서버 URL입니다.
+- `detector_id` - str - 사용할 detector입니다(예: "jailbreak-detector", "pii-detector").
 
-### Optional params  
+### 선택 파라미터
 
-- `mode` - str or list[str] - When to run. Options: `pre_call`, `post_call`, `during_call`. Default: `pre_call`
-- `default_on` - bool - Run automatically without specifying in request. Default: `false`
-- `is_detector_server` - bool - `true` for detector server, `false` for orchestrator. Default: `true`
-- `verify_ssl` - bool - Whether to verify SSL certificates. Default: `true`
+- `mode` - str 또는 list[str] - 실행 시점입니다. 옵션: `pre_call`, `post_call`, `during_call`. 기본값: `pre_call`
+- `default_on` - bool - 요청에서 지정하지 않아도 자동으로 실행할지 여부입니다. 기본값: `false`
+- `is_detector_server` - bool - detector server이면 `true`, orchestrator이면 `false`입니다. 기본값: `true`
+- `verify_ssl` - bool - SSL 인증서를 검증할지 여부입니다. 기본값: `true`
 
 ### optional_params
 
-These go under `optional_params`:
+다음 항목은 `optional_params` 아래에 넣습니다.
 
-- `detector_params` - dict - Parameters to pass to your detector
-- `extra_headers` - dict - Additional headers to inject into requests to IBM Guardrails, as a key-value dict.
-- `score_threshold` - float - Only count detections above this score (0.0 to 1.0)
-- `block_on_detection` - bool - Block the request when violations found. Default: `true`
+- `detector_params` - dict - detector에 전달할 파라미터입니다.
+- `extra_headers` - dict - IBM 가드레일 요청에 주입할 추가 헤더입니다. key-value dict 형식입니다.
+- `score_threshold` - float - 이 점수보다 높은 감지만 집계합니다(0.0~1.0).
+- `block_on_detection` - bool - 위반이 발견되면 요청을 차단합니다. 기본값: `true`
 
-## Server Types
+## 서버 유형
 
-IBM Guardrails has two APIs you can use:
+IBM 가드레일에서는 두 가지 API를 사용할 수 있습니다.
 
-### Detector Server (recommended)
+### Detector Server(권장)
 
-[This Detectors API](https://foundation-model-stack.github.io/fms-guardrails-orchestrator/?urls.primaryName=Detector+API#/Text) uses `api/v1/text/contents` endpoint to run a single detector; it can accept multiple text inputs within a request. 
+[이 Detectors API](https://foundation-model-stack.github.io/fms-guardrails-orchestrator/?urls.primaryName=Detector+API#/Text)는 단일 detector를 실행하기 위해 `api/v1/text/contents` 엔드포인트를 사용하며, 하나의 요청에서 여러 text input을 받을 수 있습니다.
 
 ```yaml
 guardrails:
@@ -121,7 +121,7 @@ guardrails:
 
 ### Orchestrator
 
-If you're using the IBM FMS Guardrails Orchestrator, you can use [FMS Orchestrator API](https://foundation-model-stack.github.io/fms-guardrails-orchestrator/?urls.primaryName=Orchestrator+API), specifically by leveraging the `api/v2/text/detection/content` to potentially run multiple detectors in a single request; however, this endpoint can only accept one text input per request.
+IBM FMS 가드레일 Orchestrator를 사용하는 경우 [FMS Orchestrator API](https://foundation-model-stack.github.io/fms-guardrails-orchestrator/?urls.primaryName=Orchestrator+API)를 사용할 수 있습니다. 특히 `api/v2/text/detection/content`를 활용하면 하나의 요청에서 여러 detector를 실행할 수 있지만, 이 엔드포인트는 요청당 하나의 text input만 받을 수 있습니다.
 
 ```yaml
 guardrails:
@@ -135,9 +135,9 @@ guardrails:
       is_detector_server: false  # Use orchestrator
 ```
 
-## Examples
+## 예제
 
-### Check for jailbreaks on input
+### 입력에서 jailbreak 검사
 
 ```yaml
 guardrails:
@@ -154,7 +154,7 @@ guardrails:
         score_threshold: 0.8
 ```
 
-### Check for PII in responses
+### 응답에서 PII 검사
 
 ```yaml
 guardrails:
@@ -171,7 +171,7 @@ guardrails:
         block_on_detection: true
 ```
 
-### Run multiple detectors
+### 여러 detector 실행
 
 ```yaml
 guardrails:
@@ -194,7 +194,7 @@ guardrails:
       is_detector_server: true
 ```
 
-Then in your request:
+그런 다음 요청에서 다음과 같이 지정합니다.
 
 ```shell
 curl -i http://localhost:4000/v1/chat/completions \
@@ -207,9 +207,9 @@ curl -i http://localhost:4000/v1/chat/completions \
   }'
 ```
 
-## How detection works
+## 감지 동작 방식
 
-When IBM Guardrails finds something, it returns details about what it found:
+IBM 가드레일이 무언가를 발견하면 감지한 항목의 세부 정보를 반환합니다.
 
 ```json
 {
@@ -221,14 +221,13 @@ When IBM Guardrails finds something, it returns details about what it found:
 }
 ```
 
-- `score` - How confident it is (0.0 to 1.0)
-- `text` - The specific text that triggered it
-- `detection_type` - What kind of violation
+- `score` - 감지 신뢰도입니다(0.0~1.0).
+- `text` - 감지를 유발한 구체적인 텍스트입니다.
+- `detection_type` - 위반 유형입니다.
 
-If the score is above your `score_threshold`, the request gets blocked (if `block_on_detection` is true).
+점수가 `score_threshold`보다 높으면, `block_on_detection`이 true일 때 요청이 차단됩니다.
 
-## Further Reading
+## 추가 자료
 
-- [Control Guardrails per API Key](./quick_start#-control-guardrails-per-api-key)
-- [IBM FMS Guardrails on GitHub](https://github.com/foundation-model-stack/fms-guardrails-orchestr8)
-
+- [API Key별 가드레일 제어](./quick_start#-control-guardrails-per-api-key)
+- [GitHub의 IBM FMS 가드레일](https://github.com/foundation-model-stack/fms-guardrails-orchestr8)

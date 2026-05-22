@@ -1,15 +1,15 @@
-# Token Usage
-By default LiteLLM returns token usage in all completion requests ([See here](https://litellm.readthedocs.io/en/latest/output/))
+# 토큰 사용량
+기본적으로 LiteLLM은 모든 completion 요청에서 토큰 사용량을 반환합니다([여기 참조](https://litellm.readthedocs.io/en/latest/output/)).
 
-However, we also expose 3 public helper functions to calculate token usage across providers:
+또한 제공자 전반의 토큰 사용량을 계산하기 위해 3개의 공개 헬퍼 함수를 제공합니다.
 
-- `token_counter`: This returns the number of tokens for a given input - it uses the tokenizer based on the model, and defaults to tiktoken if no model-specific tokenizer is available. 
+- `token_counter`: 주어진 입력의 토큰 수를 반환합니다. 모델 기반 토크나이저를 사용하며, 모델별 토크나이저를 사용할 수 없는 경우 기본값으로 tiktoken을 사용합니다. 
 
-- `cost_per_token`: This returns the cost (in USD) for prompt (input) and completion (output) tokens. It utilizes our model_cost map which can be found in `__init__.py` and also as a [community resource](https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json).
+- `cost_per_token`: prompt(input) 및 completion(output) 토큰의 비용(USD)을 반환합니다. `__init__.py`와 [커뮤니티 리소스](https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json)에서 확인할 수 있는 model_cost map을 사용합니다.
 
-- `completion_cost`: This returns the overall cost (in USD) for a given LLM API Call. It combines `token_counter` and `cost_per_token` to return the cost for that query (counting both cost of input and output). 
+- `completion_cost`: 주어진 LLM API 호출의 전체 비용(USD)을 반환합니다. `token_counter`와 `cost_per_token`을 결합하여 해당 쿼리의 비용을 반환합니다(input과 output 비용 모두 계산).
 
-## Example Usage 
+## 사용 예 
 
 1. `token_counter`
 

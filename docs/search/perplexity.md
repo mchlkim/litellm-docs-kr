@@ -1,4 +1,4 @@
-# Perplexity AI Search
+# Perplexity AI 검색
 
 **Get API Key:** [https://www.perplexity.ai/settings/api](https://www.perplexity.ai/settings/api)
 
@@ -35,7 +35,7 @@ search_tools:
       api_key: os.environ/PERPLEXITYAI_API_KEY
 ```
 
-### 2. Start the proxy
+### 2. 프록시 시작
 
 ```bash
 litellm --config /path/to/config.yaml
@@ -43,7 +43,7 @@ litellm --config /path/to/config.yaml
 # RUNNING on http://0.0.0.0:4000
 ```
 
-### 3. Test the search endpoint
+### 3. 검색 엔드포인트 테스트
 
 ```bash showLineNumbers title="Test Request"
 curl http://0.0.0.0:4000/v1/search/perplexity-search \
@@ -54,4 +54,3 @@ curl http://0.0.0.0:4000/v1/search/perplexity-search \
     "max_results": 5
   }'
 ```
-

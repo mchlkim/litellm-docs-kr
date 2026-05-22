@@ -3,29 +3,29 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
 
-# Router - Load Balancing
+# Router - 부하 분산
 
-LiteLLM manages:
-- Load-balance across multiple deployments (e.g. Azure/OpenAI)
-- Prioritizing important requests to ensure they don't fail (i.e. Queueing)
-- Basic reliability logic - cooldowns, fallbacks, timeouts and retries (fixed + exponential backoff) across multiple deployments/providers.
+LiteLLM은 다음을 관리합니다.
+- 여러 deployment 간 load balancing. 예: Azure/OpenAI.
+- 중요한 request가 실패하지 않도록 우선순위 처리. 예: queueing.
+- 여러 deployment/provider에 걸친 기본 reliability logic. cooldown, fallback, timeout, retry(fixed + exponential backoff).
 
-In production, litellm supports using Redis as a way to track cooldown server and usage (managing tpm/rpm limits).
+production에서 litellm은 cooldown server와 usage를 추적하는 방법으로 Redis 사용을 지원합니다. tpm/rpm limit 관리에 사용됩니다.
 
 :::info
 
-If you want a server to load balance across different LLM APIs, use our [LiteLLM Proxy Server](./proxy/load_balancing.md)
+서버가 여러 LLM API 간 load balancing을 수행해야 한다면 [LiteLLM Proxy Server](./proxy/load_balancing.md)를 사용하세요.
 
 :::
 
 
-## Load Balancing
-(s/o [@paulpierre](https://www.linkedin.com/in/paulpierre/) and [sweep proxy](https://docs.sweep.dev/blogs/openai-proxy) for their contributions to this implementation)
-[**See Code**](https://github.com/BerriAI/litellm/blob/main/litellm/router.py)
+## 부하 분산
+(이 implementation에 기여해 주신 [@paulpierre](https://www.linkedin.com/in/paulpierre/) 및 [sweep proxy](https://docs.sweep.dev/blogs/openai-proxy)에 감사드립니다)
+[**코드 보기**](https://github.com/BerriAI/litellm/blob/main/litellm/router.py)
 
-### Quick Start
+### 빠른 시작
 
-Loadbalance across multiple [azure](./providers/azure)/[bedrock](./providers/bedrock.md)/[provider](./providers/) deployments. LiteLLM will handle retrying in different regions if a call fails.
+여러 [azure](./providers/azure)/[bedrock](./providers/bedrock.md)/[provider](./providers/) deployment 간 load balancing을 수행합니다. call이 실패하면 LiteLLM이 다른 region에서 retry를 처리합니다.
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -94,11 +94,11 @@ print(response)
 
 :::info
 
-See detailed proxy loadbalancing/fallback docs [here](./proxy/reliability.md)
+자세한 proxy load balancing/fallback 문서는 [여기](./proxy/reliability.md)를 참고하세요.
 
 :::
 
-1. Setup model_list with multiple deployments
+1. 여러 deployment가 포함된 model_list 설정
 ```yaml
 model_list:
   - model_name: gpt-3.5-turbo
@@ -118,13 +118,13 @@ model_list:
       api_key: <your-azure-api-key>
 ```
 
-2. Start proxy 
+2. proxy 시작
 
 ```bash
 litellm --config /path/to/config.yaml 
 ```
 
-3. Test it! 
+3. 테스트
 
 ```bash
 curl -X POST 'http://0.0.0.0:4000/chat/completions' \
@@ -141,36 +141,36 @@ curl -X POST 'http://0.0.0.0:4000/chat/completions' \
 </TabItem>
 </Tabs>
 
-### Available Endpoints
-- `router.completion()` - chat completions endpoint to call 100+ LLMs
-- `router.acompletion()` - async chat completion calls
-- `router.embedding()` - embedding endpoint for Azure, OpenAI, Huggingface endpoints
-- `router.aembedding()` - async embeddings calls
-- `router.text_completion()` - completion calls in the old OpenAI `/v1/completions` endpoint format
-- `router.atext_completion()` - async text completion calls
-- `router.image_generation()` - completion calls in OpenAI `/v1/images/generations` endpoint format
-- `router.aimage_generation()` - async image generation calls
+### 사용 가능한 Endpoint
+- `router.completion()` - 100개 이상의 LLM을 호출하는 chat completions endpoint
+- `router.acompletion()` - async chat completion 호출
+- `router.embedding()` - Azure, OpenAI, Huggingface endpoint용 embedding endpoint
+- `router.aembedding()` - async embedding 호출
+- `router.text_completion()` - 기존 OpenAI `/v1/completions` endpoint format의 completion call
+- `router.atext_completion()` - async text completion 호출
+- `router.image_generation()` - OpenAI `/v1/images/generations` endpoint format의 completion call
+- `router.aimage_generation()` - async image generation 호출
 
-## Advanced - Routing Strategies ⭐️
-#### Routing Strategies - Weighted Pick, Rate Limit Aware, Least Busy, Latency Based, Cost Based
+## 고급 - Routing Strategy
+#### Routing Strategy - 가중 선택 / rate limit 인식 / least busy / latency 기반 / cost 기반 {#routing-strategy-weighted-pick-rate-limit-aware-least-busy-latency-based-cost-based}
 
-Router provides multiple strategies for routing your calls across multiple deployments. **We recommend using `simple-shuffle` (default) for best performance in production.**
-
-<Tabs>
-<TabItem value="simple-shuffle" label="(Default) Weighted Pick - RECOMMENDED">
-
-**Default and Recommended for Production** - Best performance with minimal latency overhead.
-
-Picks a deployment based on the provided **Requests per minute (rpm) or Tokens per minute (tpm)**
-
-If `rpm` or `tpm` is not provided, it randomly picks a deployment
-
-You can also set a `weight` param, to specify which model should get picked when.
+Router는 여러 deployment에 call을 라우팅하는 다양한 strategy를 제공합니다. **production에서 최상의 performance를 위해 `simple-shuffle`(기본값) 사용을 권장합니다.**
 
 <Tabs>
-<TabItem value="rpm" label="RPM-based shuffling">
+<TabItem value="simple-shuffle" label="(기본값) Weighted Pick - 권장">
 
-##### **LiteLLM Proxy Config.yaml**
+**production 기본 및 권장값** - latency overhead를 최소화하면서 가장 좋은 performance를 제공합니다.
+
+제공된 **Requests per minute(rpm) 또는 Tokens per minute(tpm)**을 기준으로 deployment를 선택합니다.
+
+`rpm` 또는 `tpm`이 제공되지 않으면 deployment를 무작위로 선택합니다.
+
+어떤 model을 어느 정도 선택할지 지정하려면 `weight` param도 설정할 수 있습니다.
+
+<Tabs>
+<TabItem value="rpm" label="RPM 기반 shuffling">
+
+##### **LiteLLM Proxy `Config.yaml`**
 
 ```yaml
 model_list:
@@ -230,9 +230,9 @@ asyncio.run(router_acompletion())
 ```
 
 </TabItem>
-<TabItem value="weight" label="Weight-based shuffling">
+<TabItem value="weight" label="Weight 기반 shuffling">
 
-##### **LiteLLM Proxy Config.yaml**
+##### **LiteLLM Proxy `Config.yaml`**
 
 ```yaml
 model_list:
@@ -298,18 +298,18 @@ asyncio.run(router_acompletion())
 <TabItem value="usage-based-v2" label="Rate-Limit Aware v2 (ASYNC)">
 
 > [!WARNING]  
-**Usage-based routing is not recommended for production due to performance impacts.** Use `simple-shuffle` (default) for optimal performance in high-traffic scenarios. Usage-based routing adds significant latency due to Redis operations for tracking usage across deployments.
+**usage-based routing은 performance 영향 때문에 production에 권장되지 않습니다.** 고트래픽 환경에서 최적 performance를 위해 `simple-shuffle`(기본값)을 사용하세요. usage-based routing은 deployment 간 usage를 추적하는 Redis operation 때문에 상당한 latency를 추가합니다.
 
 
-**🎉 NEW** This is an async implementation of usage-based-routing.
+**신규** usage-based-routing의 async implementation입니다.
 
-**Filters out deployment if tpm/rpm limit exceeded** - If you pass in the deployment's tpm/rpm limits.
+**tpm/rpm limit을 초과하면 deployment를 제외** - deployment의 tpm/rpm limit을 전달한 경우 적용됩니다.
 
-Routes to **deployment with lowest TPM usage** for that minute. 
+해당 minute에 **TPM usage가 가장 낮은 deployment**로 라우팅합니다.
 
-In production, we use Redis to track usage (TPM/RPM) across multiple deployments. This implementation uses **async redis calls** (redis.incr and redis.mget).
+production에서는 여러 deployment의 usage(TPM/RPM)를 추적하기 위해 Redis를 사용합니다. 이 implementation은 **async redis call**(`redis.incr`, `redis.mget`)을 사용합니다.
 
-For Azure, [you get 6 RPM per 1000 TPM](https://stackoverflow.com/questions/77368844/what-is-the-request-per-minute-rate-limit-for-azure-openai-models-for-gpt-3-5-tu)
+Azure에서는 [1000 TPM당 6 RPM](https://stackoverflow.com/questions/77368844/what-is-the-request-per-minute-rate-limit-for-azure-openai-models-for-gpt-3-5-tu)을 받습니다.
 
 <Tabs>
 <TabItem value="sdk" label="sdk">
@@ -363,7 +363,7 @@ print(response)
 </TabItem>
 <TabItem value="proxy" label="proxy">
 
-**1. Set strategy in config**
+**1. config에서 strategy 설정**
 
 ```yaml
 model_list:
@@ -393,13 +393,13 @@ general_settings:
   master_key: sk-1234
 ```
 
-**2. Start proxy**
+**2. proxy 시작**
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-**3. Test it!**
+**3. 테스트**
 
 ```bash
 curl --location 'http://localhost:4000/v1/chat/completions' \
@@ -416,14 +416,14 @@ curl --location 'http://localhost:4000/v1/chat/completions' \
 
 
 </TabItem>
-<TabItem value="latency-based" label="Latency-Based">
+<TabItem value="latency-based" label="Latency 기반">
 
 
-Picks the deployment with the lowest response time.
+response time이 가장 낮은 deployment를 선택합니다.
 
-It caches, and updates the response times for deployments based on when a request was sent and received from a deployment.
+request가 deployment로 전송되고 response가 수신된 시간을 기준으로 deployment의 response time을 cache하고 업데이트합니다.
 
-[**How to test**](https://github.com/BerriAI/litellm/blob/main/tests/local_testing/test_lowest_latency_routing.py)
+[**테스트 방법**](https://github.com/BerriAI/litellm/blob/main/tests/local_testing/test_lowest_latency_routing.py)
 
 ```python
 from litellm import Router 
@@ -460,29 +460,29 @@ if response is not None:
 	)
 ```
 
-#### Set Time Window 
+#### Time Window 설정
 
-Set time window for how far back to consider when averaging latency for a deployment. 
+deployment의 latency average를 계산할 때 얼마나 과거까지 고려할지 time window를 설정합니다.
 
-**In Router**
+**Router에서**
 ```python 
 router = Router(..., routing_strategy_args={"ttl": 10})
 ```
 
-**In Proxy**
+**Proxy에서**
 
 ```yaml
 router_settings:
 	routing_strategy_args: {"ttl": 10}
 ```
 
-#### Set Lowest Latency Buffer
+#### Lowest Latency Buffer 설정
 
-Set a buffer within which deployments are candidates for making calls to. 
+call 대상으로 고려할 deployment 후보 범위의 buffer를 설정합니다.
 
-E.g. 
+예:
 
-if you have 5 deployments
+deployment가 5개 있고
 
 ```
 https://litellm-prod-1.openai.azure.com/: 0.07s
@@ -492,14 +492,14 @@ https://litellm-prod-4.openai.azure.com/: 0.1s
 https://litellm-prod-5.openai.azure.com/: 4.66s
 ```
 
-to prevent initially overloading `prod-1`, with all requests - we can set a buffer of 50%, to consider deployments `prod-2, prod-3, prod-4`. 
+초기에 모든 request가 `prod-1`로 몰리는 것을 방지하려면 50% buffer를 설정해 `prod-2`, `prod-3`, `prod-4` deployment도 고려하도록 할 수 있습니다.
 
-**In Router**
+**Router에서**
 ```python 
 router = Router(..., routing_strategy_args={"lowest_latency_buffer": 0.5})
 ```
 
-**In Proxy**
+**Proxy에서**
 
 ```yaml
 router_settings:
@@ -508,15 +508,15 @@ router_settings:
 
 </TabItem>
 
-<TabItem value="usage-based" label="Rate-Limit Aware">
+<TabItem value="usage-based" label="Rate-Limit 인식">
 
-This will route to the deployment with the lowest TPM usage for that minute. 
+해당 minute에 TPM usage가 가장 낮은 deployment로 라우팅합니다.
 
-In production, we use Redis to track usage (TPM/RPM) across multiple deployments. 
+production에서는 여러 deployment의 usage(TPM/RPM)를 추적하기 위해 Redis를 사용합니다.
 
-If you pass in the deployment's tpm/rpm limits, this will also check against that, and filter out any who's limits would be exceeded. 
+deployment의 tpm/rpm limit을 전달하면 해당 limit도 확인하고, 초과될 deployment를 filter out합니다.
 
-For Azure, your RPM = TPM/6. 
+Azure에서는 RPM = TPM/6입니다.
 
 
 ```python
@@ -571,9 +571,9 @@ print(response)
 <TabItem value="least-busy" label="Least-Busy">
 
 
-Picks a deployment with the least number of ongoing calls, it's handling.
+처리 중인 ongoing call 수가 가장 적은 deployment를 선택합니다.
 
-[**How to test**](https://github.com/BerriAI/litellm/blob/main/tests/local_testing/test_least_busy_routing.py)
+[**테스트 방법**](https://github.com/BerriAI/litellm/blob/main/tests/local_testing/test_least_busy_routing.py)
 
 ```python
 from litellm import Router 
@@ -620,10 +620,10 @@ asyncio.run(router_acompletion())
 
 <TabItem value="custom" label="Custom Routing Strategy">
 
-**Plugin a custom routing strategy to select deployments**
+deployment 선택을 위한 custom routing strategy를 연결합니다.
 
 
-Step 1. Define your custom routing strategy
+1단계. custom routing strategy 정의
 
 ```python
 
@@ -685,7 +685,7 @@ class CustomRoutingStrategy(CustomRoutingStrategyBase):
         pass
 ```
 
-Step 2. Initialize Router with custom routing strategy
+2단계. custom routing strategy로 Router 초기화
 ```python
 from litellm import Router
 
@@ -718,7 +718,7 @@ router = Router(
 router.set_custom_routing_strategy(CustomRoutingStrategy()) # 👈 Set your routing strategy here
 ```
 
-Step 3. Test your routing strategy. Expect your custom routing strategy to be called when running `router.acompletion` requests
+3단계. routing strategy 테스트. `router.acompletion` request 실행 시 custom routing strategy가 호출되어야 합니다.
 ```python
 for _ in range(10):
 	response = await router.acompletion(
@@ -733,16 +733,16 @@ for _ in range(10):
 
 </TabItem>
 
-<TabItem value="lowest-cost" label="Lowest Cost Routing (Async)">
+<TabItem value="lowest-cost" label="최저 Cost Routing (Async)">
 
-Picks a deployment based on the lowest cost
+가장 낮은 cost를 기준으로 deployment를 선택합니다.
 
-How this works:
-- Get all healthy deployments
-- Select all deployments that are under their provided `rpm/tpm` limits
-- For each deployment check if `litellm_param["model"]` exists in [`litellm_model_cost_map`](https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json) 
-	- if deployment does not exist in `litellm_model_cost_map` -> use deployment_cost= `$1`
-- Select deployment with lowest cost
+동작 방식:
+- 모든 healthy deployment를 가져옵니다.
+- 제공된 `rpm/tpm` limit 아래에 있는 deployment를 모두 선택합니다.
+- 각 deployment에 대해 `litellm_param["model"]`이 [`litellm_model_cost_map`](https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json)에 존재하는지 확인합니다.
+	- deployment가 `litellm_model_cost_map`에 없으면 deployment_cost=`$1`을 사용합니다.
+- cost가 가장 낮은 deployment를 선택합니다.
 
 ```python
 from litellm import Router 
@@ -778,9 +778,9 @@ asyncio.run(router_acompletion())
 ```
 
 
-#### Using Custom Input/Output pricing
+#### Custom Input/Output pricing 사용
 
-Set `litellm_params["input_cost_per_token"]` and `litellm_params["output_cost_per_token"]` for using custom pricing when routing
+routing 시 custom pricing을 사용하려면 `litellm_params["input_cost_per_token"]` 및 `litellm_params["output_cost_per_token"]`을 설정하세요.
 
 ```python
 model_list = [
@@ -830,22 +830,22 @@ asyncio.run(router_acompletion())
 </TabItem>
 </Tabs>
 
-## Routing Groups - Per-Model Strategies
+## Routing Group - Model별 Strategy {#routing-groups---per-model-strategies}
 
-Apply different routing strategies to different models in the same router. A **routing group** binds a list of `model_name`s to a strategy and (optionally) strategy args. Models not claimed by any group fall back to the router's top-level `routing_strategy`.
+동일한 router 안에서 model별로 다른 routing strategy를 적용합니다. **routing group**은 `model_name` 목록을 strategy 및 선택적 strategy args에 연결합니다. 어떤 group에도 포함되지 않은 model은 router 최상위 `routing_strategy`로 fallback됩니다.
 
 :::tip
-You can also create, edit, and delete routing groups from the dashboard. See [Manage Routing Groups via UI](./proxy/ui/routing_groups.md).
+dashboard에서 routing group을 생성, 수정, 삭제할 수도 있습니다. [UI로 Routing Group 관리](./proxy/ui/routing_groups.md)를 참고하세요.
 :::
 
-**When to use this:** you want latency-based routing for `gpt-4o`, but plain weighted-pick for cheaper models — without spinning up a second router.
+**사용 시점:** 두 번째 router를 띄우지 않고 `gpt-4o`에는 latency-based routing을, 더 저렴한 model에는 일반 weighted-pick을 적용하고 싶을 때 사용합니다.
 
-#### Rules
+#### 규칙
 
-- Each `model_name` may belong to **at most one** group. Overlap raises `ValueError` at init.
-- Models not in any group use the top-level `routing_strategy` / `routing_strategy_args` (an implicit `"default"` group). The name `"default"` is reserved.
-- Each group can override `routing_strategy_args` (e.g. latency window TTL, TPM ceilings).
-- The group is resolved per-request based on the post-pre-routing-hook `model` name.
+- 각 `model_name`은 **최대 하나의** group에만 속할 수 있습니다. 중복되면 초기화 시 `ValueError`가 발생합니다.
+- 어떤 group에도 속하지 않은 model은 최상위 `routing_strategy` / `routing_strategy_args`를 사용합니다. 이는 암시적 `"default"` group입니다. `"default"` name은 예약되어 있습니다.
+- 각 group은 `routing_strategy_args`를 override할 수 있습니다. 예: latency window TTL, TPM ceiling.
+- group은 post-pre-routing-hook의 `model` name을 기준으로 request별로 결정됩니다.
 
 <Tabs>
 <TabItem value="config-yaml" label="LiteLLM Proxy Config.yaml">
@@ -879,9 +879,9 @@ router_settings:
         ttl: 3600
 ```
 
-Behavior:
-- `gpt-4o` → latency-based routing across the OpenAI + Azure deployments.
-- `cheap-model` → simple-shuffle (the default group).
+동작:
+- `gpt-4o` -> OpenAI + Azure deployment 간 latency-based routing.
+- `cheap-model` -> simple-shuffle(기본 group).
 
 </TabItem>
 <TabItem value="sdk" label="Python SDK">
@@ -910,9 +910,9 @@ router = Router(
 </TabItem>
 </Tabs>
 
-#### Multiple groups
+#### 여러 group
 
-Two groups can use the same strategy with different args; each gets an independent state instance.
+두 group은 같은 strategy를 서로 다른 args로 사용할 수 있으며, 각 group은 독립적인 state instance를 가집니다.
 
 ```yaml
 router_settings:
@@ -930,23 +930,23 @@ router_settings:
         rpm: 10000
 ```
 
-#### Updating at runtime
+#### runtime 중 업데이트
 
-Routing groups can be updated via `Router.update_settings(routing_groups=[...])` or the proxy's `/config/update` endpoint. Per-group state is rebuilt on update.
+Routing group은 `Router.update_settings(routing_groups=[...])` 또는 proxy의 `/config/update` endpoint를 통해 업데이트할 수 있습니다. 업데이트 시 group별 state가 다시 생성됩니다.
 
-## Traffic Mirroring / Silent Experiments
+## 트래픽 미러링 / silent experiment {#traffic-mirroring-silent-experiment}
 
-Traffic mirroring allows you to "mimic" production traffic to a secondary (silent) model for evaluation purposes. The silent model's response is gathered in the background and does not affect the latency or result of the primary request.
+Traffic mirroring을 사용하면 평가 목적으로 production traffic을 secondary(silent) model에 "복제"할 수 있습니다. silent model의 response는 background에서 수집되며 primary request의 latency나 result에 영향을 주지 않습니다.
 
-[**See detailed guide on A/B Testing - Traffic Mirroring here**](./traffic_mirroring.md)
+[**A/B Testing 및 Traffic Mirroring 상세 가이드 보기**](./traffic_mirroring.md)
 
-## Basic Reliability
+## 기본 Reliability {#fallbacks}
 
-### Deployment Ordering (Priority)
+### Deployment 우선순위 지정 {#deployment-ordering-priority}
 
-Set `order` in `litellm_params` to prioritize deployments. Lower values = higher priority. When multiple deployments share the same `order`, the routing strategy picks among them.
+deployment 우선순위를 지정하려면 `litellm_params`에 `order`를 설정하세요. 낮은 값일수록 더 높은 priority입니다. 여러 deployment가 같은 `order`를 공유하면 routing strategy가 그중 하나를 선택합니다.
 
-When a request to an `order=1` deployment fails (connection error, 404, 429, etc.), the router automatically tries `order=2` deployments, then `order=3`, and so on. Each order level gets its own set of retries before escalating to the next. If all order levels are exhausted, the router falls through to any configured [fallbacks](#fallbacks).
+`order=1` deployment 요청이 실패하면(connection error, 404, 429 등) router는 자동으로 `order=2` deployment, 그 다음 `order=3`을 시도합니다. 각 order level은 다음 level로 넘어가기 전에 자체 retry set을 사용합니다. 모든 order level이 소진되면 router는 설정된 [fallback](#fallbacks)으로 넘어갑니다.
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -997,11 +997,11 @@ model_list:
 </TabItem>
 </Tabs>
 
-### Weighted Deployments 
+### 가중치 기반 deployment {#weighted-deployment}
 
-Set `weight` on a deployment to pick one deployment more often than others. 
+특정 deployment가 다른 deployment보다 더 자주 선택되도록 하려면 deployment에 `weight`를 설정하세요.
 
-This works across **simple-shuffle** routing strategy (this is the default, if no routing strategy is selected). 
+이는 **simple-shuffle** routing strategy에서 동작합니다. routing strategy를 선택하지 않으면 기본값입니다.
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -1056,110 +1056,11 @@ model_list:
 </TabItem>
 </Tabs>
 
-### Weighted Failover
+### 최대 병렬 request(ASYNC) {#max-parallel-requests-async}
 
-By default, when a deployment in a model group fails, the router moves on to the next entry in `fallbacks` (a different model group). With `enable_weighted_failover`, the router first retries **inside the same model group** by re-picking a different deployment using the existing weights, and only escalates to cross-group fallbacks once every deployment in the group has been tried.
+router의 async request semaphore에서 사용됩니다. deployment로 보내는 최대 concurrent call 수를 제한합니다. high-traffic scenario에서 유용합니다.
 
-This is useful when you have multiple regional copies of the same model (e.g. Azure `eastus2` + `swedencentral`) and want a failed region to fail over to a healthy peer with the same `model_name`, instead of immediately switching to a different model.
-
-**Behavior**
-
-- Only active when `routing_strategy="simple-shuffle"` (the default).
-- On a retryable failure, the failing deployment ID is excluded and a new deployment is picked from the remaining peers in the same model group, respecting `weight` / `rpm` / `tpm`.
-- Exclusions accumulate across hops: each retry adds the previous failure to the exclusion set, so a deployment that just failed is never picked again in the same request chain.
-- Capped by `max_fallbacks` (default `5`).
-- Not triggered for `ContextWindowExceededError` or `ContentPolicyViolationError` — those keep their dedicated fallback paths.
-- Async-only: honored by `router.acompletion()` and other async entrypoints. The sync `router.completion()` path falls through to regular fallbacks.
-- Cooldowns still apply: a deployment that crosses `allowed_fails` is cooled down independently of weighted failover.
-
-**Order vs. weight**
-
-If the same group also uses `order`, the order filter runs **before** the weighted pick. So weighted failover re-picks only among the deployments in the current minimum-order tier. Promotion to the next order tier happens through the existing order-based fallback path.
-
-**Config**
-
-<Tabs>
-<TabItem value="sdk" label="SDK">
-
-```python
-from litellm import Router
-
-model_list = [
-    {
-        "model_name": "gpt-4.1-mini",
-        "litellm_params": {
-            "model": "azure/gpt-4.1-mini",
-            "api_base": "https://eastus2.example.azure.com",
-            "api_key": os.getenv("AZURE_EASTUS2_KEY"),
-            "weight": 1,
-        },
-    },
-    {
-        "model_name": "gpt-4.1-mini",
-        "litellm_params": {
-            "model": "azure/gpt-4.1-mini",
-            "api_base": "https://swedencentral.example.azure.com",
-            "api_key": os.getenv("AZURE_SWEDEN_KEY"),
-            "weight": 1,
-        },
-    },
-]
-
-router = Router(
-    model_list=model_list,
-    routing_strategy="simple-shuffle",
-    enable_weighted_failover=True,  # 👈 retry within the same model group on failure
-)
-
-response = await router.acompletion(
-    model="gpt-4.1-mini",
-    messages=[{"role": "user", "content": "Hey"}],
-)
-```
-
-</TabItem>
-<TabItem value="proxy" label="PROXY">
-
-```yaml
-model_list:
-  - model_name: gpt-4.1-mini
-    litellm_params:
-      model: azure/gpt-4.1-mini
-      api_base: https://eastus2.example.azure.com
-      api_key: os.environ/AZURE_EASTUS2_KEY
-      weight: 1
-  - model_name: gpt-4.1-mini
-    litellm_params:
-      model: azure/gpt-4.1-mini
-      api_base: https://swedencentral.example.azure.com
-      api_key: os.environ/AZURE_SWEDEN_KEY
-      weight: 1
-
-router_settings:
-  routing_strategy: simple-shuffle
-  enable_weighted_failover: true  # 👈 retry within the same model group on failure
-```
-
-</TabItem>
-</Tabs>
-
-**Walkthrough**
-
-With the config above and a request to `gpt-4.1-mini`:
-
-1. `simple-shuffle` picks one of the two deployments using `weight`.
-2. If the picked deployment raises a provider error (e.g. `RateLimitError`, `InternalServerError`), its deployment ID is added to `metadata._failover_excluded_ids`.
-3. The router re-enters `simple-shuffle` with the failed deployment excluded and weights renormalized over what's left.
-4. Steps 2–3 repeat until a deployment succeeds, every peer has been excluded, or `max_fallbacks` is reached.
-5. Only after all peers are exhausted does the router fall through to any `fallbacks` configured for the group.
-
-See [`enable_weighted_failover`](./proxy/config_settings#router_settings---reference) in the router settings reference for the flag.
-
-### Max Parallel Requests (ASYNC)
-
-Used in semaphore for async requests on router. Limit the max concurrent calls made to a deployment. Useful in high-traffic scenarios. 
-
-If tpm/rpm is set, and no max parallel request limit given, we use the RPM or calculated RPM (tpm/1000/6) as the max parallel request limit. 
+tpm/rpm이 설정되어 있고 max parallel request limit이 주어지지 않으면 RPM 또는 계산된 RPM(tpm/1000/6)을 max parallel request limit으로 사용합니다.
 
 
 ```python
@@ -1182,11 +1083,11 @@ router = Router(model_list=model_list, default_max_parallel_requests=20) # 👈 
 # deployment max parallel requests > default max parallel requests
 ```
 
-[**See Code**](https://github.com/BerriAI/litellm/blob/a978f2d8813c04dad34802cb95e0a0e35a3324bc/litellm/utils.py#L5605)
+[**코드 보기**](https://github.com/BerriAI/litellm/blob/a978f2d8813c04dad34802cb95e0a0e35a3324bc/litellm/utils.py#L5605)
 
 ### Cooldowns
 
-Set the limit for how many calls a model is allowed to fail in a minute, before being cooled down for a minute. 
+model이 1분간 cooldown되기 전에 1분 내 실패할 수 있는 call 수의 limit을 설정합니다.
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -1213,7 +1114,7 @@ print(f"response: {response}")
 </TabItem>
 <TabItem value="proxy" label="PROXY">
 
-**Set Global Value**
+**Global Value 설정**
 
 ```yaml
 router_settings:
@@ -1221,11 +1122,11 @@ router_settings:
   	cooldown_time: 30 # (in seconds) how long to cooldown model if fails/min > allowed_fails
 ```
 
-Defaults:
+기본값:
 - allowed_fails: 3
-- cooldown_time: 5s (`DEFAULT_COOLDOWN_TIME_SECONDS` in constants.py)
+- `cooldown_time`: 5s (`DEFAULT_COOLDOWN_TIME_SECONDS`, constants.py)
 
-**Set Per Model**
+**Model별 설정**
 
 ```yaml
 model_list:
@@ -1241,13 +1142,13 @@ model_list:
 </TabItem>
 </Tabs>
 
-**Expected Response**
+**예상 Response**
 
 ```
 No deployments available for selected model, Try again in 60 seconds. Passed model=claude-3-5-sonnet. pre-call-checks=False, allowed_model_region=n/a.
 ```
 
-#### **Disable cooldowns**
+#### **cooldown 비활성화**
 
 
 <Tabs>
@@ -1270,17 +1171,17 @@ router_settings:
 </TabItem>
 </Tabs>
 
-### How Cooldowns Work
+### Cooldown 동작 방식 {#how-cooldowns-work}
 
-Cooldowns apply to individual deployments, not entire model groups. The router isolates failures to specific deployments while keeping healthy alternatives available.
+Cooldown은 전체 model group이 아니라 개별 deployment에 적용됩니다. router는 healthy alternative를 계속 사용할 수 있도록 failure를 특정 deployment로 격리합니다.
 
-#### What is a deployment?
+#### deployment란?
 
-A deployment is a single entry in your `config.yaml` model list. Each deployment represents a unique configuration with its own `litellm_params`. 
+deployment는 `config.yaml` model list의 단일 entry입니다. 각 deployment는 자체 `litellm_params`를 가진 고유 configuration을 나타냅니다.
 
-LiteLLM generates a unique `model_id` for each deployment by creating a deterministic hash of all the `litellm_params`. This allows the router to track and manage each deployment independently.
+LiteLLM은 모든 `litellm_params`의 deterministic hash를 생성해 각 deployment에 고유한 `model_id`를 부여합니다. 이를 통해 router는 각 deployment를 독립적으로 추적하고 관리할 수 있습니다.
 
-**Example: Multiple deployments for the same model**
+**예제: 같은 model을 위한 여러 deployment**
 
 ```yaml showLineNumbers title="Load Balancing config.yaml"
 model_list:
@@ -1301,32 +1202,32 @@ model_list:
       vertex_project: my-project
 ```
 
-Each deployment gets a unique `model_id` (e.g., `1234567890`, `9129922`, `4982929292`) that the router uses for tracking health and cooldown status.
+각 deployment는 router가 health 및 cooldown status 추적에 사용하는 고유 `model_id`를 받습니다. 예: `1234567890`, `9129922`, `4982929292`.
 
-#### When are deployments cooled down?
+#### deployment는 언제 cooldown되나요?
 
-The router automatically cools down deployments based on the following conditions:
+router는 다음 조건을 기준으로 deployment를 자동 cooldown합니다.
 
-| Condition | Trigger | Cooldown Duration |
+| 조건 | Trigger | Cooldown 기간 |
 |-----------|---------|-------------------|
-| **Rate Limiting (429)** | Immediate on 429 response | 5 seconds (default) |
-| **High Failure Rate** | >50% failures in current minute | 5 seconds (default) |
-| **Non-Retryable Errors** | 401 (Auth), 404 (Not Found), 408 (Timeout) | 5 seconds (default) |
+| **Rate Limiting (429)** | 429 response 즉시 | 5초(기본값) |
+| **높은 Failure Rate** | 현재 minute의 failure가 50% 초과 | 5초(기본값) |
+| **Non-Retryable Error** | 401(Auth), 404(Not Found), 408(Timeout) | 5초(기본값) |
 
-During cooldown, the specific deployment is temporarily removed from the available pool, while other healthy deployments continue serving requests.
+cooldown 중에는 해당 deployment가 available pool에서 일시적으로 제거되고, 다른 healthy deployment는 계속 request를 처리합니다.
 
-#### Cooldown Recovery
+#### Cooldown 복구
 
-Deployments automatically recover from cooldown after the cooldown period expires. The router will:
+deployment는 cooldown 기간이 끝나면 자동으로 복구됩니다. router는 다음을 수행합니다.
 
-1. **Monitor cooldown timers** for each deployment
-2. **Automatically re-enable** deployments when cooldown expires  
-3. **Gradually reintroduce** cooled-down deployments to the rotation
-4. **Reset failure counters** once the deployment is healthy again
+1. 각 deployment의 **cooldown timer 모니터링**
+2. cooldown 만료 시 deployment **자동 재활성화**
+3. cooled-down deployment를 rotation에 **점진적으로 재도입**
+4. deployment가 다시 healthy 상태가 되면 **failure counter reset**
 
-#### Real-World Example
+#### 실제 예제
 
-Consider this high-availability setup with multiple providers:
+여러 provider가 포함된 다음 high-availability setup을 생각해 보세요.
 
 ```yaml showLineNumbers title="Load Balancing config.yaml"
 model_list:
@@ -1366,15 +1267,15 @@ flowchart TD
 
 
 
-### Retries
+### Retry
 
-For both async + sync functions, we support retrying failed requests. 
+async 및 sync function 모두에서 실패한 request 재시도를 지원합니다.
 
-For RateLimitError we implement exponential backoffs 
+RateLimitError에는 exponential backoff를 구현합니다.
 
-For generic errors, we retry immediately 
+일반 error의 경우 즉시 retry합니다.
 
-Here's a quick look at how we can set `num_retries = 3`: 
+`num_retries = 3`을 설정하는 간단한 예시는 다음과 같습니다.
 
 ```python 
 from litellm import Router
@@ -1393,7 +1294,7 @@ response = router.completion(model="gpt-3.5-turbo", messages=messages)
 print(f"response: {response}")
 ```
 
-We also support setting minimum time to wait before retrying a failed request. This is via the `retry_after` param. 
+실패한 request를 retry하기 전에 기다릴 최소 시간 설정도 지원합니다. 이는 `retry_after` param으로 지정합니다.
 
 ```python 
 from litellm import Router
@@ -1412,18 +1313,18 @@ response = router.completion(model="gpt-3.5-turbo", messages=messages)
 print(f"response: {response}")
 ```
 
-### [Advanced]: Custom Retries, Cooldowns based on Error Type
+### [고급]: Error Type 기반 Custom Retry 및 Cooldown
 
-- Use `RetryPolicy` if you want to set a `num_retries` based on the Exception received
-- Use `AllowedFailsPolicy` to set a custom number of `allowed_fails`/minute before cooling down a deployment
+- 수신한 Exception에 따라 `num_retries`를 설정하려면 `RetryPolicy`를 사용하세요.
+- deployment를 cooldown하기 전 minute당 `allowed_fails` 수를 custom하게 설정하려면 `AllowedFailsPolicy`를 사용하세요.
 
-[**See All Exception Types**](https://github.com/BerriAI/litellm/blob/ccda616f2f881375d4e8586c76fe4662909a7d22/litellm/types/router.py#L436)
+[**모든 Exception Type 보기**](https://github.com/BerriAI/litellm/blob/ccda616f2f881375d4e8586c76fe4662909a7d22/litellm/types/router.py#L436)
 
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
 
-Example:
+예제:
 
 ```python
 retry_policy = RetryPolicy(
@@ -1437,7 +1338,7 @@ allowed_fails_policy = AllowedFailsPolicy(
 )
 ```
 
-Example Usage
+예제 사용법
 
 ```python
 from litellm.router import RetryPolicy, AllowedFailsPolicy
@@ -1504,9 +1405,9 @@ router_settings:
 </TabItem>
 </Tabs>
 
-### Caching
+### 캐싱
 
-In production, we recommend using a Redis cache. For quickly testing things locally, we also support simple in-memory caching. 
+production에서는 Redis cache 사용을 권장합니다. 로컬에서 빠르게 테스트할 수 있도록 간단한 in-memory caching도 지원합니다.
 
 **In-memory Cache**
 
@@ -1528,7 +1429,7 @@ router = Router(model_list=model_list,
 print(response)
 ```
 
-**Pass in Redis URL, additional kwargs** 
+**Redis URL 및 추가 kwargs 전달**
 ```python 
 router = Router(model_list: Optional[list] = None,
                  ## CACHING ## 
@@ -1538,19 +1439,19 @@ router = Router(model_list: Optional[list] = None,
 ```
 
 :::info
-When configuring Redis caching in router settings, use `cache_kwargs` to pass additional Redis parameters, especially for non-string values that may fail when set via `REDIS_*` environment variables.
+router settings에서 Redis caching을 설정할 때는 `cache_kwargs`를 사용해 추가 Redis parameter를 전달하세요. 특히 `REDIS_*` environment variable로 설정하면 실패할 수 있는 non-string 값에 유용합니다.
 :::
 
-## Pre-Call Checks (Context Window, EU-Regions)
+## 사전 호출 검사(Context Window, EU region) {#pre-call-checks-context-window-eu-regions}
 
-Enable pre-call checks to filter out:
-1. deployments with context window limit < messages for a call.
-2. deployments outside of eu-region
+pre-call check를 활성화하면 다음을 filter out합니다.
+1. call의 messages보다 context window limit이 작은 deployment.
+2. eu-region 밖의 deployment.
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
 
-**1. Enable pre-call checks**
+**1. pre-call check 활성화**
 ```python 
 from litellm import Router 
 # ...
@@ -1558,16 +1459,16 @@ router = Router(model_list=model_list, enable_pre_call_checks=True) # 👈 Set t
 ```
 
 
-**2. Set Model List**
+**2. Model List 설정**
 
-For context window checks on azure deployments, set the base model. Pick the base model from [this list](https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json), all the azure models start with `azure/`. 
+Azure deployment에서 context window check를 사용하려면 base model을 설정하세요. [이 목록](https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json)에서 base model을 선택하면 되며, 모든 Azure model은 `azure/`로 시작합니다.
 
-For 'eu-region' filtering, Set 'region_name' of deployment. 
+'eu-region' filtering을 위해서는 deployment의 `region_name`을 설정하세요.
 
-**Note:** We automatically infer region_name for Vertex AI, Bedrock, and IBM WatsonxAI based on your litellm params. For Azure, set `litellm.enable_preview = True`.
+**참고:** Vertex AI, Bedrock, IBM WatsonxAI의 경우 LiteLLM이 litellm params를 기준으로 region_name을 자동 추론합니다. Azure의 경우 `litellm.enable_preview = True`를 설정하세요.
 
 
-[**See Code**](https://github.com/BerriAI/litellm/blob/d33e49411d6503cb634f9652873160cd534dec96/litellm/router.py#L2958)
+[**코드 보기**](https://github.com/BerriAI/litellm/blob/d33e49411d6503cb634f9652873160cd534dec96/litellm/router.py#L2958)
 
 ```python
 model_list = [
@@ -1603,7 +1504,7 @@ router = Router(model_list=model_list, enable_pre_call_checks=True)
 ```
 
 
-**3. Test it!**
+**3. 테스트**
 
 
 <Tabs>
@@ -1712,14 +1613,14 @@ print(f"response id: {response._hidden_params['model_id']}")
 <TabItem value="proxy" label="Proxy">
 
 :::info
-Go [here](./proxy/reliability.md#advanced---context-window-fallbacks) for how to do this on the proxy
+proxy에서 이를 수행하는 방법은 [여기](./proxy/reliability.md#advanced---context-window-fallbacks)를 참고하세요.
 :::
 </TabItem>
 </Tabs>
 
-## Caching across model groups
+## Model Group 간 캐싱
 
-If you want to cache across 2 different model groups (e.g. azure deployments, and openai), use caching groups. 
+서로 다른 두 model group(예: Azure deployment와 OpenAI) 간에 cache하려면 caching group을 사용하세요.
 
 ```python
 import litellm, asyncio, time
@@ -1774,16 +1675,16 @@ async def test_acompletion_caching_on_router_caching_groups():
 asyncio.run(test_acompletion_caching_on_router_caching_groups())
 ```
 
-## Alerting 🚨
+## Alerting {#alerting-}
 
-Send alerts to slack / your webhook url for the following events
-- LLM API Exceptions
-- Slow LLM Responses
+다음 event에 대해 Slack 또는 webhook URL로 alert를 보냅니다.
+- LLM API Exception
+- 느린 LLM Response
 
-Get a slack webhook url from https://api.slack.com/messaging/webhooks
+Slack webhook URL은 https://api.slack.com/messaging/webhooks 에서 받을 수 있습니다.
 
-#### Usage
-Initialize an `AlertingConfig` and pass it to `litellm.Router`. The following code will trigger an alert because `api_key=bad-key` which is invalid
+#### 사용법
+`AlertingConfig`를 초기화한 뒤 `litellm.Router`에 전달하세요. 다음 코드는 유효하지 않은 `api_key=bad-key` 때문에 alert를 trigger합니다.
 
 ```python
 import litellm
@@ -1827,13 +1728,13 @@ async def main():
 asyncio.run(main())
 ```
 
-## Track cost for Azure Deployments
+## Azure Deployment Cost 추적
 
-**Problem**: Azure returns `gpt-4` in the response when `azure/gpt-4-1106-preview` is used. This leads to inaccurate cost tracking
+**문제**: `azure/gpt-4-1106-preview`를 사용할 때 Azure가 response에서 `gpt-4`를 반환합니다. 이로 인해 cost tracking이 부정확해집니다.
 
-**Solution** ✅ :  Set `model_info["base_model"]` on your router init so litellm uses the correct model for calculating azure cost
+**해결책**: router init에서 `model_info["base_model"]`을 설정해 LiteLLM이 Azure cost 계산에 올바른 model을 사용하도록 하세요.
 
-Step 1. Router Setup
+1단계. Router 설정
 
 ```python
 from litellm import Router
@@ -1869,7 +1770,7 @@ router = Router(model_list=model_list)
 
 ```
 
-Step 2. Access `response_cost` in the custom callback, **litellm calculates the response cost for you**
+2단계. custom callback에서 `response_cost`에 접근합니다. **LiteLLM이 response cost를 계산합니다.**
 
 ```python
 import litellm
@@ -1892,9 +1793,9 @@ response = router.completion(
 ```
 
 
-#### Default litellm.completion/embedding params
+#### 기본 litellm.completion/embedding params
 
-You can also set default params for litellm completion/embedding calls. Here's how to do that: 
+litellm completion/embedding call의 기본 params도 설정할 수 있습니다. 방법은 다음과 같습니다.
 
 ```python 
 from litellm import Router
@@ -1913,11 +1814,11 @@ response = router.completion(model="gpt-3.5-turbo", messages=messages)
 print(f"response: {response}")
 ```
 
-## Custom Callbacks - Track API Key, API Endpoint, Model Used 
+## Custom Callback - 사용된 API Key, API Endpoint, Model 추적
 
-If you need to track the api_key, api endpoint, model, custom_llm_provider used for each completion call, you can setup a [custom callback](https://docs.litellm.ai/docs/observability/custom_callback) 
+각 completion call에 사용된 api_key, api endpoint, model, custom_llm_provider를 추적해야 한다면 [custom callback](https://docs.litellm.ai/docs/observability/custom_callback)을 설정할 수 있습니다.
 
-### Usage
+### 사용법
 
 ```python
 import litellm
@@ -1957,15 +1858,15 @@ response = router.completion(
 )
 ```
 
-## Deploy Router 
+## Router 배포
 
-If you want a server to load balance across different LLM APIs, use our [LiteLLM Proxy Server](./simple_proxy#load-balancing---multiple-instances-of-1-model)
+서로 다른 LLM API 간 load balancing을 수행하는 server가 필요하다면 [LiteLLM Proxy Server](./simple_proxy)를 사용하세요.
 
 
 
-## Debugging Router
-### Basic Debugging
-Set `Router(set_verbose=True)`
+## Router Debugging
+### 기본 Debugging
+`Router(set_verbose=True)`를 설정하세요.
 
 ```python
 from litellm import Router
@@ -1976,8 +1877,8 @@ router = Router(
 )
 ```
 
-### Detailed Debugging
-Set `Router(set_verbose=True,debug_level="DEBUG")`
+### 상세 Debugging
+`Router(set_verbose=True,debug_level="DEBUG")`를 설정하세요.
 
 ```python
 from litellm import Router
@@ -1989,8 +1890,8 @@ router = Router(
 )
 ```
 
-### Very Detailed Debugging
-Set `litellm.set_verbose=True` and `Router(set_verbose=True,debug_level="DEBUG")`
+### 매우 상세한 Debugging
+`litellm.set_verbose=True` 및 `Router(set_verbose=True,debug_level="DEBUG")`를 설정하세요.
 
 ```python
 from litellm import Router
@@ -2005,9 +1906,9 @@ router = Router(
 )
 ```
 
-## Router General Settings
+## Router 일반 Settings {#router-general-settings}
 
-### Usage 
+### 사용법 
 
 ```python
 router = Router(model_list=..., router_general_settings=RouterGeneralSettings(async_only_mode=True))

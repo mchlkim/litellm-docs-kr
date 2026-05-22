@@ -1,19 +1,19 @@
-# DataForSEO Search
+# DataForSEO 검색 {#dataforseo-search}
 
-**Get API Access:** [DataForSEO](https://dataforseo.com/)
+**API 액세스 받기:** [DataForSEO](https://dataforseo.com/)
 
-## Setup
+## 설정 {#setup}
 
-1. Go to [DataForSEO](https://dataforseo.com/) and create an account
-2. Navigate to your account dashboard
-3. Generate API credentials:
-   - You'll receive a **login** (username)
-   - You'll receive a **password**
-4. Set up your environment variables:
-   - `DATAFORSEO_LOGIN` - Your DataForSEO login/username
-   - `DATAFORSEO_PASSWORD` - Your DataForSEO password
+1. [DataForSEO](https://dataforseo.com/)로 이동해 계정을 만듭니다
+2. 계정 대시보드로 이동합니다
+3. API 자격 증명을 생성합니다:
+   - **login**(username)을 받게 됩니다
+   - **password**를 받게 됩니다
+4. 환경 변수를 설정합니다:
+   - `DATAFORSEO_LOGIN` - DataForSEO 로그인/사용자 이름
+   - `DATAFORSEO_PASSWORD` - DataForSEO 비밀번호
 
-## LiteLLM Python SDK
+## LiteLLM Python SDK {#litellm-python-sdk}
 
 ```python showLineNumbers title="DataForSEO Search"
 import os
@@ -29,9 +29,9 @@ response = search(
 )
 ```
 
-## LiteLLM AI Gateway
+## LiteLLM AI Gateway {#litellm-ai-gateway}
 
-### 1. Setup config.yaml
+### 1. config.yaml 설정 {#1-setup-configyaml}
 
 ```yaml showLineNumbers title="config.yaml"
 model_list:
@@ -47,7 +47,7 @@ search_tools:
       api_key: "os.environ/DATAFORSEO_LOGIN:os.environ/DATAFORSEO_PASSWORD"
 ```
 
-### 2. Start the proxy
+### 2. 프록시 시작
 
 ```bash
 litellm --config /path/to/config.yaml
@@ -55,7 +55,7 @@ litellm --config /path/to/config.yaml
 # RUNNING on http://0.0.0.0:4000
 ```
 
-### 3. Test the search endpoint
+### 3. 검색 엔드포인트 테스트 {#3-test-the-search-endpoint}
 
 ```bash showLineNumbers title="Test Request"
 curl http://0.0.0.0:4000/v1/search/dataforseo-search \
@@ -67,7 +67,7 @@ curl http://0.0.0.0:4000/v1/search/dataforseo-search \
   }'
 ```
 
-## Provider-specific Parameters
+## Provider별 파라미터 {#provider-specific-parameters}
 
 ```python showLineNumbers title="DataForSEO Search with Provider-specific Parameters"
 import os
@@ -88,4 +88,3 @@ response = search(
     os="windows"                   # Operating system
 )
 ```
-

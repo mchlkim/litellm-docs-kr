@@ -1,54 +1,54 @@
-# [BETA] Generic Guardrail API - Integrate Without a PR
+# [BETA] Generic Guardrail API - PR 없이 통합하기 {#beta-generic-guardrail-api---integrate-without-a-pr}
 
-## The Problem
+## 문제
 
-As a guardrail provider, integrating with LiteLLM traditionally requires:
-- Making a PR to the LiteLLM repository
-- Waiting for review and merge
-- Maintaining provider-specific code in LiteLLM's codebase
-- Updating the integration for changes to your API
+guardrail provider가 LiteLLM과 통합하려면 기존에는 보통 다음 작업이 필요했습니다.
+- LiteLLM 저장소에 PR 생성
+- review 및 merge 대기
+- LiteLLM codebase 안에서 provider별 코드 유지
+- API 변경에 맞춰 통합 업데이트
 
-## The Solution
+## 해결 방법
 
-The **Generic Guardrail API** lets you integrate with LiteLLM **instantly** by implementing a simple API endpoint. No PR required.
+**Generic Guardrail API**를 사용하면 간단한 API endpoint만 구현해 LiteLLM과 **즉시** 통합할 수 있습니다. PR은 필요하지 않습니다.
 
-### Key Benefits
+### 주요 장점
 
-1. **No PR Needed** - Deploy and integrate immediately
-2. **Universal Support** - Works across ALL LiteLLM endpoints (chat, embeddings, image generation, etc.)
-3. **Simple Contract** - One endpoint, three response types
-4. **Multi-Modal Support** - Handle both text and images in requests/responses
-5. **Custom Parameters** - Pass provider-specific params via config
-6. **Full Control** - You own and maintain your guardrail API
+1. **PR 불필요** - 바로 배포하고 통합 가능
+2. **범용 지원** - 모든 LiteLLM endpoint(chat, embeddings, image generation 등)에서 동작
+3. **단순한 계약** - 하나의 endpoint와 세 가지 응답 유형
+4. **Multi-modal 지원** - request/response의 text와 image를 모두 처리
+5. **Custom parameter** - config를 통해 provider-specific param 전달
+6. **완전한 제어권** - guardrail API를 직접 소유하고 유지
 
-## Supported Endpoints
+## 지원 엔드포인트
 
-The Generic Guardrail API works with the following LiteLLM endpoints:
+Generic Guardrail API는 다음 LiteLLM endpoint와 함께 동작합니다.
 
-- `/v1/chat/completions` - OpenAI Chat Completions
-- `/v1/completions` - OpenAI Text Completions
-- `/v1/responses` - OpenAI Responses API
-- `/v1/images/generations` - OpenAI Image Generation
-- `/v1/audio/transcriptions` - OpenAI Audio Transcriptions
-- `/v1/audio/speech` - OpenAI Text-to-Speech
+- `/v1/chat/completions` - `OpenAI Chat Completions`
+- `/v1/completions` - `OpenAI Text Completions`
+- `/v1/responses` - `OpenAI Responses API`
+- `/v1/images/generations` - `OpenAI Image Generation`
+- `/v1/audio/transcriptions` - `OpenAI Audio Transcriptions`
+- `/v1/audio/speech` - `OpenAI Text-to-Speech`
 - `/v1/messages` - Anthropic Messages
 - `/v1/rerank` - Cohere Rerank
-- Pass-through endpoints
+- `Pass-through` endpoint
 
-## How It Works
+## 동작 방식
 
-1. LiteLLM extracts text and images from any request (chat messages, embeddings, image prompts, etc.)
-2. Sends extracted content + metadata to your API endpoint
-3. Your API responds with: `BLOCKED`, `NONE`, or `GUARDRAIL_INTERVENED`
-4. LiteLLM enforces the decision and applies any modifications
+1. LiteLLM이 request(chat messages, embeddings, image prompts 등)에서 text와 image를 추출합니다.
+2. 추출된 content와 metadata를 API endpoint로 보냅니다.
+3. API가 `BLOCKED`, `NONE`, `GUARDRAIL_INTERVENED` 중 하나로 응답합니다.
+4. LiteLLM이 결정을 적용하고 필요한 수정을 반영합니다.
 
-## API Contract
+## API 계약 {#api-contract}
 
-### Endpoint
+### 엔드포인트 {#endpoint}
 
-Implement `POST /beta/litellm_basic_guardrail_api`
+`POST /beta/litellm_basic_guardrail_api`를 구현합니다.
 
-### Request Format
+### 요청 형식
 
 ```json
 {
@@ -108,7 +108,7 @@ Implement `POST /beta/litellm_basic_guardrail_api`
 }
 ```
 
-### Response Format
+### 응답 형식
 
 ```json
 {
@@ -119,20 +119,20 @@ Implement `POST /beta/litellm_basic_guardrail_api`
 }
 ```
 
-**Actions:**
-- `BLOCKED` - LiteLLM raises error and blocks request
-- `NONE` - Request proceeds unchanged  
-- `GUARDRAIL_INTERVENED` - Request proceeds with modified texts/images (provide `texts` and/or `images` fields)
+**동작:**
+- `BLOCKED` - LiteLLM이 error를 발생시키고 request를 block합니다.
+- `NONE` - request가 변경 없이 진행됩니다.
+- `GUARDRAIL_INTERVENED` - 수정된 texts/images와 함께 request가 진행됩니다(`texts` 및/또는 `images` field 제공).
 
-## Parameters
+## 매개변수 {#parameters}
 
-### `tools` Parameter
+### `tools` 매개변수 {#tools-parameter}
 
-The `tools` parameter provides information about available function/tool definitions in the request.
+`tools` parameter는 request에서 사용할 수 있는 function/tool definition 정보를 제공합니다.
 
-**Format:** OpenAI `ChatCompletionToolParam` format (see [OpenAI API reference](https://platform.openai.com/docs/api-reference/chat/create#chat-create-tools))
+**형식:** OpenAI `ChatCompletionToolParam` 형식([OpenAI API reference](https://platform.openai.com/docs/api-reference/chat/create#chat-create-tools) 참고)
 
-**Example:**
+**예제:**
 ```json
 {
   "type": "function",
@@ -157,23 +157,23 @@ The `tools` parameter provides information about available function/tool definit
 }
 ```
 
-**Availability:**
-- **Input only:** Tools are only passed for `input_type="request"` (pre-call guardrails). Output/response guardrails do not currently receive tool definitions.
-- **Supported endpoints:** The `tools` parameter is supported on: `/v1/chat/completions`, `/v1/responses`, and `/v1/messages`. Other endpoints do not have tool support.
+**가용성:**
+- **입력 전용:** Tools는 `input_type="request"`(pre-call guardrails)에서만 전달됩니다. Output/response guardrail은 현재 tool definition을 받지 않습니다.
+- **지원 endpoint:** `tools` parameter는 `/v1/chat/completions`, `/v1/responses`, `/v1/messages`에서 지원됩니다. 다른 endpoint에는 tool support가 없습니다.
 
-**Use cases:**
-- Enforce tool permission policies (e.g., only allow certain users/teams to access specific tools)
-- Validate tool schemas before sending to LLM
-- Log tool usage for audit purposes
-- Block sensitive tools based on user context
+**사용 사례:**
+- tool permission policy 적용(예: 특정 user/team만 특정 tool에 access 허용)
+- LLM으로 보내기 전 tool schema 검증
+- audit 목적의 tool usage logging
+- user context를 기준으로 sensitive tool block
 
-### `tool_calls` Parameter
+### `tool_calls` 매개변수 {#tool_calls-parameter}
 
-The `tool_calls` parameter contains actual function/tool invocations being made in the request or response.
+`tool_calls` parameter에는 request 또는 response에서 실제로 수행되는 function/tool invocation이 포함됩니다.
 
-**Format:** OpenAI `ChatCompletionMessageToolCall` format (see [OpenAI API reference](https://platform.openai.com/docs/api-reference/chat/object#chat/object-tool_calls))
+**형식:** OpenAI `ChatCompletionMessageToolCall` 형식([OpenAI API reference](https://platform.openai.com/docs/api-reference/chat/object#chat/object-tool_calls) 참고)
 
-**Example:**
+**예제:**
 ```json
 {
   "id": "call_abc123",
@@ -185,29 +185,29 @@ The `tool_calls` parameter contains actual function/tool invocations being made 
 }
 ```
 
-**Key Difference from `tools`:**
-- **`tools`** = Tool definitions/schemas (what tools are *available*)
-- **`tool_calls`** = Tool invocations/executions (what tools are *being called* with what arguments)
+**`tools`와의 주요 차이:**
+- **`tools`** = tool definitions/schemas(어떤 tool을 *사용할 수 있는지*)
+- **`tool_calls`** = tool invocations/executions(어떤 tool이 어떤 argument로 *호출되는지*)
 
-**Availability:**
-- **Both input and output:** Tool calls can be present in both `input_type="request"` (assistant messages requesting tool calls) and `input_type="response"` (LLM responses with tool calls).
-- **Supported endpoints:** The `tool_calls` parameter is supported on: `/v1/chat/completions`, `/v1/responses`, and `/v1/messages`.
+**가용성:**
+- **입력과 출력 모두:** Tool call은 `input_type="request"`(tool call을 요청하는 assistant message)와 `input_type="response"`(tool call이 포함된 LLM response)에 모두 있을 수 있습니다.
+- **지원 endpoint:** `tool_calls` parameter는 `/v1/chat/completions`, `/v1/responses`, `/v1/messages`에서 지원됩니다.
 
-**Use cases:**
-- Validate tool call arguments before execution
-- Redact sensitive data from tool call arguments (e.g., PII)
-- Log tool invocations for audit/debugging
-- Block tool calls with dangerous parameters
-- Modify tool call arguments (e.g., enforce constraints, sanitize inputs)
-- Monitor tool usage patterns across users/teams
+**사용 사례:**
+- 실행 전 tool call argument 검증
+- tool call argument에서 sensitive data redact(예: PII)
+- audit/debugging을 위한 tool invocation logging
+- dangerous parameter가 포함된 tool call block
+- tool call argument 수정(예: constraint 적용, input sanitize)
+- user/team 전반의 tool usage pattern monitor
 
-### `structured_messages` Parameter
+### `structured_messages` 매개변수 {#structured_messages-parameter}
 
-The `structured_messages` parameter provides the full input in OpenAI chat completion spec format, useful for distinguishing between system and user messages.
+`structured_messages` parameter는 OpenAI chat completion spec format의 전체 input을 제공합니다. system message와 user message를 구분할 때 유용합니다.
 
-**Format:** Array of OpenAI chat completion messages (see [OpenAI API reference](https://platform.openai.com/docs/api-reference/chat/create#chat-create-messages))
+**형식:** OpenAI chat completion message array([OpenAI API reference](https://platform.openai.com/docs/api-reference/chat/create#chat-create-messages) 참고)
 
-**Example:**
+**예제:**
 ```json
 [
   {"role": "system", "content": "You are a helpful assistant"},
@@ -215,18 +215,18 @@ The `structured_messages` parameter provides the full input in OpenAI chat compl
 ]
 ```
 
-**Availability:**
-- **Supported endpoints:** `/v1/chat/completions`, `/v1/messages`, `/v1/responses`
-- **Input only:** Only passed for `input_type="request"` (pre-call guardrails)
+**가용성:**
+- **지원 endpoint:** `/v1/chat/completions`, `/v1/messages`, `/v1/responses`
+- **입력 전용:** `input_type="request"`(pre-call guardrails)에서만 전달됩니다.
 
-**Use cases:**
-- Apply different policies for system vs user messages
-- Enforce role-based content restrictions
-- Log structured conversation context
+**사용 사례:**
+- system message와 user message에 서로 다른 policy 적용
+- role-based content restriction 적용
+- 구조화된 대화 context logging
 
-## LiteLLM Configuration
+## LiteLLM 설정
 
-Add to `config.yaml`:
+`config.yaml`에 다음을 추가합니다.
 
 ```yaml
 litellm_settings:
@@ -244,11 +244,11 @@ litellm_settings:
           language: "en"
 ```
 
-### Static and dynamic headers
+### 정적 및 동적 header {#static-and-dynamic-headers}
 
-You can send two kinds of headers to your guardrail endpoint:
+guardrail endpoint로 두 종류의 header를 보낼 수 있습니다.
 
-- **Static headers** (`headers`): A key/value map sent with **every** request to your guardrail. Use this for fixed values (e.g. API keys, `X-Service-Name`). Configure in `litellm_params`:
+- **Static headers** (`headers`): guardrail로 보내는 **모든** request에 함께 전송되는 key/value map입니다. API key, `X-Service-Name` 같은 고정값에 사용하세요. `litellm_params`에서 구성합니다.
 
   ```yaml
   litellm_params:
@@ -259,7 +259,7 @@ You can send two kinds of headers to your guardrail endpoint:
       X-API-Key: "secret"
   ```
 
-- **Dynamic headers** (`extra_headers`): A list of **header names** that are forwarded from the **client request** to your guardrail. Only headers in this list (plus a small default allowlist such as `x-litellm-*`) have their values sent; others are sent as `[present]`. Use this to pass through client-provided headers (e.g. `x-request-id`, `x-correlation-id`). Configure in `litellm_params`:
+- **Dynamic headers** (`extra_headers`): **client request**에서 guardrail로 forward할 **header name** list입니다. 이 list에 있는 header와 `x-litellm-*` 같은 작은 default allowlist만 value가 전송되고, 나머지는 `[present]`로 전송됩니다. client-provided header(예: `x-request-id`, `x-correlation-id`)를 pass through할 때 사용하세요. `litellm_params`에서 구성합니다.
 
   ```yaml
   litellm_params:
@@ -271,11 +271,11 @@ You can send two kinds of headers to your guardrail endpoint:
       - x-custom-auth
   ```
 
-This mirrors the [MCP static and extra headers](/docs/mcp#forwarding-custom-headers-to-mcp-servers) behavior.
+이는 [MCP static and extra headers](/docs/mcp#forwarding-custom-headers-to-mcp-servers) 동작과 같습니다.
 
-### Example: Pillar Security
+### 예제: Pillar Security {#example-pillar-security}
 
-[Pillar Security](https://pillar.security) uses the Generic Guardrail API to provide comprehensive AI security scanning including prompt injection protection, PII/PCI detection, secret detection, and content moderation.
+[Pillar Security](https://pillar.security)는 Generic Guardrail API를 사용해 prompt injection 방어, PII/PCI 탐지, secret 탐지, content moderation을 포함한 포괄적인 AI security scanning을 제공합니다.
 
 ```yaml
 guardrails:
@@ -292,11 +292,11 @@ guardrails:
         plr_scanners: true  # Include scanner details in response
 ```
 
-See the [Pillar Security documentation](../proxy/guardrails/pillar_security.md) for full configuration options.
+전체 configuration option은 [Pillar Security documentation](../proxy/guardrails/pillar_security.md)을 참고하세요.
 
-## Usage
+## 사용법
 
-Users apply your guardrail by name:
+사용자는 guardrail name으로 guardrail을 적용합니다.
 
 ```python
 response = client.chat.completions.create(
@@ -306,7 +306,7 @@ response = client.chat.completions.create(
 )
 ```
 
-Or with dynamic parameters:
+또는 dynamic parameter와 함께 사용할 수 있습니다.
 
 ```python
 response = client.chat.completions.create(
@@ -322,11 +322,11 @@ response = client.chat.completions.create(
 )
 ```
 
-## Implementation Example
+## 구현 예제
 
-See [mock_bedrock_guardrail_server.py](https://github.com/BerriAI/litellm/blob/main/cookbook/mock_guardrail_server/mock_bedrock_guardrail_server.py) for a complete reference implementation.
+전체 reference implementation은 [mock_bedrock_guardrail_server.py](https://github.com/BerriAI/litellm/blob/main/cookbook/mock_guardrail_server/mock_bedrock_guardrail_server.py)를 참고하세요.
 
-**Minimal FastAPI example:**
+**최소 FastAPI 예제:**
 
 ```python
 from fastapi import FastAPI
@@ -411,20 +411,19 @@ async def apply_guardrail(request: GuardrailRequest):
     return GuardrailResponse(action="NONE")
 ```
 
-## When to Use This
+## 사용 시점
 
-✅ **Use Generic Guardrail API when:**
-- You want instant integration without waiting for PRs
-- You maintain your own guardrail service
-- You need full control over updates and features
-- You want to support all LiteLLM endpoints automatically
+✅ **다음 경우 Generic Guardrail API를 사용하세요.**
+- PR을 기다리지 않고 즉시 통합하고 싶은 경우
+- 자체 guardrail service를 유지하는 경우
+- update와 feature를 완전히 제어해야 하는 경우
+- 모든 LiteLLM endpoint를 자동으로 지원하고 싶은 경우
 
-❌ **Make a PR when:**
-- You want deeper integration with LiteLLM internals
-- Your guardrail requires complex LiteLLM-specific logic
-- You want to be featured as a built-in provider
+❌ **다음 경우 PR을 만드세요.**
+- LiteLLM 내부와 더 깊은 통합이 필요한 경우
+- guardrail에 복잡한 LiteLLM-specific logic이 필요한 경우
+- built-in provider로 노출되고 싶은 경우
 
-## Questions?
+## 질문
 
-This is a **beta API**. We're actively improving it based on feedback. Open an issue or PR if you need additional capabilities.
-
+이 기능은 **beta API**입니다. feedback을 기반으로 계속 개선하고 있습니다. 추가 기능이 필요하면 issue 또는 PR을 열어 주세요.

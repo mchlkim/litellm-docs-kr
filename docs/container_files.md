@@ -3,35 +3,35 @@ id: container_files
 title: /containers/files
 ---
 
-# Container Files API
+# `Container Files API` {#container-files-api}
 
-Manage files within Code Interpreter containers. Files are created automatically when code interpreter generates outputs (charts, CSVs, images, etc.).
+Code Interpreter 컨테이너 안의 파일을 관리합니다. code interpreter가 차트, CSV, 이미지 같은 출력물을 생성하면 파일이 자동으로 만들어집니다.
 
 :::tip
-Looking for how to use Code Interpreter? See the [Code Interpreter Guide](/docs/guides/code_interpreter).
+Code Interpreter 사용 방법을 찾고 있다면 [Code Interpreter 가이드](/docs/guides/code_interpreter)를 참고하세요.
 :::
 
-| Feature | Supported |
+| 기능 | 지원 여부 |
 |---------|-----------|
-| Cost Tracking | ✅ |
-| Logging | ✅ |
-| Supported Providers | `openai` |
+| 비용 추적 | ✅ |
+| 로깅 | ✅ |
+| 지원 프로바이더 | `openai` |
 
-## Endpoints
+## 엔드포인트
 
-| Endpoint | Method | Description |
+| 엔드포인트 | 메서드 | 설명 |
 |----------|--------|-------------|
-| `/v1/containers/{container_id}/files` | POST | Upload file to container |
-| `/v1/containers/{container_id}/files` | GET | List files in container |
-| `/v1/containers/{container_id}/files/{file_id}` | GET | Get file metadata |
-| `/v1/containers/{container_id}/files/{file_id}/content` | GET | Download file content |
-| `/v1/containers/{container_id}/files/{file_id}` | DELETE | Delete file |
+| `/v1/containers/{container_id}/files` | POST | 컨테이너에 파일 업로드 |
+| `/v1/containers/{container_id}/files` | GET | 컨테이너 파일 목록 조회 |
+| `/v1/containers/{container_id}/files/{file_id}` | GET | 파일 메타데이터 조회 |
+| `/v1/containers/{container_id}/files/{file_id}/content` | GET | 파일 콘텐츠 다운로드 |
+| `/v1/containers/{container_id}/files/{file_id}` | DELETE | 파일 삭제 |
 
 ## LiteLLM Python SDK
 
-### Upload Container File
+### Container File 업로드
 
-Upload files directly to a container session. This is useful when `/chat/completions` or `/responses` sends files to the container but the input file type is limited to PDF. This endpoint lets you work with other file types like CSV, Excel, Python scripts, etc.
+파일을 컨테이너 세션에 직접 업로드합니다. `/chat/completions` 또는 `/responses`가 컨테이너로 파일을 보내지만 입력 파일 유형이 PDF로 제한되는 경우에 유용합니다. 이 엔드포인트를 사용하면 CSV, Excel, Python scripts 등 다른 파일 유형도 다룰 수 있습니다.
 
 ```python showLineNumbers title="upload_container_file.py"
 from litellm import upload_container_file
@@ -59,16 +59,16 @@ file = await aupload_container_file(
 )
 ```
 
-**Supported file formats:**
+**지원 파일 형식:**
 - CSV (`.csv`)
 - Excel (`.xlsx`)
 - Python scripts (`.py`)
 - JSON (`.json`)
 - Markdown (`.md`)
 - Text files (`.txt`)
-- And more...
+- 기타 형식
 
-### List Container Files
+### Container Files 목록 조회
 
 ```python showLineNumbers title="list_container_files.py"
 from litellm import list_container_files
@@ -93,7 +93,7 @@ files = await alist_container_files(
 )
 ```
 
-### Retrieve Container File
+### Container File 조회
 
 ```python showLineNumbers title="retrieve_container_file.py"
 from litellm import retrieve_container_file
@@ -108,7 +108,7 @@ print(f"File: {file.filename}")
 print(f"Size: {file.bytes} bytes")
 ```
 
-### Download File Content
+### 파일 콘텐츠 다운로드
 
 ```python showLineNumbers title="retrieve_container_file_content.py"
 from litellm import retrieve_container_file_content
@@ -124,7 +124,7 @@ with open("output.png", "wb") as f:
     f.write(content)
 ```
 
-### Delete Container File
+### Container File 삭제
 
 ```python showLineNumbers title="delete_container_file.py"
 from litellm import delete_container_file
@@ -138,12 +138,12 @@ result = delete_container_file(
 print(f"Deleted: {result.deleted}")
 ```
 
-## LiteLLM AI Gateway (Proxy)
+## `LiteLLM AI Gateway (Proxy)` {#litellm-ai-gateway-proxy}
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-### Upload File
+### 파일 업로드
 
 <Tabs>
 <TabItem value="openai-sdk" label="OpenAI SDK">
@@ -177,7 +177,7 @@ curl "http://localhost:4000/v1/containers/cntr_123.../files" \
 </TabItem>
 </Tabs>
 
-### List Files
+### 파일 목록 조회
 
 <Tabs>
 <TabItem value="openai-sdk" label="OpenAI SDK">
@@ -209,7 +209,7 @@ curl "http://localhost:4000/v1/containers/cntr_123.../files" \
 </TabItem>
 </Tabs>
 
-### Retrieve File Metadata
+### 파일 메타데이터 조회
 
 <Tabs>
 <TabItem value="openai-sdk" label="OpenAI SDK">
@@ -242,7 +242,7 @@ curl "http://localhost:4000/v1/containers/cntr_123.../files/cfile_456..." \
 </TabItem>
 </Tabs>
 
-### Download File Content
+### 파일 콘텐츠 다운로드
 
 <Tabs>
 <TabItem value="openai-sdk" label="OpenAI SDK">
@@ -276,7 +276,7 @@ curl "http://localhost:4000/v1/containers/cntr_123.../files/cfile_456.../content
 </TabItem>
 </Tabs>
 
-### Delete File
+### 파일 삭제
 
 <Tabs>
 <TabItem value="openai-sdk" label="OpenAI SDK">
@@ -308,34 +308,34 @@ curl -X DELETE "http://localhost:4000/v1/containers/cntr_123.../files/cfile_456.
 </TabItem>
 </Tabs>
 
-## Parameters
+## 파라미터
 
-### Upload File
+### 파일 업로드
 
-| Parameter | Type | Required | Description |
+| 파라미터 | 타입 | 필수 여부 | 설명 |
 |-----------|------|----------|-------------|
-| `container_id` | string | Yes | Container ID |
-| `file` | FileTypes | Yes | File to upload. Can be a tuple of (filename, content, content_type), file-like object, or bytes |
+| `container_id` | string | 예 | Container ID |
+| `file` | FileTypes | 예 | 업로드할 파일입니다. `(filename, content, content_type)` 튜플, file-like object, bytes를 사용할 수 있습니다. |
 
-### List Files
+### 파일 목록 조회
 
-| Parameter | Type | Required | Description |
+| 파라미터 | 타입 | 필수 여부 | 설명 |
 |-----------|------|----------|-------------|
-| `container_id` | string | Yes | Container ID |
-| `after` | string | No | Pagination cursor |
-| `limit` | integer | No | Items to return (1-100, default: 20) |
-| `order` | string | No | Sort order: `asc` or `desc` |
+| `container_id` | string | 예 | Container ID |
+| `after` | string | 아니요 | 페이지네이션 커서 |
+| `limit` | integer | 아니요 | 반환할 항목 수입니다. 1-100 사이이며 기본값은 20입니다. |
+| `order` | string | 아니요 | 정렬 순서입니다. `asc` 또는 `desc` |
 
-### Retrieve/Delete File
+### 파일 조회/삭제
 
-| Parameter | Type | Required | Description |
+| 파라미터 | 타입 | 필수 여부 | 설명 |
 |-----------|------|----------|-------------|
-| `container_id` | string | Yes | Container ID |
-| `file_id` | string | Yes | File ID |
+| `container_id` | string | 예 | Container ID |
+| `file_id` | string | 예 | File ID |
 
-## Response Objects
+## 응답 객체
 
-### ContainerFileObject
+### `ContainerFileObject`
 
 ```json showLineNumbers title="ContainerFileObject"
 {
@@ -350,7 +350,7 @@ curl -X DELETE "http://localhost:4000/v1/containers/cntr_123.../files/cfile_456.
 }
 ```
 
-### ContainerFileListResponse
+### `ContainerFileListResponse`
 
 ```json showLineNumbers title="ContainerFileListResponse"
 {
@@ -362,7 +362,7 @@ curl -X DELETE "http://localhost:4000/v1/containers/cntr_123.../files/cfile_456.
 }
 ```
 
-### DeleteContainerFileResponse
+### `DeleteContainerFileResponse`
 
 ```json showLineNumbers title="DeleteContainerFileResponse"
 {
@@ -372,13 +372,13 @@ curl -X DELETE "http://localhost:4000/v1/containers/cntr_123.../files/cfile_456.
 }
 ```
 
-## Supported Providers
+## 지원 프로바이더
 
 | Provider | Status |
 |----------|--------|
-| OpenAI | ✅ Supported |
+| OpenAI | ✅ 지원 |
 
-## Related
+## 관련 문서
 
-- [Containers API](/docs/containers) - Manage containers
-- [Code Interpreter Guide](/docs/guides/code_interpreter) - Using Code Interpreter with LiteLLM
+- [Containers API](/docs/containers) - 컨테이너 관리
+- [Code Interpreter 가이드](/docs/guides/code_interpreter) - LiteLLM에서 Code Interpreter 사용

@@ -1,18 +1,18 @@
-# Google Secret Manager
+# `Google Secret Manager`
 
 :::info
 
-✨ **This is an Enterprise Feature**
+✨ **This is an 엔터프라이즈 Feature**
 
-[Enterprise Pricing](https://www.litellm.ai/#pricing)
+[엔터프라이즈 Pricing](https://www.litellm.ai/#pricing)
 
 [Contact us here to get a free trial](https://enterprise.litellm.ai/demo)
 
 :::
 
-Support for [Google Secret Manager](https://cloud.google.com/security/products/secret-manager)
+[Google Secret Manager](https://cloud.google.com/security/products/secret-manager)를 지원합니다.
 
-1. Save Google Secret Manager details in your environment
+1. 환경 변수에 `Google Secret Manager` 세부 정보를 저장합니다.
 
 ```shell 
 GOOGLE_SECRET_MANAGER_PROJECT_ID="your-project-id-on-gcp" # example: adroit-crow-413218
@@ -25,7 +25,7 @@ export GOOGLE_SECRET_MANAGER_REFRESH_INTERVAL = ""            # (int) defaults t
 export GOOGLE_SECRET_MANAGER_ALWAYS_READ_SECRET_MANAGER = ""  # (str) set to "true" if you want to always read from google secret manager without using in memory caching. NOT RECOMMENDED in PROD
 ```
 
-2. Add to proxy config.yaml 
+2. proxy `config.yaml`에 추가합니다.
 ```yaml
 model_list:
   - model_name: fake-openai-endpoint
@@ -38,10 +38,9 @@ general_settings:
   key_management_system: "google_secret_manager"
 ```
 
-You can now test this by starting your proxy: 
+이제 proxy를 시작해 테스트할 수 있습니다.
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-[Quick Test Proxy](../proxy/quick_start#using-litellm-proxy---curl-request-openai-package-langchain-langchain-js)
-
+[Proxy 빠른 테스트](../proxy/quick_start#using-litellm-proxy---curl-request-openai-package-langchain-langchain-js)

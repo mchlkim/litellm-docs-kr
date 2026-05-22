@@ -1,15 +1,15 @@
-# AWS Polly Text to Speech (tts)
+# AWS Polly 텍스트 음성 변환(tts) {#aws-polly-text-to-speech-tts}
 
-## Overview
+## 개요
 
-| Property | Details |
+| 속성 | 세부 정보 |
 |-------|-------|
-| Description | Convert text to natural-sounding speech using AWS Polly's neural and standard TTS engines |
-| Provider Route on LiteLLM | `aws_polly/` |
-| Supported Operations | `/audio/speech` |
-| Link to Provider Doc | [AWS Polly SynthesizeSpeech ↗](https://docs.aws.amazon.com/polly/latest/dg/API_SynthesizeSpeech.html) |
+| 설명 | AWS Polly의 neural 및 standard TTS 엔진을 사용해 텍스트를 자연스러운 음성으로 변환합니다 |
+| LiteLLM의 Provider Route | `aws_polly/` |
+| 지원 작업 | `/audio/speech` |
+| Provider 문서 링크 | [AWS Polly SynthesizeSpeech ↗](https://docs.aws.amazon.com/polly/latest/dg/API_SynthesizeSpeech.html) |
 
-## Quick Start
+## 빠른 시작
 
 ### **LiteLLM SDK**
 
@@ -45,16 +45,16 @@ model_list:
       aws_region_name: "us-east-1"
 ```
 
-## Polly Engines
+## Polly 엔진 {#polly-engines}
 
-AWS Polly supports different speech synthesis engines. Specify the engine in the model name:
+AWS Polly는 여러 음성 합성 엔진을 지원합니다. 모델 이름에 엔진을 지정하세요.
 
-| Model | Engine | Cost (per 1M chars) | Description |
+| 모델 | 엔진 | 비용(100만 자당) | 설명 |
 |-------|--------|---------------------|-------------|
-| `aws_polly/standard` | Standard | $4.00 | Original Polly voices, faster and lowest cost |
-| `aws_polly/neural` | Neural | $16.00 | More natural, human-like speech (recommended) |
-| `aws_polly/generative` | Generative | $30.00 | Most expressive, highest quality (limited voices) |
-| `aws_polly/long-form` | Long-form | $100.00 | Optimized for long content like articles |
+| `aws_polly/standard` | Standard | $4.00 | 기존 Polly 음성으로, 더 빠르고 비용이 가장 낮습니다 |
+| `aws_polly/neural` | Neural | $16.00 | 더 자연스럽고 사람 같은 음성입니다(권장) |
+| `aws_polly/generative` | Generative | $30.00 | 표현력이 가장 높고 품질이 가장 좋습니다(지원 음성 제한) |
+| `aws_polly/long-form` | Long-form | $100.00 | 기사처럼 긴 콘텐츠에 최적화되어 있습니다 |
 
 ### **LiteLLM SDK**
 
@@ -101,20 +101,20 @@ model_list:
       aws_region_name: "us-east-1"
 ```
 
-## Available Voices
+## 사용 가능한 음성 {#available-voices}
 
-### Native Polly Voices
+### 네이티브 Polly 음성 {#native-polly-voices}
 
-AWS Polly has many voices across different languages. Here are popular US English voices:
+AWS Polly는 여러 언어의 다양한 음성을 제공합니다. 다음은 자주 사용하는 미국 영어 음성입니다.
 
-| Voice | Gender | Engine Support |
+| 음성 | 성별 | 엔진 지원 |
 |-------|--------|----------------|
-| `Joanna` | Female | Neural, Standard |
-| `Matthew` | Male | Neural, Standard, Generative |
-| `Ivy` | Female (child) | Neural, Standard |
-| `Kendra` | Female | Neural, Standard |
-| `Amy` | Female (British) | Neural, Standard |
-| `Brian` | Male (British) | Neural, Standard |
+| `Joanna` | 여성 | Neural, Standard |
+| `Matthew` | 남성 | Neural, Standard, Generative |
+| `Ivy` | 여성(아동) | Neural, Standard |
+| `Kendra` | 여성 | Neural, Standard |
+| `Amy` | 여성(영국식) | Neural, Standard |
+| `Brian` | 남성(영국식) | Neural, Standard |
 
 ### **LiteLLM SDK**
 
@@ -159,11 +159,11 @@ model_list:
       aws_region_name: "us-east-1"
 ```
 
-### OpenAI Voice Mappings
+### OpenAI 음성 매핑 {#openai-voice-mappings}
 
-LiteLLM also supports OpenAI voice names, which are automatically mapped to Polly voices:
+LiteLLM은 OpenAI 음성 이름도 지원하며, 해당 이름은 Polly 음성으로 자동 매핑됩니다.
 
-| OpenAI Voice | Maps to Polly Voice |
+| OpenAI 음성 | 매핑되는 Polly 음성 |
 |--------------|---------------------|
 | `alloy` | Joanna |
 | `echo` | Matthew |
@@ -191,9 +191,9 @@ response = litellm.speech(
 )
 ```
 
-## SSML Support
+## SSML 지원 {#ssml-support}
 
-AWS Polly supports SSML (Speech Synthesis Markup Language) for advanced control over speech output. LiteLLM automatically detects SSML input.
+AWS Polly는 음성 출력의 세부 제어를 위해 SSML(Speech Synthesis Markup Language)을 지원합니다. LiteLLM은 SSML 입력을 자동으로 감지합니다.
 
 ### **LiteLLM SDK**
 
@@ -229,7 +229,7 @@ curl -X POST http://localhost:4000/v1/audio/speech \
   --output speech.mp3
 ```
 
-## Supported Parameters
+## 지원 파라미터
 
 ```python showLineNumbers title="All Parameters"
 response = litellm.speech(
@@ -244,13 +244,13 @@ response = litellm.speech(
 )
 ```
 
-## Response Formats
+## 응답 형식 {#response-formats}
 
-| Format | Description |
+| 형식 | 설명 |
 |--------|-------------|
-| `mp3` | MP3 audio (default) |
-| `ogg_vorbis` | Ogg Vorbis audio |
-| `pcm` | Raw PCM audio |
+| `mp3` | MP3 오디오(기본값) |
+| `ogg_vorbis` | Ogg Vorbis 오디오 |
+| `pcm` | 원시 PCM 오디오 |
 
 ### **LiteLLM SDK**
 
@@ -274,9 +274,9 @@ response = litellm.speech(
 )
 ```
 
-## AWS Authentication
+## AWS 인증
 
-LiteLLM supports multiple AWS authentication methods.
+LiteLLM은 여러 AWS 인증 방식을 지원합니다.
 
 ### **LiteLLM SDK**
 
@@ -343,7 +343,7 @@ model_list:
       aws_profile_name: "my-profile"
 ```
 
-## Async Support
+## 비동기 지원 {#async-support}
 
 ```python showLineNumbers title="Async Usage"
 import litellm

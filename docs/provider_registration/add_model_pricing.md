@@ -1,14 +1,14 @@
 ---
-title: "Add Model Pricing & Context Window"
+title: "모델 가격 및 컨텍스트 윈도우 추가"
 ---
 
-To add pricing or context window information for a model, simply make a PR to this file:
+모델의 가격 또는 컨텍스트 윈도우 정보를 추가하려면 이 파일에 PR을 생성하면 됩니다.
 
-**[model_prices_and_context_window.json](https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json)**
+**[model_prices_and_context_window.json 파일](https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json)**
 
-### Sample Spec
+### 샘플 사양 {#sample-spec}
 
-Here's the full specification with all available fields:
+사용 가능한 모든 필드를 포함한 전체 사양은 다음과 같습니다.
 
 ```json
 {
@@ -56,7 +56,7 @@ Here's the full specification with all available fields:
 }
 ```
 
-### Examples
+### 예제
 
 #### Anthropic Claude
 
@@ -122,9 +122,9 @@ Here's the full specification with all available fields:
 }
 ```
 
-### Using Aliases
+### 별칭 사용 {#using-aliases}
 
-Many providers release the same model under multiple names — for example, a `latest` tag and a dated version like `claude-sonnet-4-5-20250929`. Instead of duplicating the entire entry, you can use the `aliases` field:
+많은 provider는 동일한 모델을 여러 이름으로 릴리스합니다. 예를 들어 `latest` 태그와 `claude-sonnet-4-5-20250929` 같은 날짜 버전이 있습니다. 전체 항목을 중복해서 작성하는 대신 `aliases` 필드를 사용할 수 있습니다.
 
 ```json
 {
@@ -142,8 +142,8 @@ Many providers release the same model under multiple names — for example, a `l
 }
 ```
 
-At load time, each alias is expanded into a top-level entry sharing the same data as the canonical entry. The example above makes both `claude-sonnet-4-5` and `claude-sonnet-4-5-20250929` resolve with the same pricing and capabilities.
+로드 시 각 alias는 canonical 항목과 동일한 데이터를 공유하는 최상위 항목으로 확장됩니다. 위 예제에서는 `claude-sonnet-4-5`와 `claude-sonnet-4-5-20250929`가 동일한 가격 및 기능으로 확인됩니다.
 
 :::info
-This is different from [`model_alias_map`](../completion/model_alias.md), which is a runtime SDK/proxy feature for mapping user-facing model names to LiteLLM model identifiers. The `aliases` field here is for the model cost JSON only — it avoids duplicate entries for models that share identical pricing and capabilities.
+이는 사용자에게 표시되는 모델 이름을 LiteLLM 모델 식별자에 매핑하는 runtime SDK/proxy 기능인 [`model_alias_map`](../completion/model_alias.md)와 다릅니다. 여기의 `aliases` 필드는 모델 비용 JSON 전용이며, 동일한 가격 및 기능을 공유하는 모델의 중복 항목을 방지합니다.
 :::

@@ -1,163 +1,163 @@
-# Contributing Code
+# 코드 기여하기
 
-## Checklist before submitting a PR
+## PR 제출 전 체크리스트
 
-Here are the core requirements for any PR submitted to LiteLLM:
+LiteLLM에 제출하는 모든 PR의 핵심 요구사항은 다음과 같습니다.
 
-- [ ] Sign the [Contributor License Agreement (CLA)](#contributor-license-agreement-cla)
-- [ ] Keep scope as isolated as possible — your changes should address **one specific problem** at a time
+- [ ] [기여자 라이선스 계약 (CLA)](#contributor-license-agreement-cla)에 서명합니다.
+- [ ] 범위를 가능한 한 분리해서 유지합니다. 변경사항은 한 번에 **하나의 특정 문제**만 다루어야 합니다.
 
-### Proxy (Backend) PRs
+### Proxy (Backend) PR 체크리스트
 
-- [ ] Add testing — **at least 1 test is a hard requirement** ([details](#2-adding-tests))
-- [ ] Ensure your PR passes:
-  - [ ] [Unit Tests](#3-running-unit-tests) — `make test-unit`
-  - [ ] [Formatting / Linting Tests](#4-running-linting-tests) — `make lint`
+- [ ] 테스트를 추가합니다. **최소 1개 테스트는 필수 요구사항**입니다. ([자세히 보기](#2-adding-tests))
+- [ ] PR이 다음 항목을 통과하는지 확인합니다.
+  - [ ] [단위 테스트](#3-running-unit-tests) — `make test-unit`
+  - [ ] [포매팅 / 린팅 테스트](#4-running-linting-tests) — `make lint`
 
-### UI PRs
+### UI PR 체크리스트
 
-- [ ] Ensure the UI builds successfully — `npm run build`
-- [ ] Ensure all UI unit tests pass — `npm run test`
-- [ ] If you are adding a **new component** or **new logic**, add corresponding tests
+- [ ] UI가 성공적으로 빌드되는지 확인합니다. — `npm run build`
+- [ ] 모든 UI 단위 테스트가 통과하는지 확인합니다. — `npm run test`
+- [ ] **새 컴포넌트** 또는 **새 로직**을 추가하는 경우, 그에 맞는 테스트를 추가합니다.
 
-## Contributor License Agreement (CLA)
+## 기여자 라이선스 계약 (CLA) {#contributor-license-agreement-cla}
 
-Before contributing code to LiteLLM, you must sign our [Contributor License Agreement (CLA)](https://cla-assistant.io/BerriAI/litellm). This is a legal requirement for all contributions to be merged into the main repository. The CLA helps protect both you and the project by clearly defining the terms under which your contributions are made.
+LiteLLM에 코드를 기여하기 전에 [Contributor License Agreement (CLA)](https://cla-assistant.io/BerriAI/litellm)에 서명해야 합니다. 모든 기여가 메인 저장소에 병합되기 위한 법적 요구사항입니다. CLA는 기여가 이루어지는 조건을 명확히 정의하여 기여자와 프로젝트를 모두 보호하는 데 도움이 됩니다.
 
-**Important:** We strongly recommend signing the CLA **before** starting work on your contribution to avoid delays in the review process. You can find and sign the CLA [here](https://cla-assistant.io/BerriAI/litellm).
+**중요:** 리뷰 과정이 지연되지 않도록 기여 작업을 시작하기 **전에** CLA에 서명하는 것을 강력히 권장합니다. CLA는 [여기](https://cla-assistant.io/BerriAI/litellm)에서 확인하고 서명할 수 있습니다.
 
 ---
 
 ## Proxy (Backend)
 
-### 1. Setting up your local dev environment
+### 1. 로컬 개발 환경 설정
 
-Step 1: Clone the repo
+1단계: 저장소 복제
 
 ```shell
 git clone https://github.com/BerriAI/litellm.git
 ```
 
-Step 2: Install dev dependencies
+2단계: 개발 의존성 설치
 
 ```shell
 uv sync --group dev --extra proxy
 ```
 
-### 2. Adding tests
+### 2. 테스트 추가 {#2-adding-tests}
 
-- Add your tests to the [`tests/test_litellm/` directory](https://github.com/BerriAI/litellm/tree/main/tests/litellm).
-- This directory mirrors the `litellm/` directory 1:1 and should **only** contain mocked tests.
-- **Do not** add real LLM API calls to this directory.
+- 테스트는 [`tests/test_litellm/` 디렉터리](https://github.com/BerriAI/litellm/tree/main/tests/litellm)에 추가합니다.
+- 이 디렉터리는 `litellm/` 디렉터리와 1:1로 대응되며, **모킹된 테스트만** 포함해야 합니다.
+- 이 디렉터리에 실제 LLM API 호출을 **추가하지 마세요**.
 
-#### File naming convention for `tests/test_litellm/`
+#### `tests/test_litellm/`의 파일 이름 규칙
 
-The test directory follows the same structure as `litellm/`:
+테스트 디렉터리는 `litellm/`과 동일한 구조를 따릅니다.
 
-- `test_{filename}.py` maps to `litellm/{filename}.py`
-- `litellm/proxy/test_caching_routes.py` maps to `litellm/proxy/caching_routes.py`
+- `test_{filename}.py`는 `litellm/{filename}.py`에 대응됩니다.
+- `litellm/proxy/test_caching_routes.py`는 `litellm/proxy/caching_routes.py`에 대응됩니다.
 
-### 3. Running unit tests
+### 3. 단위 테스트 실행 {#3-running-unit-tests}
 
-Run the following command from the root of the `litellm` directory:
+`litellm` 디렉터리의 루트에서 다음 명령어를 실행합니다.
 
 ```shell
 make test-unit
 ```
 
-### 4. Running linting tests
+### 4. 린팅 테스트 실행 {#4-running-linting-tests}
 
-Run the following command from the root of the `litellm` directory:
+`litellm` 디렉터리의 루트에서 다음 명령어를 실행합니다.
 
 ```shell
 make lint
 ```
 
-LiteLLM uses `mypy` for type checking. CI/CD also runs `black` for formatting.
+LiteLLM은 타입 검사를 위해 `mypy`를 사용합니다. CI/CD에서는 포매팅을 위해 `black`도 실행합니다.
 
-### 5. Submit a PR
+### 5. PR 제출
 
-- Push your changes to your fork on GitHub
-- Open a Pull Request from your fork
+- 변경사항을 GitHub의 포크에 푸시합니다.
+- 포크에서 Pull Request를 엽니다.
 
 ---
 
 ## UI
 
-### 1. Setting up your local dev environment
+### 1. 로컬 개발 환경 설정
 
-Step 1: Clone the repo
+1단계: 저장소 복제
 
 ```shell
 git clone https://github.com/BerriAI/litellm.git
 ```
 
-Step 2: Navigate to the UI dashboard directory
+2단계: UI 대시보드 디렉터리로 이동
 
 ```shell
 cd ui/litellm-dashboard
 ```
 
-Step 3: Install dependencies
+3단계: 의존성 설치
 
 ```shell
 npm install
 ```
 
-Step 4: Start the development server
+4단계: 개발 서버 시작
 
 ```shell
 npm run dev
 ```
 
-### 2. Adding tests
+### 2. 테스트 추가
 
-If you are adding a **new component** or **new logic**, you must add corresponding tests.
+**새 컴포넌트** 또는 **새 로직**을 추가하는 경우, 그에 맞는 테스트를 추가해야 합니다.
 
-### 3. Running UI unit tests
+### 3. UI 단위 테스트 실행
 
 ```shell
 npm run test
 ```
 
-### 4. Building the UI
+### 4. UI 빌드
 
-Ensure the UI builds successfully before submitting your PR:
+PR을 제출하기 전에 UI가 성공적으로 빌드되는지 확인합니다.
 
 ```shell
 npm run build
 ```
 
-### 5. Submit a PR
+### 5. PR 제출
 
-- Push your changes to your fork on GitHub
-- Open a Pull Request from your fork
+- 변경사항을 GitHub의 포크에 푸시합니다.
+- 포크에서 Pull Request를 엽니다.
 
 ---
 
-## Advanced
+## 고급
 
-### Building the LiteLLM Docker Image
+### LiteLLM Docker 이미지 빌드
 
-Follow these instructions if you want to build and run the LiteLLM Docker image yourself.
+LiteLLM Docker 이미지를 직접 빌드하고 실행하려면 다음 안내를 따르세요.
 
-Step 1: Clone the repo
+1단계: 저장소 복제
 
 ```shell
 git clone https://github.com/BerriAI/litellm.git
 ```
 
-Step 2: Build the Docker image
+2단계: Docker 이미지 빌드
 
-Build using `Dockerfile.non_root`:
+`Dockerfile.non_root`를 사용해 빌드합니다.
 
 ```shell
 docker build -f docker/Dockerfile.non_root -t litellm_test_image .
 ```
 
-Step 3: Run the Docker image
+3단계: Docker 이미지 실행
 
-Make sure `config.yaml` is present in the root directory. This is your LiteLLM proxy config file.
+루트 디렉터리에 `config.yaml`이 있는지 확인합니다. 이 파일은 LiteLLM 프록시 설정 파일입니다.
 
 ```shell
 docker run \
@@ -169,15 +169,15 @@ docker run \
     --config /app/config.yaml --detailed_debug
 ```
 
-### Running the LiteLLM Proxy Locally
+### LiteLLM Proxy를 로컬에서 실행
 
-1. Navigate to the `proxy/` directory:
+1. `proxy/` 디렉터리로 이동합니다.
 
 ```shell
 cd litellm/litellm/proxy
 ```
 
-2. Run the proxy:
+2. 프록시를 실행합니다.
 
 ```shell
 python3 proxy_cli.py --config /path/to/config.yaml

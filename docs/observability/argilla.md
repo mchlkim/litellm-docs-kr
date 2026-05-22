@@ -4,14 +4,14 @@ import TabItem from '@theme/TabItem';
 
 # Argilla 
 
-Argilla is a collaborative annotation tool for AI engineers and domain experts who need to build high-quality datasets for their projects.
+Argilla는 프로젝트에 사용할 고품질 데이터셋을 구축해야 하는 AI 엔지니어와 도메인 전문가를 위한 협업형 주석 도구입니다.
 
 
-## Getting Started
+## 시작하기
 
-To log the data to Argilla, first you need to deploy the Argilla server. If you have not deployed the Argilla server, please follow the instructions [here](https://docs.argilla.io/latest/getting_started/quickstart/).
+데이터를 Argilla에 기록하려면 먼저 Argilla 서버를 배포해야 합니다. 아직 Argilla 서버를 배포하지 않았다면 [여기](https://docs.argilla.io/latest/getting_started/quickstart/)의 안내를 따르세요.
 
-Next, you will need to configure and create the Argilla dataset.
+다음으로 Argilla 데이터셋을 구성하고 생성해야 합니다.
 
 ```python
 import argilla as rg
@@ -44,10 +44,10 @@ dataset = rg.Dataset(
 dataset.create()
 ```
 
-For further configuration, please refer to the [Argilla documentation](https://docs.argilla.io/latest/how_to_guides/dataset/).
+추가 구성은 [Argilla 문서](https://docs.argilla.io/latest/how_to_guides/dataset/)를 참고하세요.
 
 
-## Usage
+## 사용법
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -80,7 +80,7 @@ response = completion(
 
 </TabItem>
 
-<TabItem value="proxy" label="PROXY">
+<TabItem value="proxy" label="프록시">
 
 ```yaml
 litellm_settings:
@@ -93,13 +93,13 @@ litellm_settings:
 </TabItem>
 </Tabs>
 
-## Example Output
+## 예제 출력 {#example-output}
 
 <Image img={require('../../img/argilla.png')} />
 
-## Add sampling rate to Argilla calls
+## Argilla 호출에 샘플링 비율 추가 {#add-sampling-rate-to-argilla-calls}
 
-To just log a sample of calls to argilla, add `ARGILLA_SAMPLING_RATE` to your env vars.
+Argilla 호출 중 일부 샘플만 기록하려면 환경 변수에 `ARGILLA_SAMPLING_RATE`를 추가하세요.
 
 ```bash
 ARGILLA_SAMPLING_RATE=0.1 # log 10% of calls to argilla

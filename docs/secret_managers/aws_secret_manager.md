@@ -5,31 +5,31 @@ import TabItem from '@theme/TabItem';
 
 :::info
 
-✨ **This is an Enterprise Feature**
+✨ **이 기능은 엔터프라이즈 기능입니다**
 
-[Enterprise Pricing](https://www.litellm.ai/#pricing)
+[엔터프라이즈 요금제](https://www.litellm.ai/#pricing)
 
-[Contact us here to get a free trial](https://enterprise.litellm.ai/demo)
+[무료 평가판을 받으려면 여기로 문의하세요](https://enterprise.litellm.ai/demo)
 
 :::
 
-Store your proxy keys in AWS Secret Manager.
+프록시 키를 AWS Secret Manager에 저장합니다.
 
-| Feature | Support | Description |
+| 기능 | 지원 | 설명 |
 |---------|----------|-------------|
-| Reading Secrets | ✅ | Read secrets e.g `OPENAI_API_KEY` |
-| Writing Secrets | ✅ | Store secrets e.g `Virtual Keys` |
+| 시크릿 읽기 | ✅ | 예: `OPENAI_API_KEY` 같은 시크릿을 읽습니다 |
+| 시크릿 쓰기 | ✅ | 예: `가상 키` 같은 시크릿을 저장합니다 |
 
-## Proxy Usage
+## Proxy 사용법
 
-1. Save AWS Credentials in your environment
+1. 환경에 AWS 자격 증명을 저장합니다.
 ```bash
 os.environ["AWS_ACCESS_KEY_ID"] = ""  # Access key
 os.environ["AWS_SECRET_ACCESS_KEY"] = "" # Secret access key
 os.environ["AWS_REGION_NAME"] = "" # us-east-1, us-east-2, us-west-1, us-west-2
 ```
 
-2. Enable AWS Secret Manager in config. 
+2. 구성에서 AWS Secret Manager를 활성화합니다.
 
 <Tabs>
 <TabItem value="read_only" label="Read Keys from AWS Secret Manager">
@@ -45,9 +45,9 @@ general_settings:
 
 </TabItem>
 
-<TabItem value="write_only" label="Write Virtual Keys to AWS Secret Manager">
+<TabItem value="write_only" label="Write 가상 키 to AWS Secret Manager">
 
-This will only store virtual keys in AWS Secret Manager. No keys will be read from AWS Secret Manager.
+이 설정은 가상 키만 AWS Secret Manager에 저장합니다. AWS Secret Manager에서 키를 읽지는 않습니다.
 
 ```yaml
 general_settings:
@@ -78,15 +78,15 @@ general_settings:
 </TabItem>
 </Tabs>
 
-3. Run proxy
+3. 프록시를 실행합니다.
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-## Using K/V pairs in 1 AWS Secret
+## 하나의 AWS Secret에서 K/V 쌍 사용 {#using-kv-pairs-in-1-aws-secret}
 
-You can read multiple keys from a single AWS Secret using the `primary_secret_name` parameter:
+`primary_secret_name` 파라미터를 사용하면 하나의 AWS Secret에서 여러 키를 읽을 수 있습니다.
 
 ```yaml
 general_settings:
@@ -99,7 +99,7 @@ general_settings:
     primary_secret_name: "litellm_secrets" # 👈 Read multiple keys from one JSON secret
 ```
 
-The `primary_secret_name` allows you to read multiple keys from a single AWS Secret as a JSON object. For example, the "litellm_secrets" would contain:
+`primary_secret_name`을 사용하면 하나의 AWS Secret에 있는 여러 키를 JSON 객체로 읽을 수 있습니다. 예를 들어 "litellm_secrets"에는 다음 값이 들어갑니다.
 
 ```json
 {
@@ -108,13 +108,13 @@ The `primary_secret_name` allows you to read multiple keys from a single AWS Sec
 }
 ```
 
-This reduces the number of AWS Secrets you need to manage.
+이렇게 하면 관리해야 하는 AWS Secret 수를 줄일 수 있습니다.
 
-## IAM Role Assumption
+## IAM Role 수임 {#iam-role-assumption}
 
-Use IAM roles instead of static AWS credentials for better security.
+보안을 강화하려면 정적 AWS 자격 증명 대신 IAM Role을 사용하세요.
 
-### Basic IAM Role
+### 기본 IAM Role {#basic-iam-role}
 
 ```yaml
 general_settings:
@@ -126,7 +126,7 @@ general_settings:
     aws_session_name: "litellm-session"
 ```
 
-### Cross-Account Access
+### 교차 계정 액세스 {#cross-account-access}
 
 ```yaml
 general_settings:
@@ -138,7 +138,7 @@ general_settings:
     aws_external_id: "unique-external-id"
 ```
 
-### EKS with IRSA
+### IRSA를 사용하는 EKS {#eks-with-irsa}
 
 ```yaml
 general_settings:
@@ -150,17 +150,15 @@ general_settings:
     aws_web_identity_token: "os.environ/AWS_WEB_IDENTITY_TOKEN_FILE"
 ```
 
-### Configuration Parameters
+### 설정 파라미터 {#설정-parameters}
 
-| Parameter | Description |
+| 파라미터 | 설명 |
 |-----------|-------------|
-| `aws_region_name` | AWS region |
-| `aws_role_name` | IAM role ARN to assume |
-| `aws_session_name` | Session name (optional) |
-| `aws_external_id` | External ID for cross-account |
-| `aws_profile_name` | AWS profile from `~/.aws/credentials` |
-| `aws_web_identity_token` | OIDC token path for IRSA |
-| `aws_sts_endpoint` | Custom STS endpoint for VPC |
-
-
+| `aws_region_name` | AWS 리전 |
+| `aws_role_name` | 수임할 IAM Role ARN |
+| `aws_session_name` | 세션 이름(선택 사항) |
+| `aws_external_id` | 교차 계정용 External ID |
+| `aws_profile_name` | `~/.aws/credentials`의 AWS profile |
+| `aws_web_identity_token` | IRSA용 OIDC token 경로 |
+| `aws_sts_endpoint` | VPC용 사용자 지정 STS endpoint |
 

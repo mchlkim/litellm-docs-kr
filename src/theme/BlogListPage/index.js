@@ -4,10 +4,10 @@ import Link from '@docusaurus/Link';
 import styles from './styles.module.css';
 
 const TABS = [
-  {id: 'all', label: 'All'},
-  {id: 'engineering', label: 'Engineering'},
-  {id: 'security', label: 'Security'},
-  {id: 'infrastructure', label: 'Performance / Reliability'},
+  {id: 'all', label: '전체'},
+  {id: 'engineering', label: '엔지니어링'},
+  {id: 'security', label: '보안'},
+  {id: 'infrastructure', label: '성능 / 안정성'},
 ];
 
 const SECURITY_TAGS = ['security', 'incident-report'];
@@ -48,7 +48,7 @@ const DOUBLED = [...PROVIDERS, ...PROVIDERS];
 function ProviderMarquee() {
   return (
     <div className={styles.marqueeWrap}>
-      <p className={styles.marqueeLabel}>Routing to 100+ providers</p>
+      <p className={styles.marqueeLabel}>100개 이상의 제공업체로 라우팅</p>
       <div className={styles.marqueeOuter}>
         <div className={styles.fadeLeft} />
         <div className={styles.fadeRight} />
@@ -68,7 +68,7 @@ function ProviderMarquee() {
 
 // ── Post row ──────────────────────────────────────────────────────────────
 function formatDate(dateStr) {
-  return new Date(dateStr).toLocaleDateString('en-US', {
+  return new Date(dateStr).toLocaleDateString('ko-KR', {
     month: 'long', day: 'numeric', year: 'numeric',
   });
 }
@@ -112,9 +112,9 @@ function Pagination({metadata}) {
   const {previousPage, nextPage} = metadata;
   if (!previousPage && !nextPage) return null;
   return (
-    <nav className={styles.pagination} aria-label="Blog list pagination">
-      {previousPage ? <Link to={previousPage} className={styles.pageLink}>&larr; Newer posts</Link> : <span />}
-      {nextPage ? <Link to={nextPage} className={styles.pageLink}>Older posts &rarr;</Link> : <span />}
+    <nav className={styles.pagination} aria-label="블로그 목록 페이지네이션">
+      {previousPage ? <Link to={previousPage} className={styles.pageLink}>&larr; 최신 글</Link> : <span />}
+      {nextPage ? <Link to={nextPage} className={styles.pageLink}>이전 글 &rarr;</Link> : <span />}
     </nav>
   );
 }
@@ -128,27 +128,27 @@ export default function BlogListPage(props) {
 
   return (
     <Layout
-      title="Engineering Blog"
-      description="How we build the world's most widely used open-source AI Gateway. Routing, reliability, observability, and what we learn along the way."
+      title="엔지니어링 블로그"
+      description="세계에서 가장 널리 사용되는 오픈 소스 AI Gateway를 만드는 방법. 라우팅, 안정성, 관측성, 그리고 그 과정에서 배우는 것들."
     >
       <div className={styles.page}>
         {/* Hero */}
         <header className={styles.hero}>
           <p className={styles.eyebrow}>AI Gateway</p>
-          <h1 className={styles.heroTitle}>Engineering</h1>
+          <h1 className={styles.heroTitle}>엔지니어링</h1>
           <p className={styles.heroSub}>
-            How we build the world's most widely used open-source AI Gateway.
-            Routing, reliability, observability, and what we learn along the way.
+            세계에서 가장 널리 사용되는 오픈 소스 AI Gateway를 만드는 방법.
+            라우팅, 안정성, 관측성, 그리고 그 과정에서 배우는 것들.
           </p>
           <a href="https://jobs.ashbyhq.com/litellm" target="_blank" rel="noopener noreferrer" className={styles.hiringBtn}>
-            We're hiring!
+            채용 중입니다!
           </a>
         </header>
 
         <ProviderMarquee />
 
         {/* Tabs */}
-        <nav className={styles.tabs} aria-label="Filter posts by category">
+        <nav className={styles.tabs} aria-label="카테고리별 글 필터링">
           {TABS.map(tab => (
             <button
               key={tab.id}
@@ -164,7 +164,7 @@ export default function BlogListPage(props) {
         {/* Post list */}
         <main className={styles.list}>
           {filtered.length === 0 && (
-            <p className={styles.emptyMsg}>No posts on this page match the selected filter.</p>
+            <p className={styles.emptyMsg}>이 페이지에는 선택한 필터와 일치하는 글이 없습니다.</p>
           )}
           {filtered.map(({content}) => (
             <PostRow key={content.metadata.permalink} post={content.metadata} />

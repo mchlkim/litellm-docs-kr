@@ -1,24 +1,24 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# AWS Bedrock - Rerank API
+# AWS Bedrock - Rerank API 사용 {#aws-bedrock---rerank-api}
 
-Use Bedrock's Rerank API in the Cohere `/rerank` format.
+Bedrock의 Rerank API를 Cohere `/rerank` 형식으로 사용합니다.
 
-:::info Cost Tracking
+:::info 비용 추적
 
-✅ **Cost tracking is supported** for Bedrock Rerank API calls.
+✅ Bedrock Rerank API 호출은 **비용 추적을 지원합니다**.
 
 :::
 
-## Supported Parameters
+## 지원 파라미터
 
-- `model` - the foundation model ARN
-- `query` - the query to rerank against
-- `documents` - the list of documents to rerank
-- `top_n` - the number of results to return
+- `model` - foundation model ARN 값
+- `query` - rerank 기준으로 사용할 쿼리
+- `documents` - rerank할 문서 목록
+- `top_n` - 반환할 결과 수
 
-## Usage
+## 사용법
 
 <Tabs>
 <TabItem label="SDK" value="sdk">
@@ -44,7 +44,7 @@ print(response)
 </TabItem>
 <TabItem label="PROXY" value="proxy">
 
-### 1. Setup config.yaml
+### 1. config.yaml 설정 {#1-setup-configyaml}
 
 ```yaml
 model_list:
@@ -56,7 +56,7 @@ model_list:
         aws_region_name: os.environ/AWS_REGION_NAME
 ```
 
-### 2. Start proxy server
+### 2. proxy server 시작 {#2-start-proxy-server}
 
 ```bash
 litellm --config config.yaml
@@ -64,7 +64,7 @@ litellm --config config.yaml
 # RUNNING on http://0.0.0.0:4000
 ```
 
-### 3. Test it! 
+### 3. 테스트 {#3-test-it}
 
 ```bash
 curl http://0.0.0.0:4000/rerank \
@@ -88,7 +88,6 @@ curl http://0.0.0.0:4000/rerank \
 </TabItem>
 </Tabs>
 
-## Authentication
+## 인증
 
-All standard Bedrock authentication methods are supported for rerank. See [Bedrock Authentication](./bedrock#boto3---authentication) for details.
-
+rerank에는 모든 표준 Bedrock 인증 방법이 지원됩니다. 자세한 내용은 [Bedrock 인증](./bedrock#boto3---authentication)을 참고하세요.

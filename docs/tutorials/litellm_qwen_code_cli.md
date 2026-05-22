@@ -1,11 +1,11 @@
 # Qwen Code CLI
 
-This tutorial shows you how to integrate the Qwen Code CLI with LiteLLM Proxy, allowing you to route requests through LiteLLM's unified interface.
+이 튜토리얼에서는 Qwen Code CLI를 LiteLLM Proxy와 통합하여 LiteLLM의 통합 인터페이스를 통해 요청을 라우팅하는 방법을 설명합니다.
 
 
 :::info 
 
-This integration is supported from LiteLLM v1.73.3-nightly and above.
+이 통합은 LiteLLM v1.73.3-nightly 이상에서 지원됩니다.
 
 :::
 
@@ -13,41 +13,41 @@ This integration is supported from LiteLLM v1.73.3-nightly and above.
 
 <iframe width="840" height="500" src="https://www.loom.com/embed/d7059b059c0f425fb0b8839418adffd6" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
 
-## Benefits of using qwen-code with LiteLLM
+## LiteLLM과 함께 qwen-code를 사용할 때의 이점 {#benefits-of-using-qwen-code-with-litellm}
 
-When you use qwen-code with LiteLLM you get the following benefits:
+qwen-code를 LiteLLM과 함께 사용하면 다음과 같은 이점이 있습니다.
 
-**Developer Benefits:**
-- Universal Model Access: Use any LiteLLM supported model (Anthropic, OpenAI, Vertex AI, Bedrock, etc.) through the qwen-code interface.
-- Higher Rate Limits & Reliability: Load balance across multiple models and providers to avoid hitting individual provider limits, with fallbacks to ensure you get responses even if one provider fails.
+**개발자 이점:**
+- 범용 모델 접근: qwen-code 인터페이스를 통해 LiteLLM이 지원하는 모든 모델(Anthropic, OpenAI, Vertex AI, Bedrock 등)을 사용할 수 있습니다.
+- 더 높은 속도 제한과 안정성: 여러 모델과 제공자에 걸쳐 로드 밸런싱하여 개별 제공자의 제한에 걸리지 않도록 하고, 한 제공자가 실패해도 응답을 받을 수 있도록 폴백을 사용할 수 있습니다.
 
-**Proxy Admin Benefits:**
-- Centralized Management: Control access to all models through a single LiteLLM proxy instance without giving your developers API Keys to each provider.
-- Budget Controls: Set spending limits and track costs across all qwen-code usage.
+**Proxy 관리자 이점:**
+- 중앙 집중식 관리: 개발자에게 각 제공자의 API 키를 제공하지 않고도 단일 LiteLLM proxy 인스턴스를 통해 모든 모델 접근을 제어할 수 있습니다.
+- 예산 제어: 지출 한도를 설정하고 모든 qwen-code 사용량의 비용을 추적할 수 있습니다.
 
 
 
-## Prerequisites
+## 사전 준비
 
-Before you begin, ensure you have:
-- Node.js and npm installed on your system
-- A running LiteLLM Proxy instance
-- A valid LiteLLM Proxy API key
-- Git installed for cloning the repository
+시작하기 전에 다음 항목이 준비되어 있는지 확인하세요.
+- 시스템에 Node.js와 npm이 설치되어 있어야 합니다.
+- 실행 중인 LiteLLM Proxy 인스턴스가 필요합니다.
+- 유효한 LiteLLM Proxy API 키가 필요합니다.
+- 저장소 복제를 위해 Git이 설치되어 있어야 합니다.
 
-## Quick Start Guide
+## 빠른 시작 가이드 {#quick-start-guide}
 
-### Step 1: Install Qwen Code CLI
+### 1단계: Qwen Code CLI 설치 {#step-1-install-qwen-code-cli}
 
-Clone the Qwen Code CLI repository and navigate to the project directory:
+Qwen Code CLI를 전역으로 설치합니다.
 
 ```bash
 npm install -g @qwen-code/qwen-code
 ```
 
-### Step 2: Configure Qwen Code CLI for LiteLLM Proxy
+### 2단계: LiteLLM Proxy용 Qwen Code CLI 구성 {#step-2-configure-qwen-code-cli-for-litellm-proxy}
 
-Configure the Qwen Code CLI to point to your LiteLLM Proxy instance by setting the required environment variables:
+필수 환경 변수를 설정하여 Qwen Code CLI가 LiteLLM Proxy 인스턴스를 가리키도록 구성합니다.
 
 ```bash
 export OPENAI_BASE_URL="http://localhost:4000"
@@ -55,35 +55,35 @@ export OPENAI_API_KEY=sk-1234567890
 export OPENAI_MODEL="your-configured-model"
 ```
 
-**Note:** Replace the values with your actual LiteLLM Proxy configuration:
-- `OPENAI_BASE_URL`: The URL where your LiteLLM Proxy is running
-- `OPENAI_API_KEY`: Your LiteLLM Proxy API key
-- `OPENAI_MODEL`: The model you want to use (configured in your LiteLLM proxy)
+**참고:** 값을 실제 LiteLLM Proxy 구성에 맞게 바꾸세요.
+- `OPENAI_BASE_URL`: LiteLLM Proxy가 실행 중인 URL
+- `OPENAI_API_KEY`: LiteLLM Proxy API 키
+- `OPENAI_MODEL`: 사용할 모델(LiteLLM proxy에 구성된 모델)
 
-### Step 3: Build and Start Qwen Code CLI
+### 3단계: Qwen Code CLI 시작 {#step-3-build-and-start-qwen-code-cli}
 
-Build the project and start the CLI:
+CLI를 시작합니다.
 
 ```bash
 qwen
 ```
 
-### Step 4: Test the Integration
+### 4단계: 통합 테스트 {#step-4-test-the-integration}
 
-Once the CLI is running, you can send test requests. These requests will be automatically routed through LiteLLM Proxy to the configured Qwen model.
+CLI가 실행되면 테스트 요청을 보낼 수 있습니다. 이 요청은 LiteLLM Proxy를 통해 구성된 Qwen 모델로 자동 라우팅됩니다.
 
-The CLI will now use LiteLLM Proxy as the backend, giving you access to LiteLLM's features like:
-- Request/response logging
-- Rate limiting
-- Cost tracking
-- Model routing and fallbacks
+이제 CLI는 LiteLLM Proxy를 백엔드로 사용하므로 다음과 같은 LiteLLM 기능을 사용할 수 있습니다.
+- 요청/응답 로깅
+- 속도 제한
+- 비용 추적
+- 모델 라우팅 및 폴백
 
 
-## Advanced
+## 고급 설정 {#advanced}
 
-### Use Anthropic, OpenAI, Bedrock, etc. models on qwen-code
+### qwen-code에서 Anthropic, OpenAI, Bedrock 등의 모델 사용 {#use-anthropic-openai-bedrock-etc-models-on-qwen-code}
 
-In order to use non-qwen models on qwen-code, you need to set a `model_group_alias` in the LiteLLM Proxy config. This tells LiteLLM that requests with model = `qwen-code` should be routed to your desired model from any provider.
+qwen-code에서 qwen이 아닌 모델을 사용하려면 LiteLLM Proxy 구성에서 `model_group_alias`를 설정해야 합니다. 이 설정은 model = `qwen-code`인 요청을 원하는 제공자의 모델로 라우팅하라고 LiteLLM에 알려줍니다.
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -91,7 +91,7 @@ import TabItem from '@theme/TabItem';
 <Tabs>
 <TabItem value="anthropic" label="Anthropic">
 
-Route `qwen-code` requests to Claude Sonnet:
+`qwen-code` 요청을 Claude Sonnet으로 라우팅합니다.
 
 ```yaml showLineNumbers title="proxy_config.yaml"
 model_list:
@@ -107,7 +107,7 @@ router_settings:
 </TabItem>
 <TabItem value="openai" label="OpenAI">
 
-Route `qwen-code` requests to GPT-4o:
+`qwen-code` 요청을 GPT-4o로 라우팅합니다.
 
 ```yaml showLineNumbers title="proxy_config.yaml"
 model_list:
@@ -123,7 +123,7 @@ router_settings:
 </TabItem>
 <TabItem value="bedrock" label="Bedrock">
 
-Route `qwen-code` requests to Claude on Bedrock:
+`qwen-code` 요청을 Bedrock의 Claude로 라우팅합니다.
 
 ```yaml showLineNumbers title="proxy_config.yaml"
 model_list:
@@ -139,9 +139,9 @@ router_settings:
 ```
 
 </TabItem>
-<TabItem value="multi-provider" label="Multi-Provider Load Balancing">
+<TabItem value="multi-provider" label="다중 제공자 로드 밸런싱">
 
-All deployments with model_name=`anthropic-claude` will be load balanced. In this example we load balance between Anthropic and Bedrock.
+model_name=`anthropic-claude`인 모든 배포가 로드 밸런싱됩니다. 이 예시에서는 Anthropic과 Bedrock 사이에서 로드 밸런싱합니다.
 
 ```yaml showLineNumbers title="proxy_config.yaml"
 model_list:
@@ -163,16 +163,16 @@ router_settings:
 </TabItem>
 </Tabs>
 
-With this configuration, when you use `qwen-code` in the CLI, LiteLLM will automatically route your requests to the configured provider(s) with load balancing and fallbacks.
+이 구성으로 CLI에서 `qwen-code`를 사용하면 LiteLLM이 로드 밸런싱과 폴백을 적용하여 요청을 구성된 제공자로 자동 라우팅합니다.
 
 
 
 
 
-## Troubleshooting
+## 문제 해결
 
-If you encounter issues:
+문제가 발생하면 다음을 확인하세요.
 
-1. **Connection errors**: Verify that your LiteLLM Proxy is running and accessible at the configured `OPENAI_BASE_URL`
-2. **Authentication errors**: Ensure your `OPENAI_API_KEY` is valid and has the necessary permissions
-3. **Build failures**: Make sure all dependencies are installed with `npm install`
+1. **연결 오류**: LiteLLM Proxy가 실행 중이며 구성된 `OPENAI_BASE_URL`에서 접근 가능한지 확인하세요.
+2. **인증 오류**: `OPENAI_API_KEY`가 유효하고 필요한 권한을 가지고 있는지 확인하세요.
+3. **빌드 실패**: 모든 의존성이 `npm install`로 설치되어 있는지 확인하세요.

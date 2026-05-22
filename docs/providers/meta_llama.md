@@ -3,37 +3,37 @@ import TabItem from '@theme/TabItem';
 
 # Meta Llama
 
-| Property | Details |
+| 속성 | 세부 정보 |
 |-------|-------|
-| Description | Meta's Llama API provides access to Meta's family of large language models. |
-| Provider Route on LiteLLM | `meta_llama/` |
-| Supported Endpoints | `/chat/completions`, `/completions`, `/responses` |
-| API Reference | [Llama API Reference ↗](https://llama.developer.meta.com?utm_source=partner-litellm&utm_medium=website) |
+| 설명 | Meta Llama API는 Meta의 대규모 언어 모델 제품군에 대한 액세스를 제공합니다. |
+| LiteLLM의 제공자 경로 | `meta_llama/` |
+| 지원 엔드포인트 | `/chat/completions`, `/completions`, `/responses` |
+| API 참조 | [Llama API 참조 ↗](https://llama.developer.meta.com?utm_source=partner-litellm&utm_medium=website) |
 
-## Required Variables
+## 필수 변수 {#required-variables}
 
 ```python showLineNumbers title="Environment Variables"
 os.environ["LLAMA_API_KEY"] = ""  # your Meta Llama API key
 ```
 
-## Supported Models
+## 지원 모델 {#supported-models}
 
 :::info
-All models listed here https://llama.developer.meta.com/docs/models/ are supported. We actively maintain the list of models, token window, etc. [here](https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json).
+여기에 나열된 모든 모델 https://llama.developer.meta.com/docs/models/ 을 지원합니다. 모델 목록, 토큰 윈도우 등은 [여기](https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json)에서 적극적으로 관리하고 있습니다.
 
 :::
 
 
-| Model ID | Input context length | Output context length | Input Modalities | Output Modalities |
+| 모델 ID | 입력 컨텍스트 길이 | 출력 컨텍스트 길이 | 입력 모달리티 | 출력 모달리티 |
 | --- | --- | --- | --- | --- |
 | `Llama-4-Scout-17B-16E-Instruct-FP8` | 128k | 4028 | Text, Image | Text |
 | `Llama-4-Maverick-17B-128E-Instruct-FP8` | 128k | 4028 | Text, Image | Text |
 | `Llama-3.3-70B-Instruct` | 128k | 4028 | Text | Text |
 | `Llama-3.3-8B-Instruct` | 128k | 4028 | Text | Text |
 
-## Usage - LiteLLM Python SDK
+## 사용법 - LiteLLM Python SDK
 
-### Non-streaming
+### 비스트리밍 {#non-streaming}
 
 ```python showLineNumbers title="Meta Llama Non-streaming Completion"
 import os
@@ -48,7 +48,7 @@ messages = [{"content": "Hello, how are you?", "role": "user"}]
 response = completion(model="meta_llama/Llama-4-Maverick-17B-128E-Instruct-FP8", messages=messages)
 ```
 
-### Streaming
+### 스트리밍 {#streaming}
 
 ```python showLineNumbers title="Meta Llama Streaming Completion"
 import os
@@ -70,7 +70,7 @@ for chunk in response:
     print(chunk)
 ```
 
-### Function Calling
+### 함수 호출 {#function-calling}
 
 ```python showLineNumbers title="Meta Llama Function Calling"
 import os
@@ -117,7 +117,7 @@ response = completion(
 print(response.choices[0].message.tool_calls)
 ```
 
-### Tool Use
+### 도구 사용 {#tool-use}
 
 ```python showLineNumbers title="Meta Llama Tool Use"
 import os
@@ -169,10 +169,10 @@ response = completion(
 print(response.choices[0].message.content)
 ```
 
-## Usage - LiteLLM Proxy
+## 사용법 - LiteLLM Proxy
 
 
-Add the following to your LiteLLM Proxy configuration file:
+LiteLLM Proxy 설정 파일에 다음 내용을 추가하세요.
 
 ```yaml showLineNumbers title="config.yaml"
 model_list:
@@ -187,7 +187,7 @@ model_list:
       api_key: os.environ/LLAMA_API_KEY
 ```
 
-Start your LiteLLM Proxy server:
+LiteLLM Proxy 서버를 시작하세요.
 
 ```bash showLineNumbers title="Start LiteLLM Proxy"
 litellm --config config.yaml
@@ -300,4 +300,4 @@ curl http://localhost:4000/v1/chat/completions \
 </TabItem>
 </Tabs>
 
-For more detailed information on using the LiteLLM Proxy, see the [LiteLLM Proxy documentation](../providers/litellm_proxy).
+LiteLLM Proxy 사용에 대한 자세한 내용은 [LiteLLM Proxy 문서](../providers/litellm_proxy)을 참조하세요.

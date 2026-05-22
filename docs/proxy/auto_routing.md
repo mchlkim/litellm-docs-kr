@@ -2,19 +2,19 @@ import Image from '@theme/IdealImage';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Auto Routing
+# Auto Routing {#auto-routing}
 
-LiteLLM can auto select the best model for a request based on rules you define.
+LiteLLM은 사용자가 정의한 rule을 기준으로 request에 가장 적합한 model을 자동 선택할 수 있습니다.
 
 <Image alt="Auto Routing" img={require('../../img/auto_router.png')} style={{ borderRadius: '8px', marginBottom: '1em', maxWidth: '100%' }} />
 
-## LiteLLM Python SDK
+## LiteLLM Python SDK {#litellm-python-sdk}
 
-Auto routing allows you to define routing rules that automatically select the best model for a request based on the input content. This is useful for directing different types of queries to specialized models.
+Auto routing을 사용하면 input content를 기준으로 request에 가장 적합한 model을 자동 선택하는 routing rule을 정의할 수 있습니다. 서로 다른 유형의 query를 전문 model로 보내는 데 유용합니다.
 
-### Setup
+### 설정
 
-1. **Create a router configuration file** (e.g., `router.json`):
+1. **router configuration file 생성** (예: `router.json`):
 
 ```json
 {
@@ -47,7 +47,7 @@ Auto routing allows you to define routing rules that automatically select the be
 }
 ```
 
-2. **Configure the Router with auto routing models**:
+2. **auto routing model로 Router 구성**:
 
 ```python
 from litellm import Router
@@ -92,9 +92,9 @@ router = Router(
 )
 ```
 
-### Usage
+### 사용법
 
-Once configured, use the auto router by calling it with your auto router model name:
+설정이 끝나면 auto router model name으로 호출해 auto router를 사용합니다.
 
 ```python
 # This request will be routed to gpt-4.1 based on the utterance match
@@ -110,39 +110,39 @@ response = await router.acompletion(
 )
 ```
 
-### Configuration Parameters
+### 설정 Parameters
 
-- **auto_router_config_path**: Path to your router.json configuration file
-- **auto_router_default_model**: Fallback model when no route matches
-- **auto_router_embedding_model**: Model used for generating embeddings to match against utterances
+- **auto_router_config_path**: `router.json` configuration file path입니다.
+- **auto_router_default_model**: match되는 route가 없을 때 사용할 fallback model입니다.
+- **auto_router_embedding_model**: utterance와 matching할 embedding을 생성하는 데 사용할 model입니다.
 
-### Router Configuration Schema
+### Router 설정 Schema
 
-The `router.json` file supports the following structure:
+`router.json` file은 다음 구조를 지원합니다.
 
-- **encoder_type**: Type of encoder (e.g., "openai")
-- **encoder_name**: Name of the embedding model
-- **routes**: Array of routing rules with:
-  - **name**: Target model name (must match a model in your model_list)
-  - **utterances**: Example phrases/patterns to match against
-  - **description**: Human-readable description of the route
-  - **score_threshold**: Minimum similarity score to trigger this route (0.0-1.0)
-  - **metadata**: Additional metadata for the route
+- **encoder_type**: encoder type입니다(예: "openai").
+- **encoder_name**: embedding model name입니다.
+- **routes**: routing rule array입니다. 각 rule은 다음 값을 가집니다.
+  - **name**: target model name입니다(`model_list`의 model과 일치해야 합니다).
+  - **utterances**: match할 예제 phrase/pattern입니다.
+  - **description**: route에 대한 사람이 읽기 쉬운 설명입니다.
+  - **score_threshold**: 이 route를 trigger할 최소 similarity score입니다(0.0-1.0).
+  - **metadata**: route에 대한 additional metadata입니다.
 
 
-## LiteLLM Proxy Server
+## LiteLLM Proxy 서버 {#litellm-proxy-server}
 
-### Setup
+### 설정
 
-Navigate to the LiteLLM UI and go to **Models+Endpoints** > **Add Model** > **Auto Router Tab**.
+LiteLLM UI로 이동한 뒤 **모델+Endpoints** > **Add Model** > **Auto Router Tab**으로 이동합니다.
 
-Configure the following required fields:
+다음 필수 field를 설정합니다.
 
-- **Auto Router Name** - The model name that developers will use when making LLM API requests to LiteLLM
-- **Default Model** - The fallback model used when no route is matched (e.g., if set to "gpt-4o-mini", unmatched requests will be routed to gpt-4o-mini)
-- **Embedding Model** - The model used to generate embeddings for input messages. These embeddings are used to semantically match input against the utterances defined in your routes
+- **Auto Router Name** - developer가 LiteLLM에 LLM API request를 보낼 때 사용할 model name입니다.
+- **Default Model** - route가 match되지 않을 때 사용할 fallback model입니다(예: "gpt-4o-mini"로 설정하면 match되지 않은 request는 gpt-4o-mini로 route됩니다).
+- **Embedding Model** - input message의 embedding을 생성하는 데 사용할 model입니다. 이 embedding은 input을 route에 정의된 utterance와 semantic matching하는 데 사용됩니다.
 
-#### Route Configuration
+#### Route 설정
 
 <Image alt="Auto Router Setup" img={require('../../img/auto_router2.png')} style={{ borderRadius: '8px', marginBottom: '1em', maxWidth: '100%' }} />
 
@@ -150,11 +150,11 @@ Configure the following required fields:
 
 <br />
 
-Click **Add Route** to create a new routing rule. Each route consists of utterances that are matched against input messages to determine the target model.
+새 routing rule을 만들려면 **Add Route**를 클릭합니다. 각 route는 input message와 matching되어 target model을 결정하는 utterance로 구성됩니다.
 
-Configure each route with:
+각 route에는 다음 값을 설정합니다.
 
-- **Utterances** - Example phrases that will trigger this route. Use placeholders in brackets for variables:
+- **Utterances** - 이 route를 trigger할 예제 phrase입니다. variable에는 bracket placeholder를 사용합니다.
 
 ```json
 "how to code a program in [language]",
@@ -163,13 +163,13 @@ Configure each route with:
 "can you convert this [language] code to [target_language]"
 ```
 
-- **Description** - A human-readable description of what this route handles
-- **Score Threshold** - The minimum similarity score (0.0-1.0) required to trigger this route
+- **Description** - 이 route가 처리하는 내용을 설명하는 사람이 읽기 쉬운 description입니다.
+- **Score Threshold** - 이 route를 trigger하는 데 필요한 최소 similarity score입니다(0.0-1.0).
 
 
-### Usage
+### 사용법
 
-Once added developers need to select the model=`auto_router1` in the `model` field of the LLM API request.
+추가 후 developer는 LLM API request의 `model` field에서 model=`auto_router1`을 선택해야 합니다.
 
 <Tabs>
 <TabItem value="openai" label="OpenAI Python v1.0.0+">
@@ -212,36 +212,36 @@ curl -X POST http://localhost:4000/v1/chat/completions \
 
 
 
-## How It Works
+## 동작 방식
 
-1. When a request comes in, LiteLLM generates embeddings for the input message
-2. It compares these embeddings against the utterances defined in your routes
-3. If a route's similarity score exceeds the threshold, the request is routed to that model
-4. If no route matches, the request goes to the default model
+1. request가 들어오면 LiteLLM이 input message의 embedding을 생성합니다.
+2. 이 embedding을 route에 정의된 utterance와 비교합니다.
+3. route의 similarity score가 threshold를 넘으면 request를 해당 model로 route합니다.
+4. match되는 route가 없으면 request를 default model로 보냅니다.
 
 ---
 
 ## Complexity Router
 
-The Complexity Router provides an alternative to semantic routing that uses **rule-based scoring** to classify requests by complexity and route them to appropriate models — with **zero external API calls** and **sub-millisecond latency**.
+Complexity Router는 **rule-based scoring**으로 request를 complexity에 따라 분류하고 적절한 model로 route하는 semantic routing의 대안입니다. **외부 API call 없이**, **sub-millisecond latency**로 동작합니다.
 
-### When to Use
+### 사용 시점
 
-| Feature | Semantic Auto Router | Complexity Router |
+| 기능 | Semantic Auto Router | Complexity Router |
 |---------|---------------------|-------------------|
-| Classification | Embedding-based matching | Rule-based scoring |
-| Latency | ~100-500ms (embedding API) | &lt;1ms |
-| API Calls | Requires embedding model | None |
-| Training | Requires utterance examples | Works out of the box |
-| Best For | Intent-based routing | Cost optimization |
+| 분류 | Embedding-based matching | Rule-based scoring |
+| 지연 시간 | ~100-500ms(embedding API) | &lt;1ms |
+| API Calls | embedding model 필요 | 없음 |
+| Training | utterance example 필요 | 바로 사용 가능 |
+| Best For | intent 기반 routing | cost optimization |
 
-Use **Complexity Router** when you want to:
-- Route simple queries to cheaper/faster models (e.g., gpt-4o-mini)
-- Route complex queries to more capable models (e.g., claude-sonnet-4)
-- Minimize latency overhead from routing decisions
-- Avoid additional API costs for embeddings
+다음이 필요할 때 **Complexity Router**를 사용하세요.
+- simple query를 더 저렴하고 빠른 model로 route(예: gpt-4o-mini)
+- complex query를 더 강력한 model로 route(예: claude-sonnet-4)
+- routing decision으로 인한 latency overhead 최소화
+- embedding용 additional API cost 회피
 
-### LiteLLM Python SDK
+### LiteLLM Python SDK {#complexity-router-litellm-python-sdk}
 
 ```python
 from litellm import Router
@@ -285,7 +285,7 @@ router = Router(
 )
 ```
 
-#### Usage
+#### 사용법
 
 ```python
 # Simple query → routes to gpt-4o-mini
@@ -307,9 +307,9 @@ response = await router.acompletion(
 )
 ```
 
-### LiteLLM Proxy Server
+### LiteLLM Proxy 서버 {#complexity-router-litellm-proxy-server}
 
-Add the complexity router to your `config.yaml`:
+`config.yaml`에 complexity router를 추가합니다.
 
 ```yaml
 model_list:
@@ -343,11 +343,11 @@ model_list:
       complexity_router_default_model: gpt-4o
 ```
 
-### Configuration Options
+### 설정 Options
 
 #### Tier Boundaries
 
-Customize the score thresholds for each tier:
+각 tier의 score threshold를 조정합니다.
 
 ```yaml
 complexity_router_config:
@@ -364,7 +364,7 @@ complexity_router_config:
 
 #### Token Thresholds
 
-Adjust when prompts are considered "short" or "long":
+prompt가 "short" 또는 "long"으로 간주되는 기준을 조정합니다.
 
 ```yaml
 complexity_router_config:
@@ -375,7 +375,7 @@ complexity_router_config:
 
 #### Dimension Weights
 
-Customize how much each signal contributes to the complexity score:
+각 signal이 complexity score에 얼마나 기여하는지 조정합니다.
 
 ```yaml
 complexity_router_config:
@@ -389,19 +389,18 @@ complexity_router_config:
     questionComplexity: 0.02 # Multiple questions
 ```
 
-### How Complexity Routing Works
+### Complexity Routing 동작 방식
 
-The router scores each request across 7 dimensions:
+router는 각 request를 7개 dimension으로 scoring합니다.
 
-| Dimension | What It Detects | Effect |
+| Dimension | 감지 내용 | 효과 |
 |-----------|-----------------|--------|
-| Token Count | Short (&lt;15) or long (&gt;400) prompts | Short = simple, long = complex |
-| Code Presence | "function", "class", "api", "database", etc. | Increases complexity |
-| Reasoning Markers | "step by step", "think through", "analyze" | Triggers REASONING tier |
-| Technical Terms | "architecture", "distributed", "encryption" | Increases complexity |
-| Simple Indicators | "what is", "define", "hello" | Decreases complexity |
-| Multi-Step Patterns | "first...then", "1. 2. 3." | Increases complexity |
-| Question Complexity | Multiple question marks | Increases complexity |
+| Token Count | 짧은(&lt;15) 또는 긴(&gt;400) prompt | short = simple, long = complex |
+| Code Presence | "function", "class", "api", "database" 등 | complexity 증가 |
+| Reasoning Markers | "step by step", "think through", "analyze" | REASONING tier를 trigger |
+| Technical Terms | "architecture", "distributed", "encryption" | complexity 증가 |
+| Simple Indicators | "what is", "define", "hello" | complexity 감소 |
+| Multi-Step Patterns | "first...then", "1. 2. 3." | complexity 증가 |
+| Question Complexity | 여러 question mark | complexity 증가 |
 
-**Special behavior:** If 2+ reasoning markers are detected in the user message, the request automatically routes to the REASONING tier regardless of the weighted score.
-
+**특수 동작:** user message에서 reasoning marker가 2개 이상 감지되면 weighted score와 관계없이 request가 REASONING tier로 자동 route됩니다.

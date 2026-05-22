@@ -23,38 +23,37 @@ import Image from '@theme/IdealImage';
 
 :::info
 
-Get a 7 day free trial for LiteLLM Enterprise [here](https://litellm.ai/#trial).
+LiteLLM 엔터프라이즈 7일 무료 평가판은 [여기](https://litellm.ai/#trial)에서 시작할 수 있습니다.
 
-**no call needed**
+**통화는 필요하지 않습니다**
 
 :::
 
-## UI Improvements
+## UI 개선 사항
 
-### [Opt In] Admin UI - view messages / responses 
+### [옵트인] 관리자 UI - 메시지 / 응답 보기
 
-You can now view messages and response logs on Admin UI.
+이제 관리자 UI에서 메시지와 응답 로그를 볼 수 있습니다.
 
 <Image img={require('../../img/release_notes/ui_logs.png')} />
 
-How to enable it - add `store_prompts_in_spend_logs: true` to your `proxy_config.yaml`
+활성화 방법: `proxy_config.yaml`에 `store_prompts_in_spend_logs: true`를 추가하세요.
 
-Once this flag is enabled, your `messages` and `responses` will be stored in the `LiteLLM_Spend_Logs` table.
-
-```yaml
-general_settings:
-  store_prompts_in_spend_logs: true
-```
-
-## DB Schema Change
-
-Added `messages` and `responses` to the `LiteLLM_Spend_Logs` table.
-
-**By default this is not logged.** If you want `messages` and `responses` to be logged, you need to opt in with this setting 
+이 플래그를 활성화하면 `messages`와 `responses`가 `LiteLLM_Spend_로그` 테이블에 저장됩니다.
 
 ```yaml
 general_settings:
   store_prompts_in_spend_logs: true
 ```
 
+## DB 스키마 변경
+
+`LiteLLM_Spend_로그` 테이블에 `messages`와 `responses`가 추가되었습니다.
+
+**기본적으로는 로그로 기록되지 않습니다.** `messages`와 `responses`를 로그로 기록하려면 이 설정으로 옵트인해야 합니다.
+
+```yaml
+general_settings:
+  store_prompts_in_spend_logs: true
+```
 

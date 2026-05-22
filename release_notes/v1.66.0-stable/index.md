@@ -1,5 +1,5 @@
 ---
-title: v1.66.0-stable - Realtime API Cost Tracking
+title: v1.66.0-stable - Realtime API 비용 추적
 slug: v1.66.0-stable
 date: 2025-04-12T10:00:00
 authors:
@@ -20,7 +20,7 @@ import Image from '@theme/IdealImage';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-## Deploy this version
+## 이 버전 배포하기
 
 <Tabs>
 <TabItem value="docker" label="Docker">
@@ -41,17 +41,17 @@ pip install litellm==1.66.0.post1
 </TabItem>
 </Tabs>
 
-v1.66.0-stable is live now, here are the key highlights of this release
+v1.66.0-stable이 공개되었습니다. 이번 릴리스의 주요 내용은 다음과 같습니다.
 
-## Key Highlights
-- **Realtime API Cost Tracking**: Track cost of realtime API calls
-- **Microsoft SSO Auto-sync**: Auto-sync groups and group members from Azure Entra ID to LiteLLM
-- **xAI grok-3**: Added support for `xai/grok-3` models
-- **Security Fixes**: Fixed [CVE-2025-0330](https://www.cve.org/CVERecord?id=CVE-2025-0330) and [CVE-2024-6825](https://www.cve.org/CVERecord?id=CVE-2024-6825) vulnerabilities
+## 주요 하이라이트
+- **Realtime API 비용 추적**: Realtime API 호출 비용을 추적합니다.
+- **Microsoft SSO 자동 동기화**: Azure Entra ID의 그룹과 그룹 멤버를 LiteLLM으로 자동 동기화합니다.
+- **xAI grok-3**: `xai/grok-3` 모델 지원을 추가했습니다.
+- **보안 수정**: [CVE-2025-0330](https://www.cve.org/CVERecord?id=CVE-2025-0330) 및 [CVE-2024-6825](https://www.cve.org/CVERecord?id=CVE-2024-6825) 취약점을 수정했습니다.
 
-Let's dive in.
+자세히 살펴보겠습니다.
 
-## Realtime API Cost Tracking
+## Realtime API 비용 추적
 
 <Image 
   img={require('../../img/realtime_api.png')}
@@ -59,95 +59,95 @@ Let's dive in.
 />
 
 
-This release adds Realtime API logging + cost tracking. 
-- **Logging**: LiteLLM now logs the complete response from realtime calls to all logging integrations (DB, S3, Langfuse, etc.) 
-- **Cost Tracking**: You can now set 'base_model' and custom pricing for realtime models. [Custom Pricing](../../docs/proxy/custom_pricing)
-- **Budgets**: Your key/user/team budgets now work for realtime models as well.
+이번 릴리스는 Realtime API 로깅과 비용 추적을 추가합니다.
+- **로깅**: LiteLLM은 이제 realtime 호출의 전체 응답을 모든 로깅 통합(DB, S3, Langfuse 등)에 기록합니다.
+- **비용 추적**: 이제 realtime 모델에 대해 `base_model`과 커스텀 가격을 설정할 수 있습니다. [커스텀 가격](../../docs/proxy/custom_pricing)
+- **예산**: 키/사용자/팀 예산이 realtime 모델에도 적용됩니다.
 
-Start [here](https://docs.litellm.ai/docs/realtime)
+시작하려면 [여기](https://docs.litellm.ai/docs/realtime)를 확인하세요.
 
 
 
-## Microsoft SSO Auto-sync
+## Microsoft SSO 자동 동기화
 
 <Image 
   img={require('../../img/release_notes/sso_sync.png')}
   style={{width: '100%', display: 'block'}}
 />
 <p style={{textAlign: 'left', color: '#666'}}>
-  Auto-sync groups and members from Azure Entra ID to LiteLLM
+  Azure Entra ID의 그룹과 멤버를 LiteLLM으로 자동 동기화합니다.
 </p>
 
-This release adds support for auto-syncing groups and members on Microsoft Entra ID with LiteLLM. This means that LiteLLM proxy administrators can spend less time managing teams and members and LiteLLM handles the following: 
+이번 릴리스는 Microsoft Entra ID의 그룹과 멤버를 LiteLLM과 자동 동기화하는 기능을 추가합니다. LiteLLM 프록시 관리자는 팀과 멤버 관리 시간을 줄일 수 있으며, LiteLLM이 다음 작업을 처리합니다.
 
-- Auto-create teams that exist on Microsoft Entra ID 
-- Sync team members on Microsoft Entra ID with LiteLLM teams
+- Microsoft Entra ID에 존재하는 팀을 자동 생성합니다.
+- Microsoft Entra ID의 팀 멤버를 LiteLLM 팀과 동기화합니다.
 
-Get started with this [here](https://docs.litellm.ai/docs/tutorials/msft_sso)
+시작하려면 [여기](https://docs.litellm.ai/docs/tutorials/msft_sso)를 확인하세요.
 
 
-## New Models / Updated Models
+## 신규 모델 / 업데이트된 모델
 
 - **xAI**
-    1. Added reasoning_effort support for `xai/grok-3-mini-beta` [Get Started](https://docs.litellm.ai/docs/providers/xai#reasoning-usage)
-    2. Added cost tracking for `xai/grok-3` models [PR](https://github.com/BerriAI/litellm/pull/9920)
+    1. `xai/grok-3-mini-beta`에 `reasoning_effort` 지원을 추가했습니다. [시작하기](https://docs.litellm.ai/docs/providers/xai#reasoning-usage)
+    2. `xai/grok-3` 모델 비용 추적을 추가했습니다. [PR](https://github.com/BerriAI/litellm/pull/9920)
 
 - **Hugging Face**
-    1. Added inference providers support [Get Started](https://docs.litellm.ai/docs/providers/huggingface#serverless-inference-providers)
+    1. inference providers 지원을 추가했습니다. [시작하기](https://docs.litellm.ai/docs/providers/huggingface#serverless-inference-providers)
 
 - **Azure**
-    1. Added azure/gpt-4o-realtime-audio cost tracking [PR](https://github.com/BerriAI/litellm/pull/9893)
+    1. `azure/gpt-4o-realtime-audio` 비용 추적을 추가했습니다. [PR](https://github.com/BerriAI/litellm/pull/9893)
 
 - **VertexAI**
-    1. Added enterpriseWebSearch tool support [Get Started](https://docs.litellm.ai/docs/providers/vertex#grounding---web-search)
-    2. Moved to only passing keys accepted by the Vertex AI response schema [PR](https://github.com/BerriAI/litellm/pull/8992)
+    1. `enterpriseWebSearch` 도구 지원을 추가했습니다. [시작하기](https://docs.litellm.ai/docs/providers/vertex#grounding---web-search)
+    2. Vertex AI 응답 스키마가 허용하는 키만 전달하도록 변경했습니다. [PR](https://github.com/BerriAI/litellm/pull/8992)
 
 - **Google AI Studio**
-    1. Added cost tracking for `gemini-2.5-pro` [PR](https://github.com/BerriAI/litellm/pull/9837)
-    2. Fixed pricing for 'gemini/gemini-2.5-pro-preview-03-25' [PR](https://github.com/BerriAI/litellm/pull/9896)
-    3. Fixed handling file_data being passed in [PR](https://github.com/BerriAI/litellm/pull/9786)
+    1. `gemini-2.5-pro` 비용 추적을 추가했습니다. [PR](https://github.com/BerriAI/litellm/pull/9837)
+    2. `gemini/gemini-2.5-pro-preview-03-25` 가격을 수정했습니다. [PR](https://github.com/BerriAI/litellm/pull/9896)
+    3. `file_data` 전달 처리를 수정했습니다. [PR](https://github.com/BerriAI/litellm/pull/9786)
 
 - **Azure**
-    1. Updated Azure Phi-4 pricing [PR](https://github.com/BerriAI/litellm/pull/9862)
-    2. Added azure/gpt-4o-realtime-audio cost tracking [PR](https://github.com/BerriAI/litellm/pull/9893)
+    1. Azure Phi-4 가격을 업데이트했습니다. [PR](https://github.com/BerriAI/litellm/pull/9862)
+    2. `azure/gpt-4o-realtime-audio` 비용 추적을 추가했습니다. [PR](https://github.com/BerriAI/litellm/pull/9893)
 
 - **Databricks**
-    1. Removed reasoning_effort from parameters [PR](https://github.com/BerriAI/litellm/pull/9811)
-    2. Fixed custom endpoint check for Databricks [PR](https://github.com/BerriAI/litellm/pull/9925)
+    1. 파라미터에서 `reasoning_effort`를 제거했습니다. [PR](https://github.com/BerriAI/litellm/pull/9811)
+    2. Databricks 커스텀 엔드포인트 검사를 수정했습니다. [PR](https://github.com/BerriAI/litellm/pull/9925)
 
 - **General**
-    1. Added litellm.supports_reasoning() util to track if an llm supports reasoning [Get Started](https://docs.litellm.ai/docs/providers/anthropic#reasoning)
-    2. Function Calling - Handle pydantic base model in message tool calls, handle tools = [], and support fake streaming on tool calls for meta.llama3-3-70b-instruct-v1:0 [PR](https://github.com/BerriAI/litellm/pull/9774)
-    3. LiteLLM Proxy - Allow passing `thinking` param to litellm proxy via client sdk [PR](https://github.com/BerriAI/litellm/pull/9386)
-    4. Fixed correctly translating 'thinking' param for litellm [PR](https://github.com/BerriAI/litellm/pull/9904)
+    1. LLM이 reasoning을 지원하는지 추적하는 `litellm.supports_reasoning()` 유틸을 추가했습니다. [시작하기](https://docs.litellm.ai/docs/providers/anthropic#reasoning)
+    2. Function Calling에서 message tool calls의 pydantic base model을 처리하고, `tools = []`를 처리하며, `meta.llama3-3-70b-instruct-v1:0`의 tool calls에서 fake streaming을 지원합니다. [PR](https://github.com/BerriAI/litellm/pull/9774)
+    3. LiteLLM Proxy에서 client sdk를 통해 `thinking` 파라미터를 litellm proxy로 전달할 수 있게 했습니다. [PR](https://github.com/BerriAI/litellm/pull/9386)
+    4. LiteLLM의 `thinking` 파라미터 변환을 올바르게 수정했습니다. [PR](https://github.com/BerriAI/litellm/pull/9904)
 
 
-## Spend Tracking Improvements
+## 비용 추적 개선 사항
 - **OpenAI, Azure**
-    1. Realtime API Cost tracking with token usage metrics in spend logs [Get Started](https://docs.litellm.ai/docs/realtime)
+    1. spend logs의 토큰 사용량 메트릭과 함께 Realtime API 비용 추적을 추가했습니다. [시작하기](https://docs.litellm.ai/docs/realtime)
 - **Anthropic**
-    1. Fixed Claude Haiku cache read pricing per token [PR](https://github.com/BerriAI/litellm/pull/9834)
-    2. Added cost tracking for Claude responses with base_model [PR](https://github.com/BerriAI/litellm/pull/9897)
-    3. Fixed Anthropic prompt caching cost calculation and trimmed logged message in db [PR](https://github.com/BerriAI/litellm/pull/9838)
+    1. Claude Haiku 캐시 읽기 토큰당 가격을 수정했습니다. [PR](https://github.com/BerriAI/litellm/pull/9834)
+    2. `base_model`을 사용하는 Claude 응답 비용 추적을 추가했습니다. [PR](https://github.com/BerriAI/litellm/pull/9897)
+    3. Anthropic prompt caching 비용 계산을 수정하고 DB에 기록되는 메시지를 줄였습니다. [PR](https://github.com/BerriAI/litellm/pull/9838)
 - **General**
-    1. Added token tracking and log usage object in spend logs [PR](https://github.com/BerriAI/litellm/pull/9843)
-    2. Handle custom pricing at deployment level [PR](https://github.com/BerriAI/litellm/pull/9855)
+    1. spend logs에 토큰 추적과 log usage 객체를 추가했습니다. [PR](https://github.com/BerriAI/litellm/pull/9843)
+    2. 배포 단위 커스텀 가격 처리를 추가했습니다. [PR](https://github.com/BerriAI/litellm/pull/9855)
 
 
-## Management Endpoints / UI
+## 관리 엔드포인트 / UI
 
 - **Test Key Tab**
-    1. Added rendering of Reasoning content, ttft, usage metrics on test key page [PR](https://github.com/BerriAI/litellm/pull/9931)
+    1. test key 페이지에 Reasoning content, ttft, usage metrics 렌더링을 추가했습니다. [PR](https://github.com/BerriAI/litellm/pull/9931)
 
     <Image 
     img={require('../../img/release_notes/chat_metrics.png')}
     style={{width: '100%', display: 'block'}}
     />
     <p style={{textAlign: 'left', color: '#666'}}>
-    View input, output, reasoning tokens, ttft metrics.
+    입력, 출력, reasoning tokens, ttft metrics를 확인합니다.
     </p>
-- **Tag / Policy Management**
-    1. Added Tag/Policy Management. Create routing rules based on request metadata. This allows you to enforce that requests with `tags="private"` only go to specific models. [Get Started](https://docs.litellm.ai/docs/tutorials/tag_management)
+- **태그 / 정책 관리**
+    1. Tag/Policy Management를 추가했습니다. 요청 메타데이터 기반 라우팅 규칙을 만들 수 있습니다. 이를 통해 `tags="private"` 요청이 특정 모델로만 이동하도록 강제할 수 있습니다. [시작하기](https://docs.litellm.ai/docs/tutorials/tag_management)
 
     <br />
 
@@ -156,42 +156,40 @@ Get started with this [here](https://docs.litellm.ai/docs/tutorials/msft_sso)
     style={{width: '100%', display: 'block'}}
     />
     <p style={{textAlign: 'left', color: '#666'}}>
-    Create and manage tags.
+    태그를 생성하고 관리합니다.
     </p>
-- **Redesigned Login Screen**
-    1. Polished login screen [PR](https://github.com/BerriAI/litellm/pull/9778)
-- **Microsoft SSO Auto-Sync**
-    1. Added debug route to allow admins to debug SSO JWT fields [PR](https://github.com/BerriAI/litellm/pull/9835)
-    2. Added ability to use MSFT Graph API to assign users to teams [PR](https://github.com/BerriAI/litellm/pull/9865)
-    3. Connected litellm to Azure Entra ID Enterprise Application [PR](https://github.com/BerriAI/litellm/pull/9872)
-    4. Added ability for admins to set `default_team_params` for when litellm SSO creates default teams [PR](https://github.com/BerriAI/litellm/pull/9895)
-    5. Fixed MSFT SSO to use correct field for user email [PR](https://github.com/BerriAI/litellm/pull/9886)
-    6. Added UI support for setting Default Team setting when litellm SSO auto creates teams [PR](https://github.com/BerriAI/litellm/pull/9918)
-- **UI Bug Fixes**
-    1. Prevented team, key, org, model numerical values changing on scrolling [PR](https://github.com/BerriAI/litellm/pull/9776)
-    2. Instantly reflect key and team updates in UI [PR](https://github.com/BerriAI/litellm/pull/9825)
+- **재설계된 로그인 화면**
+    1. 로그인 화면을 다듬었습니다. [PR](https://github.com/BerriAI/litellm/pull/9778)
+- **Microsoft SSO 자동 동기화**
+    1. 관리자가 SSO JWT 필드를 디버그할 수 있도록 debug route를 추가했습니다. [PR](https://github.com/BerriAI/litellm/pull/9835)
+    2. MSFT Graph API를 사용해 사용자를 팀에 할당하는 기능을 추가했습니다. [PR](https://github.com/BerriAI/litellm/pull/9865)
+    3. litellm을 Azure Entra ID Enterprise Application에 연결했습니다. [PR](https://github.com/BerriAI/litellm/pull/9872)
+    4. litellm SSO가 기본 팀을 생성할 때 관리자가 `default_team_params`를 설정할 수 있게 했습니다. [PR](https://github.com/BerriAI/litellm/pull/9895)
+    5. MSFT SSO가 사용자 이메일에 올바른 필드를 사용하도록 수정했습니다. [PR](https://github.com/BerriAI/litellm/pull/9886)
+    6. litellm SSO가 팀을 자동 생성할 때 Default Team 설정을 지정하는 UI 지원을 추가했습니다. [PR](https://github.com/BerriAI/litellm/pull/9918)
+- **UI 버그 수정**
+    1. 스크롤할 때 team, key, org, model 숫자 값이 바뀌지 않도록 했습니다. [PR](https://github.com/BerriAI/litellm/pull/9776)
+    2. key와 team 업데이트가 UI에 즉시 반영되도록 했습니다. [PR](https://github.com/BerriAI/litellm/pull/9825)
 
-## Logging / Guardrail Improvements
+## 로깅 / Guardrail 개선 사항
 
 - **Prometheus**
-    1. Emit Key and Team Budget metrics on a cron job schedule [Get Started](https://docs.litellm.ai/docs/proxy/prometheus#initialize-budget-metrics-on-startup)
+    1. cron job 일정에 따라 Key 및 Team Budget 메트릭을 내보냅니다. [시작하기](https://docs.litellm.ai/docs/proxy/prometheus#initialize-budget-metrics-on-startup)
 
-## Security Fixes
+## 보안 수정
 
-- Fixed [CVE-2025-0330](https://www.cve.org/CVERecord?id=CVE-2025-0330) - Leakage of Langfuse API keys in team exception handling [PR](https://github.com/BerriAI/litellm/pull/9830)
-- Fixed [CVE-2024-6825](https://www.cve.org/CVERecord?id=CVE-2024-6825) - Remote code execution in post call rules [PR](https://github.com/BerriAI/litellm/pull/9826)
+- [CVE-2025-0330](https://www.cve.org/CVERecord?id=CVE-2025-0330)을 수정했습니다. team exception handling에서 Langfuse API keys가 노출되던 문제입니다. [PR](https://github.com/BerriAI/litellm/pull/9830)
+- [CVE-2024-6825](https://www.cve.org/CVERecord?id=CVE-2024-6825)를 수정했습니다. post call rules의 remote code execution 문제입니다. [PR](https://github.com/BerriAI/litellm/pull/9826)
 
 ## Helm
 
-- Added service annotations to litellm-helm chart [PR](https://github.com/BerriAI/litellm/pull/9840)
-- Added extraEnvVars to the helm deployment [PR](https://github.com/BerriAI/litellm/pull/9292)
+- litellm-helm chart에 service annotations를 추가했습니다. [PR](https://github.com/BerriAI/litellm/pull/9840)
+- helm deployment에 extraEnvVars를 추가했습니다. [PR](https://github.com/BerriAI/litellm/pull/9292)
 
 ## Demo
 
-Try this on the demo instance [today](https://docs.litellm.ai/docs/proxy/demo)
+데모 인스턴스에서 [바로 사용해 보세요](https://docs.litellm.ai/docs/proxy/demo).
 
-## Complete Git Diff
+## 전체 Git Diff
 
-See the complete git diff since v1.65.4-stable, [here](https://github.com/BerriAI/litellm/releases/tag/v1.66.0-stable)
-
-
+v1.65.4-stable 이후의 전체 git diff는 [여기](https://github.com/BerriAI/litellm/releases/tag/v1.66.0-stable)에서 확인할 수 있습니다.

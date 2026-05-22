@@ -1,27 +1,27 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# SDK Proxy Authentication (OAuth2/JWT Auto-Refresh)
+# SDK Proxy 인증 (OAuth2/JWT 자동 갱신)
 
-Automatically obtain and refresh OAuth2/JWT tokens when using the LiteLLM Python SDK with a LiteLLM Proxy that requires JWT authentication.
+JWT 인증이 필요한 LiteLLM Proxy와 함께 LiteLLM Python SDK를 사용할 때 OAuth2/JWT 토큰을 자동으로 가져오고 갱신합니다.
 
-## Overview
+## 개요
 
-When your LiteLLM Proxy is protected by an OAuth2/OIDC provider (Azure AD, Keycloak, Okta, Auth0, etc.), your SDK clients need valid JWT tokens for every request. Instead of manually managing token lifecycle, `litellm.proxy_auth` handles this automatically:
+LiteLLM Proxy가 OAuth2/OIDC 공급자(Azure AD, Keycloak, Okta, Auth0 등)로 보호되는 경우 SDK 클라이언트는 모든 요청에 유효한 JWT 토큰이 필요합니다. 토큰 수명 주기를 직접 관리하는 대신 `litellm.proxy_auth`가 이를 자동으로 처리합니다.
 
-- Obtains tokens from your identity provider
-- Caches tokens to avoid unnecessary requests
-- Refreshes tokens before they expire (60-second buffer)
-- Injects `Authorization: Bearer <token>` headers into every request
+- ID 공급자에서 토큰을 가져옵니다.
+- 불필요한 요청을 피하기 위해 토큰을 캐시합니다.
+- 만료되기 전에 토큰을 갱신합니다(60초 버퍼).
+- 모든 요청에 `Authorization: Bearer <token>` 헤더를 삽입합니다.
 
-## Quick Start
+## 빠른 시작
 
 ### Azure AD
 
 <Tabs>
 <TabItem value="default" label="DefaultAzureCredential">
 
-Uses the [DefaultAzureCredential](https://learn.microsoft.com/en-us/python/api/azure-identity/azure.identity.defaultazurecredential) chain (environment variables, managed identity, Azure CLI, etc.):
+[DefaultAzureCredential](https://learn.microsoft.com/en-us/python/api/azure-identity/azure.identity.defaultazurecredential) 체인(환경 변수, managed identity, Azure CLI 등)을 사용합니다.
 
 ```python
 import litellm
@@ -44,7 +44,7 @@ response = litellm.completion(
 </TabItem>
 <TabItem value="client-secret" label="ClientSecretCredential">
 
-Use a specific Azure AD app registration:
+특정 Azure AD 앱 등록을 사용합니다.
 
 ```python
 import litellm
@@ -72,11 +72,11 @@ response = litellm.completion(
 </TabItem>
 </Tabs>
 
-**Required package:** `uv add azure-identity`
+**필수 패키지:** `uv add azure-identity`
 
-### Generic OAuth2 (Okta, Auth0, Keycloak, etc.)
+### Generic OAuth2 (Okta, Auth0, Keycloak 등)
 
-Works with any OAuth2 provider that supports the `client_credentials` grant type:
+`client_credentials` grant type을 지원하는 모든 OAuth2 공급자와 함께 작동합니다.
 
 ```python
 import litellm
@@ -98,9 +98,9 @@ response = litellm.completion(
 )
 ```
 
-### Custom Credential Provider
+### 사용자 지정 Credential Provider
 
-Implement the `TokenCredential` protocol to use any authentication mechanism:
+원하는 인증 메커니즘을 사용하려면 `TokenCredential` 프로토콜을 구현합니다.
 
 ```python
 import time
@@ -124,16 +124,16 @@ litellm.proxy_auth = ProxyAuthHandler(
 )
 ```
 
-## Supported Endpoints
+## 지원 엔드포인트
 
-Auth headers are automatically injected for:
+다음 항목에는 인증 헤더가 자동으로 삽입됩니다.
 
-| Endpoint | Function |
+| 엔드포인트 | 함수 |
 |----------|----------|
 | Chat Completions | `litellm.completion()` / `litellm.acompletion()` |
 | Embeddings | `litellm.embedding()` / `litellm.aembedding()` |
 
-## How It Works
+## 작동 방식
 
 ```
 ┌──────────┐     ┌──────────────────┐     ┌──────────────┐     ┌──────────────┐
@@ -148,17 +148,17 @@ Auth headers are automatically injected for:
 └──────────┘              │                                    └──────────────┘
 ```
 
-1. You set `litellm.proxy_auth` once at startup
-2. On each SDK call (`completion()`, `embedding()`), the handler checks its cached token
-3. If the token is missing or expires within 60 seconds, it requests a new one from your identity provider
-4. The `Authorization: Bearer <token>` header is injected into the request
-5. If token retrieval fails, a warning is logged and the request proceeds without auth headers
+1. 시작 시 `litellm.proxy_auth`를 한 번 설정합니다.
+2. 각 SDK 호출(`completion()`, `embedding()`)마다 핸들러가 캐시된 토큰을 확인합니다.
+3. 토큰이 없거나 60초 이내에 만료될 경우 ID 공급자에 새 토큰을 요청합니다.
+4. 요청에 `Authorization: Bearer <token>` 헤더가 삽입됩니다.
+5. 토큰을 가져오지 못하면 경고를 기록하고 인증 헤더 없이 요청을 계속 진행합니다.
 
-## API Reference
+## API 참조
 
 ### ProxyAuthHandler
 
-The main handler that manages the token lifecycle.
+토큰 수명 주기를 관리하는 기본 핸들러입니다.
 
 ```python
 from litellm.proxy_auth import ProxyAuthHandler
@@ -169,21 +169,21 @@ handler = ProxyAuthHandler(
 )
 ```
 
-| Parameter | Type | Required | Description |
+| 매개변수 | 타입 | 필수 | 설명 |
 |-----------|------|----------|-------------|
-| `credential` | `TokenCredential` | Yes | A credential provider (AzureADCredential, GenericOAuth2Credential, or custom) |
-| `scope` | `str` | Yes | The OAuth2 scope to request tokens for |
+| `credential` | `TokenCredential` | 예 | credential provider(AzureADCredential, GenericOAuth2Credential 또는 사용자 지정) |
+| `scope` | `str` | 예 | 토큰을 요청할 OAuth2 scope |
 
-**Methods:**
+**메서드:**
 
-| Method | Returns | Description |
+| 메서드 | 반환값 | 설명 |
 |--------|---------|-------------|
-| `get_token()` | `AccessToken` | Get a valid token, refreshing if needed |
-| `get_auth_headers()` | `dict` | Get `{"Authorization": "Bearer <token>"}` headers |
+| `get_token()` | `AccessToken` | 유효한 토큰을 가져오며, 필요한 경우 갱신합니다. |
+| `get_auth_headers()` | `dict` | `{"Authorization": "Bearer <token>"}` 헤더를 가져옵니다. |
 
 ### AzureADCredential
 
-Wraps any `azure-identity` credential with lazy initialization.
+지연 초기화를 사용해 모든 `azure-identity` credential을 래핑합니다.
 
 ```python
 from litellm.proxy_auth import AzureADCredential
@@ -196,13 +196,13 @@ from azure.identity import ManagedIdentityCredential
 cred = AzureADCredential(credential=ManagedIdentityCredential())
 ```
 
-| Parameter | Type | Required | Description |
+| 매개변수 | 타입 | 필수 | 설명 |
 |-----------|------|----------|-------------|
-| `credential` | Azure `TokenCredential` | No | An azure-identity credential. If `None`, uses `DefaultAzureCredential` |
+| `credential` | Azure `TokenCredential` | 아니요 | azure-identity credential입니다. `None`이면 `DefaultAzureCredential`을 사용합니다. |
 
-### GenericOAuth2Credential
+### GenericOAuth2Credential 클래스
 
-Standard OAuth2 client credentials flow for any provider.
+모든 공급자에 사용할 수 있는 표준 OAuth2 client credentials flow입니다.
 
 ```python
 from litellm.proxy_auth import GenericOAuth2Credential
@@ -214,15 +214,15 @@ cred = GenericOAuth2Credential(
 )
 ```
 
-| Parameter | Type | Required | Description |
+| 매개변수 | 타입 | 필수 | 설명 |
 |-----------|------|----------|-------------|
-| `client_id` | `str` | Yes | OAuth2 client ID |
-| `client_secret` | `str` | Yes | OAuth2 client secret |
-| `token_url` | `str` | Yes | Token endpoint URL |
+| `client_id` | `str` | 예 | OAuth2 client ID |
+| `client_secret` | `str` | 예 | OAuth2 client secret |
+| `token_url` | `str` | 예 | 토큰 endpoint URL |
 
 ### AccessToken
 
-Dataclass representing an OAuth2 access token.
+OAuth2 access token을 나타내는 dataclass입니다.
 
 ```python
 from litellm.proxy_auth import AccessToken
@@ -233,9 +233,9 @@ token = AccessToken(
 )
 ```
 
-### TokenCredential Protocol
+### TokenCredential 프로토콜
 
-Any class implementing this protocol can be used as a credential provider:
+이 프로토콜을 구현하는 모든 클래스는 credential provider로 사용할 수 있습니다.
 
 ```python
 from litellm.proxy_auth import AccessToken
@@ -245,7 +245,7 @@ class MyCredential:
         ...
 ```
 
-## Provider-Specific Examples
+## 공급자별 예제
 
 ### Keycloak
 
@@ -292,7 +292,7 @@ litellm.proxy_auth = ProxyAuthHandler(
 )
 ```
 
-### Azure AD with Managed Identity
+### Managed Identity를 사용하는 Azure AD
 
 ```python
 from azure.identity import ManagedIdentityCredential
@@ -306,9 +306,9 @@ litellm.proxy_auth = ProxyAuthHandler(
 )
 ```
 
-## Combining with `use_litellm_proxy`
+## `use_litellm_proxy`와 함께 사용
 
-You can use `proxy_auth` together with [`use_litellm_proxy`](./providers/litellm_proxy#send-all-sdk-requests-to-litellm-proxy) to route all SDK requests through an authenticated proxy:
+<span><code>proxy_auth</code>를 <a href="./providers/litellm_proxy#send-all-sdk-requests-to-litellm-proxy"><code>use_litellm_proxy</code></a>와 함께 사용하면 모든 SDK 요청을 인증된 proxy를 통해 라우팅할 수 있습니다.</span>
 
 ```python
 import os

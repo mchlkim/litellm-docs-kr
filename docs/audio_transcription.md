@@ -1,21 +1,21 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# /audio/transcriptions
+# `/audio/transcriptions`
 
-## Overview 
+## 개요 
 
-| Feature | Supported | Notes | 
+| 기능 | 지원 여부 | 참고 | 
 |-------|-------|-------|
-| Cost Tracking | ✅ | Works with all supported models |
-| Logging | ✅ | Works across all integrations |
-| End-user Tracking | ✅ | |
-| Fallbacks | ✅ | Works between supported models |
-| Loadbalancing | ✅ | Works between supported models |
-| Guardrails | ✅ | Applies to output transcribed text (non-streaming only) |
-| Supported Providers | `openai`, `azure`, `vertex_ai`, `gemini`, `deepgram`, `groq`, `fireworks_ai`, `ovhcloud`, `mistral` | |
+| 비용 추적 | ✅ | 지원되는 모든 모델에서 작동 |
+| 로깅 | ✅ | 모든 통합에서 작동 |
+| 최종 사용자 추적 | ✅ | |
+| 폴백 | ✅ | 지원되는 모델 간에 작동 |
+| 로드 밸런싱 | ✅ | 지원되는 모델 간에 작동 |
+| 가드레일 | ✅ | 출력된 전사 텍스트에 적용됨(비스트리밍 전용) |
+| 지원 프로바이더 | `openai`, `azure`, `vertex_ai`, `gemini`, `deepgram`, `groq`, `fireworks_ai`, `ovhcloud`, `mistral` | |
 
-## Quick Start
+## 빠른 시작
 
 ### LiteLLM Python SDK
 
@@ -34,7 +34,7 @@ print(f"response: {response}")
 
 ### LiteLLM Proxy
 
-### Add model to config 
+### config에 모델 추가 {#add-model-to-config}
 
 
 <Tabs>
@@ -79,7 +79,7 @@ general_settings:
 </TabItem>
 </Tabs>
 
-### Start proxy 
+### 프록시 시작 {#start-proxy}
 
 ```bash showLineNumbers title="Start Proxy Server"
 litellm --config /path/to/config.yaml 
@@ -87,7 +87,7 @@ litellm --config /path/to/config.yaml
 # RUNNING on http://0.0.0.0:8000
 ```
 
-### Test 
+### 테스트 {#test}
 
 <Tabs>
 <TabItem value="curl" label="Curl">
@@ -119,21 +119,21 @@ transcript = client.audio.transcriptions.create(
 </TabItem>
 </Tabs>
 
-## Supported Providers
+## 지원 프로바이더
 
 - OpenAI
 - Azure
-- [Fireworks AI](./providers/fireworks_ai.md#audio-transcription)
-- [Groq](./providers/groq.md#speech-to-text---whisper)
-- [Deepgram](./providers/deepgram.md)
-- [Mistral (Voxtral)](./providers/mistral.md#audio-transcription)
-- [OVHcloud AI Endpoints](./providers/ovhcloud.md)
+- [`Fireworks AI`](https://docs.litellm.ai/docs/providers/fireworks_ai#audio-transcription)
+- [`Groq`](https://docs.litellm.ai/docs/providers/groq#speech-to-text---whisper)
+- [`Deepgram`](https://docs.litellm.ai/docs/providers/deepgram)
+- [`Mistral (Voxtral)`](https://docs.litellm.ai/docs/providers/mistral#audio-transcription)
+- [`OVHcloud AI Endpoints`](https://docs.litellm.ai/docs/providers/ovhcloud)
 
 ---
 
-## Fallbacks
+## 폴백 {#fallbacks}
 
-You can configure fallbacks for audio transcription to automatically retry with different models if the primary model fails.
+기본 모델이 실패할 경우 다른 모델로 자동 재시도하도록 오디오 전사 폴백을 설정할 수 있습니다.
 
 <Tabs>
 <TabItem value="curl" label="Curl">
@@ -168,9 +168,9 @@ transcript = client.audio.transcriptions.create(
 </TabItem>
 </Tabs>
 
-### Testing Fallbacks
+### 폴백 테스트 {#testing-fallbacks}
 
-You can test your fallback configuration using `mock_testing_fallbacks=true` to simulate failures:
+`mock_testing_fallbacks=true`를 사용해 실패를 시뮬레이션하고 폴백 설정을 테스트할 수 있습니다.
 
 <Tabs>
 <TabItem value="curl" label="Curl">

@@ -1,13 +1,13 @@
-# Volcano Engine (Volcengine)
+# `Volcano Engine (Volcengine)`
 https://www.volcengine.com/docs/82379/1263482
 
 :::tip
 
-**We support ALL Volcengine models including Chat and Embeddings, just set `model=volcengine/<any-model-on-volcengine>` as a prefix when sending litellm requests**
+**LiteLLM 요청을 보낼 때 `model=volcengine/<any-model-on-volcengine>` 접두사를 설정하면 채팅과 임베딩을 포함한 모든 Volcengine 모델을 지원합니다.**
 
 :::
 
-## API Key
+## API 키 {#api-key}
 ```python
 # env variable
 os.environ['VOLCENGINE_API_KEY']
@@ -15,7 +15,7 @@ os.environ['VOLCENGINE_API_KEY']
 os.environ['ARK_API_KEY']
 ```
 
-## Sample Usage
+## 샘플 사용법 {#sample-usage}
 ```python
 from litellm import completion
 import os
@@ -39,7 +39,7 @@ response = completion(
 print(response)
 ```
 
-## Sample Usage - Streaming
+## 샘플 사용법 - 스트리밍 {#sample-usage---streaming}
 ```python
 from litellm import completion
 import os
@@ -66,7 +66,7 @@ for chunk in response:
     print(chunk)
 ```
 
-## Sample Usage - Embedding
+## 샘플 사용법 - 임베딩 {#sample-usage---embedding}
 ```python
 from litellm import embedding
 import os
@@ -79,14 +79,14 @@ response = embedding(
 print(response)
 ```
 
-### Supported Embedding Models
-- `doubao-embedding-large` (2048 dimensions)
-- `doubao-embedding-large-text-250515` (2048 dimensions)
-- `doubao-embedding-large-text-240915` (4096 dimensions)
-- `doubao-embedding` (2560 dimensions) 
-- `doubao-embedding-text-240715` (2560 dimensions)
+### 지원되는 임베딩 모델 {#supported-embedding-models}
+- `doubao-embedding-large`(2048차원)
+- `doubao-embedding-large-text-250515`(2048차원)
+- `doubao-embedding-large-text-240915`(4096차원)
+- `doubao-embedding`(2560차원) 
+- `doubao-embedding-text-240715`(2560차원)
 
-### Embedding Parameters
+### 임베딩 파라미터 {#embedding-parameters}
 ```python
 from litellm import embedding
 
@@ -98,14 +98,14 @@ response = embedding(
 )
 ```
 
-## Supported Models - 💥 ALL Volcengine Models Supported!
-We support ALL `volcengine` models for both chat completions and embeddings:
-- **Chat Models**: Set `volcengine/<OUR_ENDPOINT_ID>` as a prefix when sending completion requests
-- **Embedding Models**: Use the specific model names listed above (e.g., `volcengine/doubao-embedding-text-240715`)
+## 지원되는 모델 - 모든 `Volcengine` 모델 지원 {#supported-models}
+채팅 completion과 임베딩 모두에서 모든 `volcengine` 모델을 지원합니다.
+- **채팅 모델**: completion 요청을 보낼 때 `volcengine/<OUR_ENDPOINT_ID>`를 접두사로 설정합니다.
+- **임베딩 모델**: 위에 나열된 특정 모델명을 사용합니다. 예: `volcengine/doubao-embedding-text-240715`
 
-## Sample Usage - LiteLLM Proxy
+## 샘플 사용법 - LiteLLM Proxy {#sample-usage---litellm-proxy}
 
-### Config.yaml setting
+### Config.yaml 설정 {#configyaml-setting}
 
 ```yaml
 model_list:
@@ -121,9 +121,9 @@ model_list:
       api_key: os.environ/VOLCENGINE_API_KEY
 ```
 
-### Send Request
+### 요청 보내기 {#send-request}
 
-#### Chat Completion
+#### Chat Completion {#chat-completion}
 ```shell
 curl --location 'http://localhost:4000/chat/completions' \
     --header 'Authorization: Bearer sk-1234' \

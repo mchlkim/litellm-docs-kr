@@ -3,36 +3,36 @@ import TabItem from '@theme/TabItem';
 
 # Sumo Logic
 
-Send LiteLLM logs to Sumo Logic for observability, monitoring, and analysis.
+관측성, 모니터링, 분석을 위해 LiteLLM 로그를 Sumo Logic으로 전송합니다.
 
-Sumo Logic is a cloud-native machine data analytics platform that provides real-time insights into your applications and infrastructure.
+Sumo Logic은 애플리케이션과 인프라에 대한 실시간 인사이트를 제공하는 클라우드 네이티브 머신 데이터 분석 플랫폼입니다.
 https://www.sumologic.com/
 
 :::info
-We want to learn how we can make the callbacks better! Meet the LiteLLM [founders](https://calendly.com/d/4mp-gd3-k5k/berriai-1-1-onboarding-litellm-hosted-version) or
-join our [discord](https://discord.gg/wuPM9dRgDw)
+콜백을 더 개선할 방법을 알고 싶습니다. LiteLLM [창립자](https://calendly.com/d/4mp-gd3-k5k/berriai-1-1-onboarding-litellm-hosted-version)를 만나거나
+[Discord](https://discord.gg/wuPM9dRgDw)에 참여해 주세요.
 :::
 
-## Pre-Requisites
+## 사전 요구 사항
 
-1. Create a Sumo Logic account at https://www.sumologic.com/
-2. Set up an HTTP Logs and Metrics Source in Sumo Logic:
-   - Go to **Manage Data** > **Collection** > **Collection**
-   - Click **Add Source** next to a Hosted Collector
-   - Select **HTTP Logs & Metrics**
-   - Copy the generated URL (it contains the authentication token)
+1. https://www.sumologic.com/ 에서 Sumo Logic 계정을 만듭니다.
+2. Sumo Logic에서 HTTP 로그 및 메트릭 Source를 설정합니다.
+   - **Manage Data** > **Collection** > **Collection**으로 이동합니다.
+   - Hosted Collector 옆의 **Add Source**를 클릭합니다.
+   - **HTTP Logs & Metrics**를 선택합니다.
+   - 생성된 URL을 복사합니다. 이 URL에는 인증 토큰이 포함되어 있습니다.
 
-For more details, see the [HTTP Logs & Metrics Source](https://www.sumologic.com/help/docs/send-data/hosted-collectors/http-source/logs-metrics/) documentation.
+자세한 내용은 [HTTP Logs & Metrics Source](https://www.sumologic.com/help/docs/send-data/hosted-collectors/http-source/logs-metrics/) 문서를 참고하세요.
 
 ```shell
 uv add litellm
 ```
 
-## Quick Start
+## 빠른 시작
 
-Use just 2 lines of code to instantly log your LLM responses to Sumo Logic.
+코드 두 줄만으로 LLM 응답을 Sumo Logic에 바로 로깅할 수 있습니다.
 
-The Sumo Logic HTTP Source URL includes the authentication token, so no separate API key is required.
+Sumo Logic HTTP Source URL에는 인증 토큰이 포함되어 있으므로 별도의 API 키가 필요하지 않습니다.
 
 <Tabs>
 <TabItem value="python" label="SDK">
@@ -66,7 +66,7 @@ response = litellm.completion(
 </TabItem>
 <TabItem value="proxy" label="LiteLLM Proxy">
 
-1. Setup config.yaml
+1. config.yaml을 설정합니다.
 
 ```yaml
 model_list:
@@ -82,13 +82,13 @@ environment_variables:
   SUMOLOGIC_WEBHOOK_URL: os.environ/SUMOLOGIC_WEBHOOK_URL
 ```
 
-2. Start LiteLLM Proxy
+2. LiteLLM Proxy를 시작합니다.
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-3. Test it!
+3. 테스트합니다.
 
 ```bash
 curl -L -X POST 'http://0.0.0.0:4000/chat/completions' \
@@ -108,16 +108,16 @@ curl -L -X POST 'http://0.0.0.0:4000/chat/completions' \
 </TabItem>
 </Tabs>
 
-## What Data is Logged?
+## 로깅되는 데이터
 
-LiteLLM sends the [Standard Logging Payload](https://docs.litellm.ai/docs/proxy/logging_spec) to Sumo Logic, which includes:
+LiteLLM은 [Standard Logging Payload](https://docs.litellm.ai/docs/proxy/logging_spec)를 Sumo Logic으로 전송하며, 여기에는 다음 항목이 포함됩니다.
 
-- **Request details**: Model, messages, parameters
-- **Response details**: Completion text, token usage, latency
-- **Metadata**: User ID, custom metadata, timestamps
-- **Cost tracking**: Response cost based on token usage
+- **요청 세부 정보**: 모델, 메시지, 파라미터
+- **응답 세부 정보**: 완성 텍스트, 토큰 사용량, 지연 시간
+- **메타데이터**: 사용자 ID, 사용자 지정 메타데이터, 타임스탬프
+- **비용 추적**: 토큰 사용량을 기준으로 한 응답 비용
 
-Example payload:
+예제 payload는 다음과 같습니다.
 
 ```json
 {
@@ -146,44 +146,44 @@ Example payload:
 }
 ```
 
-## Advanced Configuration
+## 고급 설정
 
-### Log Format
+### 로그 형식
 
-The Sumo Logic integration uses **NDJSON (newline-delimited JSON)** format by default. This format is optimal for Sumo Logic's parsing capabilities and allows Field Extraction Rules to work at ingest time.
+Sumo Logic 통합은 기본적으로 **NDJSON (newline-delimited JSON)** 형식을 사용합니다. 이 형식은 Sumo Logic의 파싱 기능에 적합하며, Field Extraction Rules가 수집 시점에 동작하도록 합니다.
 
-#### NDJSON Format
+#### NDJSON 형식
 
-Each log entry is sent as a separate line in the HTTP request:
+각 로그 항목은 HTTP 요청에서 별도의 줄로 전송됩니다.
 ```
 {"id":"chatcmpl-1","model":"gpt-3.5-turbo","response_cost":0.0001,...}
 {"id":"chatcmpl-2","model":"gpt-4","response_cost":0.0003,...}
 {"id":"chatcmpl-3","model":"gpt-3.5-turbo","response_cost":0.0001,...}
 ```
 
-#### Benefits for Field Extraction Rules (FERs)
+#### Field Extraction Rules (FERs)의 이점
 
-With NDJSON format, you can create Field Extraction Rules directly:
+NDJSON 형식을 사용하면 Field Extraction Rules를 직접 만들 수 있습니다.
 
 ```
 _sourceCategory=litellm/logs
 | json field=_raw "model", "response_cost", "user" as model, cost, user
 ```
 
-**Before NDJSON** (with JSON array format):
-- Required `parse regex ... multi` workaround
-- FERs couldn't parse at ingest time
-- Query-time parsing impacted dashboard performance
+**NDJSON 이전**(JSON 배열 형식 사용):
+- `parse regex ... multi` 우회 방법이 필요했습니다.
+- FERs가 수집 시점에 파싱할 수 없었습니다.
+- 쿼리 시점 파싱이 대시보드 성능에 영향을 주었습니다.
 
-**After NDJSON**:
-- ✅ FERs parse fields at ingest time
-- ✅ No query-time workarounds needed
-- ✅ Better dashboard performance
-- ✅ Simpler query syntax
+**NDJSON 이후**:
+- FERs가 수집 시점에 필드를 파싱합니다.
+- 쿼리 시점 우회 방법이 필요하지 않습니다.
+- 대시보드 성능이 향상됩니다.
+- 쿼리 구문이 더 단순해집니다.
 
-#### Changing the Log Format (Advanced)
+#### 로그 형식 변경(고급)
 
-If you need to change the log format (not recommended for Sumo Logic):
+로그 형식을 변경해야 하는 경우에는 다음과 같이 설정합니다. Sumo Logic에서는 권장하지 않습니다.
 
 ```yaml
 callback_settings:
@@ -193,9 +193,9 @@ callback_settings:
     log_format: json_array  # Override to use JSON array instead
 ```
 
-### Batching Settings
+### 배치 설정
 
-Control how LiteLLM batches logs before sending to Sumo Logic:
+LiteLLM이 로그를 Sumo Logic으로 전송하기 전에 배치로 묶는 방식을 제어합니다.
 
 <Tabs>
 <TabItem value="python" label="SDK">
@@ -227,18 +227,18 @@ environment_variables:
 </TabItem>
 </Tabs>
 
-### Compressed Data
+### 압축 데이터
 
-Sumo Logic supports compressed data (gzip or deflate). LiteLLM automatically handles compression when beneficial.
+Sumo Logic은 압축 데이터(gzip 또는 deflate)를 지원합니다. LiteLLM은 압축이 유리한 경우 자동으로 처리합니다.
 
-Benefits:
-- Reduced network usage
-- Faster message delivery
-- Lower data transfer costs
+이점:
+- 네트워크 사용량 감소
+- 더 빠른 메시지 전달
+- 더 낮은 데이터 전송 비용
 
-### Query Logs in Sumo Logic
+### Sumo Logic에서 로그 쿼리
 
-Once logs are flowing to Sumo Logic, you can query them using the Sumo Logic Query Language:
+로그가 Sumo Logic으로 전송되기 시작하면 Sumo Logic Query Language를 사용해 쿼리할 수 있습니다.
 
 ```sql
 _sourceCategory=litellm
@@ -246,9 +246,9 @@ _sourceCategory=litellm
 | sum(cost) by model
 ```
 
-Example queries:
+예제 쿼리는 다음과 같습니다.
 
-**Total cost by model:**
+**모델별 총 비용:**
 ```sql
 _sourceCategory=litellm
 | json "model", "response_cost" as model, cost
@@ -256,7 +256,7 @@ _sourceCategory=litellm
 | sort by total_cost desc
 ```
 
-**Average response time:**
+**평균 응답 시간:**
 ```sql
 _sourceCategory=litellm
 | json "start_time", "end_time" as start, end
@@ -266,66 +266,66 @@ _sourceCategory=litellm
 | avg(response_time_ms) as avg_response_time
 ```
 
-**Requests per user:**
+**사용자별 요청 수:**
 ```sql
 _sourceCategory=litellm
 | json "model_parameters.user" as user
 | count by user
 ```
 
-## Authentication
+## 인증
 
-The Sumo Logic HTTP Source URL includes the authentication token, so you only need to set the `SUMOLOGIC_WEBHOOK_URL` environment variable.
+Sumo Logic HTTP Source URL에는 인증 토큰이 포함되어 있으므로 `SUMOLOGIC_WEBHOOK_URL` 환경 변수만 설정하면 됩니다.
 
-**Security Best Practices:**
-- Keep your HTTP Source URL private (it contains the auth token)
-- Store it in environment variables or secrets management
-- Regenerate the URL if it's compromised (in Sumo Logic UI)
-- Use separate HTTP Sources for different environments (dev, staging, prod)
+**보안 권장 사항:**
+- HTTP Source URL은 인증 토큰을 포함하므로 비공개로 유지합니다.
+- 환경 변수 또는 보안 정보 관리 시스템에 저장합니다.
+- URL이 유출된 경우 Sumo Logic UI에서 URL을 다시 생성합니다.
+- 환경(dev, staging, prod)별로 별도의 HTTP Sources를 사용합니다.
 
-## Getting Your Sumo Logic URL
+## Sumo Logic URL 가져오기
 
-1. Log in to [Sumo Logic](https://www.sumologic.com/)
-2. Go to **Manage Data** > **Collection** > **Collection**
-3. Click **Add Source** next to a Hosted Collector
-4. Select **HTTP Logs & Metrics**
-5. Configure the source:
-   - **Name**: LiteLLM Logs
-   - **Source Category**: litellm (optional, but helps with queries)
-6. Click **Save**
-7. Copy the displayed URL - it will look like:
+1. [Sumo Logic](https://www.sumologic.com/)에 로그인합니다.
+2. **Manage Data** > **Collection** > **Collection**으로 이동합니다.
+3. Hosted Collector 옆의 **Add Source**를 클릭합니다.
+4. **HTTP Logs & Metrics**를 선택합니다.
+5. 소스를 구성합니다.
+   - **Name**: LiteLLM 로그
+   - **Source Category**: litellm(선택 사항이지만 쿼리에 도움이 됩니다)
+6. **Save**를 클릭합니다.
+7. 표시된 URL을 복사합니다. 다음과 같은 형식입니다.
    ```
    https://collectors.sumologic.com/receiver/v1/http/ZaVnC4dhaV39Tn37...
    ```
 
-## Troubleshooting
+## 문제 해결
 
-### Logs not appearing in Sumo Logic
+### Sumo Logic에 로그가 표시되지 않음
 
-1. **Verify the URL**: Make sure `SUMOLOGIC_WEBHOOK_URL` is set correctly
-2. **Check the HTTP Source**: Ensure it's active in Sumo Logic UI
-3. **Wait for batching**: Logs are sent in batches, wait 60 seconds
-4. **Check for errors**: Enable debug logging in LiteLLM:
+1. **URL 확인**: `SUMOLOGIC_WEBHOOK_URL`이 올바르게 설정되었는지 확인합니다.
+2. **HTTP Source 확인**: Sumo Logic UI에서 활성 상태인지 확인합니다.
+3. **배치 대기**: 로그는 배치로 전송되므로 60초 정도 기다립니다.
+4. **오류 확인**: LiteLLM에서 디버그 로깅을 활성화합니다.
    ```python
    litellm.set_verbose = True
    ```
 
-### URL Format
+### URL 형식
 
-The URL must be the complete HTTP Source URL from Sumo Logic:
-- ✅ Correct: `https://collectors.sumologic.com/receiver/v1/http/ZaVnC4dhaV39Tn37...`
+URL은 Sumo Logic의 전체 HTTP Source URL이어야 합니다.
+- 올바른 예: `https://collectors.sumologic.com/receiver/v1/http/ZaVnC4dhaV39Tn37...`
 
-### No authentication errors
+### 인증 오류가 발생하는 경우
 
-If you get authentication errors, regenerate the HTTP Source URL in Sumo Logic:
-1. Go to your HTTP Source in Sumo Logic
-2. Click the settings icon
-3. Click **Show URL**
-4. Click **Regenerate URL**
-5. Update your `SUMOLOGIC_WEBHOOK_URL` environment variable
+인증 오류가 발생하면 Sumo Logic에서 HTTP Source URL을 다시 생성합니다.
+1. Sumo Logic에서 해당 HTTP Source로 이동합니다.
+2. 설정 아이콘을 클릭합니다.
+3. **Show URL**을 클릭합니다.
+4. **Regenerate URL**을 클릭합니다.
+5. `SUMOLOGIC_WEBHOOK_URL` 환경 변수를 업데이트합니다.
 
-## Support & Talk to Founders
+## 지원 및 창립자와 대화
 
-- [Schedule Demo 👋](https://calendly.com/d/4mp-gd3-k5k/berriai-1-1-onboarding-litellm-hosted-version)
-- [Community Discord 💭](https://discord.gg/wuPM9dRgDw)
-- Our emails ✉️ ishaan@berri.ai / krrish@berri.ai
+- [데모 예약 👋](https://calendly.com/d/4mp-gd3-k5k/berriai-1-1-onboarding-litellm-hosted-version)
+- [커뮤니티 Discord 💭](https://discord.gg/wuPM9dRgDw)
+- 이메일 ✉️ ishaan@berri.ai / krrish@berri.ai

@@ -1,20 +1,20 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Azure AI Image Generation (Black Forest Labs - Flux)
+# Azure AI 이미지 생성 (Black Forest Labs - Flux)
 
-Azure AI provides powerful image generation capabilities using FLUX models from Black Forest Labs to create high-quality images from text descriptions.
+Azure AI는 Black Forest Labs의 FLUX 모델을 사용해 텍스트 설명에서 고품질 이미지를 생성하는 강력한 기능을 제공합니다.
 
-## Overview
+## 개요
 
-| Property | Details |
+| 속성 | 세부 정보 |
 |----------|---------|
-| Description | Azure AI Image Generation uses FLUX models to generate high-quality images from text descriptions. |
-| Provider Route on LiteLLM | `azure_ai/` |
-| Provider Doc | [Azure AI FLUX Models ↗](https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/black-forest-labs-flux-1-kontext-pro-and-flux1-1-pro-now-available-in-azure-ai-f/4434659) |
-| Supported Operations | [`/images/generations`](#image-generation), [`/images/edits`](#image-editing) |
+| 설명 | Azure AI Image Generation은 FLUX 모델을 사용해 텍스트 설명에서 고품질 이미지를 생성합니다. |
+| LiteLLM 제공자 라우트 | `azure_ai/` |
+| Provider Doc | [Azure AI FLUX 모델 ↗](https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/black-forest-labs-flux-1-kontext-pro-and-flux1-1-pro-now-available-in-azure-ai-f/4434659) |
+| 지원 작업 | [`/images/generations`](#image-generation), [`/images/edits`](#image-editing) |
 
-## Setup
+## 설정 {#setup}
 
 ### API Key & Base URL
 
@@ -25,22 +25,22 @@ os.environ["AZURE_AI_API_KEY"] = "your-api-key-here"
 os.environ["AZURE_AI_API_BASE"] = "your-azure-ai-endpoint"  # e.g., https://your-endpoint.eastus2.inference.ai.azure.com/
 ```
 
-Get your API key and endpoint from [Azure AI Studio](https://ai.azure.com/).
+[Azure AI Studio](https://ai.azure.com/)에서 API key와 endpoint를 가져오세요.
 
-## Supported Models
+## Supported 모델
 
-| Model Name | Description | Cost per Image |
+| Model Name | 설명 | 이미지당 비용 |
 |------------|-------------|----------------|
-| `azure_ai/FLUX-1.1-pro` | Latest FLUX 1.1 Pro model for high-quality image generation | $0.04 |
-| `azure_ai/FLUX.1-Kontext-pro` | FLUX 1 Kontext Pro model with enhanced context understanding | $0.04 |
-| `azure_ai/flux.2-pro` | FLUX 2 Pro model for next-generation image generation | $0.04 |
+| `azure_ai/FLUX-1.1-pro` | 고품질 이미지 생성을 위한 최신 FLUX 1.1 Pro 모델 | $0.04 |
+| `azure_ai/FLUX.1-Kontext-pro` | 향상된 context understanding을 제공하는 FLUX 1 Kontext Pro 모델 | $0.04 |
+| `azure_ai/flux.2-pro` | 차세대 이미지 생성을 위한 FLUX 2 Pro 모델 | $0.04 |
 
 ## Image Generation
 
-### Usage - LiteLLM Python SDK
+### 사용법 - LiteLLM Python SDK
 
 <Tabs>
-<TabItem value="basic" label="Basic Usage">
+<TabItem value="basic" label="Basic 사용법">
 
 ```python showLineNumbers title="Basic Image Generation"
 import litellm
@@ -112,7 +112,7 @@ print(response.data[0].b64_json)  # FLUX 2 returns base64 encoded images
 
 </TabItem>
 
-<TabItem value="async" label="Async Usage">
+<TabItem value="async" label="Async 사용법">
 
 ```python showLineNumbers title="Async Image Generation"
 import litellm
@@ -170,9 +170,9 @@ for image in response.data:
 </TabItem>
 </Tabs>
 
-### Usage - LiteLLM Proxy Server
+### 사용법 - LiteLLM Proxy Server
 
-#### 1. Configure your config.yaml
+#### 1. config.yaml 구성 {#configure-your-configyaml}
 
 ```yaml showLineNumbers title="Azure AI Image Generation Configuration"
 model_list:
@@ -205,7 +205,7 @@ general_settings:
   master_key: sk-1234
 ```
 
-#### 2. Start LiteLLM Proxy Server
+#### 2. LiteLLM Proxy Server 시작 {#start-litellm-proxy-server}
 
 ```bash showLineNumbers title="Start LiteLLM Proxy Server"
 litellm --config /path/to/config.yaml
@@ -213,7 +213,7 @@ litellm --config /path/to/config.yaml
 # RUNNING on http://0.0.0.0:4000
 ```
 
-#### 3. Make requests with OpenAI Python SDK
+#### 3. OpenAI Python SDK로 요청 보내기 {#make-requests-with-openai-python-sdk}
 
 <Tabs>
 <TabItem value="openai-sdk" label="OpenAI SDK">
@@ -277,9 +277,9 @@ curl --location 'http://localhost:4000/v1/images/generations' \
 
 ## Image Editing
 
-FLUX 2 Pro supports image editing by passing an input image along with a prompt describing the desired modifications.
+FLUX 2 Pro는 원하는 수정 사항을 설명하는 prompt와 input image를 함께 전달해 image editing을 지원합니다.
 
-### Usage - LiteLLM Python SDK
+### 사용법 - LiteLLM Python SDK
 
 <Tabs>
 <TabItem value="basic-edit" label="Basic Image Edit">
@@ -335,7 +335,7 @@ asyncio.run(edit_image())
 </TabItem>
 </Tabs>
 
-### Usage - LiteLLM Proxy Server
+### 사용법 - LiteLLM Proxy Server
 
 <Tabs>
 <TabItem value="curl-edit" label="cURL">
@@ -372,28 +372,28 @@ print(response.data[0].b64_json)
 </TabItem>
 </Tabs>
 
-## Supported Parameters
+## 지원 파라미터
 
-Azure AI Image Generation supports the following OpenAI-compatible parameters:
+Azure AI Image Generation은 다음 OpenAI 호환 parameters를 지원합니다.
 
-| Parameter | Type | Description | Default | Example |
+| Parameter | Type | 설명 | 기본값 | 예제 |
 |-----------|------|-------------|---------|---------|
-| `prompt` | string | Text description of the image to generate | Required | `"A sunset over the ocean"` |
-| `model` | string | The FLUX model to use for generation | Required | `"azure_ai/FLUX.1-Kontext-pro"` |
-| `n` | integer | Number of images to generate (1-4) | `1` | `2` |
-| `size` | string | Image dimensions | `"1024x1024"` | `"512x512"`, `"1024x1024"` |
-| `api_base` | string | Your Azure AI endpoint URL | Required | `"https://your-endpoint.eastus2.inference.ai.azure.com/"` |
-| `api_key` | string | Your Azure AI API key | Required | Environment variable or direct value |
+| `prompt` | string | 생성할 이미지의 텍스트 설명 | 필수 | `"A sunset over the ocean"` |
+| `model` | string | 생성에 사용할 FLUX model | 필수 | `"azure_ai/FLUX.1-Kontext-pro"` |
+| `n` | integer | 생성할 이미지 수(1-4) | `1` | `2` |
+| `size` | string | 이미지 크기 | `"1024x1024"` | `"512x512"`, `"1024x1024"` |
+| `api_base` | string | Azure AI endpoint URL | 필수 | `"https://your-endpoint.eastus2.inference.ai.azure.com/"` |
+| `api_key` | string | Azure AI API key | 필수 | Environment variable 또는 직접 값 |
 
-## Getting Started
+## 시작하기
 
-1. Create an account at [Azure AI Studio](https://ai.azure.com/)
-2. Deploy a FLUX model in your Azure AI Studio workspace
-3. Get your API key and endpoint from the deployment details
-4. Set your `AZURE_AI_API_KEY` and `AZURE_AI_API_BASE` environment variables
-5. Start generating images using LiteLLM
+1. [Azure AI Studio](https://ai.azure.com/)에서 계정을 생성합니다.
+2. Azure AI Studio workspace에 FLUX model을 배포합니다.
+3. deployment details에서 API key와 endpoint를 가져옵니다.
+4. `AZURE_AI_API_KEY` 및 `AZURE_AI_API_BASE` environment variables를 설정합니다.
+5. LiteLLM으로 이미지 생성을 시작합니다.
 
-## Additional Resources
+## 추가 리소스 {#additional-resources}
 
 - [Azure AI Studio Documentation](https://docs.microsoft.com/en-us/azure/ai-services/)
-- [FLUX Models Announcement](https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/black-forest-labs-flux-1-kontext-pro-and-flux1-1-pro-now-available-in-azure-ai-f/4434659)
+- [FLUX 모델 Announcement](https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/black-forest-labs-flux-1-kontext-pro-and-flux1-1-pro-now-available-in-azure-ai-f/4434659)

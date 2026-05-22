@@ -18,7 +18,7 @@ import Image from '@theme/IdealImage';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-## Deploy this version
+## 이 버전 배포 {#deploy-this-version}
 
 <Tabs>
 <TabItem value="docker" label="Docker">
@@ -43,80 +43,80 @@ pip install litellm==1.80.11
 
 ---
 
-## Key Highlights
+## 주요 하이라이트 {#key-highlights}
 
-- **Gemini 3 Flash Preview** - [Day 0 support for Google's Gemini 3 Flash Preview with reasoning capabilities](../../docs/providers/gemini)
-- **Stability AI Image Generation** - [New provider for Stability AI image generation and editing](../../docs/providers/stability)
-- **LiteLLM Content Filter** - [Built-in guardrails for harmful content, bias, and PII detection with image support](../../docs/proxy/guardrails/litellm_content_filter)
-- **New Provider: Venice.ai** - Support for Venice.ai API via providers.json
-- **Unified Skills API** - [Skills API works across Anthropic, Vertex, Azure, and Bedrock](../../docs/skills)
-- **Azure Sentinel Logging** - [New logging integration for Azure Sentinel](../../docs/observability/azure_sentinel)
-- **Guardrails Load Balancing** - [Load balance between multiple guardrail providers](../../docs/proxy/guardrails)
-- **Email Budget Alerts** - [Send email notifications when budgets are reached](../../docs/proxy/email)
-- **Cloudzero Integration on UI** - Setup your Cloudzero Integration Directly on the UI
+- **Gemini 3 Flash Preview** - [reasoning 기능을 포함한 Google Gemini 3 Flash Preview Day 0 지원](../../docs/providers/gemini)
+- **Stability AI Image Generation** - [Stability AI 이미지 생성 및 편집용 새 provider](../../docs/providers/stability)
+- **LiteLLM Content Filter** - [이미지 지원과 함께 harmful content, bias, PII detection을 제공하는 내장 가드레일](../../docs/proxy/guardrails/litellm_content_filter)
+- **New Provider: Venice.ai** - providers.json을 통한 Venice.ai API 지원
+- **Unified Skills API** - [Skills API가 Anthropic, Vertex, Azure, Bedrock 전반에서 동작](../../docs/skills)
+- **Azure Sentinel Logging** - [Azure Sentinel용 새 logging integration](../../docs/observability/azure_sentinel)
+- **가드레일 Load Balancing** - [여러 guardrail provider 간 load balance](../../docs/proxy/guardrails)
+- **Email Budget Alerts** - [budget에 도달하면 email notification 전송](../../docs/proxy/email)
+- **UI의 Cloudzero integration** - UI에서 Cloudzero integration을 직접 설정
 
 ---
 
-### Cloudzero Integration on UI
+### UI의 Cloudzero integration {#cloudzero-integration-on-ui}
 
 <Image
 img={require('../../img/ui_cloudzero.png')}
 style={{width: '100%', display: 'block', margin: '2rem auto'}}
 />
 
-Users can now configure their Cloudzero Integration directly on the UI.
+이제 사용자는 UI에서 Cloudzero integration을 직접 구성할 수 있습니다.
 
 ---
-### Performance: 50% Reduction in Memory Usage and Import Latency for the LiteLLM SDK
+### 성능: LiteLLM SDK의 memory 사용량 및 import latency 50% 감소 {#performance-50-reduction-in-memory-usage-and-import-latency-for-the-litellm-sdk}
 
-We've completely restructured `litellm.__init__.py` to defer heavy imports until they're actually needed, implementing lazy loading for **109 components**.
+`litellm.__init__.py`를 완전히 재구성해 무거운 import를 실제로 필요할 때까지 지연하고, **109개 component**에 lazy loading을 구현했습니다.
 
-This refactoring includes **41 provider config classes**, **40 utility functions**, cache implementations (Redis, DualCache, InMemoryCache), HTTP handlers, logging, types, and other heavy dependencies. Heavy libraries like tiktoken and boto3 are now loaded on-demand rather than eagerly at import time.
+이번 refactoring에는 **41개 provider config class**, **40개 utility function**, cache 구현(Redis, DualCache, InMemoryCache), HTTP handler, logging, type 및 기타 무거운 dependency가 포함됩니다. tiktoken, boto3 같은 무거운 library는 이제 import 시점에 즉시 load되지 않고 필요할 때 load됩니다.
 
-This makes LiteLLM especially beneficial for serverless functions, Lambda deployments, and containerized environments where cold start times and memory footprint matter.
+이 변경은 cold start 시간과 memory footprint가 중요한 serverless function, Lambda deployment, container 환경에서 특히 유용합니다.
 
 ---
 
-## New Providers and Endpoints
+## 신규 provider 및 endpoint {#new-providers-and-endpoints}
 
-### New Providers (5 new providers)
+### 신규 provider(5개) {#new-providers-5-new-providers}
 
-| Provider | Supported LiteLLM Endpoints | Description |
+| Provider | 지원되는 LiteLLM endpoint | 설명 |
 | -------- | ------------------- | ----------- |
-| [Stability AI](../../docs/providers/stability) | `/images/generations`, `/images/edits` | Stable Diffusion 3, SD3.5, image editing and generation |
-| Venice.ai | `/chat/completions`, `/messages`, `/responses` | Venice.ai API integration via providers.json |
-| [Pydantic AI Agents](../../docs/providers/pydantic_ai_agent) | `/a2a` | Pydantic AI agents for A2A protocol workflows |
-| [VertexAI Agent Engine](../../docs/providers/vertex_ai_agent_engine) | `/a2a` | Google Vertex AI Agent Engine for agentic workflows |
+| [Stability AI](../../docs/providers/stability) | `/images/generations`, `/images/edits` | Stable Diffusion 3, SD3.5, image editing 및 generation |
+| Venice.ai | `/chat/completions`, `/messages`, `/responses` | providers.json을 통한 Venice.ai API integration |
+| [Pydantic AI Agents](../../docs/providers/pydantic_ai_agent) | `/a2a` | A2A protocol workflow용 Pydantic AI agent |
+| [VertexAI Agent Engine](../../docs/providers/vertex_ai_agent_engine) | `/a2a` | agentic workflow용 Google Vertex AI Agent Engine |
 | [LinkUp Search](../../docs/search/linkup) | `/search` | LinkUp web search API integration |
 
-### New LLM API Endpoints (2 new endpoints)
+### 신규 LLM API endpoint(2개) {#new-llm-api-endpoints-2-new-endpoints}
 
-| Endpoint | Method | Description | Documentation |
+| Endpoint | Method | 설명 | 문서 |
 | -------- | ------ | ----------- | ------------- |
-| `/interactions` | POST | Google Interactions API for conversational AI | [Docs](../../docs/interactions) |
-| `/search` | POST | RAG Search API with rerankers | [Docs](../../docs/search/index) |
+| `/interactions` | POST | conversational AI용 Google Interactions API | [문서](../../docs/interactions) |
+| `/search` | POST | reranker를 포함한 RAG Search API | [문서](../../docs/search/index) |
 
 ---
 
-## New Models / Updated Models
+## 신규 모델 / 업데이트된 모델 {#new-models-updated-models}
 
-#### New Model Support (55+ new models)
+#### 신규 모델 지원(55개 이상) {#new-model-support-55-new-models}
 
-| Provider | Model | Context Window | Input ($/1M tokens) | Output ($/1M tokens) | Features |
+| Provider | Model | Context Window | Input($/1M tokens) | Output($/1M tokens) | 기능 |
 | -------- | ----- | -------------- | ------------------- | -------------------- | -------- |
-| Gemini | `gemini/gemini-3-flash-preview` | 1M | $0.50 | $3.00 | Reasoning, vision, audio, video, PDF |
-| Vertex AI | `vertex_ai/gemini-3-flash-preview` | 1M | $0.50 | $3.00 | Reasoning, vision, audio, video, PDF |
-| Azure AI | `azure_ai/deepseek-v3.2` | 164K | $0.58 | $1.68 | Reasoning, function calling, caching |
+| Gemini | `gemini/gemini-3-flash-preview` | 1M | $0.50 | $3.00 | Reasoning, vision, audio, video, PDF 지원 |
+| Vertex AI | `vertex_ai/gemini-3-flash-preview` | 1M | $0.50 | $3.00 | Reasoning, vision, audio, video, PDF 지원 |
+| Azure AI | `azure_ai/deepseek-v3.2` | 164K | $0.58 | $1.68 | Reasoning, function calling, caching 지원 |
 | Azure AI | `azure_ai/cohere-rerank-v4.0-pro` | 32K | $0.0025/query | - | Rerank |
 | Azure AI | `azure_ai/cohere-rerank-v4.0-fast` | 32K | $0.002/query | - | Rerank |
-| OpenRouter | `openrouter/openai/gpt-5.2` | 400K | $1.75 | $14.00 | Reasoning, vision, caching |
+| OpenRouter | `openrouter/openai/gpt-5.2` | 400K | $1.75 | $14.00 | Reasoning, vision, caching 지원 |
 | OpenRouter | `openrouter/openai/gpt-5.2-pro` | 400K | $21.00 | $168.00 | Reasoning, vision |
 | OpenRouter | `openrouter/mistralai/devstral-2512` | 262K | $0.15 | $0.60 | Function calling |
-| OpenRouter | `openrouter/mistralai/ministral-3b-2512` | 131K | $0.10 | $0.10 | Function calling, vision |
-| OpenRouter | `openrouter/mistralai/ministral-8b-2512` | 262K | $0.15 | $0.15 | Function calling, vision |
-| OpenRouter | `openrouter/mistralai/ministral-14b-2512` | 262K | $0.20 | $0.20 | Function calling, vision |
-| OpenRouter | `openrouter/mistralai/mistral-large-2512` | 262K | $0.50 | $1.50 | Function calling, vision |
-| OpenAI | `gpt-4o-transcribe-diarize` | 16K | $6.00/audio | - | Audio transcription with diarization |
+| OpenRouter | `openrouter/mistralai/ministral-3b-2512` | 131K | $0.10 | $0.10 | Function calling, vision 지원 |
+| OpenRouter | `openrouter/mistralai/ministral-8b-2512` | 262K | $0.15 | $0.15 | Function calling, vision 지원 |
+| OpenRouter | `openrouter/mistralai/ministral-14b-2512` | 262K | $0.20 | $0.20 | Function calling, vision 지원 |
+| OpenRouter | `openrouter/mistralai/mistral-large-2512` | 262K | $0.50 | $1.50 | Function calling, vision 지원 |
+| OpenAI | `gpt-4o-transcribe-diarize` | 16K | $6.00/audio | - | diarization 포함 audio transcription |
 | OpenAI | `gpt-image-1.5-2025-12-16` | - | Various | Various | Image generation |
 | Stability | `stability/sd3-large` | - | - | $0.065/image | Image generation |
 | Stability | `stability/sd3.5-large` | - | - | $0.065/image | Image generation |
@@ -130,7 +130,7 @@ This makes LiteLLM especially beneficial for serverless functions, Lambda deploy
 | LinkUp | `linkup/search-deep` | - | $58.67/1K queries | - | Deep web search |
 | GitHub Copilot | 20+ models | Various | - | - | Chat completions |
 
-#### Features
+#### 기능 {#features}
 
 - **[Gemini](../../docs/providers/gemini)**
     - Add Gemini 3 Flash Preview day 0 support with reasoning - [PR #18135](https://github.com/BerriAI/litellm/pull/18135)
@@ -219,26 +219,26 @@ This makes LiteLLM especially beneficial for serverless functions, Lambda deploy
 
 ---
 
-## Management Endpoints / UI
+## 관리 endpoint / UI {#management-endpoints-ui}
 
 #### Features
 
-- **Virtual Keys**
+- **가상 키**
     - Add master key rotation for credentials table - [PR #17952](https://github.com/BerriAI/litellm/pull/17952)
     - Fix tag management to preserve encrypted fields in litellm_params - [PR #17484](https://github.com/BerriAI/litellm/pull/17484)
     - Fix key delete and regenerate permissions - [PR #18214](https://github.com/BerriAI/litellm/pull/18214)
-- **Models + Endpoints**
-    - Add Models Conditional Rendering in UI - [PR #18071](https://github.com/BerriAI/litellm/pull/18071)
+- **모델 + Endpoints**
+    - Add 모델 Conditional Rendering in UI - [PR #18071](https://github.com/BerriAI/litellm/pull/18071)
     - Add Health Check Model for Wildcard Model in UI - [PR #18269](https://github.com/BerriAI/litellm/pull/18269)
     - Auto Resolve Vector Store Embedding Model Config - [PR #18167](https://github.com/BerriAI/litellm/pull/18167)
 - **Vector Stores**
     - Add Milvus Vector Store UI support - [PR #18030](https://github.com/BerriAI/litellm/pull/18030)
     - Persist Vector Store Settings in Team Update - [PR #18274](https://github.com/BerriAI/litellm/pull/18274)
-- **Logs & Spend**
-    - Add LiteLLM Overhead to Logs - [PR #18033](https://github.com/BerriAI/litellm/pull/18033)
-    - Show LiteLLM Overhead in Logs UI - [PR #18034](https://github.com/BerriAI/litellm/pull/18034)
-    - Resolve Team ID to Team Alias in Usage Page - [PR #18275](https://github.com/BerriAI/litellm/pull/18275)
-    - Fix Usage Page Top Key View Button Visibility - [PR #18203](https://github.com/BerriAI/litellm/pull/18203)
+- **로그 & Spend**
+    - Add LiteLLM Overhead to 로그 - [PR #18033](https://github.com/BerriAI/litellm/pull/18033)
+    - Show LiteLLM Overhead in 로그 UI - [PR #18034](https://github.com/BerriAI/litellm/pull/18034)
+    - Resolve Team ID to Team Alias in 사용법 Page - [PR #18275](https://github.com/BerriAI/litellm/pull/18275)
+    - Fix 사용법 Page Top Key View Button Visibility - [PR #18203](https://github.com/BerriAI/litellm/pull/18203)
 - **SSO & Health**
     - Add SSO Readiness Health Check - [PR #18078](https://github.com/BerriAI/litellm/pull/18078)
     - Fix /health/test_connection to resolve env variables like /chat/completions - [PR #17752](https://github.com/BerriAI/litellm/pull/17752)
@@ -272,14 +272,14 @@ This makes LiteLLM especially beneficial for serverless functions, Lambda deploy
 - **General**
     - Change extra_headers to additional_headers - [PR #17950](https://github.com/BerriAI/litellm/pull/17950)
 
-### Guardrails
+### 가드레일
 
 - **[LiteLLM Content Filter](../../docs/proxy/guardrails/litellm_content_filter)**
     - Add built-in guardrails for harmful content, bias, etc. - [PR #18029](https://github.com/BerriAI/litellm/pull/18029)
     - Add support for running content filters on images - [PR #18044](https://github.com/BerriAI/litellm/pull/18044)
     - Add support for Brazil PII field - [PR #18076](https://github.com/BerriAI/litellm/pull/18076)
     - Add configurable guardrail options for content filtering - [PR #18007](https://github.com/BerriAI/litellm/pull/18007)
-- **[Guardrails API](../../docs/adding_provider/generic_guardrail_api)**
+- **[가드레일 API](../../docs/adding_provider/generic_guardrail_api)**
     - Support LLM tool call response checks on `/chat/completions`, `/v1/responses`, `/v1/messages` - [PR #17619](https://github.com/BerriAI/litellm/pull/17619)
     - Add guardrails load balancing - [PR #18181](https://github.com/BerriAI/litellm/pull/18181)
     - Fix guardrails for passthrough endpoint - [PR #18109](https://github.com/BerriAI/litellm/pull/18109)
@@ -289,9 +289,9 @@ This makes LiteLLM especially beneficial for serverless functions, Lambda deploy
     - Add monitor mode for Lakera - [PR #18084](https://github.com/BerriAI/litellm/pull/18084)
 - **[Pillar Security](../../docs/proxy/guardrails/pillar_security)**
     - Add masking support and MCP call support - [PR #17959](https://github.com/BerriAI/litellm/pull/17959)
-- **[Bedrock Guardrails](../../docs/proxy/guardrails/bedrock)**
+- **[Bedrock 가드레일](../../docs/proxy/guardrails/bedrock)**
     - Add support for Bedrock image guardrails - [PR #18115](https://github.com/BerriAI/litellm/pull/18115)
-    - Guardrails block action takes precedence over masking - [PR #17968](https://github.com/BerriAI/litellm/pull/17968)
+    - 가드레일 block action takes precedence over masking - [PR #17968](https://github.com/BerriAI/litellm/pull/17968)
 
 ### Secret Managers
 
@@ -303,7 +303,7 @@ This makes LiteLLM especially beneficial for serverless functions, Lambda deploy
 
 ---
 
-## Spend Tracking, Budgets and Rate Limiting
+## 비용 추적, budget 및 rate limiting {#cost-tracking-budgets-and-rate-limiting}
 
 - **Email Budget Alerts** - Send email notifications when budgets are reached - [PR #17995](https://github.com/BerriAI/litellm/pull/17995)
 
@@ -317,7 +317,7 @@ This makes LiteLLM especially beneficial for serverless functions, Lambda deploy
 
 ---
 
-## Agent Gateway (A2A)
+## Agent Gateway(A2A) {#agent-gateway-a2a}
 
 - **New Provider: Agent Gateway** - Add pydantic ai agents support - [PR #18013](https://github.com/BerriAI/litellm/pull/18013)
 - **VertexAI Agent Engine** - Add Vertex AI Agent Engine provider - [PR #18014](https://github.com/BerriAI/litellm/pull/18014)
@@ -325,7 +325,7 @@ This makes LiteLLM especially beneficial for serverless functions, Lambda deploy
 
 ---
 
-## Performance / Loadbalancing / Reliability improvements
+## 성능 / load balancing / reliability 개선 {#performance-loadbalancing-reliability-improvements}
 
 - **Lazy Imports** - Use per-attribute lazy imports and extract shared constants - [PR #17994](https://github.com/BerriAI/litellm/pull/17994)
 - **Lazy Load HTTP Handlers** - Lazy load http handlers - [PR #17997](https://github.com/BerriAI/litellm/pull/17997)
@@ -339,9 +339,9 @@ This makes LiteLLM especially beneficial for serverless functions, Lambda deploy
 
 ---
 
-## Documentation Updates
+## 문서 업데이트 {#documentation-updates}
 
-- **SAP Docs** - Update SAP documentation - [PR #17974](https://github.com/BerriAI/litellm/pull/17974)
+- **SAP 문서** - Update SAP documentation - [PR #17974](https://github.com/BerriAI/litellm/pull/17974)
 - **Pydantic AI Agents** - Add docs on using pydantic ai agents with LiteLLM A2A gateway - [PR #18026](https://github.com/BerriAI/litellm/pull/18026)
 - **Vertex AI Agent Engine** - Add Vertex AI Agent Engine documentation - [PR #18027](https://github.com/BerriAI/litellm/pull/18027)
 - **Router Order** - Add router order parameter documentation - [PR #18045](https://github.com/BerriAI/litellm/pull/18045)
@@ -349,13 +349,13 @@ This makes LiteLLM especially beneficial for serverless functions, Lambda deploy
 - **Gemini 3 Flash** - Add version requirement in Gemini 3 Flash blog - [PR #18227](https://github.com/BerriAI/litellm/pull/18227)
 - **README** - Expand Responses API section and update endpoints - [PR #17354](https://github.com/BerriAI/litellm/pull/17354)
 - **Amazon Nova** - Add Amazon Nova to sidebar and supported models - [PR #18220](https://github.com/BerriAI/litellm/pull/18220)
-- **Benchmarks** - Add infrastructure recommendations to benchmarks documentation - [PR #18264](https://github.com/BerriAI/litellm/pull/18264)
+- **벤치마크** - Add infrastructure recommendations to benchmarks documentation - [PR #18264](https://github.com/BerriAI/litellm/pull/18264)
 - **Broken Links** - Fix broken link corrections - [PR #18104](https://github.com/BerriAI/litellm/pull/18104)
 - **README Fixes** - Various README improvements - [PR #18206](https://github.com/BerriAI/litellm/pull/18206)
 
 ---
 
-## Infrastructure / CI/CD
+## 인프라 / CI/CD {#infrastructure-cicd}
 
 - **PR Templates** - Add LiteLLM team PR template and CI/CD rules - [PR #17983](https://github.com/BerriAI/litellm/pull/17983), [PR #17985](https://github.com/BerriAI/litellm/pull/17985)
 - **Issue Labeling** - Improve issue labeling with component dropdown and more provider keywords - [PR #17957](https://github.com/BerriAI/litellm/pull/17957)
@@ -379,7 +379,6 @@ This makes LiteLLM especially beneficial for serverless functions, Lambda deploy
 
 ---
 
-## Full Changelog
+## Full 변경 이력
 
 **[View complete changelog on GitHub](https://github.com/BerriAI/litellm/compare/v1.80.10-nightly...v1.80.11)**
-

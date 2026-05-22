@@ -3,53 +3,53 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
 # Hugging Face
-LiteLLM supports running inference across multiple services for models hosted on the Hugging Face Hub.
+LiteLLM은 Hugging Face Hub에 호스팅된 모델을 여러 서비스에서 실행하는 inference를 지원합니다.
 
-- **Serverless Inference Providers** - Hugging Face offers an easy and unified access to serverless AI inference through multiple inference providers, like [Together AI](https://together.ai) and [Sambanova](https://sambanova.ai). This is the fastest way to integrate AI in your products with a maintenance-free and scalable solution. More details in the [Inference Providers documentation](https://huggingface.co/docs/inference-providers/index).
-- **Dedicated Inference Endpoints** - which is a product to easily deploy models to production. Inference is run by Hugging Face in a dedicated, fully managed infrastructure on a cloud provider of your choice. You can deploy your model on Hugging Face Inference Endpoints by following [these steps](https://huggingface.co/docs/inference-endpoints/guides/create_endpoint).
-
-
-## Supported Models
-
-### Serverless Inference Providers
-You can check available models for an inference provider by going to [huggingface.co/models](https://huggingface.co/models), clicking the "Other" filter tab, and selecting your desired provider:
-
-![Filter models by Inference Provider](../../img/hf_filter_inference_providers.png)
-
-For example, you can find all Fireworks supported models [here](https://huggingface.co/models?inference_provider=fireworks-ai&sort=trending).
+- **Serverless Inference Providers** - Hugging Face는 [Together AI](https://together.ai), [Sambanova](https://sambanova.ai) 같은 여러 inference provider를 통해 serverless AI inference에 쉽고 통합된 접근 방식을 제공합니다. 유지보수가 필요 없고 확장 가능한 솔루션으로 제품에 AI를 통합하는 가장 빠른 방법입니다. 자세한 내용은 [Inference Providers 문서](https://huggingface.co/docs/inference-providers/index)를 참고하세요.
+- **Dedicated Inference Endpoints** - 모델을 production에 쉽게 배포하기 위한 제품입니다. Inference는 사용자가 선택한 cloud provider의 dedicated fully managed infrastructure에서 Hugging Face가 실행합니다. [이 단계](https://huggingface.co/docs/inference-endpoints/guides/create_endpoint)에 따라 Hugging Face Inference Endpoints에 모델을 배포할 수 있습니다.
 
 
-### Dedicated Inference Endpoints
-Refer to the [Inference Endpoints catalog](https://endpoints.huggingface.co/catalog) for a list of available models.
+## 지원 모델 {#supported-모델}
 
-## Usage
+### `Serverless Inference Providers` {#serverless-inference-providers}
+Inference provider에서 사용할 수 있는 모델은 [huggingface.co/models](https://huggingface.co/models)로 이동한 뒤 "Other" filter tab을 클릭하고 원하는 provider를 선택해 확인할 수 있습니다.
+
+![Inference Provider 기준으로 모델 필터링](../../img/hf_filter_inference_providers.png)
+
+예를 들어 Fireworks가 지원하는 모든 모델은 [여기](https://huggingface.co/models?inference_provider=fireworks-ai&sort=trending)에서 찾을 수 있습니다.
+
+
+### `Dedicated Inference Endpoints` {#dedicated-inference-endpoints}
+사용 가능한 모델 목록은 [Inference Endpoints catalog](https://endpoints.huggingface.co/catalog)를 참고하세요.
+
+## 사용법
 
 <Tabs>
 <TabItem value="serverless" label="Serverless Inference Providers">
 
-### Authentication
-With a single Hugging Face token, you can access inference through multiple providers. Your calls are routed through Hugging Face and the usage is billed directly to your Hugging Face account at the standard provider API rates.
+### 인증
+단일 Hugging Face token으로 여러 provider를 통한 inference에 접근할 수 있습니다. 호출은 Hugging Face를 통해 라우팅되며, 사용량은 표준 provider API 요금으로 Hugging Face 계정에 직접 청구됩니다.
 
-Simply set the `HF_TOKEN` environment variable with your Hugging Face token, you can create one here: https://huggingface.co/settings/tokens.
+Hugging Face token으로 `HF_TOKEN` environment variable을 설정하면 됩니다. Token은 여기에서 생성할 수 있습니다: https://huggingface.co/settings/tokens.
 
 ```bash
 export HF_TOKEN="hf_xxxxxx"
 ```
-or alternatively, you can pass your Hugging Face token as a parameter:
+또는 Hugging Face token을 parameter로 전달할 수도 있습니다.
 ```python
 completion(..., api_key="hf_xxxxxx")
 ```
 
-### Getting Started
+### 시작하기
 
-To use a Hugging Face model, specify both the provider and model you want to use in the following format:
+Hugging Face 모델을 사용하려면 다음 형식으로 사용할 provider와 model을 모두 지정하세요.
 ```
 huggingface/<provider>/<hf_org_or_user>/<hf_model>
 ```
-Where `<hf_org_or_user>/<hf_model>` is the Hugging Face model ID and `<provider>` is the inference provider.  
-By default, if you don't specify a provider, LiteLLM will use the [HF Inference API](https://huggingface.co/docs/api-inference/en/index).
+여기서 `<hf_org_or_user>/<hf_model>`은 Hugging Face model ID이고 `<provider>`는 inference provider입니다.  
+기본적으로 provider를 지정하지 않으면 LiteLLM은 [HF Inference API](https://huggingface.co/docs/api-inference/en/index)를 사용합니다.
 
-Examples:
+예제:
 
 ```python
 # Run DeepSeek-R1 inference through Together AI
@@ -67,8 +67,8 @@ completion(model="huggingface/meta-llama/Llama-3.3-70B-Instruct",...)
   <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
 </a>
 
-### Basic Completion
-Here's an example of chat completion using the DeepSeek-R1 model through Together AI:
+### 기본 Completion {#basic-completion}
+다음은 Together AI를 통해 DeepSeek-R1 모델을 사용하는 chat completion 예제입니다.
 
 ```python
 import os
@@ -88,8 +88,8 @@ response = completion(
 print(response)
 ```
 
-### Streaming
-Now, let's see what a streaming request looks like.
+### 스트리밍 {#streaming}
+이제 streaming request가 어떤 형태인지 살펴보겠습니다.
 
 ```python
 import os
@@ -113,8 +113,8 @@ for chunk in response:
     print(chunk)
 ```
 
-### Image Input
-You can also pass images when the model supports it. Here is an example using [Llama-3.2-11B-Vision-Instruct](https://huggingface.co/meta-llama/Llama-3.2-11B-Vision-Instruct) model through Sambanova.
+### Image Input {#image-input}
+모델이 지원하는 경우 image도 전달할 수 있습니다. 다음은 Sambanova를 통해 [Llama-3.2-11B-Vision-Instruct](https://huggingface.co/meta-llama/Llama-3.2-11B-Vision-Instruct) 모델을 사용하는 예제입니다.
 
 ```python
 from litellm import completion
@@ -144,8 +144,8 @@ response = completion(
 print(response.choices[0])
 ```
 
-### Function Calling
-You can extend the model's capabilities by giving them access to tools. Here is an example with function calling using [Qwen2.5-72B-Instruct](https://huggingface.co/Qwen/Qwen2.5-72B-Instruct) model through Sambanova.
+### Function Calling {#function-calling}
+모델에 tool 접근 권한을 제공해 모델의 기능을 확장할 수 있습니다. 다음은 Sambanova를 통해 [Qwen2.5-72B-Instruct](https://huggingface.co/Qwen/Qwen2.5-72B-Instruct) 모델을 사용하는 function calling 예제입니다.
 
 ```python
 import os
@@ -198,8 +198,8 @@ print(response)
   <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
 </a>
 
-### Basic Completion
-After you have [deployed your Hugging Face Inference Endpoint](https://endpoints.huggingface.co/new) on dedicated infrastructure, you can run inference on it by providing the endpoint base URL in `api_base`, and indicating `huggingface/tgi` as the model name.
+### 기본 Completion {#basic-completion-1}
+Dedicated infrastructure에 [Hugging Face Inference Endpoint 배포](https://endpoints.huggingface.co/new)를 완료한 뒤에는 endpoint base URL을 `api_base`에 제공하고 model name으로 `huggingface/tgi`를 지정해 inference를 실행할 수 있습니다.
 
 ```python
 import os
@@ -215,7 +215,7 @@ response = completion(
 print(response)
 ```
 
-### Streaming
+### 스트리밍 {#streaming-1}
 
 ```python
 import os
@@ -234,7 +234,7 @@ for chunk in response:
     print(chunk)
 ```
 
-### Image Input
+### Image Input {#image-input-1}
 
 ```python
 import os
@@ -264,7 +264,7 @@ response = completion(
 print(response.choices[0])
 ```
 
-### Function Calling
+### Function Calling {#function-calling-1}
 
 ```python
 import os
@@ -299,12 +299,12 @@ print(response)
 </TabItem>
 </Tabs>
 
-## LiteLLM Proxy Server with Hugging Face models
-You can set up a [LiteLLM Proxy Server](https://docs.litellm.ai/#litellm-proxy-server-llm-gateway) to serve Hugging Face models through any of the supported Inference Providers. Here's how to do it:
+## Hugging Face 모델과 함께 LiteLLM Proxy Server 사용 {#litellm-proxy-server-with-hugging-face-models}
+지원되는 Inference Providers 중 하나를 통해 Hugging Face 모델을 제공하도록 [LiteLLM Proxy Server](https://docs.litellm.ai/#litellm-proxy-server-llm-gateway)를 설정할 수 있습니다. 방법은 다음과 같습니다.
 
-### Step 1. Setup the config file
+### Step 1. config file 설정 {#step-1-setup-the-config-file}
 
-In this case, we are configuring a proxy to serve `DeepSeek R1` from Hugging Face, using Together AI as the backend Inference Provider.
+이 예제에서는 Together AI를 backend Inference Provider로 사용해 Hugging Face의 `DeepSeek R1`을 제공하도록 proxy를 구성합니다.
 
 ```yaml
 model_list:
@@ -314,12 +314,12 @@ model_list:
       api_key: os.environ/HF_TOKEN # ensure you have `HF_TOKEN` in your .env
 ```
 
-### Step 2. Start the server
+### Step 2. server 시작 {#step-2-start-the-server}
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-### Step 3. Make a request to the server
+### Step 3. server에 request 보내기 {#step-3-make-a-request-to-the-server}
 <Tabs>
 <TabItem value="curl" label="curl">
 
@@ -364,7 +364,7 @@ print(response)
 
 ## Embedding
 
-LiteLLM supports Hugging Face's [text-embedding-inference](https://github.com/huggingface/text-embeddings-inference) models as well.
+LiteLLM은 Hugging Face의 [text-embedding-inference](https://github.com/huggingface/text-embeddings-inference) 모델도 지원합니다.
 
 ```python
 from litellm import embedding
@@ -378,16 +378,16 @@ response = embedding(
 
 # FAQ
 
-**How does billing work with Hugging Face Inference Providers?**
+**Hugging Face Inference Providers의 billing은 어떻게 작동하나요?**
 
-> Billing is centralized on your Hugging Face account, no matter which providers you are using. You are billed the standard provider API rates with no additional markup - Hugging Face simply passes through the provider costs. Note that [Hugging Face PRO](https://huggingface.co/subscribe/pro) users get $2 worth of Inference credits every month that can be used across providers.
+> 어떤 provider를 사용하든 billing은 Hugging Face 계정으로 중앙화됩니다. 추가 markup 없이 표준 provider API 요금이 청구되며, Hugging Face는 provider 비용을 그대로 전달합니다. [Hugging Face PRO](https://huggingface.co/subscribe/pro) 사용자는 매월 provider 전반에서 사용할 수 있는 $2 상당의 Inference credit을 받습니다.
 
-**Do I need to create an account for each Inference Provider?**
+**각 Inference Provider마다 계정을 만들어야 하나요?**
 
-> No, you don't need to create separate accounts. All requests are routed through Hugging Face, so you only need your HF token. This allows you to easily benchmark different providers and choose the one that best fits your needs.
+> 아니요. 별도의 계정을 만들 필요가 없습니다. 모든 request는 Hugging Face를 통해 라우팅되므로 HF token만 있으면 됩니다. 이를 통해 여러 provider를 쉽게 benchmark하고 요구사항에 가장 잘 맞는 provider를 선택할 수 있습니다.
 
-**Will more inference providers be supported by Hugging Face in the future?**
+**앞으로 Hugging Face에서 더 많은 inference provider를 지원하나요?**
 
-> Yes! New inference providers (and models) are being added gradually.
+> 네. 새로운 inference provider와 model이 점진적으로 추가되고 있습니다.
 
-We welcome any suggestions for improving our Hugging Face integration - Create an [issue](https://github.com/BerriAI/litellm/issues/new/choose)/[Join the Discord](https://discord.com/invite/wuPM9dRgDw)!
+Hugging Face integration 개선을 위한 제안을 환영합니다. [issue](https://github.com/BerriAI/litellm/issues/new/choose)를 생성하거나 [Join the Discord](https://discord.com/invite/wuPM9dRgDw)에 참여해 주세요!

@@ -1,13 +1,13 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Using ChatLiteLLM() - Langchain
+# ChatLiteLLM() 사용 - Langchain
 
-## Pre-Requisites
+## 사전 요구 사항
 ```shell
 !uv add litellm langchain
 ```
-## Quick Start
+## 빠른 시작
 
 <Tabs>
 <TabItem value="openai" label="OpenAI">
@@ -111,11 +111,11 @@ chat.invoke(messages)
 </TabItem>
 </Tabs>
 
-## Use Langchain ChatLiteLLM with MLflow
+## Langchain ChatLiteLLM을 MLflow와 함께 사용
 
-MLflow provides open-source observability solution for ChatLiteLLM.
+MLflow는 ChatLiteLLM을 위한 오픈소스 observability 솔루션을 제공합니다.
 
-To enable the integration, simply call `mlflow.litellm.autolog()` before in your code. No other setup is necessary.
+통합을 활성화하려면 코드에서 먼저 `mlflow.litellm.autolog()`를 호출하면 됩니다. 다른 설정은 필요하지 않습니다.
 
 ```python
 import mlflow
@@ -123,7 +123,7 @@ import mlflow
 mlflow.litellm.autolog()
 ```
 
-Once the auto-tracing is enabled, you can invoke `ChatLiteLLM` and see recorded traces in MLflow.
+auto-tracing이 활성화되면 `ChatLiteLLM`을 호출하고 MLflow에서 기록된 trace를 확인할 수 있습니다.
 
 ```python
 import os
@@ -135,7 +135,7 @@ chat = ChatLiteLLM(model="gpt-4o-mini")
 chat.invoke("Hi!")
 ```
 
-## Use Langchain ChatLiteLLM with Lunary
+## Langchain ChatLiteLLM을 Lunary와 함께 사용
 ```python
 import os
 from langchain.chat_models import ChatLiteLLM
@@ -158,16 +158,16 @@ chat = ChatLiteLLM(
 chat(messages)
 ```
 
-Get more details [here](../observability/lunary_integration.md)
+자세한 내용은 [여기](../observability/lunary_integration.md)를 확인하세요.
 
-## Use LangChain ChatLiteLLM + Langfuse
-Checkout this section [here](../observability/langfuse_integration#use-langchain-chatlitellm--langfuse) for more details on how to integrate Langfuse with ChatLiteLLM.
+## LangChain ChatLiteLLM + Langfuse 사용
+Langfuse를 ChatLiteLLM과 통합하는 방법에 대한 자세한 내용은 [Langfuse 통합 문서](../observability/langfuse_integration)를 확인하세요.
 
-## Using Tags with LangChain and LiteLLM
+## LangChain 및 LiteLLM에서 Tags 사용
 
-Tags are a powerful feature in LiteLLM that allow you to categorize, filter, and track your LLM requests. When using LangChain with LiteLLM, you can pass tags through the `extra_body` parameter in the metadata.
+Tags는 LLM 요청을 분류, 필터링, 추적할 수 있게 해 주는 LiteLLM의 강력한 기능입니다. LangChain을 LiteLLM과 함께 사용할 때는 metadata의 `extra_body` 파라미터를 통해 tags를 전달할 수 있습니다.
 
-### Basic Tag Usage
+### Basic Tag 사용법
 
 <Tabs>
 <TabItem value="openai" label="OpenAI">
@@ -263,9 +263,9 @@ print(response)
 </TabItem>
 </Tabs>
 
-### Advanced Tag Patterns
+### 고급 Tag 패턴
 
-#### Dynamic Tags Based on Context
+#### Context 기반 동적 Tags
 
 ```python
 import os
@@ -313,7 +313,7 @@ messages = [HumanMessage(content="Help me with this task")]
 response = premium_chat.invoke(messages)
 ```
 
-#### Tags for Cost Tracking and Analytics
+#### 비용 추적 및 Analytics용 Tags
 
 ```python
 import os
@@ -348,7 +348,7 @@ messages = [
 response = cost_tracking_chat.invoke(messages)
 ```
 
-#### Tags for A/B Testing
+#### A/B Testing용 Tags
 
 ```python
 import os
@@ -391,9 +391,9 @@ response_a = variant_a_chat.invoke(test_message)
 response_b = variant_b_chat.invoke(test_message)
 ```
 
-### Tag Best Practices
+### Tag 권장 사항
 
-#### 1. **Consistent Naming Convention**
+#### 1. **일관된 이름 지정 규칙**
 ```python
 # ✅ Good: Consistent, descriptive tags
 tags = ["production", "api-v2", "customer-support", "urgent"]
@@ -402,7 +402,7 @@ tags = ["production", "api-v2", "customer-support", "urgent"]
 tags = ["prod", "v2", "support", "urgent123"]
 ```
 
-#### 2. **Hierarchical Tags**
+#### 2. **계층형 Tags**
 ```python
 # ✅ Good: Hierarchical structure
 tags = ["env:production", "team:backend", "service:api", "priority:high"]
@@ -410,7 +410,7 @@ tags = ["env:production", "team:backend", "service:api", "priority:high"]
 # This allows for easy filtering and grouping
 ```
 
-#### 3. **Include Context Information**
+#### 3. **Context 정보 포함**
 ```python
 extra_body={
     "metadata": {
@@ -423,24 +423,24 @@ extra_body={
 }
 ```
 
-#### 4. **Tag Categories**
-Consider organizing tags into categories:
-- **Environment**: `production`, `staging`, `development`
-- **Team/Service**: `backend`, `frontend`, `api`, `worker`
-- **Feature**: `authentication`, `payment`, `notification`
-- **Priority**: `critical`, `high`, `medium`, `low`
-- **User Type**: `premium`, `enterprise`, `free`
+#### 4. **Tag 카테고리**
+tags를 카테고리로 구성하는 방식을 고려하세요.
+- **환경**: `production`, `staging`, `development`
+- **팀/서비스**: `backend`, `frontend`, `api`, `worker`
+- **기능**: `authentication`, `payment`, `notification`
+- **우선순위**: `critical`, `high`, `medium`, `low`
+- **사용자 유형**: `premium`, `enterprise`, `free`
 
-### Using Tags with LiteLLM Proxy
+### LiteLLM Proxy에서 Tags 사용
 
-When using tags with LiteLLM Proxy, you can:
+LiteLLM Proxy에서 tags를 사용하면 다음을 수행할 수 있습니다.
 
-1. **Filter requests** based on tags
-2. **Track costs** by tags in spend reports
-3. **Apply routing rules** based on tags
-4. **Monitor usage** with tag-based analytics
+1. tags 기준으로 **요청 필터링**
+2. spend reports에서 tags별 **비용 추적**
+3. tags 기준으로 **라우팅 규칙 적용**
+4. tag 기반 analytics로 **사용량 모니터링**
 
-#### Example Proxy Configuration with Tags
+#### 예제 Proxy 설정 with Tags
 
 ```yaml
 # config.yaml
@@ -458,9 +458,9 @@ tag_routing:
     models: ["gpt-3.5-turbo", "claude-3-haiku"]
 ```
 
-### Monitoring and Analytics
+### 모니터링 및 Analytics
 
-Tags enable powerful analytics capabilities:
+Tags는 강력한 analytics 기능을 제공합니다.
 
 ```python
 # Example: Get spend reports by tags
@@ -479,4 +479,4 @@ response = requests.get(
 spend_by_tags = response.json()
 ```
 
-This documentation covers the essential patterns for using tags effectively with LangChain and LiteLLM, enabling better organization, tracking, and analytics of your LLM requests.
+이 문서는 LangChain 및 LiteLLM에서 tags를 효과적으로 사용하기 위한 핵심 패턴을 다룹니다. 이를 통해 LLM 요청을 더 잘 구성하고, 추적하고, 분석할 수 있습니다.

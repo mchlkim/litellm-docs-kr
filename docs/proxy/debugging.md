@@ -1,21 +1,21 @@
-# Debugging
+# 디버깅 {#debugging}
 
-2 levels of debugging supported. 
+두 가지 수준의 디버깅을 지원합니다.
 
-- debug (prints info logs)
-- detailed debug (prints debug logs)
+- debug (info 로그 출력)
+- detailed debug (debug 로그 출력)
 
-The proxy also supports json logs. [See here](#json-logs)
+프록시는 json 로그도 지원합니다. [여기를 참고하세요](#json-logs).
 
 ## `debug`
 
-**via cli**
+**cli 사용**
 
 ```bash showLineNumbers
 $ litellm --debug
 ```
 
-**via env**
+**env 사용**
 
 ```python showLineNumbers
 os.environ["LITELLM_LOG"] = "INFO"
@@ -23,26 +23,26 @@ os.environ["LITELLM_LOG"] = "INFO"
 
 ## `detailed debug`
 
-**via cli**
+**cli 사용**
 
 ```bash showLineNumbers
 $ litellm --detailed_debug
 ```
 
-**via env**
+**env 사용**
 
 ```python showLineNumbers
 os.environ["LITELLM_LOG"] = "DEBUG"
 ```
 
-### Debug Logs 
+### 상세 debug 로그 {#debug-로그}
 
-Run the proxy with `--detailed_debug` to view detailed debug logs
+자세한 debug 로그를 보려면 `--detailed_debug`로 프록시를 실행하세요.
 ```shell showLineNumbers
 litellm --config /path/to/config.yaml --detailed_debug
 ```
 
-When making requests you should see the POST request sent by LiteLLM to the LLM on the Terminal output
+요청을 보내면 Terminal 출력에서 LiteLLM이 LLM으로 보낸 POST 요청을 확인할 수 있습니다.
 ```shell showLineNumbers
 POST Request Sent from LiteLLM:
 curl -X POST \
@@ -51,9 +51,9 @@ https://api.openai.com/v1/chat/completions \
 -d '{"model": "gpt-3.5-turbo", "messages": [{"role": "user", "content": "this is a test request, write a short poem"}]}'
 ```
 
-## Debug single request
+## 단일 요청 디버깅 {#debug-single-request}
 
-Pass in `litellm_request_debug=True` in the request body
+요청 본문에 `litellm_request_debug=True`를 전달하세요.
 
 ```bash showLineNumbers
 curl -L -X POST 'http://0.0.0.0:4000/chat/completions' \
@@ -66,7 +66,7 @@ curl -L -X POST 'http://0.0.0.0:4000/chat/completions' \
 }'
 ```
 
-This will emit the raw request sent by LiteLLM to the API Provider and raw response received from the API Provider for **just** this request in the logs. 
+그러면 로그에 **이 요청에 대해서만** LiteLLM이 API Provider로 보낸 원시 요청과 API Provider에서 받은 원시 응답이 출력됩니다.
 
 
 ```bash showLineNumbers
@@ -89,84 +89,84 @@ INFO:     127.0.0.1:56155 - "POST /chat/completions HTTP/1.1" 200 OK
 ```
 
 
-## JSON LOGS
+## JSON 로그 {#json-logs}
 
-Set `JSON_LOGS="True"` in your env:
+env에서 `JSON_LOGS="True"`를 설정하세요.
 
 ```bash showLineNumbers
 export JSON_LOGS="True"
 ```
-**OR**
+**또는**
 
-Set `json_logs: true` in your yaml: 
+yaml에서 `json_logs: true`를 설정하세요.
 
 ```yaml showLineNumbers
 litellm_settings:
     json_logs: true
 ```
 
-Start proxy 
+프록시를 시작합니다.
 
 ```bash showLineNumbers
 $ litellm
 ```
 
-The proxy will now all logs in json format.
+이제 프록시는 모든 로그를 json 형식으로 출력합니다.
 
-## Control Log Output 
+## 로그 출력 제어 {#control-log-output}
 
-Turn off fastapi's default 'INFO' logs 
+fastapi의 기본 'INFO' 로그를 끕니다.
 
-1. Turn on 'json logs' 
+1. 'json logs'를 켭니다.
 ```yaml showLineNumbers
 litellm_settings:
     json_logs: true
 ```
 
-2. Set `LITELLM_LOG` to 'ERROR' 
+2. `LITELLM_LOG`를 'ERROR'로 설정합니다.
 
-Only get logs if an error occurs. 
+오류가 발생한 경우에만 로그를 받습니다.
 
 ```bash showLineNumbers
 LITELLM_LOG="ERROR"
 ```
 
-3. Start proxy 
+3. 프록시를 시작합니다.
 
 
 ```bash showLineNumbers
 $ litellm
 ```
 
-Expected Output: 
+예상 출력:
 
 ```bash showLineNumbers
 # no info statements
 ```
 
-## Common Errors 
+## 일반적인 오류 {#common-errors}
 
-1. "No available deployments..."
+1. 배포를 사용할 수 없다는 오류(`No available deployments...`)
 
 ```
 No deployments available for selected model, Try again in 60 seconds. Passed model=claude-3-5-sonnet. pre-call-checks=False, allowed_model_region=n/a.
 ```
 
-This can be caused due to all your models hitting rate limit errors, causing the cooldown to kick in. 
+모든 모델에서 rate limit 오류가 발생해 cooldown이 작동하면 이 문제가 생길 수 있습니다.
 
-How to control this? 
-- Adjust the cooldown time
+어떻게 제어하나요?
+- cooldown 시간을 조정합니다.
 
 ```yaml showLineNumbers
 router_settings:
     cooldown_time: 0 # 👈 KEY CHANGE
 ```
 
-- Disable Cooldowns [NOT RECOMMENDED]
+- Cooldowns 비활성화 [권장하지 않음]
 
 ```yaml showLineNumbers
 router_settings:
     disable_cooldowns: True
 ```
 
-This is not recommended, as it will lead to requests being routed to deployments over their tpm/rpm limit.
+이 설정은 요청이 tpm/rpm 한도를 초과한 배포로 라우팅되게 만들 수 있으므로 권장하지 않습니다.

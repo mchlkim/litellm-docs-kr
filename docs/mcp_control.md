@@ -2,92 +2,48 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Image from '@theme/IdealImage';
 
-# MCP Permission Management
+# MCP 권한 관리
 
-Control which MCP servers and tools can be accessed by specific keys, teams, or organizations in LiteLLM. When a client attempts to list or call tools, LiteLLM enforces access controls based on configured permissions.
+LiteLLM에서 특정 key, team, organization이 접근할 수 있는 MCP server와 tool을 제어합니다. client가 tool 목록 조회 또는 호출을 시도하면 LiteLLM은 구성된 permission을 기준으로 access control을 적용합니다.
 
-## Overview
+## 개요
 
-LiteLLM provides fine-grained permission management for MCP servers, allowing you to:
+LiteLLM은 MCP server에 대한 세밀한 권한 관리를 제공하며, 다음을 수행할 수 있습니다.
 
-- **Restrict MCP access by entity**: Control which keys, teams, or organizations can access specific MCP servers
-- **Tool-level filtering**: Automatically filter available tools based on entity permissions
-- **Centralized control**: Manage all MCP permissions from the LiteLLM Admin UI or API
-- **One-click public MCPs**: Mark specific servers as available to every LiteLLM API key when you don't need per-key restrictions
+- **entity별 MCP 접근 제한**: 특정 MCP server에 접근할 수 있는 key, team, organization을 제어합니다.
+- **tool 수준 filtering**: entity permission을 기준으로 사용 가능한 tool을 자동 filtering합니다.
+- **중앙 제어**: LiteLLM 관리자 UI 또는 API에서 모든 MCP permission을 관리합니다.
+- **한 번 클릭으로 public MCP 설정**: key별 제한이 필요 없을 때 특정 server를 모든 LiteLLM API key에서 사용할 수 있게 표시합니다.
 
-This ensures that only authorized entities can discover and use MCP tools, providing an additional security layer for your MCP infrastructure.
+이를 통해 승인된 entity만 MCP tool을 발견하고 사용할 수 있으며, MCP infrastructure에 추가 보안 계층을 제공합니다.
 
-:::info Related Documentation
-- [MCP Overview](./mcp.md) - Learn about MCP in LiteLLM
-- [MCP Cost Tracking](./mcp_cost.md) - Track costs for MCP tool calls
-- [MCP Guardrails](./mcp_guardrail.md) - Apply security guardrails to MCP calls
-- [Using MCP](./mcp_usage.md) - How to use MCP with LiteLLM
+:::info 관련 문서
+- [MCP 개요](./mcp.md) - LiteLLM의 MCP 알아보기
+- [MCP 비용 추적](./mcp_cost.md) - MCP tool call 비용 추적
+- [MCP 가드레일](./mcp_guardrail.md) - MCP call에 보안 guardrail 적용
+- [MCP 사용](./mcp_usage.md) - LiteLLM에서 MCP 사용 방법
 :::
 
-## How It Works
+## 동작 방식
 
-LiteLLM supports managing permissions for MCP Servers by Keys, Teams, Organizations (entities) on LiteLLM. When a MCP client attempts to list tools, LiteLLM will only return the tools the entity has permissions to access.
+LiteLLM은 key, team, organization(entity)별 MCP Server permission 관리를 지원합니다. MCP client가 tool 목록 조회를 시도하면 LiteLLM은 해당 entity가 접근 권한을 가진 tool만 반환합니다.
 
-When Creating a Key, Team, or Organization, you can select the allowed MCP Servers that the entity has access to.
+Key, Team, Organization을 생성할 때 해당 entity가 접근할 수 있는 MCP Server를 선택할 수 있습니다.
 
 <Image 
   img={require('../img/mcp_key.png')}
   style={{width: '80%', display: 'block', margin: '0'}}
 />
 
-## Permission Hierarchy
 
-Permissions can be set at five distinct levels. When more than one level applies to a request, LiteLLM **intersects** the lists (most-restrictive wins) — except for the organization level, which acts as a **ceiling**.
-
-| Level | Source | How it composes |
-|---|---|---|
-| **Key** | `object_permission.mcp_servers` / `object_permission.mcp_access_groups` on the virtual key | If the key has an explicit list, it's used. |
-| **Team** | Same fields on the team | If both key and team have lists, the result is the **intersection** (only servers in both). If only the team has a list, the key inherits it. |
-| **End user** | Same fields on the `LiteLLM_EndUserTable` row matching `x-litellm-end-user-id` | Intersected with the running result. Skipped if no end-user-id is present on the request. |
-| **Agent** | Same fields on the agent identified by `x-litellm-agent-id` | Intersected with the running result. Skipped if no agent-id is present. |
-| **Organization** | Same fields on the org owning the key/team | Acts as a **ceiling** — the final allowed-server set is intersected with the org's list. If the org has no list, no additional restriction. |
-
-If no level has a list, the request can access **every** MCP server (open by default).
-
-```mermaid
-flowchart TD
-    A[Inbound MCP request] --> B{Key has mcp_servers list?}
-    B -->|Yes| C[Start with key's list]
-    B -->|No| D[Start with: all servers]
-    C --> E{Team has list?}
-    D --> E
-    E -->|Yes, key also had list| F[Intersect with team's list]
-    E -->|Yes, key had no list| G[Use team's list]
-    E -->|No| H[Keep current]
-    F --> I
-    G --> I
-    H --> I
-    I[Running set] --> J{end-user-id present and end-user has list?}
-    J -->|Yes| K[Intersect with end-user list]
-    J -->|No| L[Keep current]
-    K --> M
-    L --> M
-    M{agent-id present and agent has list?}
-    M -->|Yes| N[Intersect with agent list]
-    M -->|No| O[Keep current]
-    N --> P
-    O --> P
-    P{Org has list?}
-    P -->|Yes| Q[Cap final set to org's list]
-    P -->|No| R[Final set]
-    Q --> R
-```
-
-The same intersection model applies to the per-server tool-level dict `mcp_tool_permissions` (see [Per-entity Tool-Level Permissions](#per-entity-tool-level-permissions) below).
-
-## Allow/Disallow MCP Tools
+## MCP Tool 허용/차단
   
-Control which tools are available from your MCP servers. You can either allow only specific tools or block dangerous ones.
+MCP server에서 사용할 수 있는 tool을 제어합니다. 특정 tool만 허용하거나 위험한 tool을 차단할 수 있습니다.
 
 <Tabs>
-<TabItem value="allowed" label="Only Allow Specific Tools">
+<TabItem value="allowed" label="특정 Tool만 허용">
 
-Use `allowed_tools` to specify exactly which tools users can access. All other tools will be blocked.
+사용자가 접근할 수 있는 tool을 정확히 지정하려면 `allowed_tools`를 사용하세요. 나머지 모든 tool은 차단됩니다.
 
 ```yaml title="config.yaml" showLineNumbers
 mcp_servers:
@@ -103,15 +59,15 @@ mcp_servers:
     # only list_tools will be available
 ```
 
-**Use this when:**
-- You want strict control over which tools are available
-- You're in a high-security environment
-- You're testing a new MCP server with limited tools
+**다음 상황에서 사용하세요.**
+- 사용 가능한 tool을 엄격하게 제어해야 할 때
+- 보안 요구사항이 높은 환경일 때
+- 제한된 tool로 새 MCP server를 테스트할 때
 
 </TabItem>
-<TabItem value="blocked" label="Block Specific Tools">
+<TabItem value="blocked" label="특정 Tool 차단">
 
-Use `disallowed_tools` to block specific tools. All other tools will be available.
+특정 tool을 차단하려면 `disallowed_tools`를 사용하세요. 나머지 모든 tool은 사용할 수 있습니다.
 
 ```yaml title="config.yaml" showLineNumbers
 mcp_servers:
@@ -127,42 +83,42 @@ mcp_servers:
     # only repo_delete will be blocked
 ```
 
-**Use this when:**
-- Most tools are safe, but you want to block a few dangerous ones
-- You want to prevent expensive API calls
-- You're gradually adding restrictions to an existing server
+**다음 상황에서 사용하세요.**
+- 대부분의 tool은 안전하지만 일부 위험한 tool만 차단하고 싶을 때
+- 비용이 큰 API call을 방지하고 싶을 때
+- 기존 server에 제한을 단계적으로 추가할 때
 
 </TabItem>
 </Tabs>
 
-### Important Notes
+### 중요 참고
 
-- If you specify both `allowed_tools` and `disallowed_tools`, the allowed list takes priority
-- Tool names are case-sensitive
+- `allowed_tools`와 `disallowed_tools`를 모두 지정하면 allow list가 우선합니다.
+- tool name은 대소문자를 구분합니다.
 
-## Public MCP Servers (allow_all_keys)
+## 공개 MCP 서버(`allow_all_keys`) {#public-mcp-server-allow_all_keys}
 
-Some MCP servers are meant to be shared broadly—think internal knowledge bases, calendar integrations, or other low-risk utilities where every team should be able to connect without requesting access. Instead of adding those servers to every key, team, or organization, enable the new `allow_all_keys` toggle.
+일부 MCP server는 넓게 공유되도록 설계됩니다. 예를 들어 내부 knowledge base, calendar integration, 모든 team이 별도 접근 요청 없이 연결할 수 있어야 하는 저위험 utility가 있습니다. 이러한 server를 모든 key, team, organization에 하나씩 추가하는 대신 `allow_all_keys` toggle을 활성화하세요.
 
 <Tabs>
 <TabItem value="ui" label="UI">
 
-1. Open **MCP Servers → Add / Edit** in the Admin UI.
-2. Expand **Permission Management / Access Control**.
-3. Toggle **Allow All LiteLLM Keys** on.
+1. 관리자 UI에서 **MCP Servers → Add / Edit**를 엽니다.
+2. **Permission Management / Access Control**을 펼칩니다.
+3. **Allow All LiteLLM Keys** toggle을 켭니다.
 
 <Image 
   img={require('../img/mcp_allow_all_ui.png')}
   style={{width: '80%', display: 'block', margin: '1rem auto'}}
-  alt="MCP server configuration in Admin UI"
+  alt="MCP server configuration in 관리자 UI"
 /> 
 
-The toggle makes the server “public” without touching existing access groups.
+이 toggle은 기존 access group을 건드리지 않고 server를 "public"으로 만듭니다.
 
 </TabItem>
 <TabItem value="config" label="config.yaml">
 
-Set `allow_all_keys: true` to mark the server as public:
+server를 public으로 표시하려면 `allow_all_keys: true`를 설정하세요.
 
 ```yaml title="Make an MCP server public" showLineNumbers
 mcp_servers:
@@ -174,23 +130,23 @@ mcp_servers:
 </TabItem>
 </Tabs>
 
-### When to use it
+### 사용 시점
 
-- You have shared MCP utilities where fine-grained ACLs would only add busywork.
-- You want a “default enabled” experience for internal users, while still being able to layer tool-level restrictions.
-- You’re onboarding new teams and want the safest MCPs available out of the box.
+- 세밀한 ACL이 오히려 관리 부담만 늘리는 공유 MCP utility가 있을 때
+- 내부 사용자에게 기본 활성화 경험을 제공하되 tool 수준 제한은 계속 계층화하고 싶을 때
+- 새 team을 온보딩하면서 가장 안전한 MCP를 기본으로 제공하고 싶을 때
 
-Once enabled, LiteLLM automatically includes the server for every key during tool discovery/calls—no extra virtual-key or team configuration is required.
+활성화하면 LiteLLM은 tool discovery/call 과정에서 모든 key에 해당 server를 자동 포함합니다. 추가 virtual-key 또는 team 설정은 필요하지 않습니다.
 
 ---
 
-## Allow/Disallow MCP Tool Parameters
+## MCP tool parameter 허용/차단 {#mcp-tool-parameter-allow-block}
 
-Control which parameters are allowed for specific MCP tools using the `allowed_params` configuration. This provides fine-grained control over tool usage by restricting the parameters that can be passed to each tool.
+`allowed_params` 설정으로 특정 MCP tool에 허용되는 parameter를 제어합니다. 각 tool에 전달할 수 있는 parameter를 제한하여 tool 사용을 세밀하게 제어할 수 있습니다.
 
-### Configuration
+### 설정
 
-`allowed_params` is a dictionary that maps tool names to lists of allowed parameter names. When configured, only the specified parameters will be accepted for that tool - any other parameters will be rejected with a 403 error.
+`allowed_params`는 tool name을 허용된 parameter name 목록에 매핑하는 dictionary입니다. 설정하면 해당 tool에는 지정된 parameter만 허용되며, 그 외 parameter는 403 error로 거부됩니다.
 
 ```yaml title="config.yaml with allowed_params" showLineNumbers
 mcp_servers:
@@ -215,19 +171,19 @@ mcp_servers:
       create_issue: ["title", "body", "labels"]
 ```
 
-### How It Works
+### 동작 방식
 
-1. **Tool-specific filtering**: Each tool can have its own list of allowed parameters
-2. **Flexible naming**: Tool names can be specified with or without the server prefix (e.g., both `"getpetbyid"` and `"my_api_mcp-getpetbyid"` work)
-3. **Whitelist approach**: Only parameters in the allowed list are permitted
-4. **Unlisted tools**: If `allowed_params` is not set, all parameters are allowed
-5. **Error handling**: Requests with disallowed parameters receive a 403 error with details about which parameters are allowed
+1. **Tool별 filtering**: 각 tool은 자체 허용 parameter 목록을 가질 수 있습니다.
+2. **유연한 naming**: tool name은 server prefix 포함 또는 미포함으로 지정할 수 있습니다. 예: `"getpetbyid"`와 `"my_api_mcp-getpetbyid"` 모두 동작합니다.
+3. **Whitelist 방식**: 허용 목록에 있는 parameter만 허용됩니다.
+4. **목록에 없는 tool**: `allowed_params`가 설정되지 않으면 모든 parameter가 허용됩니다.
+5. **Error handling**: 허용되지 않은 parameter가 포함된 요청은 어떤 parameter가 허용되는지에 대한 세부 정보와 함께 403 error를 받습니다.
 
-### Example Request Behavior
+### 예제 요청 동작
 
-With the configuration above, here's how requests would be handled:
+위 설정에서는 요청이 다음과 같이 처리됩니다.
 
-**✅ Allowed Request:**
+**허용되는 요청:**
 ```json
 {
   "tool": "read_wiki_contents",
@@ -237,7 +193,7 @@ With the configuration above, here's how requests would be handled:
 }
 ```
 
-**❌ Rejected Request:**
+**거부되는 요청:**
 ```json
 {
   "tool": "read_wiki_contents",
@@ -255,17 +211,17 @@ With the configuration above, here's how requests would be handled:
 }
 ```
 
-### Use Cases
+### 사용 사례
 
-- **Security**: Prevent users from accessing sensitive parameters or dangerous operations
-- **Cost control**: Restrict expensive parameters (e.g., limiting result counts)
-- **Compliance**: Enforce parameter usage policies for regulatory requirements
-- **Staged rollouts**: Gradually enable parameters as tools are tested
-- **Multi-tenant isolation**: Different parameter access for different user groups
+- **보안**: 사용자가 민감한 parameter 또는 위험한 operation에 접근하지 못하게 합니다.
+- **비용 제어**: 비용이 큰 parameter를 제한합니다. 예: result count 제한.
+- **규정 준수**: 규제 요구사항에 맞는 parameter 사용 정책을 강제합니다.
+- **단계적 rollout**: tool 테스트가 진행되는 동안 parameter를 단계적으로 활성화합니다.
+- **Multi-tenant 격리**: 사용자 group별로 다른 parameter 접근을 제공합니다.
 
-### Combining with Tool Filtering
+### Tool Filtering과 함께 사용
 
-`allowed_params` works alongside `allowed_tools` and `disallowed_tools` for complete control:
+`allowed_params`는 `allowed_tools`, `disallowed_tools`와 함께 동작해 완전한 제어를 제공합니다.
 
 ```yaml title="Combined filtering example" showLineNumbers
 mcp_servers:
@@ -288,43 +244,43 @@ mcp_servers:
       search_issues: ["query", "sort", "order", "perPage"]
 ```
 
-This configuration ensures that:
-1. Only the three listed tools are available
-2. The `delete_repo` tool is explicitly blocked
-3. Each tool can only use its specified parameters
+이 설정은 다음을 보장합니다.
+1. 나열된 세 가지 tool만 사용할 수 있습니다.
+2. `delete_repo` tool은 명시적으로 차단됩니다.
+3. 각 tool은 지정된 parameter만 사용할 수 있습니다.
 
 ---
 
-## MCP Server Access Control
+## MCP 서버 접근 제어 {#mcp-server-access-control}
 
-LiteLLM Proxy provides two methods for controlling access to specific MCP servers:
+LiteLLM Proxy는 특정 MCP server 접근을 제어하는 두 가지 방법을 제공합니다.
 
-1. **URL-based Namespacing** - Use URL paths to directly access specific servers or access groups
-2. **Header-based Namespacing** - Use the `x-mcp-servers` header to specify which servers to access
+1. **URL 기반 네임스페이스** - URL path를 사용해 특정 server 또는 access group에 직접 접근합니다.
+2. **Header 기반 네임스페이스** - `x-mcp-servers` header를 사용해 접근할 server를 지정합니다.
 
 ---
 
-### Method 1: URL-based Namespacing
+### 방법 1: URL 기반 네임스페이스 {#method-1-url-based-namespacing}
 
-LiteLLM Proxy supports URL-based namespacing for MCP servers using the format `/<servers or access groups>/mcp`. This allows you to:
+LiteLLM Proxy는 `/<servers or access groups>/mcp` 형식을 사용한 MCP server용 URL 기반 네임스페이스를 지원합니다. 이를 통해 다음을 수행할 수 있습니다.
 
-- **Direct URL Access**: Point MCP clients directly to specific servers or access groups via URL
-- **Simplified Configuration**: Use URLs instead of headers for server selection
-- **Access Group Support**: Use access group names in URLs for grouped server access
+- **직접 URL 접근**: URL을 통해 MCP client를 특정 server 또는 access group으로 직접 연결합니다.
+- **간단한 설정**: server 선택에 header 대신 URL을 사용합니다.
+- **Access Group 지원**: 그룹화된 server access를 위해 URL에서 access group name을 사용합니다.
 
-#### URL Format
+#### URL 형식
 
 ```
 <your-litellm-proxy-base-url>/<server_alias_or_access_group>/mcp
 ```
 
-**Examples:**
-- `/github_mcp/mcp` - Access tools from the "github_mcp" MCP server
-- `/zapier/mcp` - Access tools from the "zapier" MCP server  
-- `/dev_group/mcp` - Access tools from all servers in the "dev_group" access group
-- `/github_mcp,zapier/mcp` - Access tools from multiple specific servers
+**예제:**
+- `/github_mcp/mcp` - "github_mcp" MCP server의 tool에 접근
+- `/zapier/mcp` - "zapier" MCP server의 tool에 접근
+- `/dev_group/mcp` - "dev_group" access group의 모든 server tool에 접근
+- `/github_mcp,zapier/mcp` - 여러 특정 server의 tool에 접근
 
-#### Usage Examples
+#### 사용법 예제
 
 <Tabs>
 <TabItem value="openai" label="OpenAI API">
@@ -351,7 +307,7 @@ curl --location 'https://api.openai.com/v1/responses' \
 }'
 ```
 
-This example uses URL namespacing to access only the "github" MCP server.
+이 예제는 URL 네임스페이스를 사용해 "github" MCP server에만 접근합니다.
 
 </TabItem>
 
@@ -379,7 +335,7 @@ curl --location '<your-litellm-proxy-base-url>/v1/responses' \
 }'
 ```
 
-This example uses the `x-mcp-servers` header to access all servers in the "dev_group" access group. Use `server_url: "litellm_proxy"` when calling the proxy's `/v1/responses` endpoint—do not use the full proxy URL.
+이 예제는 `x-mcp-servers` header를 사용해 "dev_group" access group의 모든 server에 접근합니다. proxy의 `/v1/responses` endpoint를 호출할 때는 전체 proxy URL이 아니라 `server_url: "litellm_proxy"`를 사용하세요.
 
 </TabItem>
 
@@ -398,32 +354,32 @@ This example uses the `x-mcp-servers` header to access all servers in the "dev_g
 }
 ```
 
-This configuration uses URL namespacing to access tools from both "github" and "zapier" MCP servers.
+이 설정은 URL 네임스페이스를 사용해 "github" 및 "zapier" MCP server의 tool에 접근합니다.
 
 </TabItem>
 </Tabs>
 
-#### Benefits of URL Namespacing
+#### URL 네임스페이스의 장점 {#benefits-of-url-namespacing}
 
-- **Direct Access**: No need for additional headers to specify servers
-- **Clean URLs**: Self-documenting URLs that clearly indicate which servers are accessible
-- **Access Group Support**: Use access group names for grouped server access
-- **Multiple Servers**: Specify multiple servers in a single URL with comma separation
-- **Simplified Configuration**: Easier setup for MCP clients that prefer URL-based configuration
+- **직접 접근**: server를 지정하기 위한 추가 header가 필요 없습니다.
+- **명확한 URL**: 접근 가능한 server를 명확히 보여주는 자체 설명형 URL입니다.
+- **Access Group 지원**: 그룹화된 server access에 access group name을 사용합니다.
+- **여러 server**: comma로 구분해 단일 URL에 여러 server를 지정합니다.
+- **간단한 설정**: URL 기반 설정을 선호하는 MCP client에서 더 쉽게 구성할 수 있습니다.
 
 ---
 
-### Method 2: Header-based Namespacing
+### 방법 2: Header 기반 네임스페이스 {#method-2-header-based-namespacing}
 
-You can choose to access specific MCP servers and only list their tools using the `x-mcp-servers` header. This header allows you to:
-- Limit tool access to one or more specific MCP servers
-- Control which tools are available in different environments or use cases
+`x-mcp-servers` header를 사용해 특정 MCP server에만 접근하고 해당 tool만 나열하도록 선택할 수 있습니다. 이 header로 다음을 수행할 수 있습니다.
+- 하나 이상의 특정 MCP server로 tool 접근 제한
+- 환경 또는 사용 사례별로 사용 가능한 tool 제어
 
-The header accepts a comma-separated list of server aliases: `"alias_1,Server2,Server3"`
+header는 comma로 구분된 server alias 목록을 받습니다. `"alias_1,Server2,Server3"`
 
-**Notes:**
-- If the header is not provided, tools from all available MCP servers will be accessible
-- This method works with the standard LiteLLM MCP endpoint
+**참고:**
+- header가 제공되지 않으면 사용 가능한 모든 MCP server의 tool에 접근할 수 있습니다.
+- 이 방법은 표준 LiteLLM MCP endpoint와 함께 동작합니다.
 
 <Tabs>
 <TabItem value="openai" label="OpenAI API">
@@ -451,7 +407,7 @@ curl --location 'https://api.openai.com/v1/responses' \
 }'
 ```
 
-In this example, the request will only have access to tools from the "alias_1" MCP server.
+이 예제에서 요청은 "alias_1" MCP server의 tool에만 접근할 수 있습니다.
 
 </TabItem>
 
@@ -480,7 +436,7 @@ curl --location '<your-litellm-proxy-base-url>/v1/responses' \
 }'
 ```
 
-This configuration restricts the request to only use tools from the specified MCP servers. Use `server_url: "litellm_proxy"` when calling the proxy's `/v1/responses` endpoint.
+이 설정은 지정된 MCP server의 tool만 사용하도록 요청을 제한합니다. proxy의 `/v1/responses` endpoint를 호출할 때는 `server_url: "litellm_proxy"`를 사용하세요.
 
 </TabItem>
 
@@ -500,24 +456,24 @@ This configuration restricts the request to only use tools from the specified MC
 }
 ```
 
-This configuration in Cursor IDE settings will limit tool access to only the specified MCP servers.
+Cursor IDE 설정의 이 구성은 지정된 MCP server로만 tool 접근을 제한합니다.
 
 </TabItem>
 </Tabs>
 
 ---
 
-### Comparison: Header vs URL Namespacing
+### 비교: Header와 URL 네임스페이스 {#comparison-header-vs-url-namespacing}
 
-| Feature | Header Namespacing | URL Namespacing |
+| 기능 | Header 네임스페이스 | URL 네임스페이스 |
 |---------|-------------------|-----------------|
-| **Method** | Uses `x-mcp-servers` header | Uses URL path `/<servers>/mcp` |
-| **Endpoint** | Standard `litellm_proxy` endpoint | Custom `/<servers>/mcp` endpoint |
-| **Configuration** | Requires additional header | Self-contained in URL |
-| **Multiple Servers** | Comma-separated in header | Comma-separated in URL path |
-| **Access Groups** | Supported via header | Supported via URL path |
-| **Client Support** | Works with all MCP clients | Works with URL-aware MCP clients |
-| **Use Case** | Dynamic server selection | Fixed server configuration |
+| **방식** | `x-mcp-servers` header 사용 | URL path `/<servers>/mcp` 사용 |
+| **Endpoint** | 표준 `litellm_proxy` endpoint | 사용자 지정 `/<servers>/mcp` endpoint |
+| **설정** | 추가 header 필요 | URL 자체에 포함 |
+| **여러 Server** | header에서 comma로 구분 | URL path에서 comma로 구분 |
+| **Access Group** | header로 지원 | URL path로 지원 |
+| **Client 지원** | 모든 MCP client에서 동작 | URL 인식 MCP client에서 동작 |
+| **사용 사례** | 동적 server 선택 | 고정 server configuration |
 
 <Tabs>
 <TabItem value="openai" label="OpenAI API">
@@ -545,7 +501,7 @@ curl --location 'https://api.openai.com/v1/responses' \
 }'
 ```
 
-In this example, the request will only have access to tools from the "alias_1" MCP server.
+이 예제에서 요청은 "alias_1" MCP server의 tool에만 접근할 수 있습니다.
 
 </TabItem>
 
@@ -574,7 +530,7 @@ curl --location '<your-litellm-proxy-base-url>/v1/responses' \
 }'
 ```
 
-This configuration restricts the request to only use tools from the specified MCP servers.
+이 설정은 지정된 MCP server의 tool만 사용하도록 요청을 제한합니다.
 
 </TabItem>
 
@@ -594,18 +550,18 @@ This configuration restricts the request to only use tools from the specified MC
 }
 ```
 
-This configuration in Cursor IDE settings will limit tool access to only the specified MCP server.
+Cursor IDE 설정의 이 구성은 지정된 MCP server로만 tool 접근을 제한합니다.
 
 </TabItem>
 </Tabs>
 
-### Grouping MCPs (Access Groups)
+### MCP 그룹화(Access Group) {#mcp-grouping-access-groups}
 
-MCP Access Groups allow you to group multiple MCP servers together for easier management.
+MCP Access Group을 사용하면 더 쉽게 관리할 수 있도록 여러 MCP server를 함께 그룹화할 수 있습니다.
 
-#### 1. Create an Access Group
+#### 1. Access Group 생성 {#create-an-access-group}
 
-##### A. Creating Access Groups using Config:
+##### A. Config로 Access Group 생성 {#create-an-access-group-with-config}
 
 ```yaml title="Creating access groups for MCP using the config" showLineNumbers
 mcp_servers:
@@ -616,26 +572,26 @@ mcp_servers:
     access_groups: ["dev_group"]
 ```
 
-While adding `mcp_servers` using the config:
-- Pass in a list of strings inside `access_groups`
-- These groups can then be used for segregating access using keys, teams and MCP clients using headers
+config로 `mcp_servers`를 추가할 때:
+- `access_groups` 안에 string 목록을 전달합니다.
+- 이후 이 group은 key, team, header를 사용하는 MCP client에서 access 분리에 사용할 수 있습니다.
 
-##### B. Creating Access Groups using UI
+##### B. UI로 Access Group 생성 {#create-an-access-group-with-ui}
 
-To create an access group:
-- Go to MCP Servers in the LiteLLM UI
-- Click "Add a New MCP Server" 
-- Under "MCP Access Groups", create a new group (e.g., "dev_group") by typing it
-- Add the same group name to other servers to group them together
+access group 생성 방법:
+- LiteLLM UI에서 MCP Servers로 이동합니다.
+- `Add a New MCP Server`를 클릭합니다.
+- "MCP Access Groups" 아래에서 새 group name을 입력해 생성합니다. 예: "dev_group".
+- 다른 server에도 같은 group name을 추가해 함께 그룹화합니다.
 
 <Image 
   img={require('../img/mcp_create_access_group.png')}
   style={{width: '80%', display: 'block', margin: '0'}}
 />
 
-#### 2. Use Access Group in Cursor
+#### 2. Cursor에서 Access Group 사용 {#use-an-access-group-in-cursor}
 
-Include the access group name in the `x-mcp-servers` header:
+`x-mcp-servers` header에 access group name을 포함합니다.
 
 ```json title="Cursor Configuration with Access Groups" showLineNumbers
 {
@@ -651,17 +607,17 @@ Include the access group name in the `x-mcp-servers` header:
 }
 ```
 
-This gives you access to all servers in the "dev_group" access group.
-- Which means that if deepwiki server (and any other servers) which have the access group `dev_group` assigned to them will be available for tool calling
+이렇게 하면 "dev_group" access group의 모든 server에 접근할 수 있습니다.
+- 즉, `dev_group` access group이 할당된 deepwiki server 및 다른 server는 tool calling에 사용할 수 있습니다.
 
-#### Advanced: Connecting Access Groups to API Keys
+#### 고급: API key에 Access Group 연결 {#advanced-link-an-access-group-to-an-api-key}
 
-When creating API keys, you can assign them to specific access groups for permission management:
+API key를 생성할 때 permission 관리를 위해 특정 access group에 할당할 수 있습니다.
 
-- Go to "Keys" in the LiteLLM UI and click "Create Key"
-- Select the desired MCP access groups from the dropdown
-- The key will have access to all MCP servers in those groups
-- This is reflected in the Test Key page
+- LiteLLM UI에서 "Keys"로 이동하고 "Create Key"를 클릭합니다.
+- dropdown에서 원하는 MCP access group을 선택합니다.
+- 해당 key는 그 group의 모든 MCP server에 접근할 수 있습니다.
+- 이는 Test Key page에 반영됩니다.
 
 <Image 
   img={require('../img/mcp_key_access_group.png')}
@@ -669,117 +625,40 @@ When creating API keys, you can assign them to specific access groups for permis
 />
 
 
-## Per-entity Tool-Level Permissions {#per-entity-tool-level-permissions}
 
-Control which tools different teams can access from the same MCP server. For example, give your Engineering team access to `list_repositories`, `create_issue`, and `search_code`, while Sales only gets `search_code` and `close_issue`.
+## Key, Team, Organization별 allowed tool 설정 {#set-allowed-tools-for-a-key-team-or-organization}
 
-This video shows how to set allowed tools for a Key, Team, or Organization.
+동일한 MCP server에서 team별로 접근할 수 있는 tool을 제어합니다. 예를 들어 Engineering team에는 `list_repositories`, `create_issue`, `search_code` 접근을 주고, Sales에는 `search_code`와 `close_issue`만 제공할 수 있습니다.
+
+
+이 영상은 Key, Team, Organization별 allowed tool 설정 방법을 보여줍니다.
 
 <iframe width="840" height="500" src="https://www.loom.com/embed/7464d444c3324078892367272fe50745" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
 
-### `mcp_tool_permissions` API
 
-`object_permission.mcp_tool_permissions` is a `Dict[server_id, List[tool_name]]` on the key, team, end-user, agent, or organization. It's evaluated **after** server-level access has been resolved (see [Permission Hierarchy](#permission-hierarchy) above) and applies the same five-level intersection — most-restrictive wins, organization acts as a ceiling.
+## 대시보드 보기 모드 {#dashboard-view-mode}
 
-This is distinct from the server-registration-level `allowed_tools` / `disallowed_tools` (which apply to **every** caller of the server). `mcp_tool_permissions` lets you carve out per-team subsets without changing the server config.
+Proxy admin은 `general_settings.user_mcp_management_mode`를 통해 non-admin이 MCP dashboard에서 무엇을 볼 수 있는지도 제어할 수 있습니다.
 
-<Tabs>
-<TabItem value="key" label="On a Key">
-
-```bash title="Engineering key — full GitHub access" showLineNumbers
-curl -X POST "http://localhost:4000/key/generate" \
-  -H "Authorization: Bearer sk-master-key" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "object_permission": {
-      "mcp_servers": ["github_mcp"],
-      "mcp_tool_permissions": {
-        "github_mcp": ["list_repositories", "create_issue", "search_code"]
-      }
-    }
-  }'
-```
-
-```bash title="Sales key — read-only on the same server" showLineNumbers
-curl -X POST "http://localhost:4000/key/generate" \
-  -H "Authorization: Bearer sk-master-key" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "object_permission": {
-      "mcp_servers": ["github_mcp"],
-      "mcp_tool_permissions": {
-        "github_mcp": ["search_code", "close_issue"]
-      }
-    }
-  }'
-```
-
-</TabItem>
-<TabItem value="team" label="On a Team">
-
-```bash title="Team-wide tool subset (all keys inherit)" showLineNumbers
-curl -X POST "http://localhost:4000/team/new" \
-  -H "Authorization: Bearer sk-master-key" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "team_alias": "engineering",
-    "object_permission": {
-      "mcp_servers": ["github_mcp", "deepwiki_mcp"],
-      "mcp_tool_permissions": {
-        "github_mcp": ["list_repositories", "create_issue", "search_code"]
-      }
-    }
-  }'
-```
-
-When the key also sets `mcp_tool_permissions` for `github_mcp`, the resulting tool list is the **intersection** of the two.
-
-</TabItem>
-<TabItem value="agent" label="On an Agent">
-
-When an agent (identified by `x-litellm-agent-id`) calls MCP tools, the agent's own `mcp_tool_permissions` participate in the intersection. Useful for capping what an autonomous agent can do regardless of which key originally invoked it.
-
-```bash showLineNumbers
-curl -X PATCH "http://localhost:4000/v1/agents/{agent_id}" \
-  -H "Authorization: Bearer sk-master-key" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "object_permission": {
-      "mcp_servers": ["github_mcp"],
-      "mcp_tool_permissions": {
-        "github_mcp": ["search_code"]
-      }
-    }
-  }'
-```
-
-</TabItem>
-</Tabs>
-
-
-## Dashboard View Modes
-
-Proxy admins can also control what non-admins see inside the MCP dashboard via `general_settings.user_mcp_management_mode`:
-
-- `restricted` *(default)* – users only see servers that their team explicitly has access to.
-- `view_all` – every dashboard user can see the full MCP server list. 
+- `restricted` *(default)* - 사용자는 자신의 team에 명시적으로 접근 권한이 있는 server만 볼 수 있습니다.
+- `view_all` - 모든 dashboard 사용자가 전체 MCP server 목록을 볼 수 있습니다.
 
 ```yaml title="Config example"
 general_settings:
   user_mcp_management_mode: view_all
 ```
 
-This is useful when you want discoverability for MCP offerings without granting additional execution privileges.
+추가 실행 권한을 부여하지 않으면서 MCP 제공 항목의 발견 가능성을 높이고 싶을 때 유용합니다.
 
 
-## Publish MCP Registry
+## MCP Registry 게시
 
-If you want other systems—for example external agent frameworks such as MCP-capable IDEs running outside your network—to automatically discover the MCP servers hosted on LiteLLM, you can expose a Model Context Protocol Registry endpoint. This registry lists the built-in LiteLLM MCP server and every server you have configured, using the [official MCP Registry spec](https://github.com/modelcontextprotocol/registry).
+다른 system이 LiteLLM에 호스팅된 MCP server를 자동으로 발견하게 하려면 Model Context Protocol Registry endpoint를 노출할 수 있습니다. 예를 들어 네트워크 외부에서 실행되는 MCP 지원 IDE 같은 외부 agent framework가 여기에 해당합니다. 이 registry는 [공식 MCP Registry spec](https://github.com/modelcontextprotocol/registry)을 사용해 built-in LiteLLM MCP server와 설정한 모든 server를 나열합니다.
 
-1. Set `enable_mcp_registry: true` under `general_settings` in your proxy config (or DB settings) and restart the proxy.
-2. LiteLLM will serve the registry at `GET /v1/mcp/registry.json`.
-3. Each entry points to either `/mcp` (built-in server) or `/{mcp_server_name}/mcp` for your custom servers, so clients can connect directly using the advertised Streamable HTTP URL.
+1. proxy config 또는 DB settings의 `general_settings` 아래에 `enable_mcp_registry: true`를 설정하고 proxy를 재시작합니다.
+2. LiteLLM은 `GET /v1/mcp/registry.json`에서 registry를 제공합니다.
+3. 각 entry는 `/mcp`(built-in server) 또는 custom server용 `/{mcp_server_name}/mcp`를 가리키므로 client는 공개된 Streamable HTTP URL로 직접 연결할 수 있습니다.
 
-:::note Permissions still apply
-The registry only advertises server URLs. Actual access control is still enforced by LiteLLM when the client connects to `/mcp` or `/{server}/mcp`, so publishing the registry does not bypass per-key permissions.
+:::note Permission은 계속 적용됩니다.
+registry는 server URL만 광고합니다. client가 `/mcp` 또는 `/{server}/mcp`에 연결할 때 실제 access control은 여전히 LiteLLM이 강제하므로, registry를 게시해도 key별 permission을 우회하지 않습니다.
 :::

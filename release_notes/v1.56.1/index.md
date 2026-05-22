@@ -11,7 +11,7 @@ authors:
     title: CTO, LiteLLM
     url: https://www.linkedin.com/in/reffajnaahsi/
     image_url: https://media.licdn.com/dms/image/v2/D4D03AQGiM7ZrUwqu_Q/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1675971026692?e=1741824000&v=beta&t=eQnRdXPJo4eiINWTZARoYTfqh064pgZ-E21pQTSy8jc
-tags: [key management, budgets/rate limits, logging, guardrails]
+tags: [키 관리, 예산/속도 제한, 로깅, 가드레일]
 hide_table_of_contents: false
 ---
 
@@ -19,23 +19,23 @@ import Image from '@theme/IdealImage';
 
 # v1.56.1
 
-`key management`, `budgets/rate limits`, `logging`, `guardrails`
+`키 관리`, `예산/속도 제한`, `로깅`, `가드레일`
 
 :::info
 
-Get a 7 day free trial for LiteLLM Enterprise [here](https://litellm.ai/#trial).
+LiteLLM 엔터프라이즈 7일 무료 체험은 [여기](https://litellm.ai/#trial)에서 시작할 수 있습니다.
 
-**no call needed**
+**통화는 필요하지 않습니다**
 
 :::
 
-## ✨ Budget / Rate Limit Tiers
+## ✨ 예산 / 속도 제한 티어 {#budget--rate-limit-tiers}
 
-Define tiers with rate limits. Assign them to keys. 
+속도 제한이 포함된 티어를 정의하고 키에 할당하세요.
 
-Use this to control access and budgets across a lot of keys.
+많은 키의 액세스와 예산을 함께 제어할 때 사용할 수 있습니다.
 
-**[Start here](https://docs.litellm.ai/docs/proxy/rate_limit_tiers)**
+**[여기서 시작](https://docs.litellm.ai/docs/proxy/rate_limit_tiers)**
 
 ```bash
 curl -L -X POST 'http://0.0.0.0:4000/budget/new' \
@@ -50,35 +50,32 @@ curl -L -X POST 'http://0.0.0.0:4000/budget/new' \
 ```
 
 
-## OTEL Bug Fix
+## OTEL 버그 수정 {#otel-bug-fix}
 
-LiteLLM was double logging litellm_request span. This is now fixed.
+LiteLLM이 litellm_request span을 중복 로깅하던 문제가 수정되었습니다.
 
-[Relevant PR](https://github.com/BerriAI/litellm/pull/7435)
+[관련 PR](https://github.com/BerriAI/litellm/pull/7435)
 
-## Logging for Finetuning Endpoints 
+## Finetuning 엔드포인트 로깅 {#logging-for-finetuning-endpoints}
 
-Logs for finetuning requests are now available on all logging providers (e.g. Datadog). 
+이제 finetuning 요청 로그를 모든 로깅 provider(예: Datadog)에서 사용할 수 있습니다.
 
-What's logged per request:
+요청마다 로깅되는 항목:
 
 - file_id
 - finetuning_job_id
-- any key/team metadata
+- 모든 key/team metadata
 
 
-**Start Here:**
-- [Setup Finetuning](https://docs.litellm.ai/docs/fine_tuning)
-- [Setup Logging](https://docs.litellm.ai/docs/proxy/logging#datadog)
+**여기서 시작:**
+- [Finetuning 설정](https://docs.litellm.ai/docs/fine_tuning)
+- [로깅 설정](https://docs.litellm.ai/docs/proxy/logging#datadog)
 
-## Dynamic Params for Guardrails 
+## 가드레일 동적 파라미터 {#dynamic-params-for-guardrails}
 
-You can now set custom parameters (like success threshold) for your guardrails in each request.
+이제 각 요청에서 가드레일에 사용자 지정 파라미터(예: 성공 임계값)를 설정할 수 있습니다.
 
-[See guardrails spec for more details](https://docs.litellm.ai/docs/proxy/guardrails/custom_guardrail#-pass-additional-parameters-to-guardrail)
-
-
-
+[자세한 내용은 가드레일 사양을 참고하세요](https://docs.litellm.ai/docs/proxy/guardrails/custom_guardrail#-pass-additional-parameters-to-guardrail)
 
 
 

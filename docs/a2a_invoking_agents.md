@@ -1,28 +1,28 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Invoking A2A Agents
+# A2A agent 호출
 
-Learn how to invoke A2A agents through LiteLLM using different methods.
+여러 방식으로 LiteLLM을 통해 A2A agent를 호출하는 방법을 알아봅니다.
 
-:::tip Deploy Your Own A2A Agent
+:::tip 자체 A2A agent 배포
 
-Want to test with your own agent? Deploy this template A2A agent powered by Google Gemini:
+자체 agent로 테스트하고 싶으신가요? Google Gemini 기반의 이 template A2A agent를 배포해 보세요.
 
-[**shin-bot-litellm/a2a-gemini-agent**](https://github.com/shin-bot-litellm/a2a-gemini-agent) - Simple deployable A2A agent with streaming support
+[**shin-bot-litellm/a2a-gemini-agent**](https://github.com/shin-bot-litellm/a2a-gemini-agent) - streaming을 지원하는 간단한 배포 가능 A2A agent
 
 :::
 
 ## A2A SDK
 
-Use the [A2A Python SDK](https://pypi.org/project/a2a-sdk) to invoke agents through LiteLLM using the A2A protocol.
+[A2A Python SDK](https://pypi.org/project/a2a-sdk)를 사용해 A2A protocol로 LiteLLM을 통해 agent를 호출합니다.
 
-### Non-Streaming
+### 비스트리밍
 
-This example shows how to:
-1. **List available agents** - Query `/v1/agents` to see which agents your key can access
-2. **Select an agent** - Pick an agent from the list
-3. **Invoke via A2A** - Use the A2A protocol to send messages to the agent
+이 예제는 다음 방법을 보여줍니다.
+1. **사용 가능한 agent 나열** - `/v1/agents`를 query해 key가 접근할 수 있는 agent를 확인합니다.
+2. **agent 선택** - 목록에서 agent를 고릅니다.
+3. **A2A로 호출** - A2A protocol을 사용해 agent에 message를 보냅니다.
 
 ```python showLineNumbers title="invoke_a2a_agent.py"
 from uuid import uuid4
@@ -81,9 +81,9 @@ if __name__ == "__main__":
     asyncio.run(main())
 ```
 
-### Streaming
+### streaming
 
-For streaming responses, use `send_message_streaming`:
+streaming response에는 `send_message_streaming`을 사용합니다.
 
 ```python showLineNumbers title="invoke_a2a_agent_streaming.py"
 from uuid import uuid4
@@ -128,11 +128,11 @@ if __name__ == "__main__":
     asyncio.run(main())
 ```
 
-## /chat/completions API (OpenAI SDK)
+## OpenAI SDK로 `/chat/completions` 호출 {#chat-completions-apiopenai-sdk}
 
-You can also invoke A2A agents using the familiar OpenAI SDK by using the `a2a/` model prefix.
+`a2a/` model prefix를 사용하면 익숙한 OpenAI SDK로도 A2A agent를 호출할 수 있습니다.
 
-### Non-Streaming
+### 비스트리밍
 
 <Tabs>
 <TabItem value="python" label="Python" default>
@@ -194,7 +194,7 @@ curl -X POST http://localhost:4000/v1/chat/completions \
 </TabItem>
 </Tabs>
 
-### Streaming
+### streaming
 
 <Tabs>
 <TabItem value="python" label="Python" default>
@@ -266,15 +266,15 @@ curl -X POST http://localhost:4000/v1/chat/completions \
 </TabItem>
 </Tabs>
 
-## Key Differences
+## 주요 차이점
 
-| Method | Use Case | Advantages |
+| 방식 | 사용 사례 | 장점 |
 |--------|----------|------------|
-| **A2A SDK** | Native A2A protocol integration | • Full A2A protocol support<br/>• Access to task states and artifacts<br/>• Context management |
-| **OpenAI SDK** | Familiar OpenAI-style interface | • Drop-in replacement for OpenAI calls<br/>• Easier migration from LLM to agent workflows<br/>• Works with existing OpenAI tooling |
+| **A2A SDK** | 네이티브 A2A protocol 통합 | • A2A protocol 전체 지원<br/>• task state 및 artifact 접근<br/>• context 관리 |
+| **OpenAI SDK** | 익숙한 OpenAI 스타일 인터페이스 | • OpenAI call을 대체해 바로 사용 가능<br/>• LLM workflow에서 agent workflow로 더 쉬운 migration<br/>• 기존 OpenAI tooling과 함께 동작 |
 
-:::tip Model Prefix
+:::tip model prefix
 
-When using the OpenAI SDK, always prefix your agent name with `a2a/` (e.g., `a2a/my-agent`) to route requests to the A2A agent instead of an LLM provider.
+OpenAI SDK를 사용할 때는 request가 LLM provider가 아니라 A2A agent로 routing되도록 agent name 앞에 항상 `a2a/`를 붙이세요(예: `a2a/my-agent`).
 
 :::

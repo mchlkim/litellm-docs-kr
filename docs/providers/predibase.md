@@ -3,21 +3,21 @@ import TabItem from '@theme/TabItem';
 
 # Predibase
 
-LiteLLM supports all models on Predibase
+LiteLLM은 Predibase의 모든 모델을 지원합니다.
 
 
-## Usage
+## 사용법
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
 
-### API KEYS
+### API 키 {#api-keys}
 ```python
 import os 
 os.environ["PREDIBASE_API_KEY"] = ""
 ```
 
-### Example Call
+### 호출 예제 {#example-call}
 
 ```python
 from litellm import completion
@@ -36,7 +36,7 @@ response = completion(
 </TabItem>
 <TabItem value="proxy" label="PROXY">
 
-1. Add models to your config.yaml
+1. `config.yaml`에 모델을 추가합니다.
 
   ```yaml
   model_list:
@@ -49,13 +49,13 @@ response = completion(
 
 
 
-2. Start the proxy 
+2. 프록시 시작 
 
   ```bash
   $ litellm --config /path/to/config.yaml --debug
   ```
 
-3. Send Request to LiteLLM Proxy Server
+3. LiteLLM Proxy Server로 요청을 보냅니다.
 
   <Tabs>
 
@@ -116,11 +116,11 @@ response = completion(
 
 </Tabs>
 
-## Advanced Usage - Prompt Formatting 
+## 고급 사용법 - 프롬프트 포매팅 {#advanced-usage---prompt-formatting}
 
-LiteLLM has prompt template mappings for all `meta-llama` llama3 instruct models. [**See Code**](https://github.com/BerriAI/litellm/blob/4f46b4c3975cd0f72b8c5acb2cb429d23580c18a/litellm/llms/prompt_templates/factory.py#L1360)
+LiteLLM에는 모든 `meta-llama` llama3 instruct 모델에 대한 프롬프트 템플릿 매핑이 있습니다. [**코드 보기**](https://github.com/BerriAI/litellm/blob/4f46b4c3975cd0f72b8c5acb2cb429d23580c18a/litellm/llms/prompt_templates/factory.py#L1360)
 
-To apply a custom prompt template: 
+사용자 지정 프롬프트 템플릿을 적용하려면 다음과 같이 설정합니다.
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -182,8 +182,8 @@ model_list:
 
 </Tabs>
 
-## Passing additional params - max_tokens, temperature 
-See all litellm.completion supported params [here](https://docs.litellm.ai/docs/completion/input)
+## 추가 파라미터 전달 - max_tokens, temperature {#passing-additional-params---max_tokens-temperature}
+`litellm.completion`에서 지원하는 모든 파라미터는 [여기](https://docs.litellm.ai/docs/completion/input)에서 확인하세요.
 
 ```python
 # !uv add litellm
@@ -213,10 +213,10 @@ response = completion(
         temperature: 0.5
 ```
 
-## Passings Predibase specific params - adapter_id, adapter_source, 
-Send params [not supported by `litellm.completion()`](https://docs.litellm.ai/docs/completion/input) but supported by Predibase by passing them to `litellm.completion`
+## Predibase 전용 파라미터 전달 - adapter_id, adapter_source {#passings-predibase-specific-params---adapter_id-adapter_source}
+[`litellm.completion()`에서 지원하지 않지만](https://docs.litellm.ai/docs/completion/input) Predibase에서 지원하는 파라미터는 `litellm.completion`에 전달해서 보낼 수 있습니다.
 
-Example `adapter_id`, `adapter_source` are Predibase specific param - [See List](https://github.com/BerriAI/litellm/blob/8a35354dd6dbf4c2fcefcd6e877b980fcbd68c58/litellm/llms/predibase.py#L54)
+예제 `adapter_id`, `adapter_source`는 Predibase 전용 파라미터입니다. [목록 보기](https://github.com/BerriAI/litellm/blob/8a35354dd6dbf4c2fcefcd6e877b980fcbd68c58/litellm/llms/predibase.py#L54)
 
 ```python
 # !uv add litellm

@@ -4,17 +4,17 @@ import TabItem from '@theme/TabItem';
 # Jina AI
 https://jina.ai/embeddings/
 
-Supported endpoints: 
+지원되는 엔드포인트:
 - /embeddings
 - /rerank
 
-## API Key
+## API 키 {#api-key}
 ```python
 # env variable
 os.environ['JINA_AI_API_KEY']
 ```
 
-## Sample Usage - Embedding
+## 샘플 사용법 - Embedding {#sample-usage---embedding}
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -33,7 +33,7 @@ print(response)
 </TabItem>
 <TabItem value="proxy" label="PROXY">
 
-1. Add to config.yaml
+1. `config.yaml`에 추가합니다.
 ```yaml
 model_list:
   - model_name: embedding-model
@@ -42,7 +42,7 @@ model_list:
       api_key: os.environ/JINA_AI_API_KEY
 ```
 
-2. Start proxy 
+2. 프록시를 시작합니다.
 
 ```bash
 litellm --config /path/to/config.yaml
@@ -50,7 +50,7 @@ litellm --config /path/to/config.yaml
 # RUNNING on http://0.0.0.0:4000/
 ```
 
-3. Test it! 
+3. 테스트합니다.
 
 ```bash 
 curl -L -X POST 'http://0.0.0.0:4000/embeddings' \
@@ -62,7 +62,7 @@ curl -L -X POST 'http://0.0.0.0:4000/embeddings' \
 </TabItem>
 </Tabs>
 
-## Sample Usage - Rerank
+## 샘플 사용법 - Rerank {#sample-usage---rerank}
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -92,7 +92,7 @@ print(response)
 </TabItem>
 <TabItem value="proxy" label="PROXY">
 
-1. Add to config.yaml
+1. `config.yaml`에 추가합니다.
 ```yaml
 model_list:
   - model_name: rerank-model
@@ -101,13 +101,13 @@ model_list:
       api_key: os.environ/JINA_AI_API_KEY
 ```
 
-2. Start proxy 
+2. 프록시를 시작합니다.
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-3. Test it! 
+3. 테스트합니다.
 
 ```bash 
 curl -L -X POST 'http://0.0.0.0:4000/rerank' \
@@ -129,22 +129,22 @@ curl -L -X POST 'http://0.0.0.0:4000/rerank' \
 </TabItem>
 </Tabs>
 
-## Supported Models
-All models listed here https://jina.ai/embeddings/ are supported
+## 지원되는 모델 {#supported-models}
+https://jina.ai/embeddings/ 에 나열된 모든 모델이 지원됩니다.
 
-## Supported Optional Rerank Parameters
+## 지원되는 선택적 Rerank 파라미터 {#supported-optional-rerank-parameters}
 
-All cohere rerank parameters are supported. 
+모든 `cohere` rerank 파라미터가 지원됩니다.
 
-## Supported Optional Embeddings Parameters
+## 지원되는 선택적 Embeddings 파라미터 {#supported-optional-embeddings-parameters}
 
 ```
 dimensions
 ```
 
-## Provider-specific parameters
+## Provider별 파라미터 {#provider-specific-parameters}
 
-Pass any jina ai specific parameters as a keyword argument to the `embedding` or `rerank` function, e.g. 
+`Jina AI` 전용 파라미터는 `embedding` 또는 `rerank` 함수에 키워드 인수로 전달합니다. 예:
 
 <Tabs>
 <TabItem value="sdk" label="SDK">

@@ -3,25 +3,25 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
 
-# Vertex AI - Anthropic, DeepSeek, Model Garden, xAI
+# Vertex AI - Anthropic, DeepSeek, Model Garden, xAI 파트너 모델
 
-## Supported Partner Providers
+## 지원되는 파트너 제공자
 
-| Provider | LiteLLM Route | Vertex Documentation |
+| 제공자 | LiteLLM 라우트 | Vertex 문서 |
 |----------|---------------|---------------|
-| Anthropic (Claude) | `vertex_ai/claude-*` | [Vertex AI - Anthropic Models](https://cloud.google.com/vertex-ai/generative-ai/docs/partner-models/use-claude) |
-| DeepSeek | `vertex_ai/deepseek-ai/{MODEL}` | [Vertex AI - DeepSeek Models](https://cloud.google.com/vertex-ai/generative-ai/docs/maas/deepseek) |
-| ZAI (GLM) | `vertex_ai/zai-org/{MODEL}` | [Vertex AI - GLM Models](https://cloud.google.com/vertex-ai/generative-ai/docs/maas/zaiorg/glm-47) |
-| Meta/Llama | `vertex_ai/meta/{MODEL}` | [Vertex AI - Meta Models](https://cloud.google.com/vertex-ai/generative-ai/docs/partner-models/llama) |
-| Mistral | `vertex_ai/mistral-*` | [Vertex AI - Mistral Models](https://cloud.google.com/vertex-ai/generative-ai/docs/partner-models/mistral) |
-| AI21 (Jamba) | `vertex_ai/jamba-*` | [Vertex AI - AI21 Models](https://cloud.google.com/vertex-ai/generative-ai/docs/partner-models/ai21) |
-| Qwen | `vertex_ai/qwen/*` | [Vertex AI - Qwen Models](https://cloud.google.com/vertex-ai/generative-ai/docs/maas/qwen) |
-| OpenAI (GPT-OSS) | `vertex_ai/openai/gpt-oss-*` | [Vertex AI - GPT-OSS Models](https://console.cloud.google.com/vertex-ai/publishers/openai/model-garden/) |
-| xAI (Grok) | `vertex_ai/xai/{MODEL}` | [xAI models (incl. Vertex)](https://docs.x.ai/docs/models), [Vertex AI Model Garden](https://cloud.google.com/vertex-ai/generative-ai/docs/model-garden/explore-models) |
+| Anthropic (Claude) | `vertex_ai/claude-*` | [Vertex AI - Anthropic 모델](https://cloud.google.com/vertex-ai/generative-ai/docs/partner-models/use-claude) |
+| DeepSeek | `vertex_ai/deepseek-ai/{MODEL}` | [Vertex AI - DeepSeek 모델](https://cloud.google.com/vertex-ai/generative-ai/docs/maas/deepseek) |
+| ZAI (GLM) | `vertex_ai/zai-org/{MODEL}` | [Vertex AI - GLM 모델](https://cloud.google.com/vertex-ai/generative-ai/docs/maas/zaiorg/glm-47) |
+| Meta/Llama | `vertex_ai/meta/{MODEL}` | [Vertex AI - Meta 모델](https://cloud.google.com/vertex-ai/generative-ai/docs/partner-models/llama) |
+| Mistral | `vertex_ai/mistral-*` | [Vertex AI - Mistral 모델](https://cloud.google.com/vertex-ai/generative-ai/docs/partner-models/mistral) |
+| AI21 (Jamba) | `vertex_ai/jamba-*` | [Vertex AI - AI21 모델](https://cloud.google.com/vertex-ai/generative-ai/docs/partner-models/ai21) |
+| Qwen | `vertex_ai/qwen/*` | [Vertex AI - Qwen 모델](https://cloud.google.com/vertex-ai/generative-ai/docs/maas/qwen) |
+| OpenAI (GPT-OSS) | `vertex_ai/openai/gpt-oss-*` | [Vertex AI - GPT-OSS 모델](https://console.cloud.google.com/vertex-ai/publishers/openai/model-garden/) |
+| xAI (Grok) | `vertex_ai/xai/{MODEL}` | [xAI 모델(Vertex 포함)](https://docs.x.ai/docs/models), [Vertex AI Model Garden](https://cloud.google.com/vertex-ai/generative-ai/docs/model-garden/explore-models) |
 
 ## Vertex AI - Anthropic (Claude)
 
-| Model Name       | Function Call                        |
+| 모델 이름       | 함수 호출                        |
 |------------------|--------------------------------------|
 | claude-3-opus@20240229   | `completion('vertex_ai/claude-3-opus@20240229', messages)` |
 | claude-3-5-sonnet@20240620  | `completion('vertex_ai/claude-3-5-sonnet@20240620', messages)` |
@@ -29,7 +29,7 @@ import TabItem from '@theme/TabItem';
 | claude-3-haiku@20240307   | `completion('vertex_ai/claude-3-haiku@20240307', messages)` |
 | claude-3-7-sonnet@20250219   | `completion('vertex_ai/claude-3-7-sonnet@20250219', messages)` |
 
-#### Usage
+#### 사용법
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -57,7 +57,7 @@ print("\nModel Response", response)
 </TabItem>
 <TabItem value="proxy" label="Proxy">
 
-**1. Add to config**
+**1. 구성에 추가**
 
 ```yaml
 model_list:
@@ -73,7 +73,7 @@ model_list:
         vertex_ai_location: "us-west-1"
 ```
 
-**2. Start proxy**
+**2. 프록시 시작**
 
 ```bash
 litellm --config /path/to/config.yaml
@@ -81,7 +81,7 @@ litellm --config /path/to/config.yaml
 # RUNNING at http://0.0.0.0:4000
 ```
 
-**3. Test it!**
+**3. 테스트**
 
 ```bash
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -103,7 +103,7 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 
 
 
-#### Usage - `thinking` / `reasoning_content`
+#### 사용법 - `thinking` / `reasoning_content`
 
 
 <Tabs>
@@ -124,7 +124,7 @@ resp = completion(
 
 <TabItem value="proxy" label="PROXY">
 
-1. Setup config.yaml
+1. config.yaml 설정
 
 ```yaml
 - model_name: claude-3-7-sonnet-20250219
@@ -134,13 +134,13 @@ resp = completion(
     vertex_ai_location: "us-west-1"
 ```
 
-2. Start proxy
+2. 프록시 시작
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-3. Test it! 
+3. 테스트
 
 ```bash
 curl http://0.0.0.0:4000/v1/chat/completions \
@@ -157,7 +157,7 @@ curl http://0.0.0.0:4000/v1/chat/completions \
 </Tabs>
 
 
-**Expected Response**
+**예상 응답**
 
 ```python
 ModelResponse(
@@ -215,33 +215,33 @@ ModelResponse(
 
 ## VertexAI DeepSeek
 
-| Property | Details |
+| 속성 | 세부 정보 |
 |----------|---------|
-| Provider Route | `vertex_ai/deepseek-ai/{MODEL}` |
-| Vertex Documentation | [Vertex AI - DeepSeek Models](https://cloud.google.com/vertex-ai/generative-ai/docs/maas/deepseek) |
+| 제공자 라우트 | `vertex_ai/deepseek-ai/{MODEL}` |
+| Vertex 문서 | [Vertex AI - DeepSeek 모델](https://cloud.google.com/vertex-ai/generative-ai/docs/maas/deepseek) |
 
-#### Usage
+#### 사용법
 
-**LiteLLM Supports all Vertex AI DeepSeek Models.** Ensure you use the `vertex_ai/deepseek-ai/` prefix for all Vertex AI DeepSeek models.
+**LiteLLM은 모든 Vertex AI DeepSeek 모델을 지원합니다.** 모든 Vertex AI DeepSeek 모델에 `vertex_ai/deepseek-ai/` 접두사를 사용해야 합니다.
 
-| Model Name       | Usage                        |
+| 모델 이름       | 사용법                        |
 |------------------|------------------------------|
-| vertex_ai/deepseek-ai/deepseek-r1-0528-maas | `completion('vertex_ai/deepseek-ai/deepseek-r1-0528-maas', messages)` |
+| `vertex_ai/deepseek-ai/deepseek-r1-0528-maas` | `completion('vertex_ai/deepseek-ai/deepseek-r1-0528-maas', messages)` |
 
 ## VertexAI ZAI (GLM)
 
-| Property | Details |
+| 속성 | 세부 정보 |
 |----------|---------|
-| Provider Route | `vertex_ai/zai-org/{MODEL}` |
-| Vertex Documentation | [Vertex AI - GLM Models](https://cloud.google.com/vertex-ai/generative-ai/docs/maas/zaiorg/glm-47) |
+| 제공자 라우트 | `vertex_ai/zai-org/{MODEL}` |
+| Vertex 문서 | [Vertex AI - GLM 모델](https://cloud.google.com/vertex-ai/generative-ai/docs/maas/zaiorg/glm-47) |
 
-**LiteLLM Supports all Vertex AI GLM Models.** Ensure you use the `vertex_ai/zai-org/` prefix for all Vertex AI GLM models.
+**LiteLLM은 모든 Vertex AI GLM 모델을 지원합니다.** 모든 Vertex AI GLM 모델에 `vertex_ai/zai-org/` 접두사를 사용해야 합니다.
 
-| Model Name | Usage |
+| 모델 이름 | 사용법 |
 |------------|-------|
-| vertex_ai/zai-org/glm-4.7-maas | `completion('vertex_ai/zai-org/glm-4.7-maas', messages)` |
+| `vertex_ai/zai-org/glm-4.7-maas` | `completion('vertex_ai/zai-org/glm-4.7-maas', messages)` |
 
-#### Usage
+#### 사용법
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -263,7 +263,7 @@ print("\nModel Response", response)
 </TabItem>
 <TabItem value="proxy" label="Proxy">
 
-**1. Add to config**
+**1. 구성에 추가**
 
 ```yaml
 model_list:
@@ -274,7 +274,7 @@ model_list:
       # vertex_location routes to "global"
 ```
 
-**2. Start proxy**
+**2. 프록시 시작**
 
 ```bash
 litellm --config /path/to/config.yaml
@@ -282,7 +282,7 @@ litellm --config /path/to/config.yaml
 # RUNNING at http://0.0.0.0:4000
 ```
 
-**3. Test it!**
+**3. 테스트**
 
 ```bash
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -302,20 +302,20 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 </TabItem>
 </Tabs>
 
-## VertexAI Meta/Llama API
+## VertexAI Meta/Llama API 사용 {#vertexai-meta-llama-api}
  
-| Model Name       | Function Call                        |
+| 모델 이름       | 함수 호출                        |
 |------------------|--------------------------------------|
-| meta/llama-3.2-90b-vision-instruct-maas | `completion('vertex_ai/meta/llama-3.2-90b-vision-instruct-maas', messages)` |
-| meta/llama3-8b-instruct-maas | `completion('vertex_ai/meta/llama3-8b-instruct-maas', messages)` |
-| meta/llama3-70b-instruct-maas | `completion('vertex_ai/meta/llama3-70b-instruct-maas', messages)` |
-| meta/llama3-405b-instruct-maas   | `completion('vertex_ai/meta/llama3-405b-instruct-maas', messages)` |
-| meta/llama-4-scout-17b-16e-instruct-maas | `completion('vertex_ai/meta/llama-4-scout-17b-16e-instruct-maas', messages)` |
-| meta/llama-4-scout-17-128e-instruct-maas | `completion('vertex_ai/meta/llama-4-scout-128b-16e-instruct-maas', messages)` |
-| meta/llama-4-maverick-17b-128e-instruct-maas | `completion('vertex_ai/meta/llama-4-maverick-17b-128e-instruct-maas',messages)` |
-| meta/llama-4-maverick-17b-16e-instruct-maas | `completion('vertex_ai/meta/llama-4-maverick-17b-16e-instruct-maas',messages)` |
+| `meta/llama-3.2-90b-vision-instruct-maas` | `completion('vertex_ai/meta/llama-3.2-90b-vision-instruct-maas', messages)` |
+| `meta/llama3-8b-instruct-maas` | `completion('vertex_ai/meta/llama3-8b-instruct-maas', messages)` |
+| `meta/llama3-70b-instruct-maas` | `completion('vertex_ai/meta/llama3-70b-instruct-maas', messages)` |
+| `meta/llama3-405b-instruct-maas`   | `completion('vertex_ai/meta/llama3-405b-instruct-maas', messages)` |
+| `meta/llama-4-scout-17b-16e-instruct-maas` | `completion('vertex_ai/meta/llama-4-scout-17b-16e-instruct-maas', messages)` |
+| `meta/llama-4-scout-17-128e-instruct-maas` | `completion('vertex_ai/meta/llama-4-scout-128b-16e-instruct-maas', messages)` |
+| `meta/llama-4-maverick-17b-128e-instruct-maas` | `completion('vertex_ai/meta/llama-4-maverick-17b-128e-instruct-maas',messages)` |
+| `meta/llama-4-maverick-17b-16e-instruct-maas` | `completion('vertex_ai/meta/llama-4-maverick-17b-16e-instruct-maas',messages)` |
 
-#### Usage
+#### 사용법
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -342,7 +342,7 @@ print("\nModel Response", response)
 </TabItem>
 <TabItem value="proxy" label="Proxy">
 
-**1. Add to config**
+**1. 구성에 추가**
 
 ```yaml
 model_list:
@@ -358,7 +358,7 @@ model_list:
         vertex_ai_location: "us-west-1"
 ```
 
-**2. Start proxy**
+**2. 프록시 시작**
 
 ```bash
 litellm --config /path/to/config.yaml
@@ -366,7 +366,7 @@ litellm --config /path/to/config.yaml
 # RUNNING at http://0.0.0.0:4000
 ```
 
-**3. Test it!**
+**3. 테스트**
 
 ```bash
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -386,30 +386,30 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 </TabItem>
 </Tabs>
 
-## VertexAI Mistral API
+## VertexAI Mistral API 사용 {#vertexai-mistral-api}
 
-[**Supported OpenAI Params**](https://github.com/BerriAI/litellm/blob/e0f3cd580cb85066f7d36241a03c30aa50a8a31d/litellm/llms/openai.py#L137)
+[**지원되는 OpenAI 매개변수**](https://github.com/BerriAI/litellm/blob/e0f3cd580cb85066f7d36241a03c30aa50a8a31d/litellm/llms/openai.py#L137)
 
-**LiteLLM Supports all Vertex AI Mistral Models.** Ensure you use the `vertex_ai/mistral-` prefix for all Vertex AI Mistral models.
+**LiteLLM은 모든 Vertex AI Mistral 모델을 지원합니다.** 모든 Vertex AI Mistral 모델에 `vertex_ai/mistral-` 접두사를 사용해야 합니다.
 
-Overview
+개요
 
-| Property | Details |
+| 속성 | 세부 정보 |
 |----------|---------|
-| Provider Route | `vertex_ai/mistral-{MODEL}` |
-| Vertex Documentation | [Vertex AI - Mistral Models](https://cloud.google.com/vertex-ai/generative-ai/docs/partner-models/mistral) |
+| 제공자 라우트 | `vertex_ai/mistral-{MODEL}` |
+| Vertex 문서 | [Vertex AI - Mistral 모델](https://cloud.google.com/vertex-ai/generative-ai/docs/partner-models/mistral) |
  
-| Model Name       | Function Call                        |
+| 모델 이름       | 함수 호출                        |
 |------------------|--------------------------------------|
 | mistral-large@latest   | `completion('vertex_ai/mistral-large@latest', messages)` |
 | mistral-large@2407   | `completion('vertex_ai/mistral-large@2407', messages)` |
-| mistral-small-2503   | `completion('vertex_ai/mistral-small-2503', messages)` |
-| mistral-large-2411   | `completion('vertex_ai/mistral-large-2411', messages)` |
+| `mistral-small-2503`   | `completion('vertex_ai/mistral-small-2503', messages)` |
+| `mistral-large-2411`   | `completion('vertex_ai/mistral-large-2411', messages)` |
 | mistral-nemo@latest   | `completion('vertex_ai/mistral-nemo@latest', messages)` |
 | codestral@latest   | `completion('vertex_ai/codestral@latest', messages)` |
 | codestral@@2405   | `completion('vertex_ai/codestral@2405', messages)` |
 
-#### Usage
+#### 사용법
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -436,7 +436,7 @@ print("\nModel Response", response)
 </TabItem>
 <TabItem value="proxy" label="Proxy">
 
-**1. Add to config**
+**1. 구성에 추가**
 
 ```yaml
 model_list:
@@ -452,7 +452,7 @@ model_list:
         vertex_ai_location: "us-west-1"
 ```
 
-**2. Start proxy**
+**2. 프록시 시작**
 
 ```bash
 litellm --config /path/to/config.yaml
@@ -460,7 +460,7 @@ litellm --config /path/to/config.yaml
 # RUNNING at http://0.0.0.0:4000
 ```
 
-**3. Test it!**
+**3. 테스트**
 
 ```bash
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -481,11 +481,11 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 </Tabs>
 
 
-#### Usage - Codestral FIM
+#### 사용법 - Codestral FIM
 
-Call Codestral on VertexAI via the OpenAI [`/v1/completion`](https://platform.openai.com/docs/api-reference/completions/create) endpoint for FIM tasks. 
+FIM 작업에는 OpenAI [`/v1/completion`](https://platform.openai.com/docs/api-reference/completions/create) 엔드포인트를 통해 VertexAI의 Codestral을 호출하세요. 
 
-Note: You can also call Codestral via `/chat/completion`.
+참고: `/chat/completion`을 통해서도 Codestral을 호출할 수 있습니다.
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -521,7 +521,7 @@ print("\nModel Response", response)
 </TabItem>
 <TabItem value="proxy" label="Proxy">
 
-**1. Add to config**
+**1. 구성에 추가**
 
 ```yaml
 model_list:
@@ -537,7 +537,7 @@ model_list:
         vertex_ai_location: "us-west-1"
 ```
 
-**2. Start proxy**
+**2. 프록시 시작**
 
 ```bash
 litellm --config /path/to/config.yaml
@@ -545,7 +545,7 @@ litellm --config /path/to/config.yaml
 # RUNNING at http://0.0.0.0:4000
 ```
 
-**3. Test it!**
+**3. 테스트**
 
 ```bash
 curl -X POST 'http://0.0.0.0:4000/completions' \
@@ -568,14 +568,14 @@ curl -X POST 'http://0.0.0.0:4000/completions' \
 </Tabs>
 
 
-## VertexAI AI21 Models
+## VertexAI AI21 모델
  
-| Model Name       | Function Call                        |
+| 모델 이름       | 함수 호출                        |
 |------------------|--------------------------------------|
 | jamba-1.5-mini@001   | `completion(model='vertex_ai/jamba-1.5-mini@001', messages)` |
 | jamba-1.5-large@001   | `completion(model='vertex_ai/jamba-1.5-large@001', messages)` |
 
-#### Usage
+#### 사용법
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -602,7 +602,7 @@ print("\nModel Response", response)
 </TabItem>
 <TabItem value="proxy" label="Proxy">
 
-**1. Add to config**
+**1. 구성에 추가**
 
 ```yaml
 model_list:
@@ -618,7 +618,7 @@ model_list:
         vertex_ai_location: "us-west-1"
 ```
 
-**2. Start proxy**
+**2. 프록시 시작**
 
 ```bash
 litellm --config /path/to/config.yaml
@@ -626,7 +626,7 @@ litellm --config /path/to/config.yaml
 # RUNNING at http://0.0.0.0:4000
 ```
 
-**3. Test it!**
+**3. 테스트**
 
 ```bash
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -649,19 +649,19 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 
 ## VertexAI Qwen API
 
-| Property | Details |
+| 속성 | 세부 정보 |
 |----------|---------|
-| Provider Route | `vertex_ai/qwen/{MODEL}` |
-| Vertex Documentation | [Vertex AI - Qwen Models](https://cloud.google.com/vertex-ai/generative-ai/docs/maas/qwen) |
+| 제공자 라우트 | `vertex_ai/qwen/{MODEL}` |
+| Vertex 문서 | [Vertex AI - Qwen 모델](https://cloud.google.com/vertex-ai/generative-ai/docs/maas/qwen) |
 
-**LiteLLM Supports all Vertex AI Qwen Models.** Ensure you use the `vertex_ai/qwen/` prefix for all Vertex AI Qwen models.
+**LiteLLM은 모든 Vertex AI Qwen 모델을 지원합니다.** 모든 Vertex AI Qwen 모델에 `vertex_ai/qwen/` 접두사를 사용해야 합니다.
 
-| Model Name       | Usage                        |
+| 모델 이름       | 사용법                        |
 |------------------|------------------------------|
-| vertex_ai/qwen/qwen3-coder-480b-a35b-instruct-maas | `completion('vertex_ai/qwen/qwen3-coder-480b-a35b-instruct-maas', messages)` |
-| vertex_ai/qwen/qwen3-235b-a22b-instruct-2507-maas | `completion('vertex_ai/qwen/qwen3-235b-a22b-instruct-2507-maas', messages)` |
+| `vertex_ai/qwen/qwen3-coder-480b-a35b-instruct-maas` | `completion('vertex_ai/qwen/qwen3-coder-480b-a35b-instruct-maas', messages)` |
+| `vertex_ai/qwen/qwen3-235b-a22b-instruct-2507-maas` | `completion('vertex_ai/qwen/qwen3-235b-a22b-instruct-2507-maas', messages)` |
 
-#### Usage
+#### 사용법
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -688,7 +688,7 @@ print("\nModel Response", response)
 </TabItem>
 <TabItem value="proxy" label="Proxy">
 
-**1. Add to config**
+**1. 구성에 추가**
 
 ```yaml
 model_list:
@@ -704,7 +704,7 @@ model_list:
         vertex_ai_location: "us-west-1"
 ```
 
-**2. Start proxy**
+**2. 프록시 시작**
 
 ```bash
 litellm --config /path/to/config.yaml
@@ -712,7 +712,7 @@ litellm --config /path/to/config.yaml
 # RUNNING at http://0.0.0.0:4000
 ```
 
-**3. Test it!**
+**3. 테스트**
 
 ```bash
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -733,20 +733,20 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 </Tabs>
 
 
-## VertexAI GPT-OSS Models
+## VertexAI GPT-OSS 모델
 
-| Property | Details |
+| 속성 | 세부 정보 |
 |----------|---------|
-| Provider Route | `vertex_ai/openai/{MODEL}` |
-| Vertex Documentation | [Vertex AI - GPT-OSS Models](https://console.cloud.google.com/vertex-ai/publishers/openai/model-garden/) |
+| 제공자 라우트 | `vertex_ai/openai/{MODEL}` |
+| Vertex 문서 | [Vertex AI - GPT-OSS 모델](https://console.cloud.google.com/vertex-ai/publishers/openai/model-garden/) |
 
-**LiteLLM Supports all Vertex AI GPT-OSS Models.** Ensure you use the `vertex_ai/openai/` prefix for all Vertex AI GPT-OSS models.
+**LiteLLM은 모든 Vertex AI GPT-OSS 모델을 지원합니다.** 모든 Vertex AI GPT-OSS 모델에 `vertex_ai/openai/` 접두사를 사용해야 합니다.
 
-| Model Name       | Usage                        |
+| 모델 이름       | 사용법                        |
 |------------------|------------------------------|
-| vertex_ai/openai/gpt-oss-20b-maas | `completion('vertex_ai/openai/gpt-oss-20b-maas', messages)` |
+| `vertex_ai/openai/gpt-oss-20b-maas` | `completion('vertex_ai/openai/gpt-oss-20b-maas', messages)` |
 
-#### Usage
+#### 사용법
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -773,7 +773,7 @@ print("\nModel Response", response)
 </TabItem>
 <TabItem value="proxy" label="Proxy">
 
-**1. Add to config**
+**1. 구성에 추가**
 
 ```yaml
 model_list:
@@ -784,7 +784,7 @@ model_list:
         vertex_ai_location: "us-central1"
 ```
 
-**2. Start proxy**
+**2. 프록시 시작**
 
 ```bash
 litellm --config /path/to/config.yaml
@@ -792,7 +792,7 @@ litellm --config /path/to/config.yaml
 # RUNNING at http://0.0.0.0:4000
 ```
 
-**3. Test it!**
+**3. 테스트**
 
 ```bash
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -812,9 +812,9 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 </TabItem>
 </Tabs>
 
-#### Usage - `reasoning_effort`
+#### 사용법 - `reasoning_effort`
 
-GPT-OSS models support the `reasoning_effort` parameter for enhanced reasoning capabilities.
+GPT-OSS 모델은 향상된 추론 기능을 위해 `reasoning_effort` 매개변수를 지원합니다.
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -835,7 +835,7 @@ response = completion(
 
 <TabItem value="proxy" label="PROXY">
 
-1. Setup config.yaml
+1. config.yaml 설정
 
 ```yaml
 model_list:
@@ -846,13 +846,13 @@ model_list:
     vertex_ai_location: "us-central1"
 ```
 
-2. Start proxy
+2. 프록시 시작
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-3. Test it! 
+3. 테스트
 
 ```bash
 curl http://0.0.0.0:4000/v1/chat/completions \
@@ -868,23 +868,23 @@ curl http://0.0.0.0:4000/v1/chat/completions \
 </TabItem>
 </Tabs>
 
-## VertexAI xAI (Grok) {#vertexai-xai-grok}
+## VertexAI xAI (Grok) 사용 {#vertexai-xai-grok}
 
-xAI Grok models available in **Vertex AI Model Garden** use the same OpenAI-compatible chat-completions path as other Model Garden publisher models. Use the `vertex_ai/xai/` prefix (not `xai/`, which is the direct xAI API with `XAI_API_KEY`). See also [xAI provider](./xai.md).
+**Vertex AI Model Garden**에서 제공되는 xAI Grok 모델은 다른 Model Garden 게시자 모델과 동일한 OpenAI 호환 chat-completions 경로를 사용합니다. `vertex_ai/xai/` 접두사를 사용하세요(`XAI_API_KEY`를 사용하는 직접 xAI API인 `xai/`가 아님). [xAI 제공자](./xai.md)도 참고하세요.
 
-| Property | Details |
+| 속성 | 세부 정보 |
 |----------|---------|
-| Provider Route | `vertex_ai/xai/{MODEL}` |
-| Vertex / xAI docs | [xAI models](https://docs.x.ai/docs/models), [Model Garden](https://cloud.google.com/vertex-ai/generative-ai/docs/model-garden/explore-models) |
+| 제공자 라우트 | `vertex_ai/xai/{MODEL}` |
+| Vertex / xAI 문서 | [xAI 모델](https://docs.x.ai/docs/models), [Model Garden](https://cloud.google.com/vertex-ai/generative-ai/docs/model-garden/explore-models) |
 
-| Model Name | Usage |
+| 모델 이름 | 사용법 |
 |------------|--------|
 | `vertex_ai/xai/grok-4.1-fast-non-reasoning` | `completion('vertex_ai/xai/grok-4.1-fast-non-reasoning', messages)` |
 | `vertex_ai/xai/grok-4.1-fast-reasoning` | `completion('vertex_ai/xai/grok-4.1-fast-reasoning', messages)` |
 | `vertex_ai/xai/grok-4.20-non-reasoning` | `completion('vertex_ai/xai/grok-4.20-non-reasoning', messages)` |
 | `vertex_ai/xai/grok-4.20-reasoning` | `completion('vertex_ai/xai/grok-4.20-reasoning', messages)` |
 
-#### Usage
+#### 사용법
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -910,7 +910,7 @@ print("\nModel Response", response)
 </TabItem>
 <TabItem value="proxy" label="Proxy">
 
-**1. Add to config**
+**1. 구성에 추가**
 
 ```yaml
 model_list:
@@ -921,7 +921,7 @@ model_list:
         vertex_ai_location: "us-central1"
 ```
 
-**2. Start proxy**
+**2. 프록시 시작**
 
 ```bash
 litellm --config /path/to/config.yaml
@@ -929,7 +929,7 @@ litellm --config /path/to/config.yaml
 # RUNNING at http://0.0.0.0:4000
 ```
 
-**3. Test it!**
+**3. 테스트**
 
 ```bash
 curl --location 'http://0.0.0.0:4000/chat/completions' \

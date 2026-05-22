@@ -6,20 +6,20 @@ import TabItem from '@theme/TabItem';
 
 <Image img={require('../../img/sentinel.png')} />
 
-LiteLLM supports logging to Azure Sentinel via the Azure Monitor Logs Ingestion API. Azure Sentinel uses Log Analytics workspaces for data storage, so logs sent to the workspace will be available in Sentinel for security monitoring and analysis.
+LiteLLM은 Azure Monitor 로그 Ingestion API를 통한 Azure Sentinel 로깅을 지원합니다. Azure Sentinel은 데이터 저장에 Log Analytics workspace를 사용하므로, workspace로 전송된 로그는 보안 모니터링과 분석을 위해 Sentinel에서 사용할 수 있습니다.
 
-## Azure Sentinel Integration
+## Azure Sentinel 통합
 
-| Feature | Details |
+| 기능 | 세부 정보 |
 |---------|---------|
-| **What is logged** | [StandardLoggingPayload](../proxy/logging_spec) |
+| **로깅 대상** | [StandardLoggingPayload](../proxy/logging_spec) |
 | **Events** | Success + Failure |
 | **Product Link** | [Azure Sentinel](https://learn.microsoft.com/en-us/azure/sentinel/overview) |
-| **API Reference** | [Logs Ingestion API](https://learn.microsoft.com/en-us/azure/azure-monitor/logs/logs-ingestion-api-overview) |
+| **API Reference** | [로그 Ingestion API](https://learn.microsoft.com/en-us/azure/azure-monitor/logs/logs-ingestion-api-overview) |
 
-We will use the `--config` to set `litellm.callbacks = ["azure_sentinel"]` this will log all successful and failed LLM calls to Azure Sentinel.
+`--config`로 `litellm.callbacks = ["azure_sentinel"]`를 설정합니다. 그러면 성공 및 실패한 모든 LLM 호출이 Azure Sentinel에 기록됩니다.
 
-**Step 1**: Create a `config.yaml` file and set `litellm_settings`: `callbacks`
+**1단계**: `config.yaml` 파일을 만들고 `litellm_settings`: `callbacks`를 설정합니다.
 
 ```yaml showLineNumbers title="config.yaml"
 model_list:
@@ -30,26 +30,26 @@ litellm_settings:
   callbacks: ["azure_sentinel"] # logs llm success + failure logs to Azure Sentinel
 ```
 
-**Step 2**: Set Up Azure Resources
+**2단계**: Azure 리소스 설정
 
-Before using the Logs Ingestion API, you need to set up the following in Azure:
+로그 Ingestion API를 사용하기 전에 Azure에서 다음을 설정해야 합니다.
 
-1. **Create a Log Analytics Workspace** (if you don't have one)
-2. **Create a Custom Table** in your Log Analytics workspace (e.g., `LiteLLM_CL`)
-3. **Create a Data Collection Rule (DCR)** with:
-   - Stream declaration matching your data structure
-   - Transformation to map data to your custom table
-   - Access granted to your app registration
-4. **Register an Application** in Microsoft Entra ID (Azure AD) with:
+1. **Log Analytics Workspace 생성**(없는 경우)
+2. Log Analytics workspace에서 **Custom Table 생성**(예: `LiteLLM_CL`)
+3. 다음을 포함하는 **Data Collection Rule(DCR) 생성**:
+   - 데이터 구조와 일치하는 stream declaration
+   - 데이터를 custom table로 매핑하는 transformation
+   - app registration에 부여된 접근 권한
+4. Microsoft Entra ID(Azure AD)에 다음을 가진 **Application 등록**:
    - Client ID
    - Client Secret
-   - Permissions to write to the DCR
+   - DCR에 쓸 수 있는 권한
 
-For detailed setup instructions, see the [Microsoft documentation on Logs Ingestion API](https://learn.microsoft.com/en-us/azure/azure-monitor/logs/logs-ingestion-api-overview).
+자세한 설정 방법은 [Microsoft 로그 Ingestion API 문서](https://learn.microsoft.com/en-us/azure/azure-monitor/logs/logs-ingestion-api-overview)를 참고하세요.
 
-**Step 3**: Set Required Environment Variables
+**3단계**: 필수 환경 변수 설정
 
-Set the following environment variables with your Azure credentials:
+Azure 자격 증명으로 다음 환경 변수를 설정합니다.
 
 ```shell showLineNumbers title="Environment Variables"
 # Required: Data Collection Rule (DCR) configuration
@@ -64,17 +64,17 @@ AZURE_SENTINEL_CLIENT_SECRET="your-client-secret"                    # Client se
 
 ```
 
-**Note**: The `AZURE_SENTINEL_ENDPOINT` should be the DCR's logs ingestion endpoint (found in the DCR Overview page), NOT the Data Collection Endpoint (DCE). The DCR endpoint is associated with your specific DCR and looks like: `https://your-dcr-endpoint.{region}-1.ingest.monitor.azure.com`
+**참고**: `AZURE_SENTINEL_ENDPOINT`는 Data Collection Endpoint(DCE)가 아니라 DCR의 logs ingestion endpoint여야 합니다(DCR 개요 페이지에서 확인). DCR endpoint는 특정 DCR에 연결되며 `https://your-dcr-endpoint.{region}-1.ingest.monitor.azure.com` 형식입니다.
 
-**Step 4**: Start the proxy and make a test request
+**4단계**: 프록시를 시작하고 테스트 요청 실행
 
-Start proxy
+프록시 시작
 
 ```shell showLineNumbers title="Start Proxy"
 litellm --config config.yaml --debug
 ```
 
-Test Request
+테스트 요청
 
 ```shell showLineNumbers title="Test Request"
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -93,11 +93,11 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 }'
 ```
 
-**Step 5**: View logs in Azure Sentinel
+**5단계**: Azure Sentinel에서 로그 확인
 
-1. Navigate to your Azure Sentinel workspace in the Azure portal
-2. Go to "Logs" and query your custom table (e.g., `LiteLLM_CL`)
-3. Run a query like:
+1. Azure portal에서 Azure Sentinel workspace로 이동합니다.
+2. "로그"로 이동해 custom table(예: `LiteLLM_CL`)을 쿼리합니다.
+3. 다음과 같은 쿼리를 실행합니다.
 
 ```kusto showLineNumbers title="KQL Query"
 LiteLLM_CL
@@ -106,133 +106,133 @@ LiteLLM_CL
 | order by TimeGenerated desc
 ```
 
-You should see following logs in Azure Workspace.
+Azure Workspace에서 다음과 같은 로그를 볼 수 있습니다.
 
 <Image img={require('../../img/sentinel.png')} />
 
-## Environment Variables
+## 환경 변수
 
-| Environment Variable | Description | Default Value | Required |
+| 환경 변수 | 설명 | 기본값 | 필수 |
 |---------------------|-------------|---------------|----------|
-| `AZURE_SENTINEL_DCR_IMMUTABLE_ID` | Data Collection Rule (DCR) Immutable ID | None | ✅ Yes |
-| `AZURE_SENTINEL_ENDPOINT` | DCR logs ingestion endpoint URL (from DCR Overview page) | None | ✅ Yes |
-| `AZURE_SENTINEL_STREAM_NAME` | Stream name from DCR (e.g., "Custom-LiteLLM_CL_CL") | "Custom-LiteLLM" | ❌ No |
-| `AZURE_SENTINEL_TENANT_ID` | Azure Tenant ID for OAuth2 authentication | None (falls back to `AZURE_TENANT_ID`) | ✅ Yes |
-| `AZURE_SENTINEL_CLIENT_ID` | Application (client) ID for OAuth2 authentication | None (falls back to `AZURE_CLIENT_ID`) | ✅ Yes |
-| `AZURE_SENTINEL_CLIENT_SECRET` | Client secret for OAuth2 authentication | None (falls back to `AZURE_CLIENT_SECRET`) | ✅ Yes |
+| `AZURE_SENTINEL_DCR_IMMUTABLE_ID` | Data Collection Rule(DCR) Immutable ID | None | ✅ 예 |
+| `AZURE_SENTINEL_ENDPOINT` | DCR logs ingestion endpoint URL(DCR 개요 페이지에서 확인) | None | ✅ 예 |
+| `AZURE_SENTINEL_STREAM_NAME` | DCR의 stream name(예: "Custom-LiteLLM_CL_CL") | "Custom-LiteLLM" | ❌ 아니요 |
+| `AZURE_SENTINEL_TENANT_ID` | OAuth2 인증용 Azure Tenant ID | None(`AZURE_TENANT_ID`로 fallback) | ✅ 예 |
+| `AZURE_SENTINEL_CLIENT_ID` | OAuth2 인증용 Application(client) ID | None(`AZURE_CLIENT_ID`로 fallback) | ✅ 예 |
+| `AZURE_SENTINEL_CLIENT_SECRET` | OAuth2 인증용 client secret | None(`AZURE_CLIENT_SECRET`로 fallback) | ✅ 예 |
 
-## How It Works
+## 동작 방식
 
-The Azure Sentinel integration uses the [Azure Monitor Logs Ingestion API](https://learn.microsoft.com/en-us/azure/azure-monitor/logs/logs-ingestion-api-overview) to send logs to your Log Analytics workspace. The integration:
+Azure Sentinel 통합은 [Azure Monitor 로그 Ingestion API](https://learn.microsoft.com/en-us/azure/azure-monitor/logs/logs-ingestion-api-overview)를 사용해 Log Analytics workspace로 로그를 전송합니다. 이 통합은 다음을 수행합니다.
 
-- Authenticates using OAuth2 client credentials flow with your app registration
-- Sends logs to the Data Collection Rule (DCR) endpoint
-- Batches logs for efficient transmission
-- Sends logs in the [StandardLoggingPayload](../proxy/logging_spec) format
-- Automatically handles both success and failure events
-- Caches OAuth2 tokens and refreshes them automatically
+- app registration으로 OAuth2 client credentials flow 인증
+- Data Collection Rule(DCR) endpoint로 로그 전송
+- 효율적인 전송을 위한 로그 배치 처리
+- [StandardLoggingPayload](../proxy/logging_spec) 형식으로 로그 전송
+- 성공 및 실패 이벤트 자동 처리
+- OAuth2 token 캐싱 및 자동 갱신
 
-Logs sent to the Log Analytics workspace are automatically available in Azure Sentinel for security monitoring, threat detection, and analysis.
+Log Analytics workspace로 전송된 로그는 Azure Sentinel에서 보안 모니터링, 위협 탐지, 분석에 자동으로 사용할 수 있습니다.
 
-## Azure Sentinel Setup Guide
+## Azure Sentinel 설정 가이드
 
-Follow this step-by-step guide to set up Azure Sentinel with LiteLLM.
+이 단계별 가이드에 따라 LiteLLM과 Azure Sentinel을 설정합니다.
 
-### Step 1: Create a Log Analytics Workspace
+### 1단계: Log Analytics Workspace 생성
 
 1. Navigate to [https://portal.azure.com/#home](https://portal.azure.com/#home)
 
 ![](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-17/5659f6f5-a166-4b26-a991-73352274e3bb/ascreenshot.jpeg?tl_px=0,210&br_px=2618,1673&force_format=jpeg&q=100&width=1120.0)
 
-2. Search for "Log Analytics workspaces" and click "Create"
+2. "Log Analytics workspaces"를 검색하고 "Create"를 클릭합니다.
 
 ![](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-17/a827ba10-a391-486a-a36a-51816c6255de/ascreenshot.jpeg?tl_px=0,0&br_px=2618,1463&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=21,106)
 
-3. Enter a name for your workspace (e.g., "litellm-sentinel-prod")
+3. workspace 이름을 입력합니다(예: "litellm-sentinel-prod").
 
 ![](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-17/943458f1-fd4c-47dd-a273-ea5a04734ed9/ascreenshot.jpeg?tl_px=0,420&br_px=2618,1884&force_format=jpeg&q=100&width=1120.0)
 
-4. Click "Review + Create"
+4. "Review + Create"를 클릭합니다.
 
 ![](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-17/c54828fb-f895-4eb7-b810-cacf437617bd/ascreenshot.jpeg?tl_px=0,420&br_px=2618,1884&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=40,564)
 
-### Step 2: Create a Custom Table
+### 2단계: Custom Table 생성
 
-1. Go to your Log Analytics workspace and click "Tables"
+1. Log Analytics workspace로 이동해 "Tables"를 클릭합니다.
 
 ![](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-17/72d65f70-75c0-471f-95e9-947c72e173cc/ascreenshot.jpeg?tl_px=0,142&br_px=2618,1605&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=330,277)
 
-2. Click "Create" → "New custom log (Direct Ingest)"
+2. "Create" → "New custom log (Direct Ingest)"를 클릭합니다.
 
 ![](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-17/863ad29b-2c3a-4b7c-9a6b-36d3a76c9f32/ascreenshot.jpeg?tl_px=0,0&br_px=2618,1463&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=526,146)
 
-3. Enter a table name (e.g., "LITELLM_PROD_CL")
+3. table 이름을 입력합니다(예: "LITELLM_PROD_CL").
 
 ![](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-17/ef2f1c52-aa36-46a1-91e6-9bd868891b15/ascreenshot.jpeg?tl_px=0,0&br_px=2618,1463&force_format=jpeg&q=100&width=1120.0)
 
-### Step 3: Create a Data Collection Rule (DCR)
+### 3단계: Data Collection Rule(DCR) 생성
 
-1. Click "Create a new data collection rule"
+1. "새 데이터 수집 규칙 만들기"를 클릭합니다.
 
 ![](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-17/f2abc0d3-8be8-4057-9290-946d10cfd183/ascreenshot.jpeg?tl_px=0,420&br_px=2618,1884&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=264,404)
 
-2. Enter a name for the DCR (e.g., "litellm-prod")
+2. DCR 이름을 입력합니다(예: "litellm-prod").
 
 ![](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-17/79bbebdc-e4d9-46ff-a270-1930619050a1/ascreenshot.jpeg?tl_px=0,8&br_px=2618,1471&force_format=jpeg&q=100&width=1120.0)
 
-3. Select a Data Collection Endpoint
+3. Data Collection Endpoint를 선택합니다.
 
 ![](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-17/f3112e9a-551e-415c-a7f9-55aad801bc8a/ascreenshot.jpeg?tl_px=0,420&br_px=2618,1884&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=332,480)
 
-4. Upload the sample JSON file for schema (use the [example_standard_logging_payload.json](https://github.com/BerriAI/litellm/blob/main/litellm/integrations/azure_sentinel/example_standard_logging_payload.json) file)
+4. schema용 sample JSON 파일을 업로드합니다([example_standard_logging_payload.json](https://github.com/BerriAI/litellm/blob/main/litellm/integrations/azure_sentinel/example_standard_logging_payload.json) 파일 사용).
 
 ![](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-17/703c0762-840a-4f1f-a60f-876dc24b7a03/ascreenshot.jpeg?tl_px=0,0&br_px=2618,1463&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=518,272)
 
-5. Click "Next" and then "Create"
+5. "Next"를 클릭한 뒤 "Create"를 클릭합니다.
 
 ![](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-17/0bca0200-5c64-4fbd-8061-9308aa6656b8/ascreenshot.jpeg?tl_px=0,420&br_px=2618,1884&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=128,560)
 
-### Step 4: Get the DCR Immutable ID and Logs Ingestion Endpoint
+### 4단계: DCR Immutable ID와 로그 Ingestion Endpoint 확인
 
-1. Go to "Data Collection Rules" and select your DCR
+1. "Data Collection Rules"로 이동해 DCR을 선택합니다.
 
 ![](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-17/11c06a0d-584f-4d22-b36e-9c338d43812c/ascreenshot.jpeg?tl_px=0,0&br_px=2618,1463&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=94,258)
 
-2. Copy the **DCR Immutable ID** (starts with `dcr-`)
+2. **DCR Immutable ID**를 복사합니다(`dcr-`로 시작).
 
 ![](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-17/cd0ad69a-4d95-4b6a-9533-7720908ba809/ascreenshot.jpeg?tl_px=1160,92&br_px=2618,907&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=530,277)
 
-3. Copy the **Logs Ingestion Endpoint** URL
+3. **로그 Ingestion Endpoint** URL을 복사합니다.
 
 ![](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-17/3d3752ed-08ea-4490-8c98-a97d33947ea7/ascreenshot.jpeg?tl_px=1160,464&br_px=2618,1279&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=532,277)
 
-### Step 5: Get the Stream Name
+### 5단계: Stream Name 확인
 
-1. Click "JSON View" in the DCR
+1. DCR에서 "JSON View"를 클릭합니다.
 
 ![](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-17/fd8a5504-4769-4f23-983e-520f256ee308/ascreenshot.jpeg?tl_px=1160,0&br_px=2618,814&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=965,257)
 
-2. Find the **Stream Name** in the `streamDeclarations` section (e.g., "Custom-LITELLM_PROD_CL_CL")
+2. `streamDeclarations` 섹션에서 **Stream Name**을 찾습니다(예: "Custom-LITELLM_PROD_CL_CL").
 
 ![](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-17/a4052b32-2028-4d12-8930-bfcdf6f47652/ascreenshot.jpeg?tl_px=405,270&br_px=2115,1225&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=523,277)
 
-### Step 6: Register an App and Grant Permissions
+### 6단계: App 등록 및 권한 부여
 
 1. Go to **Microsoft Entra ID** → **App registrations** → **New registration**
-2. Create a new app and note the **Client ID** and **Tenant ID**
-3. Go to **Certificates & secrets** → Create a new client secret and copy the **Secret Value**
-4. Go back to your DCR → **Access Control (IAM)** → **Add role assignment**
-5. Assign the **"Monitoring Metrics Publisher"** role to your app registration
+2. 새 app을 만들고 **Client ID**와 **Tenant ID**를 기록합니다.
+3. **인증서 및 비밀**로 이동해 새 client secret을 만들고 **Secret Value**를 복사합니다.
+4. DCR로 돌아가 **Access Control (IAM)** → **Add role assignment**로 이동합니다.
+5. app registration에 **"Monitoring Metrics Publisher"** role을 할당합니다.
 
-### Summary: Where to Find Each Value
+### 요약: 각 값의 위치
 
-| Environment Variable | Where to Find It |
+| 환경 변수 | 찾을 위치 |
 |---------------------|------------------|
-| `AZURE_SENTINEL_DCR_IMMUTABLE_ID` | DCR Overview page → Immutable ID (starts with `dcr-`) |
-| `AZURE_SENTINEL_ENDPOINT` | DCR Overview page → Logs Ingestion Endpoint |
+| `AZURE_SENTINEL_DCR_IMMUTABLE_ID` | DCR 개요 page → Immutable ID(`dcr-`로 시작) |
+| `AZURE_SENTINEL_ENDPOINT` | DCR 개요 page → 로그 Ingestion Endpoint |
 | `AZURE_SENTINEL_STREAM_NAME` | DCR JSON View → `streamDeclarations` section |
-| `AZURE_SENTINEL_TENANT_ID` | App Registration → Overview → Directory (tenant) ID |
-| `AZURE_SENTINEL_CLIENT_ID` | App Registration → Overview → Application (client) ID |
-| `AZURE_SENTINEL_CLIENT_SECRET` | App Registration → Certificates & secrets → Secret Value |
+| `AZURE_SENTINEL_TENANT_ID` | App Registration → 개요 → Directory(tenant) ID |
+| `AZURE_SENTINEL_CLIENT_ID` | App Registration → 개요 → Application(client) ID |
+| `AZURE_SENTINEL_CLIENT_SECRET` | App Registration → 인증서 및 비밀 → Secret Value |
 
-For more details, refer to the [Microsoft Logs Ingestion API documentation](https://learn.microsoft.com/en-us/azure/azure-monitor/logs/logs-ingestion-api-overview).
+자세한 내용은 [Microsoft 로그 Ingestion API 문서](https://learn.microsoft.com/en-us/azure/azure-monitor/logs/logs-ingestion-api-overview)를 참고하세요.

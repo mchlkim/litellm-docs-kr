@@ -1,16 +1,16 @@
 # Zscaler AI Guard
 
-## Overview
-Zscaler AI Guard enforces security policies for all traffic to AI sites, models, and applications. As part of the Zero Trust Exchange, it provides a comprehensive platform for visibility, control, and deep packet inspection of AI prompts.
+## 개요
+Zscaler AI Guard는 AI 사이트, 모델, 애플리케이션으로 향하는 모든 트래픽에 보안 정책을 적용합니다. Zero Trust Exchange의 일부로, AI 프롬프트에 대한 가시성, 제어, 심층 패킷 검사를 제공하는 종합 플랫폼입니다.
 
-## 1. Set Up Zscaler AI Guard Policy
-First, set up your guardrail policy in the Zscaler AI Guard dashboard to obtain your `ZSCALER_AI_GUARD_API_KEY` and `ZSCALER_AI_GUARD_POLICY_ID`.
+## 1. Zscaler AI Guard 정책 설정 {#1-set-up-zscaler-ai-guard-policy}
+먼저 Zscaler AI Guard 대시보드에서 가드레일 정책을 설정해 `ZSCALER_AI_GUARD_API_KEY`와 `ZSCALER_AI_GUARD_POLICY_ID`를 발급받습니다.
 
-## 2. Define Zscaler AI Guard in `config.yaml`
+## 2. `config.yaml`에서 Zscaler AI Guard 정의 {#2-define-zscaler-ai-guard-in-configyaml}
 
-You can define Zscaler AI Guard settings directly in your LiteLLM `config.yaml` file.
+LiteLLM `config.yaml` 파일에서 Zscaler AI Guard 설정을 직접 정의할 수 있습니다.
 
-### Example Configuration
+### 예제 설정
 
 ```yaml
 guardrails:
@@ -37,9 +37,9 @@ guardrails:
       send_user_api_key_team_id: os.environ/SEND_USER_API_KEY_TEAM_ID # Optional
 ```
 
-## 3. Test request 
+## 3. 테스트 요청 {#3-test-request}
 
-Expect this to fail since if you enable prompt_injection as Block mode
+`prompt_injection`을 Block 모드로 활성화하면 이 요청은 실패해야 합니다.
 
 ```shell
 curl -i http://localhost:4000/v1/chat/completions \
@@ -53,10 +53,10 @@ curl -i http://localhost:4000/v1/chat/completions \
    }'
 ```
 
-## 4. Behavior on Violations
+## 4. 위반 시 동작 {#4-behavior-on-violations}
 
-### Prompt is Blocked
-When input violates Zscaler AI Guard policies, return example as below:
+### 프롬프트가 차단됨 {#prompt-is-blocked}
+입력이 Zscaler AI Guard 정책을 위반하면 아래 예시처럼 반환됩니다.
 ```json
 {
    "error":{
@@ -67,12 +67,12 @@ When input violates Zscaler AI Guard policies, return example as below:
    }
 }
 ```
-- `transactionId`: Zscaler AI Guard transactionId for debugging
-- `blockingDetectors`: the list of Zscaler AI Guard detectors that block the request
+- `transactionId`: 디버깅을 위한 Zscaler AI Guard transactionId
+- `blockingDetectors`: 요청을 차단한 Zscaler AI Guard detector 목록
 
 
-### LLM response Blocked
-When output violates Zscaler AI Guard policies, return example as below:
+### LLM 응답이 차단됨 {#llm-response-blocked}
+출력이 Zscaler AI Guard 정책을 위반하면 아래 예시처럼 반환됩니다.
 ```json
 {
    "error":{
@@ -83,13 +83,13 @@ When output violates Zscaler AI Guard policies, return example as below:
    }
 }
 ```
-- `transactionId`: Zscaler AI Guard transactionId for debugging
-- `blockingDetectors`: the list of Zscaler AI Guard detectors that block the request
+- `transactionId`: 디버깅을 위한 Zscaler AI Guard transactionId
+- `blockingDetectors`: 요청을 차단한 Zscaler AI Guard detector 목록
 
 
-## 5. Error Handling
+## 5. 오류 처리 {#5-error-handling}
 
-In cases where encounter other errors when apply Zscaler AI Guard, return example as below:
+Zscaler AI Guard 적용 중 다른 오류가 발생하면 아래 예시처럼 반환됩니다.
 ```json
 {
    "error":{
@@ -100,25 +100,25 @@ In cases where encounter other errors when apply Zscaler AI Guard, return exampl
    }
 }
 ```
-## 6. Sending User Information to Zscaler AI Guard (Optional)
-If you need to send end-user information to Zscaler AI Guard for analysis, you can set the configuration in the environment variables to True and include the relevant information in custom_headers on Zscaler AI Guard.
+## 6. Zscaler AI Guard로 사용자 정보 전송 (선택 사항) {#6-sending-user-information-to-zscaler-ai-guard-optional}
+분석을 위해 최종 사용자 정보를 Zscaler AI Guard로 보내야 하는 경우, 환경 변수의 설정을 True로 지정하고 Zscaler AI Guard의 custom_headers에 관련 정보를 포함할 수 있습니다.
 
-- To send user_api_key_alias:
-Set SEND_USER_API_KEY_ALIAS = True in litellm (Default: False), add 'user-api-key-alias' to the custom_headers in Zscaler AI Guard
+- user_api_key_alias를 보내려면:
+litellm에서 `SEND_USER_API_KEY_ALIAS = True`로 설정하고(`Default: False`), Zscaler AI Guard의 `custom_headers`에 `user-api-key-alias`를 추가합니다.
 
-- To send user_api_key_user_id:
-Set SEND_USER_API_KEY_USER_ID = True in litellm  (Default: False), add 'user-api-key-user-id' to the custom_headers in Zscaler AI Guard
+- user_api_key_user_id를 보내려면:
+litellm에서 `SEND_USER_API_KEY_USER_ID = True`로 설정하고(`Default: False`), Zscaler AI Guard의 `custom_headers`에 `user-api-key-user-id`를 추가합니다.
 
-- To send user_api_key_team_id:
-Set SEND_USER_API_KEY_TEAM_ID = True in litellm  (Default: False), add 'user-api-key-team-id' to the custom_headers in Zscaler AI Guard
+- user_api_key_team_id를 보내려면:
+litellm에서 `SEND_USER_API_KEY_TEAM_ID = True`로 설정하고(`Default: False`), Zscaler AI Guard의 `custom_headers`에 `user-api-key-team-id`를 추가합니다.
 
-## 7. Using a Custom Zscaler AI Guard Policy (Optional)
-If an end user wants to use their own custom Zscaler AI Guard policy instead of the default policy for LiteLLM, they can do so by providing metadata in their LiteLLM request. Follow the steps below to implement this functionality:
+## 7. 사용자 지정 Zscaler AI Guard 정책 사용 (선택 사항) {#7-using-a-custom-zscaler-ai-guard-policy-optional}
+최종 사용자가 LiteLLM의 기본 정책 대신 자체 사용자 지정 Zscaler AI Guard 정책을 사용하려는 경우, LiteLLM 요청에 metadata를 제공하면 됩니다. 이 기능을 구현하려면 아래 단계를 따르세요.
 
--  Set up the custom policy in the Zscaler AI Guard tenant designated for LiteLLM, get the custom policy id.
--  During a LiteLLM API call, include the custom policy id in the metadata section of the request payload. 
+-  LiteLLM용으로 지정된 Zscaler AI Guard tenant에서 사용자 지정 정책을 설정하고 사용자 지정 정책 ID를 가져옵니다.
+-  LiteLLM API 호출 중 요청 페이로드의 metadata 섹션에 사용자 지정 정책 ID를 포함합니다.
 
-Example Request with Custom Policy Metadata
+사용자 지정 정책 metadata가 포함된 요청 예시
 
 ```shell
 curl -i http://localhost:8165/v1/chat/completions \
@@ -135,8 +135,8 @@ curl -i http://localhost:8165/v1/chat/completions \
   }'
 ```
 
-## 8. Set Custom Zscaler AI Guard Policy on Litellm Team OR Key Metadata (Optional)
-In addition to setting `zguard_policy_id` in a request or the configuration file, you can also set it in the metadata for LiteLLM Team or Key. The `zguard_policy_id` is determined using the following order of precedence: request, Key, Team, config file. This logic is illustrated below:
+## 8. LiteLLM Team 또는 Key Metadata에 사용자 지정 Zscaler AI Guard 정책 설정 (선택 사항) {#8-set-custom-zscaler-ai-guard-policy-on-litellm-team-or-key-metadata-optional}
+요청이나 설정 파일에서 `zguard_policy_id`를 설정하는 것 외에도 LiteLLM Team 또는 Key의 metadata에 설정할 수 있습니다. `zguard_policy_id`는 요청, Key, Team, 설정 파일 순서의 우선순위로 결정됩니다. 이 로직은 아래에 나와 있습니다.
 ```
 user_api_key_metadata = metadata.get("user_api_key_metadata", {}) or {}
 team_metadata = metadata.get("team_metadata", {}) or {}
@@ -154,9 +154,9 @@ policy_id = (
                 )
             )
 ```
-You can leverage this feature to apply multiple policies configured on the Zscaler AI Guard (ZGuard) to traffic from different applications. (Note: It is recommended to map policies using either Team or Key metadata, but not a mix of both.)
+이 기능을 활용하면 Zscaler AI Guard (ZGuard)에 설정된 여러 정책을 서로 다른 애플리케이션의 트래픽에 적용할 수 있습니다. (참고: 정책은 Team 또는 Key metadata 중 하나만 사용해 매핑하는 것이 권장되며, 둘을 섞어 사용하는 것은 권장되지 않습니다.)
 
-Example set in Team/Key Metadata, you can set From UI:
+Team/Key Metadata에 설정하는 예시이며, UI에서 설정할 수 있습니다.
 ```
 {"zguard_policy_id": 100}
 ```

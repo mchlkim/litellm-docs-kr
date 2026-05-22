@@ -1,25 +1,25 @@
-# Overview
+# 개요
 
-| Feature | Supported | 
+| 기능 | 지원 여부 | 
 |---------|-----------|
-| Supported Providers | `perplexity`, `tavily`, `parallel_ai`, `exa_ai`, `brave`, `google_pse`, `dataforseo`, `firecrawl`, `searxng`, `linkup`, `duckduckgo`, `searchapi`, `serper` |
-| Cost Tracking | ✅ |
-| Logging | ✅ |
-| Load Balancing | ❌ |
+| 지원 프로바이더 | `perplexity`, `tavily`, `parallel_ai`, `exa_ai`, `brave`, `google_pse`, `dataforseo`, `firecrawl`, `searxng`, `linkup`, `duckduckgo`, `searchapi`, `serper` |
+| 비용 추적 | ✅ |
+| 로깅 | ✅ |
+| 로드 밸런싱 | ❌ |
 
 :::tip
 
-LiteLLM follows the [Perplexity API request/response for the Search API](https://docs.perplexity.ai/api-reference/search-post)
+LiteLLM은 [Search API의 Perplexity API 요청/응답 형식](https://docs.perplexity.ai/api-reference/search-post)을 따릅니다.
 
 :::
 
 :::info
 
-Supported from LiteLLM v1.78.7+
+LiteLLM v1.78.7 이상부터 지원됩니다.
 :::
 
-## **LiteLLM Python SDK Usage**
-### Quick Start 
+## **LiteLLM Python SDK 사용법**
+### 빠른 시작 
 
 ```python showLineNumbers title="Basic Search"
 from litellm import search
@@ -39,7 +39,7 @@ for result in response.results:
     print(f"Snippet: {result.snippet}\n")
 ```
 
-### Async Usage 
+### 비동기 사용법 
 
 ```python showLineNumbers title="Async Search"
 from litellm import asearch
@@ -63,7 +63,7 @@ async def search_async():
 asyncio.run(search_async())
 ```
 
-### Optional Parameters
+### 선택적 파라미터
 
 ```python showLineNumbers title="Search with Options"
 response = search(
@@ -77,13 +77,13 @@ response = search(
 )
 ```
 
-## **LiteLLM AI Gateway Usage**
+## **LiteLLM AI Gateway 사용법**
 
-LiteLLM provides a Perplexity API compatible `/search` endpoint for search calls.
+LiteLLM은 검색 호출을 위해 Perplexity API와 호환되는 `/search` 엔드포인트를 제공합니다.
 
-**Setup**
+**설정**
 
-Add this to your litellm proxy config.yaml
+litellm proxy `config.yaml`에 다음을 추가합니다.
 
 ```yaml showLineNumbers title="config.yaml"
 model_list:
@@ -104,7 +104,7 @@ search_tools:
       api_key: os.environ/TAVILY_API_KEY
 ```
 
-Start litellm
+litellm을 시작합니다.
 
 ```bash
 litellm --config /path/to/config.yaml
@@ -112,9 +112,9 @@ litellm --config /path/to/config.yaml
 # RUNNING on http://0.0.0.0:4000
 ```
 
-### Test Request
+### 테스트 요청
 
-**Option 1: Search tool name in URL (Recommended - keeps body Perplexity-compatible)**
+**옵션 1: URL에 검색 도구 이름 지정(권장 - 본문을 Perplexity 호환 형식으로 유지)**
 
 ```bash showLineNumbers title="cURL Request"
 curl http://0.0.0.0:4000/v1/search/perplexity-search \
@@ -128,7 +128,7 @@ curl http://0.0.0.0:4000/v1/search/perplexity-search \
   }'
 ```
 
-**Option 2: Search tool name in body**
+**옵션 2: 본문에 검색 도구 이름 지정**
 
 ```bash showLineNumbers title="cURL Request with search_tool_name in body"
 curl http://0.0.0.0:4000/v1/search \
@@ -141,9 +141,9 @@ curl http://0.0.0.0:4000/v1/search \
   }'
 ```
 
-### Load Balancing
+### 로드 밸런싱
 
-Configure multiple search providers for automatic load balancing and fallbacks:
+자동 로드 밸런싱과 폴백을 위해 여러 검색 프로바이더를 설정합니다.
 
 ```yaml showLineNumbers title="config.yaml with load balancing"
 search_tools:
@@ -171,7 +171,7 @@ router_settings:
   routing_strategy: simple-shuffle  # or 'least-busy', 'latency-based-routing'
 ```
 
-Test with load balancing:
+로드 밸런싱을 테스트합니다.
 
 ```bash
 curl http://0.0.0.0:4000/v1/search/my-search \
@@ -183,17 +183,17 @@ curl http://0.0.0.0:4000/v1/search/my-search \
   }'
 ```
 
-## **Request/Response Format**
+## **Request/응답 형식**
 
 :::info
 
-LiteLLM follows the **Perplexity Search API specification**. 
+LiteLLM은 **Perplexity Search API 사양**을 따릅니다.
 
-See the [official Perplexity Search documentation](https://docs.perplexity.ai/api-reference/search-post) for complete details.
+전체 세부 정보는 [공식 Perplexity Search 문서](https://docs.perplexity.ai/api-reference/search-post)를 참고하세요.
 
 :::
 
-### Example Request
+### 예제 요청
 
 ```json showLineNumbers title="Search Request"
 {
@@ -205,19 +205,19 @@ See the [official Perplexity Search documentation](https://docs.perplexity.ai/ap
 }
 ```
 
-### Request Parameters
+### 요청 파라미터
 
-| Parameter | Type | Required | Description |
+| 파라미터 | 유형 | 필수 여부 | 설명 |
 |-----------|------|----------|-------------|
-| `query` | string or array | Yes | Search query. Can be a single string or array of strings |
-| `search_provider` | string | Yes (SDK) | The search provider to use: `"perplexity"`, `"tavily"`, `"parallel_ai"`, `"exa_ai"`, `"brave"`, `"google_pse"`, `"dataforseo"`, `"firecrawl"`, `"searxng"`, `"linkup"`, `"duckduckgo"`, `"searchapi"`, or `"serper"` |
-| `search_tool_name` | string | Yes (Proxy) | Name of the search tool configured in `config.yaml` |
-| `max_results` | integer | No | Maximum number of results to return (1-20). Default: 10 |
-| `search_domain_filter` | array | No | List of domains to filter results (max 20 domains) |
-| `max_tokens_per_page` | integer | No | Maximum tokens per page to process. Default: 1024 |
-| `country` | string | No | Country code filter (e.g., `"US"`, `"GB"`, `"DE"`) |
+| `query` | string 또는 array | 예 | 검색 쿼리입니다. 단일 문자열 또는 문자열 배열을 사용할 수 있습니다. |
+| `search_provider` | string | 예(SDK) | 사용할 검색 프로바이더: `"perplexity"`, `"tavily"`, `"parallel_ai"`, `"exa_ai"`, `"brave"`, `"google_pse"`, `"dataforseo"`, `"firecrawl"`, `"searxng"`, `"linkup"`, `"duckduckgo"`, `"searchapi"` 또는 `"serper"` |
+| `search_tool_name` | string | 예(Proxy) | `config.yaml`에 설정된 검색 도구 이름입니다. |
+| `max_results` | integer | 아니요 | 반환할 최대 결과 수입니다(1-20). 기본값: 10 |
+| `search_domain_filter` | array | 아니요 | 결과를 필터링할 도메인 목록입니다(최대 20개 도메인). |
+| `max_tokens_per_page` | integer | 아니요 | 페이지당 처리할 최대 토큰 수입니다. 기본값: 1024 |
+| `country` | string | 아니요 | 국가 코드 필터입니다(예: `"US"`, `"GB"`, `"DE"`). |
 
-**Query Format Examples:**
+**쿼리 형식 예제:**
 
 ```python
 # Single query
@@ -227,9 +227,9 @@ query = "AI developments"
 query = ["AI developments", "machine learning trends"]
 ```
 
-### Response Format
+### 응답 형식
 
-The response follows Perplexity's search format with the following structure:
+응답은 다음 구조로 Perplexity의 검색 형식을 따릅니다.
 
 ```json showLineNumbers title="Search Response"
 {
@@ -251,20 +251,20 @@ The response follows Perplexity's search format with the following structure:
 }
 ```
 
-#### Response Fields
+#### 응답 필드
 
-| Field | Type | Description |
+| 필드 | 유형 | 설명 |
 |-------|------|-------------|
-| `object` | string | Always `"search"` for search responses |
-| `results` | array | List of search results |
-| `results[].title` | string | Title of the search result |
-| `results[].url` | string | URL of the search result |
-| `results[].snippet` | string | Text snippet from the result |
-| `results[].date` | string | Optional publication or last updated date |
+| `object` | string | 검색 응답에서는 항상 `"search"`입니다. |
+| `results` | array | 검색 결과 목록입니다. |
+| `results[].title` | string | 검색 결과의 제목입니다. |
+| `results[].url` | string | 검색 결과의 URL입니다. |
+| `results[].snippet` | string | 결과에서 가져온 텍스트 스니펫입니다. |
+| `results[].date` | string | 선택적 게시일 또는 마지막 업데이트 날짜입니다. |
 
-## **Supported Providers**
+## **지원 프로바이더**
 
-| Provider | Environment Variable | `search_provider` Value |
+| 프로바이더 | 환경 변수 | `search_provider` 값 |
 |----------|---------------------|------------------------|
 | Perplexity AI | `PERPLEXITYAI_API_KEY` | `perplexity` |
 | Tavily | `TAVILY_API_KEY` | `tavily` |
@@ -274,11 +274,10 @@ The response follows Perplexity's search format with the following structure:
 | Google PSE | `GOOGLE_PSE_API_KEY`, `GOOGLE_PSE_ENGINE_ID` | `google_pse` |
 | DataForSEO | `DATAFORSEO_LOGIN`, `DATAFORSEO_PASSWORD` | `dataforseo` |
 | Firecrawl | `FIRECRAWL_API_KEY` | `firecrawl` |
-| SearXNG | `SEARXNG_API_BASE` (required) | `searxng` |
+| SearXNG | `SEARXNG_API_BASE`(필수) | `searxng` |
 | Linkup | `LINKUP_API_KEY` | `linkup` |
 | Serper | `SERPER_API_KEY` | `serper` |
 | DuckDuckGo | `DUCKDUCKGO_API_BASE` | `duckduckgo` |
 | SearchAPI.io | `SEARCHAPI_API_KEY` | `searchapi` |
 
-See the individual provider documentation for detailed setup instructions and provider-specific parameters.
-
+자세한 설정 지침과 프로바이더별 파라미터는 각 프로바이더 문서를 참고하세요.

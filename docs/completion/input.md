@@ -1,12 +1,12 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Input Params
+# 입력 parameter
 
-## Common Params 
-LiteLLM accepts and translates the [OpenAI Chat Completion params](https://platform.openai.com/docs/api-reference/chat/create) across all providers. 
+## 공통 parameter
+LiteLLM은 모든 provider에서 [OpenAI Chat Completion params](https://platform.openai.com/docs/api-reference/chat/create)를 받고 변환합니다.
 
-### Usage
+### 사용법
 ```python
 import litellm
 
@@ -23,9 +23,9 @@ response = litellm.completion(
 print(response)
 ```
 
-### Translated OpenAI params
+### 변환되는 OpenAI parameter
 
-Use this function to get an up-to-date list of supported openai params for any model + provider. 
+특정 model + provider 조합에서 지원되는 최신 OpenAI parameter 목록은 이 함수로 확인할 수 있습니다.
 
 ```python
 from litellm import get_supported_openai_params
@@ -35,9 +35,9 @@ response = get_supported_openai_params(model="anthropic.claude-3", custom_llm_pr
 print(response) # ["max_tokens", "tools", "tool_choice", "stream"]
 ```
 
-This is a list of openai params we translate across providers.
+아래는 provider 간 변환되는 OpenAI parameter 목록입니다.
 
-Use `litellm.get_supported_openai_params()` for an updated list of params for each model + provider 
+각 model + provider의 최신 parameter 목록은 `litellm.get_supported_openai_params()`를 사용하세요.
 
 | Provider | temperature | max_completion_tokens | max_tokens | top_p | stream | stream_options | stop | n | presence_penalty | frequency_penalty | functions | function_call | logit_bias | user | response_format | seed| tools | tool_choice | logprobs | top_logprobs | extra_headers |
 |--------------|-------------|------------------------|------------|-------|--------|----------------|------|-----|------------------|-------------------|-----------|----------------|-------------|------|------------------|-------------------|--------|--------------|----------|---------------|----------------------|
@@ -65,21 +65,21 @@ Use `litellm.get_supported_openai_params()` for an updated list of params for ea
 | Github | ✅| ✅ | ✅ | ✅| ✅ | ✅ | ✅ | ✅| ✅ | ✅| ✅|| || ✅ | ✅ (model dependent) | ✅ (model dependent) || ||
 | Novita AI| ✅| ✅ || ✅| ✅ | ✅ | ✅ | ✅| ✅ | ✅| || ✅||| |||| ||
 | Bytez | ✅| ✅ || ✅| ✅ | | | ✅|| || || || || || ||
-| OVHCloud AI Endpoints | ✅ | | ✅ | ✅ | ✅ | ✅ | ✅ | | | | | | | | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | |
+| `OVHCloud AI Endpoints` | ✅ | | ✅ | ✅ | ✅ | ✅ | ✅ | | | | | | | | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | |
 
 :::note
 
-By default, LiteLLM raises an exception if the openai param being passed in isn't supported. 
+기본적으로 전달된 OpenAI parameter가 지원되지 않으면 LiteLLM은 exception을 발생시킵니다.
 
-To drop the param instead, set `litellm.drop_params = True` or `completion(..drop_params=True)`.
+해당 parameter를 버리려면 `litellm.drop_params = True` 또는 `completion(..drop_params=True)`를 설정하세요.
 
-This **ONLY DROPS UNSUPPORTED OPENAI PARAMS**. 
+이 설정은 **지원되지 않는 OPENAI PARAMS만 DROP**합니다.
 
-LiteLLM assumes any non-openai param is provider specific and passes it in as a kwarg in the request body
+LiteLLM은 OpenAI parameter가 아닌 값은 provider-specific parameter로 간주하고 request body의 kwarg로 전달합니다.
 
 ::: 
 
-## Input Params
+## 입력 parameter
 
 ```python
 def completion(
@@ -122,42 +122,42 @@ def completion(
 
 ) -> ModelResponse:
 ```
-### Required Fields
+### 필수 field
 
-- `model`: *string* - ID of the model to use. Refer to the model endpoint compatibility table for details on which models work with the Chat API.
+- `model`: *string* - 사용할 model의 ID입니다. Chat API에서 어떤 model이 동작하는지는 model endpoint compatibility table을 참고하세요.
   
-- `messages`: *array* - A list of messages comprising the conversation so far.
+- `messages`: *array* - 지금까지의 conversation을 구성하는 message list입니다.
 
-#### Properties of `messages`
-*Note* - Each message in the array contains the following properties:
+#### `messages`의 properties
+*Note* - array 안의 각 message는 다음 properties를 포함합니다.
 
-- `role`: *string* - The role of the message's author. Roles can be: system, user, assistant, function or tool.
+- `role`: *string* - message 작성자의 role입니다. role은 system, user, assistant, function, tool이 될 수 있습니다.
 
-- `content`: *string or list[dict] or null* - The contents of the message. It is required for all messages, but may be null for assistant messages with function calls.
+- `content`: *string or list[dict] or null* - message content입니다. 모든 message에 필요하지만, function call이 있는 assistant message에서는 null일 수 있습니다.
 
-- `name`: *string (optional)* - The name of the author of the message. It is required if the role is "function". The name should match the name of the function represented in the content. It can contain characters (a-z, A-Z, 0-9), and underscores, with a maximum length of 64 characters.
+- `name`: *string (optional)* - message 작성자 이름입니다. role이 "function"이면 필요합니다. name은 content가 나타내는 function 이름과 일치해야 합니다. 소문자 a-z, 대문자 A-Z, 숫자 0-9, underscore 문자를 포함할 수 있고 최대 길이는 64자입니다.
 
-- `function_call`: *object (optional)* - The name and arguments of a function that should be called, as generated by the model.
+- `function_call`: *object (optional)* - model이 생성한 호출 대상 function의 name과 arguments입니다.
 
-- `tool_call_id`: *str (optional)* - Tool call that this message is responding to.
+- `tool_call_id`: *str (optional)* - 이 message가 응답하는 tool call입니다.
 
 
-[**See All Message Values**](https://github.com/BerriAI/litellm/blob/main/litellm/types/llms/openai.py#L664)
+[**전체 message value 보기**](https://github.com/BerriAI/litellm/blob/main/litellm/types/llms/openai.py#L664)
 
-#### Content Types
+#### Content type
 
-`content` can be a string (text only) or a list of content blocks (multimodal):
+`content`는 string(text only) 또는 content block list(multimodal)일 수 있습니다.
 
-| Type | Description | Docs |
+| Type | 설명 | 문서 |
 |------|-------------|------|
-| `text` | Text content | [Type Definition](https://github.com/BerriAI/litellm/blob/main/litellm/types/llms/openai.py#L598) |
-| `image_url` | Images | [Vision](./vision.md) |
-| `input_audio` | Audio input | [Audio](./audio.md) |
-| `video_url` | Video input | [Type Definition](https://github.com/BerriAI/litellm/blob/main/litellm/types/llms/openai.py#L625) |
-| `file` | Files | [Document Understanding](./document_understanding.md) |
-| `document` | Documents/PDFs | [Document Understanding](./document_understanding.md) |
+| `text` | text content | [Type Definition](https://github.com/BerriAI/litellm/blob/main/litellm/types/llms/openai.py#L598) |
+| `image_url` | image | [Vision](./vision.md) |
+| `input_audio` | audio input | [Audio](./audio.md) |
+| `video_url` | video input | [Type Definition](https://github.com/BerriAI/litellm/blob/main/litellm/types/llms/openai.py#L625) |
+| `file` | file | [문서 이해](./document_understanding.md) |
+| `document` | document/PDF | [문서 이해](./document_understanding.md) |
 
-**Examples:**
+**예제:**
 ```python
 # Text
 messages=[{"role": "user", "content": [{"type": "text", "text": "Hello!"}]}]
@@ -184,108 +184,108 @@ messages=[{"role": "user", "content": [
 ]}]
 ```
 
-## Optional Fields
+## 선택 field
 
-- `temperature`: *number or null (optional)* - The sampling temperature to be used, between 0 and 2. Higher values like 0.8 produce more random outputs, while lower values like 0.2 make outputs more focused and deterministic. 
+- `temperature`: *number 또는 null (optional)* - 사용할 sampling temperature입니다. 범위는 0에서 2입니다. 0.8처럼 높은 값은 더 random한 output을 만들고, 0.2처럼 낮은 값은 더 focused하고 deterministic한 output을 만듭니다.
 
-- `top_p`: *number or null (optional)* - An alternative to sampling with temperature. It instructs the model to consider the results of the tokens with top_p probability. For example, 0.1 means only the tokens comprising the top 10% probability mass are considered.
+- `top_p`: *number 또는 null (optional)* - temperature 기반 sampling의 대안입니다. model이 top_p probability에 해당하는 token 결과만 고려하도록 지시합니다. 예를 들어 0.1은 상위 10% probability mass를 구성하는 token만 고려한다는 의미입니다.
 
-- `n`: *integer or null (optional)* - The number of chat completion choices to generate for each input message.
+- `n`: *integer 또는 null (optional)* - 각 input message에 대해 생성할 chat completion choice 수입니다.
 
-- `stream`: *boolean or null (optional)* - If set to true, it sends partial message deltas. Tokens will be sent as they become available, with the stream terminated by a [DONE] message.
+- `stream`: *boolean 또는 null (optional)* - true로 설정하면 partial message delta를 전송합니다. token은 사용 가능해지는 대로 전송되며 stream은 [DONE] message로 종료됩니다.
 
-- `stream_options` *dict or null (optional)* - Options for streaming response. Only set this when you set `stream: true`
+- `stream_options` *dict 또는 null (optional)* - streaming response option입니다. `stream: true`를 설정할 때만 사용하세요.
 
-    - `include_usage` *boolean (optional)* - If set, an additional chunk will be streamed before the data: [DONE] message. The usage field on this chunk shows the token usage statistics for the entire request, and the choices field will always be an empty array. All other chunks will also include a usage field, but with a null value. 
+    - `include_usage` *boolean (optional)* - 설정하면 data: [DONE] message 전에 추가 chunk가 stream됩니다. 이 chunk의 usage field는 전체 request의 token usage statistics를 보여주며, choices field는 항상 empty array입니다. 다른 모든 chunk에도 usage field가 포함되지만 값은 null입니다.
 
-- `stop`: *string/ array/ null (optional)* - Up to 4 sequences where the API will stop generating further tokens.
+- `stop`: *string/ array/ null (optional)* - API가 추가 token 생성을 멈출 sequence입니다. 최대 4개까지 지정할 수 있습니다.
   
-  **Note**: OpenAI supports a maximum of 4 stop sequences. If you provide more than 4, LiteLLM will automatically truncate the list to the first 4 elements. To disable this automatic truncation, set `litellm.disable_stop_sequence_limit = True`.
+  **Note**: OpenAI는 최대 4개의 stop sequence를 지원합니다. 4개를 초과해 제공하면 LiteLLM은 list를 처음 4개 element로 자동 truncate합니다. 이 자동 truncate를 비활성화하려면 `litellm.disable_stop_sequence_limit = True`를 설정하세요.
 
-- `max_completion_tokens`: *integer (optional)* -  An upper bound for the number of tokens that can be generated for a completion, including visible output tokens and reasoning tokens.
+- `max_completion_tokens`: *integer (optional)* - completion에서 생성할 수 있는 token 수의 upper bound입니다. visible output token과 reasoning token을 포함합니다.
 
-- `max_tokens`: *integer (optional)* - The maximum number of tokens to generate in the chat completion.
+- `max_tokens`: *integer (optional)* - chat completion에서 생성할 최대 token 수입니다.
 
-- `presence_penalty`: *number or null (optional)* - It is used to penalize new tokens based on their existence in the text so far.
+- `presence_penalty`: *number 또는 null (optional)* - 지금까지의 text에 존재했는지 여부를 기준으로 새 token에 penalty를 적용할 때 사용합니다.
 
-- `response_format`: *object (optional)* - An object specifying the format that the model must output.
+- `response_format`: *object (optional)* - model이 출력해야 하는 format을 지정하는 object입니다.
 
-    - Setting to `{ "type": "json_object" }` enables JSON mode, which guarantees the message the model generates is valid JSON.
+    - `{ "type": "json_object" }`로 설정하면 JSON mode가 활성화되어 model이 생성하는 message가 valid JSON임을 보장합니다.
     
-    - Important: when using JSON mode, you must also instruct the model to produce JSON yourself via a system or user message. Without this, the model may generate an unending stream of whitespace until the generation reaches the token limit, resulting in a long-running and seemingly "stuck" request. Also note that the message content may be partially cut off if finish_reason="length", which indicates the generation exceeded max_tokens or the conversation exceeded the max context length.
+    - 중요: JSON mode를 사용할 때는 system 또는 user message로 model에게 JSON을 생성하라고 직접 지시해야 합니다. 그렇지 않으면 token limit에 도달할 때까지 whitespace가 계속 생성되어 request가 오래 실행되거나 "stuck"된 것처럼 보일 수 있습니다. 또한 `finish_reason="length"`이면 generation이 max_tokens를 초과했거나 conversation이 max context length를 초과했다는 의미이며, message content가 일부 잘릴 수 있습니다.
 
-- `seed`: *integer or null (optional)* - This feature is in Beta. If specified, our system will make a best effort to sample deterministically, such that repeated requests with the same seed and parameters should return the same result. Determinism is not guaranteed, and you should refer to the `system_fingerprint` response parameter to monitor changes in the backend.
+- `seed`: *integer 또는 null (optional)* - 이 feature는 Beta입니다. 지정하면 system은 같은 seed와 parameter를 가진 반복 request가 같은 result를 반환하도록 deterministic sampling을 best effort로 시도합니다. determinism은 보장되지 않으며 backend 변경을 monitor하려면 response parameter `system_fingerprint`를 참고해야 합니다.
 
-- `tools`: *array (optional)* - A list of tools the model may call. Use this to provide a list of functions the model may generate JSON inputs for.
+- `tools`: *array (optional)* - model이 호출할 수 있는 tool list입니다. model이 JSON input을 생성할 function list를 제공할 때 사용합니다.
 
-    - `type`: *string* - The type of the tool. You can set this to `"function"` or `"mcp"` (matching the `/responses` schema) to call LiteLLM-registered MCP servers directly from `/chat/completions`.
+    - `type`: *string* - tool type입니다. `"function"` 또는 `/responses` schema와 일치하는 `"mcp"`로 설정하여 `/chat/completions`에서 LiteLLM에 등록된 MCP server를 직접 호출할 수 있습니다.
 
-    - `function`: *object* - Required for function tools.
+    - `function`: *object* - function tool에 필요합니다.
 
-- `tool_choice`: *string or object (optional)* - Controls which (if any) function is called by the model. none means the model will not call a function and instead generates a message. auto means the model can pick between generating a message or calling a function. Specifying a particular function via `{"type": "function", "function": {"name": "my_function"}}` forces the model to call that function.
+- `tool_choice`: *string 또는 object (optional)* - model이 어떤 function을 호출할지 제어합니다. none은 model이 function을 호출하지 않고 message를 생성한다는 의미입니다. auto는 model이 message 생성과 function call 중 선택할 수 있다는 의미입니다. `{"type": "function", "function": {"name": "my_function"}}`처럼 특정 function을 지정하면 model이 해당 function을 호출하도록 강제합니다.
 
-    - `none` is the default when no functions are present. `auto` is the default if functions are present.
+    - function이 없으면 `none`이 default입니다. function이 있으면 `auto`가 default입니다.
 
-- `parallel_tool_calls`: *boolean (optional)* - Whether to enable parallel function calling during tool use. OpenAI default is true.
+- `parallel_tool_calls`: *boolean (optional)* - tool 사용 중 parallel function calling을 활성화할지 여부입니다. OpenAI default는 true입니다.
 
-- `frequency_penalty`: *number or null (optional)* - It is used to penalize new tokens based on their frequency in the text so far.
+- `frequency_penalty`: *number 또는 null (optional)* - 지금까지의 text에 등장한 frequency를 기준으로 새 token에 penalty를 적용할 때 사용합니다.
 
-- `logit_bias`: *map (optional)* - Used to modify the probability of specific tokens appearing in the completion.
+- `logit_bias`: *map (optional)* - completion에 특정 token이 등장할 probability를 수정할 때 사용합니다.
 
-- `user`: *string (optional)* - A unique identifier representing your end-user. This can help OpenAI to monitor and detect abuse.
+- `user`: *string (optional)* - end-user를 나타내는 unique identifier입니다. OpenAI가 abuse를 monitor하고 detect하는 데 도움이 됩니다.
 
-- `timeout`: *int (optional)* - Timeout in seconds for completion requests (Defaults to 600 seconds)
+- `timeout`: *int (optional)* - completion request의 timeout 초입니다(기본값: 600초).
 
-- `logprobs`: * bool (optional)* - Whether to return log probabilities of the output tokens or not. If true returns the log probabilities of each output token returned in the content of message
+- `logprobs`: * bool (optional)* - output token의 log probability를 반환할지 여부입니다. true이면 message content에 반환된 각 output token의 log probability를 반환합니다.
         
-- `top_logprobs`: *int (optional)* - An integer between 0 and 5 specifying the number of most likely tokens to return at each token position, each with an associated log probability. `logprobs` must be set to true if this parameter is used.
+- `top_logprobs`: *int (optional)* - 각 token position에서 반환할 가능성이 가장 높은 token 수를 지정하는 0에서 5 사이의 integer입니다. 각 token에는 관련 log probability가 포함됩니다. 이 parameter를 사용하려면 `logprobs`를 true로 설정해야 합니다.
 
-- `safety_identifier`: *string (optional)* - A unique identifier for tracking and managing safety-related requests. This parameter helps with safety monitoring and compliance tracking.
+- `safety_identifier`: *string (optional)* - safety-related request를 tracking하고 관리하기 위한 unique identifier입니다. 이 parameter는 safety monitoring 및 compliance tracking에 도움이 됩니다.
 
-- `headers`: *dict (optional)* - A dictionary of headers to be sent with the request.
+- `headers`: *dict (optional)* - request와 함께 보낼 header dictionary입니다.
 
-- `extra_headers`: *dict (optional)* - Alternative to `headers`, used to send extra headers in LLM API request. 
+- `extra_headers`: *dict (optional)* - `headers`의 대안으로, LLM API request에 extra header를 보낼 때 사용합니다.
 
-#### Deprecated Params
-- `functions`: *array* - A list of functions that the model may use to generate JSON inputs. Each function should have the following properties:
+#### Deprecated params
+- `functions`: *array* - model이 JSON input을 생성하는 데 사용할 수 있는 function list입니다. 각 function은 다음 properties를 가져야 합니다.
 
-    - `name`: *string* - The name of the function to be called. It should contain a-z, A-Z, 0-9, underscores and dashes, with a maximum length of 64 characters.
+- `name`: *string* - 호출할 function name입니다. 소문자 a-z, 대문자 A-Z, 숫자 0-9, underscore, dash 문자를 포함할 수 있고 최대 길이는 64자입니다.
     
-    - `description`: *string (optional)* - A description explaining what the function does. It helps the model to decide when and how to call the function.
+    - `description`: *string (optional)* - function이 무엇을 하는지 설명합니다. model이 function을 언제 어떻게 호출할지 결정하는 데 도움이 됩니다.
     
-    - `parameters`: *object* - The parameters that the function accepts, described as a JSON Schema object.
+    - `parameters`: *object* - function이 받는 parameter이며 JSON Schema object로 설명됩니다.
     
-- `function_call`: *string or object (optional)* - Controls how the model responds to function calls.
+- `function_call`: *string 또는 object (optional)* - model이 function call에 어떻게 응답하는지 제어합니다.
 
 
-#### litellm-specific params 
+#### LiteLLM 전용 params 
 
-- `api_base`: *string (optional)* - The api endpoint you want to call the model with
+- `api_base`: *string (optional)* - model을 호출할 때 사용할 API endpoint입니다.
 
-- `api_version`: *string (optional)* - (Azure-specific) the api version for the call
+- `api_version`: *string (optional)* - (Azure-specific) 호출에 사용할 API version입니다.
 
-- `num_retries`: *int (optional)* - The number of times to retry the API call if an APIError, TimeoutError or ServiceUnavailableError occurs 
+- `num_retries`: *int (optional)* - APIError, TimeoutError, ServiceUnavailableError가 발생했을 때 API call을 retry할 횟수입니다.
 
-- `context_window_fallback_dict`: *dict (optional)* - A mapping of model to use if call fails due to context window error
+- `context_window_fallback_dict`: *dict (optional)* - context window error로 call이 실패했을 때 사용할 model mapping입니다.
 
-- `fallbacks`: *list (optional)* - A list of model names + params to be used, in case the initial call fails
+- `fallbacks`: *list (optional)* - initial call이 실패할 경우 사용할 model name + param list입니다.
 
-- `metadata`: *dict (optional)* - Any additional data you want to be logged when the call is made (sent to logging integrations, eg. promptlayer and accessible via custom callback function)
+- `metadata`: *dict (optional)* - call이 발생할 때 logging할 추가 data입니다. logging integration(예: promptlayer)으로 전송되며 custom callback function에서 접근할 수 있습니다.
 
 **CUSTOM MODEL COST** 
-- `input_cost_per_token`: *float (optional)* - The cost per input token for the completion call 
+- `input_cost_per_token`: *float (optional)* - completion call의 input token당 cost입니다.
 
-- `output_cost_per_token`: *float (optional)* - The cost per output token for the completion call 
+- `output_cost_per_token`: *float (optional)* - completion call의 output token당 cost입니다.
 
-**CUSTOM PROMPT TEMPLATE** (See [prompt formatting for more info](./prompt_formatting.md#format-prompt-yourself))
-- `initial_prompt_value`: *string (optional)* - Initial string applied at the start of the input messages
+**CUSTOM PROMPT TEMPLATE** (자세한 내용은 [prompt formatting](./prompt_formatting.md#format-prompt-yourself)을 참고하세요)
+- `initial_prompt_value`: *string (optional)* - input message 시작 부분에 적용할 initial string입니다.
 
-- `roles`: *dict (optional)* - Dictionary specifying how to format the prompt based on the role + message passed in via `messages`. 
+- `roles`: *dict (optional)* - `messages`로 전달된 role + message를 기준으로 prompt format 방법을 지정하는 dictionary입니다.
 
-- `final_prompt_value`: *string (optional)* - Final string applied at the end of the input messages
+- `final_prompt_value`: *string (optional)* - input message 끝에 적용할 final string입니다.
 
-- `bos_token`: *string (optional)* - Initial string applied at the start of a sequence
+- `bos_token`: *string (optional)* - sequence 시작 부분에 적용할 initial string입니다.
 
-- `eos_token`: *string (optional)* - Initial string applied at the end of a sequence
+- `eos_token`: *string (optional)* - sequence 끝에 적용할 string입니다.
 
-- `hf_model_name`: *string (optional)* - [Sagemaker Only] The corresponding huggingface name of the model, used to pull the right chat template for the model. 
+- `hf_model_name`: *string (optional)* - [Sagemaker Only] model에 대응하는 Hugging Face name입니다. 해당 model에 맞는 chat template을 가져오는 데 사용합니다.

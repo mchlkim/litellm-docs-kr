@@ -2,32 +2,29 @@ import Image from '@theme/IdealImage';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Logging
+# 로깅 {#logging}
 
-Log Proxy input, output, and exceptions using:
+다음 도구를 사용해 Proxy 입력, 출력, 예외를 로깅합니다.
 
 - Langfuse
 - OpenTelemetry
-- GCS, s3, Azure (Blob) Buckets
+- GCS, s3, Azure (Blob) 버킷
 - AWS SQS
 - Lunary
 - MLflow
 - Deepeval
-- Custom Callbacks - Custom code and API endpoints
+- Custom Callbacks - 사용자 지정 코드 및 API 엔드포인트
 - Langsmith
 - DataDog
 - Azure Sentinel
 - DynamoDB
-- etc.
+- 기타
 
 
 
-## Getting the LiteLLM Call ID
+## LiteLLM 호출 ID 가져오기 {#litellm-call-id}
 
-LiteLLM generates a unique `call_id` for each request. This `call_id` can be
-used to track the request across the system. This can be very useful for finding
-the info for a particular request in a logging system like one of the systems
-mentioned in this page.
+LiteLLM은 각 요청마다 고유한 `call_id`를 생성합니다. 이 `call_id`는 시스템 전반에서 요청을 추적하는 데 사용할 수 있습니다. 이 페이지에서 설명하는 로깅 시스템에서 특정 요청 정보를 찾을 때 특히 유용합니다.
 
 ```shell
 curl -i -sSL --location 'http://0.0.0.0:4000/chat/completions' \
@@ -39,7 +36,7 @@ curl -i -sSL --location 'http://0.0.0.0:4000/chat/completions' \
     }' | grep 'x-litellm'
 ```
 
-The output of this is:
+출력은 다음과 같습니다.
 
 ```output
 x-litellm-call-id: b980db26-9512-45cc-b1da-c511a363b83f
@@ -51,23 +48,27 @@ x-litellm-key-tpm-limit: None
 x-litellm-key-rpm-limit: None
 ```
 
-A number of these headers could be useful for troubleshooting, but the
-`x-litellm-call-id` is the one that is most useful for tracking a request across
-components in your system, including in logging tools.
+이 헤더 중 여러 항목이 문제 해결에 유용할 수 있지만, 로깅 도구를 포함한 시스템 구성 요소 전반에서 요청을 추적할 때 가장 유용한 것은 `x-litellm-call-id`입니다.
 
 
-## Logging Features
+## 로깅 기능 {#logging-features}
 
+<span id="braintrust"></span>
+<span id="prometheus"></span>
+<span id="opik"></span>
+<span id="helicone"></span>
+<span id="sumologic"></span>
+<span id="cloudzero"></span>
 
-### Redact Messages, Response Content
+### 메시지와 응답 콘텐츠 마스킹 {#redact-messages-response-content}
 
-Set `litellm.turn_off_message_logging=True` This will prevent the messages and responses from being logged to your logging provider, but request metadata - e.g. spend, will still be tracked. Useful for privacy/compliance when handling sensitive data.
+`litellm.turn_off_message_logging=True`를 설정하세요. 그러면 메시지와 응답이 로깅 공급자에 기록되지 않지만, 비용 같은 요청 메타데이터는 계속 추적됩니다. 민감한 데이터를 다룰 때 개인정보 보호와 컴플라이언스 용도로 유용합니다.
 
 <Tabs>
 
 <TabItem value="global" label="Global">
 
-**1. Setup config.yaml**
+**1. config.yaml 설정**
 ```yaml
 model_list:
  - model_name: gpt-3.5-turbo
@@ -78,7 +79,7 @@ litellm_settings:
   turn_off_message_logging: True # 👈 Key Change
 ```
 
-**2. Send request**
+**2. 요청 전송**
 ```shell
 curl --location 'http://0.0.0.0:4000/chat/completions' \
     --header 'Content-Type: application/json' \
@@ -100,19 +101,19 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 
 :::info
 
-Dynamic request message redaction is in BETA. 
+동적 요청 메시지 마스킹은 베타입니다.
 
 :::
 
-Pass in a request header to enable message redaction for a request.
+특정 요청에서 메시지 마스킹을 활성화하려면 요청 헤더를 전달하세요.
 
 ```
 x-litellm-enable-message-redaction: true
 ```
 
-Example config.yaml
+예제 config.yaml
 
-**1. Setup config.yaml **
+**1. config.yaml 설정**
 
 ```yaml
 model_list:
@@ -121,7 +122,7 @@ model_list:
       model: gpt-3.5-turbo
 ```
 
-**2. Setup per request header**
+**2. 요청별 헤더 설정**
 
 ```shell
 curl -L -X POST 'http://0.0.0.0:4000/v1/chat/completions' \
@@ -142,22 +143,22 @@ curl -L -X POST 'http://0.0.0.0:4000/v1/chat/completions' \
 </TabItem>
 </Tabs>
 
-**3. Check Logging Tool + Spend Logs**
+**3. 로깅 도구 + 비용 로그 확인**
 
-**Logging Tool**
+**로깅 도구**
 
 <Image img={require('../../img/message_redaction_logging.png')}/>
 
-**Spend Logs**
+**Spend 로그**
 
 <Image img={require('../../img/message_redaction_spend_logs.png')} />
 
 
-### Redacting UserAPIKeyInfo 
+### UserAPIKeyInfo 마스킹 {#userapikeyinfo-redact}
 
-Redact information about the user api key (hashed token, user_id, team id, etc.), from logs. 
+로그에서 사용자 API 키 관련 정보(해시된 토큰, `user_id`, 팀 ID 등)를 마스킹합니다.
 
-Currently supported for Langfuse, OpenTelemetry, Logfire, ArizeAI logging.
+현재 Langfuse, OpenTelemetry, Logfire, ArizeAI 로깅에서 지원됩니다.
 
 ```yaml
 litellm_settings: 
@@ -165,10 +166,9 @@ litellm_settings:
   redact_user_api_key_info: true
 ```
 
-### Disable Message Redaction
+### 메시지 마스킹 비활성화 {#message-redaction-disable}
 
-If you have `litellm.turn_on_message_logging` turned on, you can override it for specific requests by
-setting a request header `LiteLLM-Disable-Message-Redaction: true`.
+`litellm.turn_on_message_logging`이 켜져 있으면 요청 헤더 `LiteLLM-Disable-Message-Redaction: true`를 설정해 특정 요청에서 재정의할 수 있습니다.
 
 
 ```shell
@@ -187,13 +187,13 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 ```
 
 
-### Turn off all tracking/logging
+### 모든 추적/로깅 끄기 {#disable-all-tracking-logging}
 
-For some use cases, you may want to turn off all tracking/logging. You can do this by passing `no-log=True` in the request body.
+일부 사용 사례에서는 모든 추적/로깅을 끄고 싶을 수 있습니다. 요청 본문에 `no-log=True`를 전달하면 됩니다.
 
 :::info
 
-Disable this by setting `global_disable_no_log_param:true` in your config.yaml file.
+`config.yaml` 파일에서 `global_disable_no_log_param:true`를 설정하면 이 기능을 비활성화할 수 있습니다.
 
 ```yaml
 litellm_settings:
@@ -256,25 +256,25 @@ print(response)
 </TabItem>
 </Tabs>
 
-**Expected Console Log**  
+**예상 콘솔 로그**  
 
 ```
 LiteLLM.Info: "no-log request, skipping logging"
 ```
 
-### ✨ Dynamically Disable specific callbacks
+### ✨ 특정 콜백 동적 비활성화 {#dynamic-callback-disable}
 
 :::info
 
-This is an enterprise feature.
+이는 엔터프라이즈 기능입니다.
 
-[Proceed with LiteLLM Enterprise](https://www.litellm.ai/enterprise)
+[LiteLLM 엔터프라이즈로 진행](https://www.litellm.ai/enterprise)
 
 :::
 
-For some use cases, you may want to disable specific callbacks for a request. You can do this by passing `x-litellm-disable-callbacks: <callback_name>` in the request headers.
+일부 사용 사례에서는 특정 요청에 대해 특정 콜백을 비활성화하고 싶을 수 있습니다. 요청 헤더에 `x-litellm-disable-callbacks: <callback_name>`을 전달하면 됩니다.
 
-Send the list of callbacks to disable in the request header `x-litellm-disable-callbacks`.
+비활성화할 콜백 목록을 요청 헤더 `x-litellm-disable-callbacks`로 보내세요.
 
 <Tabs>
 <TabItem value="Curl" label="Curl Request">
@@ -326,35 +326,35 @@ print(response)
 </Tabs>
 
 
-### ✨ Conditional Logging by Virtual Keys, Teams
+### ✨ 가상 키, Teams별 조건부 로깅 {#conditional-logging}
 
-Use this to:
-1. Conditionally enable logging for some virtual keys/teams
-2. Set different logging providers for different virtual keys/teams
+다음 용도로 사용합니다.
+1. 일부 가상 키/팀에 대해 조건부로 로깅 활성화
+2. 가상 키/팀별로 서로 다른 로깅 공급자 설정
 
-[👉 **Get Started** - Team/Key Based Logging](team_logging)
-
-
+[👉 **시작하기** - 팀/키 기반 로깅](team_logging)
 
 
 
-## What gets logged?
 
-Found under `kwargs["standard_logging_object"]`. This is a standard payload, logged for every response.
 
-[👉 **Standard Logging Payload Specification**](./logging_spec)
+## 무엇이 로깅되나요? {#what-gets-logged}
+
+`kwargs["standard_logging_object"]` 아래에서 확인할 수 있습니다. 이는 모든 응답에 대해 로깅되는 표준 페이로드입니다.
+
+[👉 **표준 로깅 페이로드 사양**](./logging_spec)
 
 ## Langfuse
 
-We will use the `--config` to set `litellm.success_callback = ["langfuse"]` this will log all successful LLM calls to langfuse. Make sure to set `LANGFUSE_PUBLIC_KEY` and `LANGFUSE_SECRET_KEY` in your environment
+`--config`를 사용해 `litellm.success_callback = ["langfuse"]`를 설정하면 성공한 모든 LLM 호출이 Langfuse에 로깅됩니다. 환경에 `LANGFUSE_PUBLIC_KEY`와 `LANGFUSE_SECRET_KEY`를 반드시 설정하세요.
 
-**Step 1** Install langfuse
+**1단계** Langfuse 설치
 
 ```shell
 uv add langfuse>=2.0.0
 ```
 
-**Step 2**: Create a `config.yaml` file and set `litellm_settings`: `success_callback`
+**2단계**: `config.yaml` 파일을 생성하고 `litellm_settings`: `success_callback` 설정
 
 ```yaml
 model_list:
@@ -365,7 +365,7 @@ litellm_settings:
   success_callback: ["langfuse"]
 ```
 
-**Step 3**: Set required env variables for logging to langfuse
+**3단계**: Langfuse 로깅에 필요한 환경 변수 설정
 
 ```shell
 export LANGFUSE_PUBLIC_KEY="pk_kk"
@@ -374,31 +374,31 @@ export LANGFUSE_SECRET_KEY="sk_ss"
 export LANGFUSE_HOST="https://xxx.langfuse.com"
 ```
 
-**Step 4**: Start the proxy, make a test request
+**4단계**: 프록시 시작 후 테스트 요청 전송
 
-Start proxy
+프록시 시작
 
 ```shell
 litellm --config config.yaml --debug
 ```
 
-Test Request
+테스트 요청
 
 ```
 litellm --test
 ```
 
-Expected output on Langfuse
+Langfuse 예상 출력
 
 <Image img={require('../../img/langfuse_small.png')} />
 
-### Logging Metadata to Langfuse
+### Langfuse에 메타데이터 로깅 {#langfuse-metadata-logging}
 
 <Tabs>
 
 <TabItem value="Curl" label="Curl Request">
 
-Pass `metadata` as part of the request body
+요청 본문의 일부로 `metadata`를 전달합니다.
 
 ```shell
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -423,7 +423,7 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 </TabItem>
 <TabItem value="openai" label="OpenAI v1.0.0+">
 
-Set `extra_body={"metadata": { }}` to `metadata` you want to pass
+전달하려는 `metadata`를 `extra_body={"metadata": { }}`로 설정합니다.
 
 ```python
 import openai
@@ -496,9 +496,9 @@ print(response)
 </TabItem>
 </Tabs>
 
-### Custom Tags
+### 사용자 지정 태그 {#custom-tags}
 
-Set `tags` as part of your request body
+요청 본문의 일부로 `tags`를 설정합니다.
 
 
 <Tabs>
@@ -535,7 +535,7 @@ print(response)
 
 <TabItem value="Curl" label="Curl Request">
 
-Pass `metadata` as part of the request body
+요청 본문의 일부로 `metadata`를 전달합니다.
 
 ```shell
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -599,26 +599,26 @@ print(response)
 
 
 
-### LiteLLM Tags - `cache_hit`, `cache_key`
+### LiteLLM 태그 - `cache_hit`, `cache_key` {#litellm-tags}
 
-Use this if you want to control which LiteLLM-specific fields are logged as tags by the LiteLLM proxy. By default LiteLLM Proxy logs no LiteLLM-specific fields
+LiteLLM Proxy가 어떤 LiteLLM 전용 필드를 태그로 로깅할지 제어하려면 이 설정을 사용하세요. 기본적으로 LiteLLM Proxy는 LiteLLM 전용 필드를 로깅하지 않습니다.
 
-| LiteLLM specific field    | Description                                                                             | Example Value                           |
+| LiteLLM 전용 필드         | 설명                                                                             | 예제 값                              |
 | ------------------------- | --------------------------------------------------------------------------------------- | --------------------------------------- |
-| `cache_hit`               | Indicates whether a cache hit occurred (True) or not (False)                            | `true`, `false`                         |
-| `cache_key`               | The Cache key used for this request                                                     | `d2b758c****`                           |
-| `proxy_base_url`          | The base URL for the proxy server, the value of env var `PROXY_BASE_URL` on your server | `https://proxy.example.com`             |
-| `user_api_key_alias`      | An alias for the LiteLLM Virtual Key.                                                   | `prod-app1`                             |
-| `user_api_key_user_id`    | The unique ID associated with a user's API key.                                         | `user_123`, `user_456`                  |
-| `user_api_key_user_email` | The email associated with a user's API key.                                             | `user@example.com`, `admin@example.com` |
-| `user_api_key_team_alias` | An alias for a team associated with an API key.                                         | `team_alpha`, `dev_team`                |
+| `cache_hit`               | 캐시 적중 발생 여부(`True`/`False`)                            | `true`, `false`                         |
+| `cache_key`               | 이 요청에 사용된 캐시 키                                                     | `d2b758c****`                           |
+| `proxy_base_url`          | 프록시 서버의 기본 URL. 서버 환경 변수 `PROXY_BASE_URL` 값 | `https://proxy.example.com`             |
+| `user_api_key_alias`      | LiteLLM Virtual Key의 별칭                                                   | `prod-app1`                             |
+| `user_api_key_user_id`    | 사용자 API 키와 연결된 고유 ID                                         | `user_123`, `user_456`                  |
+| `user_api_key_user_email` | 사용자 API 키와 연결된 이메일                                             | `user@example.com`, `admin@example.com` |
+| `user_api_key_team_alias` | API 키와 연결된 팀의 별칭                                         | `team_alpha`, `dev_team`                |
 
 
-**Usage**
+**사용법**
 
-Specify `langfuse_default_tags` to control what litellm fields get logged on Langfuse
+Langfuse에 로깅할 LiteLLM 필드를 제어하려면 `langfuse_default_tags`를 지정하세요.
 
-Example config.yaml 
+예제 config.yaml 
 ```yaml
 model_list:
   - model_name: gpt-4
@@ -634,15 +634,15 @@ litellm_settings:
   langfuse_default_tags: ["cache_hit", "cache_key", "proxy_base_url", "user_api_key_alias", "user_api_key_user_id", "user_api_key_user_email", "user_api_key_team_alias", "semantic-similarity", "proxy_base_url"]
 ```
 
-### View POST sent from LiteLLM to provider
+### LiteLLM에서 공급자로 전송한 POST 보기 {#view-post-sent-to-provider}
 
-Use this when you want to view the RAW curl request sent from LiteLLM to the LLM API 
+LiteLLM에서 LLM API로 전송한 원시 curl 요청을 보고 싶을 때 사용하세요.
 
 <Tabs>
 
 <TabItem value="Curl" label="Curl Request">
 
-Pass `metadata` as part of the request body
+요청 본문의 일부로 `metadata`를 전달합니다.
 
 ```shell
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -664,7 +664,7 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 </TabItem>
 <TabItem value="openai" label="OpenAI v1.0.0+">
 
-Set `extra_body={"metadata": {"log_raw_request": True }}` to `metadata` you want to pass
+전달하려는 `metadata`에 `extra_body={"metadata": {"log_raw_request": True }}`를 설정합니다.
 
 ```python
 import openai
@@ -731,23 +731,23 @@ print(response)
 </TabItem>
 </Tabs>
 
-**Expected Output on Langfuse**
+**Langfuse 예상 출력**
 
-You will see `raw_request` in your Langfuse Metadata. This is the RAW CURL command sent from LiteLLM to your LLM API provider
+Langfuse Metadata에서 `raw_request`를 볼 수 있습니다. 이는 LiteLLM에서 LLM API 공급자로 전송한 원시 CURL 명령입니다.
 
 <Image img={require('../../img/debug_langfuse.png')} />
 
-## OpenTelemetry
+## OpenTelemetry {#otel}
 
 :::tip
 
-The full OpenTelemetry reference — span hierarchy, every emitted span and attribute, metrics, semconv mode, and troubleshooting — lives at [Observability → OpenTelemetry Integration](/docs/observability/opentelemetry_integration). The section below is a proxy-focused quickstart.
+전체 OpenTelemetry 참조(span 계층, 내보내는 모든 span과 attribute, metric, semconv mode, 문제 해결)는 [관측성 → OpenTelemetry Integration](/docs/observability/opentelemetry_integration)에 있습니다. 아래 섹션은 Proxy 중심 빠른 시작입니다.
 
 :::
 
 :::info 
 
-[Optional] Customize OTEL Service Name and OTEL TRACER NAME by setting the following variables in your environment
+[선택 사항] 환경에 다음 변수를 설정해 OTEL 서비스 이름과 OTEL 트레이서 이름을 사용자 지정합니다.
 
 ```shell
 OTEL_TRACER_NAME=<your-trace-name>     # default="litellm"
@@ -760,30 +760,30 @@ OTEL_SERVICE_NAME=<your-service-name>` # default="litellm"
 
 <TabItem value="Console Exporter" label="Log to console">
 
-**Step 1:** Set callbacks and env vars
+**1단계:** 콜백과 환경 변수 설정
 
-Add the following to your env
+환경에 다음을 추가합니다.
 
 ```shell
 OTEL_EXPORTER="console"
 ```
 
-Add `otel` as a callback on your `litellm_config.yaml`
+`litellm_config.yaml`에 `otel`을 콜백으로 추가합니다.
 
 ```shell
 litellm_settings:
   callbacks: ["otel"]
 ```
 
-**Step 2**: Start the proxy, make a test request
+**2단계**: 프록시 시작 후 테스트 요청 전송
 
-Start proxy
+프록시 시작
 
 ```shell
 litellm --config config.yaml --detailed_debug
 ```
 
-Test Request
+테스트 요청
 
 ```shell
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -799,9 +799,9 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
     }'
 ```
 
-**Step 3**: **Expect to see the following logged on your server logs / console**
+**3단계**: **서버 로그/콘솔에 다음이 로깅되는지 확인**
 
-This is the Span from OTEL Logging
+이는 OTEL 로깅의 span입니다.
 
 ```json
 {
@@ -836,11 +836,11 @@ This is the Span from OTEL Logging
 
 <TabItem value="Honeycomb" label="Log to Honeycomb">
 
-#### Quick Start - Log to Honeycomb
+#### 빠른 시작 - Honeycomb에 로깅
 
-**Step 1:** Set callbacks and env vars
+**1단계:** 콜백과 환경 변수 설정
 
-Add the following to your env
+환경에 다음을 추가합니다.
 
 ```shell
 OTEL_EXPORTER="otlp_http"
@@ -848,22 +848,22 @@ OTEL_ENDPOINT="https://api.honeycomb.io/v1/traces"
 OTEL_HEADERS="x-honeycomb-team=<your-api-key>"
 ```
 
-Add `otel` as a callback on your `litellm_config.yaml`
+`litellm_config.yaml`에 `otel`을 콜백으로 추가합니다.
 
 ```shell
 litellm_settings:
   callbacks: ["otel"]
 ```
 
-**Step 2**: Start the proxy, make a test request
+**2단계**: 프록시 시작 후 테스트 요청 전송
 
-Start proxy
+프록시 시작
 
 ```shell
 litellm --config config.yaml --detailed_debug
 ```
 
-Test Request
+테스트 요청
 
 ```shell
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -883,10 +883,10 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 
 <TabItem value="traceloop" label="Log to Traceloop Cloud">
 
-#### Quick Start - Log to Traceloop
+#### 빠른 시작 - Traceloop에 로깅
 
-**Step 1:**
-Add the following to your env
+**1단계:**
+환경에 다음을 추가합니다.
 
 ```shell
 OTEL_EXPORTER="otlp_http"
@@ -894,22 +894,22 @@ OTEL_ENDPOINT="https://api.traceloop.com"
 OTEL_HEADERS="Authorization=Bearer%20<your-api-key>"
 ```
 
-**Step 2:** Add `otel` as a callbacks
+**2단계:** `otel`을 콜백으로 추가
 
 ```shell
 litellm_settings:
   callbacks: ["otel"]
 ```
 
-**Step 3**: Start the proxy, make a test request
+**3단계**: 프록시 시작 후 테스트 요청 전송
 
-Start proxy
+프록시 시작
 
 ```shell
 litellm --config config.yaml --detailed_debug
 ```
 
-Test Request
+테스트 요청
 
 ```shell
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -929,11 +929,11 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 
 <TabItem value="otel-col" label="Log to OTEL HTTP Collector">
 
-#### Quick Start - Log to OTEL Collector
+#### 빠른 시작 - OTEL Collector에 로깅
 
-**Step 1:** Set callbacks and env vars
+**1단계:** 콜백과 환경 변수 설정
 
-Add the following to your env
+환경에 다음을 추가합니다.
 
 ```shell
 OTEL_EXPORTER="otlp_http"
@@ -941,22 +941,22 @@ OTEL_ENDPOINT="http://0.0.0.0:4317"
 OTEL_HEADERS="x-honeycomb-team=<your-api-key>" # Optional
 ```
 
-Add `otel` as a callback on your `litellm_config.yaml`
+`litellm_config.yaml`에 `otel`을 콜백으로 추가합니다.
 
 ```shell
 litellm_settings:
   callbacks: ["otel"]
 ```
 
-**Step 2**: Start the proxy, make a test request
+**2단계**: 프록시 시작 후 테스트 요청 전송
 
-Start proxy
+프록시 시작
 
 ```shell
 litellm --config config.yaml --detailed_debug
 ```
 
-Test Request
+테스트 요청
 
 ```shell
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -976,11 +976,11 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 
 <TabItem value="otel-col-grpc" label="Log to OTEL GRPC Collector">
 
-#### Quick Start - Log to OTEL GRPC Collector
+#### 빠른 시작 - OTEL GRPC Collector에 로깅
 
-**Step 1:** Set callbacks and env vars
+**1단계:** 콜백과 환경 변수 설정
 
-Add the following to your env
+환경에 다음을 추가합니다.
 
 ```shell
 OTEL_EXPORTER="otlp_grpc"
@@ -988,24 +988,24 @@ OTEL_ENDPOINT="http:/0.0.0.0:4317"
 OTEL_HEADERS="x-honeycomb-team=<your-api-key>" # Optional
 ```
 
-> Note: OTLP gRPC requires `grpcio`. Install via `uv add "litellm[grpc]"` (or `grpcio`).
+> 참고: OTLP gRPC에는 `grpcio`가 필요합니다. `uv add "litellm[grpc]"` 또는 `grpcio`로 설치하세요.
 
-Add `otel` as a callback on your `litellm_config.yaml`
+`litellm_config.yaml`에 `otel`을 콜백으로 추가합니다.
 
 ```shell
 litellm_settings:
   callbacks: ["otel"]
 ```
 
-**Step 2**: Start the proxy, make a test request
+**2단계**: 프록시 시작 후 테스트 요청 전송
 
-Start proxy
+프록시 시작
 
 ```shell
 litellm --config config.yaml --detailed_debug
 ```
 
-Test Request
+테스트 요청
 
 ```shell
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -1025,11 +1025,11 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 
 </Tabs>
 
-** 🎉 Expect to see this trace logged in your OTEL collector**
+** 🎉 OTEL Collector에 이 trace가 로깅되는지 확인하세요**
 
-### Redacting Messages, Response Content
+### 메시지와 응답 콘텐츠 마스킹 {#otel-message-response-redact}
 
-Set `message_logging=False` for `otel`, no messages / response will be logged
+`otel`에 `message_logging=False`를 설정하면 메시지/응답이 로깅되지 않습니다.
 
 ```yaml
 litellm_settings:
@@ -1041,20 +1041,20 @@ callback_settings:
     message_logging: False
 ```
 
-### Traceparent Header
-##### Context propagation across Services `Traceparent HTTP Header`
+### Traceparent 헤더 {#traceparent-header}
+##### 서비스 간 context propagation `Traceparent HTTP Header`
 
-❓ Use this when you want to **pass information about the incoming request in a distributed tracing system**
+❓ 분산 tracing 시스템에서 **수신 요청 정보를 전달**하고 싶을 때 사용하세요.
 
-✅ Key change: Pass the **`traceparent` header** in your requests. [Read more about traceparent headers here](https://uptrace.dev/opentelemetry/opentelemetry-traceparent.html#what-is-traceparent-header)
+✅ 핵심 변경: 요청에 **`traceparent` 헤더**를 전달합니다. [traceparent header 자세히 보기](https://uptrace.dev/opentelemetry/opentelemetry-traceparent.html#what-is-traceparent-header)
 
 ```curl
 traceparent: 00-80e1afed08e019fc1110464cfa66635c-7a085853722dc6d2-01
 ```
 
-Example Usage
+예제 사용법
 
-1. Make Request to LiteLLM Proxy with `traceparent` header
+1. `traceparent` 헤더를 포함해 LiteLLM Proxy로 요청 전송
 
 ```python
 import openai
@@ -1086,21 +1086,21 @@ print(response)
 # Trace ID:  80e1afed08e019fc1110464cfa66635c
 ```
 
-2. Lookup Trace ID on OTEL Logger
+2. OTEL Logger에서 Trace ID 조회
 
-Search for Trace=`80e1afed08e019fc1110464cfa66635c` on your OTEL Collector
+OTEL Collector에서 Trace=`80e1afed08e019fc1110464cfa66635c`를 검색하세요.
 
 <Image img={require('../../img/otel_parent.png')} />
 
-##### Forwarding `Traceparent HTTP Header` to LLM APIs
+##### LLM API로 `Traceparent HTTP Header` 전달
 
-Use this if you want to forward the traceparent headers to your self hosted LLMs like vLLM
+traceparent 헤더를 vLLM 같은 자체 호스팅 LLM으로 전달하려면 사용하세요.
 
-Set `forward_traceparent_to_llm_provider: True` in your `config.yaml`. This will forward the `traceparent` header to your LLM API
+`config.yaml`에서 `forward_traceparent_to_llm_provider: True`를 설정하세요. 그러면 `traceparent` 헤더가 LLM API로 전달됩니다.
 
 :::warning
 
-Only use this for self hosted LLMs, this can cause Bedrock, VertexAI calls to fail
+자체 호스팅 LLM에만 사용하세요. Bedrock, VertexAI 호출이 실패할 수 있습니다.
 
 :::
 
@@ -1109,28 +1109,28 @@ litellm_settings:
   forward_traceparent_to_llm_provider: True
 ```
 
-## Google Cloud Storage Buckets
+## Google Cloud Storage 버킷 {#google-cloud-storage}
 
-Log LLM Logs to [Google Cloud Storage Buckets](https://cloud.google.com/storage?hl=en)
+LLM 로그를 [Google Cloud Storage Buckets](https://cloud.google.com/storage?hl=en)에 기록합니다.
 
 :::info
 
-✨ This is an Enterprise only feature [Get Started with Enterprise here](https://enterprise.litellm.ai/demo)
+✨ 이는 엔터프라이즈 전용 기능입니다. [엔터프라이즈 시작하기](https://enterprise.litellm.ai/demo)
 
 :::
 
 
-| Property                     | Details                                                        |
+| 속성                         | 상세                                                           |
 | ---------------------------- | -------------------------------------------------------------- |
-| Description                  | Log LLM Input/Output to cloud storage buckets                  |
-| Load Test Benchmarks         | [Benchmarks](https://docs.litellm.ai/docs/benchmarks)          |
-| Google Docs on Cloud Storage | [Google Cloud Storage](https://cloud.google.com/storage?hl=en) |
+| 설명                         | LLM 입력/출력을 클라우드 스토리지 버킷에 로깅                  |
+| 부하 테스트 벤치마크         | [벤치마크](https://docs.litellm.ai/docs/benchmarks)            |
+| Google 문서 on Cloud Storage | [Google Cloud Storage](https://cloud.google.com/storage?hl=en) |
 
 
 
-#### Usage
+#### 사용법
 
-1. Add `gcs_bucket` to LiteLLM Config.yaml
+1. LiteLLM `Config.yaml`에 `gcs_bucket` 추가
 ```yaml
 model_list:
 - litellm_params:
@@ -1143,20 +1143,20 @@ litellm_settings:
   callbacks: ["gcs_bucket"] # 👈 KEY CHANGE # 👈 KEY CHANGE
 ```
 
-2. Set required env variables
+2. 필요한 환경 변수 설정
 
 ```shell
 GCS_BUCKET_NAME="<your-gcs-bucket-name>"
 GCS_PATH_SERVICE_ACCOUNT="/Users/ishaanjaffer/Downloads/adroit-crow-413218-a956eef1a2a8.json" # Add path to service account.json
 ```
 
-3. Start Proxy
+3. Proxy 시작
 
 ```
 litellm --config /path/to/config.yaml
 ```
 
-4. Test it! 
+4. 테스트
 
 ```bash
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -1174,49 +1174,49 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 ```
 
 
-#### Expected Logs on GCS Buckets
+#### GCS Buckets 예상 로그
 
 <Image img={require('../../img/gcs_bucket.png')} />
 
-#### Fields Logged on GCS Buckets
+#### GCS Buckets에 로깅되는 필드
 
-[**The standard logging object is logged on GCS Bucket**](../proxy/logging_spec)
-
-
-#### Getting `service_account.json` from Google Cloud Console
-
-1. Go to [Google Cloud Console](https://console.cloud.google.com/)
-2. Search for IAM & Admin
-3. Click on Service Accounts
-4. Select a Service Account
-5. Click on 'Keys' -> Add Key -> Create New Key -> JSON
-6. Save the JSON file and add the path to `GCS_PATH_SERVICE_ACCOUNT`
+[**표준 로깅 객체가 GCS Bucket에 로깅됩니다**](../proxy/logging_spec)
 
 
+#### Google Cloud Console에서 `service_account.json` 가져오기
 
-## Google Cloud Storage - PubSub Topic
+1. [Google Cloud Console](https://console.cloud.google.com/)로 이동합니다.
+2. IAM & Admin을 검색합니다.
+3. Service Accounts를 클릭합니다.
+4. Service Account를 선택합니다.
+5. 'Keys' -> Add Key -> Create New Key -> JSON을 클릭합니다.
+6. JSON 파일을 저장하고 경로를 `GCS_PATH_SERVICE_ACCOUNT`에 추가합니다.
 
-Log LLM Logs/SpendLogs to [Google Cloud Storage PubSub Topic](https://cloud.google.com/pubsub/docs/reference/rest)
+
+
+## Google Cloud Storage - PubSub 주제
+
+LLM 로그/Spend로그를 [Google Cloud Storage PubSub Topic](https://cloud.google.com/pubsub/docs/reference/rest)에 기록합니다.
 
 :::info
 
-✨ This is an Enterprise only feature [Get Started with Enterprise here](https://enterprise.litellm.ai/demo)
+✨ 이는 엔터프라이즈 전용 기능입니다. [엔터프라이즈 시작하기](https://enterprise.litellm.ai/demo)
 
 :::
 
 
-| Property    | Details                                                            |
+| 속성        | 상세                                                               |
 | ----------- | ------------------------------------------------------------------ |
-| Description | Log LiteLLM `SpendLogs Table` to Google Cloud Storage PubSub Topic |
+| 설명        | LiteLLM `Spend로그 Table`을 Google Cloud Storage PubSub Topic에 로깅 |
 
-When to use `gcs_pubsub`?
+`gcs_pubsub`는 언제 사용하나요?
 
-- If your LiteLLM Database has crossed 1M+ spend logs and you want to send `SpendLogs` to a PubSub Topic that can be consumed by GCS BigQuery
+- LiteLLM Database의 비용 로그가 1M+를 넘었고, GCS BigQuery에서 소비할 수 있도록 `Spend로그`를 PubSub Topic으로 보내고 싶을 때
 
 
-#### Usage
+#### 사용법
 
-1. Add `gcs_pubsub` to LiteLLM Config.yaml
+1. LiteLLM `Config.yaml`에 `gcs_pubsub` 추가
 ```yaml
 model_list:
 - litellm_params:
@@ -1229,20 +1229,20 @@ litellm_settings:
   callbacks: ["gcs_pubsub"] # 👈 KEY CHANGE # 👈 KEY CHANGE
 ```
 
-2. Set required env variables
+2. 필요한 환경 변수 설정
 
 ```shell
 GCS_PUBSUB_TOPIC_ID="litellmDB"
 GCS_PUBSUB_PROJECT_ID="reliableKeys"
 ```
 
-3. Start Proxy
+3. Proxy 시작
 
 ```
 litellm --config /path/to/config.yaml
 ```
 
-4. Test it! 
+4. 테스트
 
 ```bash
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -1260,10 +1260,10 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 ```
 
 ## Deepeval
-LiteLLM supports logging on [Confidential AI](https://documentation.confident-ai.com/) (The Deepeval Platform):
+LiteLLM은 [Confidential AI](https://documentation.confident-ai.com/)(Deepeval Platform)에 로깅하는 기능을 지원합니다.
 
-### Usage:
-1. Add `deepeval` in the LiteLLM `config.yaml`
+### 사용법:
+1. LiteLLM `config.yaml`에 `deepeval` 추가
 
 ```yaml
 model_list:
@@ -1275,20 +1275,20 @@ litellm_settings:
   failure_callback: ["deepeval"]
 ```
 
-2. Set your environment variables in `.env` file. 
+2. `.env` 파일에 환경 변수 설정
 ```shell
 CONFIDENT_API_KEY=<your-api-key>
 ```
 :::info
-You can obtain your `CONFIDENT_API_KEY` by logging into [Confident AI](https://app.confident-ai.com/project) platform. 
+[Confident AI](https://app.confident-ai.com/project) 플랫폼에 로그인해 `CONFIDENT_API_KEY`를 얻을 수 있습니다.
 :::
 
-3. Start your proxy server:
+3. Proxy 서버 시작:
 ```shell
 litellm --config config.yaml --debug
 ```
 
-4. Make a request:
+4. 요청 전송:
 ```shell
 curl -X POST 'http://0.0.0.0:4000/chat/completions' \
 -H 'Content-Type: application/json' \
@@ -1308,19 +1308,19 @@ curl -X POST 'http://0.0.0.0:4000/chat/completions' \
 }'
 ```
 
-5. Check trace on platform: 
+5. 플랫폼에서 trace 확인:
 
 <Image img={require('../../img/deepeval_visible_trace.png')} />
 
-## s3 Buckets
+## s3 Buckets {#s3}
 
-We will use the `--config` to set 
+`--config`로 다음을 설정합니다.
 
 - `litellm.success_callback = ["s3"]` 
 
-This will log all successful LLM calls to s3 Bucket
+이 설정은 성공한 모든 LLM 호출을 s3 Bucket에 기록합니다.
 
-**Step 1** Set AWS Credentials in .env
+**1단계** `.env`에 AWS 자격 증명 설정
 
 ```shell
 AWS_ACCESS_KEY_ID = ""
@@ -1328,7 +1328,7 @@ AWS_SECRET_ACCESS_KEY = ""
 AWS_REGION_NAME = ""
 ```
 
-**Step 2**: Create a `config.yaml` file and set `litellm_settings`: `success_callback`
+**2단계**: `config.yaml` 파일을 만들고 `litellm_settings`: `success_callback`을 설정합니다.
 
 ```yaml
 model_list:
@@ -1348,15 +1348,15 @@ litellm_settings:
     s3_strip_base64_files: false # [OPTIONAL] remove base64 files before storing in s3
 ```
 
-**Step 3**: Start the proxy, make a test request
+**3단계**: 프록시를 시작하고 테스트 요청을 전송합니다.
 
-Start proxy
+프록시 시작
 
 ```shell
 litellm --config config.yaml --debug
 ```
 
-Test Request
+테스트 요청
 
 ```shell
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -1372,12 +1372,12 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
     }'
 ```
 
-Your logs should be available on the specified s3 Bucket
+지정한 s3 Bucket에서 로그를 확인할 수 있어야 합니다.
 
-### Team Alias Prefix in Object Key
+### Object Key의 팀 별칭 접두사 {#team-alias-prefix}
 
-You can add the team alias to the object key by setting the `team_alias` in the `config.yaml` file. 
-This will prefix the object key with the team alias.
+`config.yaml` 파일에서 `team_alias`를 설정하면 object key에 팀 별칭을 추가할 수 있습니다.
+이 설정은 object key 앞에 팀 별칭을 붙입니다.
 
 ```yaml
 litellm_settings:
@@ -1392,11 +1392,11 @@ litellm_settings:
     s3_use_team_prefix: true
 ```
 
-On s3 bucket, you will see the object key as `my-test-path/my-team-alias/...`
+s3 bucket에서 object key가 `my-test-path/my-team-alias/...` 형식으로 표시됩니다.
 
-### Key Alias Prefix in Object Key
+### Object Key의 키 별칭 접두사 {#key-alias-prefix}
 
-You can add the user api key alias to the s3 object key by enabling s3_use_key_prefix.
+`s3_use_key_prefix`를 활성화하면 사용자 API 키 별칭을 s3 object key에 추가할 수 있습니다.
 
 ```yaml
 litellm_settings:
@@ -1411,30 +1411,30 @@ litellm_settings:
     s3_use_key_prefix: true
 ```
 
-On s3 bucket, you will see the object key as `my-test-path/my-key-alias/...`
+s3 bucket에서 object key가 `my-test-path/my-key-alias/...` 형식으로 표시됩니다.
 
-if both team alias and key alias are enabled then the path becomes
+팀 별칭과 키 별칭을 모두 활성화하면 경로는 다음과 같습니다.
 `my-test-path/my-team-alias/my-key-alias/...`
 
-## AWS SQS
+## AWS SQS {#sqs}
 
 
-| Property             | Details                                                                               |
+| 속성                 | 상세                                                                                  |
 | -------------------- | ------------------------------------------------------------------------------------- |
-| Description          | Log LLM Input/Output to AWS SQS Queue                                                 |
-| AWS Docs on SQS      | [AWS SQS](https://aws.amazon.com/sqs/)                                                |
-| Fields Logged to SQS | LiteLLM [Standard Logging Payload is logged for each LLM call](../proxy/logging_spec) |
+| 설명                 | LLM 입력/출력을 AWS SQS Queue에 기록                                                  |
+| AWS 문서 on SQS      | [AWS SQS](https://aws.amazon.com/sqs/)                                                |
+| SQS에 기록되는 필드  | 각 LLM 호출마다 LiteLLM [Standard Logging Payload](../proxy/logging_spec)가 기록됩니다 |
 
 
-Log LLM Logs to [AWS Simple Queue Service (SQS)](https://aws.amazon.com/sqs/)
+LLM 로그를 [AWS Simple Queue Service (SQS)](https://aws.amazon.com/sqs/)로 전송합니다.
 
-We will use the litellm `--config` to set 
+litellm `--config`로 다음을 설정합니다.
 
 - `litellm.callbacks = ["aws_sqs"]` 
 
-This will log all successful LLM calls to AWS SQS Queue
+이 설정은 성공한 모든 LLM 호출을 AWS SQS Queue에 기록합니다.
 
-**Step 1** Set AWS Credentials in .env
+**1단계** `.env`에 AWS 자격 증명 설정
 
 ```shell
 AWS_ACCESS_KEY_ID = ""
@@ -1442,7 +1442,7 @@ AWS_SECRET_ACCESS_KEY = ""
 AWS_REGION_NAME = ""
 ```
 
-**Step 2**: Create a `config.yaml` file and set `litellm_settings`: `callbacks`
+**2단계**: `config.yaml` 파일을 만들고 `litellm_settings`: `callbacks`를 설정합니다.
 
 ```yaml
 model_list:
@@ -1472,15 +1472,15 @@ litellm_settings:
 
 ```
 
-**Step 3**: Start the proxy, make a test request
+**3단계**: 프록시를 시작하고 테스트 요청을 전송합니다.
 
-Start proxy
+프록시 시작
 
 ```shell
 litellm --config config.yaml --debug
 ```
 
-Test Request
+테스트 요청
 
 ```shell
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -1499,25 +1499,25 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 
 ## Azure Blob Storage
 
-Log LLM Logs to [Azure Data Lake Storage](https://learn.microsoft.com/en-us/azure/storage/blobs/data-lake-storage-introduction)
+LLM 로그를 [Azure Data Lake Storage](https://learn.microsoft.com/en-us/azure/storage/blobs/data-lake-storage-introduction)로 전송합니다.
 
 :::info
 
-✨ This is an Enterprise only feature [Get Started with Enterprise here](https://enterprise.litellm.ai/demo)
+✨ 이 기능은 엔터프라이즈 전용입니다. [여기에서 엔터프라이즈 시작하기](https://enterprise.litellm.ai/demo)
 
 :::
 
 
-| Property                        | Details                                                                                                         |
+| 속성                            | 상세                                                                                                            |
 | ------------------------------- | --------------------------------------------------------------------------------------------------------------- |
-| Description                     | Log LLM Input/Output to Azure Blob Storage (Bucket)                                                             |
-| Azure Docs on Data Lake Storage | [Azure Data Lake Storage](https://learn.microsoft.com/en-us/azure/storage/blobs/data-lake-storage-introduction) |
+| 설명                            | LLM 입력/출력을 Azure Blob Storage (Bucket)에 기록                                                              |
+| Azure 문서 on Data Lake Storage | [Azure Data Lake Storage](https://learn.microsoft.com/en-us/azure/storage/blobs/data-lake-storage-introduction) |
 
 
 
-#### Usage
+#### 사용법
 
-1. Add `azure_storage` to LiteLLM Config.yaml
+1. LiteLLM `Config.yaml`에 `azure_storage`를 추가합니다.
 ```yaml
 model_list:
   - model_name: fake-openai-endpoint
@@ -1530,7 +1530,7 @@ litellm_settings:
   callbacks: ["azure_storage"] # 👈 KEY CHANGE # 👈 KEY CHANGE
 ```
 
-2. Set required env variables
+2. 필요한 환경 변수를 설정합니다.
 
 ```shell
 # Required Environment Variables for Azure Storage
@@ -1547,13 +1547,13 @@ AZURE_STORAGE_CLIENT_ID="abe66585xxxxxxxxxx" # The Application Client ID to use 
 AZURE_STORAGE_CLIENT_SECRET="uMS8Qxxxxxxxxxx" # The Application Client Secret to use for Authentication
 ```
 
-3. Start Proxy
+3. Proxy 시작
 
 ```
 litellm --config /path/to/config.yaml
 ```
 
-4. Test it! 
+4. 테스트합니다.
 
 ```bash
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -1571,37 +1571,37 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 ```
 
 
-#### Expected Logs on Azure Data Lake Storage
+#### Azure Data Lake Storage의 예상 로그
 
 <Image img={require('../../img/azure_blob.png')} />
 
-#### Fields Logged on Azure Data Lake Storage
+#### Azure Data Lake Storage에 기록되는 필드
 
-[**The standard logging object is logged on Azure Data Lake Storage**](../proxy/logging_spec)
+[**표준 로깅 객체가 Azure Data Lake Storage에 기록됩니다**](../proxy/logging_spec)
 
 
-## [Datadog](../observability/datadog)
+## Datadog
 
-👉 Go here for using [Datadog LLM Observability](../observability/datadog) with LiteLLM Proxy
+👉 LiteLLM Proxy에서 [Datadog LLM 관측성](../observability/datadog)을 사용하는 방법은 여기에서 확인하세요.
 
-## [Azure Sentinel](../observability/azure_sentinel)
+## Azure Sentinel
 
-👉 Go here for using [Azure Sentinel](../observability/azure_sentinel) with LiteLLM Proxy
+👉 LiteLLM Proxy에서 [Azure Sentinel](../observability/azure_sentinel)을 사용하는 방법은 여기에서 확인하세요.
 
 
 ## Lunary
-#### Step1: Install dependencies and set your environment variables 
-Install the dependencies
+#### 1단계: 종속성 설치 및 환경 변수 설정
+종속성을 설치합니다.
 ```shell
 uv add litellm lunary
 ```
 
-Get you Lunary public key from from https://app.lunary.ai/settings 
+https://app.lunary.ai/settings 에서 Lunary 공개 키를 가져옵니다.
 ```shell
 export LUNARY_PUBLIC_KEY="<your-public-key>"
 ```
 
-#### Step 2: Create a `config.yaml` and set `lunary` callbacks
+#### 2단계: `config.yaml`을 만들고 `lunary` 콜백 설정
 
 ```yaml
 model_list:
@@ -1613,12 +1613,12 @@ litellm_settings:
   failure_callback: ["lunary"]
 ```
 
-#### Step 3: Start the LiteLLM proxy
+#### 3단계: LiteLLM Proxy 시작
 ```shell
 litellm --config config.yaml
 ```
 
-#### Step 4: Make a request
+#### 4단계: 요청 전송
 
 ```shell
 curl -X POST 'http://0.0.0.0:4000/chat/completions' \
@@ -1640,21 +1640,21 @@ curl -X POST 'http://0.0.0.0:4000/chat/completions' \
 
 ## MLflow
 
-👉 Follow the tutorial [here](../observability/mlflow) to get started with mlflow on LiteLLM Proxy Server
+👉 LiteLLM Proxy 서버에서 MLflow를 시작하려면 [여기](../observability/mlflow)의 튜토리얼을 따르세요.
 
 
 
-## Custom Callback Class [Async]
+## 사용자 지정 콜백 클래스 [Async] {#custom-callback-class-async}
 
-Use this when you want to run custom callbacks in `python`
+`python`으로 사용자 지정 콜백을 실행하려는 경우 사용합니다.
 
-#### Step 1 - Create your custom `litellm` callback class
+#### 1단계 - 사용자 지정 `litellm` 콜백 클래스 생성
 
-We use `litellm.integrations.custom_logger` for this, **more details about litellm custom callbacks [here](https://docs.litellm.ai/docs/observability/custom_callback)**
+이를 위해 `litellm.integrations.custom_logger`를 사용합니다. **litellm 사용자 지정 콜백에 대한 자세한 내용은 [여기](https://docs.litellm.ai/docs/observability/custom_callback)를 참고하세요.**
 
-Define your custom callback class in a python file.
+Python 파일에 사용자 지정 콜백 클래스를 정의합니다.
 
-Here's an example custom logger for tracking `key, user, model, prompt, response, tokens, cost`. We create a file called `custom_callbacks.py` and initialize `proxy_handler_instance` 
+다음은 `key`, `user`, `model`, `prompt`, `response`, `tokens`, `cost`를 추적하는 사용자 지정 logger 예시입니다. `custom_callbacks.py` 파일을 만들고 `proxy_handler_instance`를 초기화합니다.
 
 ```python
 from litellm.integrations.custom_logger import CustomLogger
@@ -1747,15 +1747,15 @@ proxy_handler_instance = MyCustomHandler()
 # Set litellm.callbacks = [proxy_handler_instance] on the proxy
 ```
 
-#### Step 2 - Pass your custom callback class in `config.yaml`
+#### 2단계 - `config.yaml`에 사용자 지정 콜백 클래스 전달
 
-We pass the custom callback class defined in **Step1** to the config.yaml. 
-Set `callbacks` to `python_filename.logger_instance_name`
+**1단계**에서 정의한 사용자 지정 콜백 클래스를 `config.yaml`에 전달합니다.
+`callbacks`를 `python_filename.logger_instance_name`으로 설정합니다.
 
-In the config below, we pass
+아래 config에서는 다음을 전달합니다.
 
 - python_filename: `custom_callbacks.py`
-- logger_instance_name: `proxy_handler_instance`. This is defined in Step 1
+- logger_instance_name: `proxy_handler_instance`. 1단계에서 정의한 값입니다.
 
 `callbacks: custom_callbacks.proxy_handler_instance`
 
@@ -1770,17 +1770,17 @@ litellm_settings:
 
 ```
 
-#### Step 2b - Loading Custom Callbacks from S3/GCS (Alternative)
+#### 2b단계 - S3/GCS에서 사용자 지정 콜백 로드 (대안)
 
-Instead of using local Python files, you can load custom callbacks directly from S3 or GCS buckets. This is useful for centralized callback management or when deploying in containerized environments.
+로컬 Python 파일을 사용하는 대신 S3 또는 GCS bucket에서 사용자 지정 콜백을 직접 로드할 수 있습니다. 중앙화된 콜백 관리가 필요하거나 컨테이너화된 환경에 배포할 때 유용합니다.
 
-**URL Format:**
+**URL 형식:**
 - **S3**: `s3://bucket-name/module_name.instance_name`
 - **GCS**: `gcs://bucket-name/module_name.instance_name`
 
-**Example - Loading from S3:**
+**예제 - S3에서 로드:**
 
-Let's say you have a file `custom_callbacks.py` stored in your S3 bucket `litellm-proxy` with the following content:
+다음 내용의 `custom_callbacks.py` 파일이 S3 bucket `litellm-proxy`에 저장되어 있다고 가정합니다.
 
 ```python
 # custom_callbacks.py (stored in S3)
@@ -1800,7 +1800,7 @@ class MyCustomHandler(CustomLogger):
 custom_handler = MyCustomHandler()
 ```
 
-**Configuration:**
+**설정:**
 
 ```yaml
 model_list:
@@ -1812,7 +1812,7 @@ litellm_settings:
   callbacks: ["s3://litellm-proxy/custom_callbacks.custom_handler"]
 ```
 
-**Example - Loading from GCS:**
+**예제 - GCS에서 로드:**
 
 ```yaml
 model_list:
@@ -1824,29 +1824,29 @@ litellm_settings:
   callbacks: ["gcs://my-gcs-bucket/custom_callbacks.custom_handler"]
 ```
 
-**How it works:**
-1. LiteLLM detects the S3/GCS URL prefix
-2. Downloads the Python file to a temporary location
-3. Loads the module and extracts the specified instance
-4. Cleans up the temporary file
-5. Uses the callback instance for logging
+**동작 방식:**
+1. LiteLLM이 S3/GCS URL prefix를 감지합니다.
+2. Python 파일을 임시 위치에 다운로드합니다.
+3. module을 로드하고 지정한 instance를 추출합니다.
+4. 임시 파일을 정리합니다.
+5. 로깅에 콜백 instance를 사용합니다.
 
-This approach allows you to:
-- Centrally manage callback files across multiple proxy instances
-- Share callbacks across different environments
-- Version control callback files in cloud storage
+이 방식으로 다음을 수행할 수 있습니다.
+- 여러 Proxy instance에서 콜백 파일을 중앙 관리
+- 서로 다른 환경 간 콜백 공유
+- 클라우드 스토리지에서 콜백 파일 버전 관리
 
-#### Step 2c - Mounting Custom Callbacks in Helm/Kubernetes (Alternative)
+#### 2c단계 - Helm/Kubernetes에서 사용자 지정 콜백 Mount (대안)
 
-When deploying with Helm or Kubernetes, you can mount custom callback Python files alongside your `config.yaml` using `subPath` to avoid overwriting the config directory.
+Helm 또는 Kubernetes로 배포할 때 `subPath`를 사용하면 config directory를 덮어쓰지 않고 사용자 지정 콜백 Python 파일을 `config.yaml` 옆에 mount할 수 있습니다.
 
-**The Problem:**
-Mounting a volume to a directory (e.g., `/app/`) would normally hide all existing files in that directory, including your `config.yaml`.
+**문제:**
+volume을 directory(예: `/app/`)에 mount하면 일반적으로 해당 directory의 기존 파일이 모두 가려지며, `config.yaml`도 포함됩니다.
 
-**The Solution:**
-Use `subPath` in your `volumeMounts` to mount individual files without overwriting the entire directory.
+**해결 방법:**
+`volumeMounts`에서 `subPath`를 사용해 전체 directory를 덮어쓰지 않고 개별 파일만 mount합니다.
 
-**Example - Helm values.yaml:**
+**예제 - Helm values.yaml:**
 
 ```yaml
 # values.yaml
@@ -1861,7 +1861,7 @@ volumeMounts:
     subPath: custom_callbacks.py         # Required to avoid overwriting directory
 ```
 
-**Create the ConfigMap with your callback file:**
+**콜백 파일을 포함한 ConfigMap 생성:**
 
 ```yaml
 apiVersion: v1
@@ -1879,22 +1879,22 @@ data:
     proxy_handler_instance = MyCustomHandler()
 ```
 
-**Reference in your config.yaml:**
+**config.yaml에서 참조:**
 
 ```yaml
 litellm_settings:
   callbacks: custom_callbacks.proxy_handler_instance
 ```
 
-**How it works:**
-1. The `subPath` parameter tells Kubernetes to mount only the specific file
-2. This places `custom_callbacks.py` in `/app/` alongside your existing `config.yaml`
-3. LiteLLM automatically finds the callback file in the same directory as the config
-4. No files are overwritten or hidden
+**동작 방식:**
+1. `subPath` parameter는 Kubernetes에 특정 파일만 mount하도록 지시합니다.
+2. 이 방식은 기존 `config.yaml` 옆의 `/app/`에 `custom_callbacks.py`를 배치합니다.
+3. LiteLLM은 config와 같은 directory에서 콜백 파일을 자동으로 찾습니다.
+4. 어떤 파일도 덮어쓰거나 가리지 않습니다.
 
-**Note:** You can mount multiple callback files by adding more `volumeMounts` entries, each with its own `subPath`.
+**참고:** 각 파일마다 고유한 `subPath`를 가진 `volumeMounts` entry를 추가해 여러 콜백 파일을 mount할 수 있습니다.
 
-#### Step 3 - Start proxy + test request
+#### 3단계 - Proxy 시작 + 테스트 요청
 
 ```shell
 litellm --config proxy_config.yaml
@@ -1916,7 +1916,7 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
     }'
 ```
 
-#### Resulting Log on Proxy
+#### Proxy에 출력되는 결과 로그
 
 ```shell
 On Success
@@ -1929,9 +1929,9 @@ On Success
     Proxy Metadata: {'user_api_key': None, 'headers': Headers({'host': '0.0.0.0:4000', 'user-agent': 'curl/7.88.1', 'accept': '*/*', 'authorization': 'Bearer sk-1234', 'content-length': '199', 'content-type': 'application/x-www-form-urlencoded'}), 'model_group': 'gpt-3.5-turbo', 'deployment': 'gpt-3.5-turbo-ModelID-gpt-3.5-turbo'}
 ```
 
-#### Logging Proxy Request Object, Header, Url
+#### Proxy Request Object, Header, Url 로깅
 
-Here's how you can access the `url`, `headers`, `request body` sent to the proxy for each request
+각 요청에서 Proxy로 전송된 `url`, `headers`, `request body`에 접근하는 방법은 다음과 같습니다.
 
 ```python
 class MyCustomHandler(CustomLogger):
@@ -1943,7 +1943,7 @@ class MyCustomHandler(CustomLogger):
         print(proxy_server_request)
 ```
 
-**Expected Output**
+**예상 출력**
 
 ```shell
 {
@@ -1972,9 +1972,9 @@ class MyCustomHandler(CustomLogger):
 }
 ```
 
-#### Logging `model_info` set in config.yaml 
+#### config.yaml에 설정된 `model_info` 로깅
 
-Here is how to log the `model_info` set in your proxy `config.yaml`. Information on setting `model_info` on [config.yaml](https://docs.litellm.ai/docs/proxy/configs)
+Proxy `config.yaml`에 설정된 `model_info`를 기록하는 방법은 다음과 같습니다. [config.yaml](https://docs.litellm.ai/docs/proxy/configs)에서 `model_info`를 설정하는 방법도 참고하세요.
 
 ```python
 class MyCustomHandler(CustomLogger):
@@ -1986,17 +1986,17 @@ class MyCustomHandler(CustomLogger):
         print(model_info)
 ```
 
-**Expected Output**
+**예상 출력**
 
 ```json
 {'mode': 'embedding', 'input_cost_per_token': 0.002}
 ```
 
-##### Logging responses from proxy
+##### Proxy 응답 로깅
 
-Both `/chat/completions` and `/embeddings` responses are available as `response_obj`
+`/chat/completions`와 `/embeddings` 응답은 모두 `response_obj`로 사용할 수 있습니다.
 
-**Note: for `/chat/completions`, both `stream=True` and `non stream` responses are available as `response_obj`**
+**참고: `/chat/completions`의 경우 `stream=True`와 `non stream` 응답이 모두 `response_obj`로 제공됩니다.**
 
 ```python
 class MyCustomHandler(CustomLogger):
@@ -2006,7 +2006,7 @@ class MyCustomHandler(CustomLogger):
 
 ```
 
-**Expected Output /chat/completion [for both `stream` and `non-stream` responses]**
+**예상 출력 /chat/completion [`stream` 및 `non-stream` 응답 모두]**
 
 ```json
 ModelResponse(
@@ -2033,7 +2033,7 @@ ModelResponse(
 )
 ```
 
-**Expected Output /embeddings**
+**예상 출력 /embeddings**
 
 ```json
 {
@@ -2054,37 +2054,37 @@ ModelResponse(
 }
 ```
 
-## Custom Callback APIs [Async]
+## 사용자 지정 콜백 API [Async] {#generic-api-logger}
 
 <Image 
   img={require('../../img/callback_api.png')}
   style={{width: '100%', display: 'block', margin: '2rem auto'}}
 />
 <p style={{textAlign: 'left', color: '#666'}}>
-  Send LiteLLM logs to a custom API endpoint
+  LiteLLM 로그를 사용자 지정 API 엔드포인트로 전송
 </p>
 
 :::info
 
-This is an Enterprise only feature [Get Started with Enterprise here](https://github.com/BerriAI/litellm/tree/main/enterprise)
+이 기능은 엔터프라이즈 전용입니다. [여기에서 엔터프라이즈 시작하기](https://github.com/BerriAI/litellm/tree/main/enterprise)
 
 :::
 
-| Property       | Details                                                                                                                                                    |
+| 속성           | 상세                                                                                                                                                       |
 | -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Description    | Log LLM Input/Output to a custom API endpoint                                                                                                              |
-| Logged Payload | `List[StandardLoggingPayload]` LiteLLM logs a list of [`StandardLoggingPayload` objects](https://docs.litellm.ai/docs/proxy/logging_spec) to your endpoint |
+| 설명           | LLM 입력/출력을 사용자 지정 API 엔드포인트에 기록                                                                                                          |
+| 기록 Payload   | LiteLLM이 [`StandardLoggingPayload` objects](https://docs.litellm.ai/docs/proxy/logging_spec)의 list인 `List[StandardLoggingPayload]`를 엔드포인트에 기록합니다 |
 
 
 
-Use this if you:
+다음과 같은 경우 사용합니다.
 
-- Want to use custom callbacks written in a non Python programming language
-- Want your callbacks to run on a different microservice
+- Python이 아닌 프로그래밍 언어로 작성한 사용자 지정 콜백을 사용하려는 경우
+- 콜백을 다른 마이크로서비스에서 실행하려는 경우
 
-#### Usage
+#### 사용법
 
-1. Set `success_callback: ["generic_api"]` on litellm config.yaml
+1. LiteLLM `config.yaml`에 `success_callback: ["generic_api"]`를 설정합니다.
 
 ```yaml showLineNumbers title="litellm config.yaml"
 model_list:
@@ -2097,12 +2097,12 @@ litellm_settings:
   success_callback: ["generic_api"]
 ```
 
-2. Set Environment Variables for the custom API endpoint
+2. 사용자 지정 API 엔드포인트용 환경 변수를 설정합니다.
 
-| Environment Variable      | Details                                                     | Required             |
+| 환경 변수                 | 상세                                                        | 필수                 |
 | ------------------------- | ----------------------------------------------------------- | -------------------- |
-| `GENERIC_LOGGER_ENDPOINT` | The endpoint + route we should send callback logs to        | Yes                  |
-| `GENERIC_LOGGER_HEADERS`  | Optional: Set headers to be sent to the custom API endpoint | No, this is optional |
+| `GENERIC_LOGGER_ENDPOINT` | 콜백 로그를 전송할 엔드포인트 + route                       | 예                   |
+| `GENERIC_LOGGER_HEADERS`  | 선택 사항: 사용자 지정 API 엔드포인트로 전송할 headers 설정 | 아니요, 선택 사항    |
 
 ```shell showLineNumbers title=".env"
 GENERIC_LOGGER_ENDPOINT="https://webhook-test.com/30343bc33591bc5e6dc44217ceae3e0a"
@@ -2114,13 +2114,13 @@ GENERIC_LOGGER_HEADERS="Authorization=Bearer <your-api-key>"
 GENERIC_LOGGER_HEADERS="Authorization=Bearer <your-api-key>,X-Custom-Header=custom-header-value"
 ```
 
-3. Start the proxy
+3. 프록시 시작
 
 ```shell
 litellm --config /path/to/config.yaml
 ```
 
-4. Make a test request
+4. 테스트 요청을 전송합니다.
 
 ```shell
 curl -i --location 'http://0.0.0.0:4000/chat/completions' \
@@ -2141,10 +2141,9 @@ curl -i --location 'http://0.0.0.0:4000/chat/completions' \
 
 ## Langsmith
 
-1. Set `success_callback: ["langsmith"]` on litellm config.yaml
+1. LiteLLM `config.yaml`에 `success_callback: ["langsmith"]`를 설정합니다.
 
-If you're using a custom LangSmith instance, you can set the
-`LANGSMITH_BASE_URL` environment variable to point to your instance.
+사용자 지정 LangSmith instance를 사용하는 경우 `LANGSMITH_BASE_URL` 환경 변수가 해당 instance를 가리키도록 설정할 수 있습니다.
 
 ```yaml
 litellm_settings:
@@ -2158,13 +2157,13 @@ environment_variables:
 ```
 
 
-2. Start Proxy
+2. Proxy 시작
 
 ```
 litellm --config /path/to/config.yaml
 ```
 
-3. Test it! 
+3. 테스트합니다.
 
 ```bash
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -2180,13 +2179,13 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
     }
 '
 ```
-Expect to see your log on Langfuse
+Langfuse에서 로그가 표시되는지 확인합니다.
 <Image img={require('../../img/langsmith_new.png')} />
 
 
-## Arize AI
+## Arize AI {#arize}
 
-1. Set `success_callback: ["arize"]` on litellm config.yaml
+1. LiteLLM `config.yaml`에 `success_callback: ["arize"]`를 설정합니다.
 
 ```yaml
 model_list:
@@ -2206,13 +2205,13 @@ environment_variables:
     ARIZE_HTTP_ENDPOINT: "https://otlp.arize.com/v1" # OPTIONAL - your custom arize HTTP api endpoint. Set either this or ARIZE_ENDPOINT
 ```
 
-2. Start Proxy
+2. Proxy 시작
 
 ```
 litellm --config /path/to/config.yaml
 ```
 
-3. Test it! 
+3. 테스트합니다.
 
 ```bash
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -2228,13 +2227,13 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
     }
 '
 ```
-Expect to see your log on Langfuse
+Langfuse에서 로그가 표시되는지 확인합니다.
 <Image img={require('../../img/langsmith_new.png')} />
 
 
 ## Langtrace
 
-1. Set `success_callback: ["langtrace"]` on litellm config.yaml
+1. LiteLLM `config.yaml`에 `success_callback: ["langtrace"]`를 설정합니다.
 
 ```yaml
 model_list:
@@ -2251,13 +2250,13 @@ environment_variables:
     LANGTRACE_API_KEY: "141a****"
 ```
 
-2. Start Proxy
+2. Proxy 시작
 
 ```
 litellm --config /path/to/config.yaml
 ```
 
-3. Test it! 
+3. 테스트합니다.
 
 ```bash
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -2276,17 +2275,17 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 
 ## Galileo
 
-[BETA]
+[베타]
 
-Log LLM I/O on [www.rungalileo.io](https://www.rungalileo.io/)
+[www.rungalileo.io](https://www.rungalileo.io/)에 LLM I/O를 기록합니다.
 
 :::info
 
-Beta Integration
+베타 통합
 
 :::
 
-**Required Env Variables**
+**필수 환경 변수**
 
 ```bash
 export GALILEO_BASE_URL=""  # For most users, this is the same as their console URL except with the word 'console' replaced by 'api' (e.g. http://www.console.galileo.myenterprise.com -> http://www.api.galileo.myenterprise.com)
@@ -2295,9 +2294,9 @@ export GALILEO_USERNAME=""
 export GALILEO_PASSWORD=""
 ```
 
-#### Quick Start 
+#### 빠른 시작 
 
-1. Add to Config.yaml
+1. `Config.yaml`에 추가합니다.
 
 ```yaml
 model_list:
@@ -2311,13 +2310,13 @@ litellm_settings:
   success_callback: ["galileo"] # 👈 KEY CHANGE
 ```
 
-2. Start Proxy
+2. Proxy 시작
 
 ```
 litellm --config /path/to/config.yaml
 ```
 
-3. Test it! 
+3. 테스트합니다.
 
 ```bash
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -2334,13 +2333,13 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 '
 ```
 
-🎉 That's it - Expect to see your Logs on your Galileo Dashboard
+이제 Galileo Dashboard에서 로그가 표시되는지 확인합니다.
 
 ## OpenMeter
 
-Bill customers according to their LLM API usage with [OpenMeter](../observability/openmeter.md)
+[OpenMeter](../observability/openmeter.md)를 사용해 고객에게 LLM API 사용량 기준으로 과금합니다.
 
-**Required Env Variables**
+**필수 환경 변수**
 
 ```bash
 # from https://openmeter.cloud
@@ -2348,9 +2347,9 @@ export OPENMETER_API_ENDPOINT="" # defaults to https://openmeter.cloud
 export OPENMETER_API_KEY=""
 ```
 
-##### Quick Start 
+##### 빠른 시작 
 
-1. Add to Config.yaml
+1. `Config.yaml`에 추가합니다.
 
 ```yaml
 model_list:
@@ -2364,13 +2363,13 @@ litellm_settings:
   success_callback: ["openmeter"] # 👈 KEY CHANGE
 ```
 
-2. Start Proxy
+2. Proxy 시작
 
 ```
 litellm --config /path/to/config.yaml
 ```
 
-3. Test it! 
+3. 테스트합니다.
 
 ```bash
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -2391,14 +2390,14 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 
 ## DynamoDB
 
-We will use the `--config` to set 
+`--config`로 다음을 설정합니다.
 
 - `litellm.success_callback = ["dynamodb"]` 
 - `litellm.dynamodb_table_name = "your-table-name"`
 
-This will log all successful LLM calls to DynamoDB
+이 설정은 성공한 모든 LLM 호출을 DynamoDB에 기록합니다.
 
-**Step 1** Set AWS Credentials in .env
+**1단계** `.env`에 AWS 자격 증명 설정
 
 ```shell
 AWS_ACCESS_KEY_ID = ""
@@ -2406,7 +2405,7 @@ AWS_SECRET_ACCESS_KEY = ""
 AWS_REGION_NAME = ""
 ```
 
-**Step 2**: Create a `config.yaml` file and set `litellm_settings`: `success_callback`
+**2단계**: `config.yaml` 파일을 만들고 `litellm_settings`: `success_callback`을 설정합니다.
 
 ```yaml
 model_list:
@@ -2418,15 +2417,15 @@ litellm_settings:
   dynamodb_table_name: your-table-name
 ```
 
-**Step 3**: Start the proxy, make a test request
+**3단계**: 프록시를 시작하고 테스트 요청을 전송합니다.
 
-Start proxy
+프록시 시작
 
 ```shell
 litellm --config config.yaml --debug
 ```
 
-Test Request
+테스트 요청
 
 ```shell
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -2442,9 +2441,9 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
     }'
 ```
 
-Your logs should be available on DynamoDB
+DynamoDB에서 로그를 확인할 수 있어야 합니다.
 
-#### Data Logged to DynamoDB /chat/completions
+#### DynamoDB에 기록되는 데이터 /chat/completions
 
 ```json
 {
@@ -2484,7 +2483,7 @@ Your logs should be available on DynamoDB
 }
 ```
 
-#### Data logged to DynamoDB /embeddings
+#### DynamoDB에 기록되는 데이터 /embeddings
 
 ```json
 {
@@ -2517,15 +2516,15 @@ Your logs should be available on DynamoDB
 
 ## Sentry
 
-If api calls fail (llm/database) you can log those to Sentry: 
+API 호출이 실패하면(LLM/database) 해당 실패를 Sentry에 기록할 수 있습니다.
 
-**Step 1** Install Sentry
+**1단계** Sentry 설치
 
 ```shell
 uv add --upgrade sentry-sdk
 ```
 
-**Step 2**: Save your Sentry_DSN and add `litellm_settings`: `failure_callback`
+**2단계**: Sentry_DSN을 저장하고 `litellm_settings`: `failure_callback`을 추가합니다.
 
 ```shell
 export SENTRY_DSN="your-sentry-dsn"
@@ -2547,15 +2546,15 @@ general_settings:
   database_url: "my-bad-url" # set a fake url to trigger a sentry exception
 ```
 
-**Step 3**: Start the proxy, make a test request
+**3단계**: 프록시를 시작하고 테스트 요청을 전송합니다.
 
-Start proxy
+프록시 시작
 
 ```shell
 litellm --config config.yaml --debug
 ```
 
-Test Request
+테스트 요청
 
 ```
 litellm --test
@@ -2563,17 +2562,17 @@ litellm --test
 
 ## Athina
 
-[Athina](https://athina.ai/) allows you to log LLM Input/Output for monitoring, analytics, and observability.
+[Athina](https://athina.ai/)를 사용하면 모니터링, 분석, 관측성을 위해 LLM 입력/출력을 기록할 수 있습니다.
 
-We will use the `--config` to set `litellm.success_callback = ["athina"]` this will log all successful LLM calls to athina
+`--config`로 `litellm.success_callback = ["athina"]`를 설정합니다. 이 설정은 성공한 모든 LLM 호출을 athina에 기록합니다.
 
-**Step 1** Set Athina API key
+**1단계** Athina API 키 설정
 
 ```shell
 ATHINA_API_KEY = "your-athina-api-key"
 ```
 
-**Step 2**: Create a `config.yaml` file and set `litellm_settings`: `success_callback`
+**2단계**: `config.yaml` 파일을 만들고 `litellm_settings`: `success_callback`을 설정합니다.
 
 ```yaml
 model_list:
@@ -2584,15 +2583,15 @@ litellm_settings:
   success_callback: ["athina"]
 ```
 
-**Step 3**: Start the proxy, make a test request
+**3단계**: 프록시를 시작하고 테스트 요청을 전송합니다.
 
-Start proxy
+프록시 시작
 
 ```shell
 litellm --config config.yaml --debug
 ```
 
-Test Request
+테스트 요청
 
 ```
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -2609,25 +2608,25 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 ```
 
 
-<!-- ## (BETA) Moderation with Azure Content Safety
+<!-- ## (BETA) Azure Content Safety로 Moderation
 
-Note: This page is for logging callbacks and this is a moderation service. Commenting until we found a better location for this.
+Note: 이 페이지는 logging callbacks용이고 이 항목은 moderation service입니다. 더 적절한 위치를 찾을 때까지 주석 처리합니다.
 
-[Azure Content-Safety](https://azure.microsoft.com/en-us/products/ai-services/ai-content-safety) is a Microsoft Azure service that provides content moderation APIs to detect potential offensive, harmful, or risky content in text.
+[Azure Content-Safety](https://azure.microsoft.com/en-us/products/ai-services/ai-content-safety)는 text에서 잠재적으로 공격적이거나 유해하거나 위험한 content를 감지하는 content moderation APIs를 제공하는 Microsoft Azure service입니다.
 
-We will use the `--config` to set `litellm.success_callback = ["azure_content_safety"]` this will moderate all LLM calls using Azure Content Safety.
+`--config`로 `litellm.success_callback = ["azure_content_safety"]`를 설정합니다. 이 설정은 Azure Content Safety를 사용해 모든 LLM calls를 moderate합니다.
 
-**Step 0** Deploy Azure Content Safety
+**Step 0** Azure Content Safety 배포
 
-Deploy an Azure Content-Safety instance from the Azure Portal and get the `endpoint` and `key`.
+Azure Portal에서 Azure Content-Safety instance를 배포하고 `endpoint`와 `key`를 가져옵니다.
 
-**Step 1** Set Athina API key
+**Step 1** Athina API key 설정
 
 ```shell
 AZURE_CONTENT_SAFETY_KEY = "<your-azure-content-safety-key>"
 ```
 
-**Step 2**: Create a `config.yaml` file and set `litellm_settings`: `success_callback`
+**Step 2**: `config.yaml` 파일을 만들고 `litellm_settings`: `success_callback`을 설정합니다.
 
 ```yaml
 model_list:
@@ -2641,15 +2640,15 @@ litellm_settings:
     key: "os.environ/AZURE_CONTENT_SAFETY_KEY"
 ```
 
-**Step 3**: Start the proxy, make a test request
+**Step 3**: 프록시를 시작하고 테스트 request를 전송합니다.
 
-Start proxy
+프록시 시작
 
 ```shell
 litellm --config config.yaml --debug
 ```
 
-Test Request
+테스트 request
 
 ```
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -2665,16 +2664,16 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
     }'
 ```
 
-An HTTP 400 error will be returned if the content is detected with a value greater than the threshold set in the `config.yaml`.
-The details of the response will describe:
+content가 `config.yaml`에 설정된 threshold보다 큰 값으로 감지되면 HTTP 400 error가 반환됩니다.
+response의 상세 정보에는 다음이 포함됩니다.
 
-- The `source` : input text or llm generated text
-- The `category` : the category of the content that triggered the moderation
-- The `severity` : the severity from 0 to 10
+- `source`: input text 또는 llm generated text
+- `category`: moderation을 trigger한 content category
+- `severity`: 0부터 10까지의 severity
 
-**Step 4**: Customizing Azure Content Safety Thresholds
+**Step 4**: Azure Content Safety Thresholds 사용자 지정
 
-You can customize the thresholds for each category by setting the `thresholds` in the `config.yaml`
+`config.yaml`에서 `thresholds`를 설정해 category별 threshold를 사용자 지정할 수 있습니다.
 
 ```yaml
 model_list:
@@ -2694,6 +2693,6 @@ litellm_settings:
 ```
 
 :::info
-`thresholds` are not required by default, but you can tune the values to your needs.
-Default values is `4` for all categories
+`thresholds`는 기본적으로 필수가 아니지만 필요에 맞게 값을 조정할 수 있습니다.
+기본값은 모든 category에 대해 `4`입니다.
 ::: -->

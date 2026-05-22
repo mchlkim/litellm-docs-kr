@@ -1,99 +1,99 @@
 # LiteLLM Skills
 
-[litellm-skills](https://github.com/BerriAI/litellm-skills) is a collection of [Agent Skills](https://agentskills.io) for managing a live LiteLLM proxy. Install them once and any agent that supports the Agent Skills standard (Claude Code, OpenCode, OpenClaw, etc.) can create users, teams, keys, models, MCP servers, agents, and query usage — all by running `curl` commands against your proxy.
+[litellm-skills](https://github.com/BerriAI/litellm-skills)는 실행 중인 LiteLLM proxy를 관리하기 위한 [Agent Skills](https://agentskills.io) 모음입니다. 한 번 설치하면 Agent Skills 표준을 지원하는 모든 에이전트(Claude Code, OpenCode, OpenClaw 등)가 사용자, 팀, 키, 모델, MCP 서버, 에이전트를 생성하고 사용량을 조회할 수 있습니다. 모두 proxy에 대해 `curl` 명령을 실행하는 방식으로 동작합니다.
 
-## Install
+## 설치
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/BerriAI/litellm-skills/main/install.sh | sh
 ```
 
-## Requirements
+## 요구 사항
 
-- `curl` installed
-- A running LiteLLM proxy (local or remote)
-- A proxy admin key — not a virtual key scoped to `llm_api_routes`
+- 설치된 `curl`
+- 실행 중인 LiteLLM proxy(로컬 또는 원격)
+- proxy 관리자 키. `llm_api_routes`로 범위가 제한된 가상 키가 아니어야 합니다.
 
-## Available Skills
+## 사용 가능한 Skills
 
-### Users
+### 사용자
 
-| Skill | What it does |
+| Skill | 수행 작업 |
 |-------|-------------|
-| `/add-user` | Create a user — email, role, budget, model access |
-| `/update-user` | Update budget, role, or models for an existing user |
-| `/delete-user` | Delete one or more users |
+| `/add-user` | 사용자 생성: 이메일, 역할, 예산, 모델 접근 권한 |
+| `/update-user` | 기존 사용자의 예산, 역할 또는 모델 업데이트 |
+| `/delete-user` | 사용자 한 명 이상 삭제 |
 
-### Teams
+### 팀
 
-| Skill | What it does |
+| Skill | 수행 작업 |
 |-------|-------------|
-| `/add-team` | Create a team with budget and model limits |
-| `/update-team` | Update budget, models, or rate limits |
-| `/delete-team` | Delete one or more teams |
+| `/add-team` | 예산과 모델 제한이 있는 팀 생성 |
+| `/update-team` | 예산, 모델 또는 rate limit 업데이트 |
+| `/delete-team` | 팀 한 개 이상 삭제 |
 
-### API Keys
+### API 키
 
-| Skill | What it does |
+| Skill | 수행 작업 |
 |-------|-------------|
-| `/add-key` | Generate a key scoped to a user, team, budget, and expiry |
-| `/update-key` | Update budget, models, or expiry |
-| `/delete-key` | Delete by key value or alias |
+| `/add-key` | 사용자, 팀, 예산, 만료 범위가 지정된 키 생성 |
+| `/update-key` | 예산, 모델 또는 만료일 업데이트 |
+| `/delete-key` | 키 값 또는 별칭으로 삭제 |
 
-### Organizations
+### 조직
 
-| Skill | What it does |
+| Skill | 수행 작업 |
 |-------|-------------|
-| `/add-org` | Create an org with budget and model access |
-| `/delete-org` | Delete one or more orgs |
+| `/add-org` | 예산과 모델 접근 권한이 있는 조직 생성 |
+| `/delete-org` | 조직 한 개 이상 삭제 |
 
-### Models
+### 모델
 
-| Skill | What it does |
+| Skill | 수행 작업 |
 |-------|-------------|
-| `/add-model` | Add any provider (OpenAI, Azure, Anthropic, Bedrock, Ollama…) and test it |
-| `/update-model` | Rotate credentials or swap the underlying deployment |
-| `/delete-model` | Remove a model |
+| `/add-model` | 원하는 provider(OpenAI, Azure, Anthropic, Bedrock, Ollama 등)를 추가하고 테스트 |
+| `/update-model` | 인증 정보를 교체하거나 기반 배포 변경 |
+| `/delete-model` | 모델 제거 |
 
-### MCP Servers
+### MCP 서버
 
-| Skill | What it does |
+| Skill | 수행 작업 |
 |-------|-------------|
-| `/add-mcp` | Register an MCP server (SSE, HTTP, or stdio) |
-| `/update-mcp` | Update URL, credentials, or allowed tools |
-| `/delete-mcp` | Remove an MCP server |
+| `/add-mcp` | MCP 서버 등록(SSE, HTTP 또는 stdio) |
+| `/update-mcp` | URL, 인증 정보 또는 허용된 tools 업데이트 |
+| `/delete-mcp` | MCP 서버 제거 |
 
-### Agents
+### 에이전트
 
-| Skill | What it does |
+| Skill | 수행 작업 |
 |-------|-------------|
-| `/add-agent` | Create an agent backed by a model and optional MCP servers |
-| `/update-agent` | Swap the model or update description and limits |
-| `/delete-agent` | Remove an agent |
+| `/add-agent` | 모델과 선택적 MCP 서버를 기반으로 에이전트 생성 |
+| `/update-agent` | 모델을 교체하거나 설명과 제한 업데이트 |
+| `/delete-agent` | 에이전트 제거 |
 
-### Usage
+### 사용법
 
-| Skill | What it does |
+| Skill | 수행 작업 |
 |-------|-------------|
-| `/view-usage` | Daily spend and token activity — by user, team, org, or model |
+| `/view-usage` | 사용자, 팀, 조직 또는 모델별 일일 지출 및 토큰 활동 |
 
-## How it works
+## 동작 방식
 
-When you invoke a skill, the agent asks for your `LITELLM_BASE_URL` and admin key, collects the fields needed for that operation, runs the `curl`, and shows the result. For example:
+Skill을 호출하면 에이전트가 `LITELLM_BASE_URL`과 관리자 키를 묻고, 해당 작업에 필요한 필드를 수집한 뒤 `curl`을 실행하고 결과를 보여줍니다. 예:
 
 ```
 /add-model
 ```
-→ Agent asks: provider, public name, credentials. Adds the model, runs a test completion, reports pass/fail.
+→ 에이전트가 provider, 공개 이름, 인증 정보를 묻습니다. 모델을 추가하고 테스트 completion을 실행한 뒤 성공/실패를 보고합니다.
 
 ```
 /view-usage
 ```
-→ Agent asks: date range (defaults to current month), optional team/model filter. Prints a table of daily requests, tokens, and spend.
+→ 에이전트가 날짜 범위(기본값은 이번 달)와 선택적 팀/모델 필터를 묻습니다. 일일 요청 수, 토큰, 지출 표를 출력합니다.
 
-## Related
+## 관련 항목
 
-- [litellm-skills on GitHub](https://github.com/BerriAI/litellm-skills)
-- [Virtual Keys](../proxy/virtual_keys.md) — managing API keys on the proxy
-- [Team-based routing](../proxy/team_based_routing.md) — setting up teams
-- [Model Management](../proxy/model_management.md) — adding models via config or API
+- [GitHub의 litellm-skills](https://github.com/BerriAI/litellm-skills)
+- [가상 키](../proxy/virtual_keys.md) — proxy에서 API 키 관리
+- [팀 기반 라우팅](../proxy/team_based_routing.md) — 팀 설정
+- [모델 관리](../proxy/model_management.md) — config 또는 API로 모델 추가

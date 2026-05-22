@@ -1,10 +1,10 @@
 ---
 slug: gpt_5_4_mini_nano
-title: "Day 0 Support: GPT-5.4-mini and GPT-5.4-nano"
+title: "출시 당일 지원: GPT-5.4-mini 및 GPT-5.4-nano"
 date: 2026-03-17T10:00:00
 authors:
   - name: Sameer Kankute
-    title: SWE @ LiteLLM (LLM Translation)
+    title: SWE @ LiteLLM (LLM 번역)
     url: https://www.linkedin.com/in/sameer-kankute/
     image_url: https://pbs.twimg.com/profile_images/2001352686994907136/ONgNuSk5_400x400.jpg
   - name: Krrish Dholakia
@@ -15,7 +15,7 @@ authors:
     title: "CTO, LiteLLM"
     url: https://www.linkedin.com/in/reffajnaahsi/
     image_url: https://pbs.twimg.com/profile_images/1613813310264340481/lz54oEiB_400x400.jpg
-description: "GPT-5.4-mini and GPT-5.4-nano model support in LiteLLM"
+description: "LiteLLM의 GPT-5.4-mini 및 GPT-5.4-nano 모델 지원 안내"
 tags: [openai, gpt-5.4-mini, gpt-5.4-nano, completion]
 hide_table_of_contents: false
 ---
@@ -23,18 +23,20 @@ hide_table_of_contents: false
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-LiteLLM now supports GPT-5.4-mini and GPT-5.4-nano — cost-effective models for simple completions and high-throughput workloads.
+LiteLLM은 이제 GPT-5.4-mini와 GPT-5.4-nano를 지원합니다. 두 모델은 간단한 completion과 고처리량 워크로드에 적합한 비용 효율적인 모델입니다.
 
 :::note
-If you're on **v1.82.3-stable** or above, you don't need any update to use these models.
+**v1.82.3-stable** 이상을 사용 중이라면 이 모델을 사용하기 위해 별도 업데이트가 필요하지 않습니다.
 :::
 
-## Usage
+{/* truncate */}
+
+## 사용법
 
 <Tabs>
 <TabItem value="proxy" label="LiteLLM Proxy">
 
-**1. Setup config.yaml**
+**1. config.yaml 설정**
 
 ```yaml
 model_list:
@@ -48,13 +50,13 @@ model_list:
       api_key: os.environ/OPENAI_API_KEY
 ```
 
-**2. Start the proxy**
+**2. 프록시 시작**
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-**3. Test it**
+**3. 테스트**
 
 ```bash
 # GPT-5.4-mini
@@ -100,7 +102,7 @@ print(response.choices[0].message.content)
 </TabItem>
 </Tabs>
 
-## Notes
+## 참고
 
-- Both models support function calling, vision, and tool-use — see the [OpenAI provider docs](../../docs/providers/openai) for advanced usage.
-- GPT-5.4-nano is the most cost-effective option for simple tasks; GPT-5.4-mini offers a balance of speed and capability.
+- 두 모델 모두 function calling, vision, tool-use를 지원합니다. 고급 사용법은 [OpenAI 제공자 문서](../../docs/providers/openai)를 참고하세요.
+- GPT-5.4-nano는 단순 작업에 가장 비용 효율적인 선택지이고, GPT-5.4-mini는 속도와 성능의 균형을 제공합니다.

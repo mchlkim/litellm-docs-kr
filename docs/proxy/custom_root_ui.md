@@ -2,44 +2,44 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Image from '@theme/IdealImage';
 
-# UI - Custom Root Path 
+# UI - 사용자 지정 루트 경로 {#ui---custom-root-path}
 
-💥 Use this when you want to serve LiteLLM on a custom base url path like `https://localhost:4000/api/v1` 
+💥 `https://localhost:4000/api/v1` 같은 사용자 지정 기본 URL 경로에서 LiteLLM을 제공하려는 경우 사용하세요.
 
 :::info
 
-Requires v1.72.3 or higher.
+v1.72.3 이상이 필요합니다.
 
 :::
 
-Limitations:
-- This does not work in [litellm non-root](./deploy#non-root---without-internet-connection) images, as it requires write access to the UI files.
+제한 사항:
+- UI 파일에 대한 쓰기 권한이 필요하므로 [litellm non-root](./deploy#non-root---without-internet-connection) 이미지에서는 작동하지 않습니다.
 
-## Usage
+## 사용법
 
-### 1. Set `SERVER_ROOT_PATH` in your .env
+### 1. .env에서 `SERVER_ROOT_PATH` 설정 {#1-set-server_root_path-in-your-env}
 
-👉 Set `SERVER_ROOT_PATH` in your .env and this will be set as your server root path
+👉 .env에서 `SERVER_ROOT_PATH`를 설정하면 이 값이 서버 루트 경로로 설정됩니다.
 
 ```
 export SERVER_ROOT_PATH="/api/v1"
 ```
 
-### 2. Run the Proxy
+### 2. Proxy 실행 {#2-run-the-proxy}
 
 ```shell
 litellm proxy --config /path/to/config.yaml
 ```
 
-After running the proxy you can access it on `http://0.0.0.0:4000/api/v1/` (since we set `SERVER_ROOT_PATH="/api/v1"`)
+Proxy를 실행한 후에는 `http://0.0.0.0:4000/api/v1/`에서 접근할 수 있습니다(`SERVER_ROOT_PATH="/api/v1"`로 설정했기 때문입니다).
 
-### 3. Verify Running on correct path
+### 3. 올바른 경로에서 실행 중인지 확인 {#3-verify-running-on-correct-path}
 
 <Image img={require('../../img/custom_root_path.png')} />
 
-**That's it**, that's all you need to run the proxy on a custom root path
+**끝입니다.** 사용자 지정 루트 경로에서 Proxy를 실행하는 데 필요한 작업은 이것이 전부입니다.
 
 
-## Demo
+## 데모 {#demo}
 
-[Here's a demo video](https://drive.google.com/file/d/1zqAxI0lmzNp7IJH1dxlLuKqX2xi3F_R3/view?usp=sharing) of running the proxy on a custom root path
+사용자 지정 루트 경로에서 Proxy를 실행하는 [데모 비디오](https://drive.google.com/file/d/1zqAxI0lmzNp7IJH1dxlLuKqX2xi3F_R3/view?usp=sharing)입니다.

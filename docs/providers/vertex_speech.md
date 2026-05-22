@@ -1,18 +1,18 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Vertex AI Text to Speech
+# Vertex AI TTS {#vertex-ai-text-to-speech}
 
-| Property | Details |
+| 속성 | 세부 정보 |
 |-------|-------|
-| Description | Google Cloud Text-to-Speech with Chirp3 HD voices and Gemini TTS |
-| Provider Route on LiteLLM | `vertex_ai/chirp` (Chirp), `vertex_ai/gemini-*-tts` (Gemini) |
+| 설명 | Chirp3 HD 음성 및 Gemini TTS를 사용하는 `Google Cloud Text-to-Speech` |
+| LiteLLM의 Provider Route | `vertex_ai/chirp` (Chirp), `vertex_ai/gemini-*-tts` (Gemini) |
 
-## Chirp3 HD Voices
+## Chirp3 HD Voices {#chirp3-hd-voices}
 
-Google Cloud Text-to-Speech API with high-quality Chirp3 HD voices.
+고품질 Chirp3 HD 음성을 사용하는 `Google Cloud Text-to-Speech API`입니다.
 
-### Quick Start
+### 빠른 시작
 
 #### LiteLLM Python SDK
 
@@ -33,7 +33,7 @@ response.stream_to_file(speech_file_path)
 
 #### LiteLLM AI Gateway
 
-**1. Setup config.yaml**
+**1. config.yaml 설정**
 
 ```yaml showLineNumbers title="config.yaml"
 model_list:
@@ -45,13 +45,13 @@ model_list:
       vertex_credentials: "/path/to/service_account.json"
 ```
 
-**2. Start the proxy**
+**2. 프록시 시작**
 
 ```bash title="Start LiteLLM Proxy"
 litellm --config /path/to/config.yaml
 ```
 
-**3. Make requests**
+**3. 요청 보내기**
 
 <Tabs>
 <TabItem value="curl" label="curl">
@@ -87,11 +87,11 @@ response.stream_to_file("speech.mp3")
 </TabItem>
 </Tabs>
 
-### Voice Mapping
+### 음성 매핑 {#voice-mapping}
 
-LiteLLM maps OpenAI voice names to Google Cloud voices. You can use either OpenAI voices or Google Cloud voices directly.
+LiteLLM은 OpenAI 음성 이름을 Google Cloud 음성에 매핑합니다. OpenAI 음성 또는 Google Cloud 음성을 직접 사용할 수 있습니다.
 
-| OpenAI Voice | Google Cloud Voice |
+| OpenAI 음성 | Google Cloud 음성 |
 |-------------|-------------------|
 | `alloy` | en-US-Studio-O |
 | `echo` | en-US-Studio-M |
@@ -100,7 +100,7 @@ LiteLLM maps OpenAI voice names to Google Cloud voices. You can use either OpenA
 | `nova` | en-US-Studio-O |
 | `shimmer` | en-US-Wavenet-F |
 
-### Using Google Cloud Voices Directly
+### Google Cloud Voices 직접 사용 {#using-google-cloud-voices-directly}
 
 #### LiteLLM Python SDK
 
@@ -194,11 +194,11 @@ response.stream_to_file("speech.mp3")
 </TabItem>
 </Tabs>
 
-Browse available voices: [Google Cloud Text-to-Speech Console](https://console.cloud.google.com/vertex-ai/generative/speech/text-to-speech)
+사용 가능한 음성은 [Google Cloud Text-to-Speech Console](https://console.cloud.google.com/vertex-ai/generative/speech/text-to-speech)에서 확인할 수 있습니다.
 
-### Passing Raw SSML
+### Raw SSML 전달 {#passing-raw-ssml}
 
-LiteLLM auto-detects SSML when your input contains `<speak>` tags and passes it through unchanged.
+입력에 `<speak>` 태그가 포함되어 있으면 LiteLLM이 SSML을 자동 감지하고 변경 없이 전달합니다.
 
 #### LiteLLM Python SDK
 
@@ -273,17 +273,17 @@ response.stream_to_file("speech.mp3")
 </TabItem>
 </Tabs>
 
-### Supported Parameters
+### 지원 파라미터
 
-| Parameter | Description | Values |
+| 파라미터 | 설명 | 값 |
 |-----------|-------------|--------|
-| `voice` | Voice selection | OpenAI voice, Google Cloud voice name, or dict |
-| `input` | Text to convert | Plain text or SSML |
-| `speed` | Speaking rate | 0.25 to 4.0 (default: 1.0) |
-| `response_format` | Audio format | `mp3`, `opus`, `wav`, `pcm`, `flac` |
-| `use_ssml` | Force SSML mode | `True` / `False` |
+| `voice` | 음성 선택 | OpenAI 음성, Google Cloud 음성 이름 또는 dict |
+| `input` | 변환할 텍스트 | 일반 텍스트 또는 SSML |
+| `speed` | 말하기 속도 | 0.25~4.0 (기본값: 1.0) |
+| `response_format` | 오디오 형식 | `mp3`, `opus`, `wav`, `pcm`, `flac` |
+| `use_ssml` | SSML 모드 강제 적용 | `True` / `False` |
 
-### Async Usage
+### 비동기 사용법 {#async-사용법}
 
 ```python showLineNumbers title="Async Speech Generation"
 import asyncio
@@ -303,19 +303,19 @@ asyncio.run(main())
 
 ---
 
-## Gemini TTS
+## Gemini TTS {#gemini-tts}
 
-Gemini models with audio output capabilities using the chat completions API.
+chat completions API를 사용해 오디오 출력 기능을 제공하는 Gemini 모델입니다.
 
 :::warning
-**Limitations:**
-- Only supports `pcm16` audio format
-- Streaming not yet supported
-- Must set `modalities: ["audio"]`
-- When using via LiteLLM Proxy, must include `"allowed_openai_params": ["audio", "modalities"]` in the request body to enable audio parameters
+**제한 사항:**
+- `pcm16` 오디오 형식만 지원합니다.
+- 스트리밍은 아직 지원되지 않습니다.
+- `modalities: ["audio"]`를 설정해야 합니다.
+- LiteLLM Proxy를 통해 사용할 때는 오디오 파라미터를 활성화하기 위해 요청 본문에 `"allowed_openai_params": ["audio", "modalities"]`를 포함해야 합니다.
 :::
 
-### Quick Start
+### 빠른 시작
 
 #### LiteLLM Python SDK
 
@@ -342,7 +342,7 @@ print(response)
 
 #### LiteLLM AI Gateway
 
-**1. Setup config.yaml**
+**1. config.yaml 설정**
 
 ```yaml showLineNumbers title="config.yaml"
 model_list:
@@ -354,13 +354,13 @@ model_list:
       vertex_credentials: "/path/to/service_account.json"
 ```
 
-**2. Start the proxy**
+**2. 프록시 시작**
 
 ```bash title="Start LiteLLM Proxy"
 litellm --config /path/to/config.yaml
 ```
 
-**3. Make requests**
+**3. 요청 보내기**
 
 <Tabs>
 <TabItem value="curl" label="curl">
@@ -399,14 +399,14 @@ print(response)
 </TabItem>
 </Tabs>
 
-### Supported Models
+### 지원 모델 {#supported-모델}
 
 - `vertex_ai/gemini-2.5-flash-preview-tts`
 - `vertex_ai/gemini-2.5-pro-preview-tts`
 
-See [Gemini TTS documentation](https://ai.google.dev/gemini-api/docs/speech-generation) for available voices.
+사용 가능한 음성은 [Gemini TTS documentation](https://ai.google.dev/gemini-api/docs/speech-generation)을 참고하세요.
 
-### Advanced Usage
+### 고급 사용법
 
 ```python showLineNumbers title="Gemini TTS with System Prompt"
 from litellm import completion

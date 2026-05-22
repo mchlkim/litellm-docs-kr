@@ -1,16 +1,16 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# CopilotKit SDK with LiteLLM
+# LiteLLM과 함께 CopilotKit SDK 사용 {#copilotkit-sdk-with-litellm}
 
-Use CopilotKit SDK with any LLM provider through LiteLLM Proxy.
+LiteLLM Proxy를 통해 어떤 LLM provider와도 CopilotKit SDK를 사용할 수 있습니다.
 
-> **Note:** CopilotKit SDK integration with LiteLLM Proxy works with LiteLLM v1.81.7-nightly or higher.
+> **참고:** LiteLLM Proxy와 CopilotKit SDK 통합은 LiteLLM v1.81.7-nightly 이상에서 동작합니다.
 
 
-## Quick Start
+## 빠른 시작
 
-### 1. Add Model to Config
+### 1. Config에 Model 추가 {#add-model-to-config}
 
 ```yaml title="config.yaml"
 model_list:
@@ -20,13 +20,13 @@ model_list:
       api_key: "os.environ/ANTHROPIC_API_KEY"
 ```
 
-### 2. Start LiteLLM Proxy
+### 2. LiteLLM Proxy 시작 {#start-litellm-proxy}
 
 ```bash
 litellm --config config.yaml
 ```
 
-### 3. Use CopilotKit SDK
+### 3. CopilotKit SDK 사용 {#use-copilotkit-sdk}
 
 ```typescript
 import OpenAI from "openai";
@@ -57,7 +57,7 @@ export const POST = async (req: NextRequest) => {
 };
 ```
 
-### 4. Test
+### 4. 테스트 {#test}
 
 ```bash
 curl -X POST http://localhost:3000/api/copilotkit \
@@ -85,15 +85,15 @@ curl -X POST http://localhost:3000/api/copilotkit \
 }'
 ```
 
-## Environment Variables
+## 환경 변수 {#environment-variables}
 
-| Variable | Value | Description |
+| Variable | Value | 설명 |
 |----------|-------|-------------|
-| `OPENAI_API_KEY` | `sk-12345` | Your LiteLLM API key |
+| `OPENAI_API_KEY` | `sk-12345` | LiteLLM API key |
 | `OPENAI_BASE_URL` | `http://localhost:4000/v1` | LiteLLM proxy URL |
 
 
-## Related Resources
+## 관련 자료 {#related-resources}
 
-- [CopilotKit Documentation](https://docs.copilotkit.ai)
-- [LiteLLM Proxy Quick Start](../proxy/quick_start)
+- [CopilotKit 문서](https://docs.copilotkit.ai)
+- [LiteLLM Proxy 빠른 시작](../proxy/quick_start)

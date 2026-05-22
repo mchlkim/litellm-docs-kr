@@ -1,24 +1,24 @@
 # FriendliAI
 
 :::info
-**We support ALL FriendliAI models, just set `friendliai/` as a prefix when sending completion requests**
+**모든 FriendliAI model을 지원합니다. completion request를 보낼 때 `friendliai/`를 prefix로 설정하세요.**
 :::
 
-| Property                   | Details                                                                                         |
+| 속성                   | 세부 정보                                                                                         |
 | -------------------------- | ----------------------------------------------------------------------------------------------- |
-| Description                | The fastest and most efficient inference engine to build production-ready, compound AI systems. |
-| Provider Route on LiteLLM  | `friendliai/`                                                                                   |
-| Provider Doc               | [FriendliAI ↗](https://friendli.ai/docs/sdk/integrations/litellm)                               |
-| Supported OpenAI Endpoints | `/chat/completions`, `/completions`                                                             |
+| 설명                | production-ready compound AI system을 구축하기 위한 빠르고 효율적인 inference engine입니다. |
+| LiteLLM provider 경로  | `friendliai/`                                                                                   |
+| Provider 문서               | [FriendliAI ↗](https://friendli.ai/docs/sdk/integrations/litellm)                               |
+| 지원 OpenAI endpoint | `/chat/completions`, `/completions`                                                             |
 
-## API Key
+## API key {#api-key}
 
 ```python
 # env variable
 os.environ['FRIENDLI_TOKEN']
 ```
 
-## Sample Usage
+## 샘플 사용법 {#sample-usage}
 
 ```python
 from litellm import completion
@@ -34,7 +34,7 @@ response = completion(
 print(response)
 ```
 
-## Sample Usage - Streaming
+## 샘플 사용법 - streaming {#sample-usage-streaming}
 
 ```python
 from litellm import completion
@@ -53,11 +53,11 @@ for chunk in response:
     print(chunk)
 ```
 
-## Supported Models
+## 지원 model {#supported-models}
 
-We support ALL FriendliAI AI models, just set `friendliai/` as a prefix when sending completion requests
+모든 FriendliAI model을 지원합니다. completion request를 보낼 때 `friendliai/`를 prefix로 설정하세요.
 
-| Model Name                  | Function Call                                                          |
+| Model name                  | 함수 호출                                                          |
 | --------------------------- | ---------------------------------------------------------------------- |
-| meta-llama-3.1-8b-instruct  | `completion(model="friendliai/meta-llama-3.1-8b-instruct", messages)`  |
-| meta-llama-3.1-70b-instruct | `completion(model="friendliai/meta-llama-3.1-70b-instruct", messages)` |
+| `meta-llama-3.1-8b-instruct`  | `completion(model="friendliai/meta-llama-3.1-8b-instruct", messages)`  |
+| `meta-llama-3.1-70b-instruct` | `completion(model="friendliai/meta-llama-3.1-70b-instruct", messages)` |

@@ -5,33 +5,33 @@ import TabItem from '@theme/TabItem';
 
 
 :::info
-**We support ALL Fireworks AI models, just set `fireworks_ai/` as a prefix when sending completion requests**
+**모든 Fireworks AI 모델을 지원합니다. completion 요청을 보낼 때 `fireworks_ai/`를 prefix로 설정하기만 하면 됩니다.**
 :::
 
-| Property | Details |
+| 속성 | 세부 정보 |
 |-------|-------|
-| Description | The fastest and most efficient inference engine to build production-ready, compound AI systems. |
-| Provider Route on LiteLLM | `fireworks_ai/` |
-| Provider Doc | [Fireworks AI ↗](https://docs.fireworks.ai/getting-started/introduction) |
-| Supported OpenAI Endpoints | `/chat/completions`, `/embeddings`, `/completions`, `/audio/transcriptions`, `/rerank` |
+| 설명 | 프로덕션 준비가 된 복합 AI 시스템을 빌드하기 위한 가장 빠르고 효율적인 추론 엔진입니다. |
+| LiteLLM의 Provider Route | `fireworks_ai/` |
+| Provider 문서 | [Fireworks AI ↗](https://docs.fireworks.ai/getting-started/introduction) |
+| 지원되는 OpenAI 엔드포인트 | `/chat/completions`, `/embeddings`, `/completions`, `/audio/transcriptions`, `/rerank` |
 
 
-## Overview
+## 개요 {#overview}
 
-This guide explains how to integrate LiteLLM with Fireworks AI. You can connect to Fireworks AI in three main ways:
+이 가이드에서는 LiteLLM을 Fireworks AI와 통합하는 방법을 설명합니다. Fireworks AI에는 주로 세 가지 방식으로 연결할 수 있습니다.
 
-1. <b> Using Fireworks AI serverless models </b> – Easy connection to Fireworks-managed models.
-2. <b> Connecting to a model in your own Fireworks account </b> – Access models that are hosted within your Fireworks account.
-3. <b> Connecting via a direct-route deployment </b> – A more flexible, customizable connection to a specific Fireworks instance.
+1. <b> Fireworks AI serverless 모델 사용 </b> - Fireworks가 관리하는 모델에 쉽게 연결합니다.
+2. <b> 자체 Fireworks 계정의 모델에 연결 </b> - Fireworks 계정 안에서 호스팅되는 모델에 접근합니다.
+3. <b> direct-route deployment를 통해 연결 </b> - 특정 Fireworks 인스턴스에 더 유연하고 사용자 지정 가능한 방식으로 연결합니다.
 
 
-## API Key
+## API 키 {#api-key}
 ```python
 # env variable
 os.environ['FIREWORKS_AI_API_KEY']
 ```
 
-## Sample Usage - Serverless Models
+## 샘플 사용법 - Serverless 모델 {#sample-usage---serverless-models}
 ```python
 from litellm import completion
 import os
@@ -46,7 +46,7 @@ response = completion(
 print(response)
 ```
 
-## Sample Usage - Serverless Models - Streaming
+## 샘플 사용법 - Serverless 모델 - Streaming {#sample-usage---serverless-models---streaming}
 ```python
 from litellm import completion
 import os
@@ -64,7 +64,7 @@ for chunk in response:
     print(chunk)
 ```
 
-## Sample Usage -  Models in Your Own Fireworks Account 
+## 샘플 사용법 - 자체 Fireworks 계정의 모델 {#sample-usage---models-on-your-fireworks-account}
 ```python
 from litellm import completion
 import os
@@ -79,7 +79,7 @@ response = completion(
 print(response)
 ```
 
-## Sample Usage - Direct-Route Deployment
+## 샘플 사용법 - Direct-Route Deployment {#sample-usage---direct-route-deployment}
 ```python
 from litellm import completion
 import os
@@ -95,12 +95,12 @@ response = completion(
 print(response)
 ```
 
-> **Note:** The above is for the chat interface, if you want to use the text completion interface it's model="text-completion-openai/accounts/fireworks/models/qwen2p5-coder-7b#accounts/gitlab/deployments/2fb7764c"
+> **참고:** 위 예시는 chat 인터페이스용입니다. text completion 인터페이스를 사용하려면 model="text-completion-openai/accounts/fireworks/models/qwen2p5-coder-7b#accounts/gitlab/deployments/2fb7764c"를 사용하세요.
 
 
-## Usage with LiteLLM Proxy 
+## LiteLLM Proxy 사용법 {#usage-with-litellm-proxy}
 
-### 1. Set Fireworks AI Models on config.yaml
+### 1. config.yaml에 Fireworks AI 모델 설정 {#1-set-fireworks-ai-models-on-configyaml}
 
 ```yaml
 model_list:
@@ -110,13 +110,13 @@ model_list:
       api_key: "os.environ/FIREWORKS_AI_API_KEY"
 ```
 
-### 2. Start Proxy 
+### 2. Proxy 시작 {#2-start-proxy}
 
 ```
 litellm --config config.yaml
 ```
 
-### 3. Test it
+### 3. 테스트 {#3-test}
 
 
 <Tabs>
@@ -190,11 +190,11 @@ print(response)
 </TabItem>
 </Tabs>
 
-## Document Inlining 
+## 문서 인라인 처리 {#document-inlining}
 
-LiteLLM supports document inlining for Fireworks AI models. This is useful for models that are not vision models, but still need to parse documents/images/etc.
+LiteLLM은 Fireworks AI 모델의 문서 인라인 처리를 지원합니다. vision 모델은 아니지만 문서, 이미지 등을 파싱해야 하는 모델에 유용합니다.
 
-LiteLLM will add `#transform=inline` to the url of the image_url, if the model is not a vision model.[**See Code**](https://github.com/BerriAI/litellm/blob/1ae9d45798bdaf8450f2dfdec703369f3d2212b7/litellm/llms/fireworks_ai/chat/transformation.py#L114)
+모델이 vision 모델이 아니면 LiteLLM은 image_url의 url에 `#transform=inline`을 추가합니다. [**코드 보기**](https://github.com/BerriAI/litellm/blob/1ae9d45798bdaf8450f2dfdec703369f3d2212b7/litellm/llms/fireworks_ai/chat/transformation.py#L114)
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -232,7 +232,7 @@ print(completion)
 </TabItem>
 <TabItem value="proxy" label="PROXY">
 
-1. Setup config.yaml
+1. config.yaml 설정
 
 ```yaml
 model_list:
@@ -243,13 +243,13 @@ model_list:
     #   api_base: os.environ/FIREWORKS_AI_API_BASE [OPTIONAL], defaults to "https://api.fireworks.ai/inference/v1"
 ```
 
-2. Start Proxy
+2. Proxy 시작
 
 ```
 litellm --config config.yaml
 ```
 
-3. Test it
+3. 테스트
 
 ```bash
 curl -L -X POST 'http://0.0.0.0:4000/chat/completions' \
@@ -278,9 +278,9 @@ curl -L -X POST 'http://0.0.0.0:4000/chat/completions' \
 </TabItem>
 </Tabs>
 
-### Disable Auto-add
+### 자동 추가 비활성화 {#disabling-automatic-addition}
 
-If you want to disable the auto-add of `#transform=inline` to the url of the image_url, you can set the `auto_add_transform_inline` to `False` in the `FireworksAIConfig` class.
+image_url의 url에 `#transform=inline`이 자동으로 추가되지 않게 하려면 `FireworksAIConfig` 클래스에서 `auto_add_transform_inline`을 `False`로 설정할 수 있습니다.
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -300,9 +300,9 @@ litellm_settings:
 </TabItem>
 </Tabs>
 
-## Reasoning Effort
+## 추론 노력도 {#reasoning-effort}
 
-The `reasoning_effort` parameter is supported on select Fireworks AI models. Supported models include:
+`reasoning_effort` 파라미터는 일부 Fireworks AI 모델에서 지원됩니다. 지원되는 모델은 다음과 같습니다.
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -345,40 +345,40 @@ curl http://0.0.0.0:4000/v1/chat/completions \
 </TabItem>
 </Tabs>
 
-## Supported Models - ALL Fireworks AI Models Supported!
+## 지원되는 모델 - 모든 Fireworks AI 모델 지원 {#supported-models---all-fireworks-ai-models-supported}
 
 :::info
-We support ALL Fireworks AI models, just set `fireworks_ai/` as a prefix when sending completion requests
+모든 Fireworks AI 모델을 지원합니다. completion 요청을 보낼 때 `fireworks_ai/`를 prefix로 설정하기만 하면 됩니다.
 :::
 
-| Model Name               | Function Call                                                                                                                                                      |
+| 모델 이름               | 함수 호출                                                                                                                                                      |
 |--------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| llama-v3p2-1b-instruct | `completion(model="fireworks_ai/llama-v3p2-1b-instruct", messages)` |
-| llama-v3p2-3b-instruct | `completion(model="fireworks_ai/llama-v3p2-3b-instruct", messages)` |
-| llama-v3p2-11b-vision-instruct | `completion(model="fireworks_ai/llama-v3p2-11b-vision-instruct", messages)` |
-| llama-v3p2-90b-vision-instruct | `completion(model="fireworks_ai/llama-v3p2-90b-vision-instruct", messages)` |
-| mixtral-8x7b-instruct | `completion(model="fireworks_ai/mixtral-8x7b-instruct", messages)` | 
+| `llama-v3p2-1b-instruct` | `completion(model="fireworks_ai/llama-v3p2-1b-instruct", messages)` |
+| `llama-v3p2-3b-instruct` | `completion(model="fireworks_ai/llama-v3p2-3b-instruct", messages)` |
+| `llama-v3p2-11b-vision-instruct` | `completion(model="fireworks_ai/llama-v3p2-11b-vision-instruct", messages)` |
+| `llama-v3p2-90b-vision-instruct` | `completion(model="fireworks_ai/llama-v3p2-90b-vision-instruct", messages)` |
+| `mixtral-8x7b-instruct` | `completion(model="fireworks_ai/mixtral-8x7b-instruct", messages)` | 
 | firefunction-v1 | `completion(model="fireworks_ai/firefunction-v1", messages)` |
 | llama-v2-70b-chat | `completion(model="fireworks_ai/llama-v2-70b-chat", messages)` |  
 
-## Supported Embedding Models
+## 지원되는 Embedding 모델 {#supported-embedding-models}
 
 :::info
-We support ALL Fireworks AI models, just set `fireworks_ai/` as a prefix when sending embedding requests
+모든 Fireworks AI 모델을 지원합니다. embedding 요청을 보낼 때 `fireworks_ai/`를 prefix로 설정하기만 하면 됩니다.
 :::
 
-| Model Name            | Function Call                                                   |
+| 모델 이름            | 함수 호출                                                   |
 |-----------------------|-----------------------------------------------------------------|
-| fireworks_ai/nomic-ai/nomic-embed-text-v1.5 | `response = litellm.embedding(model="fireworks_ai/nomic-ai/nomic-embed-text-v1.5", input=input_text)` |
-| fireworks_ai/nomic-ai/nomic-embed-text-v1 | `response = litellm.embedding(model="fireworks_ai/nomic-ai/nomic-embed-text-v1", input=input_text)` |
-| fireworks_ai/WhereIsAI/UAE-Large-V1 | `response = litellm.embedding(model="fireworks_ai/WhereIsAI/UAE-Large-V1", input=input_text)` |
-| fireworks_ai/thenlper/gte-large | `response = litellm.embedding(model="fireworks_ai/thenlper/gte-large", input=input_text)` |
-| fireworks_ai/thenlper/gte-base | `response = litellm.embedding(model="fireworks_ai/thenlper/gte-base", input=input_text)` |
+| `fireworks_ai/nomic-ai/nomic-embed-text-v1.5` | `response = litellm.embedding(model="fireworks_ai/nomic-ai/nomic-embed-text-v1.5", input=input_text)` |
+| `fireworks_ai/nomic-ai/nomic-embed-text-v1` | `response = litellm.embedding(model="fireworks_ai/nomic-ai/nomic-embed-text-v1", input=input_text)` |
+| `fireworks_ai/WhereIsAI/UAE-Large-V1` | `response = litellm.embedding(model="fireworks_ai/WhereIsAI/UAE-Large-V1", input=input_text)` |
+| `fireworks_ai/thenlper/gte-large` | `response = litellm.embedding(model="fireworks_ai/thenlper/gte-large", input=input_text)` |
+| `fireworks_ai/thenlper/gte-base` | `response = litellm.embedding(model="fireworks_ai/thenlper/gte-base", input=input_text)` |
 
 
-## Audio Transcription
+## 오디오 전사 {#audio-transcription}
 
-### Quick Start
+### 빠른 시작 {#quick-start}
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -396,12 +396,12 @@ response = transcription(
 )
 ```
 
-[Pass API Key/API Base in `.transcription`](../set_keys.md#passing-args-to-completion)
+`.transcription`에서 API Key/API Base를 전달할 수 있습니다.
 
 </TabItem>
 <TabItem value="proxy" label="PROXY">
 
-1. Setup config.yaml
+1. config.yaml 설정
 
 ```yaml
 model_list:
@@ -414,13 +414,13 @@ model_list:
       mode: audio_transcription
 ```
 
-2. Start Proxy
+2. Proxy 시작
 
 ```
 litellm --config config.yaml
 ```
 
-3. Test it
+3. 테스트
 
 ```bash
 curl -L -X POST 'http://0.0.0.0:4000/v1/audio/transcriptions' \
@@ -433,9 +433,9 @@ curl -L -X POST 'http://0.0.0.0:4000/v1/audio/transcriptions' \
 </TabItem>
 </Tabs>
 
-## Rerank
+## Rerank {#rerank}
 
-### Quick Start
+### 빠른 시작 {#quick-start-1}
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -464,12 +464,12 @@ response = rerank(
 print(response)
 ```
 
-[Pass API Key/API Base in `.rerank`](../set_keys.md#passing-args-to-completion)
+`.rerank`에서 API Key/API Base를 전달할 수 있습니다.
 
 </TabItem>
 <TabItem value="proxy" label="PROXY">
 
-1. Setup config.yaml
+1. config.yaml 설정
 
 ```yaml
 model_list:
@@ -481,13 +481,13 @@ model_list:
       mode: rerank
 ```
 
-2. Start Proxy
+2. Proxy 시작
 
 ```
 litellm --config config.yaml
 ```
 
-3. Test it
+3. 테스트
 
 ```bash
 curl http://0.0.0.0:4000/rerank \
@@ -510,8 +510,8 @@ curl http://0.0.0.0:4000/rerank \
 </TabItem>
 </Tabs>
 
-### Supported Models
+### 지원되는 모델 {#supported-models}
 
-| Model Name | Function Call |
+| 모델 이름 | 함수 호출 |
 |------------|---------------|
-| fireworks/qwen3-reranker-8b | `rerank(model="fireworks_ai/fireworks/qwen3-reranker-8b", query=query, documents=documents)` |
+| `fireworks/qwen3-reranker-8b` | `rerank(model="fireworks_ai/fireworks/qwen3-reranker-8b", query=query, documents=documents)` |

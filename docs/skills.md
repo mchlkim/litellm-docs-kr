@@ -1,21 +1,21 @@
-# /skills - Anthropic Skills API
+# Anthropic Skills API용 /skills
 
-| Feature | Supported | 
+| 기능 | 지원 여부 | 
 |---------|-----------|
-| Cost Tracking | ✅ |
+| 비용 추적 | ✅ |
 | Logging | ✅ |
-| Load Balancing | ✅ |
-| Supported Providers | `anthropic` |
+| 로드 밸런싱 | ✅ |
+| 지원 프로바이더 | `anthropic` |
 
 :::tip
 
-LiteLLM follows the [Anthropic Skills API](https://docs.anthropic.com/en/docs/build-with-claude/skills) for creating, managing, and using reusable AI capabilities.
+LiteLLM은 재사용 가능한 AI 기능을 생성, 관리, 사용하기 위해 [Anthropic Skills API](https://docs.anthropic.com/en/docs/build-with-claude/skills)를 따릅니다.
 
 :::
 
-## **LiteLLM Python SDK Usage**
+## **LiteLLM Python SDK 사용법**
 
-### Quick Start - Create a Skill
+### 빠른 시작 - Skill 생성 {#skill-create}
 
 ```python showLineNumbers title="create_skill.py"
 from litellm import create_skill
@@ -53,7 +53,7 @@ response = create_skill(
 print(f"Skill created: {response.id}")
 ```
 
-### List Skills
+### Skills 목록 조회
 
 ```python showLineNumbers title="list_skills.py"
 from litellm import list_skills
@@ -68,7 +68,7 @@ for skill in response.data:
     print(f"{skill.display_title}: {skill.id}")
 ```
 
-### Get Skill Details
+### Skill 세부 정보 조회
 
 ```python showLineNumbers title="get_skill.py"
 from litellm import get_skill
@@ -83,7 +83,7 @@ print(f"Skill: {skill.display_title}")
 print(f"Description: {skill.description}")
 ```
 
-### Delete a Skill
+### Skill 삭제
 
 ```python showLineNumbers title="delete_skill.py"
 from litellm import delete_skill
@@ -97,7 +97,7 @@ response = delete_skill(
 print(f"Deleted: {response.id}")
 ```
 
-### Async Usage
+### Async 사용법
 
 ```python showLineNumbers title="async_skills.py"
 from litellm import acreate_skill, alist_skills, aget_skill, adelete_skill
@@ -136,17 +136,17 @@ async def manage_skills():
 asyncio.run(manage_skills())
 ```
 
-## **LiteLLM Proxy Usage**
+## **LiteLLM Proxy 사용법**
 
-LiteLLM provides Anthropic-compatible `/skills` endpoints for managing skills.
+LiteLLM은 skills 관리를 위해 Anthropic 호환 `/skills` 엔드포인트를 제공합니다.
 
-### Authentication
+### 인증
 
-There are two ways to authenticate Skills API requests:
+Skills API 요청을 인증하는 방법은 두 가지입니다.
 
-**Option 1: Use Default ANTHROPIC_API_KEY**
+**옵션 1: 기본 ANTHROPIC_API_KEY 사용**
 
-Set the `ANTHROPIC_API_KEY` environment variable. Requests without a `model` parameter will use this default key.
+`ANTHROPIC_API_KEY` 환경 변수를 설정하세요. `model` 파라미터가 없는 요청은 이 기본 키를 사용합니다.
 
 ```yaml showLineNumbers title="config.yaml"
 # No model_list needed - uses env var
@@ -161,9 +161,9 @@ curl "http://0.0.0.0:4000/v1/skills?beta=true" \
   -H "anthropic-beta: skills-2025-10-02"
 ```
 
-**Option 2: Specify Model for Credential Selection**
+**옵션 2: Credential 선택을 위한 모델 지정**
 
-Define multiple models in your config and use the `model` parameter to specify which credentials to use.
+config에 여러 모델을 정의하고 `model` 파라미터를 사용해 어떤 credential을 사용할지 지정합니다.
 
 ```yaml showLineNumbers title="config.yaml"
 model_list:
@@ -173,7 +173,7 @@ model_list:
       api_key: os.environ/ANTHROPIC_API_KEY
 ```
 
-Start litellm
+LiteLLM을 시작합니다.
 
 ```bash
 litellm --config /path/to/config.yaml
@@ -181,15 +181,15 @@ litellm --config /path/to/config.yaml
 # RUNNING on http://0.0.0.0:4000
 ```
 
-### Basic Usage
+### 기본 사용법
 
-All examples below work with **either** authentication option (default env key or model-based routing).
+아래 모든 예제는 두 인증 옵션, 즉 기본 env key 또는 model 기반 routing 중 **어느 쪽에서도** 동작합니다.
 
-#### Create Skill
+#### Skill 생성
 
-You can upload either a ZIP file or directly upload the SKILL.md file:
+ZIP 파일을 업로드하거나 SKILL.md 파일을 직접 업로드할 수 있습니다.
 
-**Option 1: Upload ZIP file**
+**옵션 1: ZIP 파일 업로드**
 
 ```bash showLineNumbers title="create_skill_zip.sh"
 curl "http://0.0.0.0:4000/v1/skills?beta=true" \
@@ -201,7 +201,7 @@ curl "http://0.0.0.0:4000/v1/skills?beta=true" \
   -F "files[]=@test-skill.zip"
 ```
 
-**Option 2: Upload SKILL.md directly**
+**옵션 2: SKILL.md 직접 업로드**
 
 ```bash showLineNumbers title="create_skill_md.sh"
 curl "http://0.0.0.0:4000/v1/skills?beta=true" \
@@ -213,7 +213,7 @@ curl "http://0.0.0.0:4000/v1/skills?beta=true" \
   -F "files[]=@test-skill/SKILL.md;filename=test-skill/SKILL.md"
 ```
 
-#### List Skills
+#### Skills 목록 조회
 
 ```bash showLineNumbers title="list_skills.sh"
 curl "http://0.0.0.0:4000/v1/skills?beta=true" \
@@ -222,7 +222,7 @@ curl "http://0.0.0.0:4000/v1/skills?beta=true" \
   -H "anthropic-beta: skills-2025-10-02"
 ```
 
-#### Get Skill
+#### Skill 조회
 
 ```bash showLineNumbers title="get_skill.sh"
 curl "http://0.0.0.0:4000/v1/skills/skill_01abc?beta=true" \
@@ -231,7 +231,7 @@ curl "http://0.0.0.0:4000/v1/skills/skill_01abc?beta=true" \
   -H "anthropic-beta: skills-2025-10-02"
 ```
 
-#### Delete Skill
+#### Skill 삭제
 
 ```bash showLineNumbers title="delete_skill.sh"
 curl "http://0.0.0.0:4000/v1/skills/skill_01abc?beta=true" \
@@ -241,9 +241,9 @@ curl "http://0.0.0.0:4000/v1/skills/skill_01abc?beta=true" \
   -H "anthropic-beta: skills-2025-10-02"
 ```
 
-### Model-Based Routing (Multi-Account)
+### Model 기반 Routing(Multi-Account)
 
-If you have multiple Anthropic accounts, you can use model-based routing to specify which account to use:
+여러 Anthropic 계정이 있다면 model 기반 routing으로 사용할 계정을 지정할 수 있습니다.
 
 ```yaml showLineNumbers title="config.yaml"
 model_list:
@@ -258,9 +258,9 @@ model_list:
       api_key: os.environ/ANTHROPIC_API_KEY_TEAM_B
 ```
 
-Then route to specific accounts using the `model` parameter:
+그런 다음 `model` 파라미터를 사용해 특정 계정으로 라우팅합니다.
 
-**Create Skill with Routing**
+**Routing으로 Skill 생성**
 
 ```bash showLineNumbers title="create_with_routing.sh"
 # Route to Team A - using ZIP file
@@ -284,7 +284,7 @@ curl "http://0.0.0.0:4000/v1/skills?beta=true" \
   -F "files[]=@test-skill/SKILL.md;filename=test-skill/SKILL.md"
 ```
 
-**List Skills with Routing**
+**Routing으로 Skills 목록 조회**
 
 ```bash showLineNumbers title="list_with_routing.sh"
 # List Team A skills
@@ -300,7 +300,7 @@ curl "http://0.0.0.0:4000/v1/skills?beta=true&model=claude-team-b" \
   -H "anthropic-beta: skills-2025-10-02"
 ```
 
-**Get Skill with Routing**
+**Routing으로 Skill 조회**
 
 ```bash showLineNumbers title="get_with_routing.sh"
 # Get skill from Team A
@@ -316,7 +316,7 @@ curl "http://0.0.0.0:4000/v1/skills/skill_01xyz?beta=true&model=claude-team-b" \
   -H "anthropic-beta: skills-2025-10-02"
 ```
 
-**Delete Skill with Routing**
+**Routing으로 Skill 삭제**
 
 ```bash showLineNumbers title="delete_with_routing.sh"
 # Delete skill from Team A
@@ -334,9 +334,9 @@ curl "http://0.0.0.0:4000/v1/skills/skill_01xyz?beta=true&model=claude-team-b" \
   -H "anthropic-beta: skills-2025-10-02"
 ```
 
-## **SKILL.md Format**
+## **SKILL.md 형식**
 
-Skills require a `SKILL.md` file with YAML frontmatter:
+Skills에는 YAML frontmatter가 포함된 `SKILL.md` 파일이 필요합니다.
 
 ```markdown showLineNumbers title="SKILL.md"
 ---
@@ -357,23 +357,23 @@ Detailed instructions for Claude on how to use this skill.
 Examples and best practices...
 ```
 
-### YAML Frontmatter Requirements
+### YAML Frontmatter 요구 사항
 
-| Field | Required | Description |
+| 필드 | 필수 여부 | 설명 |
 |-------|----------|-------------|
-| `name` | Yes | Skill identifier (lowercase, numbers, hyphens only). Must match the directory name. |
-| `description` | Yes | Brief description of the skill |
-| `license` | No | License type (e.g., MIT, Apache-2.0) |
-| `allowed-tools` | No | List of Claude tools this skill can use |
-| `metadata` | No | Additional custom metadata |
+| `name` | 예 | Skill 식별자입니다(소문자, 숫자, 하이픈만 허용). 디렉터리 이름과 일치해야 합니다. |
+| `description` | 예 | Skill에 대한 간단한 설명 |
+| `license` | 아니요 | License 유형(예: MIT, Apache-2.0) |
+| `allowed-tools` | 아니요 | 이 skill이 사용할 수 있는 Claude 도구 목록 |
+| `metadata` | 아니요 | 추가 사용자 지정 metadata |
 
-**Important:** The `name` field must exactly match your skill directory name. For example, if your directory is `test-skill`, the frontmatter must have `name: test-skill`.
+**중요:** `name` 필드는 skill 디렉터리 이름과 정확히 일치해야 합니다. 예를 들어 디렉터리가 `test-skill`이면 frontmatter에는 `name: test-skill`이 있어야 합니다.
 
-### File Structure
+### 파일 구조
 
-**Option 1: ZIP file structure**
+**옵션 1: ZIP 파일 구조**
 
-Skills must be packaged with a top-level directory matching the skill name:
+Skills는 skill 이름과 일치하는 최상위 디렉터리로 패키징해야 합니다.
 
 ```
 test-skill.zip
@@ -381,27 +381,27 @@ test-skill.zip
     └── SKILL.md        # Required skill definition file
 ```
 
-All files must be in the same top-level directory, and `SKILL.md` must be at the root of that directory.
+모든 파일은 같은 최상위 디렉터리 안에 있어야 하며, `SKILL.md`는 해당 디렉터리의 root에 있어야 합니다.
 
-**Option 2: Direct SKILL.md upload**
+**옵션 2: SKILL.md 직접 업로드**
 
-When uploading `SKILL.md` directly (without creating a ZIP), you must include the skill directory path in the filename parameter to preserve the required structure:
+ZIP을 만들지 않고 `SKILL.md`를 직접 업로드할 때는 필요한 구조를 보존하기 위해 filename 파라미터에 skill 디렉터리 경로를 포함해야 합니다.
 
 ```bash
 # The filename parameter must include the skill directory path
 -F "files[]=@test-skill/SKILL.md;filename=test-skill/SKILL.md"
 ```
 
-This tells the API that `SKILL.md` belongs to the `test-skill` directory.
+이렇게 하면 API가 `SKILL.md`가 `test-skill` 디렉터리에 속한다는 것을 알 수 있습니다.
 
-**Important Requirements:**
-- The folder name (in ZIP or filename path) **must exactly match** the `name` field in SKILL.md frontmatter
-- `SKILL.md` must be in the root of the skill directory (not in a subdirectory)
-- All additional files must be in the same skill directory
+**중요 요구 사항:**
+- 폴더 이름(ZIP 또는 filename 경로 안의 이름)은 SKILL.md frontmatter의 `name` 필드와 **정확히 일치해야** 합니다.
+- `SKILL.md`는 하위 디렉터리가 아니라 skill 디렉터리의 root에 있어야 합니다.
+- 모든 추가 파일은 같은 skill 디렉터리 안에 있어야 합니다.
 
-## **Response Format**
+## **응답 형식**
 
-### Skill Object
+### Skill 객체
 
 ```json showLineNumbers
 {
@@ -416,7 +416,7 @@ This tells the API that `SKILL.md` belongs to the `test-skill` directory.
 }
 ```
 
-### List Skills Response
+### Skills 목록 응답
 
 ```json showLineNumbers
 {
@@ -443,9 +443,8 @@ This tells the API that `SKILL.md` belongs to the `test-skill` directory.
 ```
 
 
-## **Supported Providers**
+## **지원 프로바이더**
 
-| Provider | Link to Usage |
+| Provider | 사용법 링크 |
 |----------|---------------|
-| Anthropic | [Usage](#quick-start---create-a-skill) |
-
+| Anthropic | [사용법](#skill-create) |

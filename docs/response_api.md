@@ -4,33 +4,33 @@ import TabItem from '@theme/TabItem';
 # /responses
 
 
-LiteLLM provides an endpoint in the spec of [OpenAI's `/responses` API](https://platform.openai.com/docs/api-reference/responses)
+LiteLLM은 다음 spec에 맞춘 endpoint를 제공합니다: [OpenAI의 `/responses` API](https://platform.openai.com/docs/api-reference/responses)
 
-Requests to /chat/completions may be bridged here automatically when the provider lacks support for that endpoint. The model’s default `mode` determines how bridging works.(see `model_prices_and_context_window`) 
+provider가 해당 endpoint를 지원하지 않으면 /chat/completions 요청이 여기로 자동 bridge될 수 있습니다. model의 기본 `mode`가 bridging 동작 방식을 결정합니다(`model_prices_and_context_window` 참고). 
 
-| Feature | Supported | Notes |
+| 기능 | 지원 | 참고 |
 |---------|-----------|--------|
-| Cost Tracking | ✅ | Works with all supported models |
-| Logging | ✅ | Works across all integrations |
-| End-user Tracking | ✅ | |
-| Streaming | ✅ | |
-| WebSocket Mode | ✅ | Lower-latency persistent connections for all providers |
-| Image Generation Streaming | ✅ | Progressive image generation with partial images (1-3) |
-| Fallbacks | ✅ | Works between supported models |
-| Loadbalancing | ✅ | Works between supported models |
-| Guardrails | ✅ | Applies to input and output text (non-streaming only) |
-| Supported operations | Create a response, Get a response, Delete a response | |
-| Supported LiteLLM Versions | 1.63.8+ | |
-| Supported LLM providers | **All LiteLLM supported providers** | `openai`, `anthropic`, `bedrock`, `vertex_ai`, `gemini`, `azure`, `azure_ai` etc. |
+| 비용 추적 | ✅ | 지원되는 모든 model에서 동작 |
+| 로깅 | ✅ | 모든 integration에서 동작 |
+| 최종 사용자 추적 | ✅ | |
+| 스트리밍 | ✅ | |
+| WebSocket Mode | ✅ | 모든 provider에 대해 lower-latency persistent connection 제공 |
+| Image Generation Streaming | ✅ | partial image(1-3)를 사용한 progressive image generation |
+| 폴백 | ✅ | 지원되는 model 간 동작 |
+| 로드 밸런싱 | ✅ | 지원되는 model 간 동작 |
+| 가드레일 | ✅ | input 및 output text에 적용(non-streaming only) |
+| 지원 operation | response 생성, response 조회, response 삭제 | |
+| 지원 LiteLLM version | 1.63.8+ | |
+| 지원 LLM provider | **LiteLLM이 지원하는 모든 provider** | `openai`, `anthropic`, `bedrock`, `vertex_ai`, `gemini`, `azure`, `azure_ai` etc. |
 
-## Usage
+## 사용법
 
 ### LiteLLM Python SDK
 
 <Tabs>
 <TabItem value="openai" label="OpenAI">
 
-#### Non-streaming
+#### 비스트리밍
 ```python showLineNumbers title="OpenAI Non-streaming Response"
 import litellm
 
@@ -44,7 +44,7 @@ response = litellm.responses(
 print(response)
 ```
 
-#### Response Format (OpenAI Responses API Format)
+#### 응답 형식(OpenAI Responses API 형식)
 
 ```json
 {
@@ -76,7 +76,7 @@ print(response)
 }
 ```
 
-#### Streaming
+#### 스트리밍 {#streaming}
 ```python showLineNumbers title="OpenAI Streaming Response"
 import litellm
 
@@ -91,7 +91,7 @@ for event in response:
     print(event)
 ```
 
-#### Image Generation with Streaming
+#### 스트리밍 Image Generation
 ```python showLineNumbers title="OpenAI Streaming Image Generation"
 import litellm
 import base64
@@ -114,9 +114,9 @@ for event in stream:
             f.write(image_bytes)
 ```
 
-#### Image Generation (Non-streaming)
+#### Image Generation(비스트리밍)
 
-Image generation is supported for models that generate images. Generated images are returned in the `output` array with `type: "image_generation_call"`.
+image를 생성하는 model에서는 image generation이 지원됩니다. 생성된 image는 `type: "image_generation_call"`과 함께 `output` array에 반환됩니다.
 
 **Gemini (Google AI Studio):**
 ```python showLineNumbers title="Gemini Image Generation"
@@ -162,9 +162,9 @@ for item in response.output:
             f.write(image_bytes)
 ```
 
-**Response Format:**
+**응답 형식:**
 
-When image generation is successful, the response contains:
+image generation이 성공하면 response에 다음이 포함됩니다:
 
 ```json
 {
@@ -181,19 +181,19 @@ When image generation is successful, the response contains:
 }
 ```
 
-**Supported Models:**
+**지원 모델:**
 
-| Provider | Models | Requires `tools` Parameter |
+| Provider | 모델 | `tools` parameter 필요 여부 |
 |----------|--------|---------------------------|
-| Google AI Studio | `gemini/gemini-2.5-flash-image` | ❌ No |
-| Vertex AI | `vertex_ai/gemini-2.5-flash-image-preview` | ❌ No |
-| OpenAI | `gpt-4o`, `gpt-4o-mini`, `gpt-4.1`, `gpt-4.1-mini`, `gpt-4.1-nano`, `o3` | ✅ Yes |
-| AWS Bedrock | Stability AI, Amazon Nova Canvas models | Model-specific |
-| Fal AI | Various image generation models | Check model docs |
+| Google AI Studio | `gemini/gemini-2.5-flash-image` | ❌ 아니요 |
+| Vertex AI | `vertex_ai/gemini-2.5-flash-image-preview` | ❌ 아니요 |
+| OpenAI | `gpt-4o`, `gpt-4o-mini`, `gpt-4.1`, `gpt-4.1-mini`, `gpt-4.1-nano`, `o3` | ✅ 예 |
+| AWS Bedrock | Stability AI, Amazon Nova Canvas models | model별 |
+| Fal AI | 여러 image generation model | model docs 확인 |
 
-**Note:** The `result` field contains pure base64-encoded image data without the `data:image/png;base64,` prefix. You must decode it with `base64.b64decode()` before saving.
+**참고:** `result` field에는 `data:image/png;base64,` prefix가 없는 순수 base64-encoded image data가 들어 있습니다. 저장하기 전에 `base64.b64decode()`로 decode해야 합니다.
 
-#### GET a Response
+#### Response 조회
 ```python showLineNumbers title="Get Response by ID"
 import litellm
 
@@ -218,8 +218,8 @@ print(retrieved_response)
 # retrieved_response = await litellm.aget_responses(response_id=response_id)
 ```
 
-#### CANCEL a Response
-You can cancel an in-progress response (if supported by the provider):
+#### Response 취소
+provider가 지원하는 경우 진행 중인 response를 취소할 수 있습니다:
 
 ```python showLineNumbers title="Cancel Response by ID"
 import litellm
@@ -252,10 +252,10 @@ curl -X POST http://localhost:4000/v1/responses/response_id/cancel \
     -H "Authorization: Bearer sk-1234"
 ```
 
-This will attempt to cancel the in-progress response with the given ID.
-**Note:** Not all providers support response cancellation. If unsupported, an error will be raised.
+지정한 ID의 진행 중인 response 취소를 시도합니다.
+**참고:** 모든 provider가 response cancellation을 지원하는 것은 아닙니다. 지원하지 않으면 error가 발생합니다.
 
-#### DELETE a Response
+#### Response 삭제
 ```python showLineNumbers title="Delete Response by ID"
 import litellm
 
@@ -284,7 +284,7 @@ print(delete_response)
 
 <TabItem value="anthropic" label="Anthropic">
 
-#### Non-streaming
+#### 비스트리밍
 ```python showLineNumbers title="Anthropic Non-streaming Response"
 import litellm
 import os
@@ -302,7 +302,7 @@ response = litellm.responses(
 print(response)
 ```
 
-#### Streaming
+#### 스트리밍
 ```python showLineNumbers title="Anthropic Streaming Response"
 import litellm
 import os
@@ -325,7 +325,7 @@ for event in response:
 
 <TabItem value="vertex" label="Vertex AI">
 
-#### Non-streaming
+#### 비스트리밍
 ```python showLineNumbers title="Vertex AI Non-streaming Response"
 import litellm
 import os
@@ -345,7 +345,7 @@ response = litellm.responses(
 print(response)
 ```
 
-#### Streaming
+#### 스트리밍
 ```python showLineNumbers title="Vertex AI Streaming Response"
 import litellm
 import os
@@ -370,7 +370,7 @@ for event in response:
 
 <TabItem value="bedrock" label="AWS Bedrock">
 
-#### Non-streaming
+#### 비스트리밍
 ```python showLineNumbers title="AWS Bedrock Non-streaming Response"
 import litellm
 import os
@@ -390,7 +390,7 @@ response = litellm.responses(
 print(response)
 ```
 
-#### Streaming
+#### 스트리밍
 ```python showLineNumbers title="AWS Bedrock Streaming Response"
 import litellm
 import os
@@ -415,7 +415,7 @@ for event in response:
 
 <TabItem value="gemini" label="Google AI Studio">
 
-#### Non-streaming
+#### 비스트리밍
 ```python showLineNumbers title="Google AI Studio Non-streaming Response"
 import litellm
 import os
@@ -433,7 +433,7 @@ response = litellm.responses(
 print(response)
 ```
 
-#### Streaming
+#### 스트리밍
 ```python showLineNumbers title="Google AI Studio Streaming Response"
 import litellm
 import os
@@ -455,9 +455,9 @@ for event in response:
 </TabItem>
 </Tabs>
 
-### LiteLLM Proxy with OpenAI SDK
+### OpenAI SDK로 LiteLLM Proxy 사용
 
-First, set up and start your LiteLLM proxy server.
+먼저 LiteLLM proxy server를 설정하고 시작합니다.
 
 ```bash title="Start LiteLLM Proxy Server"
 litellm --config /path/to/config.yaml
@@ -468,7 +468,7 @@ litellm --config /path/to/config.yaml
 <Tabs>
 <TabItem value="openai" label="OpenAI">
 
-First, add this to your litellm proxy config.yaml:
+먼저 litellm proxy config.yaml에 다음을 추가합니다:
 ```yaml showLineNumbers title="OpenAI Proxy Configuration"
 model_list:
   - model_name: openai/o1-pro
@@ -477,7 +477,7 @@ model_list:
       api_key: os.environ/OPENAI_API_KEY
 ```
 
-#### Non-streaming
+#### 비스트리밍
 ```python showLineNumbers title="OpenAI Proxy Non-streaming Response"
 from openai import OpenAI
 
@@ -496,7 +496,7 @@ response = client.responses.create(
 print(response)
 ```
 
-#### Streaming
+#### 스트리밍
 ```python showLineNumbers title="OpenAI Proxy Streaming Response"
 from openai import OpenAI
 
@@ -517,7 +517,7 @@ for event in response:
     print(event)
 ```
 
-#### Image Generation with Streaming
+#### 스트리밍 Image Generation
 ```python showLineNumbers title="OpenAI Proxy Streaming Image Generation"
 from openai import OpenAI
 import base64
@@ -543,7 +543,7 @@ for event in stream:
 
 ```
 
-#### GET a Response
+#### Response 조회
 ```python showLineNumbers title="Get Response by ID with OpenAI SDK"
 from openai import OpenAI
 
@@ -568,7 +568,7 @@ retrieved_response = client.responses.retrieve(response_id)
 print(retrieved_response)
 ```
 
-#### DELETE a Response
+#### Response 삭제
 ```python showLineNumbers title="Delete Response by ID with OpenAI SDK"
 from openai import OpenAI
 
@@ -597,7 +597,7 @@ print(delete_response)
 
 <TabItem value="anthropic" label="Anthropic">
 
-First, add this to your litellm proxy config.yaml:
+먼저 litellm proxy config.yaml에 다음을 추가합니다:
 ```yaml showLineNumbers title="Anthropic Proxy Configuration"
 model_list:
   - model_name: anthropic/claude-3-5-sonnet-20240620
@@ -606,7 +606,7 @@ model_list:
       api_key: os.environ/ANTHROPIC_API_KEY
 ```
 
-#### Non-streaming
+#### 비스트리밍
 ```python showLineNumbers title="Anthropic Proxy Non-streaming Response"
 from openai import OpenAI
 
@@ -625,7 +625,7 @@ response = client.responses.create(
 print(response)
 ```
 
-#### Streaming
+#### 스트리밍
 ```python showLineNumbers title="Anthropic Proxy Streaming Response"
 from openai import OpenAI
 
@@ -650,7 +650,7 @@ for event in response:
 
 <TabItem value="vertex" label="Vertex AI">
 
-First, add this to your litellm proxy config.yaml:
+먼저 litellm proxy config.yaml에 다음을 추가합니다:
 ```yaml showLineNumbers title="Vertex AI Proxy Configuration"
 model_list:
   - model_name: vertex_ai/gemini-1.5-pro
@@ -660,7 +660,7 @@ model_list:
       vertex_location: us-central1
 ```
 
-#### Non-streaming
+#### 비스트리밍
 ```python showLineNumbers title="Vertex AI Proxy Non-streaming Response"
 from openai import OpenAI
 
@@ -679,7 +679,7 @@ response = client.responses.create(
 print(response)
 ```
 
-#### Streaming
+#### 스트리밍
 ```python showLineNumbers title="Vertex AI Proxy Streaming Response"
 from openai import OpenAI
 
@@ -704,7 +704,7 @@ for event in response:
 
 <TabItem value="bedrock" label="AWS Bedrock">
 
-First, add this to your litellm proxy config.yaml:
+먼저 litellm proxy config.yaml에 다음을 추가합니다:
 ```yaml showLineNumbers title="AWS Bedrock Proxy Configuration"
 model_list:
   - model_name: bedrock/anthropic.claude-3-sonnet-20240229-v1:0
@@ -715,7 +715,7 @@ model_list:
       aws_region_name: us-west-2
 ```
 
-#### Non-streaming
+#### 비스트리밍
 ```python showLineNumbers title="AWS Bedrock Proxy Non-streaming Response"
 from openai import OpenAI
 
@@ -734,7 +734,7 @@ response = client.responses.create(
 print(response)
 ```
 
-#### Streaming
+#### 스트리밍
 ```python showLineNumbers title="AWS Bedrock Proxy Streaming Response"
 from openai import OpenAI
 
@@ -759,7 +759,7 @@ for event in response:
 
 <TabItem value="gemini" label="Google AI Studio">
 
-First, add this to your litellm proxy config.yaml:
+먼저 litellm proxy config.yaml에 다음을 추가합니다:
 ```yaml showLineNumbers title="Google AI Studio Proxy Configuration"
 model_list:
   - model_name: gemini/gemini-1.5-flash
@@ -768,7 +768,7 @@ model_list:
       api_key: os.environ/GEMINI_API_KEY
 ```
 
-#### Non-streaming
+#### 비스트리밍
 ```python showLineNumbers title="Google AI Studio Proxy Non-streaming Response"
 from openai import OpenAI
 
@@ -787,7 +787,7 @@ response = client.responses.create(
 print(response)
 ```
 
-#### Streaming
+#### 스트리밍
 ```python showLineNumbers title="Google AI Studio Proxy Streaming Response"
 from openai import OpenAI
 
@@ -813,18 +813,18 @@ for event in response:
 
 ## WebSocket Mode
 
-The Responses API supports **WebSocket mode** for lower-latency, persistent connections ideal for agentic workflows. WebSocket mode works with **all LiteLLM providers**, not just those with native WebSocket support.
+Responses API는 agentic workflow에 적합한 lower-latency persistent connection용 **WebSocket mode**를 지원합니다. WebSocket mode는 native WebSocket을 지원하는 provider뿐 아니라 **모든 LiteLLM provider**에서 동작합니다.
 
-### Architecture
+### 아키텍처
 
-LiteLLM provides two WebSocket modes:
+LiteLLM은 두 가지 WebSocket mode를 제공합니다.
 
-1. **Native WebSocket**: Direct `wss://` connection to providers that support it (OpenAI, Azure)
-2. **Managed WebSocket**: HTTP streaming over WebSocket for all other providers (Anthropic, Gemini, Bedrock, etc.)
+1. **Native WebSocket**: 지원 provider(OpenAI, Azure)로 직접 `wss://` connection을 사용합니다.
+2. **Managed WebSocket**: 기타 provider(Anthropic, Gemini, Bedrock 등)는 WebSocket을 통한 HTTP streaming을 사용합니다.
 
-The system automatically selects the appropriate mode based on provider capabilities.
+system은 provider capability를 기준으로 적절한 mode를 자동 선택합니다.
 
-### Usage
+### 사용법
 
 <Tabs>
 <TabItem value="python" label="Python (websocket-client)">
@@ -973,27 +973,27 @@ websocat "ws://localhost:4000/v1/responses?model=gemini-2.5-flash" \
 </TabItem>
 </Tabs>
 
-### Event Types
+### Event Type
 
-WebSocket connections receive Server-Sent Events (SSE) formatted as JSON:
+WebSocket connection은 JSON 형식의 Server-Sent Events(SSE)를 받습니다.
 
-| Event Type | Description |
+| Event Type | 설명 |
 |------------|-------------|
-| `response.created` | Response generation started |
-| `response.in_progress` | Response is being generated |
-| `response.output_item.added` | New output item (message, tool call, etc.) added |
-| `response.output_text.delta` | Incremental text chunk |
-| `response.output_text.done` | Text output completed |
-| `response.content_part.done` | Content part completed |
-| `response.output_item.done` | Output item completed |
-| `response.completed` | Full response completed successfully |
-| `response.failed` | Response generation failed |
-| `response.incomplete` | Response incomplete (e.g., max tokens reached) |
-| `error` | Error occurred |
+| `response.created` | Response generation 시작 |
+| `response.in_progress` | Response 생성 중 |
+| `response.output_item.added` | 새 output item(message, tool call 등) 추가 |
+| `response.output_text.delta` | 증분 text chunk |
+| `response.output_text.done` | Text output 완료 |
+| `response.content_part.done` | Content part 완료 |
+| `response.output_item.done` | Output item 완료 |
+| `response.completed` | 전체 response가 성공적으로 완료됨 |
+| `response.failed` | Response generation 실패 |
+| `response.incomplete` | Response incomplete(예: max token 도달) |
+| `error` | Error 발생 |
 
-### Multi-Turn Conversations
+### Multi-turn Conversation 유지
 
-Use `previous_response_id` to maintain conversation context across multiple WebSocket messages:
+여러 WebSocket message에서 conversation context를 유지하려면 `previous_response_id`를 사용합니다.
 
 ```python showLineNumbers title="Multi-turn WebSocket Conversation"
 # Turn 1
@@ -1015,25 +1015,25 @@ ws.send(json.dumps({
 }))
 ```
 
-### Provider Support
+### Provider 지원
 
-| Provider | WebSocket Mode | Notes |
+| Provider | WebSocket Mode | 참고 |
 |----------|----------------|-------|
-| OpenAI | Native | Direct `wss://` connection to OpenAI |
-| Azure OpenAI | Native | Direct `wss://` connection to Azure |
-| Anthropic | Managed | HTTP streaming over WebSocket |
-| Google AI Studio (Gemini) | Managed | HTTP streaming over WebSocket |
-| Vertex AI | Managed | HTTP streaming over WebSocket |
-| AWS Bedrock | Managed | HTTP streaming over WebSocket |
-| All other providers | Managed | HTTP streaming over WebSocket |
+| OpenAI | Native | OpenAI로 직접 `wss://` connection |
+| Azure OpenAI | Native | Azure로 직접 `wss://` connection |
+| Anthropic | Managed | WebSocket을 통한 HTTP streaming |
+| Google AI Studio (Gemini) | Managed | WebSocket을 통한 HTTP streaming |
+| Vertex AI | Managed | WebSocket을 통한 HTTP streaming |
+| AWS Bedrock | Managed | WebSocket을 통한 HTTP streaming |
+| 기타 모든 provider | Managed | WebSocket을 통한 HTTP streaming |
 
-**Note**: Both native and managed modes provide the same event stream format. The difference is transparent to clients.
+**참고**: native mode와 managed mode는 같은 event stream format을 제공합니다. client 입장에서는 차이가 투명하게 처리됩니다.
 
-### Configuration
+### 설정
 
-No special configuration needed. WebSocket mode is automatically available on the `/v1/responses` endpoint when accessed via WebSocket protocol (`ws://` or `wss://`).
+별도 configuration은 필요하지 않습니다. WebSocket protocol(`ws://` 또는 `wss://`)로 access하면 `/v1/responses` endpoint에서 WebSocket mode를 자동으로 사용할 수 있습니다.
 
-For LiteLLM Proxy, ensure your models are configured normally:
+LiteLLM Proxy에서는 model이 일반적인 방식으로 구성되어 있는지 확인하세요.
 
 ```yaml showLineNumbers title="config.yaml"
 model_list:
@@ -1048,15 +1048,15 @@ model_list:
       api_key: os.environ/OPENAI_API_KEY
 ```
 
-Both models will automatically support WebSocket mode at `ws://localhost:4000/v1/responses`.
+두 model 모두 `ws://localhost:4000/v1/responses`에서 WebSocket mode를 자동으로 지원합니다.
 
-## Response ID Security
+## Response ID 보안
 
-By default, LiteLLM Proxy prevents users from accessing other users' response IDs.
+기본적으로 LiteLLM Proxy는 user가 다른 user의 response ID에 access하지 못하게 합니다.
 
-This is done by encrypting the response ID with the user ID, enabling users to only access their own response IDs.
+response ID를 user ID로 encrypt해 user가 자신의 response ID에만 access할 수 있게 합니다.
 
-Trying to access someone else's response ID returns 403:
+다른 사람의 response ID에 access하려고 하면 403이 반환됩니다:
 
 ```json
 {
@@ -1067,34 +1067,34 @@ Trying to access someone else's response ID returns 403:
 }
 ```
 
-To disable this, set `disable_responses_id_security: true`:
+이를 비활성화하려면 `disable_responses_id_security: true`를 설정합니다:
 
 ```yaml
 general_settings:
   disable_responses_id_security: true
 ```
 
-This allows any user to access any response ID.
+이 설정은 모든 user가 모든 response ID에 access할 수 있게 합니다.
 
-## Supported Responses API Parameters
+## 지원 Responses API Parameter
 
-| Provider | Supported Parameters |
+| Provider | 지원 파라미터 |
 |----------|---------------------|
-| `openai` | [All Responses API parameters are supported](https://github.com/BerriAI/litellm/blob/7c3df984da8e4dff9201e4c5353fdc7a2b441831/litellm/llms/openai/responses/transformation.py#L23) |
-| `azure` | [All Responses API parameters are supported](https://github.com/BerriAI/litellm/blob/7c3df984da8e4dff9201e4c5353fdc7a2b441831/litellm/llms/openai/responses/transformation.py#L23) |
-| `anthropic` | [See supported parameters here](https://github.com/BerriAI/litellm/blob/f39d9178868662746f159d5ef642c7f34f9bfe5f/litellm/responses/litellm_completion_transformation/transformation.py#L57) |
-| `bedrock` | [See supported parameters here](https://github.com/BerriAI/litellm/blob/f39d9178868662746f159d5ef642c7f34f9bfe5f/litellm/responses/litellm_completion_transformation/transformation.py#L57) |
-| `gemini` | [See supported parameters here](https://github.com/BerriAI/litellm/blob/f39d9178868662746f159d5ef642c7f34f9bfe5f/litellm/responses/litellm_completion_transformation/transformation.py#L57) |
-| `vertex_ai` | [See supported parameters here](https://github.com/BerriAI/litellm/blob/f39d9178868662746f159d5ef642c7f34f9bfe5f/litellm/responses/litellm_completion_transformation/transformation.py#L57) |
-| `azure_ai` | [See supported parameters here](https://github.com/BerriAI/litellm/blob/f39d9178868662746f159d5ef642c7f34f9bfe5f/litellm/responses/litellm_completion_transformation/transformation.py#L57) |
-| All other llm api providers | [See supported parameters here](https://github.com/BerriAI/litellm/blob/f39d9178868662746f159d5ef642c7f34f9bfe5f/litellm/responses/litellm_completion_transformation/transformation.py#L57) |
+| `openai` | [모든 Responses API parameter 지원](https://github.com/BerriAI/litellm/blob/7c3df984da8e4dff9201e4c5353fdc7a2b441831/litellm/llms/openai/responses/transformation.py#L23) |
+| `azure` | [모든 Responses API parameter 지원](https://github.com/BerriAI/litellm/blob/7c3df984da8e4dff9201e4c5353fdc7a2b441831/litellm/llms/openai/responses/transformation.py#L23) |
+| `anthropic` | [지원 parameter 보기](https://github.com/BerriAI/litellm/blob/f39d9178868662746f159d5ef642c7f34f9bfe5f/litellm/responses/litellm_completion_transformation/transformation.py#L57) |
+| `bedrock` | [지원 parameter 보기](https://github.com/BerriAI/litellm/blob/f39d9178868662746f159d5ef642c7f34f9bfe5f/litellm/responses/litellm_completion_transformation/transformation.py#L57) |
+| `gemini` | [지원 parameter 보기](https://github.com/BerriAI/litellm/blob/f39d9178868662746f159d5ef642c7f34f9bfe5f/litellm/responses/litellm_completion_transformation/transformation.py#L57) |
+| `vertex_ai` | [지원 parameter 보기](https://github.com/BerriAI/litellm/blob/f39d9178868662746f159d5ef642c7f34f9bfe5f/litellm/responses/litellm_completion_transformation/transformation.py#L57) |
+| `azure_ai` | [지원 parameter 보기](https://github.com/BerriAI/litellm/blob/f39d9178868662746f159d5ef642c7f34f9bfe5f/litellm/responses/litellm_completion_transformation/transformation.py#L57) |
+| 기타 모든 llm api provider | [지원 parameter 보기](https://github.com/BerriAI/litellm/blob/f39d9178868662746f159d5ef642c7f34f9bfe5f/litellm/responses/litellm_completion_transformation/transformation.py#L57) |
 
-## Load Balancing with Session Continuity.
+## Session Continuity를 사용한 Load Balancing
 
-When using the Responses API with multiple deployments of the same model (e.g., multiple Azure OpenAI endpoints), LiteLLM provides session continuity. This ensures that follow-up requests using a `previous_response_id` are routed to the same deployment that generated the original response.
+같은 model의 여러 deployment(예: 여러 Azure OpenAI endpoint)로 Responses API를 사용할 때 LiteLLM은 session continuity를 제공합니다. 이렇게 하면 `previous_response_id`를 사용하는 follow-up request가 원래 response를 생성한 동일 deployment로 route됩니다.
 
 
-#### Example Usage
+#### 예제 사용법
 
 <Tabs>
 <TabItem value="python-sdk" label="Python SDK">
@@ -1155,25 +1155,25 @@ follow_up = await router.aresponses(
 </TabItem>
 <TabItem value="proxy-server" label="Proxy Server">
 
-#### 1. Setup session continuity on proxy config.yaml
+#### 1. proxy config.yaml에서 session continuity 설정
 
-To enable session continuity for Responses API in your LiteLLM proxy, set `optional_pre_call_checks` in your proxy config.yaml.
+LiteLLM proxy에서 Responses API용 session continuity를 활성화하려면 proxy config.yaml에 `optional_pre_call_checks`를 설정합니다.
 
-- `responses_api_deployment_check`: high priority routing when `previous_response_id` is provided
-- `encrypted_content_affinity`: **[Recommended]** content-aware routing for encrypted items (e.g., `rs_...` reasoning items) (**requires LiteLLM >= 1.82.3**)
-- `session_affinity`: sticky sessions based on session id (takes priority over `deployment_affinity`)
-- `deployment_affinity`: sticky sessions based on user key (applies even without `previous_response_id`)
+- `responses_api_deployment_check`: `previous_response_id`가 제공될 때 high priority routing
+- `encrypted_content_affinity`: **[권장]** encrypted item용 content-aware routing(예: `rs_...` reasoning item)(**LiteLLM >= 1.82.3 필요**)
+- `session_affinity`: session id 기반 sticky session(`deployment_affinity`보다 우선 적용)
+- `deployment_affinity`: user key 기반 sticky session(`previous_response_id`가 없어도 적용)
 
-:::tip Recommended: Use `encrypted_content_affinity`
-For Responses API with load balancing across deployments with **different API keys**, use `encrypted_content_affinity` instead of `deployment_affinity`. It only pins requests that contain encrypted content, avoiding quota reduction while preventing `invalid_encrypted_content` errors. (Requires LiteLLM >= 1.82.3.)
+:::tip 권장: `encrypted_content_affinity` 사용
+**서로 다른 API key**를 가진 deployment 간 load balancing으로 Responses API를 사용할 때는 `deployment_affinity` 대신 `encrypted_content_affinity`를 사용하세요. encrypted content가 포함된 request만 pin하므로 quota 감소를 피하면서 `invalid_encrypted_content` error를 방지합니다.(LiteLLM >= 1.82.3 필요)
 :::
 
-Notes:
-- User-key affinity is keyed on `metadata.user_api_key_hash` (the API key hash). The OpenAI `user` request parameter is an end-user identifier and is intentionally not used for deployment affinity.
-- Session-ID affinity is keyed on `metadata.session_id`. For proxy requests, this can be passed via the `x-litellm-session-id` or `x-litellm-trace-id` HTTP header (they are interchangeable for call chaining). For Python SDK requests, you can pass it via `litellm_metadata={"session_id": "value"}` in request args.
-- `user_api_key_hash` is already SHA-256, and is used as-is (no double hashing).
-- Affinity is scoped by a stable model identifier (the model-map key, e.g. `model_map_information.model_map_key`) so model aliases map to the same stickiness bucket.
-- The mapping TTL is controlled by `deployment_affinity_ttl_seconds` (configured on Router init / proxy startup).
+참고:
+- User-key affinity는 다음을 key로 사용합니다: `metadata.user_api_key_hash` (API key hash). OpenAI `user` request parameter는 end-user identifier이며 deployment affinity에는 의도적으로 사용되지 않습니다.
+- Session-ID affinity는 다음을 key로 사용합니다: `metadata.session_id`. Proxy request에서는 `x-litellm-session-id` 또는 `x-litellm-trace-id` HTTP header로 전달할 수 있습니다(call chaining에서는 서로 바꿔 사용할 수 있음). Python SDK request에서는 request args에 `litellm_metadata={"session_id": "value"}`로 전달할 수 있습니다.
+- `user_api_key_hash`는 이미 SHA-256이므로 그대로 사용됩니다(double hashing 없음).
+- Affinity는 stable model identifier를 기준으로 scoped됩니다(model-map key, 예: `model_map_information.model_map_key`). 따라서 model alias는 같은 stickiness bucket에 매핑됩니다.
+- mapping TTL은 다음으로 제어됩니다: `deployment_affinity_ttl_seconds` (Router init / proxy startup에서 구성).
 
 ```yaml showLineNumbers title="config.yaml with Session Continuity"
 model_list:
@@ -1199,7 +1199,7 @@ router_settings:
   deployment_affinity_ttl_seconds: 3600
 ```
 
-#### 2. Use the OpenAI Python SDK to make requests to LiteLLM Proxy
+#### 2. OpenAI Python SDK로 LiteLLM Proxy에 request 전송
 
 ```python showLineNumbers title="OpenAI Client with Proxy Server"
 from openai import OpenAI
@@ -1228,11 +1228,11 @@ follow_up = client.responses.create(
 </TabItem>
 </Tabs>
 
-## Encrypted Content Affinity (Multi-Region Load Balancing)
+## Encrypted Content Affinity(다중 region Load Balancing) {#encrypted-content-affinity-multi-region-load-balancing}
 
-When load balancing Responses API across deployments with **different API keys** (e.g., different Azure regions or OpenAI organizations), encrypted content items (like `rs_...` reasoning items) can only be decrypted by the API key that created them.
+**서로 다른 API key**를 가진 deployment(예: 다른 Azure region 또는 OpenAI organization) 간에 Responses API를 load balance할 때 encrypted content item(예: `rs_...` reasoning item)은 해당 item을 만든 API key로만 decrypt할 수 있습니다.
 
-### The Problem
+### 문제
 
 ```json
 {
@@ -1244,34 +1244,34 @@ When load balancing Responses API across deployments with **different API keys**
 }
 ```
 
-This error occurs when:
-1. Initial request goes to Deployment A (API Key 1) → produces encrypted item `rs_xyz`
-2. Follow-up request with `rs_xyz` in input gets load balanced to Deployment B (API Key 2)
-3. Deployment B cannot decrypt content created by Deployment A → **request fails**
+이 error는 다음 상황에서 발생합니다:
+1. initial request가 배포 A(API key 1)로 이동해 encrypted item `rs_xyz`를 생성합니다
+2. follow-up request가 `rs_xyz` input에 포함된 상태로 배포 B(API key 2)에 load balance됩니다
+3. 배포 B가 배포 A에서 생성된 content를 decrypt할 수 없습니다 → **request 실패**
 
-### The Solution: `encrypted_content_affinity`
+### 해결책: `encrypted_content_affinity`
 
-The `encrypted_content_affinity` pre-call check routes follow-up requests containing encrypted items to the originating deployment **only when necessary**
+`encrypted_content_affinity` pre-call check는 encrypted item이 포함된 follow-up request를 **필요할 때만** originating deployment로 route합니다
 
-**Key Benefits:**
-- ✅ **No quota reduction**: Unlike `deployment_affinity`, only pins requests that contain encrypted items
-- ✅ **Bypasses rate limits**: When encrypted content requires a specific deployment, RPM/TPM limits are bypassed (the request would fail on any other deployment anyway)
-- ✅ **No `previous_response_id` required**: Works by encoding `model_id` directly into item IDs
-- ✅ **No cache required**: `model_id` is decoded on-the-fly — no Redis dependency, no TTL to manage
-- ✅ **Globally safe**: Can be enabled for all models; non-Responses-API calls (chat, embeddings) are unaffected
+**주요 이점:**
+- ✅ **quota 감소 없음**: `deployment_affinity`와 달리 encrypted item이 포함된 request만 pin합니다
+- ✅ **rate limit 우회**: encrypted content가 특정 deployment를 요구할 때 RPM/TPM limit을 우회합니다(어차피 다른 deployment에서는 request가 실패함)
+- ✅ **`previous_response_id` 불필요**: `model_id`를 item ID에 직접 encoding해 동작합니다
+- ✅ **cache 불필요**: `model_id`가 on-the-fly로 decode되므로 Redis dependency나 관리할 TTL이 없습니다
+- ✅ **전역 적용 가능**: 모든 model에 활성화할 수 있으며 non-Responses-API call(chat, embeddings)에는 영향이 없습니다
 
-### How It Works
+### 동작 방식
 
-1. **Encoding Phase** (on response):
-   - For each output item that contains `encrypted_content`, LiteLLM rewrites the item ID to embed the originating `model_id`: `rs_xyz` → `encitem_{base64("litellm:model_id:{model_id};item_id:rs_xyz")}`
-   - The original item ID is restored before forwarding the request to the upstream provider
+1. **Encoding Phase**(response 시점):
+   - `encrypted_content`가 포함된 각 output item에 대해 LiteLLM은 originating `model_id`: `rs_xyz` → `encitem_{base64("litellm:model_id:{model_id};item_id:rs_xyz")}`
+   - original item ID는 upstream provider로 request를 forward하기 전에 복원됩니다
 
-2. **Routing Phase** (before request):
-   - Scans request `input` for `encitem_` prefixed IDs
-   - If found → decodes `model_id`, pins to originating deployment, bypasses rate limits
-   - If no encoded items → normal load balancing
+2. **Routing Phase**(request 전):
+   - request `input`에서 `encitem_` prefix ID를 scan합니다
+   - 발견되면 → `model_id`를 decode하고 originating deployment에 pin한 뒤 rate limit을 우회합니다
+   - encoded item이 없으면 → 일반 load balancing을 수행합니다
 
-### Configuration
+### 설정
 
 <Tabs>
 <TabItem value="sdk" label="Python SDK">
@@ -1346,7 +1346,7 @@ router_settings:
     - encrypted_content_affinity
 ```
 
-**Start proxy:**
+**proxy 시작:**
 ```bash
 litellm --config config.yaml
 ```
@@ -1354,21 +1354,21 @@ litellm --config config.yaml
 </TabItem>
 </Tabs>
 
-### When to Use Each Affinity Type
+### Affinity Type별 사용 시점
 
-| Affinity Type | Use Case | Scope | Quota Impact |
+| Affinity Type | 사용 사례 | 범위 | Quota 영향 |
 |---------------|----------|-------|--------------|
-| **`encrypted_content_affinity`** | **[Recommended]** Multi-region Responses API with different API keys | Only requests with tracked encrypted items | ✅ None (surgical pinning) |
-| `responses_api_deployment_check` | When `previous_response_id` is available | Requests with `previous_response_id` | ✅ None |
-| `session_affinity` | Session-based applications | All requests with same `session_id` | ⚠️ Reduces quota by # of sessions |
-| `deployment_affinity` | Simple sticky sessions | All requests from same API key | ❌ Reduces quota by # of users |
+| **`encrypted_content_affinity`** | **[권장]** 서로 다른 API key를 사용하는 다중 region Responses API | 추적된 encrypted item이 있는 request만 | ✅ 없음(정밀 pinning) |
+| `responses_api_deployment_check` | `previous_response_id`를 사용할 수 있을 때 | `previous_response_id`가 있는 request | ✅ 없음 |
+| `session_affinity` | session 기반 application | 같은 `session_id`를 가진 모든 request | ⚠️ session 수만큼 quota 감소 |
+| `deployment_affinity` | 단순 sticky session | 같은 API key의 모든 request | ❌ user 수만큼 quota 감소 |
 
 
-## Per-Model-Group Affinity Configuration
+## Model Group별 Affinity 설정
 
-By default, `optional_pre_call_checks` applies globally to all model groups. Use `model_group_affinity_config` when you want different affinity behavior per model group — for example, enabling stickiness only for models spread across providers (Azure + Bedrock) while leaving single-provider groups free to load-balance.
+기본적으로 `optional_pre_call_checks`는 모든 model group에 전역으로 적용됩니다. model group별로 다른 affinity 동작이 필요할 때는 `model_group_affinity_config`를 사용하세요. 예를 들어 여러 provider(Azure + Bedrock)에 걸친 model에만 stickiness를 활성화하고, 단일 provider group은 자유롭게 load balance하도록 둘 수 있습니다.
 
-Groups not listed fall back to the global `optional_pre_call_checks` settings.
+목록에 없는 group은 전역 `optional_pre_call_checks` 설정으로 fallback됩니다.
 
 <Tabs>
 <TabItem value="python-sdk" label="Python SDK">
@@ -1441,14 +1441,14 @@ router_settings:
 </TabItem>
 </Tabs>
 
-**Supported values:** `deployment_affinity`, `responses_api_deployment_check`, `session_affinity`
+**지원 값:** `deployment_affinity`, `responses_api_deployment_check`, `session_affinity`
 
-## Calling non-Responses API endpoints (`/responses` to `/chat/completions` Bridge)
+## non-Responses API endpoint 호출(`/responses`에서 `/chat/completions` Bridge) {#calling-non-responses-api-endpoints-responses-to-chatcompletions-bridge}
 
-LiteLLM allows you to call non-Responses API models via a bridge to LiteLLM's `/chat/completions` endpoint. This is useful for calling Anthropic, Gemini and even non-Responses API OpenAI models.
+LiteLLM은 LiteLLM의 `/chat/completions` endpoint로 bridge해 non-Responses API model을 호출할 수 있게 합니다. Anthropic, Gemini, non-Responses API OpenAI model 호출에 유용합니다.
 
 
-#### Python SDK Usage
+#### Python SDK 사용법
 
 ```python showLineNumbers title="SDK Usage"
 import litellm
@@ -1467,9 +1467,9 @@ response = litellm.responses(
 print(response)
 ```
 
-#### LiteLLM Proxy Usage
+#### LiteLLM Proxy 사용법
 
-**Setup Config:**
+**Config 설정:**
 
 ```yaml showLineNumbers title="Example Configuration"
 model_list:
@@ -1479,7 +1479,7 @@ model_list:
     api_key: os.environ/ANTHROPIC_API_KEY
 ```
 
-**Start Proxy:**
+**Proxy 시작:**
 
 ```bash showLineNumbers title="Start LiteLLM Proxy"
 litellm --config /path/to/config.yaml
@@ -1487,7 +1487,7 @@ litellm --config /path/to/config.yaml
 # RUNNING on http://0.0.0.0:4000
 ```
 
-**Make Request:**
+**Request 전송:**
 
 ```bash showLineNumbers title="non-Responses API Model Request"
 curl http://localhost:4000/v1/responses \
@@ -1505,16 +1505,16 @@ curl http://localhost:4000/v1/responses \
 
 
 
-### Opt-in bridge for `openai/` models with custom `api_base`
+### custom `api_base`가 있는 `openai/` model용 opt-in bridge
 
-If you're using an **OpenAI-compatible third-party provider** (e.g. llama.cpp, vLLM, LM Studio) via `openai/` prefix with a custom `api_base`, LiteLLM will normally forward `/responses` requests directly to that endpoint. If the provider only supports `/chat/completions`, the request will fail.
+custom `api_base`와 `openai/` prefix로 **OpenAI-compatible third-party provider**(예: llama.cpp, vLLM, LM Studio)를 사용하면 LiteLLM은 일반적으로 `/responses` request를 해당 endpoint로 직접 forward합니다. provider가 `/chat/completions`만 지원하면 request가 실패합니다.
 
-Use either of these to force the `/responses` → `/chat/completions` bridge:
+`/responses` -> `/chat/completions` bridge를 강제하려면 다음 중 하나를 사용하세요.
 
-1. **`use_chat_completions_api: true`** — makes it explicit that LiteLLM will call the provider’s chat-completions API.
-2. **`openai/chat_completions/<model_name>`** — same pattern as `responses/` on chat completions: the model id encodes the routing choice.
+1. **`use_chat_completions_api: true`** - LiteLLM이 provider의 chat-completions API를 호출하도록 명시합니다.
+2. **`openai/chat_completions/<model_name>`** - chat completions의 `responses/`와 같은 pattern입니다. model id가 routing choice를 encode합니다.
 
-#### Python SDK Usage
+#### Python SDK 사용법
 
 ```python showLineNumbers title="Force bridge for custom openai/ endpoint (flag)"
 import litellm
@@ -1530,7 +1530,7 @@ response = litellm.responses(
 print(response)
 ```
 
-Or encode it in the model id:
+또는 model id에 encode합니다.
 
 ```python showLineNumbers title="Force bridge via openai/chat_completions/ model prefix"
 import litellm
@@ -1545,9 +1545,9 @@ response = litellm.responses(
 print(response)
 ```
 
-#### LiteLLM Proxy Usage
+#### LiteLLM Proxy 사용법
 
-**Setup Config:**
+**Config 설정:**
 
 ```yaml showLineNumbers title="config.yaml — bridge for custom openai/ endpoint"
 model_list:
@@ -1559,9 +1559,9 @@ model_list:
     use_chat_completions_api: true
 ```
 
-Alternatively set `model: openai/chat_completions/my-custom-model` instead of the flag.
+또는 flag 대신 `model: openai/chat_completions/my-custom-model`을 설정합니다.
 
-**Start Proxy:**
+**Proxy 시작:**
 
 ```bash showLineNumbers title="Start LiteLLM Proxy"
 litellm --config /path/to/config.yaml
@@ -1569,7 +1569,7 @@ litellm --config /path/to/config.yaml
 # RUNNING on http://0.0.0.0:4000
 ```
 
-**Make Request:**
+**Request 전송:**
 
 ```bash showLineNumbers title="Request via bridge"
 curl http://localhost:4000/v1/responses \
@@ -1581,17 +1581,17 @@ curl http://localhost:4000/v1/responses \
   }'
 ```
 
-This is particularly useful when connecting clients that hardcode the `/responses` endpoint (e.g. OpenAI Codex CLI with `wire_api = "responses"`) to local or third-party OpenAI-compatible providers that only expose `/chat/completions`.
+`/responses` endpoint를 hardcode한 client(예: `wire_api = "responses"`를 쓰는 OpenAI Codex CLI)를 `/chat/completions`만 expose하는 local 또는 third-party OpenAI-compatible provider에 연결할 때 특히 유용합니다.
 
-## Server-side compaction
+## 서버 측 compaction
 
-For long-running conversations, you can enable **server-side compaction** so that when the rendered context size crosses a threshold, the server automatically runs compaction in-stream and emits a compaction item—no separate `POST /v1/responses/compact` call is required.
+long-running conversation에서는 **server-side compaction**을 활성화할 수 있습니다. rendered context size가 threshold를 넘으면 server가 in-stream으로 compaction을 자동 실행하고 compaction item을 emit합니다. 별도의 `POST /v1/responses/compact` call은 필요하지 않습니다.
 
-Supported on the OpenAI Responses API when using the `openai` or `azure` provider. Pass `context_management` with a compaction entry and `compact_threshold` (token count; minimum 1000). When the context crosses the threshold, the server compacts in-stream and continues. Chain turns with `previous_response_id` or by appending output items to your next input array. See [OpenAI Compaction guide](https://developers.openai.com/api/docs/guides/compaction) for details.
+`openai` 또는 `azure` provider를 사용할 때 OpenAI Responses API에서 지원됩니다. compaction entry와 `compact_threshold`(token count, minimum 1000)가 포함된 `context_management`를 전달하세요. context가 threshold를 넘으면 server가 in-stream으로 compact하고 계속 진행합니다. `previous_response_id`를 사용하거나 output item을 다음 input array에 append해 turn을 chain하세요. 자세한 내용은 [OpenAI Compaction guide](https://developers.openai.com/api/docs/guides/compaction)를 참고하세요.
 
-> **Note:** You can use openai `context_management` format with Anthropic models via LiteLLM via responses API. LiteLLM will automatically translate this format for Anthropic and handle context management for you.
+> **참고:** LiteLLM Responses API를 통해 Anthropic model에서도 OpenAI `context_management` format을 사용할 수 있습니다. LiteLLM이 이 format을 Anthropic용으로 자동 translate하고 context management를 처리합니다.
 
-For explicit control over when compaction runs, use the standalone compact endpoint (`POST /v1/responses/compact`) instead.
+compaction 실행 시점을 명시적으로 제어하려면 standalone compact endpoint(`POST /v1/responses/compact`)를 대신 사용하세요.
 
 ### Python SDK
 
@@ -1618,11 +1618,11 @@ for event in stream:
     print(event)
 ```
 
-### LiteLLM Proxy (AI Gateway)
+### LiteLLM Proxy(AI Gateway) 사용
 
-Use the OpenAI SDK with your proxy as `base_url`, or call the proxy with curl. The proxy forwards `context_management` to the provider.
+proxy를 `base_url`로 지정해 OpenAI SDK를 사용하거나 curl로 proxy를 호출하세요. proxy는 `context_management`를 provider로 forward합니다.
 
-**OpenAI Python SDK (proxy as base_url):**
+**OpenAI Python SDK(`base_url`로 proxy 사용):**
 
 ```python showLineNumbers title="Server-side compaction via LiteLLM Proxy"
 from openai import OpenAI
@@ -1641,7 +1641,7 @@ response = client.responses.create(
 print(response)
 ```
 
-**curl (proxy):**
+**curl(proxy):**
 
 ```bash title="Server-side compaction via curl to LiteLLM Proxy"
 curl -X POST "http://localhost:4000/v1/responses" \
@@ -1657,9 +1657,9 @@ curl -X POST "http://localhost:4000/v1/responses" \
 
 ## Shell tool
 
-The **Shell tool** lets the model run commands in a hosted container or local runtime (OpenAI Responses API). You pass `tools=[{"type": "shell", "environment": {...}}]`; the `environment` object configures the runtime (e.g. `type: "container_auto"` for auto-provisioned containers). See [OpenAI Shell tool guide](https://developers.openai.com/api/docs/guides/tools-shell) for full options.
+**Shell tool**은 model이 hosted container 또는 local runtime에서 command를 실행할 수 있게 합니다(OpenAI Responses API). `tools=[{"type": "shell", "environment": {...}}]`를 전달하며, `environment` object가 runtime을 구성합니다(예: auto-provisioned container용 `type: "container_auto"`). 전체 option은 [OpenAI Shell tool guide](https://developers.openai.com/api/docs/guides/tools-shell)를 참고하세요.
 
-Supported when using the `openai` or `azure` provider with a model that supports the Shell tool.
+Shell tool을 지원하는 model과 함께 `openai` 또는 `azure` provider를 사용할 때 지원됩니다.
 
 ### Python SDK
 
@@ -1675,11 +1675,11 @@ response = litellm.responses(
 )
 ```
 
-### LiteLLM Proxy (AI Gateway)
+### LiteLLM Proxy(AI Gateway) 사용
 
-Use the OpenAI SDK with your proxy as `base_url`, or call the proxy with curl. The proxy forwards `tools` (including `type: "shell"`) to the provider.
+proxy를 `base_url`로 지정해 OpenAI SDK를 사용하거나 curl로 proxy를 호출하세요. proxy는 `tools`(`type: "shell"` 포함)를 provider로 forward합니다.
 
-**OpenAI Python SDK (proxy as base_url):**
+**OpenAI Python SDK(`base_url`로 proxy 사용):**
 
 ```python showLineNumbers title="Shell tool via LiteLLM Proxy"
 from openai import OpenAI
@@ -1713,21 +1713,21 @@ curl -X POST "http://localhost:4000/v1/responses" \
   }'
 ```
 
-## File Search (Vector Stores)
+## File Search(Vector Stores) 사용 {#file-search-vector-stores}
 
-For full `file_search` usage (native + emulated fallback), SDK/Proxy examples, architecture diagram, and Q&A, see:
+전체 `file_search` 사용법(native + emulated fallback), SDK/Proxy 예제, 아키텍처 다이어그램, Q&A는 다음 문서를 참고하세요.
 
-- [`File Search in the Responses API — E2E Testing Guide`](/docs/tutorials/file_search_responses_api)
+- [`File Search in the Responses API - E2E Testing Guide`](/docs/tutorials/file_search_responses_api)
 
 ## Session Management
 
-LiteLLM Proxy supports session management for all supported models. This allows you to store and fetch conversation history (state) in LiteLLM Proxy. 
+LiteLLM Proxy는 지원되는 모든 model에 대해 session management를 지원합니다. 이를 통해 LiteLLM Proxy에서 conversation history(state)를 저장하고 가져올 수 있습니다.
 
-#### Usage
+#### 사용법
 
-1. Enable storing request / response content in the database
+1. database에 request / response content 저장 활성화
 
-Set `store_prompts_in_cold_storage: true` in your proxy config.yaml. When this is enabled, LiteLLM will store the request and response content in the s3 bucket you specify.
+proxy config.yaml에서 `store_prompts_in_cold_storage: true`를 설정합니다. 활성화하면 LiteLLM은 request와 response content를 지정한 s3 bucket에 저장합니다.
 
 ```yaml showLineNumbers title="config.yaml with Session Continuity"
 litellm_settings:
@@ -1742,9 +1742,9 @@ general_settings:
   store_prompts_in_spend_logs: true
 ```
 
-2. Make request 1 with no `previous_response_id` (new session)
+2. `previous_response_id` 없이 request 1 전송(new session)
 
-Start a new conversation by making a request without specifying a previous response ID.
+previous response ID를 지정하지 않고 request를 보내 새 conversation을 시작합니다.
 
 <Tabs>
 <TabItem value="curl" label="Curl">
@@ -1784,7 +1784,7 @@ print(response.output[0].content[0].text)
 </TabItem>
 </Tabs>
 
-Response:
+응답:
 
 ```json
 {
@@ -1800,9 +1800,9 @@ Response:
 }
 ```
 
-3. Make request 2 with `previous_response_id` (same session)
+3. `previous_response_id`로 request 2 전송(same session)
 
-Continue the conversation by referencing the previous response ID to maintain conversation context.
+previous response ID를 참조해 conversation context를 유지하면서 conversation을 계속합니다.
 
 <Tabs>
 <TabItem value="curl" label="Curl">
@@ -1843,7 +1843,7 @@ print(follow_up_response.output[0].content[0].text)
 </TabItem>
 </Tabs>
 
-Response:
+응답:
 
 ```json
 {
@@ -1859,9 +1859,9 @@ Response:
 }
 ```
 
-4. Make request 3 with no `previous_response_id` (new session)
+4. `previous_response_id` 없이 request 3 전송(new session)
 
-Start a brand new conversation without referencing previous context to demonstrate how context is not maintained between sessions.
+previous context를 참조하지 않고 완전히 새 conversation을 시작해 session 간 context가 유지되지 않는 방식을 보여줍니다.
 
 <Tabs>
 <TabItem value="curl" label="Curl">
@@ -1901,7 +1901,7 @@ print(new_session_response.output[0].content[0].text)
 </TabItem>
 </Tabs>
 
-Response:
+응답:
 
 ```json
 {
@@ -1916,11 +1916,3 @@ Response:
   }]
 }
 ```
-
-
-
-
-
-
-
-

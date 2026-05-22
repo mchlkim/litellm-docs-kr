@@ -3,22 +3,22 @@ import TabItem from '@theme/TabItem';
 
 # VLLM
 
-LiteLLM supports all models on VLLM.
+LiteLLM은 VLLM의 모든 모델을 지원합니다.
 
-| Property | Details |
+| 속성 | 세부 정보 |
 |-------|-------|
-| Description | vLLM is a fast and easy-to-use library for LLM inference and serving. [Docs](https://docs.vllm.ai/en/latest/index.html) |
-| Provider Route on LiteLLM | `hosted_vllm/` (for OpenAI compatible server), `vllm/` ([DEPRECATED] for vLLM sdk usage) |
-| Provider Doc | [vLLM ↗](https://docs.vllm.ai/en/latest/index.html) |
-| Supported Endpoints | `/chat/completions`, `/embeddings`, `/completions`, `/rerank`, `/audio/transcriptions` |
+| 설명 | vLLM은 LLM inference와 serving을 위한 빠르고 사용하기 쉬운 라이브러리입니다. [문서](https://docs.vllm.ai/en/latest/index.html) |
+| LiteLLM Provider Route | `hosted_vllm/` (OpenAI 호환 server용), `vllm/` ([DEPRECATED] vLLM sdk 사용용) |
+| Provider 문서 | [vLLM ↗](https://docs.vllm.ai/en/latest/index.html) |
+| 지원 엔드포인트 | `/chat/completions`, `/embeddings`, `/completions`, `/rerank`, `/audio/transcriptions` |
 
 
-# Quick Start
+# 빠른 시작
 
-## Usage - litellm.completion (calling OpenAI compatible endpoint)
-vLLM Provides an OpenAI compatible endpoints - here's how to call it with LiteLLM 
+## 사용법 - litellm.completion (OpenAI 호환 endpoint 호출)
+vLLM은 OpenAI 호환 endpoint를 제공합니다. LiteLLM으로 호출하는 방법은 다음과 같습니다.
 
-In order to use litellm to call a hosted vllm server add the following to your completion call
+litellm으로 hosted vllm server를 호출하려면 completion call에 다음을 추가합니다.
 
 * `model="hosted_vllm/<your-vllm-model-name>"` 
 * `api_base = "your-hosted-vllm-server"`
@@ -37,11 +37,11 @@ print(response)
 ```
 
 
-## Usage -  LiteLLM Proxy Server (calling OpenAI compatible endpoint)
+## 사용법 - LiteLLM Proxy Server (OpenAI 호환 endpoint 호출)
 
-Here's how to call an OpenAI-Compatible Endpoint with the LiteLLM Proxy Server
+LiteLLM Proxy Server로 OpenAI 호환 endpoint를 호출하는 방법입니다.
 
-1. Modify the config.yaml 
+1. config.yaml 수정
 
   ```yaml
   model_list:
@@ -51,13 +51,13 @@ Here's how to call an OpenAI-Compatible Endpoint with the LiteLLM Proxy Server
         api_base: https://hosted-vllm-api.co      # add api base for OpenAI compatible provider
   ```
 
-2. Start the proxy 
+2. 프록시 시작 
 
   ```bash
   $ litellm --config /path/to/config.yaml
   ```
 
-3. Send Request to LiteLLM Proxy Server
+3. LiteLLM Proxy Server로 request 전송
 
   <Tabs>
 
@@ -123,7 +123,7 @@ Here's how to call an OpenAI-Compatible Endpoint with the LiteLLM Proxy Server
   </TabItem>
   <TabItem value="proxy" label="PROXY">
 
-  1. Setup config.yaml
+  1. config.yaml 설정
 
   ```yaml
   model_list:
@@ -133,13 +133,13 @@ Here's how to call an OpenAI-Compatible Endpoint with the LiteLLM Proxy Server
         api_base: https://hosted-vllm-api.co
   ```
 
-  2. Start the proxy
+  2. 프록시 시작
 
   ```bash
   litellm --config /path/to/config.yaml
   ```
 
-  3. Test it!
+  3. 테스트
 
   ```bash
   curl http://0.0.0.0:4000/v1/chat/completions \
@@ -153,7 +153,7 @@ Here's how to call an OpenAI-Compatible Endpoint with the LiteLLM Proxy Server
 
 ## Embeddings
 
-vLLM serves OpenAI-compatible `/v1/embeddings`. When clients omit `encoding_format`, LiteLLM defaults it for OpenAI-compatible embedding routing (request → model `litellm_params` → `LITELLM_DEFAULT_EMBEDDING_ENCODING_FORMAT` → `float`). See [Embeddings](../proxy/embedding.md#embedding-encoding-format).
+vLLM은 OpenAI 호환 `/v1/embeddings`를 제공합니다. client가 `encoding_format`을 생략하면 LiteLLM은 OpenAI 호환 embedding routing에서 기본값을 적용합니다(request → model `litellm_params` → `LITELLM_DEFAULT_EMBEDDING_ENCODING_FORMAT` → `float`). [Embeddings](../proxy/embedding.md#embedding-encoding-format)를 참고하세요.
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -173,7 +173,7 @@ print(embedding)
 </TabItem>
 <TabItem value="proxy" label="PROXY">
 
-1. Setup config.yaml
+1. config.yaml 설정
 
 ```yaml
 model_list:
@@ -183,7 +183,7 @@ model_list:
         api_base: https://hosted-vllm-api.co      # add api base for OpenAI compatible provider
 ```
 
-2. Start the proxy 
+2. 프록시 시작 
 
 ```bash
 $ litellm --config /path/to/config.yaml
@@ -191,7 +191,7 @@ $ litellm --config /path/to/config.yaml
 # RUNNING on http://0.0.0.0:4000
 ```
 
-3. Test it! 
+3. 테스트
 
 ```bash
 curl -L -X POST 'http://0.0.0.0:4000/embeddings' \
@@ -200,12 +200,14 @@ curl -L -X POST 'http://0.0.0.0:4000/embeddings' \
 -d '{"input": ["hello world"], "model": "my-model"}'
 ```
 
-[See OpenAI SDK/Langchain/etc. examples](../proxy/user_keys.md#embeddings)
+[OpenAI SDK/Langchain 등 예제 보기](../proxy/user_keys.md#embeddings)
 
 </TabItem>
 </Tabs>
 
-## Rerank
+## Rerank {#rerank}
+
+### Rerank 엔드포인트 {#rerank-endpoint}
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -234,7 +236,7 @@ response = rerank(
 print(response)
 ```
 
-### Async Usage
+### Async 사용법
 
 ```python
 from litellm import arerank
@@ -266,7 +268,7 @@ asyncio.run(test_async_rerank())
 </TabItem>
 <TabItem value="proxy" label="PROXY">
 
-1. Setup config.yaml
+1. config.yaml 설정
 
 ```yaml
 model_list:
@@ -277,7 +279,7 @@ model_list:
         # api_key: your-api-key             # [optional] if your VLLM server requires authentication
 ```
 
-2. Start the proxy 
+2. 프록시 시작 
 
 ```bash
 $ litellm --config /path/to/config.yaml
@@ -285,7 +287,7 @@ $ litellm --config /path/to/config.yaml
 # RUNNING on http://0.0.0.0:4000
 ```
 
-3. Test it! 
+3. 테스트
 
 ```bash
 curl -L -X POST 'http://0.0.0.0:4000/rerank' \
@@ -304,29 +306,29 @@ curl -L -X POST 'http://0.0.0.0:4000/rerank' \
 }'
 ```
 
-[See OpenAI SDK/Langchain/etc. examples](../rerank.md#litellm-proxy-usage)
+[OpenAI SDK/Langchain 등 예제 보기](../rerank.md#litellm-proxy-usage)
 
 </TabItem>
 </Tabs>
 
-## Send Video URL to VLLM
+## VLLM으로 Video URL 전송 {#send-video-url-to-vllm}
 
-Example Implementation from VLLM [here](https://github.com/vllm-project/vllm/pull/10020)
+VLLM의 예제 implementation은 [여기](https://github.com/vllm-project/vllm/pull/10020)에서 확인할 수 있습니다.
 
 <Tabs>
 <TabItem value="files_message" label="(Unified) Files Message">
 
-Use this to send a video url to VLLM + Gemini in the same format, using OpenAI's `files` message type.
+OpenAI의 `files` message type을 사용해 VLLM + Gemini에 같은 형식으로 video url을 보내려면 이 방식을 사용합니다.
 
-There are two ways to send a video url to VLLM:
+VLLM에 video url을 보내는 방법은 두 가지입니다.
 
-1. Pass the video url directly
+1. video url을 직접 전달
 
 ```
 {"type": "file", "file": {"file_id": video_url}},
 ```
 
-2. Pass the video data as base64
+2. video data를 base64로 전달
 
 ```
 {"type": "file", "file": {"file_data": f"data:video/mp4;base64,{video_data_base64}"}}
@@ -377,7 +379,7 @@ print(response)
 </TabItem>
 <TabItem value="proxy" label="PROXY">
 
-1. Setup config.yaml
+1. config.yaml 설정
 
 ```yaml
 model_list:
@@ -391,7 +393,7 @@ model_list:
         api_key: os.environ/GEMINI_API_KEY
 ```
 
-2. Start the proxy 
+2. 프록시 시작 
 
 ```bash
 $ litellm --config /path/to/config.yaml
@@ -399,7 +401,7 @@ $ litellm --config /path/to/config.yaml
 # RUNNING on http://0.0.0.0:4000
 ```
 
-3. Test it! 
+3. 테스트
 
 ```bash
 curl -X POST http://0.0.0.0:4000/chat/completions \
@@ -425,17 +427,17 @@ curl -X POST http://0.0.0.0:4000/chat/completions \
 </TabItem>
 <TabItem value="video_url" label="(VLLM-specific) Video Message">
 
-Use this to send a video url to VLLM in it's native message format (`video_url`).
+VLLM의 native message format(`video_url`)으로 video url을 보내려면 이 방식을 사용합니다.
 
-There are two ways to send a video url to VLLM:
+VLLM에 video url을 보내는 방법은 두 가지입니다.
 
-1. Pass the video url directly
+1. video url을 직접 전달
 
 ```
 {"type": "video_url", "video_url": {"url": video_url}},
 ```
 
-2. Pass the video data as base64
+2. video data를 base64로 전달
 
 ```
 {"type": "video_url", "video_url": {"url": f"data:video/mp4;base64,{video_data_base64}"}}
@@ -474,7 +476,7 @@ print(response)
 </TabItem>
 <TabItem value="proxy" label="PROXY">
 
-1. Setup config.yaml
+1. config.yaml 설정
 
 ```yaml
 model_list:
@@ -484,7 +486,7 @@ model_list:
         api_base: https://hosted-vllm-api.co      # add api base for OpenAI compatible provider
 ```
 
-2. Start the proxy 
+2. 프록시 시작 
 
 ```bash
 $ litellm --config /path/to/config.yaml
@@ -492,7 +494,7 @@ $ litellm --config /path/to/config.yaml
 # RUNNING on http://0.0.0.0:4000
 ```
 
-3. Test it! 
+3. 테스트
 
 ```bash
 curl -X POST http://0.0.0.0:4000/chat/completions \
@@ -519,8 +521,8 @@ curl -X POST http://0.0.0.0:4000/chat/completions \
 </Tabs>
 
 
-## (Deprecated) for packaged `vllm` installs
-### Using - `litellm.completion`
+## packaged `vllm` install용(Deprecated)
+### 사용법 - `litellm.completion`
 
 ```
 uv add litellm vllm
@@ -558,35 +560,35 @@ print(response_list)
 ```
 ### Prompt Templates
 
-For models with special prompt templates (e.g. Llama2), we format the prompt to fit their template.
+특수 prompt template이 있는 모델(예: Llama2)의 경우 해당 template에 맞게 prompt를 format합니다.
 
-**What if we don't support a model you need?**
-You can also specify you're own custom prompt formatting, in case we don't have your model covered yet. 
+**필요한 모델을 아직 지원하지 않으면 어떻게 하나요?**
+아직 해당 모델이 포함되어 있지 않다면 custom prompt formatting을 직접 지정할 수 있습니다.
 
-**Does this mean you have to specify a prompt for all models?**
-No. By default we'll concatenate your message content to make a prompt (expected format for Bloom, T-5, Llama-2 base models, etc.)
+**그렇다면 모든 모델에 prompt를 지정해야 하나요?**
+아닙니다. 기본적으로 message content를 이어 붙여 prompt를 만듭니다(Bloom, T-5, Llama-2 base model 등에서 기대하는 형식).
 
-**Default Prompt Template**
+**기본 Prompt Template**
 ```python
 def default_pt(messages):
     return " ".join(message["content"] for message in messages)
 ```
 
-[Code for how prompt templates work in LiteLLM](https://github.com/BerriAI/litellm/blob/main/litellm/llms/prompt_templates/factory.py)
+[LiteLLM에서 prompt template이 동작하는 방식의 코드](https://github.com/BerriAI/litellm/blob/main/litellm/llms/prompt_templates/factory.py)
 
 
-#### Models we already have Prompt Templates for
+#### 이미 Prompt Template이 있는 모델
 
-| Model Name                           | Works for Models                  | Function Call                                                                                                    |
+| Model Name                           | 동작 대상 모델                  | Function Call                                                                                                    |
 |--------------------------------------|-----------------------------------|------------------------------------------------------------------------------------------------------------------|
-| meta-llama/Llama-2-7b-chat           | All meta-llama llama2 chat models | `completion(model='vllm/meta-llama/Llama-2-7b', messages=messages, api_base="your_api_endpoint")`                |
-| tiiuae/falcon-7b-instruct            | All falcon instruct models        | `completion(model='vllm/tiiuae/falcon-7b-instruct', messages=messages, api_base="your_api_endpoint")`            |
-| mosaicml/mpt-7b-chat                 | All mpt chat models               | `completion(model='vllm/mosaicml/mpt-7b-chat', messages=messages, api_base="your_api_endpoint")`                 |
-| codellama/CodeLlama-34b-Instruct-hf  | All codellama instruct models     | `completion(model='vllm/codellama/CodeLlama-34b-Instruct-hf', messages=messages, api_base="your_api_endpoint")`  |
-| WizardLM/WizardCoder-Python-34B-V1.0 | All wizardcoder models            | `completion(model='vllm/WizardLM/WizardCoder-Python-34B-V1.0', messages=messages, api_base="your_api_endpoint")` |
-| Phind/Phind-CodeLlama-34B-v2         | All phind-codellama models        | `completion(model='vllm/Phind/Phind-CodeLlama-34B-v2', messages=messages, api_base="your_api_endpoint")`         |
+| meta-llama/Llama-2-7b-chat           | 모든 meta-llama llama2 chat 모델 | `completion(model='vllm/meta-llama/Llama-2-7b', messages=messages, api_base="your_api_endpoint")`                |
+| tiiuae/falcon-7b-instruct            | 모든 falcon instruct 모델        | `completion(model='vllm/tiiuae/falcon-7b-instruct', messages=messages, api_base="your_api_endpoint")`            |
+| mosaicml/mpt-7b-chat                 | 모든 mpt chat 모델               | `completion(model='vllm/mosaicml/mpt-7b-chat', messages=messages, api_base="your_api_endpoint")`                 |
+| codellama/CodeLlama-34b-Instruct-hf  | 모든 codellama instruct 모델     | `completion(model='vllm/codellama/CodeLlama-34b-Instruct-hf', messages=messages, api_base="your_api_endpoint")`  |
+| WizardLM/WizardCoder-Python-34B-V1.0 | 모든 wizardcoder 모델            | `completion(model='vllm/WizardLM/WizardCoder-Python-34B-V1.0', messages=messages, api_base="your_api_endpoint")` |
+| Phind/Phind-CodeLlama-34B-v2         | 모든 phind-codellama 모델        | `completion(model='vllm/Phind/Phind-CodeLlama-34B-v2', messages=messages, api_base="your_api_endpoint")`         |
 
-#### Custom prompt templates
+#### 사용자 지정 prompt template
 
 ```python 
 # Create your own custom prompt template works 

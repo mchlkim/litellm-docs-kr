@@ -3,28 +3,28 @@ import TabItem from '@theme/TabItem';
 
 # Baseten
 
-LiteLLM supports both Baseten Model APIs and dedicated deployments with automatic routing.
+LiteLLM은 Baseten Model API와 전용 배포를 모두 지원하며 자동 라우팅을 제공합니다.
 
-## API Types
+## API 유형 {#api-types}
 
-### Model API (Default)
+### Model API (기본값) {#model-api-default}
 - **URL**: `https://inference.baseten.co/v1`
-- **Format**: `baseten/<model-name>` (e.g., `baseten/openai/gpt-oss-120b`)
-- **Best for**: Quick access to popular models
+- **형식**: `baseten/<model-name>` (예: `baseten/openai/gpt-oss-120b`)
+- **적합한 용도**: 인기 모델에 빠르게 접근
 
-### Dedicated Deployments
+### 전용 배포 {#dedicated-deployments}
 - **URL**: `https://model-{id}.api.baseten.co/environments/production/sync/v1`
-- **Format**: `baseten/{8-digit-alphanumeric-code}` (e.g., `baseten/abcd1234`)
-- **Best for**: Custom models, latency SLAs
+- **형식**: `baseten/{8-digit-alphanumeric-code}` (예: `baseten/abcd1234`)
+- **적합한 용도**: 커스텀 모델, 지연 시간 SLA
 
 :::tip
-**Automatic Routing**: LiteLLM detects the type based on model format:
-- 8-digit alphanumeric codes → Dedicated deployment
-- All other formats → Model API
+**자동 라우팅**: LiteLLM은 모델 형식을 기준으로 유형을 감지합니다.
+- 8자리 영숫자 코드 -> 전용 배포
+- 그 외 모든 형식 -> Model API
 :::
 
 
-## Quick Start
+## 빠른 시작
 
 ```python
 import os
@@ -45,9 +45,9 @@ response = completion(
 )
 ```
 
-## Examples
+## 예제
 
-### Basic Usage
+### 기본 사용법 {#basic-usage}
 ```python
 # Model API
 response = completion(
@@ -66,7 +66,7 @@ response = completion(
 )
 ```
 
-### Streaming (Model API only)
+### 스트리밍 (Model API 전용) {#streaming-model-api-only}
 ```python
 response = completion(
     model="baseten/openai/gpt-oss-120b",
@@ -80,9 +80,9 @@ for chunk in response:
         print(chunk.choices[0].delta.content, end="")
 ```
 
-## Usage with LiteLLM Proxy
+## LiteLLM Proxy와 함께 사용하기 {#usage-with-litellm-proxy}
 
-1. **Config**:
+1. **구성**:
 ```yaml
 model_list:
   - model_name: baseten-model
@@ -91,7 +91,7 @@ model_list:
       api_key: your-baseten-api-key
 ```
 
-2. **Request**:
+2. **요청**:
 ```python
 import openai
 client = openai.OpenAI(

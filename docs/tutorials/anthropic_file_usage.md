@@ -1,22 +1,22 @@
-# Using Anthropic File API with LiteLLM Proxy
+# LiteLLM Proxy로 Anthropic File API 사용하기 {#using-anthropic-file-api-with-litellm-proxy}
 
-## Overview
+## 개요
 
-This tutorial shows how to create and analyze files with Claude-4 on Anthropic via LiteLLM Proxy.
+이 튜토리얼에서는 LiteLLM Proxy를 통해 Anthropic의 Claude-4로 파일을 만들고 분석하는 방법을 보여줍니다.
 
-## Prerequisites
+## 사전 준비
 
-- LiteLLM Proxy running
-- Anthropic API key
+- 실행 중인 LiteLLM Proxy
+- Anthropic API 키
 
-Add the following to your `.env` file:
+`.env` 파일에 다음을 추가하세요.
 ```
 ANTHROPIC_API_KEY=sk-1234
 ```
 
-## Usage
+## 사용법
 
-### 1. Setup config.yaml
+### 1. `config.yaml` 설정 {#setup-configyaml}
 
 ```yaml
 model_list:
@@ -26,9 +26,9 @@ model_list:
       api_key: os.environ/ANTHROPIC_API_KEY
 ```
 
-## 2. Create a file 
+## 2. 파일 만들기 {#create-a-file}
 
-Use the `/anthropic` passthrough endpoint to create a file.
+파일을 만들려면 `/anthropic` 패스스루 엔드포인트를 사용하세요.
 
 ```bash
 curl -L -X POST 'http://0.0.0.0:4000/anthropic/v1/files' \
@@ -38,7 +38,7 @@ curl -L -X POST 'http://0.0.0.0:4000/anthropic/v1/files' \
 -F 'file=@"/path/to/your/file.csv"'
 ```
 
-Expected response:
+예상 응답:
 
 ```json
 {
@@ -53,7 +53,7 @@ Expected response:
 ```
 
 
-## 3. Analyze the file with Claude-4 via `/chat/completions`
+## 3. `/chat/completions`를 통해 Claude-4로 파일 분석하기 {#analyze-the-file-with-claude-4-via-chatcompletions}
 
 
 ```bash

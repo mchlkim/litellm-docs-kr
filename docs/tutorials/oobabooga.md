@@ -1,14 +1,14 @@
-# Oobabooga Text Web API Tutorial
+# Oobabooga Text Web API 튜토리얼
 
-### Install + Import LiteLLM 
+### LiteLLM 설치 및 가져오기
 ```python 
 !uv add litellm
 from litellm import completion 
 import os
 ```
 
-### Call your oobabooga model
-Remember to set your api_base
+### oobabooga 모델 호출
+`api_base` 설정을 잊지 마세요.
 ```python
 response = completion(
   model="oobabooga/WizardCoder-Python-7B-V1.0-GPTQ",
@@ -18,9 +18,9 @@ response = completion(
 )
 ```
 
-### See your response 
+### 응답 확인
 ```python 
 print(response)
 ```
 
-Credits to [Shuai Shao](https://www.linkedin.com/in/shuai-sh/), for this tutorial. 
+이 튜토리얼은 [Shuai Shao](https://www.linkedin.com/in/shuai-sh/) 님이 작성했습니다.

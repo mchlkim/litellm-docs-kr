@@ -2,17 +2,17 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Image from '@theme/IdealImage';
 
-# Getting Started Tutorial
+# 시작하기 튜토리얼
 
-End-to-End tutorial for LiteLLM Proxy to:
-- Add an Azure OpenAI model
-- Make a successful /chat/completion call
-- Generate a virtual key
-- Set RPM limit on virtual key
+LiteLLM Proxy로 다음 작업을 수행하는 end-to-end 튜토리얼입니다.
+- Azure OpenAI model 추가
+- 성공적인 /chat/completion call 실행
+- virtual key 생성
+- virtual key에 RPM limit 설정
 
-## Quick Install (Recommended for local / beginners)
+## 빠른 설치(local / beginner 권장)
 
-New to LiteLLM? This is the easiest way to get started locally. One command installs LiteLLM and walks you through setup interactively — no config files to write by hand.
+LiteLLM이 처음인가요? local에서 시작하는 가장 쉬운 방법입니다. 한 command로 LiteLLM을 설치하고 interactive setup을 진행합니다. config file을 직접 작성할 필요가 없습니다.
 
 ### 1. Install
 
@@ -20,9 +20,9 @@ New to LiteLLM? This is the easiest way to get started locally. One command inst
 curl -fsSL https://raw.githubusercontent.com/BerriAI/litellm/main/scripts/install.sh | sh
 ```
 
-This detects your OS, installs `litellm[proxy]`, and drops you straight into the setup wizard.
+이 command는 OS를 감지하고 `litellm[proxy]`를 설치한 뒤 setup wizard로 바로 진입합니다.
 
-### 2. Follow the wizard
+### 2. Wizard 따라가기
 
 ```
 $ litellm --setup
@@ -50,15 +50,15 @@ $ litellm --setup
   ❯ Start the proxy now? (Y/n):
 ```
 
-The wizard walks you through:
-1. Pick your LLM providers (OpenAI, Anthropic, Azure, Bedrock, Gemini, Ollama)
-2. Enter API keys for each provider
-3. Set a port and master key (or accept the defaults)
-4. Config is saved to `./litellm_config.yaml` and the proxy starts immediately
+wizard는 다음 단계를 안내합니다.
+1. LLM provider 선택(OpenAI, Anthropic, Azure, Bedrock, Gemini, Ollama)
+2. provider별 API key 입력
+3. port와 master key 설정 또는 기본값 사용
+4. config가 `./litellm_config.yaml`에 저장되고 proxy가 즉시 시작됨
 
-### 3. Make a call
+### 3. Call 실행
 
-Your proxy is running on `http://0.0.0.0:4000`. Test it:
+proxy는 `http://0.0.0.0:4000`에서 실행 중입니다. 다음으로 테스트합니다.
 
 ```bash
 curl -X POST 'http://0.0.0.0:4000/chat/completions' \
@@ -70,15 +70,15 @@ curl -X POST 'http://0.0.0.0:4000/chat/completions' \
 }'
 ```
 
-:::tip Already have uv installed?
-You can skip the curl install and run `litellm --setup` directly after `uv tool install 'litellm[proxy]'`.
+:::tip 이미 uv가 설치되어 있나요?
+curl install을 건너뛰고 `uv tool install 'litellm[proxy]'` 후 `litellm --setup`을 바로 실행할 수 있습니다.
 :::
 
 ---
 
-## Pre-Requisites 
+## 사전 요구 사항
 
-Choose your install method. **Docker Compose** users complete their full setup inside the tab and are done. **Docker** and **LiteLLM CLI** users continue with the steps below the tabs.
+install method를 선택하세요. **Docker Compose** user는 tab 안에서 전체 setup을 완료하면 끝입니다. **Docker** 및 **LiteLLM CLI** user는 tab 아래 단계로 계속 진행합니다.
 
 <Tabs>
 
@@ -88,7 +88,7 @@ Choose your install method. **Docker Compose** users complete their full setup i
 docker pull docker.litellm.ai/berriai/litellm:main-latest
 ```
 
-[**See all docker images**](https://github.com/orgs/BerriAI/packages)
+[**모든 docker image 보기**](https://github.com/orgs/BerriAI/packages)
 
 </TabItem>
 
@@ -102,23 +102,23 @@ $ uv tool install 'litellm[proxy]'
 
 <TabItem value="docker-compose" label="Docker Compose (Proxy + DB)">
 
-Docker Compose bundles LiteLLM with a Postgres database. Follow the steps below — the proxy will be fully running by the end.
+Docker Compose는 LiteLLM과 Postgres database를 함께 제공합니다. 아래 단계를 따르면 마지막에는 proxy가 완전히 실행됩니다.
 
-### Step 1 — Pull the LiteLLM database image
+### Step 1 — LiteLLM database image 가져오기 {#step-1--litellm-database-image-pull}
 
-LiteLLM provides a dedicated `litellm-database` image for proxy deployments that connect to Postgres.
+LiteLLM은 Postgres에 연결하는 proxy deployment용 전용 `litellm-database` image를 제공합니다.
 
 ```bash
 docker pull ghcr.io/berriai/litellm-database:main-latest
 ```
 
-See all available tags on the [GitHub Container Registry](https://github.com/BerriAI/litellm/pkgs/container/litellm-database).
+사용 가능한 모든 tag는 [GitHub Container Registry](https://github.com/BerriAI/litellm/pkgs/container/litellm-database)에서 확인하세요.
 
 ---
 
-### Step 2 — Set up a database
+### Step 2 — Database 설정
 
-Complete all three config files **before** running `docker compose up`. The proxy server will not start correctly if any of these are missing.
+`docker compose up`을 실행하기 **전에** 세 config file을 모두 완료하세요. 하나라도 빠지면 proxy server가 올바르게 시작되지 않습니다.
 
 #### 2.1 — Get `docker-compose.yml` and create `.env`
 
@@ -139,9 +139,9 @@ echo 'AZURE_API_BASE="https://openai-***********/"' >> .env
 echo 'AZURE_API_KEY="your-azure-api-key"' >> .env
 ```
 
-#### 2.2 — Create `config.yaml`
+#### 2.2 — `config.yaml` 생성
 
-The default `docker-compose.yml` starts a Postgres container at `db:5432`. Your `config.yaml` must include `database_url` pointing to it:
+기본 `docker-compose.yml`은 `db:5432`에서 Postgres container를 시작합니다. `config.yaml`에는 이를 가리키는 `database_url`이 포함되어야 합니다.
 
 ```yaml
 model_list:
@@ -158,12 +158,12 @@ general_settings:
 ```
 
 :::tip
-`database_url` enables virtual keys, spend tracking, and the UI. Replace it with your [Supabase](https://supabase.com/) or [Neon](https://neon.tech/) connection string if you prefer a managed database.
+`database_url`은 virtual key, spend tracking, UI를 활성화합니다. managed database를 선호한다면 [Supabase](https://supabase.com/) 또는 [Neon](https://neon.tech/) connection string으로 바꾸세요.
 :::
 
-#### 2.3 — Create `prometheus.yml`
+#### 2.3 — `prometheus.yml` 생성 {#23--create-prometheusyml}
 
-This file **must exist as a file** before `docker compose up`. If it is missing, Docker auto-creates it as an empty directory and the Prometheus container fails to start.
+이 file은 `docker compose up` 전에 **반드시 file로 존재해야 합니다**. 없으면 Docker가 빈 directory로 자동 생성하고 Prometheus container가 시작에 실패합니다.
 
 ```yaml
 global:
@@ -176,7 +176,7 @@ scrape_configs:
       - targets: ["litellm:4000"]
 ```
 
-Also verify that the `config.yaml` volume mount and `--config` flag are **not commented out** in `docker-compose.yml`:
+또한 `docker-compose.yml`에서 `config.yaml` volume mount와 `--config` flag가 **comment out되어 있지 않은지** 확인하세요.
 
 ```yaml
 services:
@@ -188,20 +188,20 @@ services:
 ```
 
 :::warning
-All three files (`.env`, `config.yaml`, `prometheus.yml`) must be present before running `docker compose up`. See [Troubleshooting](#troubleshooting) if you run into issues.
+`docker compose up`을 실행하기 전에 세 파일(`.env`, `config.yaml`, `prometheus.yml`)이 모두 있어야 합니다. 문제가 발생하면 [문제 해결](#troubleshooting)을 참고하세요.
 :::
 
 ---
 
-### Step 3 — Start the proxy server and test it
+### Step 3 — Proxy server 시작 및 테스트
 
-After `config.yaml`, `prometheus.yml`, and `.env` are complete, start the proxy:
+`config.yaml`, `prometheus.yml`, `.env`가 준비되면 proxy를 시작합니다.
 
 ```bash
 docker compose up
 ```
 
-Once running, test it with a curl request:
+실행된 뒤 curl request로 테스트합니다.
 
 ```bash
 curl -X POST 'http://0.0.0.0:4000/chat/completions' \
@@ -213,7 +213,7 @@ curl -X POST 'http://0.0.0.0:4000/chat/completions' \
   }'
 ```
 
-**Expected response:**
+**예상 response:**
 
 ```json
 {
@@ -254,29 +254,29 @@ curl -X POST 'http://0.0.0.0:4000/chat/completions' \
 
 ---
 
-### Optional — Navigate to the LiteLLM UI and generate a virtual key
+### 선택 사항 — LiteLLM UI로 이동해 virtual key 생성
 
-Open [http://localhost:4000/ui](http://localhost:4000/ui) in your browser and log in with your master key (`sk-1234`).
+browser에서 [http://localhost:4000/ui](http://localhost:4000/ui)를 열고 master key(`sk-1234`)로 로그인합니다.
 
-Navigate to **Virtual Keys** and click **+ Create New Key**:
+**가상 키**로 이동해 **+ Create New Key**를 클릭합니다.
 
 <Image img={require('../../img/litellm_ui_create_key.png')} alt="LiteLLM UI — Create Virtual Key" />
 
-Virtual keys let you track spend, set rate limits, and control model access per user or team.
+Virtual key를 사용하면 user 또는 team별 spend 추적, rate limit 설정, model access 제어를 할 수 있습니다.
 
 </TabItem>
 
 </Tabs>
 
-:::note Docker Compose users
-Your setup is complete — the steps below are for **Docker** and **LiteLLM CLI** users only.
+:::note Docker Compose 사용자
+setup이 완료되었습니다. 아래 단계는 **Docker** 및 **LiteLLM CLI** user 전용입니다.
 :::
 
 ---
 
-## Step 1 — Add a model
+## Step 1 — Model 추가
 
-Control LiteLLM Proxy with a `config.yaml` file. Create one with your Azure model:
+`config.yaml` file로 LiteLLM Proxy를 제어합니다. Azure model을 포함해 다음 file을 생성합니다.
 
 ```yaml
 model_list:
@@ -289,33 +289,33 @@ model_list:
 ```
 ---
 
-### Model List Specification
+### Model List 사양 {#model-list-specification}
 
-You can read more about how model resolution works in the [Model Configuration](#understanding-model-configuration) section.
+model resolution 동작 방식은 [Model 설정](#understanding-model-configuration) section에서 더 자세히 확인할 수 있습니다.
 
-- **`model_name`** (`str`) - This field should contain the name of the model as received.
+- **`model_name`** (`str`) - 이 field에는 수신되는 model 이름을 넣습니다.
 - **`litellm_params`** (`dict`) [See All LiteLLM Params](https://github.com/BerriAI/litellm/blob/559a6ad826b5daef41565f54f06c739c8c068b28/litellm/types/router.py#L222)
-    - **`model`** (`str`) - Specifies the model name to be sent to `litellm.acompletion` / `litellm.aembedding`, etc. This is the identifier used by LiteLLM to route to the correct model + provider logic on the backend. 
-    - **`api_key`** (`str`) - The API key required for authentication. It can be retrieved from an environment variable using `os.environ/`.
-    - **`api_base`** (`str`) - The API base for your azure deployment.
-    - **`api_version`** (`str`) - The API Version to use when calling Azure's OpenAI API. Get the latest Inference API version [here](https://learn.microsoft.com/en-us/azure/ai-services/openai/api-version-deprecation?source=recommendations#latest-preview-api-releases).
+    - **`model`** (`str`) - `litellm.acompletion` / `litellm.aembedding` 등에 전달할 model 이름을 지정합니다. LiteLLM이 backend에서 올바른 model + provider logic으로 route하는 데 사용하는 identifier입니다.
+    - **`api_key`** (`str`) - 인증에 필요한 API key입니다. `os.environ/`을 사용해 environment variable에서 가져올 수 있습니다.
+    - **`api_base`** (`str`) - Azure deployment의 API base입니다.
+    - **`api_version`** (`str`) - Azure OpenAI API 호출 시 사용할 API Version입니다. 최신 Inference API version은 [여기](https://learn.microsoft.com/en-us/azure/ai-services/openai/api-version-deprecation?source=recommendations#latest-preview-api-releases)에서 확인하세요.
 
 
 ---
 
-### Useful Links
-- [**All Supported LLM API Providers (OpenAI/Bedrock/Vertex/etc.)**](../providers/)
-- [**Full Config.Yaml Spec**](./configs.md)
-- [**Pass provider-specific params**](../completion/provider_specific_params.md#proxy-usage)
+### 유용한 링크
+- [**지원되는 모든 LLM API Provider(OpenAI/Bedrock/Vertex 등)**](../providers/)
+- [**전체 Config.Yaml 사양**](./configs.md)
+- [**provider별 parameter 전달**](../completion/provider_specific_params.md#proxy-usage)
 
 
-## 2. Make a successful /chat/completion call 
+## 2. 성공적인 /chat/completion call 실행
 
-LiteLLM Proxy is 100% OpenAI-compatible. Test your azure model via the `/chat/completions` route.
+LiteLLM Proxy는 100% OpenAI-compatible입니다. `/chat/completions` route로 Azure model을 테스트합니다.
 
-### 2.1 Start Proxy 
+### 2.1 Proxy 시작
 
-Save your config.yaml from step 1. as `litellm_config.yaml`.
+1단계의 config.yaml을 `litellm_config.yaml`로 저장합니다.
 
 <Tabs>
 
@@ -347,7 +347,7 @@ $ litellm --config /app/config.yaml --detailed_debug
 
 </Tabs>
 
-Confirm your config was loaded correctly — you should see this in the logs:
+config가 올바르게 load되었는지 확인합니다. log에서 다음을 볼 수 있어야 합니다.
 
 ```
 Loaded config YAML (api_key and environment_variables are not shown):
@@ -357,9 +357,9 @@ Loaded config YAML (api_key and environment_variables are not shown):
       "model_name": ...
 ```
 
-### 2.2 Make Call 
+### 2.2 Call 실행
 
-LiteLLM Proxy is 100% OpenAI-compatible. Test your model via `/chat/completions`:
+LiteLLM Proxy는 100% OpenAI-compatible입니다. `/chat/completions`로 model을 테스트합니다.
 
 ```bash
 curl -X POST 'http://0.0.0.0:4000/chat/completions' \
@@ -380,7 +380,7 @@ curl -X POST 'http://0.0.0.0:4000/chat/completions' \
 }'
 ```
 
-**Expected Response**
+**예상 response**
 
 ```bash
 {
@@ -446,24 +446,24 @@ curl -X POST 'http://0.0.0.0:4000/chat/completions' \
 
 
 
-### Useful Links
-- [All Supported LLM API Providers (OpenAI/Bedrock/Vertex/etc.)](../providers/)
-- [Call LiteLLM Proxy via OpenAI SDK, Langchain, etc.](./user_keys.md#request-format)
+### 유용한 링크
+- [지원되는 모든 LLM API Provider(OpenAI/Bedrock/Vertex 등)](../providers/)
+- [OpenAI SDK, Langchain 등으로 LiteLLM Proxy 호출](./user_keys.md#request-format)
 - [All API Endpoints Swagger](https://litellm-api.up.railway.app/#/chat%2Fcompletions)
-- [Other/Non-Chat Completion Endpoints](../embedding/supported_embedding.md)
-- [Pass-through for VertexAI, Bedrock, etc.](../pass_through/vertex_ai.md)
+- [기타/Non-Chat Completion Endpoint](../embedding/supported_embedding.md)
+- [VertexAI, Bedrock 등 pass-through](../pass_through/vertex_ai.md)
 
-## Optional: Generate a virtual key
+## 선택 사항: virtual key 생성
 
-Track spend and control model access via virtual keys for the proxy.
+proxy에서 virtual key로 spend를 추적하고 model access를 제어합니다.
 
-### Prerequisite — Set up a database
+### 사전 요구 사항 — Database 설정
 
-:::note Docker Compose users
-Your Postgres container is already running — skip ahead to [Create Key w/ RPM Limit](#create-key-w-rpm-limit) below.
+:::note Docker Compose 사용자
+Postgres container가 이미 실행 중입니다. 아래 [RPM Limit이 있는 Key 생성](#create-key-w-rpm-limit)으로 건너뛰세요.
 :::
 
-**Docker / LiteLLM CLI users** — you need a Postgres database (e.g. [Supabase](https://supabase.com/), [Neon](https://neon.tech/), or self-hosted). Add `general_settings` to your `config.yaml`:
+**Docker / LiteLLM CLI user**는 Postgres database가 필요합니다(예: [Supabase](https://supabase.com/), [Neon](https://neon.tech/), 또는 self-hosted). `config.yaml`에 `general_settings`를 추가합니다.
 
 ```yaml
 model_list:
@@ -479,35 +479,35 @@ general_settings:
   database_url: "postgresql://<user>:<password>@<host>:<port>/<dbname>" # 👈 KEY CHANGE
 ```
 
-Save config.yaml as `litellm_config.yaml` before continuing.
+계속하기 전에 config.yaml을 `litellm_config.yaml`로 저장합니다.
 
-You must finish this setup before starting the proxy server.
+proxy server를 시작하기 전에 이 setup을 완료해야 합니다.
 
 ---
 
-**What is `general_settings`?**
+**`general_settings`란?**
 
-These are settings for the LiteLLM Proxy Server. 
+LiteLLM Proxy Server용 설정입니다.
 
-See All General Settings [here](https://docs.litellm.ai/docs/proxy/config_settings).
+모든 General Settings는 [여기](http://localhost:3000/docs/proxy/configs#all-settings)에서 확인하세요.
 
 1. **`master_key`** (`str`)
-   - **Description**: 
-     - Set a `master key`, this is your Proxy Admin key - you can use this to create other keys (🚨 must start with `sk-`).
-   - **Usage**: 
-     - **Set on config.yaml** set your master key under `general_settings:master_key`, example - 
+   - **설명**:
+     - `master key`를 설정합니다. 이는 Proxy Admin key이며 다른 key를 생성할 때 사용할 수 있습니다(🚨 반드시 `sk-`로 시작해야 함).
+   - **사용법**: 
+     - **config.yaml에서 설정** `general_settings:master_key` 아래에 master key를 설정합니다. 예:
         `master_key: sk-1234`
-     - **Set env variable** set `LITELLM_MASTER_KEY`
+     - **env variable 설정** `LITELLM_MASTER_KEY`를 설정합니다.
 
 2. **`database_url`** (str)
-   - **Description**: 
-     - Set a `database_url`, this is the connection to your Postgres DB, which is used by litellm for generating keys, users, teams.
-   - **Usage**: 
-     - **Set on config.yaml** set your `database_url` under `general_settings:database_url`, example - 
+   - **설명**:
+     - `database_url`을 설정합니다. 이는 key, user, team 생성을 위해 LiteLLM이 사용하는 Postgres DB 연결입니다.
+   - **사용법**: 
+     - **config.yaml에서 설정** `general_settings:database_url` 아래에 `database_url`을 설정합니다. 예:
         `database_url: "postgresql://..."`
-     - Set `DATABASE_URL=postgresql://<user>:<password>@<host>:<port>/<dbname>` in your env 
+     - env에 `DATABASE_URL=postgresql://<user>:<password>@<host>:<port>/<dbname>`를 설정합니다.
 
-### Start Proxy
+### Proxy 시작
 
 ```bash
 docker run \
@@ -519,9 +519,9 @@ docker run \
     --config /app/config.yaml --detailed_debug
 ```
 
-### Create Key w/ RPM Limit
+### RPM Limit이 있는 Key 생성 {#create-key-w-rpm-limit}
 
-Create a key with `rpm_limit: 1`. This will only allow 1 request per minute for calls to proxy with this key.
+`rpm_limit: 1`로 key를 생성합니다. 이 key로 proxy를 호출할 때 분당 1개 request만 허용됩니다.
 
 ```bash 
 curl -L -X POST 'http://0.0.0.0:4000/key/generate' \
@@ -532,9 +532,9 @@ curl -L -X POST 'http://0.0.0.0:4000/key/generate' \
 }'
 ```
 
-[**See full API Spec**](https://litellm-api.up.railway.app/#/key%20management/generate_key_fn_key_generate_post)
+[**전체 API Spec 보기**](https://litellm-api.up.railway.app/#/key%20management/generate_key_fn_key_generate_post)
 
-**Expected Response**
+**예상 response**
 
 ```bash
 {
@@ -542,11 +542,11 @@ curl -L -X POST 'http://0.0.0.0:4000/key/generate' \
 }
 ```
 
-### Test it!
+### 테스트
 
-**Use the virtual key you just created.**
+**방금 생성한 virtual key를 사용하세요.**
 
-1st call - Expect to work! 
+첫 번째 call - 성공해야 합니다.
 
 ```bash
 curl -X POST 'http://0.0.0.0:4000/chat/completions' \
@@ -567,7 +567,7 @@ curl -X POST 'http://0.0.0.0:4000/chat/completions' \
 }'
 ```
 
-**Expected Response**
+**예상 response**
 
 ```bash
 {
@@ -577,11 +577,11 @@ curl -X POST 'http://0.0.0.0:4000/chat/completions' \
 }
 ```
 
-2nd call - Expect to fail! 
+두 번째 call - 실패해야 합니다.
 
-**Why did this call fail?**
+**이 call이 실패한 이유는 무엇인가요?**
 
-We set the virtual key's requests per minute (RPM) limit to 1. This has now been crossed.
+virtual key의 requests per minute(RPM) limit을 1로 설정했기 때문입니다. 이제 이 limit을 초과했습니다.
 
 
 ```bash
@@ -603,7 +603,7 @@ curl -X POST 'http://0.0.0.0:4000/chat/completions' \
 }'
 ```
 
-**Expected Response**
+**예상 response**
 
 ```bash
 {
@@ -616,20 +616,20 @@ curl -X POST 'http://0.0.0.0:4000/chat/completions' \
 }
 ```
 
-### Useful Links 
+### 유용한 링크
 
-- [Creating Virtual Keys](./virtual_keys.md)
+- [Creating 가상 키](./virtual_keys.md)
 - [Key Management API Endpoints Swagger](https://litellm-api.up.railway.app/#/key%20management)
-- [Set Budgets / Rate Limits per key/user/teams](./users.md)
-- [Dynamic TPM/RPM Limits for keys](./team_budgets.md#dynamic-tpmrpm-allocation)
+- [key/user/team별 Budget / Rate Limit 설정](./users.md)
+- [key의 Dynamic TPM/RPM Limit](./team_budgets.md#dynamic-tpmrpm-allocation)
 
-## Key Concepts
+## 핵심 개념
 
-This section explains key concepts on LiteLLM AI Gateway.
+이 section은 LiteLLM AI Gateway의 핵심 개념을 설명합니다.
 
-### Understanding Model Configuration
+### Model 설정 이해 {#understanding-model-configuration}
 
-For this config.yaml example:
+다음 config.yaml 예제를 기준으로 설명합니다.
 
 ```yaml
 model_list:
@@ -641,7 +641,7 @@ model_list:
       api_version: "2025-01-01-preview" # [OPTIONAL] litellm uses the latest azure api_version by default
 ```
 
-**How Model Resolution Works:**
+**Model Resolution 동작 방식:**
 
 ```
 Client Request                LiteLLM Proxy                 Provider API
@@ -663,7 +663,7 @@ POST /chat/completions
                                                       POST /deployments/my_azure_deployment/...
 ```
 
-**Breaking Down the `model` Parameter under `litellm_params`:**
+**`litellm_params` 아래 `model` parameter 분해:**
 
 ```yaml
 model_list:
@@ -677,7 +677,7 @@ model_list:
                └─────────────────▶ Provider that LiteLLM routes to
 ```
 
-**Visual Breakdown:**
+**시각적 분해:**
 
 ```
 model: azure/my_azure_deployment
@@ -690,17 +690,17 @@ model: azure/my_azure_deployment
                              (azure, openai, anthropic, bedrock, etc.)
 ```
 
-**Key Concepts:**
+**핵심 개념:**
 
-- **`model_name`**: The alias your client uses to call the model. This is what you send in your API requests (e.g., `gpt-4o`).
+- **`model_name`**: client가 model을 호출할 때 사용하는 alias입니다. API request에 보내는 값입니다(예: `gpt-4o`).
 
 - **`model` (in litellm_params)**: Format is `<provider>/<model-identifier>`
-  - **Provider** (before `/`): Routes to the correct LLM provider (e.g., `azure`, `openai`, `anthropic`, `bedrock`)
-  - **Model identifier** (after `/`): The actual model/deployment name sent to that provider's API
+  - **Provider** (`/` 앞): 올바른 LLM provider로 route합니다(예: `azure`, `openai`, `anthropic`, `bedrock`).
+  - **Model identifier** (`/` 뒤): 해당 provider API로 전송되는 실제 model/deployment name입니다.
 
-**Advanced Configuration Examples:**
+**Advanced 설정 예제:**
 
-For custom OpenAI-compatible endpoints (e.g., vLLM, Ollama, custom deployments):
+custom OpenAI-compatible endpoint(예: vLLM, Ollama, custom deployment)의 경우:
 
 ```yaml
 model_list:
@@ -711,7 +711,7 @@ model_list:
       api_key: "sk-1234"
 ```
 
-**Breaking down complex model paths:**
+**복잡한 model path 분해:**
 
 ```
 model: openai/nvidia/llama-3.2-nv-embedqa-1b-v2
@@ -723,9 +723,9 @@ model: openai/nvidia/llama-3.2-nv-embedqa-1b-v2
          └──────────────────────▶ Provider (openai = OpenAI-compatible API)
 ```
 
-The key point: Everything after the first `/` is passed as-is to the provider's API.
+핵심은 첫 번째 `/` 뒤의 모든 값이 provider API로 그대로 전달된다는 점입니다.
 
-**Common Patterns:**
+**일반적인 pattern:**
 
 ```yaml
 model_list:
@@ -756,33 +756,33 @@ model_list:
 ```
 
 
-## Troubleshooting 
+## 문제 해결 
 
 ### `prometheus.yml` mount error — "not a directory"
 
-If you see:
+다음이 보이면:
 
 ```bash
 Error: cannot create subdirectories in ".../prometheus.yml": not a directory
 ```
 
-Docker created `prometheus.yml` as an **empty directory** instead of a file. This happens when the file is missing at `docker compose up` time.
+Docker가 `prometheus.yml`을 file이 아니라 **빈 directory**로 생성한 상태입니다. `docker compose up` 시점에 file이 없으면 이런 일이 발생합니다.
 
-Fix it:
-Then create the file (see [Step 2.3 — Create `prometheus.yml`](#23--create-prometheusyml)) and run `docker compose up` again.
+수정 방법:
+그런 다음 file을 생성하고([Step 2.3 — `prometheus.yml` 생성](#23--create-prometheusyml) 참고) `docker compose up`을 다시 실행합니다.
 ```bash
 rm -rf prometheus.yml
 ```
 
-Then create the file (see [Step 2.4](#step-24--create-prometheusyml)) and run `docker compose up` again.
+그런 다음 file을 생성하고([Step 2.3](#23--create-prometheusyml) 참고) `docker compose up`을 다시 실행합니다.
 
-### Non-root docker image?
+### Non-root docker image가 필요한가요? {#non-root-docker-image}
 
-If you need to run the docker image as a non-root user, use [this](https://github.com/BerriAI/litellm/pkgs/container/litellm-non_root).
+docker image를 non-root user로 실행해야 한다면 [이 image](https://github.com/BerriAI/litellm/pkgs/container/litellm-non_root)를 사용하세요.
 
-### SSL Verification Issue / Connection Error.
+### SSL 검증 문제 / 연결 오류 {#ssl-verification-issue--connection-error}
 
-If you see 
+다음이 보이면:
 
 ```bash
 ssl.SSLCertVerificationError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate in certificate chain (_ssl.c:1006)
@@ -794,7 +794,7 @@ OR
 Connection Error.
 ```
 
-You can disable ssl verification with: 
+다음 설정으로 ssl verification을 비활성화할 수 있습니다.
 
 ```yaml
 model_list:
@@ -810,10 +810,10 @@ litellm_settings:
 ```
 
 
-### (DB) All connection attempts failed 
+### (DB) 모든 연결 시도 실패 {#db-all-connection-attempts-failed}
 
 
-If you see:
+다음이 보이면:
 
 ```
 httpx.ConnectError: All connection attempts failed                                                                        
@@ -822,27 +822,27 @@ ERROR:    Application startup failed. Exiting.
 3:21:43 - LiteLLM Proxy:ERROR: utils.py:2207 - Error getting LiteLLM_SpendLogs row count: All connection attempts failed 
 ```
 
-This might be a DB permission issue. 
+DB permission 문제일 수 있습니다.
 
-1. Validate db user permission issue 
+1. db user permission 문제 확인
 
-Try creating a new database. 
+새 database 생성을 시도합니다.
 
 ```bash
 STATEMENT: CREATE DATABASE "litellm"
 ```
 
-If you get:
+다음 오류가 나오면:
 
 ```
 ERROR: permission denied to create 
 ```
 
-This indicates you have a permission issue. 
+permission 문제가 있음을 의미합니다.
 
-2. Grant permissions to your DB user
+2. DB user에 permission 부여
 
-It should look something like this:
+다음과 유사해야 합니다.
 
 ```
 psql -U postgres
@@ -852,26 +852,26 @@ psql -U postgres
 CREATE DATABASE litellm;
 ```
 
-On CloudSQL, this is:
+CloudSQL에서는 다음과 같습니다.
 
 ```
 GRANT ALL PRIVILEGES ON DATABASE litellm TO your_username;
 ```
 
 
-**What is `litellm_settings`?**
+**`litellm_settings`란?**
 
-LiteLLM Proxy uses the [LiteLLM Python SDK](https://docs.litellm.ai/docs/routing) for handling LLM API calls. 
+LiteLLM Proxy는 LLM API call 처리를 위해 [LiteLLM Python SDK](https://docs.litellm.ai/docs/routing)를 사용합니다.
 
-`litellm_settings` are module-level params for the LiteLLM Python SDK (equivalent to doing `litellm.<some_param>` on the SDK). You can see all params [here](https://github.com/BerriAI/litellm/blob/208fe6cb90937f73e0def5c97ccb2359bf8a467b/litellm/__init__.py#L114)
+`litellm_settings`는 LiteLLM Python SDK의 module-level param입니다(SDK에서 `litellm.<some_param>`을 설정하는 것과 동일). 모든 param은 [여기](https://github.com/BerriAI/litellm/blob/208fe6cb90937f73e0def5c97ccb2359bf8a467b/litellm/__init__.py#L114)에서 확인할 수 있습니다.
 
-## Support & Talk with founders
+## 지원 및 founder와 대화
 
-- [Schedule Demo 👋](https://calendly.com/d/4mp-gd3-k5k/berriai-1-1-onboarding-litellm-hosted-version)
+- [Demo 일정 잡기 👋](https://calendly.com/d/4mp-gd3-k5k/berriai-1-1-onboarding-litellm-hosted-version)
 
-- [Community Discord 💭](https://discord.gg/wuPM9dRgDw)
-- [Community Slack 💭](https://www.litellm.ai/support)
+- [커뮤니티 Discord 💭](https://discord.gg/wuPM9dRgDw)
+- [커뮤니티 Slack 💭](https://www.litellm.ai/support)
 
-- Our emails ✉️ ishaan@berri.ai / krrish@berri.ai
+- 이메일 ✉️ ishaan@berri.ai / krrish@berri.ai
 
 [![Chat on WhatsApp](https://img.shields.io/static/v1?label=Chat%20on&message=WhatsApp&color=success&logo=WhatsApp&style=flat-square)](https://wa.link/huol9n) [![Chat on Discord](https://img.shields.io/static/v1?label=Chat%20on&message=Discord&color=blue&logo=Discord&style=flat-square)](https://discord.gg/wuPM9dRgDw) 

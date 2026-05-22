@@ -3,28 +3,28 @@ import TabItem from '@theme/TabItem';
 
 # Pillar Security
 
-Pillar Security integrates with [LiteLLM Proxy](https://docs.litellm.ai) via the [Generic Guardrail API](https://docs.litellm.ai/docs/adding_provider/generic_guardrail_api), providing comprehensive AI security scanning for your LLM applications.
+Pillar Security는 [Generic Guardrail API](https://docs.litellm.ai/docs/adding_provider/generic_guardrail_api)를 통해 [LiteLLM Proxy](https://docs.litellm.ai)와 통합되며, LLM 애플리케이션을 위한 포괄적인 AI 보안 스캔을 제공합니다.
 
-- **Prompt Injection Protection**: Prevent malicious prompt manipulation
-- **Jailbreak Detection**: Detect attempts to bypass AI safety measures
-- **PII + PCI Detection**: Automatically detect sensitive personal and payment card information
-- **Secret Detection**: Identify API keys, tokens, and credentials
-- **Content Moderation**: Filter harmful or inappropriate content
-- **Toxic Language**: Filter offensive or harmful language
+- **Prompt Injection Protection**: 악의적인 prompt 조작 방지
+- **Jailbreak Detection**: AI 안전 조치를 우회하려는 시도 탐지
+- **PII + PCI Detection**: 민감한 개인정보 및 결제 카드 정보 자동 탐지
+- **Secret Detection**: API key, token, credential 식별
+- **Content Moderation**: 유해하거나 부적절한 콘텐츠 필터링
+- **Toxic Language**: 공격적이거나 유해한 언어 필터링
 
 
-## Quick Start
+## 빠른 시작
 
-### 1. Set Environment Variables
+### 1. 환경 변수 설정
 
 ```bash
 export PILLAR_API_KEY=your-pillar-api-key
 export OPENAI_API_KEY=your-openai-api-key
 ```
 
-### 2. Configure LiteLLM
+### 2. LiteLLM 구성
 
-Create or update your `config.yaml`:
+`config.yaml`을 생성하거나 업데이트합니다.
 
 ```yaml
 model_list:
@@ -48,17 +48,17 @@ guardrails:
 ```
 
 :::warning Important
-- The `api_base` must be exactly `https://api.pillar.security/api/v1/integrations/litellm` — this is the only endpoint that supports the Generic Guardrail API integration.
-- The value `guardrail: generic_guardrail_api` must not be changed. This is the LiteLLM built-in guardrail type. However, you can customize the `guardrail_name` to any value you prefer.
+- `api_base`는 반드시 `https://api.pillar.security/api/v1/integrations/litellm`이어야 합니다. Generic Guardrail API 통합을 지원하는 유일한 endpoint입니다.
+- `guardrail: generic_guardrail_api` 값은 변경하면 안 됩니다. 이는 LiteLLM 내장 guardrail type입니다. 단, `guardrail_name`은 원하는 값으로 사용자 지정할 수 있습니다.
 :::
 
-### 3. Start LiteLLM Proxy
+### 3. LiteLLM Proxy 시작
 
 ```bash
 litellm --config config.yaml --port 4000
 ```
 
-### 4. Test the Integration
+### 4. 통합 테스트
 
 ```bash
 curl -X POST "http://localhost:4000/v1/chat/completions" \
@@ -70,71 +70,71 @@ curl -X POST "http://localhost:4000/v1/chat/completions" \
   }'
 ```
 
-## Prerequisites
+## 사전 준비
 
-Before you begin, ensure you have:
+시작하기 전에 다음을 준비했는지 확인합니다.
 
-1. **Pillar Security Account**: Sign up at [Pillar Dashboard](https://app.pillar.security)
-2. **API Credentials**: Get your API key from the dashboard
-3. **LiteLLM Proxy**: Install and configure LiteLLM proxy
+1. **Pillar Security Account**: [Pillar Dashboard](https://app.pillar.security)에서 가입
+2. **API Credentials**: Dashboard에서 API key 발급
+3. **LiteLLM Proxy**: LiteLLM proxy 설치 및 구성
 
 ## Guardrail Modes
 
-Pillar Security supports three execution modes for comprehensive protection:
+Pillar Security는 포괄적인 보호를 위해 세 가지 실행 모드를 지원합니다.
 
-| Mode | When It Runs | What It Protects | Use Case |
+| Mode | 실행 시점 | 보호 대상 | 사용 사례 |
 |------|-------------|------------------|----------|
-| **`pre_call`** | Before LLM call | User input only | Block malicious prompts, prevent prompt injection |
-| **`during_call`** | Parallel with LLM call | User input only | Input monitoring with lower latency |
-| **`post_call`** | After LLM response | Full conversation context | Output filtering, PII/PCI detection in responses |
+| **`pre_call`** | LLM 호출 전 | 사용자 입력만 | 악성 prompt 차단, prompt injection 방지 |
+| **`during_call`** | LLM 호출과 병렬 | 사용자 입력만 | 더 낮은 지연으로 입력 모니터링 |
+| **`post_call`** | LLM 응답 후 | 전체 대화 context | 출력 필터링, 응답 내 PII/PCI 탐지 |
 
-### Why Dual Mode is Recommended
+### Dual Mode 권장 이유
 
 :::tip Recommended
-Use `[pre_call, post_call]` for complete protection of both inputs and outputs.
+입력과 출력을 모두 완전하게 보호하려면 `[pre_call, post_call]`을 사용하세요.
 :::
 
-- **Complete Protection**: Guards both incoming prompts and outgoing responses
-- **Prompt Injection Defense**: Blocks malicious input before reaching the LLM
-- **Response Monitoring**: Detects PII, secrets, or inappropriate content in outputs
-- **Full Context Analysis**: Pillar sees the complete conversation for better detection
+- **Complete Protection**: 들어오는 prompt와 나가는 응답을 모두 보호
+- **Prompt Injection Defense**: 악성 입력이 LLM에 도달하기 전에 차단
+- **Response Monitoring**: 출력에서 PII, secret, 부적절한 콘텐츠 탐지
+- **Full Context Analysis**: 더 나은 탐지를 위해 Pillar가 전체 대화를 확인
 
-## Configuration Reference
+## 설정 Reference
 
-### Core Parameters
+### 핵심 파라미터
 
-| Parameter | Description |
+| Parameter | 설명 |
 |-----------|-------------|
-| `guardrail` | Must be `generic_guardrail_api` (do not change this value) |
-| `api_base` | Must be `https://api.pillar.security/api/v1/integrations/litellm` (do not change this value) |
-| `api_key` | Pillar API key (sent as `x-api-key` header) |
-| `mode` | When to run: `pre_call`, `post_call`, `during_call`, or array like `[pre_call, post_call]` |
-| `default_on` | Enable guardrail for all requests by default |
+| `guardrail` | 반드시 `generic_guardrail_api`여야 합니다(이 값은 변경하지 마세요). |
+| `api_base` | 반드시 `https://api.pillar.security/api/v1/integrations/litellm`이어야 합니다(이 값은 변경하지 마세요). |
+| `api_key` | Pillar API key(`x-api-key` header로 전송) |
+| `mode` | 실행 시점: `pre_call`, `post_call`, `during_call` 또는 `[pre_call, post_call]` 같은 배열 |
+| `default_on` | 기본적으로 모든 요청에 guardrail 활성화 |
 
-### Pillar-Specific Parameters
+### Pillar 전용 파라미터
 
-These parameters are passed via `additional_provider_specific_params`:
+이 파라미터는 `additional_provider_specific_params`를 통해 전달됩니다.
 
-| Parameter | Type | Description |
+| Parameter | Type | 설명 |
 |-----------|------|-------------|
-| `plr_mask` | bool | Enable automatic masking of sensitive data (PII, PCI, secrets) before sending to LLM |
-| `plr_evidence` | bool | Include detection evidence in response |
-| `plr_scanners` | bool | Include scanner details in response |
-| `plr_persist` | bool | Persist session data to Pillar dashboard |
+| `plr_mask` | bool | LLM으로 전송하기 전에 민감 데이터(PII, PCI, secret)를 자동 masking |
+| `plr_evidence` | bool | 응답에 탐지 증거 포함 |
+| `plr_scanners` | bool | 응답에 scanner 세부 정보 포함 |
+| `plr_persist` | bool | Session 데이터를 Pillar dashboard에 저장 |
 
 :::tip
-**Enable `plr_mask: true`** to automatically sanitize sensitive data (PII, secrets, payment card info) before it reaches the LLM. Masked content is replaced with placeholders while original data is preserved in Pillar's audit logs.
+민감 데이터(PII, secret, 결제 카드 정보)가 LLM에 도달하기 전에 자동으로 정리하려면 **`plr_mask: true`를 활성화**하세요. Masking된 내용은 placeholder로 대체되고 원본 데이터는 Pillar audit log에 보존됩니다.
 :::
 
-## Configuration Examples
+## 설정 예제
 
 <Tabs>
-<TabItem value="recommended" label="Recommended (Dual Mode)">
+<TabItem value="recommended" label="권장 설정(Dual Mode)">
 
 **Best for:**
-- **Complete Protection**: Guards both incoming prompts and outgoing responses
-- **Maximum Visibility**: Full scanner and evidence details for debugging
-- **Production Use**: Persistent sessions for dashboard monitoring
+- **Complete Protection**: 들어오는 prompt와 나가는 응답을 모두 보호
+- **Maximum Visibility**: Debugging을 위한 전체 scanner 및 evidence 세부 정보
+- **Production Use**: Dashboard monitoring을 위한 session 저장
 
 ```yaml
 model_list:
@@ -168,9 +168,9 @@ litellm_settings:
 <TabItem value="monitor" label="Monitor Mode">
 
 **Best for:**
-- **Logging Only**: Log all threats without blocking requests
-- **Analysis**: Understand threat patterns before enforcing blocks
-- **Testing**: Evaluate detection accuracy before production
+- **Logging Only**: 요청을 차단하지 않고 모든 threat를 기록
+- **Analysis**: 차단을 적용하기 전에 threat pattern 파악
+- **Testing**: 운영 적용 전에 탐지 정확도 평가
 
 ```yaml
 model_list:
@@ -201,9 +201,9 @@ general_settings:
 <TabItem value="input-only" label="Input-Only Protection">
 
 **Best for:**
-- **Input Protection**: Block malicious prompts before they reach the LLM
-- **Simple Setup**: Single guardrail configuration
-- **Lower Latency**: Only scans user input, not LLM responses
+- **Input Protection**: 악성 prompt가 LLM에 도달하기 전에 차단
+- **Simple Setup**: 단일 guardrail 구성
+- **Lower Latency**: LLM 응답은 스캔하지 않고 사용자 입력만 스캔
 
 ```yaml
 model_list:
@@ -233,9 +233,9 @@ general_settings:
 <TabItem value="lowlatency" label="Low Latency Parallel">
 
 **Best for:**
-- **Minimal Latency**: Run security scans in parallel with LLM calls
-- **Real-time Monitoring**: Threat detection without blocking
-- **High Throughput**: Performance-optimized configuration
+- **Minimal Latency**: LLM 호출과 병렬로 보안 스캔 실행
+- **Real-time Monitoring**: 차단 없이 threat 탐지
+- **High Throughput**: 성능 최적화 구성
 
 ```yaml
 model_list:
@@ -263,13 +263,13 @@ general_settings:
 </TabItem>
 </Tabs>
 
-## Response Detail Levels
+## 응답 상세 수준
 
-Control what detection data is included in responses using `plr_scanners` and `plr_evidence`:
+`plr_scanners`와 `plr_evidence`를 사용해 응답에 포함할 탐지 데이터를 제어합니다.
 
-### Minimal Response
+### 최소 응답
 
-When both `plr_scanners` and `plr_evidence` are `false`:
+`plr_scanners`와 `plr_evidence`가 모두 `false`인 경우:
 
 ```json
 {
@@ -278,9 +278,9 @@ When both `plr_scanners` and `plr_evidence` are `false`:
 }
 ```
 
-Use when you only care about whether Pillar detected a threat.
+Pillar가 threat를 탐지했는지만 알면 될 때 사용합니다.
 
-### Scanner Breakdown
+### Scanner 세부 분류
 
 When `plr_scanners: true`:
 
@@ -298,9 +298,9 @@ When `plr_scanners: true`:
 }
 ```
 
-Use when you need to know which categories triggered.
+어떤 category가 트리거되었는지 알아야 할 때 사용합니다.
 
-### Full Context
+### 전체 context
 
 When both `plr_scanners: true` and `plr_evidence: true`:
 
@@ -322,15 +322,15 @@ When both `plr_scanners: true` and `plr_evidence: true`:
 }
 ```
 
-Ideal for debugging, audit logs, or compliance exports.
+Debugging, audit log, compliance export에 적합합니다.
 
 :::tip
-**Always set `plr_scanners: true` and `plr_evidence: true`** to see what Pillar detected. This is essential for troubleshooting and understanding security threats.
+Pillar가 무엇을 탐지했는지 보려면 **항상 `plr_scanners: true`와 `plr_evidence: true`를 설정**하세요. 이는 문제 해결과 보안 threat 이해에 필수적입니다.
 :::
 
-## Session Tracking
+## Session 추적
 
-Pillar supports comprehensive session tracking using LiteLLM's metadata system:
+Pillar는 LiteLLM의 metadata system을 사용해 포괄적인 session 추적을 지원합니다.
 
 ```bash
 curl -X POST "http://localhost:4000/v1/chat/completions" \
@@ -346,22 +346,22 @@ curl -X POST "http://localhost:4000/v1/chat/completions" \
   }'
 ```
 
-This provides clear, explicit conversation tracking that works seamlessly with LiteLLM's session management.
+이를 통해 LiteLLM의 session management와 자연스럽게 동작하는 명확하고 명시적인 대화 추적을 제공합니다.
 
-## Environment Variables
+## 환경 변수
 
-Set your Pillar API key as an environment variable:
+Pillar API key를 환경 변수로 설정합니다.
 
 ```bash
 export PILLAR_API_KEY=your-pillar-api-key
 ```
 
-## Examples
+## 예제
 
 <Tabs>
 <TabItem value="safe" label="Safe Request">
 
-**Safe request**
+**안전한 요청**
 
 ```bash
 curl -X POST "http://localhost:4000/v1/chat/completions" \
@@ -374,7 +374,7 @@ curl -X POST "http://localhost:4000/v1/chat/completions" \
   }'
 ```
 
-**Expected response (Allowed):**
+**예상 응답(허용):**
 
 ```json
 {
@@ -398,7 +398,7 @@ curl -X POST "http://localhost:4000/v1/chat/completions" \
 </TabItem>
 <TabItem value="injection" label="Prompt Injection">
 
-**Prompt injection detection request:**
+**Prompt injection 탐지 요청:**
 
 ```bash
 curl -X POST "http://localhost:4000/v1/chat/completions" \
@@ -416,7 +416,7 @@ curl -X POST "http://localhost:4000/v1/chat/completions" \
   }'
 ```
 
-**Expected response (Blocked):**
+**예상 응답(차단):**
 
 ```json
 {
@@ -449,7 +449,7 @@ curl -X POST "http://localhost:4000/v1/chat/completions" \
 </TabItem>
 <TabItem value="secrets" label="Secret Detection">
 
-**Secret detection request:**
+**Secret 탐지 요청:**
 
 ```bash
 curl -X POST "http://localhost:4000/v1/chat/completions" \
@@ -467,7 +467,7 @@ curl -X POST "http://localhost:4000/v1/chat/completions" \
   }'
 ```
 
-**Expected response (Blocked):**
+**예상 응답(차단):**
 
 ```json
 {
@@ -501,18 +501,18 @@ curl -X POST "http://localhost:4000/v1/chat/completions" \
 </TabItem>
 </Tabs>
 
-## Next Steps
+## 다음 단계
 
-- **Monitor your applications**: Use the [Pillar Dashboard](https://app.pillar.security) to view security events and analytics
-- **Customize detection**: Configure specific scanners and thresholds for your use case
-- **Scale your deployment**: Use LiteLLM's load balancing features with Pillar protection
+- **애플리케이션 모니터링**: [Pillar Dashboard](https://app.pillar.security)에서 security event와 analytics를 확인합니다.
+- **탐지 사용자 지정**: 사용 사례에 맞는 특정 scanner와 threshold를 구성합니다.
+- **배포 확장**: Pillar 보호와 함께 LiteLLM의 load balancing 기능을 사용합니다.
 
-## Support
+## 지원
 
-Need help with your LiteLLM integration? Contact us at support@pillar.security
+LiteLLM 통합에 도움이 필요하면 support@pillar.security로 문의하세요.
 
-### Resources
+### 리소스
 
 - [Pillar Dashboard](https://app.pillar.security)
-- [LiteLLM Documentation](https://docs.litellm.ai)
+- [LiteLLM 문서](https://docs.litellm.ai)
 - [Pillar API Reference](https://docs.pillar.security/docs/api/introduction)

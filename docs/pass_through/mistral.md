@@ -1,17 +1,17 @@
 # Mistral
 
-Pass-through endpoints for Mistral - call provider-specific endpoint, in native format (no translation).
+Mistral용 패스스루 엔드포인트입니다. 공급자별 엔드포인트를 네이티브 형식으로 호출합니다(변환 없음).
 
-| Feature | Supported | Notes | 
+| 기능 | 지원 | 참고 | 
 |-------|-------|-------|
-| Cost Tracking | ❌ | Not supported |
-| Logging | ✅ | works across all integrations |
-| End-user Tracking | ❌ | [Tell us if you need this](https://github.com/BerriAI/litellm/issues/new) |
-| Streaming | ✅ | |
+| 비용 추적 | ❌ | 지원되지 않음 |
+| 로깅 | ✅ | 모든 통합에서 작동 |
+| 최종 사용자 추적 | ❌ | [필요한 경우 알려주세요](https://github.com/BerriAI/litellm/issues/new) |
+| 스트리밍 | ✅ | |
 
-Just replace `https://api.mistral.ai/v1` with `LITELLM_PROXY_BASE_URL/mistral` 🚀
+`https://api.mistral.ai/v1`을 `LITELLM_PROXY_BASE_URL/mistral`로 바꾸기만 하면 됩니다. 🚀
 
-#### **Example Usage**
+#### **예제 사용법**
 
 ```bash
 curl -L -X POST 'http://0.0.0.0:4000/mistral/v1/ocr' \
@@ -27,19 +27,19 @@ curl -L -X POST 'http://0.0.0.0:4000/mistral/v1/ocr' \
 }'
 ```
 
-Supports **ALL** Mistral Endpoints (including streaming).
+Mistral의 **모든** 엔드포인트를 지원합니다(스트리밍 포함).
 
-## Quick Start
+## 빠른 시작
 
-Let's call the Mistral [`/chat/completions` endpoint](https://docs.mistral.ai/api/#tag/chat/operation/chat_completion_v1_chat_completions_post)
+Mistral [`/chat/completions` 엔드포인트](https://docs.mistral.ai/api/#tag/chat/operation/chat_completion_v1_chat_completions_post)를 호출해 보겠습니다.
 
-1. Add MISTRAL_API_KEY to your environment 
+1. 환경에 MISTRAL_API_KEY를 추가합니다.
 
 ```bash
 export MISTRAL_API_KEY="sk-1234"
 ```
 
-2. Start LiteLLM Proxy 
+2. LiteLLM Proxy를 시작합니다.
 
 ```bash
 litellm
@@ -47,9 +47,9 @@ litellm
 # RUNNING on http://0.0.0.0:4000
 ```
 
-3. Test it! 
+3. 테스트합니다.
 
-Let's call the Mistral `/ocr` endpoint
+Mistral `/ocr` 엔드포인트를 호출해 보겠습니다.
 
 ```bash
 curl -L -X POST 'http://0.0.0.0:4000/mistral/v1/ocr' \
@@ -66,21 +66,21 @@ curl -L -X POST 'http://0.0.0.0:4000/mistral/v1/ocr' \
 ```
 
 
-## Examples
+## 예제
 
-Anything after `http://0.0.0.0:4000/mistral` is treated as a provider-specific route, and handled accordingly.
+`http://0.0.0.0:4000/mistral` 뒤의 모든 경로는 공급자별 라우트로 처리됩니다.
 
-Key Changes: 
+주요 변경 사항:
 
-| **Original Endpoint**                                | **Replace With**                  |
+| **원본 엔드포인트**                                | **대체 값**                  |
 |------------------------------------------------------|-----------------------------------|
 | `https://api.mistral.ai/v1`          | `http://0.0.0.0:4000/mistral` (LITELLM_PROXY_BASE_URL="http://0.0.0.0:4000")      |
-| `bearer $MISTRAL_API_KEY`                                 | `bearer anything` (use `bearer LITELLM_VIRTUAL_KEY` if Virtual Keys are setup on proxy)                    |
+| `bearer $MISTRAL_API_KEY`                                 | `bearer anything`(프록시에 가상 키를 설정한 경우 `bearer LITELLM_VIRTUAL_KEY` 사용)                    |
 
 
-### **Example 1: OCR endpoint**
+### **예제 1: OCR 엔드포인트** {#example-1-ocr-endpoint}
 
-#### LiteLLM Proxy Call 
+#### LiteLLM Proxy 호출 {#litellm-proxy-call}
 
 ```bash
 curl -L -X POST 'http://0.0.0.0:4000/mistral/v1/ocr' \
@@ -96,7 +96,7 @@ curl -L -X POST 'http://0.0.0.0:4000/mistral/v1/ocr' \
 ```
 
 
-#### Direct Mistral API Call 
+#### 직접 Mistral API 호출 {#direct-mistral-api-call}
 
 ```bash
 curl https://api.mistral.ai/v1/ocr \
@@ -112,9 +112,9 @@ curl https://api.mistral.ai/v1/ocr \
   }'
 ```
 
-### **Example 2: Chat API**
+### **예제 2: 채팅 API** {#example-2-chat-api}
 
-#### LiteLLM Proxy Call 
+#### LiteLLM Proxy 호출 {#litellm-proxy-call-1}
 
 ```bash
 curl -L -X POST 'http://0.0.0.0:4000/mistral/v1/chat/completions' \
@@ -134,7 +134,7 @@ curl -L -X POST 'http://0.0.0.0:4000/mistral/v1/chat/completions' \
 }'
 ```
 
-#### Direct Mistral API Call 
+#### 직접 Mistral API 호출 {#direct-mistral-api-call-1}
 
 ```bash
 curl -L -X POST 'https://api.mistral.ai/v1/chat/completions' \
@@ -154,16 +154,16 @@ curl -L -X POST 'https://api.mistral.ai/v1/chat/completions' \
 ```
 
 
-## Advanced - Use with Virtual Keys 
+## 고급 - 가상 키와 함께 사용 {#advanced---use-with-virtual-keys}
 
-Pre-requisites
-- [Setup proxy with DB](../proxy/virtual_keys.md#setup)
+사전 요구 사항
+- [DB로 프록시 설정](../proxy/virtual_keys.md#setup)
 
-Use this, to avoid giving developers the raw Mistral API key, but still letting them use Mistral endpoints.
+개발자에게 원본 Mistral API 키를 제공하지 않으면서도 Mistral 엔드포인트를 사용할 수 있게 하려면 이 방식을 사용합니다.
 
-### Usage
+### 사용법
 
-1. Setup environment
+1. 환경을 설정합니다.
 
 ```bash
 export DATABASE_URL=""
@@ -177,7 +177,7 @@ litellm
 # RUNNING on http://0.0.0.0:4000
 ```
 
-2. Generate virtual key 
+2. 가상 키를 생성합니다.
 
 ```bash
 curl -X POST 'http://0.0.0.0:4000/key/generate' \
@@ -186,7 +186,7 @@ curl -X POST 'http://0.0.0.0:4000/key/generate' \
 -d '{}'
 ```
 
-Expected Response 
+예상 응답
 
 ```bash
 {
@@ -195,7 +195,7 @@ Expected Response
 }
 ```
 
-3. Test it! 
+3. 테스트합니다.
 
 
 ```bash

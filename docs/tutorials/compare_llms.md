@@ -1,45 +1,45 @@
 import Image from '@theme/IdealImage';
 
-# Benchmark LLMs
-Easily benchmark LLMs for a given question by viewing 
-* Responses 
-* Response Cost
-* Response Time
+# LLM 벤치마크
+다음 항목을 확인하면서 특정 질문에 대해 LLM을 쉽게 벤치마크할 수 있습니다.
+* 응답
+* 응답 비용
+* 응답 시간
 
-### Benchmark Output
+### 벤치마크 출력
 <Image img={require('../../img/bench_llm.png')} />
 
-## Setup:
+## 설정:
 ```
 git clone https://github.com/BerriAI/litellm
 ```
-cd to `litellm/cookbook/benchmark` dir
+`litellm/cookbook/benchmark` 디렉터리로 이동합니다.
 
-Located here: 
+위치는 다음과 같습니다.
 https://github.com/BerriAI/litellm/tree/main/cookbook/benchmark
 ```
 cd litellm/cookbook/benchmark
 ```
 
-### Install Dependencies
+### 의존성 설치
 ```
 uv add litellm click tqdm tabulate termcolor
 ```
 
-### Configuration - Set LLM API Keys + LLMs in benchmark.py
-In `benchmark/benchmark.py` select your LLMs, LLM API Key and questions
+### `benchmark.py`에서 LLM API 키와 LLM 설정
+`benchmark/benchmark.py`에서 사용할 LLM, LLM API 키, 질문을 선택합니다.
 
-Supported LLMs: https://docs.litellm.ai/docs/providers
+지원되는 LLM: https://docs.litellm.ai/docs/providers
 
 ```python
-# Define the list of models to benchmark
+# 벤치마크할 모델 목록을 정의합니다.
 models = ['gpt-3.5-turbo', 'claude-2']
 
-# Enter LLM API keys
+# LLM API 키를 입력합니다.
 os.environ['OPENAI_API_KEY'] = ""
 os.environ['ANTHROPIC_API_KEY'] = ""
 
-# List of questions to benchmark (replace with your questions)
+# 벤치마크할 질문 목록입니다. 필요한 질문으로 바꾸세요.
 questions = [
     "When will BerriAI IPO?",
     "When will LiteLLM hit $100M ARR?"
@@ -47,12 +47,12 @@ questions = [
 
 ```
 
-## Run benchmark.py
+## `benchmark.py` 실행
 ```
 python3 benchmark.py
 ```
 
-## Expected Output
+## 예상 출력
 ```
 Running question: When will BerriAI IPO? for model: claude-2: 100%|████████████████████████████████████████████████████████████████████████████████████| 3/3 [00:13<00:00,  4.41s/it]
 
@@ -81,43 +81,43 @@ Benchmark Results for 'When will BerriAI IPO?':
 |                 | plans or strategies.                                                             |                           |            |
 +-----------------+----------------------------------------------------------------------------------+---------------------------+------------+
 ```
-## Support
-**🤝 Schedule a 1-on-1 Session:** Book a [1-on-1 session](https://enterprise.litellm.ai/demo) with Krrish and Ishaan, the founders, to discuss any issues, provide feedback, or explore how we can improve LiteLLM for you.
+## 지원
+**🤝 1:1 세션 예약:** 문제를 논의하거나 피드백을 제공하거나 LiteLLM을 어떻게 개선할 수 있을지 살펴보려면 창립자인 Krrish와 Ishaan과의 [1:1 세션](https://enterprise.litellm.ai/demo)을 예약하세요.
 
 
 <!-- 
-## Pre-requisites:
+## 사전 요구 사항:
 ``` python
 !uv add litellm
 ```
 
-## Example Use Case 1 - Code Generator
+## 예제 사용 사례 1 - 코드 생성기
 
-### Enter your system prompt and questions
+### 시스템 프롬프트와 질문 입력
 ```` python
-# enter your system prompt if you have one
+# 시스템 프롬프트가 있으면 입력합니다.
 system_prompt = """
-You are a coding assistant helping users using litellm.
-litellm is a light package to simplify calling OpenAI, Azure, Cohere, Anthropic, Huggingface API Endpoints
+당신은 사용자가 litellm을 사용할 수 있도록 돕는 코딩 어시스턴트입니다.
+litellm은 OpenAI, Azure, Cohere, Anthropic, Huggingface API 엔드포인트 호출을 단순화하는 가벼운 패키지입니다.
 --
-Sample Usage:
+사용 예:
 ```
 uv add litellm
-from litellm import completion
-## set ENV variables
+import litellm # litellm을 가져옵니다.
+## ENV 변수를 설정합니다.
 os.environ["OPENAI_API_KEY"] = "openai key"
 os.environ["COHERE_API_KEY"] = "cohere key"
 messages = [{ "content": "Hello, how are you?","role": "user"}]
-# openai call
-response = completion(model="gpt-3.5-turbo", messages=messages)
-# cohere call
-response = completion("command-nightly", messages)
+# openai 호출
+response = litellm.completion(model="gpt-3.5-turbo", messages=messages) # 호출
+# cohere 호출
+response = litellm.completion("command-nightly", messages) # 호출
 ```
 
 """
 
 
-# questions/logs you want to run the LLM on
+# LLM에서 실행할 질문/로그입니다.
 questions = [
     "what is litellm?",
     "why should I use LiteLLM",
@@ -126,9 +126,9 @@ questions = [
 ]
 ````
 
-### Running questions
+### 질문 실행
 
-### Select from 100+ LLMs here: <https://docs.litellm.ai/docs/providers> {#select-from-100-llms-here-httpsdocslitellmaidocsproviders}
+### 여기에서 100개 이상의 LLM을 선택하세요: <https://docs.litellm.ai/docs/providers> {#select-from-100-llms-here-httpsdocslitellmaidocsproviders}
 
 ``` python
 import litellm
@@ -136,29 +136,29 @@ from litellm import completion, completion_cost
 import os
 import time
 
-# optional use litellm dashboard to view logs
+# 선택 사항: 로그를 보려면 litellm 대시보드를 사용합니다.
 # litellm.use_client = True
-# litellm.token = "ishaan_2@berri.ai" # set your email
+# litellm.token = "ishaan_2@berri.ai" # 이메일을 설정합니다.
 
 
-# set API keys
+# API 키를 설정합니다.
 os.environ['TOGETHERAI_API_KEY'] = ""
 os.environ['OPENAI_API_KEY'] = ""
 os.environ['ANTHROPIC_API_KEY'] = ""
 
 
-# select LLMs to benchmark
-# using https://api.together.xyz/playground for llama2
-# try any supported LLM here: https://docs.litellm.ai/docs/providers
+# 벤치마크할 LLM을 선택합니다.
+# llama2에는 https://api.together.xyz/playground 를 사용합니다.
+# 지원되는 LLM은 여기에서 시도할 수 있습니다: https://docs.litellm.ai/docs/providers
 
 models = ['togethercomputer/llama-2-70b-chat', 'gpt-3.5-turbo', 'claude-instant-1.2']
 data = []
 
-for question in questions: # group by question
+for question in questions: # 질문별로 그룹화합니다.
   for model in models:
     print(f"running question: {question} for model: {model}")
     start_time = time.time()
-    # show response, response time, cost for each question
+    # 각 질문의 응답, 응답 시간, 비용을 표시합니다.
     response = completion(
         model=model,
         max_tokens=500,
@@ -172,13 +172,13 @@ for question in questions: # group by question
         ],
     )
     end = time.time()
-    total_time = end-start_time # response time
+    total_time = end-start_time # 응답 시간
     # print(response)
-    cost = completion_cost(response) # cost for completion
-    raw_response = response['choices'][0]['message']['content'] # response string
+    cost = completion_cost(response) # completion 비용
+    raw_response = response['choices'][0]['message']['content'] # 응답 문자열
 
 
-    # add log to pandas df
+    # pandas df에 로그를 추가합니다.
     data.append(
         {
             'Model': model,
@@ -189,7 +189,7 @@ for question in questions: # group by question
         })
 ```
 
-### View Benchmarks for LLMs
+### LLM 벤치마크 보기
 ``` python
 from IPython.display import display
 from IPython.core.interactiveshell import InteractiveShell
@@ -244,15 +244,15 @@ for question, group_data in grouped_by_question:
   </tbody>
 </table>
 
-## Example Use Case 2 - Rewrite user input concisely
+## 예제 사용 사례 2 - 사용자 입력을 간결하게 다시 쓰기
 
 ``` python
-# enter your system prompt if you have one
+# 시스템 프롬프트가 있으면 입력합니다.
 system_prompt = """
 For a given user input, rewrite the input to make be more concise.
 """
 
-# user input for re-writing questions
+# 다시 쓸 사용자 입력 질문입니다.
 questions = [
     "LiteLLM is a lightweight Python package that simplifies the process of making API calls to various language models. Here are some reasons why you should use LiteLLM:nn1. **Simplified API Calls**: LiteLLM abstracts away the complexity of making API calls to different language models. It provides a unified interface for invoking models from OpenAI, Azure, Cohere, Anthropic, Huggingface, and more.nn2. **Easy Integration**: LiteLLM seamlessly integrates with your existing codebase. You can import the package and start making API calls with just a few lines of code.nn3. **Flexibility**: LiteLLM supports a variety of language models, including GPT-3, GPT-Neo, chatGPT, and more. You can choose the model that suits your requirements and easily switch between them.nn4. **Convenience**: LiteLLM handles the authentication and connection details for you. You just need to set the relevant environment variables, and the package takes care of the rest.nn5. **Quick Prototyping**: LiteLLM is ideal for rapid prototyping and experimentation. With its simple API, you can quickly generate text, chat with models, and build interactive applications.nn6. **Community Support**: LiteLLM is actively maintained and supported by a community of developers. You can find help, share ideas, and collaborate with others to enhance your projects.nnOverall, LiteLLM simplifies the process of making API calls to language models, saving you time and effort while providing flexibility and convenience",
     "Hi everyone! I'm [your name] and I'm currently working on [your project/role involving LLMs]. I came across LiteLLM and was really excited by how it simplifies working with different LLM providers. I'm hoping to use LiteLLM to [build an app/simplify my code/test different models etc]. Before finding LiteLLM, I was struggling with [describe any issues you faced working with multiple LLMs]. With LiteLLM's unified API and automatic translation between providers, I think it will really help me to [goals you have for using LiteLLM]. Looking forward to being part of this community and learning more about how I can build impactful applications powered by LLMs!Let me know if you would like me to modify or expand on any part of this suggested intro. I'm happy to provide any clarification or additional details you need!",
@@ -260,7 +260,7 @@ questions = [
 ]
 ```
 
-### Run Questions
+### 질문 실행
 
 ``` python
 import litellm
@@ -268,22 +268,22 @@ from litellm import completion, completion_cost
 import os
 import time
 
-# optional use litellm dashboard to view logs
+# 선택 사항: 로그를 보려면 litellm 대시보드를 사용합니다.
 # litellm.use_client = True
-# litellm.token = "ishaan_2@berri.ai" # set your email
+# litellm.token = "ishaan_2@berri.ai" # 이메일을 설정합니다.
 
 os.environ['TOGETHERAI_API_KEY'] = ""
 os.environ['OPENAI_API_KEY'] = ""
 os.environ['ANTHROPIC_API_KEY'] = ""
 
-models = ['togethercomputer/llama-2-70b-chat', 'gpt-3.5-turbo', 'claude-instant-1.2'] # enter llms to benchmark
+models = ['togethercomputer/llama-2-70b-chat', 'gpt-3.5-turbo', 'claude-instant-1.2'] # 벤치마크할 llm을 입력합니다.
 data_2 = []
 
-for question in questions: # group by question
+for question in questions: # 질문별로 그룹화합니다.
   for model in models:
     print(f"running question: {question} for model: {model}")
     start_time = time.time()
-    # show response, response time, cost for each question
+    # 각 질문의 응답, 응답 시간, 비용을 표시합니다.
     response = completion(
         model=model,
         max_tokens=500,
@@ -297,13 +297,13 @@ for question in questions: # group by question
         ],
     )
     end = time.time()
-    total_time = end-start_time # response time
+    total_time = end-start_time # 응답 시간
     # print(response)
-    cost = completion_cost(response) # cost for completion
-    raw_response = response['choices'][0]['message']['content'] # response string
+    cost = completion_cost(response) # completion 비용
+    raw_response = response['choices'][0]['message']['content'] # 응답 문자열
     #print(raw_response, total_time, cost)
 
-    # add to pandas df
+    # pandas df에 추가합니다.
     data_2.append(
         {
             'Model': model,
@@ -315,7 +315,7 @@ for question in questions: # group by question
 
 
 ```
-### View Logs - Group by Question
+### 로그 보기 - 질문별 그룹화
 ``` python
 from IPython.display import display
 from IPython.core.interactiveshell import InteractiveShell
@@ -331,9 +331,9 @@ for question, group_data in grouped_by_question:
     HTML(group_data.to_html())
 ```
 
-#### User Question
-    Question: Hi everyone! I'm [your name] and I'm currently working on [your project/role involving LLMs]. I came across LiteLLM and was really excited by how it simplifies working with different LLM providers. I'm hoping to use LiteLLM to [build an app/simplify my code/test different models etc]. Before finding LiteLLM, I was struggling with [describe any issues you faced working with multiple LLMs]. With LiteLLM's unified API and automatic translation between providers, I think it will really help me to [goals you have for using LiteLLM]. Looking forward to being part of this community and learning more about how I can build impactful applications powered by LLMs!Let me know if you would like me to modify or expand on any part of this suggested intro. I'm happy to provide any clarification or additional details you need!
-#### Logs
+#### 사용자 질문
+    질문: 안녕하세요! 저는 [이름]이고 현재 [LLM 관련 프로젝트/역할]을 진행하고 있습니다. LiteLLM이 여러 LLM 제공업체와 작업하는 과정을 단순화한다는 점이 흥미로워 사용해 보려고 합니다. LiteLLM으로 [앱 빌드/코드 단순화/여러 모델 테스트 등]을 하고 싶습니다. LiteLLM을 찾기 전에는 [여러 LLM을 다루며 겪은 문제]로 어려움을 겪었습니다. LiteLLM의 통합 API와 제공업체 간 자동 변환이 [LiteLLM 사용 목표]를 달성하는 데 큰 도움이 될 것 같습니다. 이 커뮤니티에 참여해 LLM 기반 애플리케이션을 만드는 방법을 더 배우고 싶습니다. 이 소개 문구에서 수정하거나 확장할 부분이 있으면 알려주세요. 필요한 설명이나 추가 세부 정보도 제공할 수 있습니다.
+#### 로그
 <table border="1" class="dataframe">
   <thead>
     <tr>
@@ -348,21 +348,21 @@ for question, group_data in grouped_by_question:
     <tr>
       <th>3</th>
       <td>togethercomputer/llama-2-70b-chat</td>
-      <td>nHere's a more concise version of the user input:nn"Hi everyone! I'm [your name] and I'm working on [your project/role involving LLMs]. I recently discovered LiteLLM and I'm excited to use it to [build an app/simplify my code/test different models etc]. Before LiteLLM, I struggled with [describe any issues you faced working with multiple LLMs]. I'm looking forward to using LiteLLM's unified API and automatic translation to achieve my goals. I'm eager to learn more about building impactful applications powered by LLMs and to be part of this community. Let me know if you have any questions or need further clarification."nnIn this revised version, we've kept the essential information and removed some of the extraneous language. We've also rephrased some of the sentences to make them more concise and easier to read.</td>
+      <td>n다음은 사용자 입력을 더 간결하게 다시 쓴 버전입니다:nn"안녕하세요! 저는 [이름]이고 [LLM 관련 프로젝트/역할]을 진행하고 있습니다. 최근 LiteLLM을 알게 되었고 [앱 빌드/코드 단순화/여러 모델 테스트 등]에 활용해 보고 싶습니다. LiteLLM 이전에는 [여러 LLM을 다루며 겪은 문제]로 어려움을 겪었습니다. LiteLLM의 통합 API와 자동 변환 기능으로 목표를 달성하고 싶습니다. LLM 기반 애플리케이션을 만드는 방법을 더 배우고 이 커뮤니티에 참여하고 싶습니다. 질문이나 추가 설명이 필요하면 알려주세요."nn이 수정 버전에서는 핵심 정보만 남기고 불필요한 표현을 줄였습니다. 일부 문장도 더 간결하고 읽기 쉽게 바꾸었습니다.</td>
       <td>18.300620</td>
       <td>0.001200</td>
     </tr>
     <tr>
       <th>4</th>
       <td>gpt-3.5-turbo</td>
-      <td>User input: Hi, I'm [your name] and I'm excited about using LiteLLM to simplify working with different LLM providers. Before finding LiteLLM, I faced challenges working with multiple LLMs. With LiteLLM's unified API and automatic translation, I believe it will help me achieve my goals of [state your goals]. I look forward to being part of this community and learning how to build impactful applications with LLMs. Let me know if you need any further clarification or details.</td>
+      <td>사용자 입력: 안녕하세요. 저는 [이름]이고 LiteLLM으로 여러 LLM 제공업체와의 작업을 단순화할 수 있다는 점이 기대됩니다. LiteLLM을 찾기 전에는 여러 LLM을 다루는 데 어려움이 있었습니다. LiteLLM의 통합 API와 자동 변환이 [목표 작성]을 달성하는 데 도움이 될 것 같습니다. 이 커뮤니티에 참여해 LLM으로 영향력 있는 애플리케이션을 만드는 방법을 배우고 싶습니다. 추가 설명이나 세부 정보가 필요하면 알려주세요.</td>
       <td>7.385472</td>
       <td>0.000525</td>
     </tr>
     <tr>
       <th>5</th>
       <td>claude-instant-1.2</td>
-      <td>Here is a more concise rewrite of the user input:nnHi everyone, I'm [your name]. I'm currently [your project/role] and came across LiteLLM, which simplifies working with different LLMs through its unified API. I hope to [build an app/simplify code/test models] with LiteLLM since I previously struggled with [issues]. LiteLLM's automatic translation between providers will help me [goals] and build impactful LLM applications. Looking forward to learning more as part of this community. Let me know if you need any clarification on my plans to use LiteLLM.</td>
+      <td>다음은 사용자 입력을 더 간결하게 다시 쓴 버전입니다:nn안녕하세요, 저는 [이름]입니다. 현재 [프로젝트/역할]을 진행하고 있으며, 통합 API로 여러 LLM 작업을 단순화하는 LiteLLM을 알게 되었습니다. 이전에 [문제]로 어려움을 겪었기 때문에 LiteLLM으로 [앱 빌드/코드 단순화/모델 테스트]를 해보고 싶습니다. LiteLLM의 제공업체 간 자동 변환은 [목표]를 달성하고 LLM 애플리케이션을 만드는 데 도움이 될 것입니다. 이 커뮤니티에서 더 배우고 싶습니다. LiteLLM 사용 계획에 대해 설명이 필요하면 알려주세요.</td>
       <td>8.628217</td>
       <td>0.001022</td>
     </tr>

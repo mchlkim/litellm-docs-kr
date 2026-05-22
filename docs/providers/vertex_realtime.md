@@ -1,32 +1,32 @@
-# Vertex AI Gemini Live - Realtime API
+# `Vertex AI Gemini Live - Realtime API`
 
-Use Vertex AI's Gemini Live API (BidiGenerateContent) through LiteLLM's unified `/realtime` endpoint, which speaks the OpenAI Realtime protocol.
+OpenAI Realtime 프로토콜을 사용하는 LiteLLM의 통합 `/realtime` 엔드포인트를 통해 Vertex AI의 Gemini Live API(`BidiGenerateContent`)를 사용할 수 있습니다.
 
-| Feature | Supported |
+| 기능 | 지원 여부 |
 |---------|-----------|
 | Proxy (`/realtime`) | ✅ |
-| Voice in / Voice out | ✅ |
-| Text in / Text out | ✅ |
+| 음성 입력 / 음성 출력 | ✅ |
+| 텍스트 입력 / 텍스트 출력 | ✅ |
 | Server VAD | ✅ |
-| Output transcription | ✅ |
+| 출력 전사 | ✅ |
 
-## Setup
+## 설정
 
-### 1. Auth
+### 1. 인증
 
-LiteLLM uses your Google Cloud credentials (OAuth2 Bearer token), not an API key.
+LiteLLM은 API 키가 아니라 Google Cloud 자격 증명(OAuth2 Bearer token)을 사용합니다.
 
 ```bash
 gcloud auth application-default login
 ```
 
-Or set a service-account key file:
+또는 서비스 계정 키 파일을 설정합니다.
 
 ```bash
 export GOOGLE_APPLICATION_CREDENTIALS=/path/to/sa-key.json
 ```
 
-### 2. Proxy config
+### 2. 프록시 설정
 
 ```yaml
 model_list:
@@ -40,15 +40,15 @@ general_settings:
   master_key: sk-your-key
 ```
 
-### 3. Start the proxy
+### 3. 프록시 시작
 
 ```bash
 litellm --config config.yaml --port 4000
 ```
 
-## Usage
+## 사용법
 
-### Python (websockets)
+### Python (`websockets`)
 
 ```python
 import asyncio
@@ -118,7 +118,7 @@ ws.on("message", (data) => {
 });
 ```
 
-### OpenAI SDK (Python)
+### `OpenAI SDK` (Python) {#openai-sdk-python}
 
 ```python
 import asyncio
@@ -153,14 +153,14 @@ async def main():
 asyncio.run(main())
 ```
 
-## Voice in / Voice out
+## 음성 입력 / 음성 출력
 
-For a complete voice example see [`voice_realtime_test.py`](https://github.com/BerriAI/litellm/blob/main/voice_realtime_test.py).
+전체 음성 예제는 [`voice_realtime_test.py`](https://github.com/BerriAI/litellm/blob/main/voice_realtime_test.py)를 참고하세요.
 
-Key settings for audio:
-- Microphone input: **16 kHz** PCM16 (`audio/pcm;rate=16000`)
-- Speaker output: **24 kHz** PCM16 (Vertex AI returns audio at 24 kHz)
-- Server VAD is enabled by default with 800 ms silence threshold
+오디오의 핵심 설정은 다음과 같습니다.
+- 마이크 입력: **16 kHz** PCM16(`audio/pcm;rate=16000`)
+- 스피커 출력: **24 kHz** PCM16(Vertex AI는 24 kHz 오디오를 반환)
+- Server VAD는 기본적으로 활성화되며 무음 임계값은 800ms입니다.
 
 ```python
 # session.update with server VAD — the proxy ignores this for Vertex AI
@@ -174,30 +174,30 @@ await ws.send(json.dumps({
 }))
 ```
 
-## Supported OpenAI Realtime Events
+## 지원되는 OpenAI Realtime 이벤트
 
 **Client → Proxy (→ Vertex AI)**
 
-| OpenAI event | Notes |
+| OpenAI 이벤트 | 참고 |
 |---|---|
-| `input_audio_buffer.append` | Forwarded as `realtime_input.audio` |
-| `conversation.item.create` | Forwarded as `realtime_input.text` |
-| `session.update` | Silently ignored — Vertex AI does not support mid-session reconfiguration |
-| `response.create` | Silently ignored — Vertex AI responds automatically after each turn |
+| `input_audio_buffer.append` | `realtime_input.audio`로 전달됩니다. |
+| `conversation.item.create` | `realtime_input.text`로 전달됩니다. |
+| `session.update` | 조용히 무시됩니다. Vertex AI는 세션 중간 재구성을 지원하지 않습니다. |
+| `response.create` | 조용히 무시됩니다. Vertex AI는 각 턴 이후 자동으로 응답합니다. |
 
 **Vertex AI → Proxy (→ Client)**
 
-| OpenAI event emitted | Vertex AI source |
+| 발생하는 OpenAI 이벤트 | Vertex AI 소스 |
 |---|---|
-| `session.created` | Synthesized after `setupComplete` |
+| `session.created` | `setupComplete` 이후 생성됩니다. |
 | `response.text.delta` | `serverContent.modelTurn.parts[].text` |
 | `response.audio.delta` | `serverContent.modelTurn.parts[].inlineData` |
 | `response.audio_transcript.delta` | `serverContent.outputTranscription.text` |
 | `conversation.item.input_audio_transcription.completed` | `serverContent.inputTranscription.text` |
 | `response.done` | `serverContent.turnComplete` |
 
-## Limitations
+## 제한 사항
 
-- `session.update` is not forwarded (Vertex AI only accepts one setup message per connection).
-- Tool calling / function calling is not yet supported.
-- Audio transcription requires `outputAudioTranscription: {}` to be set in the initial setup (done automatically by LiteLLM).
+- `session.update`는 전달되지 않습니다(Vertex AI는 연결당 하나의 설정 메시지만 허용).
+- 도구 호출 / 함수 호출은 아직 지원되지 않습니다.
+- 오디오 전사를 사용하려면 초기 설정에 `outputAudioTranscription: {}`가 설정되어야 합니다(LiteLLM이 자동으로 처리).

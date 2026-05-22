@@ -19,7 +19,7 @@ import Image from '@theme/IdealImage';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-## Deploy this version
+## 이 버전 배포하기 {#deploy-this-version}
 
 <Tabs>
 <TabItem value="docker" label="Docker">
@@ -41,47 +41,47 @@ pip install litellm==1.72.0
 </Tabs>
 
 
-## Key Highlights
+## 주요 하이라이트 {#key-highlights}
 
-LiteLLM v1.72.0-stable.rc is live now. Here are the key highlights of this release:
+LiteLLM v1.72.0-stable.rc가 공개되었습니다. 이번 릴리스의 주요 내용은 다음과 같습니다.
 
-- **Vector Store Permissions**: Control Vector Store access at the Key, Team, and Organization level.
-- **Rate Limiting Sliding Window support**: Improved accuracy for Key/Team/User rate limits with request tracking across minutes.
-- **Aiohttp Transport used by default**: Aiohttp transport is now the default transport for LiteLLM networking requests. This gives users 2x higher RPS per instance with a 40ms median latency overhead.
-- **Bedrock Agents**: Call Bedrock Agents with `/chat/completions`, `/response` endpoints.
-- **Anthropic File API**: Upload and analyze CSV files with Claude-4 on Anthropic via LiteLLM.
-- **Prometheus**: End users (`end_user`) will no longer be tracked by default on Prometheus. Tracking end_users on prometheus is now opt-in. This is done to prevent the response from `/metrics` from  becoming too large. [Read More](../../docs/proxy/prometheus#tracking-end_user-on-prometheus)
+- **Vector Store 권한**: Key, Team, Organization 수준에서 Vector Store 액세스를 제어합니다.
+- **Rate Limiting Sliding Window 지원**: 분 단위 요청 추적으로 Key/Team/User 속도 제한의 정확도를 개선했습니다.
+- **Aiohttp Transport 기본 사용**: 이제 Aiohttp transport가 LiteLLM 네트워킹 요청의 기본 transport입니다. 인스턴스당 RPS는 2배 높이고, 중앙값 지연 시간 오버헤드는 40ms 수준으로 제공합니다.
+- **Bedrock Agents**: `/chat/completions`, `/response` 엔드포인트로 Bedrock Agents를 호출합니다.
+- **Anthropic File API**: LiteLLM을 통해 Anthropic에서 Claude-4로 CSV 파일을 업로드하고 분석합니다.
+- **Prometheus**: 최종 사용자(`end_user`)는 더 이상 Prometheus에서 기본 추적되지 않습니다. Prometheus에서 end_users 추적은 이제 opt-in입니다. 이는 `/metrics`의 응답이 너무 커지는 것을 방지하기 위한 조치입니다. [자세히 보기](../../docs/proxy/prometheus#tracking-end_user-on-prometheus)
 
 
 ---
 
-## Vector Store Permissions
+## Vector Store 권한 {#vector-store-permissions}
 
-This release brings support for managing permissions for vector stores by Keys, Teams, Organizations (entities) on LiteLLM. When a request attempts to query a vector store, LiteLLM will block it if the requesting entity lacks the proper permissions.
+이번 릴리스는 LiteLLM에서 Keys, Teams, Organizations(엔티티)별로 Vector Store 권한을 관리하는 기능을 지원합니다. 요청이 Vector Store 조회를 시도할 때, 요청 엔티티에 적절한 권한이 없으면 LiteLLM이 이를 차단합니다.
 
-This is great for use cases that require access to restricted data that you don't want everyone to use. 
+모든 사용자에게 공개하고 싶지 않은 제한된 데이터에 대한 액세스가 필요한 사용 사례에 적합합니다.
 
-Over the next week we plan on adding permission management for MCP Servers.
+다음 주에는 MCP Servers에 대한 권한 관리를 추가할 계획입니다.
 
 ---
-## Aiohttp Transport used by default
+## Aiohttp Transport 기본 사용 {#aiohttp-transport-used-by-default}
 
-Aiohttp transport is now the default transport for LiteLLM networking requests. This gives users 2x higher RPS per instance with a 40ms median latency overhead. This has been live on LiteLLM Cloud for a week + gone through alpha users testing for a week.
+이제 Aiohttp transport가 LiteLLM 네트워킹 요청의 기본 transport입니다. 인스턴스당 RPS는 2배 높이고, 중앙값 지연 시간 오버헤드는 40ms 수준으로 제공합니다. 이 기능은 LiteLLM Cloud에서 일주일 동안 운영되었고, alpha users 테스트도 일주일 동안 거쳤습니다.
 
 
-If you encounter any issues, you can disable using the aiohttp transport in the following ways:
+문제가 발생하면 다음 방법으로 aiohttp transport 사용을 비활성화할 수 있습니다.
 
-**On LiteLLM Proxy**
+**LiteLLM Proxy에서**
 
-Set the `DISABLE_AIOHTTP_TRANSPORT=True` in the environment variables. 
+환경 변수에 `DISABLE_AIOHTTP_TRANSPORT=True`를 설정합니다.
 
 ```yaml showLineNumbers title="Environment Variable"
 export DISABLE_AIOHTTP_TRANSPORT="True"
 ```
 
-**On LiteLLM Python SDK**
+**LiteLLM Python SDK에서**
 
-Set the `disable_aiohttp_transport=True` to disable aiohttp transport. 
+aiohttp transport를 비활성화하려면 `disable_aiohttp_transport=True`를 설정합니다.
 
 ```python showLineNumbers title="Python SDK"
 import litellm
@@ -97,138 +97,138 @@ print(result)
 ---
 
 
-## New Models / Updated Models
+## 신규 모델 / 업데이트된 모델 {#new-모델--updated-모델}
 
 - **[Bedrock](../../docs/providers/bedrock)**
-    - Video support for Bedrock Converse - [PR](https://github.com/BerriAI/litellm/pull/11166)
-    - InvokeAgents support as /chat/completions route - [PR](https://github.com/BerriAI/litellm/pull/11239), [Get Started](../../docs/providers/bedrock_agents)
-    - AI21 Jamba models compatibility fixes - [PR](https://github.com/BerriAI/litellm/pull/11233)
-    - Fixed duplicate maxTokens parameter for Claude with thinking - [PR](https://github.com/BerriAI/litellm/pull/11181)
+    - Bedrock Converse의 동영상 지원 - [PR](https://github.com/BerriAI/litellm/pull/11166)
+    - /chat/completions 경로의 InvokeAgents 지원 - [PR](https://github.com/BerriAI/litellm/pull/11239), [시작하기](../../docs/providers/bedrock_agents)
+    - AI21 Jamba models 호환성 수정 - [PR](https://github.com/BerriAI/litellm/pull/11233)
+    - thinking을 사용하는 Claude에서 중복 maxTokens 파라미터 수정 - [PR](https://github.com/BerriAI/litellm/pull/11181)
 - **[Gemini (Google AI Studio + Vertex AI)](https://docs.litellm.ai/docs/providers/gemini)**
-    - Parallel tool calling support with `parallel_tool_calls` parameter - [PR](https://github.com/BerriAI/litellm/pull/11125)
-    - All Gemini models now support parallel function calling - [PR](https://github.com/BerriAI/litellm/pull/11225)
+    - `parallel_tool_calls` 파라미터를 통한 병렬 tool calling 지원 - [PR](https://github.com/BerriAI/litellm/pull/11125)
+    - 모든 Gemini models가 이제 병렬 function calling을 지원 - [PR](https://github.com/BerriAI/litellm/pull/11225)
 - **[VertexAI](../../docs/providers/vertex)**
-    - codeExecution tool support and anyOf handling - [PR](https://github.com/BerriAI/litellm/pull/11195)
-    - Vertex AI Anthropic support on /v1/messages - [PR](https://github.com/BerriAI/litellm/pull/11246)
-    - Thinking, global regions, and parallel tool calling improvements - [PR](https://github.com/BerriAI/litellm/pull/11194)
-    - Web Search Support [PR](https://github.com/BerriAI/litellm/commit/06484f6e5a7a2f4e45c490266782ed28b51b7db6)
+    - codeExecution tool 지원 및 anyOf 처리 - [PR](https://github.com/BerriAI/litellm/pull/11195)
+    - /v1/messages에서 Vertex AI Anthropic 지원 - [PR](https://github.com/BerriAI/litellm/pull/11246)
+    - Thinking, global regions, 병렬 tool calling 개선 - [PR](https://github.com/BerriAI/litellm/pull/11194)
+    - Web Search 지원 [PR](https://github.com/BerriAI/litellm/commit/06484f6e5a7a2f4e45c490266782ed28b51b7db6)
 - **[Anthropic](../../docs/providers/anthropic)**
-    - Thinking blocks on streaming support - [PR](https://github.com/BerriAI/litellm/pull/11194)
-    - Files API with form-data support on passthrough - [PR](https://github.com/BerriAI/litellm/pull/11256)
-    - File ID support on /chat/completion - [PR](https://github.com/BerriAI/litellm/pull/11256)
+    - 스트리밍에서 thinking blocks 지원 - [PR](https://github.com/BerriAI/litellm/pull/11194)
+    - passthrough에서 form-data를 사용하는 Files API 지원 - [PR](https://github.com/BerriAI/litellm/pull/11256)
+    - /chat/completion에서 File ID 지원 - [PR](https://github.com/BerriAI/litellm/pull/11256)
 - **[xAI](../../docs/providers/xai)**
-    - Web Search Support [PR](https://github.com/BerriAI/litellm/commit/06484f6e5a7a2f4e45c490266782ed28b51b7db6)
+    - Web Search 지원 [PR](https://github.com/BerriAI/litellm/commit/06484f6e5a7a2f4e45c490266782ed28b51b7db6)
 - **[Google AI Studio](../../docs/providers/gemini)**
-    - Web Search Support [PR](https://github.com/BerriAI/litellm/commit/06484f6e5a7a2f4e45c490266782ed28b51b7db6)
+    - Web Search 지원 [PR](https://github.com/BerriAI/litellm/commit/06484f6e5a7a2f4e45c490266782ed28b51b7db6)
 - **[Mistral](../../docs/providers/mistral)**
-    - Updated mistral-medium prices and context sizes - [PR](https://github.com/BerriAI/litellm/pull/10729)
+    - mistral-medium 가격과 context sizes 업데이트 - [PR](https://github.com/BerriAI/litellm/pull/10729)
 - **[Ollama](../../docs/providers/ollama)**
-    - Tool calls parsing on streaming - [PR](https://github.com/BerriAI/litellm/pull/11171)
+    - 스트리밍에서 tool calls 파싱 - [PR](https://github.com/BerriAI/litellm/pull/11171)
 - **[Cohere](../../docs/providers/cohere)**
-    - Swapped Cohere and Cohere Chat provider positioning - [PR](https://github.com/BerriAI/litellm/pull/11173)
+    - Cohere와 Cohere Chat provider 위치 교체 - [PR](https://github.com/BerriAI/litellm/pull/11173)
 - **[Nebius AI Studio](../../docs/providers/nebius)**
-    - New provider integration - [PR](https://github.com/BerriAI/litellm/pull/11143)
+    - 신규 provider 통합 - [PR](https://github.com/BerriAI/litellm/pull/11143)
 
-## LLM API Endpoints
+## LLM API 엔드포인트 {#llm-api-endpoints}
 
 - **[Image Edits API](../../docs/image_generation)**
-    - Azure support for /v1/images/edits - [PR](https://github.com/BerriAI/litellm/pull/11160)
-    - Cost tracking for image edits endpoint (OpenAI, Azure) - [PR](https://github.com/BerriAI/litellm/pull/11186)
+    - /v1/images/edits의 Azure 지원 - [PR](https://github.com/BerriAI/litellm/pull/11160)
+    - image edits 엔드포인트(OpenAI, Azure)의 비용 추적 - [PR](https://github.com/BerriAI/litellm/pull/11186)
 - **[Completions API](../../docs/completion/chat)**
-    - Codestral latency overhead tracking on /v1/completions - [PR](https://github.com/BerriAI/litellm/pull/10879)
+    - /v1/completions에서 Codestral 지연 시간 오버헤드 추적 - [PR](https://github.com/BerriAI/litellm/pull/10879)
 - **[Audio Transcriptions API](../../docs/audio/speech)**
-    - GPT-4o mini audio preview pricing without date - [PR](https://github.com/BerriAI/litellm/pull/11207)
-    - Non-default params support for audio transcription - [PR](https://github.com/BerriAI/litellm/pull/11212)
+    - 날짜가 없는 GPT-4o mini audio preview 가격 - [PR](https://github.com/BerriAI/litellm/pull/11207)
+    - audio transcription의 non-default params 지원 - [PR](https://github.com/BerriAI/litellm/pull/11212)
 - **[Responses API](../../docs/response_api)**
-    - Session management fixes for using Non-OpenAI models - [PR](https://github.com/BerriAI/litellm/pull/11254)
+    - Non-OpenAI models 사용 시 session management 수정 - [PR](https://github.com/BerriAI/litellm/pull/11254)
 
-## Management Endpoints / UI
+## 관리 엔드포인트 / UI {#management-endpoints--ui}
 
 - **Vector Stores**
-    - Permission management for LiteLLM Keys, Teams, and Organizations - [PR](https://github.com/BerriAI/litellm/pull/11213)
-    - UI display of vector store permissions - [PR](https://github.com/BerriAI/litellm/pull/11277)
-    - Vector store access controls enforcement - [PR](https://github.com/BerriAI/litellm/pull/11281)
-    - Object permissions fixes and QA improvements - [PR](https://github.com/BerriAI/litellm/pull/11291)
+    - LiteLLM Keys, Teams, Organizations의 권한 관리 - [PR](https://github.com/BerriAI/litellm/pull/11213)
+    - Vector Store 권한의 UI 표시 - [PR](https://github.com/BerriAI/litellm/pull/11277)
+    - Vector Store 액세스 제어 적용 - [PR](https://github.com/BerriAI/litellm/pull/11281)
+    - Object permissions 수정 및 QA 개선 - [PR](https://github.com/BerriAI/litellm/pull/11291)
 - **Teams**
-    - "All proxy models" display when no models selected - [PR](https://github.com/BerriAI/litellm/pull/11187)
-    - Removed redundant teamInfo call, using existing teamsList - [PR](https://github.com/BerriAI/litellm/pull/11051)
-    - Improved model tags display on Keys, Teams and Org pages - [PR](https://github.com/BerriAI/litellm/pull/11022)
+    - 모델을 선택하지 않았을 때 "All proxy models" 표시 - [PR](https://github.com/BerriAI/litellm/pull/11187)
+    - 중복 teamInfo 호출을 제거하고 기존 teamsList 사용 - [PR](https://github.com/BerriAI/litellm/pull/11051)
+    - Keys, Teams, Org 페이지의 model tags 표시 개선 - [PR](https://github.com/BerriAI/litellm/pull/11022)
 - **SSO/SCIM**
-    - Bug fixes for showing SCIM token on UI - [PR](https://github.com/BerriAI/litellm/pull/11220)
-- **General UI**
-    - Fix "UI Session Expired. Logging out" - [PR](https://github.com/BerriAI/litellm/pull/11279)
-    - Support for forwarding /sso/key/generate to server root path URL - [PR](https://github.com/BerriAI/litellm/pull/11165)
+    - UI에 SCIM token을 표시하는 버그 수정 - [PR](https://github.com/BerriAI/litellm/pull/11220)
+- **일반 UI**
+    - "UI Session Expired. Logging out" 수정 - [PR](https://github.com/BerriAI/litellm/pull/11279)
+    - /sso/key/generate를 server root path URL로 전달하는 기능 지원 - [PR](https://github.com/BerriAI/litellm/pull/11165)
 
 
-## Logging / Guardrails Integrations
+## 로깅 / 가드레일 통합 {#logging--가드레일-integrations}
 
-#### Logging
+#### 로깅 {#logging}
 - **[Prometheus](../../docs/proxy/prometheus)**
-    - End users will no longer be tracked by default on Prometheus. Tracking end_users on prometheus is now opt-in. [PR](https://github.com/BerriAI/litellm/pull/11192)
+    - 최종 사용자는 더 이상 Prometheus에서 기본 추적되지 않습니다. Prometheus에서 end_users 추적은 이제 opt-in입니다. [PR](https://github.com/BerriAI/litellm/pull/11192)
 - **[Langfuse](../../docs/proxy/logging#langfuse)**
-    - Performance improvements: Fixed "Max langfuse clients reached" issue - [PR](https://github.com/BerriAI/litellm/pull/11285)
+    - 성능 개선: "Max langfuse clients reached" 문제 수정 - [PR](https://github.com/BerriAI/litellm/pull/11285)
 - **[Helicone](../../docs/observability/helicone_integration)**
-    - Base URL support - [PR](https://github.com/BerriAI/litellm/pull/11211)
+    - Base URL 지원 - [PR](https://github.com/BerriAI/litellm/pull/11211)
 - **[Sentry](../../docs/proxy/logging#sentry)**
-    - Added sentry sample rate configuration - [PR](https://github.com/BerriAI/litellm/pull/10283)
+    - sentry sample rate 설정 추가 - [PR](https://github.com/BerriAI/litellm/pull/10283)
 
-#### Guardrails
-- **[Bedrock Guardrails](../../docs/proxy/guardrails/bedrock)**
-    - Streaming support for bedrock post guard - [PR](https://github.com/BerriAI/litellm/pull/11247)
-    - Auth parameter persistence fixes - [PR](https://github.com/BerriAI/litellm/pull/11270)
-- **[Pangea Guardrails](../../docs/proxy/guardrails/pangea)**
-    - Added Pangea provider to Guardrails hook - [PR](https://github.com/BerriAI/litellm/pull/10775)
+#### 가드레일 {#가드레일}
+- **[Bedrock 가드레일](../../docs/proxy/guardrails/bedrock)**
+    - bedrock post guard의 Streaming 지원 - [PR](https://github.com/BerriAI/litellm/pull/11247)
+    - Auth parameter persistence 수정 - [PR](https://github.com/BerriAI/litellm/pull/11270)
+- **[Pangea 가드레일](../../docs/proxy/guardrails/pangea)**
+    - 가드레일 hook에 Pangea provider 추가 - [PR](https://github.com/BerriAI/litellm/pull/10775)
 
 
-## Performance / Reliability Improvements
+## 성능 / 안정성 개선 {#performance--reliability-improvements}
 - **aiohttp Transport**
-    - Handling for aiohttp.ClientPayloadError - [PR](https://github.com/BerriAI/litellm/pull/11162)
-    - SSL verification settings support - [PR](https://github.com/BerriAI/litellm/pull/11162)
-    - Rollback to httpx==0.27.0 for stability - [PR](https://github.com/BerriAI/litellm/pull/11146)
+    - aiohttp.ClientPayloadError 처리 - [PR](https://github.com/BerriAI/litellm/pull/11162)
+    - SSL verification settings 지원 - [PR](https://github.com/BerriAI/litellm/pull/11162)
+    - 안정성을 위해 httpx==0.27.0으로 롤백 - [PR](https://github.com/BerriAI/litellm/pull/11146)
 - **Request Limiting**
-    - Sliding window logic for parallel request limiter v2 - [PR](https://github.com/BerriAI/litellm/pull/11283)
+    - parallel request limiter v2의 Sliding window 로직 - [PR](https://github.com/BerriAI/litellm/pull/11283)
 
 
-## Bug Fixes
+## 버그 수정 {#bug-fixes}
 
-- **LLM API Fixes**
-    - Added missing request_kwargs to get_available_deployment call - [PR](https://github.com/BerriAI/litellm/pull/11202)
-    - Fixed calling Azure O-series models - [PR](https://github.com/BerriAI/litellm/pull/11212)
-    - Support for dropping non-OpenAI params via additional_drop_params - [PR](https://github.com/BerriAI/litellm/pull/11246)
-    - Fixed frequency_penalty to repeat_penalty parameter mapping - [PR](https://github.com/BerriAI/litellm/pull/11284)
-    - Fix for embedding cache hits on string input - [PR](https://github.com/BerriAI/litellm/pull/11211)
-- **General**
-    - OIDC provider improvements and audience bug fix - [PR](https://github.com/BerriAI/litellm/pull/10054)
-    - Removed AzureCredentialType restriction on AZURE_CREDENTIAL - [PR](https://github.com/BerriAI/litellm/pull/11272)
-    - Prevention of sensitive key leakage to Langfuse - [PR](https://github.com/BerriAI/litellm/pull/11165)
-    - Fixed healthcheck test using curl when curl not in image - [PR](https://github.com/BerriAI/litellm/pull/9737)
+- **LLM API 수정**
+    - get_available_deployment 호출에 누락된 request_kwargs 추가 - [PR](https://github.com/BerriAI/litellm/pull/11202)
+    - Azure O-series models 호출 수정 - [PR](https://github.com/BerriAI/litellm/pull/11212)
+    - additional_drop_params를 통한 non-OpenAI params 삭제 지원 - [PR](https://github.com/BerriAI/litellm/pull/11246)
+    - frequency_penalty에서 repeat_penalty 파라미터로의 매핑 수정 - [PR](https://github.com/BerriAI/litellm/pull/11284)
+    - string input에서 embedding cache hits 수정 - [PR](https://github.com/BerriAI/litellm/pull/11211)
+- **일반**
+    - OIDC provider 개선 및 audience 버그 수정 - [PR](https://github.com/BerriAI/litellm/pull/10054)
+    - AZURE_CREDENTIAL의 AzureCredentialType 제한 제거 - [PR](https://github.com/BerriAI/litellm/pull/11272)
+    - Langfuse로 민감한 key가 유출되지 않도록 방지 - [PR](https://github.com/BerriAI/litellm/pull/11165)
+    - 이미지에 curl이 없을 때 curl을 사용하는 healthcheck test 수정 - [PR](https://github.com/BerriAI/litellm/pull/9737)
 
-## New Contributors
-* [@agajdosi](https://github.com/agajdosi) made their first contribution in [#9737](https://github.com/BerriAI/litellm/pull/9737)
-* [@ketangangal](https://github.com/ketangangal) made their first contribution in [#11161](https://github.com/BerriAI/litellm/pull/11161)
-* [@Aktsvigun](https://github.com/Aktsvigun) made their first contribution in [#11143](https://github.com/BerriAI/litellm/pull/11143)
-* [@ryanmeans](https://github.com/ryanmeans) made their first contribution in [#10775](https://github.com/BerriAI/litellm/pull/10775)
-* [@nikoizs](https://github.com/nikoizs) made their first contribution in [#10054](https://github.com/BerriAI/litellm/pull/10054)
-* [@Nitro963](https://github.com/Nitro963) made their first contribution in [#11202](https://github.com/BerriAI/litellm/pull/11202)
-* [@Jacobh2](https://github.com/Jacobh2) made their first contribution in [#11207](https://github.com/BerriAI/litellm/pull/11207)
-* [@regismesquita](https://github.com/regismesquita) made their first contribution in [#10729](https://github.com/BerriAI/litellm/pull/10729)
-* [@Vinnie-Singleton-NN](https://github.com/Vinnie-Singleton-NN) made their first contribution in [#10283](https://github.com/BerriAI/litellm/pull/10283)
-* [@trashhalo](https://github.com/trashhalo) made their first contribution in [#11219](https://github.com/BerriAI/litellm/pull/11219)
-* [@VigneshwarRajasekaran](https://github.com/VigneshwarRajasekaran) made their first contribution in [#11223](https://github.com/BerriAI/litellm/pull/11223)
-* [@AnilAren](https://github.com/AnilAren) made their first contribution in [#11233](https://github.com/BerriAI/litellm/pull/11233)
-* [@fadil4u](https://github.com/fadil4u) made their first contribution in [#11242](https://github.com/BerriAI/litellm/pull/11242)
-* [@whitfin](https://github.com/whitfin) made their first contribution in [#11279](https://github.com/BerriAI/litellm/pull/11279)
-* [@hcoona](https://github.com/hcoona) made their first contribution in [#11272](https://github.com/BerriAI/litellm/pull/11272)
-* [@keyute](https://github.com/keyute) made their first contribution in [#11173](https://github.com/BerriAI/litellm/pull/11173)
-* [@emmanuel-ferdman](https://github.com/emmanuel-ferdman) made their first contribution in [#11230](https://github.com/BerriAI/litellm/pull/11230)
+## 신규 기여자 {#new-contributors}
+* [@agajdosi](https://github.com/agajdosi)가 [#9737](https://github.com/BerriAI/litellm/pull/9737)에서 첫 기여를 했습니다.
+* [@ketangangal](https://github.com/ketangangal)가 [#11161](https://github.com/BerriAI/litellm/pull/11161)에서 첫 기여를 했습니다.
+* [@Aktsvigun](https://github.com/Aktsvigun)가 [#11143](https://github.com/BerriAI/litellm/pull/11143)에서 첫 기여를 했습니다.
+* [@ryanmeans](https://github.com/ryanmeans)가 [#10775](https://github.com/BerriAI/litellm/pull/10775)에서 첫 기여를 했습니다.
+* [@nikoizs](https://github.com/nikoizs)가 [#10054](https://github.com/BerriAI/litellm/pull/10054)에서 첫 기여를 했습니다.
+* [@Nitro963](https://github.com/Nitro963)가 [#11202](https://github.com/BerriAI/litellm/pull/11202)에서 첫 기여를 했습니다.
+* [@Jacobh2](https://github.com/Jacobh2)가 [#11207](https://github.com/BerriAI/litellm/pull/11207)에서 첫 기여를 했습니다.
+* [@regismesquita](https://github.com/regismesquita)가 [#10729](https://github.com/BerriAI/litellm/pull/10729)에서 첫 기여를 했습니다.
+* [@Vinnie-Singleton-NN](https://github.com/Vinnie-Singleton-NN)가 [#10283](https://github.com/BerriAI/litellm/pull/10283)에서 첫 기여를 했습니다.
+* [@trashhalo](https://github.com/trashhalo)가 [#11219](https://github.com/BerriAI/litellm/pull/11219)에서 첫 기여를 했습니다.
+* [@VigneshwarRajasekaran](https://github.com/VigneshwarRajasekaran)가 [#11223](https://github.com/BerriAI/litellm/pull/11223)에서 첫 기여를 했습니다.
+* [@AnilAren](https://github.com/AnilAren)가 [#11233](https://github.com/BerriAI/litellm/pull/11233)에서 첫 기여를 했습니다.
+* [@fadil4u](https://github.com/fadil4u)가 [#11242](https://github.com/BerriAI/litellm/pull/11242)에서 첫 기여를 했습니다.
+* [@whitfin](https://github.com/whitfin)가 [#11279](https://github.com/BerriAI/litellm/pull/11279)에서 첫 기여를 했습니다.
+* [@hcoona](https://github.com/hcoona)가 [#11272](https://github.com/BerriAI/litellm/pull/11272)에서 첫 기여를 했습니다.
+* [@keyute](https://github.com/keyute)가 [#11173](https://github.com/BerriAI/litellm/pull/11173)에서 첫 기여를 했습니다.
+* [@emmanuel-ferdman](https://github.com/emmanuel-ferdman)가 [#11230](https://github.com/BerriAI/litellm/pull/11230)에서 첫 기여를 했습니다.
 
-## Demo Instance
+## 데모 인스턴스 {#demo-instance}
 
-Here's a Demo Instance to test changes:
+변경 사항을 테스트할 수 있는 데모 인스턴스입니다.
 
-- Instance: https://demo.litellm.ai/
-- Login Credentials:
-    - Username: admin
-    - Password: sk-1234
+- 인스턴스: https://demo.litellm.ai/
+- 로그인 자격 증명:
+    - 사용자 이름: admin
+    - 비밀번호: sk-1234
 
 ## [Git Diff](https://github.com/BerriAI/litellm/releases)

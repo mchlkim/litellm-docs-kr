@@ -1,4 +1,4 @@
-# All settings
+# 전체 설정
 
 ```yaml
 environment_variables: {}
@@ -16,155 +16,152 @@ model_list:
       additionalProp1: {}
 
 litellm_settings:
-  # Logging/Callback settings
-  success_callback: ["langfuse"]  # list of success callbacks
-  failure_callback: ["sentry"]  # list of failure callbacks
-  callbacks: ["otel"]  # list of callbacks - runs on success and failure
-  service_callbacks: ["datadog", "prometheus"]  # logs redis, postgres failures on datadog, prometheus
-  turn_off_message_logging: boolean  # prevent the messages and responses from being logged to on your callbacks, but request metadata will still be logged. Useful for privacy/compliance when handling sensitive data.
-  redact_user_api_key_info: boolean  # Redact information about the user api key (hashed token, user_id, team id, etc.), from logs. Currently supported for Langfuse, OpenTelemetry, Logfire, ArizeAI logging.
-  langfuse_default_tags: ["cache_hit", "cache_key", "proxy_base_url", "user_api_key_alias", "user_api_key_user_id", "user_api_key_user_email", "user_api_key_team_alias", "semantic-similarity", "proxy_base_url"] # default tags for Langfuse Logging
-  # Networking settings
-  request_timeout: 10 # (int) llm requesttimeout in seconds. Raise Timeout error if call takes longer than 10s. Sets litellm.request_timeout
-  force_ipv4: boolean # If true, litellm will force ipv4 for all LLM requests. Some users have seen httpx ConnectionError when using ipv6 + Anthropic API
+  # 로깅/Callback 설정
+  success_callback: ["langfuse"]  # 성공 callback 목록
+  failure_callback: ["sentry"]  # 실패 callback 목록
+  callbacks: ["otel"]  # 성공과 실패 모두에서 실행되는 callback 목록
+  service_callbacks: ["datadog", "prometheus"]  # redis, postgres 실패를 datadog, prometheus에 기록
+  turn_off_message_logging: boolean  # 메시지와 응답이 callback에 기록되지 않게 합니다. 요청 metadata는 계속 기록됩니다. 민감 데이터 처리 시 개인정보 보호/규정 준수에 유용합니다.
+  redact_user_api_key_info: boolean  # log에서 user API key 정보(hashed token, user_id, team id 등)를 마스킹합니다. 현재 Langfuse, OpenTelemetry, Logfire, ArizeAI logging을 지원합니다.
+  langfuse_default_tags: ["cache_hit", "cache_key", "proxy_base_url", "user_api_key_alias", "user_api_key_user_id", "user_api_key_user_email", "user_api_key_team_alias", "semantic-similarity", "proxy_base_url"] # Langfuse Logging 기본 tag
+  # 네트워크 설정
+  request_timeout: 10 # (int) LLM request timeout(초). 호출이 10초보다 오래 걸리면 Timeout error를 발생시킵니다. litellm.request_timeout을 설정합니다.
+  force_ipv4: boolean # true이면 litellm이 모든 LLM request에 ipv4를 강제합니다. 일부 사용자는 ipv6 + Anthropic API 사용 시 httpx ConnectionError를 경험했습니다.
 
-  # Cost tracking settings
+  # 비용 추적 설정
   cost_discount_config:
-    vertex_ai: 0.05 # Apply a 5% discount to Vertex AI costs
-    gemini: 0.05 # Apply a 5% discount to Gemini costs
+    vertex_ai: 0.05 # Vertex AI cost에 5% discount 적용
+    gemini: 0.05 # Gemini cost에 5% discount 적용
   cost_margin_config:
-    global: 0.05 # Apply a 5% margin to all providers
-    openai: 0.10 # Apply a 10% margin to OpenAI costs
+    global: 0.05 # 모든 provider에 5% margin 적용
+    openai: 0.10 # OpenAI cost에 10% margin 적용
   
-  # Debugging - see debugging docs for more options
-  # Use `--debug` or `--detailed_debug` CLI flags, or set LITELLM_LOG env var to "INFO", "DEBUG", or "ERROR"
-  json_logs: boolean # if true, logs will be in json format
+  # 디버깅 - 추가 옵션은 debugging 문서를 참고하세요
+  # `--debug` 또는 `--detailed_debug` CLI flag를 사용하거나 LITELLM_LOG env var를 "INFO", "DEBUG", "ERROR" 중 하나로 설정하세요
+  json_logs: boolean # true이면 log가 JSON format으로 기록됩니다
 
-  # Fallbacks, reliability
-  default_fallbacks: ["claude-opus"] # set default_fallbacks, in case a specific model group is misconfigured / bad.
-  content_policy_fallbacks: [{ "gpt-3.5-turbo-small": ["claude-opus"] }] # fallbacks for ContentPolicyErrors
-  context_window_fallbacks: [{ "gpt-3.5-turbo-small": ["gpt-3.5-turbo-large", "claude-opus"] }] # fallbacks for ContextWindowExceededErrors
+  # Fallback과 reliability
+  default_fallbacks: ["claude-opus"] # 특정 model group이 잘못 구성되었거나 문제가 있을 때 사용할 default_fallbacks 설정
+  content_policy_fallbacks: [{ "gpt-3.5-turbo-small": ["claude-opus"] }] # ContentPolicyErrors용 fallback
+  context_window_fallbacks: [{ "gpt-3.5-turbo-small": ["gpt-3.5-turbo-large", "claude-opus"] }] # ContextWindowExceededErrors용 fallback
 
-  # MCP Aliases - Map aliases to MCP server names for easier tool access
+  # MCP Aliases - 더 쉬운 tool 접근을 위해 alias를 MCP server name에 매핑
   mcp_aliases: {
       "github": "github_mcp_server",
       "zapier": "zapier_mcp_server",
       "deepwiki": "deepwiki_mcp_server",
-    } # Maps friendly aliases to MCP server names. Only the first alias for each server is used
+    } # 사람이 읽기 쉬운 alias를 MCP server name에 매핑합니다. 각 server의 첫 번째 alias만 사용됩니다.
 
-  # Caching settings
+  # Caching 설정
   cache: true
-  cache_params: # set cache params for redis
-    type: redis # type of cache to initialize (options: "local", "redis", "s3", "gcs")
+  cache_params: # redis용 cache param 설정
+    type: redis # 초기화할 cache type(options: "local", "redis", "s3", "gcs")
 
-    # Optional - Redis Settings
-    host: "localhost" # The host address for the Redis cache. Required if type is "redis".
-    port: 6379 # The port number for the Redis cache. Required if type is "redis".
-    password: "your_password" # The password for the Redis cache. Required if type is "redis".
-    namespace: "litellm.caching.caching" # namespace for redis cache
-    max_connections: 100  # [OPTIONAL] Set Maximum number of Redis connections. Passed directly to redis-py. 
-    # Optional - Redis Cluster Settings
+    # 선택 사항 - Redis 설정
+    host: "localhost" # Redis cache host address. type이 "redis"이면 필요합니다.
+    port: 6379 # Redis cache port number. type이 "redis"이면 필요합니다.
+    password: "your_password" # Redis cache password. type이 "redis"이면 필요합니다.
+    namespace: "litellm.caching.caching" # redis cache namespace
+    max_connections: 100  # [선택 사항] Redis connection 최대 수입니다. redis-py로 직접 전달됩니다.
+    # 선택 사항 - Redis Cluster 설정
     redis_startup_nodes: [{ "host": "127.0.0.1", "port": "7001" }]
 
-    # Optional - Redis Sentinel Settings
+    # 선택 사항 - Redis Sentinel 설정
     service_name: "mymaster"
     sentinel_nodes: [["localhost", 26379]]
 
-    # Optional - GCP IAM Authentication for Redis
-    gcp_service_account: "projects/-/serviceAccounts/your-sa@project.iam.gserviceaccount.com" # GCP service account for IAM authentication
-    gcp_ssl_ca_certs: "./server-ca.pem" # Path to SSL CA certificate file for GCP Memorystore Redis
-    ssl: true # Enable SSL for secure connections
-    ssl_cert_reqs: null # Set to null for self-signed certificates
-    ssl_check_hostname: false # Set to false for self-signed certificates
+    # 선택 사항 - Redis용 GCP IAM Authentication
+    gcp_service_account: "projects/-/serviceAccounts/your-sa@project.iam.gserviceaccount.com" # IAM authentication용 GCP service account
+    gcp_ssl_ca_certs: "./server-ca.pem" # GCP Memorystore Redis용 SSL CA certificate file path
+    ssl: true # secure connection을 위해 SSL 활성화
+    ssl_cert_reqs: null # self-signed certificate에는 null로 설정
+    ssl_check_hostname: false # self-signed certificate에는 false로 설정
 
-    # Optional - Qdrant Semantic Cache Settings
-    qdrant_semantic_cache_embedding_model: openai-embedding # the model should be defined on the model_list
+    # 선택 사항 - Qdrant Semantic Cache 설정
+    qdrant_semantic_cache_embedding_model: openai-embedding # model_list에 정의된 model이어야 합니다
     qdrant_collection_name: test_collection
     qdrant_quantization_config: binary
-    qdrant_semantic_cache_vector_size: 1536 # vector size must match embedding model dimensionality
-    similarity_threshold: 0.8 # similarity threshold for semantic cache
+    qdrant_semantic_cache_vector_size: 1536 # vector size는 embedding model dimensionality와 일치해야 합니다
+    similarity_threshold: 0.8 # semantic cache용 similarity threshold
 
-    # Optional - S3 Cache Settings
-    s3_bucket_name: cache-bucket-litellm # AWS Bucket Name for S3
-    s3_region_name: us-west-2 # AWS Region Name for S3
-    s3_aws_access_key_id: os.environ/AWS_ACCESS_KEY_ID # us os.environ/<variable name> to pass environment variables. This is AWS Access Key ID for S3
-    s3_aws_secret_access_key: os.environ/AWS_SECRET_ACCESS_KEY # AWS Secret Access Key for S3
-    s3_endpoint_url: https://s3.amazonaws.com # [OPTIONAL] S3 endpoint URL, if you want to use Backblaze/cloudflare s3 bucket
+    # 선택 사항 - S3 Cache 설정
+    s3_bucket_name: cache-bucket-litellm # S3용 AWS Bucket Name
+    s3_region_name: us-west-2 # S3용 AWS Region Name
+    s3_aws_access_key_id: os.environ/AWS_ACCESS_KEY_ID # 환경 변수를 전달하려면 os.environ/<variable name>을 사용합니다. S3용 AWS Access Key ID입니다.
+    s3_aws_secret_access_key: os.environ/AWS_SECRET_ACCESS_KEY # S3용 AWS Secret Access Key
+    s3_endpoint_url: https://s3.amazonaws.com # [선택 사항] Backblaze/cloudflare s3 bucket을 사용하려는 경우 S3 endpoint URL
 
-    # Optional - GCS Cache Settings
-    gcs_bucket_name: cache-bucket-litellm # GCS Bucket Name for caching
-    gcs_path_service_account: os.environ/GCS_PATH_SERVICE_ACCOUNT # Path to GCS service account JSON file
-    gcs_path: cache/ # [OPTIONAL] GCS path prefix for cache objects
+    # 선택 사항 - GCS Cache 설정
+    gcs_bucket_name: cache-bucket-litellm # caching용 GCS Bucket Name
+    gcs_path_service_account: os.environ/GCS_PATH_SERVICE_ACCOUNT # GCS service account JSON file path
+    gcs_path: cache/ # [선택 사항] cache object용 GCS path prefix
 
-    # Common Cache settings
-    # Optional - Supported call types for caching
+    # 공통 Cache 설정
+    # 선택 사항 - caching을 지원할 call type
     supported_call_types:
       ["acompletion", "atext_completion", "aembedding", "atranscription"]
       # /chat/completions, /completions, /embeddings, /audio/transcriptions
-    mode: default_off # if default_off, you need to opt in to caching on a per call basis
-    ttl: 600 # ttl for caching
-    disable_copilot_system_to_assistant: False # DEPRECATED - GitHub Copilot API supports system prompts.
+    mode: default_off # default_off이면 call별로 caching을 opt in해야 합니다
+    ttl: 600 # caching용 ttl
+    disable_copilot_system_to_assistant: False # DEPRECATED - GitHub Copilot API는 system prompt를 지원합니다.
 
-  # Virtual key auth cache — shares API key / virtual-key auth across workers via Redis.
-  # Reduces DB round trips when caches are cold on new workers or pods.
-  # Requires litellm_settings.cache: true AND cache_params.type: redis above.
+  # Virtual key auth cache - Redis를 통해 worker 간 API key / virtual-key auth를 공유합니다.
+  # 새 worker 또는 pod에서 cache가 cold 상태일 때 DB round trip을 줄입니다.
+  # 위의 litellm_settings.cache: true 및 cache_params.type: redis가 필요합니다.
   enable_redis_auth_cache: false
 
 callback_settings:
   otel:
-    message_logging: boolean # OTEL logging callback specific settings
+    message_logging: boolean # OTEL logging callback 전용 설정
 
 general_settings:
   completion_model: string
   store_prompts_in_spend_logs: boolean
   forward_client_headers_to_llm_api: boolean
-  disable_spend_logs: boolean  # turn off writing each transaction to the db
-  disable_master_key_return: boolean  # turn off returning master key on UI (checked on '/user/info' endpoint)
-  disable_retry_on_max_parallel_request_limit_error: boolean  # turn off retries when max parallel request limit is reached
-  disable_reset_budget: boolean  # turn off reset budget scheduled task
-  disable_adding_master_key_hash_to_db: boolean  # turn off storing master key hash in db, for spend tracking
-  disable_responses_id_security: boolean  # turn off response ID security checks that prevent users from accessing other users' responses
-  enable_jwt_auth: boolean  # allow proxy admin to auth in via jwt tokens with 'litellm_proxy_admin' in claims
-  enforce_user_param: boolean  # requires all openai endpoint requests to have a 'user' param
-  reject_clientside_metadata_tags: boolean  # if true, rejects requests with client-side 'metadata.tags' to prevent users from influencing budgets
-  allowed_routes: ["route1", "route2"]  # list of allowed proxy API routes - a user can access. (currently JWT-Auth only)
-  key_management_system: google_kms  # either google_kms or azure_kms
+  disable_spend_logs: boolean  # 각 transaction을 DB에 쓰지 않습니다
+  disable_master_key_return: boolean  # UI에서 master key 반환을 끕니다('/user/info' endpoint에서 확인)
+  disable_retry_on_max_parallel_request_limit_error: boolean  # max parallel request limit에 도달했을 때 retry를 끕니다
+  disable_reset_budget: boolean  # budget reset scheduled task를 끕니다
+  disable_adding_master_key_hash_to_db: boolean  # spend tracking용 master key hash DB 저장을 끕니다
+  disable_responses_id_security: boolean  # 사용자가 다른 사용자의 response에 접근하지 못하게 하는 response ID security check를 끕니다
+  enable_jwt_auth: boolean  # claim에 'litellm_proxy_admin'이 있는 jwt token으로 proxy admin 인증을 허용합니다
+  enforce_user_param: boolean  # 모든 openai endpoint request에 'user' param을 요구합니다
+  reject_clientside_metadata_tags: boolean  # true이면 클라이언트 측 'metadata.tags'가 있는 request를 거부해 사용자가 budget에 영향을 주지 못하게 합니다
+  allowed_routes: ["route1", "route2"]  # 사용자가 접근할 수 있는 proxy API route 목록입니다(현재 JWT-Auth 전용)
+  key_management_system: google_kms  # google_kms 또는 azure_kms
   master_key: string
-  maximum_spend_logs_retention_period: 30d # The maximum time to retain spend logs before deletion.
-  maximum_spend_logs_retention_interval: 1d # interval in which the spend log cleanup task should run in.
+  maximum_spend_logs_retention_period: 30d # 삭제 전 spend log를 보관할 최대 시간입니다.
+  maximum_spend_logs_retention_interval: 1d # spend log cleanup task가 실행될 interval입니다.
   user_mcp_management_mode: restricted  # or "view_all"
 
-  # Database Settings
+  # Database 설정
   database_url: string
   database_connection_pool_limit: 0  # default 10
   database_connection_timeout: 0  # default 60s
-  database_connect_timeout: 0  # Prisma `connect_timeout` URL param (seconds). Unset => Prisma default.
-  database_socket_timeout: 0  # Prisma `socket_timeout` URL param (seconds). Idle/slow connections beyond this are closed.
-  database_extra_connection_params: {}  # Extra key/value pairs appended to the Prisma DATABASE_URL / DIRECT_URL query string (e.g. sslmode, pgbouncer, statement_cache_size). Overrides LiteLLM defaults.
-  allow_requests_on_db_unavailable: boolean  # if true, will allow requests that can not connect to the DB to verify Virtual Key to still work 
+  allow_requests_on_db_unavailable: boolean  # true이면 Virtual Key 검증을 위해 DB에 연결할 수 없는 request도 동작하도록 허용합니다
 
   custom_auth: string
-  max_parallel_requests: 0 # the max parallel requests allowed per deployment
-  global_max_parallel_requests: 0 # the max parallel requests allowed on the proxy all up
+  max_parallel_requests: 0 # deployment별 허용되는 최대 parallel request 수
+  global_max_parallel_requests: 0 # proxy 전체에서 허용되는 최대 parallel request 수
   infer_model_from_keys: true
   background_health_checks: true
   health_check_interval: 300
   alerting: ["slack", "email"]
   alerting_threshold: 0
-  use_client_credentials_pass_through_routes: boolean  # use client credentials for all pass through routes like "/vertex-ai", /bedrock/. When this is True Virtual Key auth will not be applied on these endpoints
+  use_client_credentials_pass_through_routes: boolean  # "/vertex-ai", /bedrock/ 같은 모든 pass-through route에 client credential을 사용합니다. true이면 이 endpoint에는 Virtual Key auth가 적용되지 않습니다
 
 router_settings:
-  routing_strategy: simple-shuffle # Literal["simple-shuffle", "least-busy", "usage-based-routing","latency-based-routing"], default="simple-shuffle" - RECOMMENDED for best performance
+  routing_strategy: simple-shuffle # Literal["simple-shuffle", "least-busy", "usage-based-routing","latency-based-routing"], default="simple-shuffle" - 성능상 권장
   redis_host: <your-redis-host>           # string
   redis_password: <your-redis-password>   # string
   redis_port: <your-redis-port>           # string
-  enable_pre_call_checks: true            # bool - Before call is made check if a call is within model context window 
-  allowed_fails: 3 # cooldown model if it fails > 1 call in a minute. 
-  cooldown_time: 30 # (in seconds) how long to cooldown model if fails/min > allowed_fails
-  disable_cooldowns: True                  # bool - Disable cooldowns for all models 
-  enable_tag_filtering: True                # bool - Use tag based routing for requests
-  tag_filtering_match_any: True             # bool - Tag matching behavior (only when enable_tag_filtering=true). `true`: match if deployment has ANY requested tag; `false`: match only if deployment has ALL requested tags
-  retry_policy: {                          # Dict[str, int]: retry policy for different types of exceptions
+  enable_pre_call_checks: true            # bool - 호출 전 요청이 model context window 안에 있는지 확인
+  allowed_fails: 3 # 1분 안에 1회보다 많이 실패하면 model cooldown
+  cooldown_time: 30 # (초) fails/min > allowed_fails일 때 model cooldown 기간
+  disable_cooldowns: True                  # bool - 모든 model cooldown 비활성화
+  enable_tag_filtering: True                # bool - Use tag 기반 routing for requests
+  tag_filtering_match_any: True             # bool - tag matching 동작(enable_tag_filtering=true일 때만). `true`: deployment가 요청 tag 중 하나라도 가지면 match; `false`: 모든 요청 tag를 가져야 match
+  retry_policy: {                          # Dict[str, int]: exception type별 retry policy
     "AuthenticationErrorRetries": 3,
     "TimeoutErrorRetries": 3,
     "RateLimitErrorRetries": 3,
@@ -172,190 +169,186 @@ router_settings:
     "InternalServerErrorRetries": 4
   }
   allowed_fails_policy: {
-    "BadRequestErrorAllowedFails": 1000, # Allow 1000 BadRequestErrors before cooling down a deployment
+    "BadRequestErrorAllowedFails": 1000, # deployment cooldown 전 BadRequestError 1000회 허용
     "AuthenticationErrorAllowedFails": 10, # int 
     "TimeoutErrorAllowedFails": 12, # int 
     "RateLimitErrorAllowedFails": 10000, # int 
     "ContentPolicyViolationErrorAllowedFails": 15, # int 
     "InternalServerErrorAllowedFails": 20, # int 
   }
-  content_policy_fallbacks=[{"claude-2": ["my-fallback-model"]}] # List[Dict[str, List[str]]]: Fallback model for content policy violations
-  fallbacks=[{"claude-2": ["my-fallback-model"]}] # List[Dict[str, List[str]]]: Fallback model for all errors
+  content_policy_fallbacks=[{"claude-2": ["my-fallback-model"]}] # List[Dict[str, List[str]]]: content policy violation용 fallback model
+  fallbacks=[{"claude-2": ["my-fallback-model"]}] # List[Dict[str, List[str]]]: 모든 error용 fallback model
 
 ```
 
-### litellm_settings - Reference
+### litellm_settings - 참조 {#litellm_settings---reference}
 
-| Name | Type | Description |
+| 이름 | 타입 | 설명 |
 |------|------|-------------|
-| success_callback | array of strings | List of success callbacks. [Doc Proxy logging callbacks](logging), [Doc Metrics](prometheus) |
-| failure_callback | array of strings | List of failure callbacks [Doc Proxy logging callbacks](logging), [Doc Metrics](prometheus) |
-| callbacks | array of strings | List of callbacks - runs on success and failure [Doc Proxy logging callbacks](logging), [Doc Metrics](prometheus) |
-| service_callbacks | array of strings | System health monitoring - Logs redis, postgres failures on specified services (e.g. datadog, prometheus) [Doc Metrics](prometheus) |
-| turn_off_message_logging | boolean | If true, prevents messages and responses from being logged to callbacks, but request metadata will still be logged. Useful for privacy/compliance when handling sensitive data [Proxy Logging](logging) |
-| modify_params | boolean | If true, allows modifying the parameters of the request before it is sent to the LLM provider |
-| enable_preview_features | boolean | If true, enables preview features - e.g. Azure O1 Models with streaming support.|
-| LITELLM_DISABLE_STOP_SEQUENCE_LIMIT | Disable validation for stop sequence limit (default: 4) |  
-| redact_user_api_key_info | boolean | If true, redacts information about the user api key from logs [Proxy Logging](logging#redacting-userapikeyinfo) |
-| mcp_aliases | object | Maps friendly aliases to MCP server names for easier tool access. Only the first alias for each server is used. [MCP Aliases](../mcp#mcp-aliases) |
-| langfuse_default_tags | array of strings | Default tags for Langfuse Logging. Use this if you want to control which LiteLLM-specific fields are logged as tags by the LiteLLM proxy. By default LiteLLM Proxy logs no LiteLLM-specific fields as tags. [Further docs](./logging#litellm-specific-tags-on-langfuse---cache_hit-cache_key) |
-| set_verbose | boolean | [DEPRECATED - see debugging docs](./debugging) Use `--debug` or `--detailed_debug` CLI flags, or set `LITELLM_LOG` env var to "INFO", "DEBUG", or "ERROR" instead. |
-| json_logs | boolean | If true, logs will be in json format. If you need to store the logs as JSON, just set the `litellm.json_logs = True`. We currently just log the raw POST request from litellm as a JSON [Further docs](./debugging) |
-| default_fallbacks | array of strings | List of fallback models to use if a specific model group is misconfigured / bad. [Further docs](./reliability#default-fallbacks) |
-| request_timeout | integer | The timeout for requests in seconds. If not set, the default value is `6000 seconds`. [For reference OpenAI Python SDK defaults to `600 seconds`.](https://github.com/openai/openai-python/blob/main/src/openai/_constants.py) |
-| force_ipv4 | boolean | If true, litellm will force ipv4 for all LLM requests. Some users have seen httpx ConnectionError when using ipv6 + Anthropic API |
-| content_policy_fallbacks | array of objects | Fallbacks to use when a ContentPolicyViolationError is encountered. [Further docs](./reliability#content-policy-fallbacks) |
-| context_window_fallbacks | array of objects | Fallbacks to use when a ContextWindowExceededError is encountered. [Further docs](./reliability#context-window-fallbacks) |
-| cache | boolean | If true, enables caching. [Further docs](./caching) |
-| cache_params | object | Parameters for the cache. [Further docs](./caching#supported-cache_params-on-proxy-configyaml) |
-| enable_redis_auth_cache | boolean | When `true`, stores virtual-key auth payloads in Redis (same client as response caching) so every worker/pod shares cached auth lookups—fewer repeated database reads on cache misses. **Requires `cache: true` and `cache_params.type: redis`** (Redis or Redis Cluster). Optional: set `general_settings.user_api_key_cache_ttl` so TTL applies consistently to memory and Redis. [Further docs](./caching#virtual-key-authentication-cache-redis) |
-| disable_end_user_cost_tracking | boolean | If true, turns off end user cost tracking on prometheus metrics + litellm spend logs table on proxy. |
-| enable_end_user_cost_tracking_prometheus_only | boolean | If true, includes the `end_user` label on Prometheus metrics. Disabled by default to keep Prometheus cardinality bounded. [Further docs](./prometheus#tracking-end_user-on-prometheus) |
-| cost_discount_config | object | Provider-specific percentage discounts applied to cost calculations. Configure under `litellm_settings`. [Further docs](./provider_discounts) |
-| cost_margin_config | object | Provider-specific or global percentage/fixed margins applied to cost calculations. Configure under `litellm_settings`. [Further docs](./provider_margins) |
-| key_generation_settings | object | Restricts who can generate keys. [Further docs](./virtual_keys.md#restricting-key-generation) |
-| disable_add_transform_inline_image_block | boolean | For Fireworks AI models - if true, turns off the auto-add of `#transform=inline` to the url of the image_url, if the model is not a vision model. |
-| use_chat_completions_url_for_anthropic_messages | boolean | If true, routes OpenAI `/v1/messages` requests through chat/completions instead of the Responses API. Can also be set via env var `LITELLM_USE_CHAT_COMPLETIONS_URL_FOR_ANTHROPIC_MESSAGES=true`. |
-| route_all_chat_openai_to_responses | boolean | If true, routes all OpenAI `/chat/completions` requests through the Responses API bridge. Recommended for OpenAI models. Can also be set via env var `LITELLM_ROUTE_ALL_CHAT_OPENAI_TO_RESPONSES=true`. |
-| skip_system_message_in_guardrail | boolean | If true, unified guardrails omit `role: system` from scanned input on **chat completions** and **Anthropic `/v1/messages`** only; the LLM still receives full messages. Per-guardrail override: `litellm_params.skip_system_message_in_guardrail` on each guardrail. [Guardrails quick start](./guardrails/quick_start#skip-system-messages-in-guardrail-evaluation) |
-| disable_hf_tokenizer_download | boolean | If true, it defaults to using the openai tokenizer for all models (including huggingface models). |
-| enable_json_schema_validation | boolean | If true, enables json schema validation for all requests. |
-| enable_key_alias_format_validation | boolean | If true, validates `key_alias` format on `/key/generate` and `/key/update`. Must be 2-255 chars, start/end with alphanumeric, only allow `a-zA-Z0-9_-/.@`. Default `false`. |
-| user_url_validation | boolean | Default `true`. When `true`, the proxy validates user-controlled URLs (e.g. OpenAPI `spec_path` when it is an `http(s)` URL, image URLs, and similar) before fetching: DNS is resolved and connections to non–globally-routable addresses (RFC1918, loopback, link-local, etc.) are blocked unless the **hostname in the URL** is listed in `user_url_allowed_hosts`. Set to `false` to skip validation (only if you trust who can supply URLs). **Must be set under `litellm_settings`**, not `general_settings`. |
-| user_url_allowed_hosts | array of strings | Hostnames allowed to resolve to private/internal IPs when `user_url_validation` is `true`. Match the host **as it appears in the URL** (e.g. `api.corp.internal`, `127.0.0.1`, `127.0.0.1:8080`, `[::1]:443`). For split-horizon DNS, allowlist the public hostname, not the resolved `10.x` address. **Must be set under `litellm_settings`**, not `general_settings`. See [MCP from OpenAPI](../mcp_openapi#internal-spec-urls-ssrf). |
-| disable_copilot_system_to_assistant | boolean | **DEPRECATED** - GitHub Copilot API supports system prompts. |
-| default_team_params | object | Default parameters applied to every new team created via `/team/new` (including SSO auto-created teams). Only fills in fields not explicitly set in the request. Sub-fields: `max_budget` (float), `budget_duration` (string, e.g. `"30d"`), `tpm_limit` (integer), `rpm_limit` (integer), `team_member_permissions` (array of strings, e.g. `["/team/daily/activity", "/key/generate"]`), `models` (array of strings — only applied to SSO auto-created teams). |
+| success_callback | 문자열 배열 | 성공 시 실행할 callback 목록입니다. [Proxy 로깅 callback 문서](logging), [메트릭 문서](prometheus) |
+| failure_callback | 문자열 배열 | 실패 시 실행할 callback 목록입니다. [Proxy 로깅 callback 문서](logging), [메트릭 문서](prometheus) |
+| callbacks | 문자열 배열 | 성공과 실패 모두에서 실행되는 callback 목록입니다. [Proxy 로깅 callback 문서](logging), [메트릭 문서](prometheus) |
+| service_callbacks | 문자열 배열 | 시스템 상태 모니터링용 설정입니다. 지정한 서비스(예: datadog, prometheus)에 redis, postgres 실패를 로깅합니다. [메트릭 문서](prometheus) |
+| turn_off_message_logging | boolean | `true`이면 메시지와 응답이 callback에 기록되지 않습니다. 요청 metadata는 계속 기록됩니다. 민감 데이터를 다룰 때 개인정보 보호와 규정 준수 용도로 유용합니다. [Proxy 로깅](logging) |
+| modify_params | boolean | `true`이면 요청이 LLM provider로 전송되기 전에 요청 파라미터를 수정할 수 있습니다. |
+| enable_preview_features | boolean | `true`이면 Azure O1 streaming 지원 같은 미리보기 기능을 활성화합니다. |
+| LITELLM_DISABLE_STOP_SEQUENCE_LIMIT | stop sequence 제한 검증을 비활성화합니다. 기본 제한은 4입니다. |  
+| redact_user_api_key_info | boolean | `true`이면 로그에서 사용자 API key 정보(hashed token, user_id, team id 등)를 마스킹합니다. [Proxy Logging](logging#redacting-userapikeyinfo) |
+| mcp_aliases | object | 더 쉬운 도구 접근을 위해 alias를 MCP server 이름에 매핑합니다. 각 server의 첫 번째 alias만 사용됩니다. [MCP Aliases](../mcp#mcp-aliases) |
+| langfuse_default_tags | 문자열 배열 | Langfuse Logging 기본 tag입니다. LiteLLM proxy가 어떤 LiteLLM 전용 필드를 tag로 기록할지 제어할 때 사용합니다. 기본적으로 LiteLLM Proxy는 LiteLLM 전용 필드를 tag로 기록하지 않습니다. [추가 문서](/docs/proxy/logging#litellm-specific-tags-on-langfuse---cache_hit-cache_key) |
+| set_verbose | boolean | [사용 중단됨 - debugging 문서 참고](./debugging) 대신 `--debug`, `--detailed_debug` CLI flag를 사용하거나 `LITELLM_LOG` env var를 "INFO", "DEBUG", "ERROR" 중 하나로 설정하세요. |
+| json_logs | boolean | `true`이면 로그가 JSON 형식으로 기록됩니다. 로그를 JSON으로 저장해야 한다면 `litellm.json_logs = True`를 설정하세요. 현재는 litellm의 raw POST request를 JSON으로 로깅합니다. [추가 문서](./debugging) |
+| default_fallbacks | 문자열 배열 | 특정 model group이 잘못 구성되었거나 실패할 때 사용할 fallback model 목록입니다. [추가 문서](/docs/proxy/reliability#default-fallbacks) |
+| request_timeout | integer | 요청 timeout(초)입니다. 설정하지 않으면 기본값은 `6000 seconds`입니다. [참고로 OpenAI Python SDK 기본값은 `600 seconds`입니다.](https://github.com/openai/openai-python/blob/main/src/openai/_constants.py) |
+| force_ipv4 | boolean | `true`이면 litellm이 모든 LLM 요청에 ipv4를 강제합니다. 일부 사용자는 ipv6와 Anthropic API 조합에서 httpx ConnectionError를 경험했습니다. |
+| content_policy_fallbacks | array of objects | ContentPolicyViolationError 발생 시 사용할 fallback입니다. [추가 문서](./reliability#content-policy-fallbacks) |
+| context_window_fallbacks | array of objects | ContextWindowExceededError 발생 시 사용할 fallback입니다. [추가 문서](./reliability#context-window-fallbacks) |
+| cache | boolean | `true`이면 caching을 활성화합니다. [추가 문서](./caching) |
+| cache_params | object | cache 파라미터입니다. [추가 문서](/docs/proxy/caching#supported-cache_params-on-proxy-configyaml) |
+| enable_redis_auth_cache | boolean | `true`이면 virtual-key auth payload를 Redis(response caching과 같은 client)에 저장해 모든 worker/pod가 cached auth lookup을 공유합니다. cache miss 시 반복 데이터베이스 read가 줄어듭니다. **`cache: true`와 `cache_params.type: redis`가 필요합니다**(Redis 또는 Redis Cluster). 선택 사항으로 `general_settings.user_api_key_cache_ttl`을 설정하면 memory와 Redis에 TTL이 일관되게 적용됩니다. [추가 문서](./caching#virtual-key-authentication-cache-redis) |
+| disable_end_user_cost_tracking | boolean | `true`이면 proxy에서 Prometheus metrics와 litellm spend logs table의 최종 사용자 비용 추적을 끕니다. |
+| enable_end_user_cost_tracking_prometheus_only | boolean | `true`이면 Prometheus metrics에 `end_user` label을 포함합니다. Prometheus cardinality를 제한하기 위해 기본값은 비활성화입니다. [추가 문서](/docs/proxy/prometheus#tracking-end_user-on-prometheus) |
+| cost_discount_config | object | cost 계산에 적용할 provider별 percentage discount입니다. `litellm_settings` 아래에 구성합니다. [추가 문서](./provider_discounts) |
+| cost_margin_config | object | cost 계산에 적용할 provider별 또는 global percentage/fixed margin입니다. `litellm_settings` 아래에 구성합니다. [추가 문서](./provider_margins) |
+| key_generation_settings | object | key를 생성할 수 있는 주체를 제한합니다. [추가 문서](./virtual_keys.md#restricting-key-generation) |
+| disable_add_transform_inline_image_block | boolean | Fireworks AI model용 설정입니다. `true`이면 model이 vision model이 아닐 때 image_url에 `#transform=inline`을 자동 추가하지 않습니다. |
+| use_chat_completions_url_for_anthropic_messages | boolean | `true`이면 OpenAI `/v1/messages` 요청을 Responses API 대신 chat/completions로 라우팅합니다. `LITELLM_USE_CHAT_COMPLETIONS_URL_FOR_ANTHROPIC_MESSAGES=true` env var로도 설정할 수 있습니다. |
+| route_all_chat_openai_to_responses | boolean | `true`이면 모든 OpenAI `/chat/completions` 요청을 Responses API bridge로 라우팅합니다. OpenAI model에는 권장됩니다. `LITELLM_ROUTE_ALL_CHAT_OPENAI_TO_RESPONSES=true` env var로도 설정할 수 있습니다. |
+| skip_system_message_in_guardrail | boolean | `true`이면 unified guardrail이 **chat completions**와 **Anthropic `/v1/messages`**에서만 스캔 입력의 `role: system`을 생략합니다. LLM에는 전체 메시지가 계속 전달됩니다. guardrail별 override는 각 guardrail의 `litellm_params.skip_system_message_in_guardrail`로 설정합니다. [가드레일 quick start](/docs/proxy/guardrails/quick_start#skip-system-messages-in-guardrail-evaluation) |
+| disable_hf_tokenizer_download | boolean | `true`이면 모든 model(huggingface model 포함)에 openai tokenizer를 기본으로 사용합니다. |
+| enable_json_schema_validation | boolean | `true`이면 모든 요청에 json schema validation을 활성화합니다. |
+| enable_key_alias_format_validation | boolean | `true`이면 `/key/generate`와 `/key/update`에서 `key_alias` 형식을 검증합니다. 2-255자, 시작/끝은 alphanumeric, 허용 문자는 `a-zA-Z0-9_-/.@`입니다. 기본값은 `false`입니다. |
+| user_url_validation | boolean | 기본값은 `true`입니다. `true`이면 proxy가 fetch 전에 사용자 제어 URL(예: `http(s)` URL인 OpenAPI `spec_path`, image URL 등)을 검증합니다. DNS를 확인하고, URL의 **hostname**이 `user_url_allowed_hosts`에 없으면 RFC1918, loopback, link-local 등 globally-routable이 아닌 주소 연결을 차단합니다. URL 제공자를 신뢰할 수 있을 때만 `false`로 설정해 검증을 건너뜁니다. **`general_settings`가 아니라 `litellm_settings` 아래에 설정해야 합니다.** |
+| user_url_allowed_hosts | 문자열 배열 | `user_url_validation`이 `true`일 때 private/internal IP로 resolve될 수 있는 hostname 목록입니다. host는 **URL에 나타난 그대로** 맞춰야 합니다(예: `api.corp.internal`, `127.0.0.1`, `127.0.0.1:8080`, `[::1]:443`). split-horizon DNS에서는 resolved `10.x` 주소가 아니라 public hostname을 allowlist에 넣습니다. **`general_settings`가 아니라 `litellm_settings` 아래에 설정해야 합니다.** [MCP from OpenAPI](../mcp_openapi#internal-spec-urls-ssrf)를 참고하세요. |
+| disable_copilot_system_to_assistant | boolean | **DEPRECATED** - GitHub Copilot API는 system prompt를 지원합니다. |
+| default_team_params | object | `/team/new`로 생성되는 모든 새 team(SSO로 자동 생성되는 team 포함)에 적용할 기본 파라미터입니다. 요청에서 명시하지 않은 필드만 채웁니다. 하위 필드: `max_budget`(float), `budget_duration`(string, 예: `"30d"`), `tpm_limit`(integer), `rpm_limit`(integer), `team_member_permissions`(문자열 배열, 예: `["/team/daily/activity", "/key/generate"]`), `models`(문자열 배열 - SSO 자동 생성 team에만 적용). |
 
-### general_settings - Reference
+### general_settings - 참조 {#general_settings---reference}
 
-| Name | Type | Description |
+| 이름 | 타입 | 설명 |
 |------|------|-------------|
-| completion_model | string | The model to use for all completions, overriding any `model` specified in the request |
-| disable_spend_logs | boolean | If true, turns off writing each transaction to the database |
-| disable_spend_updates | boolean | If true, turns off all spend updates to the DB. Including key/user/team spend updates. |
-| disable_master_key_return | boolean | If true, turns off returning master key on UI. (checked on '/user/info' endpoint) |
-| disable_retry_on_max_parallel_request_limit_error | boolean | If true, turns off retries when max parallel request limit is reached |
-| disable_reset_budget | boolean | If true, turns off reset budget scheduled task |
-| disable_adding_master_key_hash_to_db | boolean | If true, turns off storing master key hash in db |
-| disable_responses_id_security | boolean | If true, disables response ID security checks that prevent users from accessing response IDs from other users. When false (default), response IDs are encrypted with user information to ensure users can only access their own responses. Applies to /v1/responses endpoints |
-| enable_jwt_auth | boolean | allow proxy admin to auth in via jwt tokens with 'litellm_proxy_admin' in claims. [Doc on JWT Tokens](token_auth) |
-| enforce_user_param | boolean | If true, requires all OpenAI endpoint requests to have a 'user' param. [Doc on call hooks](call_hooks)|
-| reject_clientside_metadata_tags | boolean | If true, rejects requests that contain client-side 'metadata.tags' to prevent users from influencing budgets by sending different tags. Tags can only be inherited from the API key metadata. |
-| allowed_routes | array of strings | List of allowed proxy API routes a user can access [Doc on controlling allowed routes](enterprise#control-available-public-private-routes)|
-| key_management_system | string | Specifies the key management system. [Doc Secret Managers](../secret) |
-| master_key | string | The master key for the proxy [Set up Virtual Keys](virtual_keys) |
-| database_url | string | The URL for the database connection [Set up Virtual Keys](virtual_keys) |
-| database_connection_pool_limit | integer | The limit for database connection pool [Setting DB Connection Pool limit](#configure-db-pool-limits--connection-timeouts) |
-| database_connection_timeout | integer | The timeout for database connections in seconds [Setting DB Connection Pool limit, timeout](#configure-db-pool-limits--connection-timeouts) |
-| database_connect_timeout | float | Maps to the Prisma [`connect_timeout`](https://www.prisma.io/docs/orm/overview/databases/postgresql) URL param (seconds). Bounds how long the engine waits to establish a new connection before failing. Defaults to Prisma's built-in value when unset. |
-| database_socket_timeout | float | Maps to the Prisma [`socket_timeout`](https://www.prisma.io/docs/orm/overview/databases/postgresql) URL param (seconds). When set, an idle or slow connection that has not produced data within this window is closed. **Use this to cap idle Prisma connections from LiteLLM.** |
-| database_extra_connection_params | object | Escape hatch — extra key/value pairs appended verbatim to the Prisma `DATABASE_URL` / `DIRECT_URL` query string (e.g. `sslmode`, `pgbouncer`, `statement_cache_size`). Keys here override any default LiteLLM sets. |
-| allow_requests_on_db_unavailable | boolean | If true, allows requests to succeed even if DB is unreachable. **Only use this if running LiteLLM in your VPC** This will allow requests to work even when LiteLLM cannot connect to the DB to verify a Virtual Key [Doc on graceful db unavailability](prod#5-if-running-litellm-on-vpc-gracefully-handle-db-unavailability) |
-| custom_auth | string | Write your own custom authentication logic [Doc Custom Auth](virtual_keys#custom-auth) |
-| max_parallel_requests | integer | The max parallel requests allowed per deployment |
-| global_max_parallel_requests | integer | The max parallel requests allowed on the proxy overall |
-| infer_model_from_keys | boolean | If true, infers the model from the provided keys |
-| background_health_checks | boolean | If true, enables background health checks. [Doc on health checks](health) |
-| health_check_interval | integer | The interval for health checks in seconds [Doc on health checks](health) |
-| alerting | array of strings | List of alerting methods [Doc on Slack Alerting](alerting) |
-| alerting_threshold | integer | The threshold for triggering alerts [Doc on Slack Alerting](alerting) |
-| use_client_credentials_pass_through_routes | boolean | If true, uses client credentials for all pass-through routes. [Doc on pass through routes](pass_through) |
-| health_check_details | boolean | If false, hides health check details (e.g. remaining rate limit). [Doc on health checks](health) |
-| public_routes | List[str] | (Enterprise Feature) Control list of public routes |
-| alert_types | List[str] | Control list of alert types to send to slack (Doc on alert types)[./alerting.md] |
-| enforced_params | List[str] | (Enterprise Feature) List of params that must be included in all requests to the proxy |
-| enable_oauth2_auth | boolean | (Enterprise Feature) If true, enables oauth2.0 authentication on LLM + info routes |
-| use_x_forwarded_for | str | If true, uses the `X-Forwarded-For` header to derive the client IP and (for MCP OAuth) the proxy's public origin from `X-Forwarded-Proto` / `X-Forwarded-Host` / `X-Forwarded-Port`. For MCP OAuth, headers are honored only when `mcp_trusted_proxy_ranges` is also set and the request peer's IP falls inside one of those CIDRs. For ingressed deployments, prefer [`PROXY_BASE_URL`](#environment-variables---reference). See [MCP OAuth — Reverse proxy and ingress configuration](../mcp_oauth#reverse-proxy-and-ingress-configuration). |
-| service_account_settings | List[Dict[str, Any]] | Set `service_account_settings` if you want to create settings that only apply to service account keys (Doc on service accounts)[./service_accounts.md] | 
-| image_generation_model | str | The default model to use for image generation - ignores model set in request |
-| store_model_in_db | boolean | If true, enables storing model + credential information in the DB. |
-| supported_db_objects | List[str] | Fine-grained control over which object types to load from the database when `store_model_in_db` is True. Available types: `"models"`, `"mcp"`, `"guardrails"`, `"vector_stores"`, `"pass_through_endpoints"`, `"prompts"`, `"model_cost_map"`. If not set, all object types are loaded (default behavior). Example: `supported_db_objects: ["mcp"]` to only load MCP servers from DB. |
-| user_mcp_management_mode | string | Controls what non-admins can see on the MCP dashboard. `restricted` (default) only lists MCP servers that the user’s teams are explicitly allowed to access. `view_all` lets every user see the full MCP server list. Tool list/call always respects per-key permissions, so users still cannot run MCP calls without access. |
-| store_prompts_in_spend_logs | boolean | If true, allows prompts and responses to be stored in the spend logs table. |
-| max_request_size_mb | int | The maximum size for requests in MB. Requests above this size will be rejected. |
-| max_response_size_mb | int | The maximum size for responses in MB. LLM Responses above this size will not be sent. |
-| proxy_budget_rescheduler_min_time | int | The minimum time (in seconds) to wait before checking db for budget resets. **Default is 597 seconds** |
-| proxy_budget_rescheduler_max_time | int | The maximum time (in seconds) to wait before checking db for budget resets. **Default is 605 seconds** |
-| proxy_batch_write_at | int | Time (in seconds) to wait before batch writing spend logs to the db. **Default is 10 seconds** |
-| proxy_batch_polling_interval | int | Time (in seconds) to wait before polling a batch, to check if it's completed. **Default is 6000 seconds (1 hour)** |
-| alerting_args | dict | Args for Slack Alerting [Doc on Slack Alerting](./alerting.md) |
-| custom_key_generate | str | Custom function for key generation [Doc on custom key generation](./virtual_keys.md#custom--key-generate) |
-| allowed_ips | List[str] | List of IPs allowed to access the proxy. If not set, all IPs are allowed. |
-| embedding_model | str | The default model to use for embeddings - ignores model set in request |
-| default_team_disabled | boolean | If true, users cannot create 'personal' keys (keys with no team_id). |
-| alert_to_webhook_url | Dict[str] | [Specify a webhook url for each alert type.](./alerting.md#set-specific-slack-channels-per-alert-type) |
-| key_management_settings | List[Dict[str, Any]] | Settings for key management system (e.g. AWS KMS, Azure Key Vault) [Doc on key management](../secret.md) |
-| allow_user_auth | boolean | (Deprecated) old approach for user authentication. |
-| user_api_key_cache_ttl | int | The time (in seconds) to cache user api keys in memory. |
-| disable_prisma_schema_update | boolean | If true, turns off automatic schema updates to DB |
-| litellm_key_header_name | str | If set, allows passing LiteLLM keys as a custom header. [Doc on custom headers](./virtual_keys.md#custom-headers) |
-| moderation_model | str | The default model to use for moderation. |
-| custom_sso | str | Path to a python file that implements custom SSO logic. [Doc on custom SSO](./custom_sso.md) |
-| allow_client_side_credentials | boolean | If true, allows passing client side credentials to the proxy. (Useful when testing finetuning models) [Doc on client side credentials](./virtual_keys.md#client-side-credentials) |
-| admin_only_routes | List[str] | (Enterprise Feature) List of routes that are only accessible to admin users. [Doc on admin only routes](./enterprise#control-available-public-private-routes) |
-| use_azure_key_vault | boolean | If true, load keys from azure key vault | 
-| use_google_kms | boolean | If true, load keys from google kms |
-| spend_report_frequency | str | Specify how often you want a Spend Report to be sent (e.g. "1d", "2d", "30d") [More on this](./alerting.md#spend-report-frequency) |
-| ui_access_mode | Literal["admin_only"] | If set, restricts access to the UI to admin users only. [Docs](./ui.md#restrict-ui-access) |
-| litellm_jwtauth | Dict[str, Any] | Settings for JWT authentication. [Docs](./token_auth.md) |
-| litellm_license | str | The license key for the proxy. [Docs](../enterprise.md#how-does-deployment-with-enterprise-license-work) |
-| oauth2_config_mappings | Dict[str, str] | Define the OAuth2 config mappings | 
-| pass_through_endpoints | List[Dict[str, Any]] | Define the pass through endpoints. [Docs](./pass_through) |
-| enable_oauth2_proxy_auth | boolean | (Enterprise Feature) If true, enables oauth2.0 authentication |
-| forward_openai_org_id | boolean | If true, forwards the OpenAI Organization ID to the backend LLM call (if it's OpenAI). |
-| forward_client_headers_to_llm_api | boolean | If true, forwards the client headers (any `x-` headers and `anthropic-beta` headers) to the backend LLM call |
-| maximum_spend_logs_retention_period               | str                   | Used to set the max retention time for spend logs in the db, after which they will be auto-purged                                                                                                                                                                                                                             |
-| maximum_spend_logs_retention_interval             | str                   | Used to set the interval in which the spend log cleanup task should run in.                                                                                                                                                                                                                                                   |
-| alert_type_config | dict | Configuration mapping alert types to their handler settings |
-| always_include_stream_usage | boolean | If true, includes usage metrics in every streaming response chunk |
-| auto_redirect_ui_login_to_sso | boolean | If true, automatically redirects UI login page to SSO provider |
-| control_plane_url | string | URL of the control plane for cross-instance state sharing |
-| custom_auth_run_common_checks | boolean | If true, runs standard auth validation checks alongside custom auth handlers |
-| custom_ui_sso_sign_in_handler | string | Custom handler for SSO sign-in logic in the UI |
-| database_connection_pool_timeout | integer | Database connection pool timeout in seconds |
-| disable_error_logs | boolean | If true, suppresses error tracking and storage in the database |
-| enable_health_check_routing | boolean | If true, enables health check-driven request routing to avoid unhealthy deployments |
-| health_check_ignore_transient_errors | boolean | If true, 429 (rate limit) and 408 (timeout) health check failures are ignored and do not affect routing or cooldown |
-| enable_mcp_registry | boolean | If true, enables access to the centralized MCP server registry |
-| enforce_rbac | boolean | If true, enables role-based access control (RBAC) for all proxy operations |
-| forward_llm_provider_auth_headers | boolean | If true, forwards provider-specific auth headers to LLM API calls |
-| health_check_concurrency | integer | Maximum number of concurrent health check operations |
-| health_check_skip_disabled_background_models | boolean | If true, skips health probes for deployments with `model_info.disable_background_health_check: true` on on-demand `GET /health` and related health runs (not only the background loop). [Doc on health checks](health) |
-| health_check_staleness_threshold | integer | Maximum age in seconds for health check results before marking deployments as stale |
-| maximum_spend_logs_cleanup_cron | string | Cron expression for scheduling automatic spend log cleanup tasks |
-| mcp_client_side_auth_header_name | string | HTTP header name for client-side MCP server credentials |
-| mcp_internal_ip_ranges | list | CIDR ranges considered internal for non-public MCP server access control |
-| mcp_required_fields | list | List of required field names for MCP server submissions |
-| mcp_trusted_proxy_ranges | list | CIDR ranges of proxies trusted to forward `X-Forwarded-*` headers for MCP. Required (in addition to `use_x_forwarded_for: true`) for the MCP OAuth `authorize` endpoint to derive its public origin from those headers. Without this, headers are ignored and the proxy falls back to the request's literal base URL. For ingressed deployments, prefer [`PROXY_BASE_URL`](#environment-variables---reference). See [MCP OAuth — Reverse proxy and ingress configuration](../mcp_oauth#reverse-proxy-and-ingress-configuration). |
-| require_end_user_mcp_access_defined | boolean | If true, requires end users to have explicit MCP access permissions defined |
-| role_permissions | list | List of role-based permission configurations |
-| search_tools | list | List of search tool configurations for enabling web search capabilities |
-| token_rate_limit_type | string | Rate limit counting method: "total", "output", or "input" tokens |
-| use_redis_transaction_buffer | boolean | If true, buffers database transactions in Redis before writing |
-| use_shared_health_check | boolean | If true, uses Redis-backed shared health check state across multiple proxy instances |
-| user_header_mappings | dict | Map custom request headers to user IDs using lookup rules |
-| user_header_name | string | HTTP header name to extract user identity from requests |
+| completion_model | string | 모든 completion에 사용할 model입니다. 요청에 지정된 `model`을 override합니다. |
+| disable_spend_logs | boolean | `true`이면 각 transaction을 데이터베이스에 기록하지 않습니다. |
+| disable_spend_updates | boolean | `true`이면 key/user/team spend update를 포함해 모든 spend update를 DB에 쓰지 않습니다. |
+| disable_master_key_return | boolean | `true`이면 UI에서 master key를 반환하지 않습니다. (`/user/info` endpoint에서 확인) |
+| disable_retry_on_max_parallel_request_limit_error | boolean | `true`이면 max parallel request limit에 도달했을 때 retry를 끕니다. |
+| disable_reset_budget | boolean | `true`이면 budget reset scheduled task를 끕니다. |
+| disable_adding_master_key_hash_to_db | boolean | `true`이면 master key hash를 db에 저장하지 않습니다. |
+| disable_responses_id_security | boolean | `true`이면 사용자가 다른 사용자의 response ID에 접근하지 못하게 하는 response ID security check를 비활성화합니다. `false`(기본값)이면 response ID가 사용자 정보로 암호화되어 사용자가 자신의 response에만 접근할 수 있습니다. `/v1/responses` endpoint에 적용됩니다. |
+| enable_jwt_auth | boolean | claim에 `litellm_proxy_admin`이 있는 jwt token으로 proxy admin 인증을 허용합니다. [JWT Tokens 문서](token_auth) |
+| enforce_user_param | boolean | `true`이면 모든 OpenAI endpoint 요청에 `user` param이 필요합니다. [call hook 문서](call_hooks) |
+| reject_clientside_metadata_tags | boolean | `true`이면 클라이언트 측 `metadata.tags`가 포함된 요청을 거부해 사용자가 tag를 바꿔 budget에 영향을 주지 못하게 합니다. tag는 API key metadata에서만 상속될 수 있습니다. |
+| allowed_routes | 문자열 배열 | 사용자가 접근할 수 있는 proxy API route 목록입니다. [allowed route 제어 문서](enterprise#control-available-public-private-routes) |
+| key_management_system | string | key management system을 지정합니다. [Secret Managers 문서](../secret) |
+| master_key | string | proxy의 master key입니다. [가상 키 설정](virtual_keys) |
+| database_url | string | 데이터베이스 연결 URL입니다. [가상 키 설정](virtual_keys) |
+| database_connection_pool_limit | integer | 데이터베이스 연결 pool limit입니다. [DB Connection Pool limit 설정](#configure-db-pool-limits--connection-timeouts) |
+| database_connection_timeout | integer | 데이터베이스 연결 timeout(초)입니다. [DB Connection Pool limit/timeout 설정](#configure-db-pool-limits--connection-timeouts) |
+| allow_requests_on_db_unavailable | boolean | `true`이면 DB에 도달할 수 없어도 요청 성공을 허용합니다. **LiteLLM을 VPC에서 실행할 때만 사용하세요.** LiteLLM이 DB에 연결해 Virtual Key를 검증할 수 없을 때도 요청이 동작할 수 있습니다. [DB unavailable graceful handling 문서](/docs/proxy/prod#5-if-running-litellm-on-vpc-gracefully-handle-db-unavailability) |
+| custom_auth | string | 직접 작성한 사용자 정의 인증 logic입니다. [Custom Auth 문서](virtual_keys#custom-auth) |
+| max_parallel_requests | integer | deployment별 허용되는 최대 parallel request 수입니다. |
+| global_max_parallel_requests | integer | proxy 전체에서 허용되는 최대 parallel request 수입니다. |
+| infer_model_from_keys | boolean | `true`이면 제공된 key에서 model을 추론합니다. |
+| background_health_checks | boolean | `true`이면 백그라운드 health check를 활성화합니다. [health check 문서](health) |
+| health_check_interval | integer | health check 간격(초)입니다. [health check 문서](health) |
+| alerting | 문자열 배열 | alerting method 목록입니다. [Slack Alerting 문서](alerting) |
+| alerting_threshold | integer | alert 발생 임계값입니다. [Slack Alerting 문서](alerting) |
+| use_client_credentials_pass_through_routes | boolean | `true`이면 모든 pass-through route에 client credential을 사용합니다. [pass-through route 문서](pass_through) |
+| health_check_details | boolean | `false`이면 남은 rate limit 같은 health check detail을 숨깁니다. [health check 문서](health) |
+| public_routes | List[str] | (엔터프라이즈 Feature) public route 목록을 제어합니다. |
+| alert_types | List[str] | Slack으로 보낼 alert type 목록을 제어합니다. [alert type 문서](./alerting.md) |
+| enforced_params | List[str] | (엔터프라이즈 Feature) proxy로 들어오는 모든 요청에 포함되어야 하는 param 목록입니다. |
+| enable_oauth2_auth | boolean | (엔터프라이즈 Feature) `true`이면 LLM + info route에 oauth2.0 authentication을 활성화합니다. |
+| use_x_forwarded_for | str | `true`이면 `X-Forwarded-For` header를 사용해 client IP 주소를 가져옵니다. |
+| service_account_settings | List[Dict[str, Any]] | service account key에만 적용되는 설정을 만들려면 `service_account_settings`를 설정합니다. [service account 문서](./service_accounts.md) | 
+| image_generation_model | str | image generation에 사용할 기본 model입니다. 요청에 설정된 model은 무시합니다. |
+| store_model_in_db | boolean | `true`이면 model과 credential 정보를 DB에 저장합니다. |
+| supported_db_objects | List[str] | `store_model_in_db`가 True일 때 데이터베이스에서 load할 object type을 세밀하게 제어합니다. 사용 가능한 type은 `"models"`, `"mcp"`, `"guardrails"`, `"vector_stores"`, `"pass_through_endpoints"`, `"prompts"`, `"model_cost_map"`입니다. 설정하지 않으면 모든 object type을 load합니다(기본 동작). 예: `supported_db_objects: ["mcp"]`는 DB에서 MCP server만 load합니다. |
+| user_mcp_management_mode | string | non-admin이 MCP dashboard에서 볼 수 있는 항목을 제어합니다. `restricted`(기본값)는 사용자의 team이 명시적으로 접근 허용된 MCP server만 표시합니다. `view_all`은 모든 사용자에게 전체 MCP server 목록을 보여줍니다. tool list/call은 항상 key별 권한을 따르므로, 접근 권한이 없으면 MCP call은 실행할 수 없습니다. |
+| store_prompts_in_spend_logs | boolean | `true`이면 prompt와 response를 spend logs table에 저장할 수 있습니다. |
+| max_request_size_mb | int | 요청 최대 크기(MB)입니다. 이 크기를 넘는 요청은 거부됩니다. |
+| max_response_size_mb | int | 응답 최대 크기(MB)입니다. 이 크기를 넘는 LLM Response는 전송되지 않습니다. |
+| proxy_budget_rescheduler_min_time | int | budget reset 확인을 위해 db를 조회하기 전 대기하는 최소 시간(초)입니다. **기본값은 597 seconds입니다.** |
+| proxy_budget_rescheduler_max_time | int | budget reset 확인을 위해 db를 조회하기 전 대기하는 최대 시간(초)입니다. **기본값은 605 seconds입니다.** |
+| proxy_batch_write_at | int | spend log를 db에 batch write하기 전 대기 시간(초)입니다. **기본값은 10 seconds입니다.** |
+| proxy_batch_polling_interval | int | batch 완료 여부를 확인하기 위해 polling하기 전 대기 시간(초)입니다. **기본값은 6000 seconds(1 hour)입니다.** |
+| alerting_args | dict | Slack Alerting 인자입니다. [Slack Alerting 문서](./alerting.md) |
+| custom_key_generate | str | key generation용 custom function입니다. [사용자 정의 key generation 문서](./virtual_keys.md#custom--key-generate) |
+| allowed_ips | List[str] | proxy 접근을 허용할 IP 목록입니다. 설정하지 않으면 모든 IP가 허용됩니다. |
+| embedding_model | str | embedding에 사용할 기본 model입니다. 요청에 설정된 model은 무시합니다. |
+| default_team_disabled | boolean | `true`이면 사용자가 team_id 없는 `personal` key를 만들 수 없습니다. |
+| alert_to_webhook_url | Dict[str] | [각 alert type별 webhook URL을 지정합니다.](/docs/proxy/alerting#set-specific-slack-channels-per-alert-type) |
+| key_management_settings | List[Dict[str, Any]] | key management system 설정입니다(예: AWS KMS, Azure Key Vault). [key management 문서](../secret.md) |
+| allow_user_auth | boolean | (Deprecated) user authentication의 이전 방식입니다. |
+| user_api_key_cache_ttl | int | user api key를 memory에 cache할 시간(초)입니다. |
+| disable_prisma_schema_update | boolean | `true`이면 DB 자동 schema update를 끕니다. |
+| litellm_key_header_name | str | 설정하면 LiteLLM key를 custom header로 전달할 수 있습니다. [custom header 문서](./virtual_keys.md#custom-headers) |
+| moderation_model | str | moderation에 사용할 기본 model입니다. |
+| custom_sso | str | custom SSO logic을 구현하는 python file 경로입니다. [custom SSO 문서](./custom_sso.md) |
+| allow_client_side_credentials | boolean | `true`이면 클라이언트 측 credential을 proxy로 전달할 수 있습니다. finetuning model 테스트에 유용합니다. [클라이언트 측 credential 문서](./virtual_keys.md#클라이언트 측-credentials) |
+| admin_only_routes | List[str] | (엔터프라이즈 Feature) admin 사용자만 접근할 수 있는 route 목록입니다. [admin only route 문서](./enterprise#control-available-public-private-routes) |
+| use_azure_key_vault | boolean | `true`이면 azure key vault에서 key를 load합니다. | 
+| use_google_kms | boolean | `true`이면 google kms에서 key를 load합니다. |
+| spend_report_frequency | str | Spend Report를 보낼 주기를 지정합니다(예: `"1d"`, `"2d"`, `"30d"`). [관련 문서](./alerting.md#spend-report-frequency) |
+| ui_access_mode | Literal["admin_only"] | 설정하면 admin 사용자만 UI에 접근할 수 있습니다. [문서](./ui.md#restrict-ui-access) |
+| litellm_jwtauth | Dict[str, Any] | JWT authentication 설정입니다. [문서](./token_auth.md) |
+| litellm_license | str | proxy license key입니다. [문서](/docs/enterprise#how-does-deployment-with-enterprise-license-work) |
+| oauth2_config_mappings | Dict[str, str] | OAuth2 config mapping을 정의합니다. | 
+| pass_through_endpoints | List[Dict[str, Any]] | pass-through endpoint를 정의합니다. [문서](./pass_through) |
+| enable_oauth2_proxy_auth | boolean | (엔터프라이즈 Feature) `true`이면 oauth2.0 authentication을 활성화합니다. |
+| forward_openai_org_id | boolean | `true`이면 backend LLM call이 OpenAI일 때 OpenAI Organization ID를 전달합니다. |
+| forward_client_headers_to_llm_api | boolean | `true`이면 client header(`x-` header와 `anthropic-beta` header)를 backend LLM call로 전달합니다. |
+| maximum_spend_logs_retention_period               | str                   | spend log가 auto-purge되기 전 db에 보관되는 최대 시간을 설정합니다. |
+| maximum_spend_logs_retention_interval             | str                   | spend log cleanup task가 실행될 간격을 설정합니다. |
+| alert_type_config | dict | alert type을 handler 설정에 매핑하는 설정입니다. |
+| always_include_stream_usage | boolean | `true`이면 모든 streaming response chunk에 usage metrics를 포함합니다. |
+| auto_redirect_ui_login_to_sso | boolean | `true`이면 UI login page를 SSO provider로 자동 redirect합니다. |
+| control_plane_url | string | instance 간 state 공유을 위한 control plane URL입니다. |
+| custom_auth_run_common_checks | boolean | `true`이면 custom auth handler와 함께 표준 auth validation check를 실행합니다. |
+| custom_ui_sso_sign_in_handler | string | UI의 SSO sign-in logic용 custom handler입니다. |
+| database_connection_pool_timeout | integer | 데이터베이스 연결 pool timeout(초)입니다. |
+| disable_error_logs | boolean | `true`이면 데이터베이스의 error tracking 및 storage를 억제합니다. |
+| enable_health_check_routing | boolean | `true`이면 unhealthy deployment로 라우팅하지 않도록 health check 기반 request routing을 활성화합니다. |
+| health_check_ignore_transient_errors | boolean | `true`이면 429(rate limit)와 408(timeout) health check 실패를 무시해 routing이나 cooldown에 영향을 주지 않게 합니다. |
+| enable_mcp_registry | boolean | `true`이면 centralized MCP server registry 접근을 활성화합니다. |
+| enforce_rbac | boolean | `true`이면 모든 proxy operation에 role-based access control(RBAC)을 활성화합니다. |
+| forward_llm_provider_auth_headers | boolean | `true`이면 provider별 auth header를 LLM API call로 전달합니다. |
+| health_check_concurrency | integer | 동시에 실행할 수 있는 health check operation의 최대 수입니다. |
+| health_check_staleness_threshold | integer | health check result가 stale로 표시되기 전 최대 age(초)입니다. |
+| maximum_spend_logs_cleanup_cron | string | 자동 spend log cleanup task scheduling용 cron expression입니다. |
+| mcp_client_side_auth_header_name | string | 클라이언트 측 MCP server credential용 HTTP header 이름입니다. |
+| mcp_internal_ip_ranges | list | non-public MCP server access control에서 internal로 간주할 CIDR range입니다. |
+| mcp_required_fields | list | MCP server submission에 필요한 field name 목록입니다. |
+| mcp_trusted_proxy_ranges | list | MCP용 `X-Forwarded-For` header 전달을 신뢰할 proxy CIDR 범위입니다. |
+| require_end_user_mcp_access_defined | boolean | `true`이면 end user에게 명시적인 MCP access permission이 정의되어 있어야 합니다. |
+| role_permissions | list | role-based permission configuration 목록입니다. |
+| search_tools | list | web search capability를 활성화하기 위한 search tool configuration 목록입니다. |
+| token_rate_limit_type | string | rate limit 계산 방식입니다. `"total"`, `"output"`, `"input"` token 중 하나입니다. |
+| use_redis_transaction_buffer | boolean | `true`이면 데이터베이스 transaction을 쓰기 전에 Redis에 buffer합니다. |
+| use_shared_health_check | boolean | `true`이면 여러 proxy instance에서 Redis-backed shared health check state를 사용합니다. |
+| user_header_mappings | dict | lookup rule을 사용해 custom request header를 user ID에 매핑합니다. |
+| user_header_name | string | 요청에서 user identity를 추출할 HTTP header 이름입니다. |
 
-### router_settings - Reference
+### router_settings - 참조 {#router_settings---reference}
 
 :::info
 
-Most values can also be set via `litellm_settings`. If you see overlapping values, settings on
-`router_settings` will override those on `litellm_settings`. :::
+대부분의 값은 `litellm_settings`로도 설정할 수 있습니다. 겹치는 값이 있으면
+`router_settings`의 설정이 `litellm_settings`의 값을 override합니다. :::
 
 ```yaml
 router_settings:
-  routing_strategy: simple-shuffle # Literal["simple-shuffle", "least-busy", "usage-based-routing","latency-based-routing"], default="simple-shuffle" - RECOMMENDED for best performance
+  routing_strategy: simple-shuffle # Literal["simple-shuffle", "least-busy", "usage-based-routing","latency-based-routing"], default="simple-shuffle" - 성능상 권장
   redis_host: <your-redis-host>           # string
   redis_password: <your-redis-password>   # string
   redis_port: <your-redis-port>           # string
-  enable_pre_call_checks: true            # bool - Before call is made check if a call is within model context window
-  allowed_fails: 3 # cooldown model if it fails > 1 call in a minute.
-  cooldown_time: 30 # (in seconds) how long to cooldown model if fails/min > allowed_fails
-  disable_cooldowns: True                  # bool - Disable cooldowns for all models
-  enable_tag_filtering: True                # bool - Use tag based routing for requests
-  tag_filtering_match_any: True             # bool - Tag matching behavior (only when enable_tag_filtering=true). `true`: match if deployment has ANY requested tag; `false`: match only if deployment has ALL requested tags
-  retry_policy: {                          # Dict[str, int]: retry policy for different types of exceptions
+  enable_pre_call_checks: true            # bool - 호출 전 요청이 model context window 안에 있는지 확인
+  allowed_fails: 3 # 1분 안에 1회보다 많이 실패하면 model cooldown
+  cooldown_time: 30 # (초) fails/min > allowed_fails일 때 model cooldown 기간
+  disable_cooldowns: True                  # bool - 모든 model cooldown 비활성화
+  enable_tag_filtering: True                # bool - Use tag 기반 routing for requests
+  tag_filtering_match_any: True             # bool - tag matching 동작(enable_tag_filtering=true일 때만). `true`: deployment가 요청 tag 중 하나라도 가지면 match; `false`: 모든 요청 tag를 가져야 match
+  retry_policy: {                          # Dict[str, int]: exception type별 retry policy
     "AuthenticationErrorRetries": 3,
     "TimeoutErrorRetries": 3,
     "RateLimitErrorRetries": 3,
@@ -363,802 +356,790 @@ router_settings:
     "InternalServerErrorRetries": 4
   }
   allowed_fails_policy: {
-    "BadRequestErrorAllowedFails": 1000, # Allow 1000 BadRequestErrors before cooling down a deployment
+    "BadRequestErrorAllowedFails": 1000, # deployment cooldown 전 BadRequestError 1000회 허용
     "AuthenticationErrorAllowedFails": 10, # int
     "TimeoutErrorAllowedFails": 12, # int
     "RateLimitErrorAllowedFails": 10000, # int
     "ContentPolicyViolationErrorAllowedFails": 15, # int
     "InternalServerErrorAllowedFails": 20, # int
   }
-  content_policy_fallbacks=[{"claude-2": ["my-fallback-model"]}] # List[Dict[str, List[str]]]: Fallback model for content policy violations
-  fallbacks=[{"claude-2": ["my-fallback-model"]}] # List[Dict[str, List[str]]]: Fallback model for all errors
+  content_policy_fallbacks=[{"claude-2": ["my-fallback-model"]}] # List[Dict[str, List[str]]]: content policy violation용 fallback model
+  fallbacks=[{"claude-2": ["my-fallback-model"]}] # List[Dict[str, List[str]]]: 모든 error용 fallback model
 ```
 
-| Name | Type | Description |
+| 이름 | 타입 | 설명 |
 |------|------|-------------|
-| routing_strategy | string | The strategy used for routing requests. Options: "simple-shuffle", "least-busy", "usage-based-routing", "latency-based-routing". Default is "simple-shuffle". [More information here](../routing) |
-| redis_host | string | The host address for the Redis server. **Only set this if you have multiple instances of LiteLLM Proxy and want current tpm/rpm tracking to be shared across them** |
-| redis_password | string | The password for the Redis server. **Only set this if you have multiple instances of LiteLLM Proxy and want current tpm/rpm tracking to be shared across them** |
-| redis_port | string | The port number for the Redis server. **Only set this if you have multiple instances of LiteLLM Proxy and want current tpm/rpm tracking to be shared across them**|
-| redis_db | int | The database number for the Redis server. **Only set this if you have multiple instances of LiteLLM Proxy and want current tpm/rpm tracking to be shared across them**|
-| enable_pre_call_check | boolean | If true, checks if a call is within the model's context window before making the call. [More information here](reliability) |
-| content_policy_fallbacks | array of objects | Specifies fallback models for content policy violations. [More information here](reliability) |
-| fallbacks | array of objects | Specifies fallback models for all types of errors. [More information here](reliability) |
-| enable_tag_filtering | boolean | If true, uses tag based routing for requests [Tag Based Routing](tag_routing) |
-| enable_weighted_failover | boolean | If true and `routing_strategy` is `simple-shuffle`, a retryable failure on one deployment re-picks (weighted) across other deployments in the same model group before cross-group fallbacks. Default: false. |
-| tag_filtering_match_any | boolean | Tag matching behavior (only when enable_tag_filtering=true). `true`: match if deployment has ANY requested tag; `false`: match only if deployment has ALL requested tags |
-| cooldown_time | integer | The duration (in seconds) to cooldown a model if it exceeds the allowed failures. |
-| disable_cooldowns | boolean | If true, disables cooldowns for all models. [More information here](reliability) |
-| retry_policy | object | Specifies the number of retries for different types of exceptions. [More information here](reliability) |
-| allowed_fails | integer | The number of failures allowed before cooling down a model. [More information here](reliability) |
-| allowed_fails_policy | object | Specifies the number of allowed failures for different error types before cooling down a deployment. [More information here](reliability) |
-| default_max_parallel_requests | Optional[int] | The default maximum number of parallel requests for a deployment. |
-| default_priority | (Optional[int]) | The default priority for a request. Only for '.scheduler_acompletion()'. Default is None. | 
-| polling_interval | (Optional[float]) | frequency of polling queue. Only for '.scheduler_acompletion()'. Default is 3ms. |
-| max_fallbacks | Optional[int] | The maximum number of fallbacks to try before exiting the call. Defaults to 5. |
-| default_litellm_params | Optional[dict] | The default litellm parameters to add to all requests (e.g. `temperature`, `max_tokens`). |
-| timeout | Optional[float] | The default timeout for a request. Default is 10 minutes. |
-| stream_timeout | Optional[float] | The default timeout for a streaming request. If not set, the 'timeout' value is used. |
-| debug_level | Literal["DEBUG", "INFO"] | The debug level for the logging library in the router. Defaults to "INFO". |
-| client_ttl | int | Time-to-live for cached clients in seconds. Defaults to 3600. |
-| cache_kwargs | dict | Additional keyword arguments for the cache initialization. Use this for non-string Redis parameters that may fail when set via `REDIS_*` environment variables. |
-| routing_strategy_args | dict | Additional keyword arguments for the routing strategy - e.g. lowest latency routing default ttl |
-| model_group_alias | dict | Model group alias mapping. E.g. `{"claude-3-haiku": "claude-3-haiku-20240229"}` |
-| num_retries | int | Number of retries for a request. Defaults to 3. |
-| default_fallbacks | Optional[List[str]] | Fallbacks to try if no model group-specific fallbacks are defined. |
-| caching_groups | Optional[List[tuple]] | List of model groups for caching across model groups. Defaults to None. - e.g. caching_groups=[("openai-gpt-3.5-turbo", "azure-gpt-3.5-turbo")]|
-| alerting_config | AlertingConfig | [SDK-only arg] Slack alerting configuration. Defaults to None. [Further Docs](../routing.md#alerting-) |
-| assistants_config | AssistantsConfig | Set on proxy via `assistant_settings`. [Further docs](../assistants.md) |
-| set_verbose | boolean | [DEPRECATED PARAM - see debug docs](./debugging) If true, sets the logging level to verbose. |
-| retry_after | int | Time to wait before retrying a request in seconds. Defaults to 0. If `x-retry-after` is received from LLM API, this value is overridden. |
-| provider_budget_config | ProviderBudgetConfig | Provider budget configuration. Use this to set llm_provider budget limits. example $100/day to OpenAI, $100/day to Azure, etc. Defaults to None. [Further Docs](./provider_budget_routing.md) |
-| enable_pre_call_checks | boolean | If true, checks if a call is within the model's context window before making the call. **Required** for `model_info.max_input_tokens` enforcement. Default: false. [More information here](reliability) |
-| model_group_retry_policy | Dict[str, RetryPolicy] | [SDK-only arg] Set retry policy for model groups. |
-| context_window_fallbacks | List[Dict[str, List[str]]] | Fallback models for context window violations. |
-| redis_url | str | URL for Redis server. **Known performance issue with Redis URL.** |
-| cache_responses | boolean | Flag to enable caching LLM Responses, if cache set under `router_settings`. If true, caches responses. Defaults to False. |
-| router_general_settings | RouterGeneralSettings | [SDK-Only] Router general settings - contains optimizations like 'async_only_mode'. [Docs](../routing.md#router-general-settings) |
-| optional_pre_call_checks | List[str] | List of pre-call checks to add to the router. Supported: `router_budget_limiting`, `prompt_caching`, `responses_api_deployment_check`, `encrypted_content_affinity` (requires LiteLLM >= 1.82.3), `deployment_affinity`, `session_affinity`, `forward_client_headers_by_model_group` |
-| deployment_affinity_ttl_seconds | int | TTL (seconds) for user-key → deployment affinity mapping when `deployment_affinity` is enabled (configured at Router init / proxy startup). Defaults to `3600` (1 hour). |
-| model_group_affinity_config | Dict[str, List[str]] | Per-model-group affinity flags. Keys are model group names; values are lists of checks to enable (`deployment_affinity`, `responses_api_deployment_check`, `session_affinity`). Groups not listed fall back to the global `optional_pre_call_checks`. [Docs](../response_api.md#per-model-group-affinity-configuration) |
-| ignore_invalid_deployments | boolean | If true, ignores invalid deployments. Default for proxy is True - to prevent invalid models from blocking other models from being loaded. |
-| search_tools | List[SearchToolTypedDict] | List of search tool configurations for Search API integration. Each tool specifies a search_tool_name and litellm_params with search_provider, api_key, api_base, etc. [Further Docs](../search/index.md) |
-| guardrail_list | List[GuardrailTypedDict] | List of guardrail configurations for guardrail load balancing. Enables load balancing across multiple guardrail deployments with the same guardrail_name. [Further Docs](./guardrails/guardrail_load_balancing.md) |
-| enable_health_check_routing | boolean | If true, enables health check-driven deployment filtering to avoid routing requests to unhealthy deployments |
-| health_check_staleness_threshold | integer | Maximum age in seconds for cached health check results before marking deployments as stale |
-| health_check_ignore_transient_errors | boolean | If true, 429 (rate limit) and 408 (timeout) health check failures are ignored and do not affect routing or cooldown |
-| routing_groups | Optional[List[RoutingGroup]] | List of model groups that each apply their own routing strategy to a subset of models. Each group has a `group_name`, `models` (list of model names matched against the request's model), `routing_strategy`, and optional `routing_strategy_args`. Defaults to None. |
+| routing_strategy | string | 요청 라우팅에 사용할 strategy입니다. 옵션: "simple-shuffle", "least-busy", "usage-based-routing", "latency-based-routing". 기본값은 "simple-shuffle"입니다. [추가 정보](../routing) |
+| redis_host | string | Redis server host 주소입니다. **LiteLLM Proxy 인스턴스가 여러 개이고 현재 tpm/rpm 추적을 인스턴스 간 공유하려는 경우에만 설정하세요.** |
+| redis_password | string | Redis server password입니다. **LiteLLM Proxy 인스턴스가 여러 개이고 현재 tpm/rpm 추적을 인스턴스 간 공유하려는 경우에만 설정하세요.** |
+| redis_port | string | Redis server port 번호입니다. **LiteLLM Proxy 인스턴스가 여러 개이고 현재 tpm/rpm 추적을 인스턴스 간 공유하려는 경우에만 설정하세요.** |
+| redis_db | int | Redis server 데이터베이스 number입니다. **LiteLLM Proxy 인스턴스가 여러 개이고 현재 tpm/rpm 추적을 인스턴스 간 공유하려는 경우에만 설정하세요.** |
+| enable_pre_call_check | boolean | `true`이면 호출 실행 전에 요청이 model context window 안에 들어오는지 확인합니다. [추가 정보](reliability) |
+| content_policy_fallbacks | array of objects | content policy violation에 사용할 fallback model을 지정합니다. [추가 정보](reliability) |
+| fallbacks | array of objects | 모든 오류 유형에 사용할 fallback model을 지정합니다. [추가 정보](reliability) |
+| enable_tag_filtering | boolean | `true`이면 request에 tag 기반 routing을 사용합니다. [Tag Based Routing](tag_routing) |
+| tag_filtering_match_any | boolean | tag matching 동작입니다(`enable_tag_filtering=true`일 때만 적용). `true`: deployment가 요청 tag 중 하나라도 가지면 match, `false`: 모든 요청 tag를 가져야 match합니다. |
+| cooldown_time | integer | 허용 failure 수를 초과했을 때 model을 cooldown할 기간(초)입니다. |
+| disable_cooldowns | boolean | `true`이면 모든 model의 cooldown을 비활성화합니다. [추가 정보](reliability) |
+| retry_policy | object | exception type별 retry 횟수를 지정합니다. [추가 정보](reliability) |
+| allowed_fails | integer | model cooldown 전 허용되는 failure 수입니다. [추가 정보](reliability) |
+| allowed_fails_policy | object | deployment cooldown 전 오류 유형별 허용 failure 수를 지정합니다. [추가 정보](reliability) |
+| default_max_parallel_requests | Optional[int] | deployment의 기본 최대 parallel request 수입니다. |
+| default_priority | (Optional[int]) | request의 기본 priority입니다. `.scheduler_acompletion()`에서만 사용합니다. 기본값은 None입니다. | 
+| polling_interval | (Optional[float]) | polling queue 빈도입니다. `.scheduler_acompletion()`에서만 사용합니다. 기본값은 3ms입니다. |
+| max_fallbacks | Optional[int] | call 종료 전 시도할 최대 fallback 수입니다. 기본값은 5입니다. |
+| default_litellm_params | Optional[dict] | 모든 request에 추가할 기본 litellm parameter입니다(예: `temperature`, `max_tokens`). |
+| timeout | Optional[float] | request 기본 timeout입니다. 기본값은 10 minutes입니다. |
+| stream_timeout | Optional[float] | streaming request의 기본 timeout입니다. 설정하지 않으면 `timeout` 값을 사용합니다. |
+| debug_level | Literal["DEBUG", "INFO"] | router logging library의 debug level입니다. 기본값은 "INFO"입니다. |
+| client_ttl | int | cached client의 TTL(초)입니다. 기본값은 3600입니다. |
+| cache_kwargs | dict | cache 초기화에 넘길 추가 keyword argument입니다. `REDIS_*` environment variable로 설정하면 실패할 수 있는 non-string Redis parameter에 사용합니다. |
+| routing_strategy_args | dict | routing strategy에 넘길 추가 keyword argument입니다. 예: lowest latency routing 기본 TTL |
+| model_group_alias | dict | model group alias mapping입니다. 예: `{"claude-3-haiku": "claude-3-haiku-20240229"}` |
+| num_retries | int | request retry 횟수입니다. 기본값은 3입니다. |
+| default_fallbacks | Optional[List[str]] | model group별 fallback이 정의되지 않았을 때 시도할 fallback입니다. |
+| caching_groups | Optional[List[tuple]] | model group 간 caching에 사용할 model group 목록입니다. 기본값은 None입니다. 예: caching_groups=[("openai-gpt-3.5-turbo", "azure-gpt-3.5-turbo")] |
+| alerting_config | AlertingConfig | [SDK-only arg] Slack alerting configuration입니다. 기본값은 None입니다. [추가 문서](../routing.md#alerting-) |
+| assistants_config | AssistantsConfig | proxy에서는 `assistant_settings`로 설정합니다. [추가 문서](../assistants.md) |
+| set_verbose | boolean | [DEPRECATED PARAM - debug 문서 참고](./debugging) `true`이면 logging level을 verbose로 설정합니다. |
+| retry_after | int | request retry 전 대기 시간(초)입니다. 기본값은 0입니다. LLM API에서 `x-retry-after`를 받으면 이 값이 override됩니다. |
+| provider_budget_config | ProviderBudgetConfig | provider budget configuration입니다. llm_provider 예산 한도를 설정할 때 사용합니다. 예: OpenAI에 $100/day, Azure에 $100/day 등. 기본값은 None입니다. [추가 문서](./provider_budget_routing.md) |
+| enable_pre_call_checks | boolean | `true`이면 호출 실행 전에 요청이 model context window 안에 들어오는지 확인합니다. `model_info.max_input_tokens` enforcement에 **필수**입니다. 기본값: false. [추가 정보](reliability) |
+| model_group_retry_policy | Dict[str, RetryPolicy] | [SDK-only arg] model group별 retry policy를 설정합니다. |
+| context_window_fallbacks | List[Dict[str, List[str]]] | context window violation에 사용할 fallback model입니다. |
+| redis_url | str | Redis server URL입니다. **Redis URL에는 알려진 performance issue가 있습니다.** |
+| cache_responses | boolean | `router_settings` 아래에 cache가 설정된 경우 LLM 응답 caching을 활성화하는 flag입니다. `true`이면 response를 cache합니다. 기본값은 False입니다. |
+| router_general_settings | RouterGeneralSettings | [SDK-Only] router general setting입니다. `async_only_mode` 같은 optimization을 포함합니다. [문서](../routing.md#router-general-settings) |
+| optional_pre_call_checks | List[str] | router에 추가할 pre-call check 목록입니다. 지원 항목: `router_budget_limiting`, `prompt_caching`, `responses_api_deployment_check`, `encrypted_content_affinity`(LiteLLM >= 1.82.3 필요), `deployment_affinity`, `session_affinity`, `forward_client_headers_by_model_group` |
+| deployment_affinity_ttl_seconds | int | `deployment_affinity`가 활성화될 때 user-key → deployment affinity mapping TTL(초)입니다(Router init / proxy startup에서 구성). 기본값은 `3600`(1 hour)입니다. |
+| model_group_affinity_config | Dict[str, List[str]] | model group별 affinity flag입니다. key는 model group name이고 값은 활성화할 check 목록(`deployment_affinity`, `responses_api_deployment_check`, `session_affinity`)입니다. 목록에 없는 group은 global `optional_pre_call_checks`를 사용합니다. [문서](../response_api.md#per-model-group-affinity-configuration) |
+| ignore_invalid_deployments | boolean | `true`이면 invalid deployment를 무시합니다. invalid model이 다른 model load를 막지 않도록 proxy 기본값은 True입니다. |
+| search_tools | List[SearchToolTypedDict] | Search API integration용 search tool configuration 목록입니다. 각 tool은 search_tool_name과 search_provider, api_key, api_base 등을 포함한 litellm_params를 지정합니다. [추가 문서](../search/index.md) |
+| guardrail_list | List[GuardrailTypedDict] | guardrail load balancing용 guardrail configuration 목록입니다. 같은 guardrail_name을 가진 여러 guardrail deployment 간 load balancing을 활성화합니다. [추가 문서](./guardrails/guardrail_load_balancing.md) |
+| enable_health_check_routing | boolean | `true`이면 unhealthy deployment로 라우팅하지 않도록 health check 기반 deployment filtering을 활성화합니다. |
+| health_check_staleness_threshold | integer | cached health check result가 stale로 표시되기 전 최대 age(초)입니다. |
+| health_check_ignore_transient_errors | boolean | `true`이면 429(rate limit)와 408(timeout) health check 실패를 무시해 routing이나 cooldown에 영향을 주지 않게 합니다. |
+| routing_groups | Optional[List[RoutingGroup]] | 각자 routing strategy를 적용하는 model group 목록입니다. 각 group은 `group_name`, `models`(request model과 matching할 model name 목록), `routing_strategy`, 선택적 `routing_strategy_args`를 가집니다. 기본값은 None입니다. |
 
 
-### environment variables - Reference
+### 환경 변수 - 참조 {#environment-variables---reference}
 
-| Name | Description |
+| 이름 | 설명 |
 |------|-------------|
-| ACTIONS_ID_TOKEN_REQUEST_TOKEN | Token for requesting ID in GitHub Actions
-| ACTIONS_ID_TOKEN_REQUEST_URL | URL for requesting ID token in GitHub Actions
-| AGENTOPS_ENVIRONMENT | Environment for AgentOps logging integration
-| AGENTOPS_API_KEY | API Key for AgentOps logging integration
-| AGENTOPS_SERVICE_NAME | Service Name for AgentOps logging integration
-| AISPEND_ACCOUNT_ID | Account ID for AI Spend
-| AISPEND_API_KEY | API Key for AI Spend
-| AIOHTTP_CONNECTOR_LIMIT | Connection limit for aiohttp connector. When set to 0, no limit is applied. **Default is 0**
-| AIOHTTP_CONNECTOR_LIMIT_PER_HOST | Connection limit per host for aiohttp connector. When set to 0, no limit is applied. **Default is 0**
-| AIOHTTP_KEEPALIVE_TIMEOUT | Keep-alive timeout for aiohttp connections in seconds. **Default is 120**
-| AIOHTTP_SO_KEEPALIVE | Enable TCP `SO_KEEPALIVE` on aiohttp sockets so idle provider connections are detected and reaped before NAT/load balancers silently drop them. **Default is False**
-| AIOHTTP_TCP_KEEPCNT | Number of unacknowledged TCP keepalive probes before the connection is considered dead (applies when `AIOHTTP_SO_KEEPALIVE=True`). **Default is 5**
-| AIOHTTP_TCP_KEEPIDLE | Seconds an aiohttp TCP connection must be idle before keepalive probes are sent (applies when `AIOHTTP_SO_KEEPALIVE=True`). **Default is 60**
-| AIOHTTP_TCP_KEEPINTVL | Seconds between successive aiohttp TCP keepalive probes (applies when `AIOHTTP_SO_KEEPALIVE=True`). **Default is 30**
-| AIOHTTP_TRUST_ENV | Flag to enable aiohttp trust environment. When this is set to True, aiohttp will respect HTTP(S)_PROXY env vars. **Default is False**
-| AIOHTTP_TTL_DNS_CACHE | DNS cache time-to-live for aiohttp in seconds. **Default is 300**
-| AKTO_GUARDRAIL_API_BASE | Base URL for the Akto Guardrail API (e.g. `http://localhost:9090`). Used by the Akto guardrail integration.
-| AKTO_API_KEY | API key for authenticating with the Akto Guardrail service.
-| ALLOWED_EMAIL_DOMAINS | List of email domains allowed for access
-| APSCHEDULER_COALESCE | Whether to combine multiple pending executions of a job into one. **Default is False**
-| APSCHEDULER_MAX_INSTANCES | Maximum number of concurrent instances of each job. **Default is 1**
-| APSCHEDULER_MISFIRE_GRACE_TIME | Grace time in seconds for misfired jobs. **Default is 1**
-| APSCHEDULER_REPLACE_EXISTING | Whether to replace existing jobs with the same ID. **Default is False**
-| ARIZE_API_KEY | API key for Arize platform integration
-| ARIZE_SPACE_KEY | Space key for Arize platform
-| ARGILLA_BATCH_SIZE | Batch size for Argilla logging
-| ARGILLA_API_KEY | API key for Argilla platform
-| ARGILLA_SAMPLING_RATE | Sampling rate for Argilla logging
-| ARGILLA_DATASET_NAME | Dataset name for Argilla logging
-| ARGILLA_BASE_URL | Base URL for Argilla service
-| ATHINA_API_KEY | API key for Athina service
-| ATHINA_BASE_URL | Base URL for Athina service (defaults to `https://log.athina.ai`)
-| AUTH_STRATEGY | Strategy used for authentication (e.g., OAuth, API key)
-| AUTO_REDIRECT_UI_LOGIN_TO_SSO | Flag to enable automatic redirect of UI login page to SSO when SSO is configured. Default is **false**
-| AUDIO_SPEECH_CHUNK_SIZE | Chunk size for audio speech processing. Default is 1024
-| ANTHROPIC_API_KEY | API key for Anthropic service. Uses `x-api-key` header for authentication.
-| ANTHROPIC_AUTH_TOKEN | Alternative auth token for Anthropic service. Uses `Authorization: Bearer` header instead of `x-api-key`. Used as fallback when `ANTHROPIC_API_KEY` is not set.
-| ANTHROPIC_API_BASE | Base URL for Anthropic API. Default is https://api.anthropic.com
-| ANTHROPIC_BASE_URL | Alternative to `ANTHROPIC_API_BASE` for setting the Anthropic API base URL. Used as fallback when `ANTHROPIC_API_BASE` is not set.
-| ANTHROPIC_TOKEN_COUNTING_BETA_VERSION | Beta version header for Anthropic token counting API. Default is `token-counting-2024-11-01`
-| AWS_ACCESS_KEY_ID | Access Key ID for AWS services
-| AWS_BATCH_ROLE_ARN | ARN of the AWS IAM role for batch operations
-| AWS_DEFAULT_REGION | Default AWS region for service interactions when AWS_REGION is not set
-| AWS_PROFILE_NAME | AWS CLI profile name to be used
-| AWS_REGION | AWS region for service interactions (takes precedence over AWS_DEFAULT_REGION)
-| AWS_REGION_NAME | Default AWS region for service interactions
-| AWS_ROLE_ARN | ARN of the AWS IAM role to assume for authentication
-| AWS_ROLE_NAME | Role name for AWS IAM usage
-| AWS_S3_BUCKET_NAME | Name of the AWS S3 bucket for file operations
-| AWS_S3_OUTPUT_BUCKET_NAME | Name of the AWS S3 output bucket for batch operations
-| AWS_SECRET_ACCESS_KEY | Secret Access Key for AWS services
-| AWS_SESSION_NAME | Name for AWS session
-| AWS_WEB_IDENTITY_TOKEN | Web identity token for AWS
-| AWS_WEB_IDENTITY_TOKEN_FILE | Path to file containing web identity token for AWS
-| AZURE_API_VERSION | Version of the Azure API being used
-| AZURE_AI_API_BASE | Base URL for Azure AI services (e.g., Azure AI Anthropic)
-| AZURE_AI_API_KEY | API key for Azure AI services (e.g., Azure AI Anthropic)
-| AZURE_AUTHORITY_HOST | Azure authority host URL
-| AZURE_CERTIFICATE_PASSWORD | Password for Azure OpenAI certificate
-| AZURE_CLIENT_ID | Client ID for Azure services
-| AZURE_CLIENT_SECRET | Client secret for Azure services
-| AZURE_COMPUTER_USE_INPUT_COST_PER_1K_TOKENS | Input cost per 1K tokens for Azure Computer Use service
-| AZURE_COMPUTER_USE_OUTPUT_COST_PER_1K_TOKENS | Output cost per 1K tokens for Azure Computer Use service
-| AZURE_DEFAULT_RESPONSES_API_VERSION | Version of the Azure Default Responses API being used. Default is "preview"
-| AZURE_DOCUMENT_INTELLIGENCE_API_VERSION | API version for Azure Document Intelligence service
-| AZURE_DOCUMENT_INTELLIGENCE_DEFAULT_DPI | Default DPI (dots per inch) setting for Azure Document Intelligence service
-| AZURE_TENANT_ID | Tenant ID for Azure Active Directory
-| AZURE_USERNAME | Username for Azure services, use in conjunction with AZURE_PASSWORD for azure ad token with basic username/password workflow
-| AZURE_PASSWORD | Password for Azure services, use in conjunction with AZURE_USERNAME for azure ad token with basic username/password workflow
-| AZURE_FEDERATED_TOKEN_FILE | File path to Azure federated token
-| AZURE_FILE_SEARCH_COST_PER_GB_PER_DAY | Cost per GB per day for Azure File Search service
-| AZURE_SCOPE | For EntraID Auth, Scope for Azure services, defaults to "https://cognitiveservices.azure.com/.default"
-| AZURE_SENTINEL_DCR_IMMUTABLE_ID | Immutable ID of the Data Collection Rule for Azure Sentinel logging
-| AZURE_SENTINEL_STREAM_NAME | Stream name for Azure Sentinel logging
-| AZURE_SENTINEL_CLIENT_SECRET | Client secret for Azure Sentinel authentication
-| AZURE_SENTINEL_ENDPOINT | Endpoint for Azure Sentinel logging
-| AZURE_SENTINEL_TENANT_ID | Tenant ID for Azure Sentinel authentication
-| AZURE_SENTINEL_CLIENT_ID | Client ID for Azure Sentinel authentication
-| AZURE_KEY_VAULT_URI | URI for Azure Key Vault
-| AZURE_OPERATION_POLLING_TIMEOUT | Timeout in seconds for Azure operation polling
-| AZURE_STORAGE_ACCOUNT_KEY | The Azure Storage Account Key to use for Authentication to Azure Blob Storage logging
-| AZURE_STORAGE_ACCOUNT_NAME | Name of the Azure Storage Account to use for logging to Azure Blob Storage
-| AZURE_STORAGE_FILE_SYSTEM | Name of the Azure Storage File System to use for logging to Azure Blob Storage.  (Typically the Container name)
-| AZURE_STORAGE_TENANT_ID | The Application Tenant ID to use for Authentication to Azure Blob Storage logging
-| AZURE_STORAGE_CLIENT_ID | The Application Client ID to use for Authentication to Azure Blob Storage logging
-| AZURE_STORAGE_CLIENT_SECRET | The Application Client Secret to use for Authentication to Azure Blob Storage logging
-| AZURE_VECTOR_STORE_COST_PER_GB_PER_DAY | Cost per GB per day for Azure Vector Store service
-| BACKGROUND_HEALTH_CHECK_MAX_TOKENS | Optional global default for `max_tokens` on proxy background health checks when a model has no `health_check_max_tokens`. If unset, non-wildcard models default to 5. Applies to wildcard routes when set. Default is unset
-| BACKGROUND_HEALTH_CHECK_MAX_TOKENS_REASONING | For **non-wildcard** reasoning models (`supports_reasoning(model)=true`), this takes precedence over `BACKGROUND_HEALTH_CHECK_MAX_TOKENS` when set. If unset, reasoning models fall back to `BACKGROUND_HEALTH_CHECK_MAX_TOKENS` (if set) or default behavior. Wildcard routes ignore this. Default is unset
-| BATCH_STATUS_POLL_INTERVAL_SECONDS | Interval in seconds for polling batch status. Default is 3600 (1 hour)
-| BATCH_STATUS_POLL_MAX_ATTEMPTS | Maximum number of attempts for polling batch status. Default is 24 (for 24 hours)
-| BEDROCK_MAX_POLICY_SIZE | Maximum size for Bedrock policy. Default is 75
-| BEDROCK_MIN_THINKING_BUDGET_TOKENS | Minimum thinking budget in tokens for Bedrock reasoning models. Bedrock returns a 400 error if budget_tokens is below this value. Requests with lower values are clamped to this minimum. Default is 1024
-| BERRISPEND_ACCOUNT_ID | Account ID for BerriSpend service
-| BRAINTRUST_API_KEY | API key for Braintrust integration
-| BRAINTRUST_API_BASE | Base URL for Braintrust API. Default is https://api.braintrustdata.com/v1
-| BRAINTRUST_MOCK | Enable mock mode for Braintrust integration testing. When set to true, intercepts Braintrust API calls and returns mock responses without making actual network calls. Default is false
-| BRAINTRUST_MOCK_LATENCY_MS | Mock latency in milliseconds for Braintrust API calls when mock mode is enabled. Simulates network round-trip time. Default is 100ms
-| CACHED_STREAMING_CHUNK_DELAY | Delay in seconds for cached streaming chunks. Default is 0.02
-| CHATGPT_API_BASE | Base URL for ChatGPT API. Default is https://chatgpt.com/backend-api/codex
-| CHATGPT_AUTH_FILE | Filename for ChatGPT authentication data. Default is "auth.json"
-| CHATGPT_DEFAULT_INSTRUCTIONS | Default system instructions for ChatGPT provider
-| CHATGPT_ORIGINATOR | Originator identifier for ChatGPT API requests. Default is "codex_cli_rs"
-| CHATGPT_TOKEN_DIR | Directory to store ChatGPT authentication tokens. Default is "~/.config/litellm/chatgpt"
-| CHATGPT_USER_AGENT | Custom user agent string for ChatGPT API requests
-| CHATGPT_USER_AGENT_SUFFIX | Suffix to append to the ChatGPT user agent string
-| CIRCLE_OIDC_TOKEN | OpenID Connect token for CircleCI
-| CIRCLE_OIDC_TOKEN_V2 | Version 2 of the OpenID Connect token for CircleCI
-| CLI_JWT_EXPIRATION_HOURS | Expiration time in hours for CLI-generated JWT tokens. Default is 24 hours. Can also be set via LITELLM_CLI_JWT_EXPIRATION_HOURS
-| CLOUDZERO_API_KEY | CloudZero API key for authentication
-| CLOUDZERO_CONNECTION_ID | CloudZero connection ID for data submission
-| CLOUDZERO_EXPORT_INTERVAL_MINUTES | Interval in minutes for CloudZero data export operations
-| CLOUDZERO_MAX_FETCHED_DATA_RECORDS | Maximum number of data records to fetch from CloudZero
-| CLOUDZERO_TIMEZONE | Timezone for date handling (default: UTC)
-| CONFIG_FILE_PATH | File path for configuration file
-| CYBERARK_ACCOUNT | CyberArk account name for secret management
-| CYBERARK_API_BASE | Base URL for CyberArk API
-| CYBERARK_API_KEY | API key for CyberArk secret management service
-| CYBERARK_CLIENT_CERT | Path to client certificate for CyberArk authentication
-| CYBERARK_CLIENT_KEY | Path to client key for CyberArk authentication
-| CYBERARK_USERNAME | Username for CyberArk authentication
-| CYBERARK_SSL_VERIFY | Flag to enable or disable SSL certificate verification for CyberArk. Default is True
-| CONFIDENT_API_KEY | API key for DeepEval integration
-| CUSTOM_TIKTOKEN_CACHE_DIR | Custom directory for Tiktoken cache
-| CONFIDENT_API_KEY | API key for Confident AI (Deepeval) Logging service
-| COHERE_API_BASE | Base URL for Cohere API. Default is https://api.cohere.com
-| COMPETITOR_LLM_TEMPERATURE | Temperature setting for the LLM used in competitor discovery. Default is 0.3
-| CURSOR_API_BASE | API base URL for Cursor AI provider integration. Default is https://api.cursor.com
-| DATABASE_HOST | Hostname for the database server
-| DATABASE_HOST_READ_REPLICA | Hostname for the read-replica database server. Only used by the componentized deployment (experimental) when `IAM_TOKEN_DB_AUTH=True` to assemble `DATABASE_URL_READ_REPLICA` from RDS IAM env vars
-| DATABASE_NAME | Name of the database
-| DATABASE_NAME_READ_REPLICA | Database name for the read replica (defaults to `DATABASE_NAME`). Only used by the componentized deployment (experimental) when `IAM_TOKEN_DB_AUTH=True`
-| DATABASE_PASSWORD | Password for the database user
-| DATABASE_PORT | Port number for database connection
-| DATABASE_PORT_READ_REPLICA | Port number for the read replica (default 5432). Only used by the componentized deployment (experimental) when `IAM_TOKEN_DB_AUTH=True`
-| DATABASE_SCHEMA | Schema name used in the database
-| DATABASE_SCHEMA_READ_REPLICA | Schema name for the read replica (defaults to `DATABASE_SCHEMA`). Only used by the componentized deployment (experimental) when `IAM_TOKEN_DB_AUTH=True`
-| DATABASE_URL | Connection URL for the database
-| DATABASE_URL_READ_REPLICA | Optional read-replica connection URL. When set, the proxy routes read-only queries (find_*, count, group_by, query_raw/_first) to this endpoint while writes continue to use `DATABASE_URL`. Useful for Aurora-style clusters with separate reader/writer endpoints. Falls back to writer-only behavior when unset. With `IAM_TOKEN_DB_AUTH=True`, the reader IAM token is auto-refreshed alongside the writer
-| DATABASE_USER | Username for database connection
-| DATABASE_USER_READ_REPLICA | Database user for the read replica (defaults to `DATABASE_USER`). Only used by the componentized deployment (experimental) when `IAM_TOKEN_DB_AUTH=True`
-| DATABASE_USERNAME | Alias for database user
-| DATABRICKS_API_BASE | Base URL for Databricks API
-| DATABRICKS_API_KEY | API key (Personal Access Token) for Databricks API authentication
-| DATABRICKS_CLIENT_ID | Client ID for Databricks OAuth M2M authentication (Service Principal application ID)
-| DATABRICKS_CLIENT_SECRET | Client secret for Databricks OAuth M2M authentication
-| DATABRICKS_USER_AGENT | Custom user agent string for Databricks API requests. Used for partner telemetry attribution
-| DAYS_IN_A_MONTH | Days in a month for calculation purposes. Default is 28
-| DAYS_IN_A_WEEK | Days in a week for calculation purposes. Default is 7
-| DAYS_IN_A_YEAR | Days in a year for calculation purposes. Default is 365
-| DYNAMOAI_API_KEY | API key for DynamoAI Guardrails service
-| DYNAMOAI_API_BASE | Base URL for DynamoAI API. Default is https://api.dynamo.ai
-| DYNAMOAI_MODEL_ID | Model ID for DynamoAI tracking/logging purposes
-| DYNAMOAI_POLICY_IDS | Comma-separated list of DynamoAI policy IDs to apply
-| DD_BASE_URL | Base URL for Datadog integration
-| DATADOG_BASE_URL | (Alternative to DD_BASE_URL) Base URL for Datadog integration
-| _DATADOG_BASE_URL | (Alternative to DD_BASE_URL) Base URL for Datadog integration
-| DD_AGENT_HOST | Hostname or IP of DataDog agent (e.g., "localhost"). When set, logs are sent to agent instead of direct API
-| DD_AGENT_PORT | Port of DataDog agent for log intake. Default is 10518
-| DD_API_KEY | API key for Datadog integration
-| DD_APP_KEY | Application key for Datadog Cost Management integration. Required along with DD_API_KEY for cost metrics
-| DD_SITE | Site URL for Datadog (e.g., datadoghq.com)
-| DD_SOURCE | Source identifier for Datadog logs
-| DD_TRACER_STREAMING_CHUNK_YIELD_RESOURCE | Resource name for Datadog tracing of streaming chunk yields. Default is "streaming.chunk.yield"
-| DD_ENV | Environment identifier for Datadog logs. Only supported for `datadog_llm_observability` callback
-| DD_LLMOBS_ML_APP | Default ml_app name for Datadog LLM Observability (Application column). Falls back to DD_SERVICE. Can be overridden per-request via `metadata.ml_app`.
-| DD_SERVICE | Service identifier for Datadog logs. Defaults to "litellm-server"
-| DD_VERSION | Version identifier for Datadog logs. Defaults to "unknown"
-| DATADOG_MOCK | Enable mock mode for Datadog integration testing. When set to true, intercepts Datadog API calls and returns mock responses without making actual network calls. Default is false
-| DATADOG_MOCK_LATENCY_MS | Mock latency in milliseconds for Datadog API calls when mock mode is enabled. Simulates network round-trip time. Default is 100ms
-| DEBUG_OTEL | Enable debug mode for OpenTelemetry
-| DEFAULT_ALLOWED_FAILS | Maximum failures allowed before cooling down a model. Default is 3
-| DEFAULT_A2A_AGENT_TIMEOUT | Default timeout in seconds for A2A (Agent-to-Agent) protocol requests. Default is 6000
-| DEFAULT_ACCESS_GROUP_CACHE_TTL | Time-to-live in seconds for cached access group information. Default is 600 (10 minutes)
-| DEFAULT_ANTHROPIC_CHAT_MAX_TOKENS | Default maximum tokens for Anthropic chat completions. Default is 4096
-| DEFAULT_BATCH_SIZE | Default batch size for operations. Default is 512
-| DEFAULT_CHUNK_OVERLAP | Default chunk overlap for RAG text splitters. Default is 200
-| DEFAULT_CHUNK_SIZE | Default chunk size for RAG text splitters. Default is 1000
-| DEFAULT_CLIENT_DISCONNECT_CHECK_TIMEOUT_SECONDS | Timeout in seconds for checking client disconnection. Default is 1
-| DEFAULT_COOLDOWN_TIME_SECONDS | Duration in seconds to cooldown a model after failures. Default is 5
-| DEFAULT_CRON_JOB_LOCK_TTL_SECONDS | Time-to-live for cron job locks in seconds. Default is 60 (1 minute)
-| DEFAULT_DATAFORSEO_LOCATION_CODE | Default location code for DataForSEO search API. Default is 2250 (France)
-| DEFAULT_FAILURE_THRESHOLD_PERCENT | Threshold percentage of failures to cool down a deployment. Default is 0.5 (50%)
-| DEFAULT_FAILURE_THRESHOLD_MINIMUM_REQUESTS | Minimum number of requests before applying error rate cooldown. Prevents cooldown from triggering on first failure. Default is 5
-| DEFAULT_FLUSH_INTERVAL_SECONDS | Default interval in seconds for flushing operations. Default is 5
-| DEFAULT_HEALTH_CHECK_INTERVAL | Default interval in seconds for health checks. Default is 300 (5 minutes)
-| DEFAULT_HEALTH_CHECK_PROMPT | Default prompt used during health checks for non-image models. Default is "test from litellm"
-| DEFAULT_IMAGE_HEIGHT | Default height for images. Default is 300
-| DEFAULT_IMAGE_TOKEN_COUNT | Default token count for images. Default is 250
-| DEFAULT_IMAGE_WIDTH | Default width for images. Default is 300
-| DEFAULT_IN_MEMORY_TTL | Default time-to-live for in-memory cache in seconds. Default is 5
-| DEFAULT_MANAGEMENT_OBJECT_IN_MEMORY_CACHE_TTL | Default time-to-live in seconds for management objects (User, Team, Key, Organization) in memory cache. Default is 60 seconds.
-| DEFAULT_MAX_LRU_CACHE_SIZE | Default maximum size for LRU cache. Default is 64
-| DEFAULT_MAX_RECURSE_DEPTH | Default maximum recursion depth. Default is 100
-| DEFAULT_MAX_RECURSE_DEPTH_SENSITIVE_DATA_MASKER | Default maximum recursion depth for sensitive data masker. Default is 10
-| DEFAULT_MAX_RETRIES | Default maximum retry attempts. Default is 2
-| DEFAULT_MAX_TOKENS | Default maximum tokens for LLM calls. Default is 4096
-| DEFAULT_MAX_TOKENS_FOR_TRITON | Default maximum tokens for Triton models. Default is 2000
-| DEFAULT_MAX_REDIS_BATCH_CACHE_SIZE | Default maximum size for redis batch cache. Default is 1000
-| DEFAULT_MCP_SEMANTIC_FILTER_EMBEDDING_MODEL | Default embedding model for MCP semantic tool filtering. Default is "text-embedding-3-small"
-| DEFAULT_MCP_SEMANTIC_FILTER_SIMILARITY_THRESHOLD | Default similarity threshold for MCP semantic tool filtering. Default is 0.3
-| DEFAULT_MCP_SEMANTIC_FILTER_TOP_K | Default number of top results to return for MCP semantic tool filtering. Default is 10
-| MCP_NPM_CACHE_DIR | Directory for npm cache used by STDIO MCP servers. In containers the default (~/.npm) may not exist or be read-only. Default is `/tmp/.npm_mcp_cache`
-| LITELLM_MCP_CLIENT_TIMEOUT | MCP client connection timeout in seconds (stdio and HTTP/SSE transports). Default is 60
-| LITELLM_MCP_TOOL_LISTING_TIMEOUT | Timeout in seconds for listing tools from an MCP server. Default is 30
-| LITELLM_MCP_METADATA_TIMEOUT | HTTP client timeout in seconds for OAuth metadata fetching. Default is 10
-| LITELLM_MCP_HEALTH_CHECK_TIMEOUT | Health check timeout in seconds for MCP servers. Default is 10
-| LITELLM_MCP_STDIO_EXTRA_COMMANDS | Comma-separated extra command basenames allowed for MCP stdio transport beyond the built-in allowlist. Example: `my-mcp-bin`. Empty by default
-| MCP_OAUTH2_TOKEN_CACHE_DEFAULT_TTL | Default TTL in seconds for MCP OAuth2 token cache. Default is 3600
-| MCP_OAUTH2_TOKEN_CACHE_MAX_SIZE | Maximum number of entries in MCP OAuth2 token cache. Default is 200
-| MCP_OAUTH2_TOKEN_CACHE_MIN_TTL | Minimum TTL in seconds for MCP OAuth2 token cache. Default is 10
-| MCP_OAUTH2_TOKEN_EXPIRY_BUFFER_SECONDS | Seconds to subtract from token expiry when computing cache TTL. Default is 60
-| MCP_PER_USER_TOKEN_DEFAULT_TTL | Default TTL in seconds for per-user MCP OAuth tokens stored in Redis. Default is 43200 (12 hours)
-| MCP_PER_USER_TOKEN_EXPIRY_BUFFER_SECONDS | Seconds to subtract from per-user MCP OAuth token expiry when computing Redis TTL. Default is 60
-| MCP_TOKEN_EXCHANGE_CACHE_MAX_SIZE | Maximum number of entries in the MCP OAuth2 token exchange cache. Default is 500
-| MCP_TRUSTED_REDIRECT_ORIGINS | Comma-separated allowlist of additional `redirect_uri` origins accepted by the MCP OAuth `authorize` endpoint, beyond same-origin and loopback. Each entry is `host` or `host:port`; a `*.suffix` prefix matches any strictly-deeper subdomain. HTTPS only. Use this for first-party OAuth clients on sister domains (e.g. `app.example.com`). For ingressed deployments where the proxy's own origin is wrong, set [`PROXY_BASE_URL`](#environment-variables---reference) instead. See [MCP OAuth — Reverse proxy and ingress configuration](../mcp_oauth#reverse-proxy-and-ingress-configuration).
-| DEFAULT_MOCK_RESPONSE_COMPLETION_TOKEN_COUNT | Default token count for mock response completions. Default is 20
-| DEFAULT_MOCK_RESPONSE_PROMPT_TOKEN_COUNT | Default token count for mock response prompts. Default is 10
-| DEFAULT_MODEL_CREATED_AT_TIME | Default creation timestamp for models. Default is 1677610602
-| DEFAULT_NUM_WORKERS_LITELLM_PROXY | Default number of workers for LiteLLM proxy when `NUM_WORKERS` is not set. Default is 1. **We strongly recommend setting NUM_WORKERS to the number of vCPUs available** (e.g. `NUM_WORKERS=8` or `--num_workers 8`).
-| DEFAULT_PROMPT_INJECTION_SIMILARITY_THRESHOLD | Default threshold for prompt injection similarity. Default is 0.7
-| DEFAULT_POLLING_INTERVAL | Default polling interval for schedulers in seconds. Default is 0.03
-| DEFAULT_REASONING_EFFORT_DISABLE_THINKING_BUDGET | Default reasoning effort disable thinking budget. Default is 0
-| DEFAULT_REASONING_EFFORT_HIGH_THINKING_BUDGET | Default high reasoning effort thinking budget. Default is 4096
-| DEFAULT_REASONING_EFFORT_LOW_THINKING_BUDGET | Default low reasoning effort thinking budget. Default is 1024
-| DEFAULT_REASONING_EFFORT_MAX_THINKING_BUDGET | Default `max` reasoning effort thinking budget for legacy Anthropic models that use `thinking.budget_tokens` (Claude 4.5 series + Haiku). On Claude 4.6/4.7 the `max` tier is routed via adaptive `output_config.effort=max` instead and ignores this constant. Default is 16384
-| DEFAULT_REASONING_EFFORT_MEDIUM_THINKING_BUDGET | Default medium reasoning effort thinking budget. Default is 2048
-| DEFAULT_REASONING_EFFORT_MINIMAL_THINKING_BUDGET | Default minimal reasoning effort thinking budget. Default is 512
-| DEFAULT_REASONING_EFFORT_MINIMAL_THINKING_BUDGET_GEMINI_2_5_FLASH | Default minimal reasoning effort thinking budget for Gemini 2.5 Flash. Default is 512
-| DEFAULT_REASONING_EFFORT_MINIMAL_THINKING_BUDGET_GEMINI_2_5_FLASH_LITE | Default minimal reasoning effort thinking budget for Gemini 2.5 Flash Lite. Default is 512
-| DEFAULT_REASONING_EFFORT_MINIMAL_THINKING_BUDGET_GEMINI_2_5_PRO | Default minimal reasoning effort thinking budget for Gemini 2.5 Pro. Default is 512
-| DEFAULT_REASONING_EFFORT_XHIGH_THINKING_BUDGET | Default `xhigh` reasoning effort thinking budget for legacy Anthropic models that use `thinking.budget_tokens`. Continues the 2&times; progression 1024 &rarr; 2048 &rarr; 4096 &rarr; 8192 from low/medium/high. On Claude 4.6/4.7 the `xhigh` tier is routed via adaptive `output_config.effort=xhigh` instead and ignores this constant. Default is 8192
-| DEFAULT_REDIS_MAJOR_VERSION | Default Redis major version to assume when version cannot be determined. Default is 7
-| DEFAULT_REDIS_SYNC_INTERVAL | Default Redis synchronization interval in seconds. Default is 1
-| DEFAULT_SEMANTIC_GUARD_EMBEDDING_MODEL | Default embedding model for Semantic Guard (route-matching guardrail). Default is "text-embedding-3-small"
-| DEFAULT_SEMANTIC_GUARD_SIMILARITY_THRESHOLD | Default similarity threshold for Semantic Guard route matching. Default is 0.75
-| DEFAULT_REPLICATE_GPU_PRICE_PER_SECOND | Default price per second for Replicate GPU. Default is 0.001400
-| DEFAULT_REPLICATE_POLLING_DELAY_SECONDS | Default delay in seconds for Replicate polling. Default is 1
-| DEFAULT_REPLICATE_POLLING_RETRIES | Default number of retries for Replicate polling. Default is 5
-| DEFAULT_SQS_BATCH_SIZE | Default batch size for SQS logging. Default is 512
-| DEFAULT_SQS_FLUSH_INTERVAL_SECONDS | Default flush interval for SQS logging. Default is 10
-| DEFAULT_S3_BATCH_SIZE | Default batch size for S3 logging. Default is 512
-| DEFAULT_S3_FLUSH_INTERVAL_SECONDS | Default flush interval for S3 logging. Default is 10
-| DEFAULT_SLACK_ALERTING_THRESHOLD | Default threshold for Slack alerting. Default is 300
-| DEFAULT_SOFT_BUDGET | Default soft budget for LiteLLM proxy keys. Default is 50.0
-| DEFAULT_TRIM_RATIO | Default ratio of tokens to trim from prompt end. Default is 0.75
-| DEFAULT_GOOGLE_VIDEO_DURATION_SECONDS | Default duration for video generation in seconds in google. Default is 8
-| DIRECT_URL | Direct URL for service endpoint
-| DISABLE_ADMIN_UI | Toggle to disable the admin UI
-| DISABLE_AIOHTTP_TRANSPORT | Flag to disable aiohttp transport. When this is set to True, litellm will use httpx instead of aiohttp. **Default is False**
-| DISABLE_AIOHTTP_TRUST_ENV | Flag to disable aiohttp trust environment. When this is set to True, litellm will not trust the environment for aiohttp eg. `HTTP_PROXY` and `HTTPS_PROXY` environment variables will not be used when this is set to True. **Default is False**
-| DISABLE_SCHEMA_UPDATE | Toggle to disable schema updates
-| DYNAMIC_RATE_LIMIT_ERROR_THRESHOLD_PER_MINUTE | Threshold for deployment failures per minute before enforcing rate limits in parallel request limiter. Default is 1
-| DOCS_DESCRIPTION | Description text for documentation pages
-| DOCS_FILTERED | Flag indicating filtered documentation
-| DOCS_TITLE | Title of the documentation pages
-| DOCS_URL | The path to the Swagger API documentation. **By default this is "/"**
-| EMAIL_LOGO_URL | URL for the logo used in emails
-| EMAIL_BUDGET_ALERT_TTL | Time-to-live for email budget alerts in seconds
-| EMAIL_BUDGET_ALERT_MAX_SPEND_ALERT_PERCENTAGE | Maximum spend percentage for triggering email budget alerts
-| EMAIL_SUPPORT_CONTACT | Support contact email address
-| EMAIL_SIGNATURE | Custom HTML footer/signature for all emails. Can include HTML tags for formatting and links.
-| EMAIL_SUBJECT_INVITATION | Custom subject template for invitation emails. 
-| EMAIL_SUBJECT_KEY_CREATED | Custom subject template for key creation emails. 
-| EMAIL_BUDGET_ALERT_MAX_SPEND_ALERT_PERCENTAGE | Percentage of max budget that triggers alerts (as decimal: 0.8 = 80%). Default is 0.8
-| EMAIL_BUDGET_ALERT_TTL | Time-to-live for budget alert deduplication in seconds. Default is 86400 (24 hours)
-| ENKRYPTAI_API_BASE | Base URL for EnkryptAI Guardrails API. **Default is https://api.enkryptai.com**
-| ENKRYPTAI_API_KEY | API key for EnkryptAI Guardrails service
-| FIREWORKS_AI_4_B | Size parameter for Fireworks AI 4B model. Default is 4
-| FIREWORKS_AI_16_B | Size parameter for Fireworks AI 16B model. Default is 16
-| FIREWORKS_AI_56_B_MOE | Size parameter for Fireworks AI 56B MOE model. Default is 56
-| FIREWORKS_AI_80_B | Size parameter for Fireworks AI 80B model. Default is 80
-| FIREWORKS_AI_176_B_MOE | Size parameter for Fireworks AI 176B MOE model. Default is 176
-| FOCUS_PROVIDER | Destination provider for Focus exports (e.g., `s3`). Defaults to `s3`.
-| FOCUS_FORMAT | Output format for Focus exports. Defaults to `parquet`.
-| FOCUS_FREQUENCY | Frequency for scheduled Focus exports (`hourly`, `daily`, or `interval`). Defaults to `hourly`.
-| FOCUS_CRON_OFFSET | Minute offset used when scheduling hourly/daily Focus exports. Defaults to `5` minutes.
-| FOCUS_INTERVAL_SECONDS | Interval (in seconds) for Focus exports when `frequency` is `interval`.
-| FOCUS_PREFIX | Object key prefix (or folder) used when uploading Focus export files. Defaults to `focus_exports`.
-| FOCUS_S3_BUCKET_NAME | S3 bucket to upload Focus export files when using the S3 destination.
-| FOCUS_S3_REGION_NAME | AWS region for the Focus export S3 bucket.
-| FOCUS_S3_ENDPOINT_URL | Custom endpoint for the Focus export S3 client (optional; useful for S3-compatible storage).
-| FOCUS_S3_ACCESS_KEY | AWS access key ID used by the Focus export S3 client.
-| FOCUS_S3_SECRET_KEY | AWS secret access key used by the Focus export S3 client.
-| FOCUS_S3_SESSION_TOKEN | AWS session token used by the Focus export S3 client (optional).
-| FUNCTION_DEFINITION_TOKEN_COUNT | Token count for function definitions. Default is 9
-| GALILEO_BASE_URL | Base URL for Galileo platform
-| GALILEO_PASSWORD | Password for Galileo authentication
-| GALILEO_PROJECT_ID | Project ID for Galileo usage
-| GALILEO_USERNAME | Username for Galileo authentication
-| GOOGLE_SECRET_MANAGER_PROJECT_ID | Project ID for Google Secret Manager
-| GCS_BUCKET_NAME | Name of the Google Cloud Storage bucket
-| GCS_MOCK | Enable mock mode for GCS integration testing. When set to true, intercepts GCS API calls and returns mock responses without making actual network calls. Default is false
-| GCS_MOCK_LATENCY_MS | Mock latency in milliseconds for GCS API calls when mock mode is enabled. Simulates network round-trip time. Default is 150ms
-| GCS_PATH_SERVICE_ACCOUNT | Path to the Google Cloud service account JSON file
-| GCS_FLUSH_INTERVAL | Flush interval for GCS logging (in seconds). Specify how often you want a log to be sent to GCS. **Default is 20 seconds**
-| GCS_BATCH_SIZE | Batch size for GCS logging. Specify after how many logs you want to flush to GCS. If `BATCH_SIZE` is set to 10, logs are flushed every 10 logs. **Default is 2048**
-| GCS_USE_BATCHED_LOGGING | Enable batched logging for GCS. When enabled (default), multiple log payloads are combined into single GCS object uploads (NDJSON format), dramatically reducing API calls. When disabled, sends each log individually as separate GCS objects (legacy behavior). **Default is true**
-| GCS_PUBSUB_TOPIC_ID | PubSub Topic ID to send LiteLLM SpendLogs to.
-| GCS_PUBSUB_PROJECT_ID | PubSub Project ID to send LiteLLM SpendLogs to.
-| GENERIC_AUTHORIZATION_ENDPOINT | Authorization endpoint for generic OAuth providers
-| GENERIC_CLIENT_ID | Client ID for generic OAuth providers
-| GENERIC_CLIENT_SECRET | Client secret for generic OAuth providers
-| GENERIC_CLIENT_STATE | State parameter for generic client authentication
-| GENERIC_CLIENT_USE_PKCE | Enable PKCE (Proof Key for Code Exchange) for generic OAuth providers. Set to "true" when your OAuth provider requires PKCE. **Default is false**
-| GENERIC_SSO_HEADERS | Comma-separated list of additional headers to add to the request - e.g. Authorization=Bearer `<token>`, Content-Type=application/json, etc.
-| GENERIC_INCLUDE_CLIENT_ID | Include client ID in requests for OAuth
-| GENERIC_SCOPE | Scope settings for generic OAuth providers
-| GENERIC_TOKEN_ENDPOINT | Token endpoint for generic OAuth providers
-| GENERIC_USER_DISPLAY_NAME_ATTRIBUTE | Attribute for user's display name in generic auth
-| GENERIC_USER_EMAIL_ATTRIBUTE | Attribute for user's email in generic auth
-| GENERIC_USER_EXTRA_ATTRIBUTES | Comma-separated list of additional fields to extract from generic SSO provider response (e.g., "department,employee_id,groups"). Accessible via `CustomOpenID.extra_fields` in custom SSO handlers. Supports dot notation for nested fields
-| GENERIC_USER_FIRST_NAME_ATTRIBUTE | Attribute for user's first name in generic auth
-| GENERIC_USER_ID_ATTRIBUTE | Attribute for user ID in generic auth
-| GENERIC_USER_LAST_NAME_ATTRIBUTE | Attribute for user's last name in generic auth
-| GENERIC_USER_PROVIDER_ATTRIBUTE | Attribute specifying the user's provider
-| GENERIC_USER_ROLE_ATTRIBUTE | Attribute specifying the user's role
-| GENERIC_USERINFO_ENDPOINT | Endpoint to fetch user information in generic OAuth
-| GENERIC_LOGGER_ENDPOINT | Endpoint URL for the Generic Logger callback to send logs to
-| GENERIC_LOGGER_HEADERS | JSON string of headers to include in Generic Logger callback requests
-| GENERIC_ROLE_MAPPINGS_DEFAULT_ROLE | Default LiteLLM role to assign when no role mapping matches in generic SSO. Used with GENERIC_ROLE_MAPPINGS_ROLES
-| GENERIC_ROLE_MAPPINGS_GROUP_CLAIM | The claim/attribute name in the SSO token that contains the user's groups. Used for role mapping
-| GENERIC_ROLE_MAPPINGS_ROLES | Python dict string mapping LiteLLM roles to SSO group names. Example: `{"proxy_admin": ["admin-group"], "internal_user": ["users"]}`
-| GENERIC_USER_ROLE_MAPPINGS | Alternative to GENERIC_ROLE_MAPPINGS_ROLES for configuring user role mappings from SSO
-| GEMINI_API_BASE | Base URL for Gemini API. Default is https://generativelanguage.googleapis.com
-| GALILEO_BASE_URL | Base URL for Galileo platform
-| GALILEO_PASSWORD | Password for Galileo authentication
-| GALILEO_PROJECT_ID | Project ID for Galileo usage
-| GALILEO_USERNAME | Username for Galileo authentication
-| GITHUB_COPILOT_TOKEN_DIR | Directory to store GitHub Copilot token for `github_copilot` llm provider
-| GITHUB_COPILOT_API_KEY_FILE | File to store GitHub Copilot API key for `github_copilot` llm provider
-| GITHUB_COPILOT_ACCESS_TOKEN_FILE | File to store GitHub Copilot access token for `github_copilot` llm provider
-| GITHUB_COPILOT_API_BASE | Base URL for GitHub Copilot API. For GitHub Enterprise subscriptions with custom host, it is similar to https://copilot-api.my-company.ghe.com. Default is https://api.githubcopilot.com
-| GITHUB_COPILOT_DEVICE_CODE_URL | URL for GitHub Copilot device code authentication. For GitHub Enterprise subscriptions with custom host, it is similar to https://my-company.ghe.com/login/device/code. Default is https://github.com/login/device/code
-| GITHUB_COPILOT_ACCESS_TOKEN_URL | URL for GitHub Copilot access token retrieval. For GitHub Enterprise subscriptions with custom host, it is similar to https://my-company.ghe.com/login/oauth/access_token. Default is https://github.com/login/oauth/access_token
-| GITHUB_COPILOT_API_KEY_URL | URL for GitHub Copilot API key retrieval. For GitHub Enterprise subscriptions with custom host, it is similar to https://my-company.ghe.com/api/v3/copilot_internal/v2/token. Default is https://api.github.com/copilot_internal/v2/token
-| GITHUB_COPILOT_CLIENT_ID | Client ID for GitHub Copilot device flow authentication. This is used by the `github_copilot` provider for device code authentication. Default is "Iv1.b507a08c87ecfe98"
-| GREENSCALE_API_KEY | API key for Greenscale service
-| GREENSCALE_ENDPOINT | Endpoint URL for Greenscale service
-| GRAYSWAN_API_BASE | Base URL for GraySwan API. Default is https://api.grayswan.ai
-| GRAYSWAN_API_KEY | API key for GraySwan Cygnal service
-| GRAYSWAN_REASONING_MODE | Reasoning mode for GraySwan guardrail
-| GRAYSWAN_VIOLATION_THRESHOLD | Violation threshold for GraySwan guardrail
-| GOOGLE_APPLICATION_CREDENTIALS | Path to Google Cloud credentials JSON file
-| GOOGLE_CLIENT_ID | Client ID for Google OAuth
-| GOOGLE_CLIENT_SECRET | Client secret for Google OAuth
-| GOOGLE_KMS_RESOURCE_NAME | Name of the resource in Google KMS
-| GUARDRAILS_AI_API_BASE | Base URL for Guardrails AI API
-| HEALTH_CHECK_TIMEOUT_SECONDS | Timeout in seconds for health checks. Default is 60
-| HEROKU_API_BASE | Base URL for Heroku API
-| HEROKU_API_KEY | API key for Heroku services
-| HF_API_BASE | Base URL for Hugging Face API
-| HCP_VAULT_ADDR | Address for [Hashicorp Vault Secret Manager](../secret.md#hashicorp-vault)
-| HCP_VAULT_APPROLE_MOUNT_PATH | Mount path for AppRole authentication in [Hashicorp Vault Secret Manager](../secret.md#hashicorp-vault). Default is "approle"
-| HCP_VAULT_APPROLE_ROLE_ID | Role ID for AppRole authentication in [Hashicorp Vault Secret Manager](../secret.md#hashicorp-vault)
-| HCP_VAULT_APPROLE_SECRET_ID | Secret ID for AppRole authentication in [Hashicorp Vault Secret Manager](../secret.md#hashicorp-vault)
-| HCP_VAULT_CLIENT_CERT | Path to client certificate for [Hashicorp Vault Secret Manager](../secret.md#hashicorp-vault)
-| HCP_VAULT_CLIENT_KEY | Path to client key for [Hashicorp Vault Secret Manager](../secret.md#hashicorp-vault)
-| HCP_VAULT_MOUNT_NAME | Mount name for [Hashicorp Vault Secret Manager](../secret.md#hashicorp-vault)
-| HCP_VAULT_NAMESPACE | Namespace for [Hashicorp Vault Secret Manager](../secret.md#hashicorp-vault)
-| HCP_VAULT_PATH_PREFIX | Path prefix for [Hashicorp Vault Secret Manager](../secret.md#hashicorp-vault)
-| HCP_VAULT_TOKEN | Token for [Hashicorp Vault Secret Manager](../secret.md#hashicorp-vault)
-| HCP_VAULT_CERT_ROLE | Role for [Hashicorp Vault Secret Manager Auth](../secret.md#hashicorp-vault)
-| HELICONE_API_KEY | API key for Helicone service
-| HELICONE_API_BASE | Base URL for Helicone service, defaults to `https://api.helicone.ai`
-| HELICONE_MOCK | Enable mock mode for Helicone integration testing. When set to true, intercepts Helicone API calls and returns mock responses without making actual network calls. Default is false
-| HELICONE_MOCK_LATENCY_MS | Mock latency in milliseconds for Helicone API calls when mock mode is enabled. Simulates network round-trip time. Default is 100ms
-| HOSTNAME | Hostname for the server, this will be [emitted to `datadog` logs](https://docs.litellm.ai/docs/proxy/logging#datadog)
-| HOURS_IN_A_DAY | Hours in a day for calculation purposes. Default is 24
-| HIDDENLAYER_API_BASE | Base URL for HiddenLayer API. Defaults to `https://api.hiddenlayer.ai`
-| HIDDENLAYER_AUTH_URL | Authentication URL for HiddenLayer. Defaults to `https://auth.hiddenlayer.ai`
-| HIDDENLAYER_CLIENT_ID | Client ID for HiddenLayer SaaS authentication
-| HIDDENLAYER_CLIENT_SECRET | Client secret for HiddenLayer SaaS authentication
-| HUGGINGFACE_API_BASE | Base URL for Hugging Face API
-| HUGGINGFACE_API_KEY | API key for Hugging Face API
-| HUMANLOOP_PROMPT_CACHE_TTL_SECONDS | Time-to-live in seconds for cached prompts in Humanloop. Default is 60
-| IAM_TOKEN_DB_AUTH | IAM token for database authentication
-| IBM_GUARDRAILS_API_BASE | Base URL for IBM Guardrails API
-| IBM_GUARDRAILS_AUTH_TOKEN | Authorization bearer token for IBM Guardrails API
-| INITIAL_RETRY_DELAY | Initial delay in seconds for retrying requests. Default is 0.5
-| JITTER | Jitter factor for retry delay calculations. Default is 0.75
-| JSON_LOGS | Enable JSON formatted logging
-| JWT_AUDIENCE | Expected audience for JWT tokens
-| JWT_ISSUER | Expected issuer (`iss` claim) for JWT tokens. When set, PyJWT verifies the `iss` claim and rejects tokens from other issuers
-| JWT_PUBLIC_KEY_URL | URL to fetch public key for JWT verification
-| LAGO_API_BASE | Base URL for Lago API
-| LAGO_API_CHARGE_BY | Parameter to determine charge basis in Lago
-| LAGO_API_EVENT_CODE | Event code for Lago API events
-| LAGO_API_KEY | API key for accessing Lago services
-| LANGFUSE_BASE_URL | Base URL for Langfuse service |
-| LANGFUSE_DEBUG | Toggle debug mode for Langfuse
-| LANGFUSE_FLUSH_INTERVAL | Interval for flushing Langfuse logs
-| LANGFUSE_TRACING_ENVIRONMENT | Environment for Langfuse tracing
-| LANGFUSE_HOST | Deprecated host URL for Langfuse service |
-| LANGFUSE_MOCK | Enable mock mode for Langfuse integration testing. When set to true, intercepts Langfuse API calls and returns mock responses without making actual network calls. Default is false
-| LANGFUSE_MOCK_LATENCY_MS | Mock latency in milliseconds for Langfuse API calls when mock mode is enabled. Simulates network round-trip time. Default is 100ms
-| LANGFUSE_PUBLIC_KEY | Public key for Langfuse authentication
-| LANGFUSE_RELEASE | Release version of Langfuse integration
-| LANGFUSE_SECRET_KEY | Secret key for Langfuse authentication
-| LANGFUSE_PROPAGATE_TRACE_ID | Flag to enable propagating trace ID to Langfuse. Default is False
-| LANGSMITH_API_KEY | API key for Langsmith platform
-| LANGSMITH_BASE_URL | Base URL for Langsmith service
-| LANGSMITH_BATCH_SIZE | Batch size for operations in Langsmith
-| LANGSMITH_DEFAULT_RUN_NAME | Default name for Langsmith run
-| LANGSMITH_PROJECT | Project name for Langsmith integration
-| LANGSMITH_SAMPLING_RATE | Sampling rate for Langsmith logging
-| LANGSMITH_TENANT_ID | Tenant ID for Langsmith multi-tenant deployments
-| LANGSMITH_MOCK | Enable mock mode for Langsmith integration testing. When set to true, intercepts Langsmith API calls and returns mock responses without making actual network calls. Default is false
-| LANGSMITH_MOCK_LATENCY_MS | Mock latency in milliseconds for Langsmith API calls when mock mode is enabled. Simulates network round-trip time. Default is 100ms
-| LANGTRACE_API_KEY | API key for Langtrace service
-| LASSO_API_BASE | Base URL for Lasso API
-| LASSO_API_KEY | API key for Lasso service
-| LASSO_USER_ID | User ID for Lasso service
-| LASSO_CONVERSATION_ID | Conversation ID for Lasso service
-| LENGTH_OF_LITELLM_GENERATED_KEY | Length of keys generated by LiteLLM. Default is 16
-| LEGACY_MULTI_INSTANCE_RATE_LIMITING | Flag to enable legacy multi-instance rate limiting. **Default is False**
-| LITERAL_API_KEY | API key for Literal integration
-| LITERAL_API_URL | API URL for Literal service
-| LITERAL_BATCH_SIZE | Batch size for Literal operations
-| LITELLM_ANTHROPIC_BETA_HEADERS_URL | Custom URL for fetching Anthropic beta headers configuration. Default is the GitHub main branch URL
-| LITELLM_ANTHROPIC_DISABLE_URL_SUFFIX | Disable automatic URL suffix appending for Anthropic API base URLs. When set to `true`, prevents LiteLLM from automatically adding `/v1/messages` or `/v1/complete` to custom Anthropic API endpoints
-| LITELLM_ASSETS_PATH | Path to directory for UI assets and logos. Used when running with read-only filesystem (e.g., Kubernetes). Default is `/var/lib/litellm/assets` in Docker.
-| LITELLM_BLOG_POSTS_URL | Custom URL for fetching LiteLLM blog posts JSON. Default is the GitHub main branch URL
-| LITELLM_CLI_JWT_EXPIRATION_HOURS | Expiration time in hours for CLI-generated JWT tokens. Default is 24 hours
-| LITELLM_CORS_ALLOW_CREDENTIALS | Set to `true` to explicitly allow credentials in CORS responses. When not set, credentials are disabled automatically if `LITELLM_CORS_ORIGINS` is `*` (wildcard) to prevent the browser security misconfiguration of reflecting any origin with credentials
-| LITELLM_CORS_ORIGINS | Comma-separated list of allowed CORS origins (e.g. `https://app.example.com,https://admin.example.com`). Defaults to `*` (all origins) when not set
-| LITELLM_DD_AGENT_HOST | Hostname or IP of DataDog agent for LiteLLM-specific logging. When set, logs are sent to agent instead of direct API
-| LITELLM_DEPLOYMENT_ENVIRONMENT | Environment name for the deployment (e.g., "production", "staging"). Used as a fallback when OTEL_ENVIRONMENT_NAME is not set. Sets the `environment` tag in telemetry data
-| LITELLM_DETAILED_TIMING | When true, adds detailed per-phase timing headers to responses (`x-litellm-timing-{pre-processing,llm-api,post-processing,message-copy}-ms`). Default is false. See [latency overhead docs](../troubleshoot/latency_overhead.md)
-| LITELLM_DD_AGENT_PORT | Port of DataDog agent for LiteLLM-specific log intake. Default is 10518
-| LITELLM_DD_LLM_OBS_PORT | Port for Datadog LLM Observability agent. Default is 8126
-| LITELLM_DEFAULT_EMBEDDING_ENCODING_FORMAT | Default `encoding_format` for OpenAI-compatible embedding calls when it is not set on the request or in model `litellm_params` (e.g. `float`, `base64`). Fallback is `float`. See [Embeddings](./embedding.md#embedding-encoding-format).
-| LITELLM_DONT_SHOW_FEEDBACK_BOX | Flag to hide feedback box in LiteLLM UI
-| LITELLM_DROP_PARAMS | Parameters to drop in LiteLLM requests
-| LITELLM_MODIFY_PARAMS | Parameters to modify in LiteLLM requests
-| LITELLM_EMAIL | Email associated with LiteLLM account
-| LITELLM_FAVICON_URL | Custom URL for the LiteLLM UI favicon. When set, overrides the default favicon
-| LITELLM_GLOBAL_MAX_PARALLEL_REQUEST_RETRIES | Maximum retries for parallel requests in LiteLLM
-| LITELLM_GLOBAL_MAX_PARALLEL_REQUEST_RETRY_TIMEOUT | Timeout for retries of parallel requests in LiteLLM
-| LITELLM_DISABLE_LAZY_LOADING | When set to "1", "true", "yes", or "on", disables lazy loading of attributes (currently only affects encoding/tiktoken). This ensures encoding is initialized before VCR starts recording HTTP requests, fixing VCR cassette creation issues. See [issue #18659](https://github.com/BerriAI/litellm/issues/18659)
-| LITELLM_DISABLE_REDACT_SECRETS | When set to "true", disables automatic redaction of secrets (API keys, tokens, credentials) from proxy log output. Secret redaction is enabled by default.
-| LITELLM_MIGRATION_DIR | Custom migrations directory for prisma migrations, used for baselining db in read-only file systems.
-| LITELLM_HOSTED_UI | URL of the hosted UI for LiteLLM
-| LITELLM_UI_API_DOC_BASE_URL | Optional override for the API Reference base URL (used in sample code/docs) when the admin UI runs on a different host than the proxy. Defaults to `PROXY_BASE_URL` when unset.
-| LITELLM_UI_PATH | Path to directory for Admin UI files. Used when running with read-only filesystem (e.g., Kubernetes). Default is `/var/lib/litellm/ui` in Docker.
-| LITELLM_UI_SESSION_DURATION | Duration for UI login session (username/password, SSO, invitation links). Format: "30s", "30m", "24h", "7d". Does not apply to EXPERIMENTAL_UI_LOGIN flow, which uses a fixed 10-minute expiry for security. Default is "24h"
-| LITELLM_EXPIRED_UI_SESSION_KEY_CLEANUP_BATCH_SIZE | Maximum number of expired LiteLLM dashboard session keys to delete per cleanup run. Default is 1000.
-| LITELLM_EXPIRED_UI_SESSION_KEY_CLEANUP_ENABLED | Set to `true` to enable the background cleanup job for expired LiteLLM dashboard session keys. Default is `false`.
-| LITELLM_EXPIRED_UI_SESSION_KEY_CLEANUP_INTERVAL_SECONDS | Interval in seconds for how often to run the expired LiteLLM dashboard session key cleanup job. Default is 86400 (24 hours).
-| LITELM_ENVIRONMENT | Environment of LiteLLM Instance, used by logging services. Currently only used by DeepEval.
-| LITELLM_KEY_ROTATION_ENABLED | Enable auto-key rotation for LiteLLM (boolean). Default is false.
-| LITELLM_KEY_ROTATION_CHECK_INTERVAL_SECONDS | Interval in seconds for how often to run job that auto-rotates keys. Default is 86400 (24 hours).
-| LITELLM_KEY_ROTATION_GRACE_PERIOD | Duration to keep old key valid after rotation (e.g. "24h", "2d"). Default is empty (immediate revoke). Used for scheduled rotations and as fallback when not specified in regenerate request.
-| LITELLM_KEY_ROTATION_LOCK_TTL_SECONDS | TTL in seconds for the distributed lock used by the key rotation job. Default is 600 (10 minutes).
-| LITELLM_LICENSE | License key for LiteLLM usage
-| LITELLM_LOCAL_ANTHROPIC_BETA_HEADERS | Set to `True` to use the local bundled Anthropic beta headers config only, disabling remote fetching. Default is `False`
-| LITELLM_OIDC_ALLOWED_CREDENTIAL_DIRS | Comma-separated list of absolute directories from which the `oidc/file/` provider is permitted to read token files. Defaults to `/var/run/secrets,/run/secrets`.
-| LITELLM_LOCAL_BLOG_POSTS | When set to `True`, uses the local bundled blog posts only, disabling remote fetching from GitHub. Default is `False`
-| LITELLM_LOCAL_MODEL_COST_MAP | Local configuration for model cost mapping in LiteLLM
-| LITELLM_LOCAL_POLICY_TEMPLATES | When set to "true", uses local backup policy templates instead of fetching from GitHub. Policy templates are fetched from https://raw.githubusercontent.com/BerriAI/litellm/main/policy_templates.json by default, with automatic fallback to local backup on failure
-| LITELLM_LOG | Enable detailed logging for LiteLLM
-| LITELLM_MODEL_COST_MAP_URL | URL for fetching model cost map data. Default is https://raw.githubusercontent.com/BerriAI/litellm/main/model_prices_and_context_window.json
-| LITELLM_LOG_FILE | File path to write LiteLLM logs to. When set, logs will be written to both console and the specified file
-| LITELLM_LOGGER_NAME | Name for OTEL logger 
-| LITELLM_METER_NAME | Name for OTEL Meter 
-| LITELLM_OTEL_INTEGRATION_ENABLE_EVENTS | Optionally enable semantic logs (`gen_ai.content.prompt`/`gen_ai.content.completion`, or `gen_ai.client.inference.operation.details` in semconv mode) for OTEL. Default `false`. See [OpenTelemetry](/docs/observability/opentelemetry_integration#configuration-reference)
-| LITELLM_OTEL_INTEGRATION_ENABLE_METRICS | Optionally enable semantic metrics (TTFT, TPOT, response duration, cost, token usage) for OTEL. Default `false`. See [OpenTelemetry](/docs/observability/opentelemetry_integration#metrics-reference)
-| LITELLM_ENABLE_PYROSCOPE | If true, enables Pyroscope CPU profiling. Profiles are sent to PYROSCOPE_SERVER_ADDRESS. Off by default. See [Pyroscope profiling](/proxy/pyroscope_profiling).
-| LITELLM_ENABLE_TEAM_STALE_ALIAS_BYPASS | When `true`, if a team's legacy `model_aliases` entry maps a public model name to an internal `model_name_<team_id>_<uuid>` deployment, pre-call handling can skip that rewrite when team-scoped sibling deployments exist for the public name—so load balancing / `order` apply across siblings. Default is `false` for backwards compatibility. See [Team-scoped models and legacy aliases](./load_balancing#team-scoped-models-and-legacy-model_aliases). When stale aliases are detected and this flag is off, the proxy may log a one-time warning.
-| PYROSCOPE_APP_NAME | Application name reported to Pyroscope. Required when LITELLM_ENABLE_PYROSCOPE is true. No default.
-| PYROSCOPE_SERVER_ADDRESS | Pyroscope server URL to send profiles to. Required when LITELLM_ENABLE_PYROSCOPE is true. No default.
-| PYROSCOPE_SAMPLE_RATE | Optional. Sample rate for Pyroscope profiling (integer). No default; when unset, the pyroscope-io library default is used.
-| PYROSCOPE_GRAFANA_USER | Optional. Grafana Cloud Pyroscope user/tenant ID for basic auth. Required when PYROSCOPE_GRAFANA_API_TOKEN is set.
-| PYROSCOPE_GRAFANA_API_TOKEN | Optional. Grafana Cloud API/access policy token for Pyroscope basic auth. Required when PYROSCOPE_GRAFANA_USER is set.
-| LITELLM_MASTER_KEY | Master key for proxy authentication
-| LITELLM_MAX_BUDGET_PER_SESSION_TTL | TTL in seconds for session budget counters used by the max-budget-per-session limiter. Default is 3600 (1 hour)
-| LITELLM_MAX_ITERATIONS_TTL | TTL in seconds for session iteration counters used by the max-iterations limiter. Default is 3600 (1 hour)
-| LITELLM_MAX_STREAMING_DURATION_SECONDS | Maximum duration in seconds allowed for a streaming response. Streams exceeding this duration are terminated with a Timeout error. Default is None (no limit)
-| LITELLM_MODE | Operating mode for LiteLLM (e.g., production, development)
-| LITELLM_NON_ROOT | Flag to run LiteLLM in non-root mode for enhanced security in Docker containers
-| LITELLM_RATE_LIMIT_WINDOW_SIZE | Rate limit window size for LiteLLM. Default is 60
-| LITELLM_REASONING_AUTO_SUMMARY | If set to "true", automatically enables detailed reasoning summaries (`summary: "detailed"`) for reasoning models across all translation paths (Anthropic adapter, Responses API, etc.). Default is "false"
-| LITELLM_SALT_KEY | Salt key for encryption in LiteLLM
-| LITELLM_SSL_CIPHERS | SSL/TLS cipher configuration for faster handshakes. Controls cipher suite preferences for OpenSSL connections.
-| LITELLM_SECRET_AWS_KMS_LITELLM_LICENSE | AWS KMS encrypted license for LiteLLM
-| LITELLM_TOKEN | Access token for LiteLLM integration
-| LITELLM_USE_CHAT_COMPLETIONS_URL_FOR_ANTHROPIC_MESSAGES | When set to "true", routes OpenAI /v1/messages requests through chat/completions instead of the Responses API for Anthropic models. Can also be set via `litellm_settings.use_chat_completions_url_for_anthropic_messages`
-| LITELLM_ROUTE_ALL_CHAT_OPENAI_TO_RESPONSES | When set to "true", routes all OpenAI /chat/completions requests through the Responses API bridge. Recommended for OpenAI models. Can also be set via `litellm_settings.route_all_chat_openai_to_responses`
-| LITELLM_USE_LEGACY_INTERACTIONS_SCHEMA | When set to "true", uses the legacy Google Interactions API schema (`outputs` array, `2026-05-07` revision) instead of the new schema (`steps` array, `2026-05-20` revision). The legacy schema will be sunset on June 8, 2026. Can also be set via `litellm_settings.use_legacy_interactions_schema`
-| LITELLM_USER_AGENT | Custom user agent string for LiteLLM API requests. Used for partner telemetry attribution
-| LITELLM_WORKER_STARTUP_HOOKS | Comma-separated list of `module.path:function_name` callables to run in each worker process during startup. Runs early in the worker lifecycle (before config/DB loading). Useful for re-initializing per-process state like [gflags](https://github.com/google/python-gflags). See [Worker Startup Hooks](/proxy/worker_startup_hooks) for details
-| LITELLM_PRINT_STANDARD_LOGGING_PAYLOAD | If true, prints the standard logging payload to the console - useful for debugging
-| LITELM_ENVIRONMENT | Environment for LiteLLM Instance. This is currently only logged to DeepEval to determine the environment for DeepEval integration.
-| LITELLM_ASYNCIO_QUEUE_MAXSIZE | Maximum size for asyncio queues (e.g. log queues, spend update queues, and cookbook examples such as realtime audio in `nova_sonic_realtime.py`). Bounds in-memory growth to prevent OOM. Default is 1000.
-| LOGFIRE_TOKEN | Token for Logfire logging service
-| LOGFIRE_BASE_URL | Base URL for Logfire logging service (useful for self hosted deployments)
-| LOGGING_WORKER_CONCURRENCY | Maximum number of concurrent coroutine slots for the logging worker on the asyncio event loop. Default is 100. Setting too high will flood the event loop with logging tasks which will lower the overall latency of the requests.
-| LOGGING_WORKER_MAX_QUEUE_SIZE | Maximum size of the logging worker queue. When the queue is full, the worker aggressively clears tasks to make room instead of dropping logs. Default is 50,000
-| LOGGING_WORKER_MAX_TIME_PER_COROUTINE | Maximum time in seconds allowed for each coroutine in the logging worker before timing out. Default is 20.0
-| LOGGING_WORKER_CLEAR_PERCENTAGE | Percentage of the queue to extract when clearing. Default is 50% 
-| MAX_BASE64_LENGTH_FOR_LOGGING | Maximum number of base64 characters to keep in logging payloads. Data URIs exceeding this are replaced with a size placeholder. Set to 0 to disable truncation. Default is 64
-| MAX_COMPETITOR_NAMES | Maximum number of competitor names allowed in policy template enrichment. Default is 100
-| MAX_EXCEPTION_MESSAGE_LENGTH | Maximum length for exception messages. Default is 2000
-| MAX_ITERATIONS_TO_CLEAR_QUEUE | Maximum number of iterations to attempt when clearing the logging worker queue during shutdown. Default is 200
-| MAX_TIME_TO_CLEAR_QUEUE | Maximum time in seconds to spend clearing the logging worker queue during shutdown. Default is 5.0
-| LOGGING_WORKER_AGGRESSIVE_CLEAR_COOLDOWN_SECONDS | Cooldown time in seconds before allowing another aggressive clear operation when the queue is full. Default is 0.5 
-| MAX_STRING_LENGTH_PROMPT_IN_DB | Maximum length for strings in spend logs when sanitizing request bodies. Strings longer than this will be truncated. Default is 1000
-| MAX_IN_MEMORY_QUEUE_FLUSH_COUNT | Maximum count for in-memory queue flush operations. Default is 1000
-| MAX_IMAGE_URL_DOWNLOAD_SIZE_MB | Maximum size in MB for downloading images from URLs. Prevents memory issues from downloading very large images. Images exceeding this limit will be rejected before download. Set to 0 to completely disable image URL handling (all image_url requests will be blocked). Default is 50MB (matching [OpenAI's limit](https://platform.openai.com/docs/guides/images-vision?api-mode=chat#image-input-requirements))
-| MAX_LONG_SIDE_FOR_IMAGE_HIGH_RES | Maximum length for the long side of high-resolution images. Default is 2000
-| MAX_REDIS_BUFFER_DEQUEUE_COUNT | Maximum count for Redis buffer dequeue operations. Default is 100
-| MAX_SHORT_SIDE_FOR_IMAGE_HIGH_RES | Maximum length for the short side of high-resolution images. Default is 768
-| MAX_SIZE_IN_MEMORY_QUEUE | Maximum size for in-memory queue. Default is 10000
-| MAX_SIZE_PER_ITEM_IN_MEMORY_CACHE_IN_KB | Maximum size in KB for each item in memory cache. Default is 512 or 1024
-| MAX_SPENDLOG_ROWS_TO_QUERY | Maximum number of spend log rows to query. Default is 1,000,000
-| MAX_TEAM_LIST_LIMIT | Maximum number of teams to list. Default is 20
-| MAX_TILE_HEIGHT | Maximum height for image tiles. Default is 512
-| MAX_TILE_WIDTH | Maximum width for image tiles. Default is 512
-| MAX_TOKEN_TRIMMING_ATTEMPTS | Maximum number of attempts to trim a token message. Default is 10
-| MAXIMUM_TRACEBACK_LINES_TO_LOG | Maximum number of lines to log in traceback in LiteLLM Logs UI. Default is 100
-| MAX_RETRY_DELAY | Maximum delay in seconds for retrying requests. Default is 8.0
-| MAX_LANGFUSE_INITIALIZED_CLIENTS | Maximum number of Langfuse clients to initialize on proxy. Default is 50. This is set since langfuse initializes 1 thread everytime a client is initialized. We've had an incident in the past where we reached 100% cpu utilization because Langfuse was initialized several times.
-| MAX_MCP_SEMANTIC_FILTER_TOOLS_HEADER_LENGTH | Maximum header length for MCP semantic filter tools. Default is 150
-| MAX_POLICY_ESTIMATE_IMPACT_ROWS | Maximum number of rows returned when estimating the impact of a policy. Default is 1000
-| MAX_PAYLOAD_SIZE_FOR_DEBUG_LOG | Maximum payload size in bytes for full DEBUG serialization. Payloads exceeding this will be truncated in logs. Default is 102400 (100 KB)
-| MIN_NON_ZERO_TEMPERATURE | Minimum non-zero temperature value. Default is 0.0001
-| MINIMUM_PROMPT_CACHE_TOKEN_COUNT | Minimum token count for caching a prompt. Default is 1024
-| MISTRAL_API_BASE | Base URL for Mistral API. Default is https://api.mistral.ai
-| MISTRAL_API_KEY | API key for Mistral API
-| MICROSOFT_AUTHORIZATION_ENDPOINT | Custom authorization endpoint URL for Microsoft SSO (overrides default Microsoft OAuth authorization endpoint)
-| MICROSOFT_CLIENT_ID | Client ID for Microsoft services
-| MICROSOFT_CLIENT_SECRET | Client secret for Microsoft services
-| MICROSOFT_SERVICE_PRINCIPAL_ID | Service Principal ID for Microsoft Enterprise Application. (This is an advanced feature if you want litellm to auto-assign members to Litellm Teams based on their Microsoft Entra ID Groups)
-| MICROSOFT_TENANT | Tenant ID for Microsoft Azure
-| MICROSOFT_TOKEN_ENDPOINT | Custom token endpoint URL for Microsoft SSO (overrides default Microsoft OAuth token endpoint)
-| MICROSOFT_USER_DISPLAY_NAME_ATTRIBUTE | Field name for user display name in Microsoft SSO response. Default is `displayName`
-| MICROSOFT_USER_EMAIL_ATTRIBUTE | Field name for user email in Microsoft SSO response. Default is `userPrincipalName`
-| MICROSOFT_USER_FIRST_NAME_ATTRIBUTE | Field name for user first name in Microsoft SSO response. Default is `givenName`
-| MICROSOFT_USER_ID_ATTRIBUTE | Field name for user ID in Microsoft SSO response. Default is `id`
-| MICROSOFT_USER_LAST_NAME_ATTRIBUTE | Field name for user last name in Microsoft SSO response. Default is `surname`
-| MICROSOFT_USERINFO_ENDPOINT | Custom userinfo endpoint URL for Microsoft SSO (overrides default Microsoft Graph userinfo endpoint)
-| MODEL_COST_MAP_MAX_SHRINK_RATIO | Maximum allowed shrinkage ratio when validating a fetched model cost map against the local backup. Rejects the fetched map if it is smaller than this fraction of the backup. Default is 0.5
-| MODEL_COST_MAP_MIN_MODEL_COUNT | Minimum number of models a fetched cost map must contain to be considered valid. Default is 50
-| NO_DOCS | Flag to disable Swagger UI documentation
-| NO_OPENAPI | Flag to disable the /openapi.json endpoint
-| NO_REDOC | Flag to disable Redoc documentation
-| NO_PROXY | List of addresses to bypass proxy
-| NON_LLM_CONNECTION_TIMEOUT | Timeout in seconds for non-LLM service connections. Default is 15
-| OAUTH_TOKEN_INFO_ENDPOINT | Endpoint for OAuth token info retrieval
-| OPENAI_BASE_URL | Base URL for OpenAI API
-| OPENAI_API_BASE | Base URL for OpenAI API. Default is https://api.openai.com/
-| OPENAI_API_KEY | API key for OpenAI services
-| OPENAI_CHATGPT_API_BASE | Alternative to CHATGPT_API_BASE. Base URL for ChatGPT API
-| OPENAI_FILE_SEARCH_COST_PER_1K_CALLS | Cost per 1000 calls for OpenAI file search. Default is 0.0025
-| OPENAI_ORGANIZATION | Organization identifier for OpenAI
-| OPENAPI_URL | The path to the OpenAPI JSON endpoint. **By default this is "/openapi.json"**
-| OPENID_BASE_URL | Base URL for OpenID Connect services
-| OPENID_CLIENT_ID | Client ID for OpenID Connect authentication
-| OPENID_CLIENT_SECRET | Client secret for OpenID Connect authentication
-| OPENMETER_API_ENDPOINT | API endpoint for OpenMeter integration
-| OPENMETER_API_KEY | API key for OpenMeter services
-| OPENMETER_EVENT_TYPE | Type of events sent to OpenMeter
-| ONYX_API_BASE | Base URL for Onyx Security AI Guard service (defaults to https://ai-guard.onyx.security)
-| ONYX_API_KEY | API key for Onyx Security AI Guard service
-| ONYX_TIMEOUT | Timeout in seconds for Onyx Guard server requests. Default is 10
-| OTEL_ENDPOINT | OpenTelemetry endpoint for traces
-| OTEL_EXPORTER_OTLP_ENDPOINT | OpenTelemetry endpoint for traces
-| OTEL_ENVIRONMENT_NAME | Environment name for OpenTelemetry
-| OTEL_EXPORTER | Exporter type for OpenTelemetry
-| OTEL_EXPORTER_OTLP_PROTOCOL | Exporter type for OpenTelemetry
-| OTEL_HEADERS | Headers for OpenTelemetry requests
-| OTEL_MODEL_ID | Model ID for OpenTelemetry tracing
-| OTEL_EXPORTER_OTLP_HEADERS | Headers for OpenTelemetry requests
-| OTEL_SERVICE_NAME | Service name identifier for OpenTelemetry
-| OTEL_TRACER_NAME | Tracer name for OpenTelemetry tracing
-| OTEL_LOGS_EXPORTER | Exporter type for OpenTelemetry logs (e.g., console)
-| OTEL_IGNORE_CONTEXT_PROPAGATION | When true, ignore parent span context propagation (inbound `traceparent` headers and any active span) so every LiteLLM trace is its own root. Default `false`
-| OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT | Controls whether prompts and completions are captured in OpenTelemetry traces. Accepts `NO_CONTENT` (default per spec), `SPAN_ONLY`, `EVENT_ONLY`, `SPAN_AND_EVENT`, or the boolean form (`true` maps to `EVENT_ONLY`, `false` to `NO_CONTENT`)
-| OTEL_SEMCONV_STABILITY_OPT_IN | Set to `gen_ai_latest_experimental` to emit spans following the latest [OpenTelemetry GenAI semantic conventions](https://opentelemetry.io/docs/specs/semconv/gen-ai/gen-ai-spans/). Renames the LLM-call span to `{operation} {model}`, suppresses `raw_gen_ai_request`, adds `gen_ai.provider.name`, and consolidates events. Comma-separable per OTEL spec
-| USE_OTEL_LITELLM_REQUEST_SPAN | When `true`, the proxy emits a discrete `litellm_request` span per LLM call as a child of the `Received Proxy Server Request` span. Default `false` (since v1.81.0); LLM-call attributes are set directly on the proxy root span. See [Why don't I see a `litellm_request` span?](/docs/observability/opentelemetry_integration#why-dont-i-see-a-litellm_request-span)
-| OTEL_DEBUG | When `true`, prints exporter and span-creation diagnostics to stderr. Useful when traces aren't reaching your backend. Default `false`
-| DEBUG_OTEL | Alias for `OTEL_DEBUG`
-| PAGERDUTY_API_KEY | API key for PagerDuty Alerting
-| PANW_PRISMA_AIRS_API_KEY | API key for PANW Prisma AIRS service
-| PANW_PRISMA_AIRS_API_BASE | Base URL for PANW Prisma AIRS service
-| PHOENIX_API_KEY | API key for Arize Phoenix
-| PHOENIX_COLLECTOR_ENDPOINT | API endpoint for Arize Phoenix
-| PHOENIX_COLLECTOR_HTTP_ENDPOINT | API http endpoint for Arize Phoenix
-| PILLAR_API_BASE | Base URL for Pillar API Guardrails
-| PILLAR_API_KEY | API key for Pillar API Guardrails
-| PILLAR_ON_FLAGGED_ACTION | Action to take when content is flagged ('block' or 'monitor')
-| PKCE_STRICT_CACHE_MISS | When set to `true`, the SSO callback will return a 401 error if the PKCE code_verifier is not found in the cache (e.g. due to a cache miss across pods). When `false` (default), it logs a warning and continues without the code_verifier.
-| POD_NAME | Pod name for the server, this will be [emitted to `datadog` logs](https://docs.litellm.ai/docs/proxy/logging#datadog) as `POD_NAME` 
-| POSTHOG_API_KEY | API key for PostHog analytics integration
-| POSTHOG_API_URL | Base URL for PostHog API (defaults to https://us.i.posthog.com)
-| POSTHOG_MOCK | Enable mock mode for PostHog integration testing. When set to true, intercepts PostHog API calls and returns mock responses without making actual network calls. Default is false
-| POSTHOG_MOCK_LATENCY_MS | Mock latency in milliseconds for PostHog API calls when mock mode is enabled. Simulates network round-trip time. Default is 100ms
-| PRISMA_AUTH_RECONNECT_LOCK_TIMEOUT_SECONDS | Lock timeout in seconds for Prisma auth reconnection. Default is 0.1
-| PRISMA_AUTH_RECONNECT_TIMEOUT_SECONDS | Timeout in seconds for Prisma auth reconnection attempts. Default is 2.0
-| PRISMA_HEALTH_WATCHDOG_ENABLED | Enable the Prisma DB health watchdog that monitors and reconnects on connection loss. Default is true
-| PRISMA_HEALTH_WATCHDOG_INTERVAL_SECONDS | Interval in seconds for Prisma health watchdog probes. Default is 30
-| PRISMA_HEALTH_WATCHDOG_PROBE_TIMEOUT_SECONDS | Timeout in seconds for each Prisma health probe. Default is 5.0
-| PRISMA_RECONNECT_COOLDOWN_SECONDS | Cooldown in seconds between Prisma reconnection attempts. Default is 15
-| PRISMA_RECONNECT_ESCALATION_THRESHOLD | Number of consecutive reconnect failures before escalating the reconnection strategy. Default is 3
-| PRISMA_WATCHDOG_RECONNECT_TIMEOUT_SECONDS | Timeout in seconds for Prisma watchdog-initiated reconnection. Default is 30.0
-| PREDIBASE_API_BASE | Base URL for Predibase API
-| PRESIDIO_ANALYZER_API_BASE | Base URL for Presidio Analyzer service
-| PRESIDIO_ANONYMIZER_API_BASE | Base URL for Presidio Anonymizer service
-| PROMETHEUS_BUDGET_METRICS_REFRESH_INTERVAL_MINUTES | Refresh interval in minutes for Prometheus budget metrics. Default is 5
-| PROMETHEUS_FALLBACK_STATS_SEND_TIME_HOURS | Fallback time in hours for sending stats to Prometheus. Default is 9
-| PROMETHEUS_URL | URL for Prometheus service
-| PROMPTLAYER_API_KEY | API key for PromptLayer integration
-| PROXY_ADMIN_ID | Admin identifier for proxy server
-| PROXY_BASE_URL | Base URL for proxy service. Also used by the MCP OAuth `authorize` endpoint as the proxy's public origin when validating browser-supplied `redirect_uri` values — set this to the exact origin users see in their address bar (e.g. `https://llm.example.com`) when LiteLLM runs behind a TLS-terminating ingress. Full origin only: scheme + host (+ port if non-default), no trailing slash, no path. When set, it takes precedence over `X-Forwarded-*` headers (which only apply when [`use_x_forwarded_for`](#general_settings---reference) is `true` AND the request peer is in [`mcp_trusted_proxy_ranges`](#general_settings---reference)). See [MCP OAuth — Reverse proxy and ingress configuration](../mcp_oauth#reverse-proxy-and-ingress-configuration).
-| PROXY_BATCH_WRITE_AT | Time in seconds to wait before batch writing spend logs to the database. Default is 10
-| PROXY_BATCH_POLLING_INTERVAL | Time in seconds to wait before polling a batch, to check if it's completed. Default is 6000s (1 hour)
-| PROXY_BATCH_POLLING_ENABLED | Set to `false` to disable the `CheckBatchCost` and `CheckResponsesCost` background polling jobs entirely. Useful for emergency mitigation on installs with large numbers of stale managed objects. Default is `true`
-| MAX_OBJECTS_PER_POLL_CYCLE | Maximum number of managed objects (batches / responses) fetched per polling cycle. Prevents OOM on installs with many stale rows. Default is `50`
-| MANAGED_OBJECT_STALENESS_CUTOFF_DAYS | Managed objects older than this many days in a non-terminal state are marked `stale_expired` at the start of each poll cycle and skipped. Default is `7`
-| PROXY_BUDGET_RESCHEDULER_MAX_TIME | Maximum time in seconds to wait before checking database for budget resets. Default is 605
-| PROXY_BUDGET_RESCHEDULER_MIN_TIME | Minimum time in seconds to wait before checking database for budget resets. Default is 597
-| PYTHON_GC_THRESHOLD | GC thresholds ('gen0,gen1,gen2', e.g. '1000,50,50'); defaults to Python’s values.
-| PROXY_LOGOUT_URL | URL for logging out of the proxy service
-| QDRANT_API_BASE | Base URL for Qdrant API
-| QDRANT_API_KEY | API key for Qdrant service
-| QDRANT_SCALAR_QUANTILE | Scalar quantile for Qdrant operations. Default is 0.99
-| QDRANT_URL | Connection URL for Qdrant database
-| QDRANT_VECTOR_SIZE | Vector size for Qdrant operations. Default is 1536
-| REDIS_CONNECTION_POOL_TIMEOUT | Timeout in seconds for Redis connection pool. Default is 5
-| REDIS_CIRCUIT_BREAKER_FAILURE_THRESHOLD | Number of consecutive failures before the Redis circuit breaker opens. Default is 5
-| REDIS_CIRCUIT_BREAKER_RECOVERY_TIMEOUT | Time in seconds before the Redis circuit breaker attempts recovery after opening. Default is 60
-| REDIS_CLUSTER_NODES | JSON-formatted list of Redis cluster startup nodes for Redis Cluster mode. Example: `[{"host": "node1", "port": 6379}]`
-| REDIS_HOST | Hostname for Redis server
-| REDIS_PASSWORD | Password for Redis service
-| REDIS_PORT | Port number for Redis server
-| REDIS_SOCKET_TIMEOUT | Timeout in seconds for Redis socket operations. Default is 0.1
-| REDIS_GCP_SERVICE_ACCOUNT | GCP service account for IAM authentication with Redis. Format: "projects/-/serviceAccounts/name@project.iam.gserviceaccount.com"
-| REDIS_GCP_SSL_CA_CERTS | Path to SSL CA certificate file for secure GCP Memorystore Redis connections
-| REDOC_URL | The path to the Redoc Fast API documentation. **By default this is "/redoc"**
-| REPEATED_STREAMING_CHUNK_LIMIT | Limit for repeated streaming chunks to detect looping. Default is 100
-| REALTIME_WEBSOCKET_MAX_MESSAGE_SIZE_BYTES | Maximum size in bytes for WebSocket messages in realtime connections. Default is None.
-| REPLICATE_MODEL_NAME_WITH_ID_LENGTH | Length of Replicate model names with ID. Default is 64
-| REPLICATE_POLLING_DELAY_SECONDS | Delay in seconds for Replicate polling operations. Default is 0.5
-| REQUEST_TIMEOUT | Timeout in seconds for requests. Default is 6000
-| ROOT_REDIRECT_URL | URL to redirect root path (/) to when DOCS_URL is set to something other than "/" (DOCS_URL is "/" by default)
-| ROUTER_MAX_FALLBACKS | Maximum number of fallbacks for router. Default is 5
-| RUBRIK_API_KEY | Bearer token for authenticating with the Rubrik webhook service
-| RUBRIK_BATCH_SIZE | Number of log entries to buffer before flushing to Rubrik. Default is 512
-| RUBRIK_SAMPLING_RATE | Fraction of requests to log to Rubrik (0.0 to 1.0). Default is 1.0
-| RUBRIK_WEBHOOK_URL | Base URL of the Rubrik webhook service for tool blocking and batch logging
-| RUNWAYML_DEFAULT_API_VERSION | Default API version for RunwayML service. Default is "2024-11-06"
-| RUNWAYML_POLLING_TIMEOUT | Timeout in seconds for RunwayML image generation polling. Default is 600 (10 minutes)
-| S3_VECTORS_DEFAULT_DIMENSION | Default vector dimension for S3 Vectors RAG ingestion. Default is 1024
-| S3_VECTORS_DEFAULT_DISTANCE_METRIC | Default distance metric for S3 Vectors RAG ingestion. Options: "cosine", "euclidean". Default is "cosine"
-| SECRET_MANAGER_REFRESH_INTERVAL | Refresh interval in seconds for secret manager. Default is 86400 (24 hours)
-| SERVER_ROOT_PATH | Root path for the server application
-| SEND_USER_API_KEY_ALIAS | Flag to send user API key alias to Zscaler AI Guard. Default is False
-| SEND_USER_API_KEY_TEAM_ID | Flag to send user API key team ID to Zscaler AI Guard. Default is False
-| SEND_USER_API_KEY_USER_ID | Flag to send user API key user ID to Zscaler AI Guard. Default is False
-| SET_VERBOSE | [DEPRECATED] Use `LITELLM_LOG` instead with values "INFO", "DEBUG", or "ERROR". See [debugging docs](./debugging)
-| SINGLE_DEPLOYMENT_TRAFFIC_FAILURE_THRESHOLD | Minimum number of requests to consider "reasonable traffic" for single-deployment cooldown logic. Default is 1000
-| SLACK_DAILY_REPORT_FREQUENCY | Frequency of daily Slack reports (e.g., daily, weekly)
-| SLACK_WEBHOOK_URL | Webhook URL for Slack integration
-| SMTP_HOST | Hostname for the SMTP server
-| SMTP_PASSWORD | Password for SMTP authentication (do not set if SMTP does not require auth)
-| SMTP_PORT | Port number for SMTP server
-| SMTP_SENDER_EMAIL | Email address used as the sender in SMTP transactions
-| SMTP_SENDER_LOGO | Logo used in emails sent via SMTP
-| SMTP_TLS | Flag to enable or disable TLS for SMTP connections
-| SMTP_USERNAME | Username for SMTP authentication (do not set if SMTP does not require auth)
-| SENDGRID_API_KEY | API key for SendGrid email service
-| RESEND_API_KEY | API key for Resend email service
-| SENDGRID_SENDER_EMAIL | Email address used as the sender in SendGrid email transactions 
-| SPEND_LOGS_URL | URL for retrieving spend logs
-| SPEND_LOG_CLEANUP_BATCH_SIZE | Number of logs deleted per batch during cleanup. Default is 1000
-| STALE_OBJECT_CLEANUP_BATCH_SIZE | Max number of stale managed objects updated per cleanup cycle. Default is 1000
-| SSL_CERTIFICATE | Path to the SSL certificate file
-| SSL_ECDH_CURVE | ECDH curve for SSL/TLS key exchange (e.g., 'X25519' to disable PQC).
-| SSL_SECURITY_LEVEL | [BETA] Security level for SSL/TLS connections. E.g. `DEFAULT@SECLEVEL=1`
-| SSL_VERIFY | Flag to enable or disable SSL certificate verification
-| SSL_CERT_FILE | Path to the SSL certificate file for custom CA bundle
-| SUPABASE_KEY | API key for Supabase service
-| SUPABASE_URL | Base URL for Supabase instance
-| STORE_MODEL_IN_DB | If true, enables storing model + credential information in the DB. 
-| SYSTEM_MESSAGE_TOKEN_COUNT | Token count for system messages. Default is 4
-| TEST_EMAIL_ADDRESS | Email address used for testing purposes
-| TOGETHER_AI_4_B | Size parameter for Together AI 4B model. Default is 4
-| TOGETHER_AI_8_B | Size parameter for Together AI 8B model. Default is 8
-| TOGETHER_AI_21_B | Size parameter for Together AI 21B model. Default is 21
-| TOGETHER_AI_41_B | Size parameter for Together AI 41B model. Default is 41
-| TOGETHER_AI_80_B | Size parameter for Together AI 80B model. Default is 80
-| TOGETHER_AI_110_B | Size parameter for Together AI 110B model. Default is 110
-| TOGETHER_AI_EMBEDDING_150_M | Size parameter for Together AI 150M embedding model. Default is 150
-| TOGETHER_AI_EMBEDDING_350_M | Size parameter for Together AI 350M embedding model. Default is 350
-| TOOL_CHOICE_OBJECT_TOKEN_COUNT | Token count for tool choice objects. Default is 4
-| TOOL_POLICY_CACHE_TTL_SECONDS | TTL in seconds for caching tool policy guardrail results. Default is 60
-| UI_LOGO_PATH | Path to the logo image used in the UI
-| UI_PASSWORD | Password for accessing the UI
-| UI_USERNAME | Username for accessing the UI
-| UPSTREAM_LANGFUSE_DEBUG | Flag to enable debugging for upstream Langfuse
-| UPSTREAM_LANGFUSE_HOST | Host URL for upstream Langfuse service
-| UPSTREAM_LANGFUSE_PUBLIC_KEY | Public key for upstream Langfuse authentication
-| UPSTREAM_LANGFUSE_RELEASE | Release version identifier for upstream Langfuse
-| UPSTREAM_LANGFUSE_SECRET_KEY | Secret key for upstream Langfuse authentication
-| USE_AWS_KMS | Flag to enable AWS Key Management Service for encryption
-| USE_PRISMA_MIGRATE | Flag to use prisma migrate instead of prisma db push. Recommended for production environments.
-| VANTAGE_API_KEY | API key for Vantage cost-import integration
-| VANTAGE_BASE_URL | Base URL for Vantage API. Default is `https://api.vantage.sh`
-| VANTAGE_EXPORT_FREQUENCY | Export frequency for Vantage — `hourly` (default), `daily`, or `interval`
-| VANTAGE_EXPORT_INTERVAL_SECONDS | Interval in seconds when VANTAGE_EXPORT_FREQUENCY is `interval`
-| VANTAGE_INTEGRATION_TOKEN | Vantage integration token for the cost-import endpoint
-| WANDB_API_KEY | API key for Weights & Biases (W&B) logging integration
-| WANDB_HOST | Host URL for Weights & Biases (W&B) service
-| WANDB_PROJECT_ID | Project ID for Weights & Biases (W&B) logging integration
-| WEBHOOK_URL | URL for receiving webhooks from external services
-| SPEND_LOG_RUN_LOOPS | Constant for setting how many runs of 1000 batch deletes should spend_log_cleanup task run
-| SPEND_LOG_CLEANUP_BATCH_SIZE | Number of logs deleted per batch during cleanup. Default is 1000
-| SPEND_LOG_QUEUE_POLL_INTERVAL | Polling interval in seconds for spend log queue. Default is 2.0
-| SPEND_LOG_QUEUE_SIZE_THRESHOLD | Threshold for spend log queue size before processing. Default is 100
-| SPEND_LOG_CLEANUP_MAX_CONSECUTIVE_BATCH_FAILURES | Number of consecutive batch failures tolerated before the spend log cleanup run aborts. Default is 3
-| SPEND_LOG_CLEANUP_BATCH_FAILURE_BACKOFF_SECONDS | Backoff in seconds between failed spend log cleanup batches. Default is 0.5
-| SPEND_COUNTER_RESEED_LOCKS_MAX_SIZE | Max size of the per-counter LRU lock dict used to coalesce concurrent spend-counter reseeds from the DB on the enforcement path. Default is 10000.
-| COROUTINE_CHECKER_MAX_SIZE_IN_MEMORY | Maximum size for CoroutineChecker in-memory cache. Default is 1000
-| DEFAULT_SHARED_HEALTH_CHECK_TTL | Time-to-live in seconds for cached health check results in shared health check mode. Default is 300 (5 minutes)
-| DEFAULT_SHARED_HEALTH_CHECK_LOCK_TTL | Time-to-live in seconds for health check lock in shared health check mode. Default is 60 (1 minute)
-| ZSCALER_AI_GUARD_API_KEY | API key for Zscaler AI Guard service
-| ZSCALER_AI_GUARD_POLICY_ID | Policy ID for Zscaler AI Guard guardrails
-| ZSCALER_AI_GUARD_URL | Base URL for Zscaler AI Guard API. Default is https://api.us1.zseclipse.net/v1/detection/execute-policy
+| ACTIONS_ID_TOKEN_REQUEST_TOKEN | GitHub Actions에서 ID를 요청하기 위한 token
+| ACTIONS_ID_TOKEN_REQUEST_URL | GitHub Actions에서 ID token을 요청하는 URL입니다.
+| AGENTOPS_ENVIRONMENT | AgentOps 로깅 integration의 environment입니다.
+| AGENTOPS_API_KEY | AgentOps 로깅 integration용 API key입니다.
+| AGENTOPS_SERVICE_NAME | AgentOps 로깅 integration용 service name입니다.
+| AISPEND_ACCOUNT_ID | AI Spend account ID입니다.
+| AISPEND_API_KEY | AI Spend API key입니다.
+| AIOHTTP_CONNECTOR_LIMIT | aiohttp connector connection limit입니다. 0으로 설정하면 제한이 적용되지 않습니다. **기본값은 0입니다.**
+| AIOHTTP_CONNECTOR_LIMIT_PER_HOST | aiohttp connector의 host별 connection limit입니다. 0으로 설정하면 제한이 적용되지 않습니다. **기본값은 0입니다.**
+| AIOHTTP_KEEPALIVE_TIMEOUT | aiohttp connection keep-alive timeout(초)입니다. **기본값은 120입니다.**
+| AIOHTTP_SO_KEEPALIVE | aiohttp socket에서 TCP `SO_KEEPALIVE`를 활성화해 idle provider connection이 NAT/load balancer에 의해 조용히 끊기기 전에 감지하고 정리합니다. **기본값은 False입니다.**
+| AIOHTTP_TCP_KEEPCNT | connection을 dead로 간주하기 전 응답 없는 TCP keepalive probe 수입니다(`AIOHTTP_SO_KEEPALIVE=True`일 때 적용). **기본값은 5입니다.**
+| AIOHTTP_TCP_KEEPIDLE | aiohttp TCP connection이 idle 상태로 유지된 뒤 keepalive probe를 보내기까지의 시간(초)입니다(`AIOHTTP_SO_KEEPALIVE=True`일 때 적용). **기본값은 60입니다.**
+| AIOHTTP_TCP_KEEPINTVL | 연속 aiohttp TCP keepalive probe 사이의 시간(초)입니다(`AIOHTTP_SO_KEEPALIVE=True`일 때 적용). **기본값은 30입니다.**
+| AIOHTTP_TRUST_ENV | aiohttp trust environment를 활성화하는 flag입니다. True로 설정하면 aiohttp가 HTTP(S)_PROXY env var를 따릅니다. **기본값은 False입니다.**
+| AIOHTTP_TTL_DNS_CACHE | aiohttp DNS cache TTL(초)입니다. **기본값은 300입니다.**
+| AKTO_GUARDRAIL_API_BASE | Akto Guardrail API base URL입니다(예: `http://localhost:9090`). Akto guardrail integration에서 사용됩니다.
+| AKTO_API_KEY | Akto Guardrail service 인증용 API key입니다.
+| ALLOWED_EMAIL_DOMAINS | 접근을 허용할 email domain 목록입니다.
+| APSCHEDULER_COALESCE | job의 pending execution 여러 개를 하나로 합칠지 여부입니다. **기본값은 False입니다.**
+| APSCHEDULER_MAX_INSTANCES | 각 job의 최대 concurrent instance 수입니다. **기본값은 1입니다.**
+| APSCHEDULER_MISFIRE_GRACE_TIME | misfired job의 grace time(초)입니다. **기본값은 1입니다.**
+| APSCHEDULER_REPLACE_EXISTING | 같은 ID의 기존 job을 교체할지 여부입니다. **기본값은 False입니다.**
+| ARIZE_API_KEY | Arize platform integration용 API key입니다.
+| ARIZE_SPACE_KEY | Arize platform space key입니다.
+| ARGILLA_BATCH_SIZE | Argilla 로깅 batch size입니다.
+| ARGILLA_API_KEY | Argilla platform API key입니다.
+| ARGILLA_SAMPLING_RATE | Argilla 로깅 sampling rate입니다.
+| ARGILLA_DATASET_NAME | Argilla 로깅 dataset name입니다.
+| ARGILLA_BASE_URL | Argilla service base URL입니다.
+| ATHINA_API_KEY | Athina service API key입니다.
+| ATHINA_BASE_URL | Athina service base URL입니다. 기본값은 `https://log.athina.ai`입니다.
+| AUTH_STRATEGY | authentication에 사용하는 strategy입니다(예: OAuth, API key).
+| AUTO_REDIRECT_UI_LOGIN_TO_SSO | SSO가 구성된 경우 UI login page를 SSO로 자동 redirect하는 flag입니다. 기본값은 **false**입니다.
+| AUDIO_SPEECH_CHUNK_SIZE | audio speech 처리 chunk size입니다. 기본값은 1024입니다.
+| ANTHROPIC_API_KEY | Anthropic service API key입니다. 인증에 `x-api-key` header를 사용합니다.
+| ANTHROPIC_AUTH_TOKEN | Anthropic service의 대체 auth token입니다. `x-api-key` 대신 `Authorization: Bearer` header를 사용합니다. `ANTHROPIC_API_KEY`가 설정되지 않았을 때 fallback으로 사용됩니다.
+| ANTHROPIC_API_BASE | Anthropic API base URL입니다. 기본값은 https://api.anthropic.com 입니다.
+| ANTHROPIC_BASE_URL | Anthropic API base URL 설정용 `ANTHROPIC_API_BASE` 대안입니다. `ANTHROPIC_API_BASE`가 설정되지 않았을 때 fallback으로 사용됩니다.
+| ANTHROPIC_TOKEN_COUNTING_BETA_VERSION | Anthropic token counting API용 beta version header입니다. 기본값은 `token-counting-2024-11-01`입니다.
+| AWS_ACCESS_KEY_ID | AWS service용 Access Key ID입니다.
+| AWS_BATCH_ROLE_ARN | batch operation용 AWS IAM role ARN입니다.
+| AWS_DEFAULT_REGION | AWS_REGION이 설정되지 않았을 때 service interaction에 사용할 기본 AWS region입니다.
+| AWS_PROFILE_NAME | 사용할 AWS CLI profile name입니다.
+| AWS_REGION | service interaction용 AWS region입니다. AWS_DEFAULT_REGION보다 우선합니다.
+| AWS_REGION_NAME | service interaction용 기본 AWS region입니다.
+| AWS_ROLE_ARN | authentication을 위해 assume할 AWS IAM role ARN입니다.
+| AWS_ROLE_NAME | AWS IAM 사용용 role name입니다.
+| AWS_S3_BUCKET_NAME | file operation용 AWS S3 bucket name입니다.
+| AWS_S3_OUTPUT_BUCKET_NAME | batch operation용 AWS S3 output bucket name입니다.
+| AWS_SECRET_ACCESS_KEY | AWS service용 Secret Access Key입니다.
+| AWS_SESSION_NAME | AWS session name입니다.
+| AWS_WEB_IDENTITY_TOKEN | AWS용 web identity token입니다.
+| AWS_WEB_IDENTITY_TOKEN_FILE | AWS web identity token이 들어 있는 file path입니다.
+| AZURE_API_VERSION | 사용 중인 Azure API version입니다.
+| AZURE_AI_API_BASE | Azure AI service base URL입니다(예: Azure AI Anthropic).
+| AZURE_AI_API_KEY | Azure AI service API key입니다(예: Azure AI Anthropic).
+| AZURE_AUTHORITY_HOST | Azure authority host URL입니다.
+| AZURE_CERTIFICATE_PASSWORD | Azure OpenAI certificate password입니다.
+| AZURE_CLIENT_ID | Azure service client ID입니다.
+| AZURE_CLIENT_SECRET | Azure service client secret입니다.
+| AZURE_COMPUTER_USE_INPUT_COST_PER_1K_TOKENS | `Azure Computer Use service`의 1K token당 input 비용입니다.
+| AZURE_COMPUTER_USE_OUTPUT_COST_PER_1K_TOKENS | `Azure Computer Use service`의 1K token당 output 비용입니다.
+| AZURE_DEFAULT_RESPONSES_API_VERSION | 사용 중인 `Azure Default Responses API` 버전입니다. 기본값은 "preview"입니다.
+| AZURE_DOCUMENT_INTELLIGENCE_API_VERSION | Azure Document Intelligence service API version입니다.
+| AZURE_DOCUMENT_INTELLIGENCE_DEFAULT_DPI | Azure Document Intelligence service 기본 DPI(dots per inch) 설정입니다.
+| AZURE_TENANT_ID | Azure Active Directory tenant ID입니다.
+| AZURE_USERNAME | Azure service username입니다. 기본 username/password workflow에서 AZURE_PASSWORD와 함께 azure ad token용으로 사용합니다.
+| AZURE_PASSWORD | Azure service password입니다. 기본 username/password workflow에서 AZURE_USERNAME과 함께 azure ad token용으로 사용합니다.
+| AZURE_FEDERATED_TOKEN_FILE | Azure federated token file path입니다.
+| AZURE_FILE_SEARCH_COST_PER_GB_PER_DAY | Azure File Search service의 GB/day cost입니다.
+| AZURE_SCOPE | EntraID Auth에서 Azure service scope입니다. 기본값은 "https://cognitiveservices.azure.com/.default"입니다.
+| AZURE_SENTINEL_DCR_IMMUTABLE_ID | Azure Sentinel logging용 Data Collection Rule immutable ID입니다.
+| AZURE_SENTINEL_STREAM_NAME | Azure Sentinel logging stream name입니다.
+| AZURE_SENTINEL_CLIENT_SECRET | Azure Sentinel authentication client secret입니다.
+| AZURE_SENTINEL_ENDPOINT | Azure Sentinel logging endpoint입니다.
+| AZURE_SENTINEL_TENANT_ID | Azure Sentinel authentication tenant ID입니다.
+| AZURE_SENTINEL_CLIENT_ID | Azure Sentinel authentication client ID입니다.
+| AZURE_KEY_VAULT_URI | Azure Key Vault URI입니다.
+| AZURE_OPERATION_POLLING_TIMEOUT | Azure operation polling timeout(초)입니다.
+| AZURE_STORAGE_ACCOUNT_KEY | Azure Blob Storage logging 인증에 사용할 Azure Storage Account Key입니다.
+| AZURE_STORAGE_ACCOUNT_NAME | Azure Blob Storage logging에 사용할 Azure Storage Account name입니다.
+| AZURE_STORAGE_FILE_SYSTEM | Azure Blob Storage logging에 사용할 Azure Storage File System name입니다. 일반적으로 Container name입니다.
+| AZURE_STORAGE_TENANT_ID | Azure Blob Storage logging 인증에 사용할 Application Tenant ID입니다.
+| AZURE_STORAGE_CLIENT_ID | Azure Blob Storage logging 인증에 사용할 Application Client ID입니다.
+| AZURE_STORAGE_CLIENT_SECRET | Azure Blob Storage logging 인증에 사용할 Application Client Secret입니다.
+| AZURE_VECTOR_STORE_COST_PER_GB_PER_DAY | Azure Vector Store service의 GB/day cost입니다.
+| BACKGROUND_HEALTH_CHECK_MAX_TOKENS | model에 `health_check_max_tokens`가 없을 때 proxy 백그라운드 health check의 `max_tokens`에 사용할 선택적 global 기본값입니다. 설정하지 않으면 non-wildcard model의 기본값은 5입니다. 설정하면 wildcard route에도 적용됩니다. 기본값은 unset입니다.
+| BACKGROUND_HEALTH_CHECK_MAX_TOKENS_REASONING | **non-wildcard** reasoning model(`supports_reasoning(model)=true`)에서 설정하면 `BACKGROUND_HEALTH_CHECK_MAX_TOKENS`보다 우선합니다. 설정하지 않으면 reasoning model은 `BACKGROUND_HEALTH_CHECK_MAX_TOKENS`(설정된 경우) 또는 기본 동작을 사용합니다. Wildcard route는 이를 무시합니다. 기본값은 unset입니다.
+| BATCH_STATUS_POLL_INTERVAL_SECONDS | batch status polling 간격(초)입니다. 기본값은 3600(1 hour)입니다.
+| BATCH_STATUS_POLL_MAX_ATTEMPTS | batch status polling 최대 시도 횟수입니다. 기본값은 24(24 hours)입니다.
+| BEDROCK_MAX_POLICY_SIZE | Bedrock policy의 최대 크기입니다. 기본값은 75입니다.
+| BEDROCK_MIN_THINKING_BUDGET_TOKENS | Bedrock reasoning model의 최소 thinking budget token 수입니다. `budget_tokens`가 이 값보다 낮으면 Bedrock은 400 error를 반환합니다. 더 낮은 값이 들어온 request는 이 최소값으로 clamp됩니다. 기본값은 1024입니다.
+| BERRISPEND_ACCOUNT_ID | BerriSpend service account ID입니다.
+| BRAINTRUST_API_KEY | Braintrust integration용 API key입니다.
+| BRAINTRUST_API_BASE | Braintrust API base URL입니다. 기본값은 https://api.braintrustdata.com/v1 입니다.
+| BRAINTRUST_MOCK | Braintrust integration testing용 mock mode를 활성화합니다. true로 설정하면 실제 network call 없이 Braintrust API call을 가로채 mock response를 반환합니다. 기본값은 false입니다.
+| BRAINTRUST_MOCK_LATENCY_MS | mock mode가 활성화된 Braintrust API call의 mock latency(ms)입니다. network round-trip time을 simulate합니다. 기본값은 100ms입니다.
+| CACHED_STREAMING_CHUNK_DELAY | cached streaming chunk 지연 시간(초)입니다. 기본값은 0.02입니다.
+| CHATGPT_API_BASE | ChatGPT API base URL입니다. 기본값은 https://chatgpt.com/backend-api/codex 입니다.
+| CHATGPT_AUTH_FILE | ChatGPT authentication data file name입니다. 기본값은 "auth.json"입니다.
+| CHATGPT_DEFAULT_INSTRUCTIONS | ChatGPT provider의 기본 system instructions입니다.
+| CHATGPT_ORIGINATOR | ChatGPT API request용 originator identifier입니다. 기본값은 "codex_cli_rs"입니다.
+| CHATGPT_TOKEN_DIR | ChatGPT authentication token을 저장할 directory입니다. 기본값은 "~/.config/litellm/chatgpt"입니다.
+| CHATGPT_USER_AGENT | ChatGPT API request용 custom user agent string입니다.
+| CHATGPT_USER_AGENT_SUFFIX | ChatGPT user agent string에 추가할 suffix입니다.
+| CIRCLE_OIDC_TOKEN | CircleCI용 OpenID Connect token입니다.
+| CIRCLE_OIDC_TOKEN_V2 | CircleCI용 OpenID Connect token version 2입니다.
+| CLI_JWT_EXPIRATION_HOURS | CLI가 생성한 JWT token의 만료 시간(시간)입니다. 기본값은 24 hours입니다. `LITELLM_CLI_JWT_EXPIRATION_HOURS`로도 설정할 수 있습니다.
+| CLOUDZERO_API_KEY | authentication용 CloudZero API key입니다.
+| CLOUDZERO_CONNECTION_ID | data submission용 CloudZero connection ID입니다.
+| CLOUDZERO_EXPORT_INTERVAL_MINUTES | CloudZero data export operation 간격(분)입니다.
+| CLOUDZERO_MAX_FETCHED_DATA_RECORDS | CloudZero에서 fetch할 최대 data record 수입니다.
+| CLOUDZERO_TIMEZONE | date handling용 timezone입니다. 기본값은 UTC입니다.
+| CONFIG_FILE_PATH | configuration file path입니다.
+| CYBERARK_ACCOUNT | secret management용 CyberArk account name입니다.
+| CYBERARK_API_BASE | CyberArk API base URL입니다.
+| CYBERARK_API_KEY | CyberArk secret management service API key입니다.
+| CYBERARK_CLIENT_CERT | CyberArk authentication용 client certificate path입니다.
+| CYBERARK_CLIENT_KEY | CyberArk authentication용 client key path입니다.
+| CYBERARK_USERNAME | CyberArk authentication username입니다.
+| CYBERARK_SSL_VERIFY | CyberArk SSL certificate verification을 활성화/비활성화하는 flag입니다. 기본값은 True입니다.
+| CONFIDENT_API_KEY | DeepEval integration용 API key입니다.
+| CUSTOM_TIKTOKEN_CACHE_DIR | Tiktoken cache용 custom directory입니다.
+| CONFIDENT_API_KEY | Confident AI(Deepeval) Logging service용 API key입니다.
+| COHERE_API_BASE | Cohere API base URL입니다. 기본값은 https://api.cohere.com 입니다.
+| COMPETITOR_LLM_TEMPERATURE | competitor discovery에 사용하는 LLM의 temperature 설정입니다. 기본값은 0.3입니다.
+| CURSOR_API_BASE | Cursor AI provider integration용 API base URL입니다. 기본값은 https://api.cursor.com 입니다.
+| DATABASE_HOST | 데이터베이스 server hostname입니다.
+| DATABASE_NAME | 데이터베이스 name입니다.
+| DATABASE_PASSWORD | 데이터베이스 user password입니다.
+| DATABASE_PORT | 데이터베이스 연결 port number입니다.
+| DATABASE_SCHEMA | 데이터베이스에서 사용할 schema name입니다.
+| DATABASE_URL | 데이터베이스 연결 URL입니다.
+| DATABASE_URL_READ_REPLICA | 선택적 read-replica connection URL입니다. 설정하면 proxy는 read-only query(find_*, count, group_by, query_raw/_first)를 이 endpoint로 라우팅하고 write는 계속 `DATABASE_URL`을 사용합니다. reader/writer endpoint가 분리된 Aurora 스타일 cluster에 유용합니다. 설정하지 않으면 writer-only 동작으로 fallback합니다. `IAM_TOKEN_DB_AUTH=True`이면 reader IAM token도 writer와 함께 자동 refresh됩니다.
+| DATABASE_USER | 데이터베이스 연결 username입니다.
+| DATABASE_USERNAME | 데이터베이스 user의 alias입니다.
+| DATABRICKS_API_BASE | Databricks API base URL입니다.
+| DATABRICKS_API_KEY | Databricks API authentication용 API key(Personal Access Token)입니다.
+| DATABRICKS_CLIENT_ID | Databricks OAuth M2M authentication용 client ID입니다(Service Principal application ID).
+| DATABRICKS_CLIENT_SECRET | Databricks OAuth M2M authentication용 client secret입니다.
+| DATABRICKS_USER_AGENT | Databricks API request용 custom user agent string입니다. partner telemetry attribution에 사용됩니다.
+| DAYS_IN_A_MONTH | 계산에 사용할 한 달의 일수입니다. 기본값은 28입니다.
+| DAYS_IN_A_WEEK | 계산에 사용할 한 주의 일수입니다. 기본값은 7입니다.
+| DAYS_IN_A_YEAR | 계산에 사용할 1년의 일수입니다. 기본값은 365입니다.
+| DYNAMOAI_API_KEY | DynamoAI 가드레일 service API key입니다.
+| DYNAMOAI_API_BASE | DynamoAI API base URL입니다. 기본값은 https://api.dynamo.ai 입니다.
+| DYNAMOAI_MODEL_ID | DynamoAI tracking/logging용 model ID입니다.
+| DYNAMOAI_POLICY_IDS | 적용할 DynamoAI policy ID의 comma-separated 목록입니다.
+| DD_BASE_URL | Datadog integration base URL입니다.
+| DATADOG_BASE_URL | DD_BASE_URL의 대안인 Datadog integration base URL입니다.
+| _DATADOG_BASE_URL | DD_BASE_URL의 대안인 Datadog integration base URL입니다.
+| DD_AGENT_HOST | DataDog agent hostname 또는 IP입니다(예: "localhost"). 설정하면 log가 direct API 대신 agent로 전송됩니다.
+| DD_AGENT_PORT | DataDog agent log intake port입니다. 기본값은 10518입니다.
+| DD_API_KEY | Datadog integration용 API key입니다.
+| DD_APP_KEY | Datadog Cost Management integration용 application key입니다. cost metrics에는 DD_API_KEY와 함께 필요합니다.
+| DD_SITE | Datadog site URL입니다(예: datadoghq.com).
+| DD_SOURCE | Datadog log source identifier입니다.
+| DD_TRACER_STREAMING_CHUNK_YIELD_RESOURCE | streaming chunk yield의 Datadog tracing resource name입니다. 기본값은 "streaming.chunk.yield"입니다.
+| DD_ENV | Datadog log environment identifier입니다. `datadog_llm_observability` callback에서만 지원됩니다.
+| DD_SERVICE | Datadog log service identifier입니다. 기본값은 "litellm-server"입니다.
+| DD_VERSION | Datadog log version identifier입니다. 기본값은 "unknown"입니다.
+| DATADOG_MOCK | Datadog integration testing용 mock mode를 활성화합니다. true이면 실제 network call 없이 Datadog API call을 가로채 mock response를 반환합니다. 기본값은 false입니다.
+| DATADOG_MOCK_LATENCY_MS | mock mode가 활성화된 Datadog API call의 mock latency(ms)입니다. network round-trip time을 simulate합니다. 기본값은 100ms입니다.
+| DEBUG_OTEL | OpenTelemetry debug mode를 활성화합니다.
+| DEFAULT_ALLOWED_FAILS | model cooldown 전 허용되는 최대 failure 수입니다. 기본값은 3입니다.
+| DEFAULT_A2A_AGENT_TIMEOUT | `A2A(Agent-to-Agent)` 프로토콜 요청의 기본 timeout(초)입니다. 기본값은 6000입니다.
+| DEFAULT_ACCESS_GROUP_CACHE_TTL | cached access group information의 TTL(초)입니다. 기본값은 600(10 minutes)입니다.
+| DEFAULT_ANTHROPIC_CHAT_MAX_TOKENS | Anthropic chat completion의 기본 maximum token 수입니다. 기본값은 4096입니다.
+| DEFAULT_BATCH_SIZE | operation 기본 batch size입니다. 기본값은 512입니다.
+| DEFAULT_CHUNK_OVERLAP | RAG text splitter 기본 chunk overlap입니다. 기본값은 200입니다.
+| DEFAULT_CHUNK_SIZE | RAG text splitter 기본 chunk size입니다. 기본값은 1000입니다.
+| DEFAULT_CLIENT_DISCONNECT_CHECK_TIMEOUT_SECONDS | client disconnection 확인 timeout(초)입니다. 기본값은 1입니다.
+| DEFAULT_COOLDOWN_TIME_SECONDS | failure 후 model cooldown 기간(초)입니다. 기본값은 5입니다.
+| DEFAULT_CRON_JOB_LOCK_TTL_SECONDS | cron job lock TTL(초)입니다. 기본값은 60(1 minute)입니다.
+| DEFAULT_DATAFORSEO_LOCATION_CODE | DataForSEO search API 기본 location code입니다. 기본값은 2250(France)입니다.
+| DEFAULT_FAILURE_THRESHOLD_PERCENT | deployment cooldown을 적용할 failure threshold percentage입니다. 기본값은 0.5(50%)입니다.
+| DEFAULT_FAILURE_THRESHOLD_MINIMUM_REQUESTS | error rate cooldown 적용 전 최소 request 수입니다. 첫 failure만으로 cooldown이 trigger되는 것을 방지합니다. 기본값은 5입니다.
+| DEFAULT_FLUSH_INTERVAL_SECONDS | flush operation 기본 interval(초)입니다. 기본값은 5입니다.
+| DEFAULT_HEALTH_CHECK_INTERVAL | health check 기본 interval(초)입니다. 기본값은 300(5 minutes)입니다.
+| DEFAULT_HEALTH_CHECK_PROMPT | non-image model health check에 사용하는 기본 prompt입니다. 기본값은 "test from litellm"입니다.
+| DEFAULT_IMAGE_HEIGHT | image 기본 height입니다. 기본값은 300입니다.
+| DEFAULT_IMAGE_TOKEN_COUNT | image 기본 token count입니다. 기본값은 250입니다.
+| DEFAULT_IMAGE_WIDTH | image 기본 width입니다. 기본값은 300입니다.
+| DEFAULT_IN_MEMORY_TTL | in-memory cache 기본 TTL(초)입니다. 기본값은 5입니다.
+| DEFAULT_MANAGEMENT_OBJECT_IN_MEMORY_CACHE_TTL | management object(User, Team, Key, Organization)의 memory cache 기본 TTL(초)입니다. 기본값은 60 seconds입니다.
+| DEFAULT_MAX_LRU_CACHE_SIZE | LRU cache 기본 maximum size입니다. 기본값은 64입니다.
+| DEFAULT_MAX_RECURSE_DEPTH | 기본 maximum recursion depth입니다. 기본값은 100입니다.
+| DEFAULT_MAX_RECURSE_DEPTH_SENSITIVE_DATA_MASKER | sensitive data masker 기본 maximum recursion depth입니다. 기본값은 10입니다.
+| DEFAULT_MAX_RETRIES | 기본 maximum retry attempt 수입니다. 기본값은 2입니다.
+| DEFAULT_MAX_TOKENS | LLM call 기본 maximum token 수입니다. 기본값은 4096입니다.
+| DEFAULT_MAX_TOKENS_FOR_TRITON | Triton model 기본 maximum token 수입니다. 기본값은 2000입니다.
+| DEFAULT_MAX_REDIS_BATCH_CACHE_SIZE | redis batch cache 기본 maximum size입니다. 기본값은 1000입니다.
+| DEFAULT_MCP_SEMANTIC_FILTER_EMBEDDING_MODEL | MCP semantic tool filtering용 기본 embedding model입니다. 기본값은 "text-embedding-3-small"입니다.
+| DEFAULT_MCP_SEMANTIC_FILTER_SIMILARITY_THRESHOLD | MCP semantic tool filtering 기본 similarity threshold입니다. 기본값은 0.3입니다.
+| DEFAULT_MCP_SEMANTIC_FILTER_TOP_K | MCP semantic tool filtering에서 반환할 기본 top result 수입니다. 기본값은 10입니다.
+| MCP_NPM_CACHE_DIR | STDIO MCP server가 사용하는 npm cache directory입니다. container에서는 기본값(`~/.npm`)이 없거나 read-only일 수 있습니다. 기본값은 `/tmp/.npm_mcp_cache`입니다.
+| LITELLM_MCP_CLIENT_TIMEOUT | MCP client connection timeout(초)입니다(stdio 및 HTTP/SSE transport). 기본값은 60입니다.
+| LITELLM_MCP_TOOL_LISTING_TIMEOUT | MCP server에서 tool 목록을 가져오는 timeout(초)입니다. 기본값은 30입니다.
+| LITELLM_MCP_METADATA_TIMEOUT | OAuth metadata fetching용 HTTP client timeout(초)입니다. 기본값은 10입니다.
+| LITELLM_MCP_HEALTH_CHECK_TIMEOUT | MCP server health check timeout(초)입니다. 기본값은 10입니다.
+| LITELLM_MCP_STDIO_EXTRA_COMMANDS | 기본 allowlist 외에 MCP stdio transport에서 허용할 추가 command basename의 comma-separated 목록입니다. 예제: `my-mcp-bin`. 기본값은 empty입니다.
+| MCP_OAUTH2_TOKEN_CACHE_DEFAULT_TTL | MCP OAuth2 token cache의 기본 TTL(초)입니다. 기본값은 3600입니다.
+| MCP_OAUTH2_TOKEN_CACHE_MAX_SIZE | MCP OAuth2 token cache의 최대 entry 수입니다. 기본값은 200입니다.
+| MCP_OAUTH2_TOKEN_CACHE_MIN_TTL | MCP OAuth2 token cache의 최소 TTL(초)입니다. 기본값은 10입니다.
+| MCP_OAUTH2_TOKEN_EXPIRY_BUFFER_SECONDS | cache TTL 계산 시 token expiry에서 차감할 시간(초)입니다. 기본값은 60입니다.
+| MCP_PER_USER_TOKEN_DEFAULT_TTL | Redis에 저장되는 per-user MCP OAuth token의 기본 TTL(초)입니다. 기본값은 43200(12 hours)입니다.
+| MCP_PER_USER_TOKEN_EXPIRY_BUFFER_SECONDS | Redis TTL 계산 시 per-user MCP OAuth token expiry에서 차감할 시간(초)입니다. 기본값은 60입니다.
+| MCP_TOKEN_EXCHANGE_CACHE_MAX_SIZE | MCP OAuth2 token exchange cache의 최대 entry 수입니다. 기본값은 500입니다.
+| DEFAULT_MOCK_RESPONSE_COMPLETION_TOKEN_COUNT | mock response completion의 기본 token count입니다. 기본값은 20입니다.
+| DEFAULT_MOCK_RESPONSE_PROMPT_TOKEN_COUNT | mock response prompt의 기본 token count입니다. 기본값은 10입니다.
+| DEFAULT_MODEL_CREATED_AT_TIME | model의 기본 creation timestamp입니다. 기본값은 1677610602입니다.
+| DEFAULT_NUM_WORKERS_LITELLM_PROXY | `NUM_WORKERS`가 설정되지 않았을 때 LiteLLM proxy의 기본 worker 수입니다. 기본값은 1입니다. **사용 가능한 vCPU 수에 맞춰 NUM_WORKERS를 설정하는 것을 강력히 권장합니다**(예: `NUM_WORKERS=8` 또는 `--num_workers 8`).
+| DEFAULT_PROMPT_INJECTION_SIMILARITY_THRESHOLD | prompt injection similarity 기본 threshold입니다. 기본값은 0.7입니다.
+| DEFAULT_POLLING_INTERVAL | scheduler의 기본 polling interval(초)입니다. 기본값은 0.03입니다.
+| DEFAULT_REASONING_EFFORT_DISABLE_THINKING_BUDGET | reasoning effort에서 thinking budget을 비활성화할 때의 기본값입니다. 기본값은 0입니다.
+| DEFAULT_REASONING_EFFORT_HIGH_THINKING_BUDGET | high reasoning effort thinking budget 기본값입니다. 기본값은 4096입니다.
+| DEFAULT_REASONING_EFFORT_LOW_THINKING_BUDGET | low reasoning effort thinking budget 기본값입니다. 기본값은 1024입니다.
+| DEFAULT_REASONING_EFFORT_MAX_THINKING_BUDGET | `thinking.budget_tokens`를 사용하는 legacy Anthropic model(Claude 4.5 series + Haiku)의 기본 `max` reasoning effort thinking budget입니다. Claude 4.6/4.7에서는 `max` tier가 adaptive `output_config.effort=max`를 통해 라우팅되며 이 상수를 무시합니다. 기본값은 16384입니다.
+| DEFAULT_REASONING_EFFORT_MEDIUM_THINKING_BUDGET | medium reasoning effort thinking budget 기본값입니다. 기본값은 2048입니다.
+| DEFAULT_REASONING_EFFORT_MINIMAL_THINKING_BUDGET | minimal reasoning effort thinking budget 기본값입니다. 기본값은 512입니다.
+| DEFAULT_REASONING_EFFORT_MINIMAL_THINKING_BUDGET_GEMINI_2_5_FLASH | Gemini 2.5 Flash용 minimal reasoning effort thinking budget 기본값입니다. 기본값은 512입니다.
+| DEFAULT_REASONING_EFFORT_MINIMAL_THINKING_BUDGET_GEMINI_2_5_FLASH_LITE | Gemini 2.5 Flash Lite용 minimal reasoning effort thinking budget 기본값입니다. 기본값은 512입니다.
+| DEFAULT_REASONING_EFFORT_MINIMAL_THINKING_BUDGET_GEMINI_2_5_PRO | Gemini 2.5 Pro용 minimal reasoning effort thinking budget 기본값입니다. 기본값은 512입니다.
+| DEFAULT_REASONING_EFFORT_XHIGH_THINKING_BUDGET | `thinking.budget_tokens`를 사용하는 legacy Anthropic model의 기본 `xhigh` reasoning effort thinking budget입니다. low/medium/high의 1024 &rarr; 2048 &rarr; 4096 &rarr; 8192 2&times; progression을 따릅니다. Claude 4.6/4.7에서는 `xhigh` tier가 adaptive `output_config.effort=xhigh`로 라우팅되며 이 상수를 무시합니다. 기본값은 8192입니다.
+| DEFAULT_REDIS_MAJOR_VERSION | version을 확인할 수 없을 때 가정할 기본 Redis major version입니다. 기본값은 7입니다.
+| DEFAULT_REDIS_SYNC_INTERVAL | Redis synchronization 기본 interval(초)입니다. 기본값은 1입니다.
+| DEFAULT_SEMANTIC_GUARD_EMBEDDING_MODEL | Semantic Guard(route-matching guardrail)의 기본 embedding model입니다. 기본값은 "text-embedding-3-small"입니다.
+| DEFAULT_SEMANTIC_GUARD_SIMILARITY_THRESHOLD | Semantic Guard route matching의 기본 similarity threshold입니다. 기본값은 0.75입니다.
+| DEFAULT_REPLICATE_GPU_PRICE_PER_SECOND | Replicate GPU의 second당 기본 price입니다. 기본값은 0.001400입니다.
+| DEFAULT_REPLICATE_POLLING_DELAY_SECONDS | Replicate polling의 기본 delay(초)입니다. 기본값은 1입니다.
+| DEFAULT_REPLICATE_POLLING_RETRIES | Replicate polling의 기본 retry 횟수입니다. 기본값은 5입니다.
+| DEFAULT_SQS_BATCH_SIZE | SQS logging 기본 batch size입니다. 기본값은 512입니다.
+| DEFAULT_SQS_FLUSH_INTERVAL_SECONDS | SQS logging 기본 flush interval(초)입니다. 기본값은 10입니다.
+| DEFAULT_S3_BATCH_SIZE | S3 logging 기본 batch size입니다. 기본값은 512입니다.
+| DEFAULT_S3_FLUSH_INTERVAL_SECONDS | S3 logging 기본 flush interval(초)입니다. 기본값은 10입니다.
+| DEFAULT_SLACK_ALERTING_THRESHOLD | Slack alerting 기본 threshold입니다. 기본값은 300입니다.
+| DEFAULT_SOFT_BUDGET | LiteLLM proxy key의 기본 soft budget입니다. 기본값은 50.0입니다.
+| DEFAULT_TRIM_RATIO | prompt 끝에서 trim할 token 비율 기본값입니다. 기본값은 0.75입니다.
+| DEFAULT_GOOGLE_VIDEO_DURATION_SECONDS | Google video generation의 기본 duration(초)입니다. 기본값은 8입니다.
+| DIRECT_URL | service endpoint의 direct URL입니다.
+| DISABLE_ADMIN_UI | admin UI를 비활성화하는 toggle입니다.
+| DISABLE_AIOHTTP_TRANSPORT | aiohttp transport를 비활성화하는 flag입니다. True로 설정하면 litellm은 aiohttp 대신 httpx를 사용합니다. **기본값은 False입니다.**
+| DISABLE_AIOHTTP_TRUST_ENV | aiohttp trust environment를 비활성화하는 flag입니다. True로 설정하면 litellm은 aiohttp에서 environment를 신뢰하지 않으므로 `HTTP_PROXY`, `HTTPS_PROXY` 환경 변수가 사용되지 않습니다. **기본값은 False입니다.**
+| DISABLE_SCHEMA_UPDATE | schema update를 비활성화하는 toggle입니다.
+| DYNAMIC_RATE_LIMIT_ERROR_THRESHOLD_PER_MINUTE | parallel request limiter에서 rate limit을 적용하기 전 분당 deployment failure threshold입니다. 기본값은 1입니다.
+| DOCS_DESCRIPTION | documentation page용 description text입니다.
+| DOCS_FILTERED | filtered documentation 여부를 나타내는 flag입니다.
+| DOCS_TITLE | documentation page title입니다.
+| DOCS_URL | Swagger API documentation path입니다. **기본값은 "/"입니다.**
+| EMAIL_LOGO_URL | email에서 사용할 logo URL입니다.
+| EMAIL_BUDGET_ALERT_TTL | email budget alert의 time-to-live(초)입니다.
+| EMAIL_BUDGET_ALERT_MAX_SPEND_ALERT_PERCENTAGE | email budget alert를 trigger할 maximum spend percentage입니다.
+| EMAIL_SUPPORT_CONTACT | support contact email address입니다.
+| EMAIL_SIGNATURE | 모든 email에 사용할 custom HTML footer/signature입니다. formatting과 link용 HTML tag를 포함할 수 있습니다.
+| EMAIL_SUBJECT_INVITATION | invitation email용 custom subject template입니다.
+| EMAIL_SUBJECT_KEY_CREATED | key creation email용 custom subject template입니다.
+| EMAIL_BUDGET_ALERT_MAX_SPEND_ALERT_PERCENTAGE | alert를 trigger하는 max budget 대비 percentage입니다(decimal: 0.8 = 80%). 기본값은 0.8입니다.
+| EMAIL_BUDGET_ALERT_TTL | budget alert deduplication용 time-to-live(초)입니다. 기본값은 86400(24 hours)입니다.
+| ENKRYPTAI_API_BASE | EnkryptAI 가드레일 API base URL입니다. **기본값은 https://api.enkryptai.com 입니다.**
+| ENKRYPTAI_API_KEY | EnkryptAI 가드레일 service용 API key입니다.
+| FIREWORKS_AI_4_B | Fireworks AI 4B model용 size parameter입니다. 기본값은 4입니다.
+| FIREWORKS_AI_16_B | Fireworks AI 16B model용 size parameter입니다. 기본값은 16입니다.
+| FIREWORKS_AI_56_B_MOE | Fireworks AI 56B MOE model용 size parameter입니다. 기본값은 56입니다.
+| FIREWORKS_AI_80_B | Fireworks AI 80B model용 size parameter입니다. 기본값은 80입니다.
+| FIREWORKS_AI_176_B_MOE | Fireworks AI 176B MOE model용 size parameter입니다. 기본값은 176입니다.
+| FOCUS_PROVIDER | Focus export 대상 provider입니다(예: `s3`). 기본값은 `s3`입니다.
+| FOCUS_FORMAT | Focus export output format입니다. 기본값은 `parquet`입니다.
+| FOCUS_FREQUENCY | scheduled Focus export frequency입니다(`hourly`, `daily`, `interval`). 기본값은 `hourly`입니다.
+| FOCUS_CRON_OFFSET | hourly/daily Focus export scheduling에 사용할 minute offset입니다. 기본값은 `5` minutes입니다.
+| FOCUS_INTERVAL_SECONDS | `frequency`가 `interval`일 때 Focus export interval(초)입니다.
+| FOCUS_PREFIX | Focus export file upload 시 사용할 object key prefix 또는 folder입니다. 기본값은 `focus_exports`입니다.
+| FOCUS_S3_BUCKET_NAME | S3 destination 사용 시 Focus export file을 upload할 S3 bucket입니다.
+| FOCUS_S3_REGION_NAME | Focus export S3 bucket의 AWS region입니다.
+| FOCUS_S3_ENDPOINT_URL | Focus export S3 client용 custom endpoint입니다(optional; S3-compatible storage에 유용).
+| FOCUS_S3_ACCESS_KEY | Focus export S3 client가 사용하는 AWS access key ID입니다.
+| FOCUS_S3_SECRET_KEY | Focus export S3 client가 사용하는 AWS secret access key입니다.
+| FOCUS_S3_SESSION_TOKEN | Focus export S3 client가 사용하는 AWS session token입니다(optional).
+| FUNCTION_DEFINITION_TOKEN_COUNT | function definition의 token count입니다. 기본값은 9입니다.
+| GALILEO_BASE_URL | Galileo platform base URL입니다.
+| GALILEO_PASSWORD | Galileo authentication용 password입니다.
+| GALILEO_PROJECT_ID | Galileo usage용 project ID입니다.
+| GALILEO_USERNAME | Galileo authentication용 username입니다.
+| GOOGLE_SECRET_MANAGER_PROJECT_ID | Google Secret Manager project ID입니다.
+| GCS_BUCKET_NAME | Google Cloud Storage bucket name입니다.
+| GCS_MOCK | GCS integration testing용 mock mode를 활성화합니다. true로 설정하면 실제 network call 없이 GCS API call을 가로채 mock response를 반환합니다. 기본값은 false입니다.
+| GCS_MOCK_LATENCY_MS | mock mode가 활성화된 GCS API call의 mock latency(ms)입니다. network round-trip time을 simulate합니다. 기본값은 150ms입니다.
+| GCS_PATH_SERVICE_ACCOUNT | Google Cloud service account JSON file path입니다.
+| GCS_FLUSH_INTERVAL | GCS logging flush interval(초)입니다. log를 GCS로 얼마나 자주 보낼지 지정합니다. **기본값은 20 seconds입니다.**
+| GCS_BATCH_SIZE | GCS 로깅 batch size입니다. 몇 개의 log마다 GCS로 flush할지 지정합니다. `BATCH_SIZE`가 10이면 log 10개마다 flush됩니다. **기본값은 2048입니다.**
+| GCS_USE_BATCHED_LOGGING | GCS batched logging을 활성화합니다. 활성화된 경우(기본값) 여러 log payload를 하나의 GCS object upload(NDJSON format)로 합쳐 API call을 크게 줄입니다. 비활성화하면 각 log를 별도 GCS object로 개별 전송합니다(legacy behavior). **기본값은 true입니다.**
+| GCS_PUBSUB_TOPIC_ID | LiteLLM Spend로그를 보낼 PubSub Topic ID입니다.
+| GCS_PUBSUB_PROJECT_ID | LiteLLM Spend로그를 보낼 PubSub Project ID입니다.
+| GENERIC_AUTHORIZATION_ENDPOINT | generic OAuth provider용 authorization endpoint입니다.
+| GENERIC_CLIENT_ID | generic OAuth provider용 client ID입니다.
+| GENERIC_CLIENT_SECRET | generic OAuth provider용 client secret입니다.
+| GENERIC_CLIENT_STATE | generic client authentication용 state parameter입니다.
+| GENERIC_CLIENT_USE_PKCE | generic OAuth provider용 `PKCE(Proof Key for Code Exchange)`를 활성화합니다. OAuth provider가 PKCE를 요구하면 "true"로 설정하세요. **기본값은 false입니다.**
+| GENERIC_SSO_HEADERS | request에 추가할 additional header의 comma-separated 목록입니다. 예: Authorization=Bearer `<token>`, Content-Type=application/json 등.
+| GENERIC_INCLUDE_CLIENT_ID | OAuth request에 client ID를 포함합니다.
+| GENERIC_SCOPE | generic OAuth provider용 scope 설정입니다.
+| GENERIC_TOKEN_ENDPOINT | generic OAuth provider용 token endpoint입니다.
+| GENERIC_USER_DISPLAY_NAME_ATTRIBUTE | generic auth에서 user display name에 사용할 attribute입니다.
+| GENERIC_USER_EMAIL_ATTRIBUTE | generic auth에서 user email에 사용할 attribute입니다.
+| GENERIC_USER_EXTRA_ATTRIBUTES | generic SSO provider response에서 추출할 additional field의 comma-separated 목록입니다(예: "department,employee_id,groups"). custom SSO handler에서 `CustomOpenID.extra_fields`로 접근할 수 있습니다. nested field에는 dot notation을 지원합니다.
+| GENERIC_USER_FIRST_NAME_ATTRIBUTE | generic auth에서 user first name에 사용할 attribute입니다.
+| GENERIC_USER_ID_ATTRIBUTE | generic auth에서 user ID에 사용할 attribute입니다.
+| GENERIC_USER_LAST_NAME_ATTRIBUTE | generic auth에서 user last name에 사용할 attribute입니다.
+| GENERIC_USER_PROVIDER_ATTRIBUTE | user provider를 지정하는 attribute입니다.
+| GENERIC_USER_ROLE_ATTRIBUTE | user role을 지정하는 attribute입니다.
+| GENERIC_USERINFO_ENDPOINT | generic OAuth에서 user information을 가져올 endpoint입니다.
+| GENERIC_LOGGER_ENDPOINT | Generic Logger callback이 log를 보낼 endpoint URL입니다.
+| GENERIC_LOGGER_HEADERS | Generic Logger callback request에 포함할 header의 JSON string입니다.
+| GENERIC_ROLE_MAPPINGS_DEFAULT_ROLE | generic SSO에서 role mapping이 match되지 않을 때 할당할 기본 LiteLLM role입니다. `GENERIC_ROLE_MAPPINGS_ROLES`와 함께 사용합니다.
+| GENERIC_ROLE_MAPPINGS_GROUP_CLAIM | user group을 포함하는 SSO token의 claim/attribute name입니다. role mapping에 사용합니다.
+| GENERIC_ROLE_MAPPINGS_ROLES | LiteLLM role을 SSO group name에 매핑하는 Python dict string입니다. 예제: `{"proxy_admin": ["admin-group"], "internal_user": ["users"]}`
+| GENERIC_USER_ROLE_MAPPINGS | SSO에서 user role mapping을 구성하기 위한 `GENERIC_ROLE_MAPPINGS_ROLES`의 대안입니다.
+| GEMINI_API_BASE | Gemini API base URL입니다. 기본값은 https://generativelanguage.googleapis.com 입니다.
+| GALILEO_BASE_URL | Galileo platform base URL입니다.
+| GALILEO_PASSWORD | Galileo authentication용 password입니다.
+| GALILEO_PROJECT_ID | Galileo usage용 project ID입니다.
+| GALILEO_USERNAME | Galileo authentication용 username입니다.
+| GITHUB_COPILOT_TOKEN_DIR | `github_copilot` llm provider용 GitHub Copilot token 저장 directory입니다.
+| GITHUB_COPILOT_API_KEY_FILE | `github_copilot` llm provider용 GitHub Copilot API key 저장 file입니다.
+| GITHUB_COPILOT_ACCESS_TOKEN_FILE | `github_copilot` llm provider용 GitHub Copilot access token 저장 file입니다.
+| GITHUB_COPILOT_API_BASE | GitHub Copilot API base URL입니다. custom host가 있는 GitHub 엔터프라이즈 subscription에서는 https://copilot-api.my-company.ghe.com 과 유사합니다. 기본값은 https://api.githubcopilot.com 입니다.
+| GITHUB_COPILOT_DEVICE_CODE_URL | GitHub Copilot device code authentication용 URL입니다. custom host가 있는 GitHub 엔터프라이즈 subscription에서는 https://my-company.ghe.com/login/device/code 와 유사합니다. 기본값은 https://github.com/login/device/code 입니다.
+| GITHUB_COPILOT_ACCESS_TOKEN_URL | GitHub Copilot access token retrieval용 URL입니다. custom host가 있는 GitHub 엔터프라이즈 subscription에서는 https://my-company.ghe.com/login/oauth/access_token 과 유사합니다. 기본값은 https://github.com/login/oauth/access_token 입니다.
+| GITHUB_COPILOT_API_KEY_URL | GitHub Copilot API key retrieval용 URL입니다. custom host가 있는 GitHub 엔터프라이즈 subscription에서는 https://my-company.ghe.com/api/v3/copilot_internal/v2/token 과 유사합니다. 기본값은 https://api.github.com/copilot_internal/v2/token 입니다.
+| GITHUB_COPILOT_CLIENT_ID | GitHub Copilot device flow authentication용 client ID입니다. `github_copilot` provider가 device code authentication에 사용합니다. 기본값은 `Iv1.b507a08c87ecfe98`입니다.
+| GREENSCALE_API_KEY | Greenscale service용 API key입니다.
+| GREENSCALE_ENDPOINT | Greenscale service endpoint URL입니다.
+| GRAYSWAN_API_BASE | GraySwan API base URL입니다. 기본값은 https://api.grayswan.ai 입니다.
+| GRAYSWAN_API_KEY | GraySwan Cygnal service용 API key입니다.
+| GRAYSWAN_REASONING_MODE | GraySwan guardrail의 reasoning mode입니다.
+| GRAYSWAN_VIOLATION_THRESHOLD | GraySwan guardrail의 violation threshold입니다.
+| GOOGLE_APPLICATION_CREDENTIALS | Google Cloud credentials JSON file path입니다.
+| GOOGLE_CLIENT_ID | Google OAuth용 client ID입니다.
+| GOOGLE_CLIENT_SECRET | Google OAuth용 client secret입니다.
+| GOOGLE_KMS_RESOURCE_NAME | Google KMS resource name입니다.
+| GUARDRAILS_AI_API_BASE | 가드레일 AI API base URL입니다.
+| HEALTH_CHECK_TIMEOUT_SECONDS | health check timeout(초)입니다. 기본값은 60입니다.
+| HEROKU_API_BASE | Heroku API base URL입니다.
+| HEROKU_API_KEY | Heroku service용 API key입니다.
+| HF_API_BASE | Hugging Face API base URL입니다.
+| HCP_VAULT_ADDR | [Hashicorp Vault Secret Manager](../secret.md#hashicorp-vault) address입니다.
+| HCP_VAULT_APPROLE_MOUNT_PATH | [Hashicorp Vault Secret Manager](../secret.md#hashicorp-vault)의 AppRole authentication mount path입니다. 기본값은 "approle"입니다.
+| HCP_VAULT_APPROLE_ROLE_ID | [Hashicorp Vault Secret Manager](../secret.md#hashicorp-vault)의 AppRole authentication role ID입니다.
+| HCP_VAULT_APPROLE_SECRET_ID | [Hashicorp Vault Secret Manager](../secret.md#hashicorp-vault)의 AppRole authentication secret ID입니다.
+| HCP_VAULT_CLIENT_CERT | [Hashicorp Vault Secret Manager](../secret.md#hashicorp-vault)용 client certificate path입니다.
+| HCP_VAULT_CLIENT_KEY | [Hashicorp Vault Secret Manager](../secret.md#hashicorp-vault)용 client key path입니다.
+| HCP_VAULT_MOUNT_NAME | [Hashicorp Vault Secret Manager](../secret.md#hashicorp-vault)의 mount name입니다.
+| HCP_VAULT_NAMESPACE | [Hashicorp Vault Secret Manager](../secret.md#hashicorp-vault)의 namespace입니다.
+| HCP_VAULT_PATH_PREFIX | [Hashicorp Vault Secret Manager](../secret.md#hashicorp-vault)의 path prefix입니다.
+| HCP_VAULT_TOKEN | [Hashicorp Vault Secret Manager](../secret.md#hashicorp-vault)용 token입니다.
+| HCP_VAULT_CERT_ROLE | [Hashicorp Vault Secret Manager Auth](../secret.md#hashicorp-vault)용 role입니다.
+| HELICONE_API_KEY | Helicone service용 API key입니다.
+| HELICONE_API_BASE | Helicone service base URL입니다. 기본값은 `https://api.helicone.ai`입니다.
+| HELICONE_MOCK | Helicone integration testing용 mock mode를 활성화합니다. true로 설정하면 실제 network call 없이 Helicone API call을 가로채 mock response를 반환합니다. 기본값은 false입니다.
+| HELICONE_MOCK_LATENCY_MS | mock mode가 활성화된 Helicone API call의 mock latency(ms)입니다. network round-trip time을 simulate합니다. 기본값은 100ms입니다.
+| HOSTNAME | server hostname입니다. 이 값은 [`datadog` logs](https://docs.litellm.ai/docs/proxy/logging#datadog)로 emit됩니다.
+| HOURS_IN_A_DAY | 계산에 사용할 하루의 시간 수입니다. 기본값은 24입니다.
+| HIDDENLAYER_API_BASE | HiddenLayer API base URL입니다. 기본값은 `https://api.hiddenlayer.ai`입니다.
+| HIDDENLAYER_AUTH_URL | HiddenLayer 인증 URL입니다. 기본값은 `https://auth.hiddenlayer.ai`입니다.
+| HIDDENLAYER_CLIENT_ID | HiddenLayer SaaS authentication용 client ID입니다.
+| HIDDENLAYER_CLIENT_SECRET | HiddenLayer SaaS authentication용 client secret입니다.
+| HUGGINGFACE_API_BASE | Hugging Face API base URL입니다.
+| HUGGINGFACE_API_KEY | Hugging Face API용 API key입니다.
+| HUMANLOOP_PROMPT_CACHE_TTL_SECONDS | Humanloop cached prompt의 time-to-live(초)입니다. 기본값은 60입니다.
+| IAM_TOKEN_DB_AUTH | 데이터베이스 authentication용 IAM token입니다.
+| IBM_GUARDRAILS_API_BASE | IBM 가드레일 API base URL입니다.
+| IBM_GUARDRAILS_AUTH_TOKEN | IBM 가드레일 API용 authorization bearer token입니다.
+| INITIAL_RETRY_DELAY | request retry 전 initial delay(초)입니다. 기본값은 0.5입니다.
+| JITTER | retry delay 계산용 jitter factor입니다. 기본값은 0.75입니다.
+| JSON_LOGS | JSON formatted logging을 활성화합니다.
+| JWT_AUDIENCE | JWT token의 expected audience입니다.
+| JWT_ISSUER | JWT token의 expected issuer(`iss` claim)입니다. 설정하면 PyJWT가 `iss` claim을 검증하고 다른 issuer의 token을 거부합니다.
+| JWT_PUBLIC_KEY_URL | JWT verification용 public key를 가져올 URL입니다.
+| LAGO_API_BASE | Lago API base URL입니다.
+| LAGO_API_CHARGE_BY | Lago에서 charge basis를 결정하는 parameter입니다.
+| LAGO_API_EVENT_CODE | Lago API event code입니다.
+| LAGO_API_KEY | Lago service 접근용 API key입니다.
+| LANGFUSE_DEBUG | Langfuse debug mode toggle입니다.
+| LANGFUSE_FLUSH_INTERVAL | Langfuse log flush interval입니다.
+| LANGFUSE_TRACING_ENVIRONMENT | Langfuse tracing environment입니다.
+| LANGFUSE_HOST | Langfuse service host URL입니다.
+| LANGFUSE_MOCK | Langfuse integration testing용 mock mode를 활성화합니다. true로 설정하면 실제 network call 없이 Langfuse API call을 가로채 mock response를 반환합니다. 기본값은 false입니다.
+| LANGFUSE_MOCK_LATENCY_MS | mock mode가 활성화된 Langfuse API call의 mock latency(ms)입니다. network round-trip time을 simulate합니다. 기본값은 100ms입니다.
+| LANGFUSE_PUBLIC_KEY | Langfuse authentication용 public key입니다.
+| LANGFUSE_RELEASE | Langfuse integration release version입니다.
+| LANGFUSE_SECRET_KEY | Langfuse authentication용 secret key입니다.
+| LANGFUSE_PROPAGATE_TRACE_ID | trace ID를 Langfuse로 propagate하는 flag입니다. 기본값은 False입니다.
+| LANGSMITH_API_KEY | Langsmith platform용 API key입니다.
+| LANGSMITH_BASE_URL | Langsmith service base URL입니다.
+| LANGSMITH_BATCH_SIZE | Langsmith operation batch size입니다.
+| LANGSMITH_DEFAULT_RUN_NAME | Langsmith run의 기본 name입니다.
+| LANGSMITH_PROJECT | Langsmith integration project name입니다.
+| LANGSMITH_SAMPLING_RATE | Langsmith 로깅 sampling rate입니다.
+| LANGSMITH_TENANT_ID | Langsmith multi-tenant deployment용 tenant ID입니다.
+| LANGSMITH_MOCK | Langsmith integration testing용 mock mode를 활성화합니다. true로 설정하면 실제 network call 없이 Langsmith API call을 가로채 mock response를 반환합니다. 기본값은 false입니다.
+| LANGSMITH_MOCK_LATENCY_MS | mock mode가 활성화된 Langsmith API call의 mock latency(ms)입니다. network round-trip time을 simulate합니다. 기본값은 100ms입니다.
+| LANGTRACE_API_KEY | Langtrace service용 API key입니다.
+| LASSO_API_BASE | Lasso API base URL입니다.
+| LASSO_API_KEY | Lasso service용 API key입니다.
+| LASSO_USER_ID | Lasso service용 user ID입니다.
+| LASSO_CONVERSATION_ID | Lasso service용 conversation ID입니다.
+| LENGTH_OF_LITELLM_GENERATED_KEY | LiteLLM이 생성하는 key 길이입니다. 기본값은 16입니다.
+| LEGACY_MULTI_INSTANCE_RATE_LIMITING | legacy multi-instance rate limiting을 활성화하는 flag입니다. **기본값은 False입니다.**
+| LITERAL_API_KEY | Literal integration용 API key입니다.
+| LITERAL_API_URL | Literal service API URL입니다.
+| LITERAL_BATCH_SIZE | Literal operation batch size입니다.
+| LITELLM_ANTHROPIC_BETA_HEADERS_URL | Anthropic beta header configuration을 가져올 custom URL입니다. 기본값은 GitHub main branch URL입니다.
+| LITELLM_ANTHROPIC_DISABLE_URL_SUFFIX | Anthropic API base URL에 URL suffix를 자동으로 붙이는 동작을 비활성화합니다. `true`로 설정하면 LiteLLM이 custom Anthropic API endpoint에 `/v1/messages` 또는 `/v1/complete`를 자동 추가하지 않습니다.
+| LITELLM_ASSETS_PATH | UI asset과 logo directory path입니다. read-only filesystem(예: Kubernetes)에서 실행할 때 사용합니다. Docker 기본값은 `/var/lib/litellm/assets`입니다.
+| LITELLM_BLOG_POSTS_URL | LiteLLM blog posts JSON을 가져올 custom URL입니다. 기본값은 GitHub main branch URL입니다.
+| LITELLM_CLI_JWT_EXPIRATION_HOURS | CLI에서 생성한 JWT token의 만료 시간(시간)입니다. 기본값은 24 hours입니다.
+| LITELLM_CORS_ALLOW_CREDENTIALS | CORS response에서 credentials를 명시적으로 허용하려면 `true`로 설정합니다. 설정하지 않은 경우 `LITELLM_CORS_ORIGINS`가 `*`이면 browser 보안 misconfiguration을 막기 위해 credentials가 자동으로 비활성화됩니다.
+| LITELLM_CORS_ORIGINS | 허용할 CORS origin의 comma-separated 목록입니다(예: `https://app.example.com,https://admin.example.com`). 설정하지 않으면 기본값은 `*`(all origins)입니다.
+| LITELLM_DD_AGENT_HOST | LiteLLM-specific logging용 DataDog agent hostname 또는 IP입니다. 설정하면 log가 direct API 대신 agent로 전송됩니다.
+| LITELLM_DEPLOYMENT_ENVIRONMENT | deployment environment name입니다(예: "production", "staging"). `OTEL_ENVIRONMENT_NAME`이 설정되지 않았을 때 fallback으로 사용되며 telemetry data의 `environment` tag를 설정합니다.
+| LITELLM_DETAILED_TIMING | true이면 response에 detailed per-phase timing header(`x-litellm-timing-{pre-processing,llm-api,post-processing,message-copy}-ms`)를 추가합니다. 기본값은 false입니다. [latency overhead docs](../troubleshoot/latency_overhead.md)를 참고하세요.
+| LITELLM_DD_AGENT_PORT | LiteLLM-specific log intake용 DataDog agent port입니다. 기본값은 10518입니다.
+| LITELLM_DD_LLM_OBS_PORT | Datadog LLM observability agent port입니다. 기본값은 8126입니다.
+| LITELLM_DEFAULT_EMBEDDING_ENCODING_FORMAT | request 또는 model `litellm_params`에 설정되지 않은 OpenAI-compatible embedding call의 기본 `encoding_format`입니다(예: `float`, `base64`). fallback은 `float`입니다. [Embeddings](./embedding.md#embedding-encoding-format)를 참고하세요.
+| LITELLM_DONT_SHOW_FEEDBACK_BOX | LiteLLM UI의 feedback box를 숨기는 flag입니다.
+| LITELLM_DROP_PARAMS | LiteLLM request에서 제거할 parameter입니다.
+| LITELLM_MODIFY_PARAMS | LiteLLM request에서 수정할 parameter입니다.
+| LITELLM_EMAIL | LiteLLM account와 연결된 email입니다.
+| LITELLM_FAVICON_URL | LiteLLM UI favicon용 custom URL입니다. 설정하면 기본 favicon을 override합니다.
+| LITELLM_GLOBAL_MAX_PARALLEL_REQUEST_RETRIES | LiteLLM parallel request의 최대 retry 횟수입니다.
+| LITELLM_GLOBAL_MAX_PARALLEL_REQUEST_RETRY_TIMEOUT | LiteLLM parallel request retry timeout입니다.
+| LITELLM_DISABLE_LAZY_LOADING | "1", "true", "yes", "on"으로 설정하면 attribute lazy loading을 비활성화합니다(현재 encoding/tiktoken에만 영향). VCR이 HTTP request recording을 시작하기 전에 encoding을 초기화해 VCR cassette 생성 문제를 해결합니다. [issue #18659](https://github.com/BerriAI/litellm/issues/18659)를 참고하세요.
+| LITELLM_DISABLE_REDACT_SECRETS | "true"로 설정하면 proxy log output에서 secret(API key, token, credential)을 자동 redaction하는 동작을 비활성화합니다. secret redaction은 기본적으로 활성화됩니다.
+| LITELLM_MIGRATION_DIR | read-only file system에서 DB baseline을 잡기 위해 사용할 Prisma migration custom directory입니다.
+| LITELLM_HOSTED_UI | LiteLLM hosted UI URL입니다.
+| LITELLM_UI_API_DOC_BASE_URL | admin UI가 proxy와 다른 host에서 실행될 때 sample code/docs에 사용할 API Reference base URL override입니다. 설정하지 않으면 `PROXY_BASE_URL`을 사용합니다.
+| LITELLM_UI_PATH | admin UI file directory path입니다. read-only filesystem(예: Kubernetes)에서 실행할 때 사용합니다. Docker 기본값은 `/var/lib/litellm/ui`입니다.
+| LITELLM_UI_SESSION_DURATION | UI login session 기간입니다(username/password, SSO, invitation link). 형식: "30s", "30m", "24h", "7d". security를 위해 고정 10분 만료를 쓰는 `EXPERIMENTAL_UI_LOGIN` flow에는 적용되지 않습니다. 기본값은 "24h"입니다.
+| LITELLM_EXPIRED_UI_SESSION_KEY_CLEANUP_BATCH_SIZE | cleanup run마다 삭제할 expired LiteLLM dashboard session key의 최대 수입니다. 기본값은 1000입니다.
+| LITELLM_EXPIRED_UI_SESSION_KEY_CLEANUP_ENABLED | expired LiteLLM dashboard session key background cleanup job을 활성화하려면 `true`로 설정합니다. 기본값은 `false`입니다.
+| LITELLM_EXPIRED_UI_SESSION_KEY_CLEANUP_INTERVAL_SECONDS | expired LiteLLM dashboard session key cleanup job 실행 interval(초)입니다. 기본값은 86400(24 hours)입니다.
+| LITELM_ENVIRONMENT | LiteLLM Instance environment입니다. logging service에서 사용되며 현재는 DeepEval에서만 사용됩니다.
+| LITELLM_KEY_ROTATION_ENABLED | LiteLLM auto-key rotation을 활성화합니다(boolean). 기본값은 false입니다.
+| LITELLM_KEY_ROTATION_CHECK_INTERVAL_SECONDS | key auto-rotation job 실행 interval(초)입니다. 기본값은 86400(24 hours)입니다.
+| LITELLM_KEY_ROTATION_GRACE_PERIOD | rotation 후 old key를 유효하게 유지할 기간입니다(예: "24h", "2d"). 기본값은 empty(immediate revoke)입니다. scheduled rotation과 regenerate request에서 지정되지 않았을 때 fallback으로 사용됩니다.
+| LITELLM_KEY_ROTATION_LOCK_TTL_SECONDS | key rotation job에서 사용하는 distributed lock TTL(초)입니다. 기본값은 600(10 minutes)입니다.
+| LITELLM_LICENSE | LiteLLM usage용 license key입니다.
+| LITELLM_LOCAL_ANTHROPIC_BETA_HEADERS | remote fetching을 비활성화하고 local bundled Anthropic beta headers config만 사용하려면 `True`로 설정합니다. 기본값은 `False`입니다.
+| LITELLM_OIDC_ALLOWED_CREDENTIAL_DIRS | `oidc/file/` provider가 token file을 읽을 수 있는 absolute directory의 comma-separated 목록입니다. 기본값은 `/var/run/secrets,/run/secrets`입니다.
+| LITELLM_LOCAL_BLOG_POSTS | `True`로 설정하면 GitHub에서 remote fetching하지 않고 local bundled blog posts만 사용합니다. 기본값은 `False`입니다.
+| LITELLM_LOCAL_MODEL_COST_MAP | LiteLLM model cost mapping용 local configuration입니다.
+| LITELLM_LOCAL_POLICY_TEMPLATES | "true"로 설정하면 GitHub에서 가져오는 대신 local backup policy template을 사용합니다. 기본적으로 policy template은 https://raw.githubusercontent.com/BerriAI/litellm/main/policy_templates.json 에서 가져오며 실패 시 local backup으로 자동 fallback합니다.
+| LITELLM_LOG | LiteLLM detailed logging을 활성화합니다.
+| LITELLM_MODEL_COST_MAP_URL | model cost map data를 가져올 URL입니다. 기본값은 https://raw.githubusercontent.com/BerriAI/litellm/main/model_prices_and_context_window.json 입니다.
+| LITELLM_LOG_FILE | LiteLLM log를 기록할 file path입니다. 설정하면 console과 지정 file 양쪽에 log가 기록됩니다.
+| LITELLM_LOGGER_NAME | OTEL logger name입니다.
+| LITELLM_METER_NAME | OTEL Meter name입니다.
+| LITELLM_OTEL_INTEGRATION_ENABLE_EVENTS | OTEL용 semantic log(`gen_ai.content.prompt`/`gen_ai.content.completion`, 또는 semconv mode의 `gen_ai.client.inference.operation.details`)를 선택적으로 활성화합니다. 기본값은 `false`입니다. [OpenTelemetry](/docs/observability/opentelemetry_integration#configuration-reference)를 참고하세요.
+| LITELLM_OTEL_INTEGRATION_ENABLE_METRICS | OTEL용 semantic metric(TTFT, TPOT, response duration, cost, token usage)을 선택적으로 활성화합니다. 기본값은 `false`입니다. [OpenTelemetry](/docs/observability/opentelemetry_integration#metrics-reference)를 참고하세요.
+| LITELLM_ENABLE_PYROSCOPE | true이면 Pyroscope CPU profiling을 활성화합니다. profile은 `PYROSCOPE_SERVER_ADDRESS`로 전송됩니다. 기본값은 off입니다. [Pyroscope profiling](/proxy/pyroscope_profiling)을 참고하세요.
+| LITELLM_ENABLE_TEAM_STALE_ALIAS_BYPASS | `true`이면 team의 legacy `model_aliases` entry가 public model name을 internal `model_name_<team_id>_<uuid>` deployment로 매핑하더라도, public name의 team-scoped sibling deployment가 있을 때 pre-call 처리에서 rewrite를 건너뛸 수 있습니다. 따라서 sibling 간 load balancing / `order`가 적용됩니다. backward compatibility를 위해 기본값은 `false`입니다. [Team-scoped model과 legacy alias](/docs/proxy/load_balancing#team-scoped-models-and-legacy-model_aliases)를 참고하세요. stale alias가 감지되고 이 flag가 off이면 proxy가 one-time warning을 기록할 수 있습니다.
+| PYROSCOPE_APP_NAME | Pyroscope에 보고할 application name입니다. `LITELLM_ENABLE_PYROSCOPE`가 true일 때 필요합니다. 기본값은 없습니다.
+| PYROSCOPE_SERVER_ADDRESS | profile을 전송할 Pyroscope server URL입니다. `LITELLM_ENABLE_PYROSCOPE`가 true일 때 필요합니다. 기본값은 없습니다.
+| PYROSCOPE_SAMPLE_RATE | Pyroscope profiling sample rate입니다(integer). 기본값은 없으며, 설정하지 않으면 pyroscope-io library 기본값을 사용합니다.
+| LITELLM_MASTER_KEY | proxy authentication용 master key입니다.
+| LITELLM_MAX_BUDGET_PER_SESSION_TTL | max-budget-per-session limiter가 사용하는 session budget counter TTL(초)입니다. 기본값은 3600(1 hour)입니다.
+| LITELLM_MAX_ITERATIONS_TTL | max-iterations limiter가 사용하는 session iteration counter TTL(초)입니다. 기본값은 3600(1 hour)입니다.
+| LITELLM_MAX_STREAMING_DURATION_SECONDS | streaming response에 허용되는 최대 duration(초)입니다. 이 시간을 넘는 stream은 Timeout error로 종료됩니다. 기본값은 None(no limit)입니다.
+| LITELLM_MODE | LiteLLM operating mode입니다(예: production, development).
+| LITELLM_NON_ROOT | Docker container에서 향상된 security를 위해 LiteLLM을 non-root mode로 실행하는 flag입니다.
+| LITELLM_RATE_LIMIT_WINDOW_SIZE | LiteLLM rate limit window size입니다. 기본값은 60입니다.
+| LITELLM_REASONING_AUTO_SUMMARY | "true"로 설정하면 reasoning model에 대해 모든 translation path(Anthropic adapter, Responses API 등)에서 detailed reasoning summary(`summary: "detailed"`)를 자동 활성화합니다. 기본값은 "false"입니다.
+| LITELLM_SALT_KEY | LiteLLM encryption용 salt key입니다.
+| LITELLM_SSL_CIPHERS | 더 빠른 handshake를 위한 SSL/TLS cipher configuration입니다. OpenSSL connection의 cipher suite preference를 제어합니다.
+| LITELLM_SECRET_AWS_KMS_LITELLM_LICENSE | AWS KMS로 암호화된 LiteLLM license입니다.
+| LITELLM_TOKEN | LiteLLM integration용 access token입니다.
+| LITELLM_USE_CHAT_COMPLETIONS_URL_FOR_ANTHROPIC_MESSAGES | "true"로 설정하면 Anthropic model에 대한 OpenAI `/v1/messages` request를 Responses API 대신 chat/completions로 route합니다. `litellm_settings.use_chat_completions_url_for_anthropic_messages`로도 설정할 수 있습니다.
+| LITELLM_ROUTE_ALL_CHAT_OPENAI_TO_RESPONSES | "true"로 설정하면 모든 OpenAI `/chat/completions` request를 Responses API bridge로 route합니다. OpenAI model에 권장됩니다. `litellm_settings.route_all_chat_openai_to_responses`로도 설정할 수 있습니다.
+| LITELLM_USER_AGENT | LiteLLM API request용 custom user agent string입니다. partner telemetry attribution에 사용됩니다.
+| LITELLM_WORKER_STARTUP_HOOKS | 각 worker process startup 중 실행할 `module.path:function_name` callable의 comma-separated 목록입니다. worker lifecycle 초기에(config/DB loading 전) 실행됩니다. [gflags](https://github.com/google/python-gflags) 같은 per-process state를 다시 초기화할 때 유용합니다. 자세한 내용은 [Worker Startup Hooks](/proxy/worker_startup_hooks)를 참고하세요.
+| LITELLM_PRINT_STANDARD_LOGGING_PAYLOAD | true이면 standard logging payload를 console에 출력합니다. debugging에 유용합니다.
+| LITELM_ENVIRONMENT | LiteLLM Instance environment입니다. 현재 DeepEval integration에서 environment 판단용으로만 logging됩니다.
+| LITELLM_ASYNCIO_QUEUE_MAXSIZE | asyncio queue의 최대 size입니다(예: log queue, spend update queue, `nova_sonic_realtime.py` 같은 cookbook 예제의 realtime audio). OOM 방지를 위해 in-memory growth를 제한합니다. 기본값은 1000입니다.
+| LOGFIRE_TOKEN | Logfire logging service용 token입니다.
+| LOGFIRE_BASE_URL | Logfire logging service base URL입니다(self-hosted deployment에 유용).
+| LOGGING_WORKER_CONCURRENCY | asyncio event loop에서 logging worker가 사용할 concurrent coroutine slot의 최대 수입니다. 기본값은 100입니다. 너무 높게 설정하면 event loop에 logging task가 몰려 request 전체 latency가 높아질 수 있습니다.
+| LOGGING_WORKER_MAX_QUEUE_SIZE | logging worker queue의 최대 size입니다. queue가 가득 차면 log를 drop하는 대신 worker가 task를 공격적으로 비워 공간을 만듭니다. 기본값은 50,000입니다.
+| LOGGING_WORKER_MAX_TIME_PER_COROUTINE | logging worker의 각 coroutine에 허용되는 최대 시간(초)입니다. 기본값은 20.0입니다.
+| LOGGING_WORKER_CLEAR_PERCENTAGE | clearing 시 queue에서 추출할 percentage입니다. 기본값은 50%입니다.
+| MAX_BASE64_LENGTH_FOR_LOGGING | logging payload에 유지할 base64 character 최대 수입니다. 이 값을 넘는 Data URI는 size placeholder로 대체됩니다. 0으로 설정하면 truncation을 비활성화합니다. 기본값은 64입니다.
+| MAX_COMPETITOR_NAMES | policy template enrichment에서 허용할 competitor name 최대 수입니다. 기본값은 100입니다.
+| MAX_EXCEPTION_MESSAGE_LENGTH | exception message 최대 길이입니다. 기본값은 2000입니다.
+| MAX_ITERATIONS_TO_CLEAR_QUEUE | shutdown 중 logging worker queue clearing을 시도할 최대 iteration 수입니다. 기본값은 200입니다.
+| MAX_TIME_TO_CLEAR_QUEUE | shutdown 중 logging worker queue clearing에 사용할 최대 시간(초)입니다. 기본값은 5.0입니다.
+| LOGGING_WORKER_AGGRESSIVE_CLEAR_COOLDOWN_SECONDS | queue가 가득 찼을 때 다음 aggressive clear operation을 허용하기 전 cooldown time(초)입니다. 기본값은 0.5입니다.
+| MAX_STRING_LENGTH_PROMPT_IN_DB | request body sanitization 중 spend log에 저장할 string 최대 길이입니다. 이보다 긴 string은 truncate됩니다. 기본값은 1000입니다.
+| MAX_IN_MEMORY_QUEUE_FLUSH_COUNT | `in-memory queue flush` 작업의 최대 count입니다. 기본값은 1000입니다.
+| MAX_IMAGE_URL_DOWNLOAD_SIZE_MB | URL에서 image를 download할 때 허용되는 최대 size(MB)입니다. 매우 큰 image download로 인한 memory issue를 방지합니다. limit을 넘는 image는 download 전 reject됩니다. 0으로 설정하면 image URL handling을 완전히 비활성화합니다. 기본값은 50MB([OpenAI's limit](https://platform.openai.com/docs/guides/images-vision?api-mode=chat#image-input-requirements)와 동일)입니다.
+| MAX_LONG_SIDE_FOR_IMAGE_HIGH_RES | high-resolution image의 long side 최대 길이입니다. 기본값은 2000입니다.
+| MAX_REDIS_BUFFER_DEQUEUE_COUNT | Redis buffer dequeue operation의 최대 count입니다. 기본값은 100입니다.
+| MAX_SHORT_SIDE_FOR_IMAGE_HIGH_RES | high-resolution image의 short side 최대 길이입니다. 기본값은 768입니다.
+| MAX_SIZE_IN_MEMORY_QUEUE | in-memory queue의 최대 size입니다. 기본값은 10000입니다.
+| MAX_SIZE_PER_ITEM_IN_MEMORY_CACHE_IN_KB | memory cache item당 최대 size(KB)입니다. 기본값은 512 또는 1024입니다.
+| MAX_SPENDLOG_ROWS_TO_QUERY | query할 spend log row의 최대 수입니다. 기본값은 1,000,000입니다.
+| MAX_TEAM_LIST_LIMIT | list할 team의 최대 수입니다. 기본값은 20입니다.
+| MAX_TILE_HEIGHT | image tile의 최대 height입니다. 기본값은 512입니다.
+| MAX_TILE_WIDTH | image tile의 최대 width입니다. 기본값은 512입니다.
+| MAX_TOKEN_TRIMMING_ATTEMPTS | token message trim을 시도할 최대 횟수입니다. 기본값은 10입니다.
+| MAXIMUM_TRACEBACK_LINES_TO_LOG | LiteLLM log UI에 기록할 traceback line 최대 수입니다. 기본값은 100입니다.
+| MAX_RETRY_DELAY | request retry의 최대 delay(초)입니다. 기본값은 8.0입니다.
+| MAX_LANGFUSE_INITIALIZED_CLIENTS | proxy에서 초기화할 Langfuse client 최대 수입니다. 기본값은 50입니다. Langfuse는 client가 초기화될 때마다 thread 1개를 생성하므로 이 값을 둡니다. 과거 Langfuse가 여러 번 초기화되어 CPU utilization이 100%에 도달한 incident가 있었습니다.
+| MAX_MCP_SEMANTIC_FILTER_TOOLS_HEADER_LENGTH | MCP semantic filter tool header의 최대 길이입니다. 기본값은 150입니다.
+| MAX_POLICY_ESTIMATE_IMPACT_ROWS | policy 영향 추정 시 반환할 row의 최대 수입니다. 기본값은 1000입니다.
+| MAX_PAYLOAD_SIZE_FOR_DEBUG_LOG | full DEBUG serialization payload의 최대 size(bytes)입니다. 이 값을 넘는 payload는 log에서 truncate됩니다. 기본값은 102400(100 KB)입니다.
+| MIN_NON_ZERO_TEMPERATURE | 0이 아닌 temperature의 최소값입니다. 기본값은 0.0001입니다.
+| MINIMUM_PROMPT_CACHE_TOKEN_COUNT | prompt caching을 위한 최소 token count입니다. 기본값은 1024입니다.
+| MISTRAL_API_BASE | Mistral API base URL입니다. 기본값은 https://api.mistral.ai 입니다.
+| MISTRAL_API_KEY | Mistral API용 API key입니다.
+| MICROSOFT_AUTHORIZATION_ENDPOINT | Microsoft SSO용 custom authorization endpoint URL입니다. 기본 Microsoft OAuth authorization endpoint를 override합니다.
+| MICROSOFT_CLIENT_ID | Microsoft service용 client ID입니다.
+| MICROSOFT_CLIENT_SECRET | Microsoft service용 client secret입니다.
+| MICROSOFT_SERVICE_PRINCIPAL_ID | Microsoft Enterprise Application의 Service Principal ID입니다. Microsoft Entra ID Group 기반으로 Litellm Team member를 자동 할당하려는 경우 사용하는 advanced feature입니다.
+| MICROSOFT_TENANT | Microsoft Azure tenant ID입니다.
+| MICROSOFT_TOKEN_ENDPOINT | Microsoft SSO용 custom token endpoint URL입니다. 기본 Microsoft OAuth token endpoint를 override합니다.
+| MICROSOFT_USER_DISPLAY_NAME_ATTRIBUTE | Microsoft SSO response에서 user display name에 사용할 field name입니다. 기본값은 `displayName`입니다.
+| MICROSOFT_USER_EMAIL_ATTRIBUTE | Microsoft SSO response에서 user email에 사용할 field name입니다. 기본값은 `userPrincipalName`입니다.
+| MICROSOFT_USER_FIRST_NAME_ATTRIBUTE | Microsoft SSO response에서 user first name에 사용할 field name입니다. 기본값은 `givenName`입니다.
+| MICROSOFT_USER_ID_ATTRIBUTE | Microsoft SSO response에서 user ID에 사용할 field name입니다. 기본값은 `id`입니다.
+| MICROSOFT_USER_LAST_NAME_ATTRIBUTE | Microsoft SSO response에서 user last name에 사용할 field name입니다. 기본값은 `surname`입니다.
+| MICROSOFT_USERINFO_ENDPOINT | Microsoft SSO용 custom userinfo endpoint URL입니다. 기본 Microsoft Graph userinfo endpoint를 override합니다.
+| MODEL_COST_MAP_MAX_SHRINK_RATIO | fetched model cost map을 local backup과 비교해 검증할 때 허용되는 최대 shrinkage ratio입니다. fetched map이 backup의 이 fraction보다 작으면 reject합니다. 기본값은 0.5입니다.
+| MODEL_COST_MAP_MIN_MODEL_COUNT | fetched cost map이 valid로 간주되기 위해 포함해야 하는 model 최소 수입니다. 기본값은 50입니다.
+| NO_DOCS | Swagger UI documentation을 비활성화하는 flag입니다.
+| NO_OPENAPI | `/openapi.json` endpoint를 비활성화하는 flag입니다.
+| NO_REDOC | Redoc documentation을 비활성화하는 flag입니다.
+| NO_PROXY | proxy를 우회할 address 목록입니다.
+| NON_LLM_CONNECTION_TIMEOUT | non-LLM service connection timeout(초)입니다. 기본값은 15입니다.
+| OAUTH_TOKEN_INFO_ENDPOINT | OAuth token info retrieval endpoint입니다.
+| OPENAI_BASE_URL | OpenAI API base URL입니다.
+| OPENAI_API_BASE | OpenAI API base URL입니다. 기본값은 https://api.openai.com/ 입니다.
+| OPENAI_API_KEY | OpenAI service용 API key입니다.
+| OPENAI_CHATGPT_API_BASE | `CHATGPT_API_BASE`의 대안입니다. ChatGPT API base URL입니다.
+| OPENAI_FILE_SEARCH_COST_PER_1K_CALLS | OpenAI file search 1000 call당 cost입니다. 기본값은 0.0025입니다.
+| OPENAI_ORGANIZATION | OpenAI organization identifier입니다.
+| OPENAPI_URL | OpenAPI JSON endpoint path입니다. **기본값은 "/openapi.json"입니다.**
+| OPENID_BASE_URL | OpenID Connect service base URL입니다.
+| OPENID_CLIENT_ID | OpenID Connect authentication용 client ID입니다.
+| OPENID_CLIENT_SECRET | OpenID Connect authentication용 client secret입니다.
+| OPENMETER_API_ENDPOINT | OpenMeter integration용 API endpoint입니다.
+| OPENMETER_API_KEY | OpenMeter service용 API key입니다.
+| OPENMETER_EVENT_TYPE | OpenMeter로 전송되는 event type입니다.
+| ONYX_API_BASE | Onyx Security AI Guard service base URL입니다(기본값: https://ai-guard.onyx.security).
+| ONYX_API_KEY | Onyx Security AI Guard service용 API key입니다.
+| ONYX_TIMEOUT | Onyx Guard server request timeout(초)입니다. 기본값은 10입니다.
+| OTEL_ENDPOINT | trace용 OpenTelemetry endpoint입니다.
+| OTEL_EXPORTER_OTLP_ENDPOINT | trace용 OpenTelemetry endpoint입니다.
+| OTEL_ENVIRONMENT_NAME | OpenTelemetry environment name입니다.
+| OTEL_EXPORTER | OpenTelemetry exporter type입니다.
+| OTEL_EXPORTER_OTLP_PROTOCOL | OpenTelemetry exporter type입니다.
+| OTEL_HEADERS | OpenTelemetry request용 headers입니다.
+| OTEL_MODEL_ID | OpenTelemetry tracing용 model ID입니다.
+| OTEL_EXPORTER_OTLP_HEADERS | OpenTelemetry request용 headers입니다.
+| OTEL_SERVICE_NAME | OpenTelemetry service name identifier입니다.
+| OTEL_TRACER_NAME | OpenTelemetry tracing용 tracer name입니다.
+| OTEL_LOGS_EXPORTER | OpenTelemetry logs exporter type입니다(예: console).
+| OTEL_IGNORE_CONTEXT_PROPAGATION | true이면 parent span context propagation(inbound `traceparent` headers 및 active span)을 무시해 모든 LiteLLM trace가 자체 root가 됩니다. 기본값은 `false`입니다.
+| OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT | prompt와 completion을 OpenTelemetry trace에 캡처할지 제어합니다. `NO_CONTENT`(spec 기본값), `SPAN_ONLY`, `EVENT_ONLY`, `SPAN_AND_EVENT`, 또는 boolean 형식(`true`는 `EVENT_ONLY`, `false`는 `NO_CONTENT`)을 허용합니다.
+| OTEL_SEMCONV_STABILITY_OPT_IN | 최신 [OpenTelemetry GenAI semantic conventions](https://opentelemetry.io/docs/specs/semconv/gen-ai/gen-ai-spans/)를 따르는 span을 emit하려면 `gen_ai_latest_experimental`로 설정합니다. LLM-call span을 `{operation} {model}`로 rename하고, `raw_gen_ai_request`를 억제하며, `gen_ai.provider.name`을 추가하고 event를 통합합니다. OTEL spec에 따라 comma-separated로 설정할 수 있습니다.
+| USE_OTEL_LITELLM_REQUEST_SPAN | `true`이면 proxy가 LLM call마다 `Received Proxy Server Request` span의 child로 별도 `litellm_request` span을 emit합니다. 기본값은 `false`입니다(v1.81.0 이후). LLM-call attribute는 proxy root span에 직접 설정됩니다. [왜 `litellm_request` span이 보이지 않나요?](/docs/observability/opentelemetry_integration#why-dont-i-see-a-litellm_request-span)를 참고하세요.
+| OTEL_DEBUG | `true`이면 exporter와 span creation diagnostics를 stderr에 출력합니다. trace가 backend에 도달하지 않을 때 유용합니다. 기본값은 `false`입니다.
+| DEBUG_OTEL | `OTEL_DEBUG`의 alias입니다.
+| PAGERDUTY_API_KEY | PagerDuty Alerting용 API key입니다.
+| PANW_PRISMA_AIRS_API_KEY | PANW Prisma AIRS service용 API key입니다.
+| PANW_PRISMA_AIRS_API_BASE | PANW Prisma AIRS service base URL입니다.
+| PHOENIX_API_KEY | Arize Phoenix용 API key입니다.
+| PHOENIX_COLLECTOR_ENDPOINT | Arize Phoenix API endpoint입니다.
+| PHOENIX_COLLECTOR_HTTP_ENDPOINT | Arize Phoenix API http endpoint입니다.
+| PILLAR_API_BASE | Pillar API 가드레일 base URL입니다.
+| PILLAR_API_KEY | Pillar API 가드레일용 API key입니다.
+| PILLAR_ON_FLAGGED_ACTION | content가 flagged될 때 수행할 action입니다('block' 또는 'monitor').
+| PKCE_STRICT_CACHE_MISS | `true`로 설정하면 SSO callback에서 PKCE code_verifier를 cache에서 찾지 못할 때(예: pod 간 cache miss) 401 error를 반환합니다. `false`(기본값)이면 warning을 기록하고 code_verifier 없이 계속합니다.
+| POD_NAME | server pod name입니다. 이 값은 `POD_NAME`으로 [`datadog` logs](https://docs.litellm.ai/docs/proxy/logging#datadog)에 emit됩니다.
+| POSTHOG_API_KEY | PostHog analytics integration용 API key입니다.
+| POSTHOG_API_URL | PostHog API base URL입니다(기본값: https://us.i.posthog.com).
+| POSTHOG_MOCK | PostHog integration testing용 mock mode를 활성화합니다. true로 설정하면 실제 network call 없이 PostHog API call을 가로채 mock response를 반환합니다. 기본값은 false입니다.
+| POSTHOG_MOCK_LATENCY_MS | mock mode가 활성화된 PostHog API call의 mock latency(ms)입니다. network round-trip time을 simulate합니다. 기본값은 100ms입니다.
+| PRISMA_AUTH_RECONNECT_LOCK_TIMEOUT_SECONDS | Prisma auth reconnection용 lock timeout(초)입니다. 기본값은 0.1입니다.
+| PRISMA_AUTH_RECONNECT_TIMEOUT_SECONDS | Prisma auth reconnection attempt timeout(초)입니다. 기본값은 2.0입니다.
+| PRISMA_HEALTH_WATCHDOG_ENABLED | connection loss를 감시하고 reconnect하는 Prisma DB health watchdog을 활성화합니다. 기본값은 true입니다.
+| PRISMA_HEALTH_WATCHDOG_INTERVAL_SECONDS | Prisma health watchdog probe interval(초)입니다. 기본값은 30입니다.
+| PRISMA_HEALTH_WATCHDOG_PROBE_TIMEOUT_SECONDS | 각 Prisma health probe timeout(초)입니다. 기본값은 5.0입니다.
+| PRISMA_RECONNECT_COOLDOWN_SECONDS | Prisma reconnection attempt 사이의 cooldown(초)입니다. 기본값은 15입니다.
+| PRISMA_RECONNECT_ESCALATION_THRESHOLD | reconnection strategy escalate 전 연속 reconnect failure 수입니다. 기본값은 3입니다.
+| PRISMA_WATCHDOG_RECONNECT_TIMEOUT_SECONDS | Prisma watchdog이 시작한 reconnection timeout(초)입니다. 기본값은 30.0입니다.
+| PREDIBASE_API_BASE | Predibase API base URL입니다.
+| PRESIDIO_ANALYZER_API_BASE | Presidio Analyzer service base URL입니다.
+| PRESIDIO_ANONYMIZER_API_BASE | Presidio Anonymizer service base URL입니다.
+| PROMETHEUS_BUDGET_METRICS_REFRESH_INTERVAL_MINUTES | Prometheus budget metrics refresh interval(분)입니다. 기본값은 5입니다.
+| PROMETHEUS_FALLBACK_STATS_SEND_TIME_HOURS | stats를 Prometheus로 보낼 fallback time(시간)입니다. 기본값은 9입니다.
+| PROMETHEUS_URL | Prometheus service URL입니다.
+| PROMPTLAYER_API_KEY | PromptLayer integration용 API key입니다.
+| PROXY_ADMIN_ID | proxy server admin identifier입니다.
+| PROXY_BASE_URL | proxy service base URL입니다.
+| PROXY_BATCH_WRITE_AT | spend logs를 데이터베이스에 batch write하기 전 대기 시간(초)입니다. 기본값은 10입니다.
+| PROXY_BATCH_POLLING_INTERVAL | batch 완료 여부 확인을 위해 polling하기 전 대기 시간(초)입니다. 기본값은 6000s(1 hour)입니다.
+| PROXY_BATCH_POLLING_ENABLED | `false`로 설정하면 `CheckBatchCost`와 `CheckResponsesCost` background polling job을 완전히 비활성화합니다. stale managed object가 많은 install에서 긴급 완화에 유용합니다. 기본값은 `true`입니다.
+| MAX_OBJECTS_PER_POLL_CYCLE | polling cycle마다 fetch할 managed object(batches / responses)의 최대 수입니다. stale row가 많은 install에서 OOM을 방지합니다. 기본값은 `50`입니다.
+| MANAGED_OBJECT_STALENESS_CUTOFF_DAYS | non-terminal state에서 이 일수보다 오래된 managed object는 각 poll cycle 시작 시 `stale_expired`로 표시되고 skip됩니다. 기본값은 `7`입니다.
+| PROXY_BUDGET_RESCHEDULER_MAX_TIME | budget reset 확인을 위해 데이터베이스를 조회하기 전 최대 대기 시간(초)입니다. 기본값은 605입니다.
+| PROXY_BUDGET_RESCHEDULER_MIN_TIME | budget reset 확인을 위해 데이터베이스를 조회하기 전 최소 대기 시간(초)입니다. 기본값은 597입니다.
+| PYTHON_GC_THRESHOLD | GC threshold입니다('gen0,gen1,gen2', 예: '1000,50,50'). 기본값은 Python 값입니다.
+| PROXY_LOGOUT_URL | proxy service logout URL입니다.
+| QDRANT_API_BASE | Qdrant API base URL입니다.
+| QDRANT_API_KEY | Qdrant service용 API key입니다.
+| QDRANT_SCALAR_QUANTILE | Qdrant operation용 scalar quantile입니다. 기본값은 0.99입니다.
+| QDRANT_URL | Qdrant 데이터베이스 연결 URL입니다.
+| QDRANT_VECTOR_SIZE | Qdrant operation용 vector size입니다. 기본값은 1536입니다.
+| REDIS_CONNECTION_POOL_TIMEOUT | Redis connection pool timeout(초)입니다. 기본값은 5입니다.
+| REDIS_CIRCUIT_BREAKER_FAILURE_THRESHOLD | Redis circuit breaker가 open되기 전 연속 failure 수입니다. 기본값은 5입니다.
+| REDIS_CIRCUIT_BREAKER_RECOVERY_TIMEOUT | Redis circuit breaker가 open된 뒤 recovery를 시도하기 전 대기 시간(초)입니다. 기본값은 60입니다.
+| REDIS_CLUSTER_NODES | Redis Cluster mode용 Redis cluster startup node의 JSON-formatted list입니다. 예제: `[{"host": "node1", "port": 6379}]`
+| REDIS_HOST | Redis server hostname입니다.
+| REDIS_PASSWORD | Redis service password입니다.
+| REDIS_PORT | Redis server port 번호입니다.
+| REDIS_SOCKET_TIMEOUT | Redis socket operation timeout(초)입니다. 기본값은 0.1입니다.
+| REDIS_GCP_SERVICE_ACCOUNT | Redis IAM authentication용 GCP service account입니다. 형식: "projects/-/serviceAccounts/name@project.iam.gserviceaccount.com"
+| REDIS_GCP_SSL_CA_CERTS | secure GCP Memorystore Redis connection용 SSL CA certificate file path입니다.
+| REDOC_URL | Redoc Fast API documentation path입니다. **기본값은 "/redoc"입니다.**
+| REPEATED_STREAMING_CHUNK_LIMIT | looping 감지를 위한 repeated streaming chunk limit입니다. 기본값은 100입니다.
+| REALTIME_WEBSOCKET_MAX_MESSAGE_SIZE_BYTES | realtime connection에서 WebSocket message의 최대 크기(bytes)입니다. 기본값은 None입니다.
+| REPLICATE_MODEL_NAME_WITH_ID_LENGTH | ID가 포함된 Replicate model name 길이입니다. 기본값은 64입니다.
+| REPLICATE_POLLING_DELAY_SECONDS | Replicate polling operation delay(초)입니다. 기본값은 0.5입니다.
+| REQUEST_TIMEOUT | request timeout(초)입니다. 기본값은 6000입니다.
+| ROOT_REDIRECT_URL | DOCS_URL이 "/"가 아닌 값으로 설정된 경우 root path(/)를 redirect할 URL입니다(DOCS_URL 기본값은 "/"입니다).
+| ROUTER_MAX_FALLBACKS | router의 최대 fallback 수입니다. 기본값은 5입니다.
+| RUBRIK_API_KEY | Rubrik webhook service authentication용 bearer token입니다.
+| RUBRIK_BATCH_SIZE | Rubrik으로 flush하기 전 buffer할 log entry 수입니다. 기본값은 512입니다.
+| RUBRIK_SAMPLING_RATE | Rubrik에 logging할 request 비율입니다(0.0부터 1.0). 기본값은 1.0입니다.
+| RUBRIK_WEBHOOK_URL | tool blocking 및 batch logging용 Rubrik webhook service base URL입니다.
+| RUNWAYML_DEFAULT_API_VERSION | RunwayML service 기본 API version입니다. 기본값은 "2024-11-06"입니다.
+| RUNWAYML_POLLING_TIMEOUT | RunwayML image generation polling timeout(초)입니다. 기본값은 600(10 minutes)입니다.
+| S3_VECTORS_DEFAULT_DIMENSION | S3 Vectors RAG ingestion의 기본 vector dimension입니다. 기본값은 1024입니다.
+| S3_VECTORS_DEFAULT_DISTANCE_METRIC | S3 Vectors RAG ingestion의 기본 distance metric입니다. 옵션: "cosine", "euclidean". 기본값은 "cosine"입니다.
+| SECRET_MANAGER_REFRESH_INTERVAL | secret manager refresh interval(초)입니다. 기본값은 86400(24 hours)입니다.
+| SERVER_ROOT_PATH | server application root path입니다.
+| SEND_USER_API_KEY_ALIAS | user API key alias를 Zscaler AI Guard로 전송하는 flag입니다. 기본값은 False입니다.
+| SEND_USER_API_KEY_TEAM_ID | user API key team ID를 Zscaler AI Guard로 전송하는 flag입니다. 기본값은 False입니다.
+| SEND_USER_API_KEY_USER_ID | user API key user ID를 Zscaler AI Guard로 전송하는 flag입니다. 기본값은 False입니다.
+| SET_VERBOSE | [DEPRECATED] 대신 `LITELLM_LOG`를 "INFO", "DEBUG", "ERROR" 값과 함께 사용하세요. [debugging docs](./debugging)를 참고하세요.
+| SINGLE_DEPLOYMENT_TRAFFIC_FAILURE_THRESHOLD | single-deployment cooldown logic에서 "reasonable traffic"으로 간주할 최소 request 수입니다. 기본값은 1000입니다.
+| SLACK_DAILY_REPORT_FREQUENCY | daily Slack report frequency입니다(예: daily, weekly).
+| SLACK_WEBHOOK_URL | Slack integration용 webhook URL입니다.
+| SMTP_HOST | SMTP server hostname입니다.
+| SMTP_PASSWORD | SMTP authentication용 password입니다(SMTP가 auth를 요구하지 않으면 설정하지 마세요).
+| SMTP_PORT | SMTP server port number입니다.
+| SMTP_SENDER_EMAIL | SMTP transaction에서 sender로 사용할 email address입니다.
+| SMTP_SENDER_LOGO | SMTP로 전송되는 email에 사용할 logo입니다.
+| SMTP_TLS | SMTP connection에서 TLS를 활성화/비활성화하는 flag입니다.
+| SMTP_USERNAME | SMTP authentication용 username입니다(SMTP가 auth를 요구하지 않으면 설정하지 마세요).
+| SENDGRID_API_KEY | SendGrid email service용 API key입니다.
+| RESEND_API_KEY | Resend email service용 API key입니다.
+| SENDGRID_SENDER_EMAIL | SendGrid email transaction에서 sender로 사용할 email address입니다.
+| SPEND_LOGS_URL | spend logs retrieval용 URL입니다.
+| SPEND_LOG_CLEANUP_BATCH_SIZE | cleanup 중 batch마다 삭제할 log 수입니다. 기본값은 1000입니다.
+| STALE_OBJECT_CLEANUP_BATCH_SIZE | cleanup cycle마다 update할 stale managed object의 최대 수입니다. 기본값은 1000입니다.
+| SSL_CERTIFICATE | SSL certificate file path입니다.
+| SSL_ECDH_CURVE | SSL/TLS key exchange용 ECDH curve입니다(예: PQC 비활성화를 위한 'X25519').
+| SSL_SECURITY_LEVEL | [BETA] SSL/TLS connection security level입니다. 예: `DEFAULT@SECLEVEL=1`
+| SSL_VERIFY | SSL certificate verification을 활성화/비활성화하는 flag입니다.
+| SSL_CERT_FILE | custom CA bundle용 SSL certificate file path입니다.
+| SUPABASE_KEY | Supabase service용 API key입니다.
+| SUPABASE_URL | Supabase instance base URL입니다.
+| STORE_MODEL_IN_DB | true이면 model과 credential 정보를 DB에 저장합니다.
+| SYSTEM_MESSAGE_TOKEN_COUNT | system message token count입니다. 기본값은 4입니다.
+| TEST_EMAIL_ADDRESS | testing purpose용 email address입니다.
+| TOGETHER_AI_4_B | Together AI 4B model용 size parameter입니다. 기본값은 4입니다.
+| TOGETHER_AI_8_B | Together AI 8B model용 size parameter입니다. 기본값은 8입니다.
+| TOGETHER_AI_21_B | Together AI 21B model용 size parameter입니다. 기본값은 21입니다.
+| TOGETHER_AI_41_B | Together AI 41B model용 size parameter입니다. 기본값은 41입니다.
+| TOGETHER_AI_80_B | Together AI 80B model용 size parameter입니다. 기본값은 80입니다.
+| TOGETHER_AI_110_B | Together AI 110B model용 size parameter입니다. 기본값은 110입니다.
+| TOGETHER_AI_EMBEDDING_150_M | Together AI 150M embedding model용 size parameter입니다. 기본값은 150입니다.
+| TOGETHER_AI_EMBEDDING_350_M | Together AI 350M embedding model용 size parameter입니다. 기본값은 350입니다.
+| TOOL_CHOICE_OBJECT_TOKEN_COUNT | tool choice object token count입니다. 기본값은 4입니다.
+| TOOL_POLICY_CACHE_TTL_SECONDS | tool policy guardrail result caching용 TTL(초)입니다. 기본값은 60입니다.
+| UI_LOGO_PATH | UI에서 사용할 logo image path입니다.
+| UI_PASSWORD | UI 접근용 password입니다.
+| UI_USERNAME | UI 접근용 username입니다.
+| UPSTREAM_LANGFUSE_DEBUG | upstream Langfuse debugging을 활성화하는 flag입니다.
+| UPSTREAM_LANGFUSE_HOST | upstream Langfuse service host URL입니다.
+| UPSTREAM_LANGFUSE_PUBLIC_KEY | upstream Langfuse authentication용 public key입니다.
+| UPSTREAM_LANGFUSE_RELEASE | upstream Langfuse release version identifier입니다.
+| UPSTREAM_LANGFUSE_SECRET_KEY | upstream Langfuse authentication용 secret key입니다.
+| USE_AWS_KMS | encryption에 AWS Key Management Service를 활성화하는 flag입니다.
+| USE_PRISMA_MIGRATE | prisma db push 대신 prisma migrate를 사용하는 flag입니다. production environment에 권장됩니다.
+| VANTAGE_API_KEY | Vantage cost-import integration용 API key입니다.
+| VANTAGE_BASE_URL | Vantage API base URL입니다. 기본값은 `https://api.vantage.sh`입니다.
+| VANTAGE_EXPORT_FREQUENCY | Vantage export frequency입니다. `hourly`(기본값), `daily`, `interval` 중 하나입니다.
+| VANTAGE_EXPORT_INTERVAL_SECONDS | `VANTAGE_EXPORT_FREQUENCY`가 `interval`일 때 interval(초)입니다.
+| VANTAGE_INTEGRATION_TOKEN | cost-import endpoint용 Vantage integration token입니다.
+| WANDB_API_KEY | Weights & Biases(W&B) 로깅 integration용 API key입니다.
+| WANDB_HOST | Weights & Biases(W&B) service host URL입니다.
+| WANDB_PROJECT_ID | Weights & Biases(W&B) 로깅 integration용 project ID입니다.
+| WEBHOOK_URL | external service에서 webhook을 수신할 URL입니다.
+| SPEND_LOG_RUN_LOOPS | spend_log_cleanup task가 1000개 batch delete를 몇 번 실행할지 설정하는 constant입니다.
+| SPEND_LOG_CLEANUP_BATCH_SIZE | cleanup 중 batch마다 삭제할 log 수입니다. 기본값은 1000입니다.
+| SPEND_LOG_QUEUE_POLL_INTERVAL | spend log queue polling interval(초)입니다. 기본값은 2.0입니다.
+| SPEND_LOG_QUEUE_SIZE_THRESHOLD | processing 전 spend log queue size threshold입니다. 기본값은 100입니다.
+| SPEND_LOG_CLEANUP_MAX_CONSECUTIVE_BATCH_FAILURES | spend log cleanup run이 abort되기 전 허용되는 연속 batch failure 수입니다. 기본값은 3입니다.
+| SPEND_LOG_CLEANUP_BATCH_FAILURE_BACKOFF_SECONDS | 실패한 spend log cleanup batch 사이의 backoff(초)입니다. 기본값은 0.5입니다.
+| SPEND_COUNTER_RESEED_LOCKS_MAX_SIZE | enforcement path에서 DB 기반 concurrent spend-counter reseed를 coalesce하는 per-counter LRU lock dict의 최대 크기입니다. 기본값은 10000입니다.
+| COROUTINE_CHECKER_MAX_SIZE_IN_MEMORY | `CoroutineChecker in-memory cache`의 최대 크기입니다. 기본값은 1000입니다.
+| DEFAULT_SHARED_HEALTH_CHECK_TTL | shared health check mode에서 cached health check result의 time-to-live(초)입니다. 기본값은 300(5 minutes)입니다.
+| DEFAULT_SHARED_HEALTH_CHECK_LOCK_TTL | shared health check mode에서 health check lock의 time-to-live(초)입니다. 기본값은 60(1 minute)입니다.
+| ZSCALER_AI_GUARD_API_KEY | Zscaler AI Guard service용 API key입니다.
+| ZSCALER_AI_GUARD_POLICY_ID | Zscaler AI Guard guardrails용 policy ID입니다.
+| ZSCALER_AI_GUARD_URL | Zscaler AI Guard API base URL입니다. 기본값은 https://api.us1.zseclipse.net/v1/detection/execute-policy 입니다.

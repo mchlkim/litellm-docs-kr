@@ -1,55 +1,55 @@
 ---
 slug: anthropic-wildcard-model-access-incident
-title: "Incident Report: Wildcard Blocking New Models After Cost Map Reload"
+title: "사고 보고서: 비용 맵 다시 불러오기 이후 wildcard가 새 모델을 차단한 문제"
 date: 2026-02-23T10:00:00
 authors:
   - sameer
   - krrish
   - ishaan-alt
-tags: [incident-report, proxy, auth, model-access]
+tags: [사고-보고, proxy, auth, 모델-접근]
 hide_table_of_contents: false
 ---
 
-**Date:** Feb 23, 2026  
-**Duration:** ~3 hours  
-**Severity:** High (for users with provider wildcard access rules)  
-**Status:** Resolved
+**날짜:** 2026년 2월 23일  
+**지속 시간:** 약 3시간  
+**심각도:** 높음(provider wildcard 접근 규칙을 사용하는 사용자 대상)  
+**상태:** 해결됨
 
-## Summary
+## 요약
 
-When a new Anthropic model (e.g. `claude-sonnet-4-6`) was added to the LiteLLM model cost map and a cost map reload was triggered, requests to the new model were rejected with:
+새 Anthropic 모델(예: `claude-sonnet-4-6`)이 LiteLLM model cost map에 추가되고 cost map reload가 실행되면, 새 모델에 대한 요청이 다음 오류로 거부되었습니다.
 
 ```
 key not allowed to access model. This key can only access models=['anthropic/*']. Tried to access claude-sonnet-4-6.
 ```
 
-The reload updated `litellm.model_cost` correctly but never re-ran `add_known_models()`, so `litellm.anthropic_models` (the in-memory set used by the wildcard resolver) remained stale. The new model was invisible to the `anthropic/*` wildcard even though the cost map knew about it.
+reload는 `litellm.model_cost`를 올바르게 업데이트했지만 `add_known_models()`를 다시 실행하지 않았습니다. 그래서 wildcard resolver가 사용하는 인메모리 set인 `litellm.anthropic_models`가 오래된 상태로 남았습니다. cost map에는 새 모델이 존재했지만, `anthropic/*` wildcard에서는 해당 모델을 볼 수 없었습니다.
 
-- **LLM calls:** All requests to newly-added Anthropic models were blocked with a 401.
-- **Existing models:** Unaffected — only models missing from the stale provider set were impacted.
-- **Other providers:** Same bug class existed for any provider wildcard (e.g. `openai/*`, `gemini/*`).
+- **LLM 호출:** 새로 추가된 Anthropic 모델에 대한 모든 요청이 401로 차단되었습니다.
+- **기존 모델:** 영향 없음. 오래된 provider set에 없는 모델만 영향을 받았습니다.
+- **다른 provider:** 동일한 bug class가 모든 provider wildcard에도 존재했습니다. 예: `openai/*`, `gemini/*`.
 
 {/* truncate */}
 
 ---
 
-## Background
+## 배경
 
-LiteLLM supports provider-level wildcard access rules. When an admin configures a key or team with `models=['anthropic/*']`, any model whose provider resolves to `anthropic` should be allowed. The resolution happens in `_model_custom_llm_provider_matches_wildcard_pattern`:
+LiteLLM은 provider 수준 wildcard 접근 규칙을 지원합니다. 관리자가 key 또는 team에 `models=['anthropic/*']`를 설정하면, provider가 `anthropic`으로 resolve되는 모든 모델이 허용되어야 합니다. 이 resolve는 `_model_custom_llm_provider_matches_wildcard_pattern`에서 수행됩니다.
 
 ```mermaid
 flowchart TD
-    A["1. Request arrives for claude-sonnet-4-6"] --> B["2. Auth check: can this key call this model?
+    A["1. claude-sonnet-4-6 요청 도착"] --> B["2. 인증 확인: 이 key가 이 모델을 호출할 수 있는가?
     proxy/auth/auth_checks.py"]
-    B --> C["3. Key has models=['anthropic/*']
-    → wildcard match attempted"]
+    B --> C["3. Key에 models=['anthropic/*'] 설정
+    → wildcard match 시도"]
     C --> D["4. get_llm_provider('claude-sonnet-4-6')
-    checks litellm.anthropic_models set"]
-    D -->|"model IN set"| E["5a. ✅ Provider = 'anthropic'
+    litellm.anthropic_models set 확인"]
+    D -->|"모델이 set에 있음"| E["5a. ✅ Provider = 'anthropic'
     → 'anthropic/claude-sonnet-4-6' matches 'anthropic/*'"]
-    D -->|"model NOT IN set"| F["5b. ❌ Provider unknown
-    → exception raised → wildcard returns False"]
-    E --> G["6. Request allowed"]
+    D -->|"모델이 set에 없음"| F["5b. ❌ Provider unknown
+    → exception 발생 → wildcard가 False 반환"]
+    E --> G["6. 요청 허용"]
     F --> H["6. 401: key not allowed to access model"]
 
     style E fill:#d4edda,stroke:#28a745
@@ -58,13 +58,13 @@ flowchart TD
     style D fill:#fff3cd,stroke:#ffc107
 ```
 
-`litellm.anthropic_models` is a Python `set` populated at import time by `add_known_models()`. It is the source `get_llm_provider()` consults to map a bare model name like `claude-sonnet-4-6` to the provider string `"anthropic"`.
+`litellm.anthropic_models`는 import 시점에 `add_known_models()`가 채우는 Python `set`입니다. `get_llm_provider()`는 `claude-sonnet-4-6` 같은 bare model name을 provider string `"anthropic"`으로 매핑할 때 이 set을 참고합니다.
 
 ---
 
-## Root Cause
+## 근본 원인
 
-`add_known_models()` is called **once** at module import time. Both reload paths in `proxy_server.py` updated `litellm.model_cost` with the fresh map but never called `add_known_models()` again:
+`add_known_models()`는 module import 시점에 **한 번만** 호출되었습니다. `proxy_server.py`의 두 reload path는 fresh map으로 `litellm.model_cost`를 업데이트했지만 `add_known_models()`를 다시 호출하지 않았습니다.
 
 ```python
 # Before the fix — both reload paths looked like this:
@@ -79,24 +79,24 @@ _invalidate_model_cost_lowercase_map()           # ✅ cache cleared
 #    → 401 for every request to the new model
 ```
 
-The gap existed in two places:
-1. `_check_and_reload_model_cost_map` — the periodic automatic reload (every 10 s)
-2. The `/reload/model_cost_map` admin endpoint — the manual reload
+누락 지점은 두 곳이었습니다.
+1. `_check_and_reload_model_cost_map` - 주기적 자동 reload(10초마다)
+2. `/reload/model_cost_map` admin endpoint - 수동 reload
 
-**Timeline:**
+**타임라인:**
 
-1. New model (`claude-sonnet-4-6`) added to `model_prices_and_context_window.json`
-2. Admin triggers cost map reload via UI → `litellm.model_cost` updated
-3. Users with `anthropic/*` wildcard keys attempt requests to `claude-sonnet-4-6`
-4. `get_llm_provider('claude-sonnet-4-6')` raises → wildcard returns False → 401
-5. Admin reloads cost map again — same result (root cause not addressed)
-6. ~3 hours of investigation → root cause identified → fix deployed
+1. 새 모델(`claude-sonnet-4-6`)이 `model_prices_and_context_window.json`에 추가됨
+2. 관리자가 UI에서 cost map reload 실행 → `litellm.model_cost` 업데이트
+3. `anthropic/*` wildcard key를 가진 사용자가 `claude-sonnet-4-6` 요청 시도
+4. `get_llm_provider('claude-sonnet-4-6')`가 예외 발생 → wildcard가 False 반환 → 401
+5. 관리자가 cost map을 다시 reload해도 동일한 결과 발생(근본 원인 미해결)
+6. 약 3시간 조사 → 근본 원인 식별 → fix 배포
 
 ---
 
-## The Fix
+## 수정 내용
 
-After each reload, `add_known_models()` is called with the freshly fetched map passed explicitly. Passing the map directly (rather than relying on the module-level reference) removes any ambiguity about which dict is iterated:
+각 reload 이후, 새로 가져온 map을 명시적으로 전달해 `add_known_models()`를 호출하도록 수정했습니다. module-level reference에 의존하지 않고 map을 직접 전달하면 어떤 dict를 iterate하는지에 대한 모호성이 사라집니다.
 
 ```python
 # After the fix — both reload paths now do:
@@ -106,7 +106,7 @@ _invalidate_model_cost_lowercase_map()
 litellm.add_known_models(model_cost_map=new_model_cost_map)  # ✅ sets repopulated
 ```
 
-`add_known_models()` was also updated to accept an optional explicit map so callers cannot accidentally iterate a stale module-level reference:
+또한 `add_known_models()`가 선택적 explicit map을 받을 수 있도록 수정했습니다. 이로써 caller가 실수로 오래된 module-level reference를 iterate하는 일을 막을 수 있습니다.
 
 ```python
 # Before
@@ -121,18 +121,18 @@ def add_known_models(model_cost_map: Optional[Dict] = None):
         ...
 ```
 
-After the fix, the provider sets (`anthropic_models`, `open_ai_chat_completion_models`, etc.) are always consistent with `litellm.model_cost` immediately after every reload. New models become accessible via wildcard rules without any proxy restart.
+수정 후에는 매 reload 직후 provider set(`anthropic_models`, `open_ai_chat_completion_models` 등)이 항상 `litellm.model_cost`와 일치합니다. 새 모델은 proxy restart 없이 wildcard rule로 접근 가능해집니다.
 
 ---
 
-## Remediation
+## 조치
 
-| # | Action | Status | Code |
+| # | 조치 | 상태 | 코드 |
 |---|---|---|---|
-| 1 | Call `add_known_models(model_cost_map=...)` in the periodic reload path | ✅ Done | [`proxy_server.py#L4393`](https://github.com/BerriAI/litellm/blob/main/litellm/proxy/proxy_server.py#L4393) |
-| 2 | Call `add_known_models(model_cost_map=...)` in the `/reload/model_cost_map` endpoint | ✅ Done | [`proxy_server.py#L11904`](https://github.com/BerriAI/litellm/blob/main/litellm/proxy/proxy_server.py#L11904) |
-| 3 | Update `add_known_models()` to accept an explicit map parameter | ✅ Done | [`__init__.py#L617`](https://github.com/BerriAI/litellm/blob/main/litellm/__init__.py#L617) |
-| 4 | Regression test: `add_known_models(model_cost_map=...)` populates provider sets | ✅ Done | [`test_auth_checks.py`](https://github.com/BerriAI/litellm/blob/main/tests/proxy_unit_tests/test_auth_checks.py) |
-| 5 | Regression test: `anthropic/*` wildcard grants/denies access correctly after reload | ✅ Done | [`test_auth_checks.py`](https://github.com/BerriAI/litellm/blob/main/tests/proxy_unit_tests/test_auth_checks.py) |
+| 1 | 주기적 reload path에서 `add_known_models(model_cost_map=...)` 호출 | ✅ 완료 | [`proxy_server.py#L4393`](https://github.com/BerriAI/litellm/blob/main/litellm/proxy/proxy_server.py#L4393) |
+| 2 | `/reload/model_cost_map` endpoint에서 `add_known_models(model_cost_map=...)` 호출 | ✅ 완료 | [`proxy_server.py#L11904`](https://github.com/BerriAI/litellm/blob/main/litellm/proxy/proxy_server.py#L11904) |
+| 3 | `add_known_models()`가 explicit map parameter를 받을 수 있도록 업데이트 | ✅ 완료 | [`__init__.py#L617`](https://github.com/BerriAI/litellm/blob/main/litellm/__init__.py#L617) |
+| 4 | 회귀 테스트: `add_known_models(model_cost_map=...)`가 provider set을 채우는지 검증 | ✅ 완료 | [`test_auth_checks.py`](https://github.com/BerriAI/litellm/blob/main/tests/proxy_unit_tests/test_auth_checks.py) |
+| 5 | 회귀 테스트: reload 이후 `anthropic/*` wildcard가 접근을 올바르게 허용/거부하는지 검증 | ✅ 완료 | [`test_auth_checks.py`](https://github.com/BerriAI/litellm/blob/main/tests/proxy_unit_tests/test_auth_checks.py) |
 
 ---

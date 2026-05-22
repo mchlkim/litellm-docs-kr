@@ -2,33 +2,33 @@ import Image from '@theme/IdealImage';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Overview
-Set model list, `api_base`, `api_key`, `temperature` & proxy server settings (`master-key`) on the config.yaml. 
+# 개요
+`config.yaml`에서 모델 목록, `api_base`, `api_key`, `temperature`, proxy server 설정(`master-key`)을 지정합니다.
 
-| Param Name           | Description                                                   |
+| 파라미터 이름           | 설명                                                   |
 |----------------------|---------------------------------------------------------------|
-| `model_list`         | List of supported models on the server, with model-specific configs |
-| `router_settings`   | litellm Router settings, example `routing_strategy="least-busy"` [**see all**](#router-settings)|
-| `litellm_settings`   | litellm Module settings, example `litellm.drop_params=True`, `litellm.set_verbose=True`, `litellm.api_base`, `litellm.cache` [**see all**](#all-settings)|
-| `general_settings`   | Server settings, example setting `master_key: sk-my_special_key` |
-| `environment_variables`   | Environment Variables example, `REDIS_HOST`, `REDIS_PORT` |
+| `model_list`         | 서버에서 지원하는 모델 목록과 모델별 설정 |
+| `router_settings`   | litellm Router 설정입니다. 예: `routing_strategy="least-busy"` [**전체 보기**](#router-settings)|
+| `litellm_settings`   | litellm module 설정입니다. 예: `litellm.drop_params=True`, `litellm.set_verbose=True`, `litellm.api_base`, `litellm.cache` [**전체 보기**](#all-settings)|
+| `general_settings`   | 서버 설정입니다. 예: `master_key: sk-my_special_key` |
+| `environment_variables`   | 환경 변수 예시입니다. `REDIS_HOST`, `REDIS_PORT` |
 
-**Complete List:** Check the Swagger UI docs on `<your-proxy-url>/#/config.yaml` (e.g. http://0.0.0.0:4000/#/config.yaml), for everything you can pass in the config.yaml.
+**전체 목록:** `config.yaml`에 전달할 수 있는 모든 항목은 `<your-proxy-url>/#/config.yaml`(예: http://0.0.0.0:4000/#/config.yaml)의 Swagger UI 문서를 확인하세요.
 
 
-## Quick Start 
+## 빠른 시작 
 
-Set a model alias for your deployments. 
+deployment에 사용할 모델 alias를 설정합니다.
 
-In the `config.yaml` the model_name parameter is the user-facing name to use for your deployment. 
+`config.yaml`에서 `model_name` 파라미터는 사용자가 deployment를 호출할 때 쓰는 외부 표시 이름입니다.
 
-In the config below:
-- `model_name`: the name to pass TO litellm from the external client  
-- `litellm_params.model`: the model string passed to the litellm.completion() function
+아래 설정에서:
+- `model_name`: 외부 client가 litellm에 전달하는 이름
+- `litellm_params.model`: `litellm.completion()` 함수에 전달되는 모델 문자열
 
-E.g.: 
-- `model=vllm-models` will route to `openai/facebook/opt-125m`. 
-- `model=gpt-4o` will load balance between `azure/gpt-4o-eu` and `azure/gpt-4o-ca`
+예:
+- `model=vllm-models`는 `openai/facebook/opt-125m`으로 라우팅됩니다.
+- `model=gpt-4o`는 `azure/gpt-4o-eu`와 `azure/gpt-4o-ca` 사이에서 load balance됩니다.
 
 ```yaml
 model_list:
@@ -78,11 +78,11 @@ general_settings:
 ```
 :::info
 
-For more provider-specific info, [go here](../providers/)
+provider별 자세한 정보는 [여기](../providers/)를 확인하세요.
 
 :::
 
-#### Step 2: Start Proxy with config
+#### 2단계: config로 Proxy 시작
 
 ```shell
 $ litellm --config /path/to/config.yaml
@@ -90,7 +90,7 @@ $ litellm --config /path/to/config.yaml
 
 :::tip
 
-Run with `--detailed_debug` if you need detailed debug logs 
+자세한 debug log가 필요하면 `--detailed_debug`로 실행하세요.
 
 ```shell
 $ litellm --config /path/to/config.yaml --detailed_debug
@@ -98,13 +98,13 @@ $ litellm --config /path/to/config.yaml --detailed_debug
 
 :::
 
-#### Step 3: Test it
+#### 3단계: 테스트
 
-Sends request to model where `model_name=gpt-4o` on config.yaml. 
+`config.yaml`에서 `model_name=gpt-4o`로 지정된 모델에 요청을 보냅니다.
 
-If multiple with `model_name=gpt-4o` does [Load Balancing](https://docs.litellm.ai/docs/proxy/load_balancing)
+`model_name=gpt-4o` 항목이 여러 개 있으면 [Load Balancing](https://docs.litellm.ai/docs/proxy/load_balancing)이 수행됩니다.
 
-**[Langchain, OpenAI SDK Usage Examples](../proxy/user_keys#request-format)**
+**[Langchain, OpenAI SDK 사용법 예제](../proxy/user_keys#request-format)**
 
 ```shell
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -121,14 +121,14 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 '
 ```
 
-## LLM configs `model_list`
+## LLM 설정 `model_list`
 
-### Model-specific params (API Base, Keys, Temperature, Max Tokens, Organization, Headers etc.)
-You can use the config to save model-specific information like api_base, api_key, temperature, max_tokens, etc. 
+### 모델별 파라미터(API Base, Key, Temperature, Max Token, Organization, Header 등)
+config를 사용해 `api_base`, `api_key`, `temperature`, `max_tokens` 같은 모델별 정보를 저장할 수 있습니다.
 
-[**All input params**](https://docs.litellm.ai/docs/completion/input#input-params-1)
+[**전체 input params**](https://docs.litellm.ai/docs/completion/input#input-params-1)
 
-**Step 1**: Create a `config.yaml` file
+**1단계**: `config.yaml` 파일 생성
 ```yaml
 model_list:
   - model_name: gpt-4-team1
@@ -158,22 +158,22 @@ model_list:
       api_base: your_ollama_api_base
 ```
 
-**Step 2**: Start server with config
+**2단계**: config로 서버 시작
 
 ```shell
 $ litellm --config /path/to/config.yaml
 ```
 
-**Expected Logs:**
+**예상 로그:**
 
-Look for this line in your console logs to confirm the config.yaml was loaded in correctly.
+`config.yaml`이 올바르게 로드되었는지 확인하려면 console log에서 다음 줄을 찾으세요.
 ```
 LiteLLM: Proxy initialized with Config, Set models:
 ```
 
-### Embedding Models - Use Sagemaker, Bedrock, Azure, OpenAI, XInference
+### Embedding 모델 - Sagemaker, Bedrock, Azure, OpenAI, XInference 사용
 
-See supported Embedding Providers & Models [here](https://docs.litellm.ai/docs/embedding/supported_embedding)
+지원되는 Embedding Provider와 모델은 [여기](https://docs.litellm.ai/docs/embedding/supported_embedding)를 확인하세요.
 
 
 <Tabs>
@@ -200,7 +200,7 @@ model_list:
 
 <TabItem value="sagemaker" label="Sagemaker, Bedrock Embeddings">
 
-Here's how to route between GPT-J embedding (sagemaker endpoint), Amazon Titan embedding (Bedrock) and Azure OpenAI embedding on the proxy server: 
+proxy server에서 GPT-J embedding(Sagemaker endpoint), Amazon Titan embedding(Bedrock), Azure OpenAI embedding 사이를 라우팅하는 방법입니다.
 
 ```yaml
 model_list:
@@ -224,7 +224,7 @@ general_settings:
 </TabItem>
 
 <TabItem value="Hugging Face emb" label="Hugging Face Embeddings">
-LiteLLM Proxy supports all <a href="https://huggingface.co/models?pipeline_tag=feature-extraction">Feature-Extraction Embedding models</a>.
+LiteLLM Proxy는 모든 <a href="https://huggingface.co/models?pipeline_tag=feature-extraction">Feature-Extraction Embedding model</a>을 지원합니다.
 
 ```yaml
 model_list:
@@ -279,7 +279,7 @@ model_list:
 
 https://docs.litellm.ai/docs/providers/xinference
 
-**Note add `xinference/` prefix to `litellm_params`: `model` so litellm knows to route to OpenAI**
+**참고:** LiteLLM이 OpenAI로 라우팅해야 함을 알 수 있도록 `litellm_params`의 `model`에 `xinference/` prefix를 추가하세요.
 
 ```yaml
 model_list:
@@ -293,9 +293,9 @@ model_list:
 
 <TabItem value="openai emb" label="OpenAI Compatible Embeddings">
 
-<p>Use this for calling <a href="https://github.com/xorbitsai/inference">/embedding endpoints on OpenAI Compatible Servers</a>.</p>
+<p><a href="https://github.com/xorbitsai/inference">OpenAI Compatible Server의 /embedding endpoint</a>를 호출할 때 사용합니다.</p>
 
-**Note add `openai/` prefix to `litellm_params`: `model` so litellm knows to route to OpenAI**
+**참고:** LiteLLM이 OpenAI로 라우팅해야 함을 알 수 있도록 `litellm_params`의 `model`에 `openai/` prefix를 추가하세요.
 
 ```yaml
 model_list:
@@ -308,14 +308,14 @@ model_list:
 </TabItem>
 </Tabs>
 
-#### Start Proxy
+#### Proxy 시작
 
 ```shell
 litellm --config config.yaml
 ```
 
-#### Make Request
-Sends Request to `bedrock-cohere`
+#### 요청 보내기
+`bedrock-cohere`로 요청을 보냅니다.
 
 ```shell
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -332,9 +332,9 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 ```
 
 
-### Multiple OpenAI Organizations 
+### 여러 OpenAI 조직
 
-Add all openai models across all OpenAI organizations with just 1 model definition 
+하나의 모델 정의만으로 여러 OpenAI 조직의 모든 OpenAI 모델을 추가합니다.
 
 ```yaml
   - model_name: *
@@ -347,9 +347,9 @@ Add all openai models across all OpenAI organizations with just 1 model definiti
        - org-3
 ```
 
-LiteLLM will automatically create separate deployments for each org.
+LiteLLM은 각 org별로 별도 deployment를 자동 생성합니다.
 
-Confirm this via 
+다음으로 확인할 수 있습니다.
 
 ```bash
 curl --location 'http://0.0.0.0:4000/v1/model/info' \
@@ -357,25 +357,25 @@ curl --location 'http://0.0.0.0:4000/v1/model/info' \
 --data ''
 ```
 
-### Load Balancing 
+### Load Balancing
 
 :::info
-For more on this, go to [this page](https://docs.litellm.ai/docs/proxy/load_balancing)
+자세한 내용은 [이 페이지](https://docs.litellm.ai/docs/proxy/load_balancing)를 확인하세요.
 :::
 
-Use this to call multiple instances of the same model and configure things like [routing strategy](https://docs.litellm.ai/docs/routing#advanced).
+동일 모델의 여러 instance를 호출하고 [routing strategy](https://docs.litellm.ai/docs/routing#advanced) 같은 항목을 설정할 때 사용합니다.
 
-For optimal performance:
-- Set `tpm/rpm` per model deployment. Weighted picks are then based on the established tpm/rpm.
-- Select your optimal routing strategy in `router_settings:routing_strategy`.
+최적 성능을 위해:
+- 모델 deployment별로 `tpm/rpm`을 설정하세요. 그러면 설정된 tpm/rpm을 기준으로 weighted pick이 수행됩니다.
+- `router_settings:routing_strategy`에서 적합한 routing strategy를 선택하세요.
 
-LiteLLM supports
+LiteLLM은 다음을 지원합니다.
 ```python
 ["simple-shuffle", "least-busy", "usage-based-routing","latency-based-routing"], default="simple-shuffle"`
 ```
 
-When `tpm/rpm` is set + `routing_strategy==simple-shuffle` litellm will use a weighted pick based on set tpm/rpm. **In our load tests setting tpm/rpm for all deployments + `routing_strategy==simple-shuffle` maximized throughput**
-- When using multiple LiteLLM Servers / Kubernetes set redis settings `router_settings:redis_host` etc
+`tpm/rpm`이 설정되어 있고 `routing_strategy==simple-shuffle`이면 LiteLLM은 설정된 tpm/rpm을 기준으로 weighted pick을 사용합니다. **load test에서는 모든 deployment에 tpm/rpm을 설정하고 `routing_strategy==simple-shuffle`을 사용할 때 throughput이 최대화되었습니다.**
+- 여러 LiteLLM Server 또는 Kubernetes를 사용할 때는 `router_settings:redis_host` 등 Redis 설정을 지정하세요.
 
 ```yaml
 model_list:
@@ -423,12 +423,12 @@ router_settings: # router_settings are optional
   redis_port: 1992
 ```
 
-You can view your cost once you set up [Virtual keys](https://docs.litellm.ai/docs/proxy/virtual_keys) or [custom_callbacks](https://docs.litellm.ai/docs/proxy/logging)
+비용은 [Virtual keys](https://docs.litellm.ai/docs/proxy/virtual_keys) 또는 [custom_callbacks](https://docs.litellm.ai/docs/proxy/logging)을 설정한 뒤 확인할 수 있습니다.
 
 
-### Load API Keys / config values from Environment 
+### 환경에서 API Key/config 값 로드
 
-If you have secrets saved in your environment, and don't want to expose them in the config.yaml, here's how to load model-specific keys from the environment. **This works for ANY value on the config.yaml**
+secret을 환경 변수에 저장해 두었고 `config.yaml`에 노출하고 싶지 않다면, 다음 방식으로 모델별 key를 환경에서 로드할 수 있습니다. **이 방식은 `config.yaml`의 모든 값에 사용할 수 있습니다.**
 
 ```yaml
 os.environ/<YOUR-ENV-VAR> # runs os.getenv("YOUR-ENV-VAR")
@@ -444,15 +444,15 @@ model_list:
       api_key: os.environ/AZURE_NORTH_AMERICA_API_KEY # 👈 KEY CHANGE
 ```
 
-[**See Code**](https://github.com/BerriAI/litellm/blob/c12d6c3fe80e1b5e704d9846b246c059defadce7/litellm/utils.py#L2366)
+[**코드 보기**](https://github.com/BerriAI/litellm/blob/c12d6c3fe80e1b5e704d9846b246c059defadce7/litellm/utils.py#L2366)
 
-s/o to [@David Manouchehri](https://www.linkedin.com/in/davidmanouchehri/) for helping with this. 
+이 기능에 도움을 준 [@David Manouchehri](https://www.linkedin.com/in/davidmanouchehri/)에게 감사드립니다.
 
-### Centralized Credential Management
+### 중앙화된 Credential 관리
 
-Define credentials once and reuse them across multiple models. This helps with:
+credential을 한 번 정의하고 여러 모델에서 재사용합니다. 다음에 도움이 됩니다.
 - Secret rotation
-- Reducing config duplication
+- config 중복 감소
 
 ```yaml
 model_list:
@@ -472,29 +472,29 @@ credential_list:
       custom_llm_provider: "azure"
 ```
 
-#### Key Parameters
-- `credential_name`: Unique identifier for the credential set
-- `credential_values`: Key-value pairs of credentials/secrets (supports `os.environ/` syntax)
-- `credential_info`: Key-value pairs of user provided credentials information.  No key-value pairs are required, but the dictionary must exist.
+#### 주요 파라미터
+- `credential_name`: credential set의 고유 식별자
+- `credential_values`: credential/secret의 key-value 쌍(`os.environ/` 문법 지원)
+- `credential_info`: 사용자가 제공한 credential 정보의 key-value 쌍입니다. 필수 key-value는 없지만 dictionary는 존재해야 합니다.
 
-### Load API Keys from Secret Managers (Azure Vault, etc)
+### Secret Manager에서 API Key 로드(Azure Vault 등)
 
-[**Using Secret Managers with LiteLLM Proxy**](../secret)
+[**LiteLLM Proxy에서 Secret Manager 사용**](../secret)
 
 
-### Set Supported Environments for a model - `production`, `staging`, `development`
+### 모델별 지원 환경 설정 - `production`, `staging`, `development`
 
-Use this if you want to control which model is exposed on a specific litellm environment
+특정 LiteLLM 환경에서 어떤 모델을 노출할지 제어하려면 이 설정을 사용하세요.
 
-Supported Environments:
+지원 환경:
 - `production`
 - `staging`
 - `development`
 
-1. Set `LITELLM_ENVIRONMENT="<environment>"` in your environment. Can be one of `production`, `staging` or `development`
+1. 환경에 `LITELLM_ENVIRONMENT="<environment>"`를 설정합니다. 값은 `production`, `staging`, `development` 중 하나입니다.
 
 
-2. For each model set the list of supported environments in `model_info.supported_environments`
+2. 각 모델에 대해 `model_info.supported_environments`에 지원 환경 목록을 설정합니다.
 ```yaml
 model_list:
  - model_name: gpt-3.5-turbo-16k
@@ -518,11 +518,11 @@ model_list:
 ```
 
 
-### Set Custom Prompt Templates
+### Custom Prompt Template 설정하기
 
-LiteLLM by default checks if a model has a [prompt template and applies it](../completion/prompt_formatting.md) (e.g. if a huggingface model has a saved chat template in it's tokenizer_config.json). However, you can also set a custom prompt template on your proxy in the `config.yaml`: 
+LiteLLM은 기본적으로 모델에 [prompt template이 있는지 확인하고 적용](../completion/prompt_formatting.md)합니다. 예를 들어 Hugging Face 모델의 `tokenizer_config.json`에 저장된 chat template이 있으면 이를 사용합니다. 필요하면 `config.yaml`에서 proxy에 사용자 지정 prompt template을 설정할 수도 있습니다.
 
-**Step 1**: Save your prompt template in a `config.yaml`
+**1단계**: `config.yaml`에 prompt template 저장
 ```yaml
 # Model-specific parameters
 model_list:
@@ -539,15 +539,15 @@ model_list:
       max_tokens: 4096
 ```
 
-**Step 2**: Start server with config
+**2단계**: config로 서버 시작
 
 ```shell
 $ litellm --config /path/to/config.yaml
 ``` 
 
-### Set custom tokenizer 
+### Custom tokenizer 설정 {#set-custom-tokenizer}
 
-If you're using the [`/utils/token_counter` endpoint](https://litellm-api.up.railway.app/#/llm%20utils/token_counter_utils_token_counter_post), and want to set a custom huggingface tokenizer for a model, you can do so in the `config.yaml`
+[`/utils/token_counter` endpoint](https://litellm-api.up.railway.app/#/llm%20utils/token_counter_utils_token_counter_post)를 사용하면서 모델에 custom Hugging Face tokenizer를 설정하려면 `config.yaml`에서 지정할 수 있습니다.
 
 ```yaml
 model_list:
@@ -571,9 +571,9 @@ custom_tokenizer:
   auth_token: Optional[str] # huggingface auth token 
 ```
 
-## General Settings `general_settings` (DB Connection, etc)
+## 일반 설정 `general_settings`(DB 연결 등)
 
-### Configure DB Pool Limits + Connection Timeouts 
+### DB Pool 제한과 연결 Timeout 설정
 
 ```yaml
 general_settings: 
@@ -581,91 +581,69 @@ general_settings:
   database_connection_timeout: 60 # sets a 60s timeout for any connection call to the db 
 ```
 
-**How to calculate the right value:**
+**적절한 값 계산 방법:**
 
-The connection limit is applied **per worker process**, not per instance. This means if you have multiple workers, each worker will create its own connection pool.
+connection limit은 instance 단위가 아니라 **worker process별로** 적용됩니다. worker가 여러 개이면 각 worker가 자체 connection pool을 만듭니다.
 
-**Formula:**
+**공식:**
 ```
 database_connection_pool_limit = MAX_DB_CONNECTIONS ÷ (number_of_instances × number_of_workers_per_instance)
 ```
 
-**Example:**
-- Your database allows a maximum of **100 connections**
-- You're running **1 instance** of LiteLLM
-- Each instance has **8 workers** (set via `--num_workers 8`)
+**예제:**
+- database가 최대 **100 connection**을 허용합니다.
+- LiteLLM **1개 instance**를 실행합니다.
+- 각 instance에는 **8개 worker**가 있습니다(`--num_workers 8`로 설정).
 
-Calculation: `100 ÷ (1 × 8) = 12.5`
+계산: `100 ÷ (1 × 8) = 12.5`
 
-Since you shouldn't use 12.5, round down to **10** to leave a safety buffer. This means:
-- Each of the 8 workers will have a connection pool limit of 10
-- Total maximum connections: 8 workers × 10 connections = 80 connections
-- This stays safely under your database's 100 connection limit
+12.5를 그대로 사용할 수 없으므로 안전 buffer를 남기기 위해 **10**으로 내립니다. 이 경우:
+- 8개 worker 각각의 connection pool limit은 10입니다.
+- 총 최대 connection 수: 8 workers × 10 connections = 80 connections
+- database의 100 connection 제한 안에 안전하게 머무릅니다.
 
-### Cap Idle DB Connections + Pass Extra Prisma URL Params
+## LiteLLM License Key(엔터프라이즈)
 
-If you're seeing a large number of idle Prisma connections that never close, set `database_socket_timeout` so Prisma closes any connection that's been silent past the threshold. You can also bound how long Prisma waits to open a new connection with `database_connect_timeout`, and pass arbitrary extra query-string params through to Prisma via `database_extra_connection_params`.
-
-These map to the Prisma [PostgreSQL connection URL params](https://www.prisma.io/docs/orm/overview/databases/postgresql) of the same name (minus the `database_` prefix), and LiteLLM appends them to both `DATABASE_URL` and `DIRECT_URL`.
-
-```yaml
-general_settings:
-  database_connection_pool_limit: 20
-  database_socket_timeout: 300   # close any connection idle/slow for >5 min
-  database_connect_timeout: 15   # fail fast if a new connection can't be established within 15s
-  database_extra_connection_params:
-    pgbouncer: "true"            # set if running behind PgBouncer
-    statement_cache_size: 0
-    sslmode: "require"
-```
-
-**Notes:**
-- `database_socket_timeout` is the main knob for capping idle DB connections from LiteLLM.
-- `database_connect_timeout` and `database_socket_timeout` are omitted from the URL when unset, so Prisma's defaults apply.
-- `database_extra_connection_params` is an untyped passthrough — any key you set here **overrides** the LiteLLM-set defaults for that key (e.g. you can override `pool_timeout` from this dict). Use it for `sslmode`, `pgbouncer`, `statement_cache_size`, or any other Prisma URL param.
-
-## LiteLLM License Key (Enterprise)
-
-To enable [LiteLLM Enterprise features](https://docs.litellm.ai/docs/enterprise), set your license key as an environment variable:
+[LiteLLM 엔터프라이즈 기능](https://docs.litellm.ai/docs/enterprise)을 활성화하려면 license key를 환경 변수로 설정하세요.
 
 ```bash
 export LITELLM_LICENSE="eyJ..."
 ```
 
-The license key is a JWT token provided when you purchase a LiteLLM Enterprise license. Once set, LiteLLM will automatically detect and activate enterprise features.
+license key는 LiteLLM 엔터프라이즈 license 구매 시 제공되는 JWT token입니다. 설정하면 LiteLLM이 자동으로 감지해 enterprise 기능을 활성화합니다.
 
-You can also add it to your `.env` file:
+`.env` 파일에 추가할 수도 있습니다.
 
 ```env
 LITELLM_LICENSE="eyJ..."
 ```
 
-## Extras
+## 기타
 
 
-### Disable Swagger UI 
+### Swagger UI 비활성화
 
-To disable the Swagger docs from the base url, set 
+base URL에서 Swagger 문서를 비활성화하려면 다음을 설정하세요.
 
 ```env
 NO_DOCS="True"
 ```
 
-in your environment, and restart the proxy. 
+환경 변수에 설정한 뒤 proxy를 재시작합니다.
 
 ### Disable Redoc
 
-To disable the Redoc docs (defaults to `<your-proxy-url>/redoc`), set 
+Redoc 문서(기본값: `<your-proxy-url>/redoc`)를 비활성화하려면 다음을 설정하세요.
 
 ```env
 NO_REDOC="True"
 ```
 
-in your environment, and restart the proxy. 
+환경 변수에 설정한 뒤 proxy를 재시작합니다.
 
-### Use CONFIG_FILE_PATH for proxy (Easier Azure container deployment)
+### Proxy에 CONFIG_FILE_PATH 사용(Azure container 배포 간소화)
 
-1. Setup config.yaml
+1. config.yaml 설정
 
 ```yaml
 model_list:
@@ -675,13 +653,13 @@ model_list:
       api_key: os.environ/OPENAI_API_KEY
 ```
 
-2. Store filepath as env var 
+2. file path를 환경 변수로 저장
 
 ```bash
 CONFIG_FILE_PATH="/path/to/config.yaml"
 ```
 
-3. Start Proxy
+3. Proxy 시작
 
 ```bash
 $ litellm 
@@ -690,23 +668,23 @@ $ litellm
 ```
 
 
-### Providing LiteLLM config.yaml file as a s3, GCS Bucket Object/url
+### LiteLLM config.yaml 파일을 s3 또는 GCS Bucket object/URL로 제공하기
 
-Use this if you cannot mount a config file on your deployment service (example - AWS Fargate, Railway etc)
+배포 서비스에서 config 파일을 mount할 수 없을 때 사용합니다. 예: AWS Fargate, Railway 등.
 
-LiteLLM Proxy will read your config.yaml from an s3 Bucket or GCS Bucket 
+LiteLLM Proxy는 s3 Bucket 또는 GCS Bucket에서 `config.yaml`을 읽습니다.
 
 <Tabs>
 <TabItem value="gcs" label="GCS Bucket">
 
-Set the following .env vars 
+다음 `.env` 변수를 설정합니다.
 ```shell
 LITELLM_CONFIG_BUCKET_TYPE = "gcs"                              # set this to "gcs"         
 LITELLM_CONFIG_BUCKET_NAME = "litellm-proxy"                    # your bucket name on GCS
 LITELLM_CONFIG_BUCKET_OBJECT_KEY = "proxy_config.yaml"         # object key on GCS
 ```
 
-Start litellm proxy with these env vars - litellm will read your config from GCS 
+이 환경 변수로 litellm proxy를 시작하면 litellm이 GCS에서 config를 읽습니다.
 
 ```shell
 docker run --name litellm-proxy \
@@ -722,13 +700,13 @@ docker run --name litellm-proxy \
 
 <TabItem value="s3" label="s3">
 
-Set the following .env vars 
+다음 `.env` 변수를 설정합니다.
 ```shell
 LITELLM_CONFIG_BUCKET_NAME = "litellm-proxy"                    # your bucket name on s3 
 LITELLM_CONFIG_BUCKET_OBJECT_KEY = "litellm_proxy_config.yaml"  # object key on s3
 ```
 
-Start litellm proxy with these env vars - litellm will read your config from s3 
+이 환경 변수로 litellm proxy를 시작하면 litellm이 s3에서 config를 읽습니다.
 
 ```shell
 docker run --name litellm-proxy \

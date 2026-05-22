@@ -1,70 +1,70 @@
 import Image from '@theme/IdealImage';
 
-# Customize UI Logo
+# UI 로고 사용자 지정
 
-Personalize your LiteLLM dashboard by replacing the default logo with your own company branding. You can set a custom logo via the UI or the API.
+기본 로고를 회사 브랜딩에 맞는 로고로 교체해 LiteLLM 대시보드를 맞춤 설정할 수 있습니다. 사용자 지정 로고는 UI 또는 API를 통해 설정할 수 있습니다.
 
-## Via the UI
+## UI에서 설정
 
-### 1. Navigate to Settings
+### 1. 설정으로 이동
 
-Click the **Settings** icon in the sidebar.
+사이드바에서 **Settings** 아이콘을 클릭합니다.
 
-![Navigate to Settings](https://colony-recorder.s3.amazonaws.com/files/2026-03-13/57a15404-51f7-481e-9db2-cea94566d3ce/ascreenshot_7a348567c839448bb806fd71cf4abca0_text_export.jpeg)
+![설정으로 이동](https://colony-recorder.s3.amazonaws.com/files/2026-03-13/57a15404-51f7-481e-9db2-cea94566d3ce/ascreenshot_7a348567c839448bb806fd71cf4abca0_text_export.jpeg)
 
-### 2. Open UI Theme Settings
+### 2. UI 테마 설정 열기
 
-Click **UI Theme** from the settings menu.
+설정 메뉴에서 **UI Theme**를 클릭합니다.
 
-![Open UI Theme](https://colony-recorder.s3.amazonaws.com/files/2026-03-13/30663fe1-9f78-4496-96d4-c53513cbaf82/ascreenshot_ac1eb59eda0e423fbd0e7d3a6cabd4c7_text_export.jpeg)
+![UI 테마 열기](https://colony-recorder.s3.amazonaws.com/files/2026-03-13/30663fe1-9f78-4496-96d4-c53513cbaf82/ascreenshot_ac1eb59eda0e423fbd0e7d3a6cabd4c7_text_export.jpeg)
 
-### 3. Click the Logo URL Field
+### 3. Logo URL 필드 클릭
 
-Click the **Logo URL** text field to start editing.
+편집을 시작하려면 **Logo URL** 텍스트 필드를 클릭합니다.
 
-![Click Logo URL Field](https://colony-recorder.s3.amazonaws.com/files/2026-03-13/069e8412-8ec1-4d36-ba38-6b2e2858a45a/ascreenshot_8fc7fb4a3af74815bc1b69a8554bc110_text_export.jpeg)
+![Logo URL 필드 클릭](https://colony-recorder.s3.amazonaws.com/files/2026-03-13/069e8412-8ec1-4d36-ba38-6b2e2858a45a/ascreenshot_8fc7fb4a3af74815bc1b69a8554bc110_text_export.jpeg)
 
-### 4. Find Your Logo Image
+### 4. 로고 이미지 찾기
 
-Open a new browser tab and find the logo image you want to use (e.g., search Google Images for your company logo).
+새 브라우저 탭을 열고 사용할 로고 이미지를 찾습니다. 예를 들어 Google Images에서 회사 로고를 검색할 수 있습니다.
 
-![Find Logo Image](https://colony-recorder.s3.amazonaws.com/files/2026-03-13/d9b55dac-bc4e-4728-b422-4afbc21f9034/ascreenshot_2a805f39c83d4b5e95f43495a6ea4e79_text_export.jpeg)
+![로고 이미지 찾기](https://colony-recorder.s3.amazonaws.com/files/2026-03-13/d9b55dac-bc4e-4728-b422-4afbc21f9034/ascreenshot_2a805f39c83d4b5e95f43495a6ea4e79_text_export.jpeg)
 
-### 5. Right-Click on the Logo Image
+### 5. 로고 이미지에서 오른쪽 클릭
 
-Right-click the image you want to use as your logo.
+로고로 사용할 이미지를 오른쪽 클릭합니다.
 
-![Right-Click Image](https://colony-recorder.s3.amazonaws.com/files/2026-03-13/9d42d13e-6028-4710-acb2-c6af04a855c7/ascreenshot_0f21f29ba0e44132afe483a4b88e8b70_text_export.jpeg)
+![이미지 오른쪽 클릭](https://colony-recorder.s3.amazonaws.com/files/2026-03-13/9d42d13e-6028-4710-acb2-c6af04a855c7/ascreenshot_0f21f29ba0e44132afe483a4b88e8b70_text_export.jpeg)
 
-### 6. Copy the Image Address
+### 6. 이미지 주소 복사
 
-Select **Copy Image Address** from the context menu to copy the URL.
+컨텍스트 메뉴에서 **Copy Image Address**를 선택해 URL을 복사합니다.
 
-![Copy Image Address](https://colony-recorder.s3.amazonaws.com/files/2026-03-13/c25637be-383a-498b-ad11-eb1761d52757/ascreenshot_b237ee800979462189a02c1e1942ebf1_text_export.jpeg)
+![이미지 주소 복사](https://colony-recorder.s3.amazonaws.com/files/2026-03-13/c25637be-383a-498b-ad11-eb1761d52757/ascreenshot_b237ee800979462189a02c1e1942ebf1_text_export.jpeg)
 
-### 7. Switch Back to LiteLLM
+### 7. LiteLLM으로 다시 전환
 
-Navigate back to the LiteLLM UI tab (e.g., press **Cmd + Left** or click the tab).
+LiteLLM UI 탭으로 돌아갑니다. 예를 들어 **Cmd + Left**를 누르거나 해당 탭을 클릭합니다.
 
-![Switch Back](https://colony-recorder.s3.amazonaws.com/files/2026-03-13/f0647856-679c-4591-9ff7-7fd3cfbc70b4/ascreenshot_3ce46dae64c94891ac0983f5ed8f085a_text_export.jpeg)
+![다시 전환](https://colony-recorder.s3.amazonaws.com/files/2026-03-13/f0647856-679c-4591-9ff7-7fd3cfbc70b4/ascreenshot_3ce46dae64c94891ac0983f5ed8f085a_text_export.jpeg)
 
-### 8. Paste the Logo URL
+### 8. Logo URL 붙여넣기
 
-Paste the copied image URL into the **Logo URL** field with **Cmd + V**.
+복사한 이미지 URL을 **Cmd + V**로 **Logo URL** 필드에 붙여넣습니다.
 
-![Paste URL](https://colony-recorder.s3.amazonaws.com/files/2026-03-13/54dd30d9-7a88-41e8-a580-a6acf707c7fa/ascreenshot_8a772218ac0743d9ae8ffd3311eccd5a_text_export.jpeg)
+![URL 붙여넣기](https://colony-recorder.s3.amazonaws.com/files/2026-03-13/54dd30d9-7a88-41e8-a580-a6acf707c7fa/ascreenshot_8a772218ac0743d9ae8ffd3311eccd5a_text_export.jpeg)
 
-### 9. Save Changes
+### 9. 변경 사항 저장
 
-Click **Save Changes** to apply your new logo.
+새 로고를 적용하려면 **Save Changes**를 클릭합니다.
 
-![Save Changes](https://colony-recorder.s3.amazonaws.com/files/2026-03-13/4baf6494-d146-4600-b6f2-ef667338d580/ascreenshot_722cbcd568ec4267af5122b3958bb248_text_export.jpeg)
+![변경 사항 저장](https://colony-recorder.s3.amazonaws.com/files/2026-03-13/4baf6494-d146-4600-b6f2-ef667338d580/ascreenshot_722cbcd568ec4267af5122b3958bb248_text_export.jpeg)
 
-Your custom logo will now appear in the LiteLLM dashboard sidebar and login page.
+이제 사용자 지정 로고가 LiteLLM 대시보드 사이드바와 로그인 페이지에 표시됩니다.
 
-## Via the API
+## API에서 설정
 
-### Set a Custom Logo
+### 사용자 지정 로고 설정
 
 ```bash
 curl -X PATCH 'http://localhost:4000/settings/update/ui_theme_settings' \
@@ -75,9 +75,9 @@ curl -X PATCH 'http://localhost:4000/settings/update/ui_theme_settings' \
   }'
 ```
 
-### Set a Custom Favicon
+### 사용자 지정 파비콘 설정
 
-You can also customize the browser tab favicon:
+브라우저 탭의 파비콘도 사용자 지정할 수 있습니다.
 
 ```bash
 curl -X PATCH 'http://localhost:4000/settings/update/ui_theme_settings' \
@@ -89,15 +89,15 @@ curl -X PATCH 'http://localhost:4000/settings/update/ui_theme_settings' \
   }'
 ```
 
-### Get Current Theme Settings
+### 현재 테마 설정 가져오기
 
 ```bash
 curl -X GET 'http://localhost:4000/settings/get/ui_theme_settings'
 ```
 
-### Reset to Default Logo
+### 기본 로고로 재설정
 
-Send an empty `logo_url` to restore the default LiteLLM logo:
+기본 LiteLLM 로고로 복원하려면 빈 `logo_url`을 전송합니다.
 
 ```bash
 curl -X PATCH 'http://localhost:4000/settings/update/ui_theme_settings' \
@@ -108,9 +108,9 @@ curl -X PATCH 'http://localhost:4000/settings/update/ui_theme_settings' \
   }'
 ```
 
-## Via `proxy_config.yaml`
+## `proxy_config.yaml`에서 설정
 
-You can also set the logo URL in your proxy configuration file:
+프록시 구성 파일에서도 로고 URL을 설정할 수 있습니다.
 
 ```yaml
 litellm_settings:
@@ -119,20 +119,20 @@ litellm_settings:
     favicon_url: "https://example.com/your-favicon.ico"  # optional
 ```
 
-Or set it as an environment variable:
+또는 환경 변수로 설정할 수 있습니다.
 
 ```yaml
 environment_variables:
   UI_LOGO_PATH: "https://example.com/your-company-logo.png"
 ```
 
-## Supported Logo Formats
+## 지원되는 로고 형식
 
-| Format | Supported |
+| 형식 | 지원 여부 |
 |--------|-----------|
-| JPEG / JPG | Yes |
-| PNG | Yes |
-| SVG | Yes |
-| ICO (favicon only) | Yes |
-| HTTP/HTTPS URL | Yes |
-| Local file path | Yes |
+| JPEG / JPG | 예 |
+| PNG | 예 |
+| SVG | 예 |
+| ICO (파비콘만) | 예 |
+| HTTP/HTTPS URL | 예 |
+| 로컬 파일 경로 | 예 |

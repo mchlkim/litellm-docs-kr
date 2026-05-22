@@ -1,12 +1,12 @@
-# Custom Auth 
+# Custom Auth
 
-You can now override the default api key auth.
+기본 API key 인증을 override할 수 있습니다.
 
-## Usage
+## 사용법
 
-#### 1. Create a custom auth file. 
+#### 1. custom auth 파일 생성
 
-Make sure the response type follows the `UserAPIKeyAuth` pydantic object. This is used by for logging usage specific to that user key.
+응답 타입이 `UserAPIKeyAuth` pydantic 객체를 따르도록 하세요. 이 객체는 해당 user key별 사용량 로깅에 사용됩니다.
 
 ```python
 from fastapi import Request
@@ -22,11 +22,11 @@ async def user_api_key_auth(request: Request, api_key: str) -> UserAPIKeyAuth:
         raise Exception
 ```
 
-## UserAPIKeyAuth Fields Reference
+## UserAPIKeyAuth 필드 참조
 
-The `UserAPIKeyAuth` object supports the following fields for comprehensive auth configuration:
+`UserAPIKeyAuth` 객체는 포괄적인 인증 설정을 위해 다음 필드를 지원합니다.
 
-### Core Authentication Fields
+### 핵심 인증 필드
 ```python
 UserAPIKeyAuth(
     # Basic auth fields
@@ -47,7 +47,7 @@ UserAPIKeyAuth(
 )
 ```
 
-### Budget and Spend Tracking
+### 예산과 비용 추적
 ```python
 UserAPIKeyAuth(
     # User budgets
@@ -89,7 +89,7 @@ UserAPIKeyAuth(
 )
 ```
 
-### End User Tracking
+### 최종 사용자 추적
 ```python
 UserAPIKeyAuth(
     # End user identification and limits
@@ -100,7 +100,7 @@ UserAPIKeyAuth(
 )
 ```
 
-### Model and Route Access
+### 모델 및 라우트 접근
 ```python
 UserAPIKeyAuth(
     # Model access control
@@ -115,7 +115,7 @@ UserAPIKeyAuth(
 )
 ```
 
-### Object Permission Example (MCP, agents, etc.)
+### Object Permission 예제(MCP, agents 등)
 
 ```python
 from litellm.proxy._experimental.mcp_server.mcp_server_manager import (
@@ -138,7 +138,7 @@ UserAPIKeyAuth(
 )
 ```
 
-### Advanced Configuration
+### 고급 설정
 ```python
 UserAPIKeyAuth(
     # Request handling
@@ -160,7 +160,7 @@ UserAPIKeyAuth(
 )
 ```
 
-### Complete Example
+### 전체 예제
 
 ```python
 from fastapi import Request
@@ -209,11 +209,11 @@ async def user_api_key_auth(request: Request, api_key: str) -> UserAPIKeyAuth:
         raise Exception("Authentication failed")
 ```
 
-#### 2. Pass the filepath (relative to the config.yaml)
+#### 2. 파일 경로 전달(`config.yaml` 기준 상대 경로)
 
-Pass the filepath to the config.yaml 
+`config.yaml`에 파일 경로를 전달합니다.
 
-e.g. if they're both in the same dir - `./config.yaml` and `./custom_auth.py`, this is what it looks like:
+예를 들어 `./config.yaml`과 `./custom_auth.py`가 같은 디렉터리에 있다면 다음과 같이 설정합니다.
 ```yaml 
 model_list: 
   - model_name: "openai-model"
@@ -228,29 +228,29 @@ general_settings:
   custom_auth: custom_auth.user_api_key_auth
 ```
 
-[**Implementation Code**](https://github.com/BerriAI/litellm/blob/caf2a6b279ddbe89ebd1d8f4499f65715d684851/litellm/proxy/utils.py#L122)
+[**구현 코드**](https://github.com/BerriAI/litellm/blob/caf2a6b279ddbe89ebd1d8f4499f65715d684851/litellm/proxy/utils.py#L122)
 
-#### 3. Start the proxy
+#### 3. 프록시 시작
 ```shell
 $ litellm --config /path/to/config.yaml 
 ```
 
-## ✨ Support LiteLLM Virtual Keys + Custom Auth
+## LiteLLM 가상 키 + Custom Auth 지원
 
-Supported from v1.72.2+
+v1.72.2 이상에서 지원됩니다.
 
 :::info 
 
-✨ Supporting Custom Auth + LiteLLM Virtual Keys is on LiteLLM Enterprise
+Custom Auth + LiteLLM 가상 키 지원은 LiteLLM 엔터프라이즈 기능입니다.
 
-[Enterprise Pricing](https://www.litellm.ai/#pricing)
+[엔터프라이즈 가격](https://www.litellm.ai/#pricing)
 
-[Get free 7-day trial key](https://www.litellm.ai/enterprise#trial)
+[무료 7일 trial key 받기](https://www.litellm.ai/enterprise#trial)
 :::
 
-### Usage
+### 사용법
 
-1. Setup custom auth file
+1. custom auth 파일을 설정합니다.
 
 ```python
 """
@@ -278,9 +278,9 @@ async def user_api_key_auth(
 
 ```
 
-2. Setup config.yaml
+2. `config.yaml`을 설정합니다.
 
-Key change set `mode: auto`. This will check both litellm api key auth + custom auth.
+핵심 변경은 `mode: auto` 설정입니다. 이 모드는 LiteLLM api key auth와 custom auth를 모두 확인합니다.
 
 ```yaml
 model_list: 
@@ -295,13 +295,13 @@ general_settings:
     mode: "auto" # can be 'on', 'off', 'auto' - 'auto' checks both litellm api key auth + custom auth
 ```
 
-Flow:
-1. Checks custom auth first
-2. If custom auth fails, checks litellm api key auth
-3. If both fail, returns 401
+흐름:
+1. 먼저 custom auth를 확인합니다.
+2. custom auth가 실패하면 LiteLLM api key auth를 확인합니다.
+3. 둘 다 실패하면 401을 반환합니다.
 
 
-3. Test it! 
+3. 테스트합니다.
 
 ```bash
 curl -L -X POST 'http://0.0.0.0:4000/v1/chat/completions' \
@@ -321,9 +321,9 @@ curl -L -X POST 'http://0.0.0.0:4000/v1/chat/completions' \
 
 
 
-#### Bubble up custom exceptions
+#### custom exception 전달
 
-If you want to bubble up custom exceptions, you can do so by raising a `ProxyException`.
+custom exception을 클라이언트로 전달하려면 `ProxyException`을 raise하면 됩니다.
 
 ```python
 """

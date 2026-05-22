@@ -20,7 +20,7 @@ import Image from '@theme/IdealImage';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-## Deploy this version
+## 이 버전 배포 {#deploy-this-version}
 
 <Tabs>
 <TabItem value="docker" label="Docker">
@@ -41,136 +41,135 @@ pip install litellm==1.65.4.post1
 </TabItem>
 </Tabs>
 
-v1.65.4-stable is live. Here are the improvements since v1.65.0-stable.
+v1.65.4-stable이 배포되었습니다. v1.65.0-stable 이후의 개선 사항은 다음과 같습니다.
 
-## Key Highlights
-- **Preventing DB Deadlocks**: Fixes a high-traffic issue when multiple instances were writing to the DB at the same time. 
-- **New Usage Tab**: Enables viewing spend by model and customizing date range
+## 주요 하이라이트 {#key-highlights}
+- **DB 데드락 방지**: 여러 인스턴스가 동시에 DB에 쓰기 작업을 수행할 때 발생하던 고트래픽 문제를 수정했습니다.
+- **새로운 사용법 탭**: 모델별 지출 조회와 날짜 범위 사용자 지정을 지원합니다.
 
-Let's dive in. 
+자세히 살펴보겠습니다.
 
-### Preventing DB Deadlocks
+### DB 데드락 방지 {#preventing-db-deadlocks}
 
 <Image img={require('../../img/prevent_deadlocks.jpg')} />
 
-This release fixes the DB deadlocking issue that users faced in high traffic (10K+ RPS). This is great because it enables user/key/team spend tracking works at that scale.
+이번 릴리스는 고트래픽(10K+ RPS) 환경에서 사용자가 겪던 DB 데드락 문제를 수정합니다. 이를 통해 해당 규모에서도 사용자/키/팀 지출 추적이 동작할 수 있습니다.
 
-Read more about the new architecture [here](https://docs.litellm.ai/docs/proxy/db_deadlocks)
+새 아키텍처에 대한 자세한 내용은 [여기](https://docs.litellm.ai/docs/proxy/db_deadlocks)에서 확인하세요.
 
 
-### New Usage Tab
+### 새로운 사용법 탭 {#new-사용법-tab}
 
 <Image img={require('../../img/release_notes/spend_by_model.jpg')} />
 
-The new Usage tab now brings the ability to track daily spend by model. This makes it easier to catch any spend tracking or token counting errors, when combined with the ability to view successful requests, and token usage.
+새 사용법 탭에서 이제 모델별 일일 지출을 추적할 수 있습니다. 성공한 요청과 토큰 사용량을 함께 확인할 수 있어 지출 추적 또는 토큰 계산 오류를 더 쉽게 찾을 수 있습니다.
 
-To test this out, just go to Experimental > New Usage > Activity.
+직접 테스트하려면 Experimental > New 사용법 > Activity로 이동하세요.
 
 
-## New Models / Updated Models
+## 신규 모델 / 업데이트된 모델 {#new-모델--updated-모델}
 
-1. Databricks - claude-3-7-sonnet cost tracking [PR](https://github.com/BerriAI/litellm/blob/52b35cd8093b9ad833987b24f494586a1e923209/model_prices_and_context_window.json#L10350)
-2. VertexAI - `gemini-2.5-pro-exp-03-25` cost tracking [PR](https://github.com/BerriAI/litellm/blob/52b35cd8093b9ad833987b24f494586a1e923209/model_prices_and_context_window.json#L4492)
-3. VertexAI - `gemini-2.0-flash` cost tracking [PR](https://github.com/BerriAI/litellm/blob/52b35cd8093b9ad833987b24f494586a1e923209/model_prices_and_context_window.json#L4689)
-4. Groq - add whisper ASR models to model cost map [PR](https://github.com/BerriAI/litellm/blob/52b35cd8093b9ad833987b24f494586a1e923209/model_prices_and_context_window.json#L3324)
-5. IBM - Add watsonx/ibm/granite-3-8b-instruct to model cost map [PR](https://github.com/BerriAI/litellm/blob/52b35cd8093b9ad833987b24f494586a1e923209/model_prices_and_context_window.json#L91)
-6. Google AI Studio - add gemini/gemini-2.5-pro-preview-03-25 to model cost map [PR](https://github.com/BerriAI/litellm/blob/52b35cd8093b9ad833987b24f494586a1e923209/model_prices_and_context_window.json#L4850)
+1. Databricks - claude-3-7-sonnet 비용 추적 [PR](https://github.com/BerriAI/litellm/blob/52b35cd8093b9ad833987b24f494586a1e923209/model_prices_and_context_window.json#L10350)
+2. VertexAI - `gemini-2.5-pro-exp-03-25` 비용 추적 [PR](https://github.com/BerriAI/litellm/blob/52b35cd8093b9ad833987b24f494586a1e923209/model_prices_and_context_window.json#L4492)
+3. VertexAI - `gemini-2.0-flash` 비용 추적 [PR](https://github.com/BerriAI/litellm/blob/52b35cd8093b9ad833987b24f494586a1e923209/model_prices_and_context_window.json#L4689)
+4. Groq - whisper ASR 모델을 모델 비용 맵에 추가 [PR](https://github.com/BerriAI/litellm/blob/52b35cd8093b9ad833987b24f494586a1e923209/model_prices_and_context_window.json#L3324)
+5. IBM - watsonx/ibm/granite-3-8b-instruct를 모델 비용 맵에 추가 [PR](https://github.com/BerriAI/litellm/blob/52b35cd8093b9ad833987b24f494586a1e923209/model_prices_and_context_window.json#L91)
+6. Google AI Studio - gemini/gemini-2.5-pro-preview-03-25를 모델 비용 맵에 추가 [PR](https://github.com/BerriAI/litellm/blob/52b35cd8093b9ad833987b24f494586a1e923209/model_prices_and_context_window.json#L4850)
 
-## LLM Translation
-1. Vertex AI - Support anyOf param for OpenAI json schema translation [Get Started](https://docs.litellm.ai/docs/providers/vertex#json-schema)
-2. Anthropic- response_format + thinking param support  (works across Anthropic API, Bedrock, Vertex) [Get Started](https://docs.litellm.ai/docs/reasoning_content)
-3. Anthropic - if thinking token is specified and max tokens is not - ensure max token to anthropic is higher than thinking tokens (works across Anthropic API, Bedrock, Vertex) [PR](https://github.com/BerriAI/litellm/pull/9594)
-4. Bedrock - latency optimized inference support [Get Started](https://docs.litellm.ai/docs/providers/bedrock#usage---latency-optimized-inference)
-5. Sagemaker - handle special tokens + multibyte character code in response [Get Started](https://docs.litellm.ai/docs/providers/aws_sagemaker)
-6. MCP - add support for using SSE MCP servers [Get Started](https://docs.litellm.ai/docs/mcp#usage)
-8. Anthropic - new `litellm.messages.create` interface for calling Anthropic `/v1/messages` via passthrough [Get Started](https://docs.litellm.ai/docs/anthropic_unified#usage)
-11. Anthropic - support ‘file’ content type in message param (works across Anthropic API, Bedrock, Vertex) [Get Started](https://docs.litellm.ai/docs/providers/anthropic#usage---pdf)
-12. Anthropic - map openai 'reasoning_effort' to anthropic 'thinking' param (works across Anthropic API, Bedrock, Vertex) [Get Started](https://docs.litellm.ai/docs/providers/anthropic#usage---thinking--reasoning_content)
-13. Google AI Studio (Gemini) - [BETA] `/v1/files` upload support [Get Started](../../docs/providers/google_ai_studio/files) 
-14. Azure - fix o-series tool calling [Get Started](../../docs/providers/azure#tool-calling--function-calling)
-15. Unified file id - [ALPHA] allow calling multiple providers with same file id [PR](https://github.com/BerriAI/litellm/pull/9718)
-    - This is experimental, and not recommended for production use.
-    - We plan to have a production-ready implementation by next week.
-16. Google AI Studio (Gemini) - return logprobs [PR](https://github.com/BerriAI/litellm/pull/9713)
-17. Anthropic - Support prompt caching for Anthropic tool calls [Get Started](https://docs.litellm.ai/docs/completion/prompt_caching)
-18. OpenRouter - unwrap extra body on open router calls [PR](https://github.com/BerriAI/litellm/pull/9747)
-19. VertexAI - fix credential caching issue [PR](https://github.com/BerriAI/litellm/pull/9756)
-20. XAI - filter out 'name' param for XAI [PR](https://github.com/BerriAI/litellm/pull/9761)
-21. Gemini - image generation output support [Get Started](../../docs/providers/gemini#image-generation)
-22. Databricks - support claude-3-7-sonnet w/ thinking + response_format [Get Started](../../docs/providers/databricks#usage---thinking--reasoning_content)
+## LLM 변환 {#llm-translation}
+1. Vertex AI - OpenAI json schema 변환에서 anyOf param 지원 [Get Started](https://docs.litellm.ai/docs/providers/vertex#json-schema)
+2. Anthropic - response_format + thinking param 지원(Anthropic API, Bedrock, Vertex 전반에서 동작) [Get Started](https://docs.litellm.ai/docs/reasoning_content)
+3. Anthropic - thinking token이 지정되고 max tokens가 지정되지 않은 경우, Anthropic에 전달되는 max token이 thinking tokens보다 크도록 보장(Anthropic API, Bedrock, Vertex 전반에서 동작) [PR](https://github.com/BerriAI/litellm/pull/9594)
+4. Bedrock - latency optimized inference 지원 [Get Started](https://docs.litellm.ai/docs/providers/bedrock#usage---latency-optimized-inference)
+5. Sagemaker - 응답의 special tokens + multibyte character code 처리 [Get Started](https://docs.litellm.ai/docs/providers/aws_sagemaker)
+6. MCP - SSE MCP servers 사용 지원 추가 [Get Started](https://docs.litellm.ai/docs/mcp#usage)
+8. Anthropic - passthrough를 통해 Anthropic `/v1/messages`를 호출하는 새 `litellm.messages.create` 인터페이스 [Get Started](https://docs.litellm.ai/docs/anthropic_unified#usage)
+11. Anthropic - message param에서 ‘file’ content type 지원(Anthropic API, Bedrock, Vertex 전반에서 동작) [Get Started](https://docs.litellm.ai/docs/providers/anthropic#usage---pdf)
+12. Anthropic - openai 'reasoning_effort'를 anthropic 'thinking' param에 매핑(Anthropic API, Bedrock, Vertex 전반에서 동작) [Get Started](https://docs.litellm.ai/docs/providers/anthropic#usage---thinking--reasoning_content)
+13. Google AI Studio (Gemini) - [BETA] `/v1/files` 업로드 지원 [Get Started](../../docs/providers/google_ai_studio/files)
+14. Azure - o-series tool calling 수정 [Get Started](../../docs/providers/azure#tool-calling--function-calling)
+15. Unified file id - [ALPHA] 동일한 file id로 여러 provider를 호출할 수 있도록 허용 [PR](https://github.com/BerriAI/litellm/pull/9718)
+    - 실험적 기능이며 프로덕션 사용은 권장하지 않습니다.
+    - 다음 주까지 프로덕션 준비가 된 구현을 제공할 계획입니다.
+16. Google AI Studio (Gemini) - logprobs 반환 [PR](https://github.com/BerriAI/litellm/pull/9713)
+17. Anthropic - Anthropic tool calls에 대한 prompt caching 지원 [Get Started](https://docs.litellm.ai/docs/completion/prompt_caching)
+18. OpenRouter - OpenRouter 호출에서 extra body unwrap 처리 [PR](https://github.com/BerriAI/litellm/pull/9747)
+19. VertexAI - credential caching 문제 수정 [PR](https://github.com/BerriAI/litellm/pull/9756)
+20. XAI - XAI에 대해 'name' param 필터링 [PR](https://github.com/BerriAI/litellm/pull/9761)
+21. Gemini - image generation output 지원 [Get Started](../../docs/providers/gemini#image-generation)
+22. Databricks - thinking + response_format을 사용하는 claude-3-7-sonnet 지원 [Get Started](../../docs/providers/databricks#usage---thinking--reasoning_content)
 
-## Spend Tracking Improvements
-1. Reliability fix  - Check sent and received model for cost calculation [PR](https://github.com/BerriAI/litellm/pull/9669)
-2. Vertex AI - Multimodal embedding cost tracking [Get Started](https://docs.litellm.ai/docs/providers/vertex#multi-modal-embeddings), [PR](https://github.com/BerriAI/litellm/pull/9623)
+## 비용 추적 개선 사항 {#비용-추적-improvements}
+1. 안정성 수정 - 비용 계산을 위해 전송된 모델과 수신된 모델 확인 [PR](https://github.com/BerriAI/litellm/pull/9669)
+2. Vertex AI - Multimodal embedding 비용 추적 [Get Started](https://docs.litellm.ai/docs/providers/vertex#multi-modal-embeddings), [PR](https://github.com/BerriAI/litellm/pull/9623)
 
-## Management Endpoints / UI
+## 관리 엔드포인트 / UI {#management-endpoints--ui}
 
 <Image img={require('../../img/release_notes/new_activity_tab.png')} />
 
-1. New Usage Tab
-    - Report 'total_tokens' + report success/failure calls
-    - Remove double bars on scroll
-    - Ensure ‘daily spend’ chart ordered from earliest to latest date
-    - showing spend per model per day
-    - show key alias on usage tab
-    - Allow non-admins to view their activity
-    - Add date picker to new usage tab
-2. Virtual Keys Tab
-    - remove 'default key' on user signup
-    - fix showing user models available for personal key creation
+1. 새로운 사용법 탭
+    - 'total_tokens' 보고 + 성공/실패 호출 보고
+    - 스크롤 시 이중 막대 제거
+    - ‘daily spend’ 차트가 가장 이른 날짜부터 가장 늦은 날짜 순서로 정렬되도록 보장
+    - 일별 모델별 지출 표시
+    - usage tab에 key alias 표시
+    - 관리자가 아닌 사용자도 자신의 활동을 볼 수 있도록 허용
+    - 새 usage tab에 date picker 추가
+2. 가상 키 Tab
+    - 사용자 가입 시 'default key' 제거
+    - personal key 생성에 사용할 수 있는 사용자 모델 표시 수정
 3. Test Key Tab
-    - Allow testing image generation models
-4. Models Tab
-    - Fix bulk adding models 
-    - support reusable credentials for passthrough endpoints
-    - Allow team members to see team models
+    - image generation 모델 테스트 허용
+4. 모델 Tab
+    - 모델 일괄 추가 수정
+    - passthrough endpoints에 reusable credentials 지원
+    - 팀 멤버가 팀 모델을 볼 수 있도록 허용
 5. Teams Tab
-    - Fix json serialization error on update team metadata
-6. Request Logs Tab
-    - Add reasoning_content token tracking across all providers on streaming
+    - team metadata 업데이트 시 json serialization error 수정
+6. Request 로그 Tab
+    - streaming에서 모든 provider에 걸쳐 reasoning_content token tracking 추가
 7. API 
-    - return key alias on /user/daily/activity [Get Started](../../docs/proxy/cost_tracking#daily-spend-breakdown-api)
+    - /user/daily/activity에서 key alias 반환 [Get Started](../../docs/proxy/cost_tracking#daily-spend-breakdown-api)
 8. SSO
-    - Allow assigning SSO users to teams on MSFT SSO [PR](https://github.com/BerriAI/litellm/pull/9745)
+    - MSFT SSO에서 SSO 사용자를 팀에 할당할 수 있도록 허용 [PR](https://github.com/BerriAI/litellm/pull/9745)
 
-## Logging / Guardrail Integrations
+## Logging / Guardrail 통합 {#logging--guardrail-integrations}
 
-1. Console Logs - Add json formatting for uncaught exceptions [PR](https://github.com/BerriAI/litellm/pull/9619)
-2. Guardrails - AIM Guardrails support for virtual key based policies [Get Started](../../docs/proxy/guardrails/aim_security)
-3. Logging - fix completion start time tracking [PR](https://github.com/BerriAI/litellm/pull/9688)
+1. Console 로그 - uncaught exceptions에 json formatting 추가 [PR](https://github.com/BerriAI/litellm/pull/9619)
+2. 가드레일 - virtual key 기반 policies에 AIM 가드레일 지원 [Get Started](../../docs/proxy/guardrails/aim_security)
+3. Logging - completion start time tracking 수정 [PR](https://github.com/BerriAI/litellm/pull/9688)
 4. Prometheus
-    - Allow adding authentication on Prometheus /metrics endpoints [PR](https://github.com/BerriAI/litellm/pull/9766)
-    - Distinguish LLM Provider Exception vs. LiteLLM Exception in metric naming [PR](https://github.com/BerriAI/litellm/pull/9760)
-    - Emit operational metrics for new DB Transaction architecture [PR](https://github.com/BerriAI/litellm/pull/9719)
+    - Prometheus /metrics endpoints에 authentication 추가 허용 [PR](https://github.com/BerriAI/litellm/pull/9766)
+    - metric naming에서 LLM Provider Exception과 LiteLLM Exception 구분 [PR](https://github.com/BerriAI/litellm/pull/9760)
+    - 새 DB Transaction architecture의 operational metrics 내보내기 [PR](https://github.com/BerriAI/litellm/pull/9719)
 
-## Performance / Loadbalancing / Reliability improvements
-1. Preventing Deadlocks
-    - Reduce DB Deadlocks by storing spend updates in Redis and then committing to DB [PR](https://github.com/BerriAI/litellm/pull/9608)
-    - Ensure no deadlocks occur when updating DailyUserSpendTransaction [PR](https://github.com/BerriAI/litellm/pull/9690)
-    - High Traffic fix - ensure new DB + Redis architecture accurately tracks spend [PR](https://github.com/BerriAI/litellm/pull/9673)
-    - Use Redis for PodLock Manager instead of PG (ensures no deadlocks occur) [PR](https://github.com/BerriAI/litellm/pull/9715)
-    - v2 DB Deadlock Reduction Architecture – Add Max Size for In-Memory Queue + Backpressure Mechanism [PR](https://github.com/BerriAI/litellm/pull/9759)
+## 성능 / 로드밸런싱 / 안정성 개선 사항 {#performance--loadbalancing--reliability-improvements}
+1. 데드락 방지
+    - spend updates를 Redis에 저장한 다음 DB에 커밋하여 DB Deadlocks 감소 [PR](https://github.com/BerriAI/litellm/pull/9608)
+    - DailyUserSpendTransaction 업데이트 시 데드락이 발생하지 않도록 보장 [PR](https://github.com/BerriAI/litellm/pull/9690)
+    - 고트래픽 수정 - 새 DB + Redis architecture가 지출을 정확하게 추적하도록 보장 [PR](https://github.com/BerriAI/litellm/pull/9673)
+    - PG 대신 Redis를 PodLock Manager에 사용(데드락이 발생하지 않도록 보장) [PR](https://github.com/BerriAI/litellm/pull/9715)
+    - v2 DB Deadlock Reduction 아키텍처 - In-Memory Queue의 Max Size + Backpressure Mechanism 추가 [PR](https://github.com/BerriAI/litellm/pull/9759)
     
 2. Prisma Migrations [Get Started](../../docs/proxy/prod#9-use-prisma-migrate-deploy)
-    - connects litellm proxy to litellm's prisma migration files
-    - Handle db schema updates from new `litellm-proxy-extras` sdk
-3. Redis - support password for sync sentinel clients [PR](https://github.com/BerriAI/litellm/pull/9622)
-4. Fix "Circular reference detected" error when max_parallel_requests = 0 [PR](https://github.com/BerriAI/litellm/pull/9671)
-5. Code QA - Ban hardcoded numbers [PR](https://github.com/BerriAI/litellm/pull/9709)
+    - litellm proxy를 litellm의 prisma migration files에 연결
+    - 새 `litellm-proxy-extras` sdk의 db schema updates 처리
+3. Redis - sync sentinel clients에 password 지원 [PR](https://github.com/BerriAI/litellm/pull/9622)
+4. max_parallel_requests = 0일 때 발생하는 "Circular reference detected" 오류 수정 [PR](https://github.com/BerriAI/litellm/pull/9671)
+5. Code QA - hardcoded numbers 금지 [PR](https://github.com/BerriAI/litellm/pull/9709)
 
 ## Helm
-1. fix: wrong indentation of ttlSecondsAfterFinished in chart [PR](https://github.com/BerriAI/litellm/pull/9611)
+1. fix: chart의 ttlSecondsAfterFinished 들여쓰기 오류 [PR](https://github.com/BerriAI/litellm/pull/9611)
 
-## General Proxy Improvements
-1. Fix - only apply service_account_settings.enforced_params on service accounts [PR](https://github.com/BerriAI/litellm/pull/9683)
-2. Fix - handle metadata null on `/chat/completion` [PR](https://github.com/BerriAI/litellm/issues/9717)
-3. Fix - Move daily user transaction logging outside of 'disable_spend_logs' flag, as they’re unrelated [PR](https://github.com/BerriAI/litellm/pull/9772)
+## 일반 Proxy 개선 사항 {#general-proxy-improvements}
+1. Fix - service accounts에만 service_account_settings.enforced_params 적용 [PR](https://github.com/BerriAI/litellm/pull/9683)
+2. Fix - `/chat/completion`에서 metadata null 처리 [PR](https://github.com/BerriAI/litellm/issues/9717)
+3. Fix - daily user transaction logging은 관련이 없으므로 'disable_spend_logs' flag 밖으로 이동 [PR](https://github.com/BerriAI/litellm/pull/9772)
 
 ## Demo
 
-Try this on the demo instance [today](https://docs.litellm.ai/docs/proxy/demo)
+데모 인스턴스에서 [오늘](https://docs.litellm.ai/docs/proxy/demo) 사용해 보세요.
 
-## Complete Git Diff
+## 전체 Git Diff {#complete-git-diff}
 
-See the complete git diff since v1.65.0-stable, [here](https://github.com/BerriAI/litellm/releases/tag/v1.65.4-stable)
-
+v1.65.0-stable 이후의 전체 git diff는 [여기](https://github.com/BerriAI/litellm/releases/tag/v1.65.4-stable)에서 확인할 수 있습니다.

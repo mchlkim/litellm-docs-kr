@@ -1,10 +1,10 @@
-# RunwayML - Video Generation
+# RunwayML - 비디오 생성 {#runwayml-video-generation}
 
-LiteLLM supports RunwayML's Gen-4 video generation API, allowing you to generate videos from text prompts and images.
+LiteLLM은 RunwayML의 Gen-4 비디오 생성 API를 지원하므로 text prompt와 image에서 video를 생성할 수 있습니다.
 
-## Quick Start
+## 빠른 시작
 
-```python showLineNumbers title="Basic Video Generation"
+```python showLineNumbers title="기본 비디오 생성"
 from litellm import video_generation
 import os
 
@@ -23,29 +23,29 @@ print(f"Video ID: {response.id}")
 print(f"Status: {response.status}")
 ```
 
-## Authentication
+## 인증
 
-Set your RunwayML API key:
+RunwayML API key를 설정합니다.
 
-```python showLineNumbers title="Set API Key"
+```python showLineNumbers title="API Key 설정"
 import os
 
 os.environ["RUNWAYML_API_KEY"] = "your-api-key"
 ```
 
-## Supported Parameters
+## 지원 파라미터
 
-| Parameter | Type | Required | Description |
+| 파라미터 | 타입 | 필수 | 설명 |
 |-----------|------|----------|-------------|
-| `model` | string | Yes | Model to use (e.g., `runwayml/gen4_turbo`) |
-| `prompt` | string | Yes | Text description for the video |
-| `input_reference` | string/file | Yes | URL or file path to reference image |
-| `seconds` | int | No | Video duration (5 or 10 seconds) |
-| `size` | string | No | Video dimensions (`1280x720` or `720x1280`). Can also use `ratio` format (`1280:720`) |
+| `model` | string | 예 | 사용할 model(예: `runwayml/gen4_turbo`) |
+| `prompt` | string | 예 | video에 대한 text description |
+| `input_reference` | string/file | 예 | reference image의 URL 또는 file path |
+| `seconds` | int | 아니요 | video duration(5초 또는 10초) |
+| `size` | string | 아니요 | video dimension(`1280x720` 또는 `720x1280`). `ratio` format(`1280:720`)도 사용할 수 있습니다 |
 
-## Complete Workflow
+## 전체 Workflow {#complete-workflow}
 
-```python showLineNumbers title="Complete Video Generation Workflow"
+```python showLineNumbers title="전체 비디오 생성 Workflow"
 from litellm import video_generation, video_status, video_content
 import os
 import time
@@ -88,9 +88,9 @@ with open("generated_video.mp4", "wb") as f:
 print("Video saved successfully!")
 ```
 
-## Async Usage
+## Async 사용법
 
-```python showLineNumbers title="Async Video Generation"
+```python showLineNumbers title="비동기 비디오 생성"
 from litellm import avideo_generation, avideo_status, avideo_content
 import os
 import asyncio
@@ -135,9 +135,9 @@ async def generate_video():
 asyncio.run(generate_video())
 ```
 
-## LiteLLM Proxy Usage
+## LiteLLM Proxy 사용법
 
-Add RunwayML to your proxy configuration:
+proxy configuration에 RunwayML을 추가합니다.
 
 ```yaml showLineNumbers title="config.yaml"
 model_list:
@@ -147,15 +147,15 @@ model_list:
       api_key: os.environ/RUNWAYML_API_KEY
 ```
 
-Start the proxy:
+프록시 시작:
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-Generate videos through the proxy:
+proxy를 통해 video를 생성합니다.
 
-```bash showLineNumbers title="Proxy Request"
+```bash showLineNumbers title="Proxy 요청"
 curl --location 'http://localhost:4000/v1/videos' \
 --header 'Content-Type: application/json' \
 --header 'x-litellm-api-key: sk-1234' \
@@ -167,30 +167,30 @@ curl --location 'http://localhost:4000/v1/videos' \
 }'
 ```
 
-Check video status:
+video status를 확인합니다.
 
-```bash showLineNumbers title="Check Status"
+```bash showLineNumbers title="상태 확인"
 curl --location 'http://localhost:4000/v1/videos/{video_id}' \
 --header 'x-litellm-api-key: sk-1234'
 ```
 
-Download video content:
+video content를 다운로드합니다.
 
-```bash showLineNumbers title="Download Video"
+```bash showLineNumbers title="비디오 다운로드"
 curl --location 'http://localhost:4000/v1/videos/{video_id}/content' \
 --header 'x-litellm-api-key: sk-1234' \
 --output video.mp4
 ```
 
-## Supported Models
+## 지원 모델 {#supported-models}
 
-| Model | Description | Duration | Aspect Ratios |
+| Model | 설명 | Duration | Aspect ratios |
 |-------|-------------|----------|---------------|
-| `runwayml/gen4_turbo` | Fast video generation | 5-10s | 1280x720, 720x1280 |
+| `runwayml/gen4_turbo` | 빠른 video generation | 5-10s | 1280x720, 720x1280 |
 
-## Error Handling
+## Error handling {#error-handling}
 
-```python showLineNumbers title="Error Handling"
+```python showLineNumbers title="Error handling"
 from litellm import video_generation, video_status
 import time
 
@@ -227,11 +227,11 @@ except Exception as e:
     print(f"Error: {str(e)}")
 ```
 
-## Cost Tracking
+## Cost tracking {#cost-tracking}
 
-LiteLLM automatically tracks RunwayML video generation costs:
+LiteLLM은 RunwayML video generation 비용을 자동으로 추적합니다.
 
-```python showLineNumbers title="Cost Tracking"
+```python showLineNumbers title="Cost tracking"
 from litellm import video_generation, completion_cost
 
 response = video_generation(
@@ -247,20 +247,19 @@ cost = completion_cost(completion_response=response)
 print(f"Video generation cost: ${cost}")
 ```
 
-## API Reference
+## API reference {#api-reference}
 
-For complete API details, see the [OpenAI Video Generation API specification](https://platform.openai.com/docs/guides/video-generation) which LiteLLM follows.
+전체 API 세부 정보는 LiteLLM이 따르는 [OpenAI Video Generation API specification](https://platform.openai.com/docs/guides/video-generation)을 참고하세요.
 
-## Supported Features
+## 지원 기능 {#supported-features}
 
-| Feature | Supported |
+| 기능 | 지원 |
 |---------|-----------|
-| Video Generation | ✅ |
-| Image-to-Video | ✅ |
-| Status Checking | ✅ |
-| Content Download | ✅ |
-| Cost Tracking | ✅ |
+| Video generation | ✅ |
+| Image-to-video | ✅ |
+| Status checking | ✅ |
+| Content download | ✅ |
+| Cost tracking | ✅ |
 | Logging | ✅ |
 | Fallbacks | ✅ |
-| Load Balancing | ✅ |
-
+| Load balancing | ✅ |

@@ -3,25 +3,25 @@ import TabItem from '@theme/TabItem';
 
 # Bytez
 
-LiteLLM supports all chat models on [Bytez](https://www.bytez.com)!
+LiteLLM은 [Bytez](https://www.bytez.com)의 모든 채팅 모델을 지원합니다!
 
-That also means multi-modal models are supported 🔥
+즉, 멀티모달 모델도 지원됩니다 🔥
 
-Tasks supported: `chat`, `image-text-to-text`, `audio-text-to-text`, `video-text-to-text`
+지원되는 작업: `chat`, `image-text-to-text`, `audio-text-to-text`, `video-text-to-text`
 
-## Usage
+## 사용법
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
 
-### API KEYS
+### API 키 {#api-keys}
 
 ```py
 import os
 os.environ["BYTEZ_API_KEY"] = "YOUR_BYTEZ_KEY_GOES_HERE"
 ```
 
-### Example Call
+### 예제 호출 {#예제-call}
 
 ```py
 from litellm import completion
@@ -38,7 +38,7 @@ response = completion(
 </TabItem>
 <TabItem value="proxy" label="PROXY">
 
-1. Add models to your config.yaml
+1. config.yaml에 모델을 추가합니다.
 
 ```yaml
 model_list:
@@ -48,13 +48,13 @@ model_list:
       api_key: os.environ/BYTEZ_API_KEY
 ```
 
-2. Start the proxy
+2. 프록시 시작
 
 ```bash
 $ BYTEZ_API_KEY=YOUR_BYTEZ_API_KEY_HERE litellm --config /path/to/config.yaml --debug
 ```
 
-3. Send Request to LiteLLM Proxy Server
+3. LiteLLM Proxy Server로 요청을 보냅니다.
 
   <Tabs>
 
@@ -115,15 +115,15 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 
 </Tabs>
 
-## Automatic Prompt Template Handling
+## 자동 Prompt Template 처리 {#automatic-prompt-template-handling}
 
-All prompt formatting is handled automatically by our API when you send a messages list to it!
+messages 목록을 보내면 모든 prompt formatting은 API에서 자동으로 처리됩니다!
 
-If you wish to use custom formatting, please let us know via either [help@bytez.com](mailto:help@bytez.com) or on our [Discord](https://discord.com/invite/Z723PfCFWf) and we will work to provide it!
+custom formatting을 사용하려면 [help@bytez.com](mailto:help@bytez.com) 또는 [Discord](https://discord.com/invite/Z723PfCFWf)로 알려주세요. 제공할 수 있도록 지원하겠습니다!
 
-## Passing additional params - max_tokens, temperature
+## 추가 params 전달 - max_tokens, temperature {#passing-additional-params---max_tokens-temperature}
 
-See all litellm.completion supported params [here](https://docs.litellm.ai/docs/completion/input)
+litellm.completion이 지원하는 모든 params는 [여기](https://docs.litellm.ai/docs/completion/input)에서 확인할 수 있습니다.
 
 ```py
 # !uv add litellm
@@ -153,11 +153,11 @@ model_list:
       temperature: 0.5
 ```
 
-## Passing Bytez-specific params
+## Bytez 전용 params 전달 {#passing-bytez-specific-params}
 
-Any kwarg supported by huggingface we also support! (Provided the model supports it.)
+huggingface에서 지원하는 모든 kwarg도 지원합니다! 단, 해당 모델이 지원해야 합니다.
 
-Example `repetition_penalty`
+예제 `repetition_penalty`
 
 ```py
 # !uv add litellm

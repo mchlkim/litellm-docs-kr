@@ -1,91 +1,89 @@
-# What is stored in the DB
+# DB에 저장되는 항목
 
-The LiteLLM Proxy uses a PostgreSQL database to store various information. Here's are the main features the DB is used for:
-- Virtual Keys, Organizations, Teams, Users, Budgets, and more.
-- Per request Usage Tracking
+LiteLLM Proxy는 PostgreSQL database를 사용해 여러 정보를 저장합니다. DB가 사용되는 주요 기능은 다음과 같습니다.
+- 가상 키, 조직, 팀, 사용자, 예산 등(`Virtual Keys`, `Organizations`, `Teams`, `Users`, `Budgets`)
+- 요청별 사용량 추적
 
-## Link to DB Schema
+## DB Schema 링크
 
-You can see the full DB Schema [here](https://github.com/BerriAI/litellm/blob/main/schema.prisma)
+전체 DB Schema는 [여기](https://github.com/BerriAI/litellm/blob/main/schema.prisma)에서 확인할 수 있습니다.
 
 ## DB Tables
 
-### Organizations, Teams, Users, End Users
+### 조직, 팀, 사용자, 최종 사용자
 
-| Table Name | Description | Row Insert Frequency |
+| 테이블 이름 | 설명 | 행 삽입 빈도 |
 |------------|-------------|---------------------|
-| LiteLLM_OrganizationTable | Manages organization-level configurations. Tracks organization spend, model access, and metadata. Links to budget configurations and teams. | Low |
-| LiteLLM_TeamTable | Handles team-level settings within organizations. Manages team members, admins, and their roles. Controls team-specific budgets, rate limits, and model access. | Low |
-| LiteLLM_UserTable | Stores user information and their settings. Tracks individual user spend, model access, and rate limits. Manages user roles and team memberships. | Low |
-| LiteLLM_EndUserTable | Manages end-user configurations. Controls model access and regional requirements. Tracks end-user spend. | Low |
-| LiteLLM_TeamMembership | Tracks user participation in teams. Manages team-specific user budgets and spend. | Low |
-| LiteLLM_OrganizationMembership | Manages user roles within organizations. Tracks organization-specific user permissions and spend. | Low |
-| LiteLLM_InvitationLink | Handles user invitations. Manages invitation status and expiration. Tracks who created and accepted invitations. | Low |
-| LiteLLM_UserNotifications | Handles model access requests. Tracks user requests for model access. Manages approval status. | Low |
+| LiteLLM_OrganizationTable | Organization 수준 설정을 관리합니다. Organization spend, model access, metadata를 추적하고 budget configuration 및 team과 연결합니다. | Low |
+| LiteLLM_TeamTable | Organization 내부의 team 수준 설정을 처리합니다. Team member, admin, role을 관리하고 team별 budget, rate limit, model access를 제어합니다. | Low |
+| LiteLLM_UserTable | 사용자 정보와 설정을 저장합니다. 개별 user spend, model access, rate limit을 추적하고 user role 및 team membership을 관리합니다. | Low |
+| LiteLLM_EndUserTable | End-user 설정을 관리합니다. Model access와 regional requirement를 제어하고 end-user spend를 추적합니다. | Low |
+| LiteLLM_TeamMembership | 사용자의 team 참여를 추적합니다. Team별 user budget과 spend를 관리합니다. | Low |
+| LiteLLM_OrganizationMembership | Organization 내 user role을 관리합니다. Organization별 user permission과 spend를 추적합니다. | Low |
+| LiteLLM_InvitationLink | User invitation을 처리합니다. Invitation status와 expiration을 관리하고 누가 invitation을 만들고 수락했는지 추적합니다. | Low |
+| LiteLLM_UserNotifications | Model access request를 처리합니다. Model access에 대한 user request와 approval status를 추적합니다. | Low |
 
-### Authentication
+### 인증
 
-| Table Name | Description | Row Insert Frequency |
+| 테이블 이름 | 설명 | 행 삽입 빈도 |
 |------------|-------------|---------------------|
-| LiteLLM_VerificationToken | Manages Virtual Keys and their permissions. Controls token-specific budgets, rate limits, and model access. Tracks key-specific spend and metadata. | **Medium** - stores all Virtual Keys |
+| LiteLLM_VerificationToken | Virtual Key와 권한을 관리합니다. Token별 budget, rate limit, model access를 제어하고 key별 spend와 metadata를 추적합니다. | **Medium** - 모든 Virtual Key 저장 |
 
-### Model (LLM) Management
+### Model(LLM) 관리
 
-| Table Name | Description | Row Insert Frequency |
+| 테이블 이름 | 설명 | 행 삽입 빈도 |
 |------------|-------------|---------------------|
-| LiteLLM_ProxyModelTable | Stores model configurations. Defines available models and their parameters. Contains model-specific information and settings. | Low - Configuration only |
+| LiteLLM_ProxyModelTable | Model configuration을 저장합니다. 사용 가능한 model과 parameter를 정의하고 model별 정보와 설정을 포함합니다. | Low - 설정만 저장 |
 
-### Budget Management
+### Budget 관리
 
-| Table Name | Description | Row Insert Frequency |
+| 테이블 이름 | 설명 | 행 삽입 빈도 |
 |------------|-------------|---------------------|
-| LiteLLM_BudgetTable | Stores budget and rate limit configurations for organizations, keys, and end users. Tracks max budgets, soft budgets, TPM/RPM limits, and model-specific budgets. Handles budget duration and reset timing. | Low - Configuration only |
+| LiteLLM_BudgetTable | Organizations, keys, end users에 대한 budget 및 rate limit configuration을 저장합니다. Max budget, soft budget, TPM/RPM limit, model별 budget을 추적하고 budget duration과 reset timing을 처리합니다. | Low - 설정만 저장 |
 
 
-### Tracking & Logging
+### Tracking 및 Logging
 
-| Table Name | Description | Row Insert Frequency |
+| 테이블 이름 | 설명 | 행 삽입 빈도 |
 |------------|-------------|---------------------|
-| LiteLLM_SpendLogs | Detailed logs of all API requests. Records token usage, spend, and timing information. Tracks which models and keys were used. | **Medium - this is a batch process that runs on an interval.** |
-| LiteLLM_AuditLog | Tracks changes to system configuration. Records who made changes and what was modified. Maintains history of updates to teams, users, and models. | **Off by default**, **High - Runs on every change to an entity** |
+| LiteLLM_SpendLogs | 모든 API request의 상세 로그입니다. Token usage, spend, timing 정보를 기록하고 어떤 model과 key가 사용되었는지 추적합니다. | **Medium - 일정 주기로 실행되는 batch process** |
+| LiteLLM_AuditLog | System configuration 변경 사항을 추적합니다. 누가 무엇을 변경했는지 기록하고 teams, users, models 업데이트 이력을 유지합니다. | **기본값 Off**, **High - entity가 변경될 때마다 실행** |
 
-## Disable `LiteLLM_SpendLogs`
+## `LiteLLM_SpendLogs` 비활성화
 
-You can disable spend_logs and error_logs by setting `disable_spend_logs` and `disable_error_logs` to `True` on the `general_settings` section of your proxy_config.yaml file.
+`proxy_config.yaml` 파일의 `general_settings` 섹션에서 `disable_spend_logs`와 `disable_error_logs`를 `True`로 설정하면 spend_logs와 error_logs를 비활성화할 수 있습니다.
 
 ```yaml
 general_settings:
-  disable_spend_logs: True   # Disable writing spend logs to DB
-  disable_error_logs: True   # Only disable writing error logs to DB, regular spend logs will still be written unless `disable_spend_logs: True`
+  disable_spend_logs: True   # DB에 spend logs 쓰기 비활성화
+  disable_error_logs: True   # DB에 error logs 쓰기만 비활성화. `disable_spend_logs: True`가 아니면 일반 spend logs는 계속 기록됨
 ```
 
-### What is the impact of disabling these logs?
+### 이 로그를 비활성화하면 어떤 영향이 있나요?
 
-When disabling spend logs (`disable_spend_logs: True`):
-- You **will not** be able to view Usage on the LiteLLM UI
-- You **will** continue seeing cost metrics on s3, Prometheus, Langfuse (any other Logging integration you are using)
+Spend logs를 비활성화하는 경우(`disable_spend_logs: True`):
+- LiteLLM UI에서 사용량을 **볼 수 없습니다**.
+- s3, Prometheus, Langfuse 등 사용 중인 다른 logging integration에서는 cost metric을 **계속 볼 수 있습니다**.
 
-When disabling error logs (`disable_error_logs: True`):
-- You **will not** be able to view Errors on the LiteLLM UI
-- You **will** continue seeing error logs in your application logs and any other logging integrations you are using
-
-
-## Migrating Databases 
-
-If you need to migrate Databases the following Tables should be copied to ensure continuation of services and no downtime
+Error logs를 비활성화하는 경우(`disable_error_logs: True`):
+- LiteLLM UI에서 Errors를 **볼 수 없습니다**.
+- 애플리케이션 로그와 사용 중인 다른 logging integration에서는 error log를 **계속 볼 수 있습니다**.
 
 
-| Table Name | Description | 
+## Database 마이그레이션
+
+Database를 마이그레이션해야 하는 경우 서비스 연속성과 무중단을 보장하려면 다음 table을 복사해야 합니다.
+
+
+| 테이블 이름 | 설명 | 
 |------------|-------------|
-| LiteLLM_VerificationToken | **Required** to ensure existing virtual keys continue working |
-| LiteLLM_UserTable | **Required** to ensure existing virtual keys continue working |
-| LiteLLM_TeamTable | **Required** to ensure Teams are migrated |
-| LiteLLM_TeamMembership | **Required** to ensure Teams member budgets are migrated |
-| LiteLLM_BudgetTable | **Required** to migrate existing budgeting settings |
-| LiteLLM_OrganizationTable | **Optional** Only migrate if you use Organizations in DB |
-| LiteLLM_OrganizationMembership | **Optional** Only migrate if you use Organizations in DB | 
-| LiteLLM_ProxyModelTable | **Optional** Only migrate if you store your LLMs in the DB (i.e you set `STORE_MODEL_IN_DB=True`) |
-| LiteLLM_SpendLogs | **Optional** Only migrate if you want historical data on LiteLLM UI |
-| LiteLLM_ErrorLogs | **Optional** Only migrate if you want historical data on LiteLLM UI |
-
-
+| LiteLLM_VerificationToken | 기존 virtual key가 계속 동작하도록 하려면 **필수** |
+| LiteLLM_UserTable | 기존 virtual key가 계속 동작하도록 하려면 **필수** |
+| LiteLLM_TeamTable | Teams를 마이그레이션하려면 **필수** |
+| LiteLLM_TeamMembership | Team member budget을 마이그레이션하려면 **필수** |
+| LiteLLM_BudgetTable | 기존 budgeting setting을 마이그레이션하려면 **필수** |
+| LiteLLM_OrganizationTable | DB에서 Organizations를 사용하는 경우에만 마이그레이션하는 **선택 항목** |
+| LiteLLM_OrganizationMembership | DB에서 Organizations를 사용하는 경우에만 마이그레이션하는 **선택 항목** | 
+| LiteLLM_ProxyModelTable | LLM을 DB에 저장하는 경우(즉 `STORE_MODEL_IN_DB=True`를 설정한 경우)에만 마이그레이션하는 **선택 항목** |
+| LiteLLM_SpendLogs | LiteLLM UI에서 historical data가 필요한 경우에만 마이그레이션하는 **선택 항목** |
+| LiteLLM_ErrorLogs | LiteLLM UI에서 historical data가 필요한 경우에만 마이그레이션하는 **선택 항목** |

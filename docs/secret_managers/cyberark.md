@@ -1,33 +1,33 @@
-# CyberArk Conjur
+# CyberArk Conjur {#cyberark-conjur}
 
 import Image from '@theme/IdealImage';
 
 :::info
 
-✨ **This is an Enterprise Feature**
+✨ **이 기능은 엔터프라이즈 기능입니다**
 
-[Enterprise Pricing](https://www.litellm.ai/#pricing)
+[엔터프라이즈 요금](https://www.litellm.ai/#pricing)
 
-[Contact us here to get a free trial](https://enterprise.litellm.ai/demo)
+[무료 평가판을 받으려면 여기로 문의하세요](https://enterprise.litellm.ai/demo)
 
 :::
 
-| Feature | Support | Description |
+| 기능 | 지원 | 설명 |
 |---------|----------|-------------|
-| Reading Secrets | ✅ | Read secrets e.g `OPENAI_API_KEY` |
-| Writing Secrets | ✅ | Store secrets e.g `Virtual Keys` |
-| Deleting Secrets | ❌ | Secrets must be removed via policy updates |
+| 시크릿 읽기 | ✅ | `OPENAI_API_KEY` 같은 시크릿을 읽습니다 |
+| 시크릿 쓰기 | ✅ | `가상 키` 같은 시크릿을 저장합니다 |
+| 시크릿 삭제 | ❌ | 시크릿은 정책 업데이트를 통해 제거해야 합니다 |
 
-Read and write secrets from [CyberArk Conjur](https://www.cyberark.com/products/secrets-management/) (self-hosted secrets manager)
+[CyberArk Conjur](https://www.cyberark.com/products/secrets-management/)(셀프 호스팅 시크릿 관리자)에서 시크릿을 읽고 씁니다.
 
-**Step 1.** Add CyberArk Conjur details in your environment
+**1단계.** 환경에 CyberArk Conjur 세부 정보를 추가합니다.
 
-LiteLLM supports two methods of authentication:
+LiteLLM은 두 가지 인증 방식을 지원합니다.
 
-1. API key authentication - `CYBERARK_API_KEY` (recommended)
-2. Certificate authentication - `CYBERARK_CLIENT_CERT` and `CYBERARK_CLIENT_KEY`
+1. API 키 인증 - `CYBERARK_API_KEY`(권장)
+2. 인증서 인증 - `CYBERARK_CLIENT_CERT` 및 `CYBERARK_CLIENT_KEY`
 
-```bash title="Environment Variables" showLineNumbers
+```bash title="환경 변수" showLineNumbers
 CYBERARK_API_BASE="http://your-conjur-instance:8080"
 CYBERARK_ACCOUNT="default"
 CYBERARK_USERNAME="admin"
@@ -44,9 +44,9 @@ CYBERARK_REFRESH_INTERVAL="300" # defaults to 300 seconds (5 minutes), frequency
 CYBERARK_SSL_VERIFY="true" # defaults to true, set to "false" to disable SSL verification (for self-signed certificates)
 ```
 
-**Step 2.** Add to proxy config.yaml
+**2단계.** 프록시 `config.yaml`에 추가합니다.
 
-```yaml title="Proxy Config" showLineNumbers
+```yaml title="프록시 구성" showLineNumbers
 general_settings:
   key_management_system: "cyberark"
 
@@ -57,29 +57,29 @@ general_settings:
     access_mode: "read_and_write" # Literal["read_only", "write_only", "read_and_write"]
 ```
 
-**Step 3.** Start + test proxy
+**3단계.** 프록시를 시작하고 테스트합니다.
 
-```bash title="Start Proxy" showLineNumbers
+```bash title="프록시 시작" showLineNumbers
 $ litellm --config /path/to/config.yaml
 ```
 
-[Quick Test Proxy](../proxy/user_keys)
+[프록시 빠른 테스트](../proxy/user_keys)
 
-## Writing Virtual Keys to CyberArk
+## CyberArk에 가상 키 쓰기 {#writing-가상-키-to-cyberark}
 
-When you create a virtual key in the LiteLLM UI, it automatically gets stored in CyberArk Conjur.
+LiteLLM UI에서 가상 키를 만들면 CyberArk Conjur에 자동으로 저장됩니다.
 
-**Step 1:** Create a virtual key in the LiteLLM Admin UI
+**1단계:** LiteLLM 관리자 UI에서 가상 키를 만듭니다.
 
-In this example, we create a key named `litellm-cyber-ark-secret-key`:
+이 예시에서는 `litellm-cyber-ark-secret-key`라는 이름의 키를 만듭니다.
 
-<Image img={require('../../img/cyberark1.png')} alt="Creating virtual key in LiteLLM UI" />
+<Image img={require('../../img/cyberark1.png')} alt="LiteLLM UI에서 가상 키 만들기" />
 
-**Step 2:** Verify the secret exists in CyberArk
+**2단계:** CyberArk에 시크릿이 있는지 확인합니다.
 
-You can verify the virtual key was stored in CyberArk by querying the secrets API:
+시크릿 API를 쿼리하여 가상 키가 CyberArk에 저장되었는지 확인할 수 있습니다.
 
-```bash title="Verify Secret in CyberArk" showLineNumbers
+```bash title="CyberArk에서 시크릿 확인" showLineNumbers
 TOKEN=$(curl -s -X POST http://0.0.0.0:8080/authn/default/admin/authenticate \
   -d "your-api-key" | base64 | tr -d '\n')
 
@@ -87,112 +87,112 @@ curl -H "Authorization: Token token=\"$TOKEN\"" \
   "http://0.0.0.0:8080/resources/default/variable" | jq .
 ```
 
-The response shows `litellm-cyber-ark-secret-key` exists in CyberArk:
+응답에는 `litellm-cyber-ark-secret-key`가 CyberArk에 있음을 보여줍니다.
 
-<Image img={require('../../img/cyberark2.png')} alt="Virtual key stored in CyberArk API" />
+<Image img={require('../../img/cyberark2.png')} alt="CyberArk API에 저장된 가상 키" />
 
-The virtual key is stored with the full path: `default:variable:litellm/litellm-cyber-ark-secret-key`
+가상 키는 전체 경로 `default:variable:litellm/litellm-cyber-ark-secret-key`로 저장됩니다.
 
-## How it works
+## 동작 방식
 
-**Authentication**
+**인증**
 
-CyberArk Conjur uses a two-step authentication process:
+CyberArk Conjur는 2단계 인증 프로세스를 사용합니다.
 
-1. LiteLLM authenticates with your API key to get a session token
-2. The session token (base64-encoded) is used for subsequent API requests
-3. Tokens expire after ~8 minutes, so LiteLLM caches and refreshes them automatically
+1. LiteLLM이 API 키로 인증하여 세션 토큰을 가져옵니다.
+2. 세션 토큰(base64로 인코딩됨)은 이후 API 요청에 사용됩니다.
+3. 토큰은 약 8분 후 만료되므로 LiteLLM이 이를 캐시하고 자동으로 갱신합니다.
 
-**Reading Secrets**
+**시크릿 읽기**
 
-LiteLLM reads secrets from CyberArk Conjur using the following URL format:
+LiteLLM은 다음 URL 형식을 사용하여 CyberArk Conjur에서 시크릿을 읽습니다.
 
 ```
 {CYBERARK_API_BASE}/secrets/{ACCOUNT}/variable/{SECRET_NAME}
 ```
 
-For example, if you have:
+예를 들어 다음 값이 있다면:
 - `CYBERARK_API_BASE="http://conjur.example.com:8080"`
 - `CYBERARK_ACCOUNT="default"`
-- Secret name: `AZURE_API_KEY`
+- 시크릿 이름: `AZURE_API_KEY`
 
-LiteLLM will look up:
+LiteLLM은 다음 주소를 조회합니다.
 ```
 http://conjur.example.com:8080/secrets/default/variable/AZURE_API_KEY
 ```
 
-**Writing Secrets**
+**시크릿 쓰기**
 
-When a Virtual Key is created on LiteLLM, the following happens automatically:
+LiteLLM에서 가상 키가 생성되면 다음 작업이 자동으로 수행됩니다.
 
-1. LiteLLM creates a policy entry to define the variable in Conjur (if it doesn't exist)
-2. LiteLLM sets the secret value via the Conjur API
+1. LiteLLM이 Conjur에 변수를 정의하는 정책 항목을 만듭니다(없는 경우).
+2. LiteLLM이 Conjur API를 통해 시크릿 값을 설정합니다.
 
-LiteLLM stores secrets under the `prefix_for_stored_virtual_keys` path (default: `litellm/`)
+LiteLLM은 `prefix_for_stored_virtual_keys` 경로 아래에 시크릿을 저장합니다(기본값: `litellm/`).
 
-For example, a virtual key would be stored as: `litellm/virtual-key-name`
+예를 들어 가상 키는 `litellm/virtual-key-name` 형식으로 저장됩니다.
 
-**Important Notes**
+**중요 참고 사항**
 
-- Variables must be defined in a Conjur policy before setting their values
-- LiteLLM automatically creates policy entries when writing new secrets
-- Secret names with slashes (e.g., `litellm/key`) are automatically URL-encoded
-- Session tokens are cached for 5 minutes by default to minimize API calls
+- 변수 값을 설정하기 전에 Conjur 정책에 변수가 정의되어 있어야 합니다.
+- LiteLLM은 새 시크릿을 쓸 때 정책 항목을 자동으로 만듭니다.
+- 슬래시가 포함된 시크릿 이름(예: `litellm/key`)은 자동으로 URL 인코딩됩니다.
+- API 호출을 최소화하기 위해 세션 토큰은 기본적으로 5분 동안 캐시됩니다.
 
-## Troubleshooting
+## 문제 해결
 
-If you're experiencing issues with the LiteLLM integration, first validate that your CyberArk Conjur instance is working correctly. Run these curl commands directly against your CyberArk endpoints to verify connectivity and authentication:
+LiteLLM 통합에 문제가 있다면 먼저 CyberArk Conjur 인스턴스가 정상 작동하는지 확인하세요. 다음 curl 명령을 CyberArk 엔드포인트에 직접 실행하여 연결성과 인증을 확인합니다.
 
-**Step 1: Authenticate and get a token**
+**1단계: 인증하고 토큰 받기**
 
-Replace `http://conjur.example.com:8080` with your `CYBERARK_API_BASE` and use your actual credentials:
+`http://conjur.example.com:8080`을 `CYBERARK_API_BASE` 값으로 바꾸고 실제 자격 증명을 사용하세요.
 
-```bash title="Authenticate" showLineNumbers
+```bash title="인증" showLineNumbers
 TOKEN=$(curl -s -X POST http://conjur.example.com:8080/authn/default/admin/authenticate \
   -d "your-api-key" | base64 | tr -d '\n')
 ```
 
-**Step 2: Test reading a secret**
+**2단계: 시크릿 읽기 테스트**
 
-```bash title="Read Secret" showLineNumbers
+```bash title="시크릿 읽기" showLineNumbers
 curl -H "Authorization: Token token=\"$TOKEN\"" \
   "http://conjur.example.com:8080/secrets/default/variable/test-secret"
 ```
 
-**Step 3: Test writing a secret**
+**3단계: 시크릿 쓰기 테스트**
 
-```bash title="Write Secret" showLineNumbers
+```bash title="시크릿 쓰기" showLineNumbers
 curl -X POST \
   -H "Authorization: Token token=\"$TOKEN\"" \
   --data "my-secret-value" \
   "http://conjur.example.com:8080/secrets/default/variable/test-secret"
 ```
 
-If these commands work successfully against your CyberArk instance, then CyberArk is functioning correctly and the issue is with your LiteLLM configuration. Check that:
-- Your environment variables are correctly set
-- The `CYBERARK_API_BASE` URL is accessible from your LiteLLM instance
-- Your API key or certificates have the necessary permissions in CyberArk
+이 명령들이 CyberArk 인스턴스에서 성공적으로 실행되면 CyberArk는 정상 작동 중이며 문제는 LiteLLM 구성에 있습니다. 다음 항목을 확인하세요.
+- 환경 변수가 올바르게 설정되어 있는지
+- LiteLLM 인스턴스에서 `CYBERARK_API_BASE` URL에 접근할 수 있는지
+- API 키 또는 인증서에 CyberArk에서 필요한 권한이 있는지
 
-### SSL Certificate Errors
+### SSL 인증서 오류 {#ssl-certificate-errors}
 
-If you encounter SSL certificate verification errors like:
+다음과 같은 SSL 인증서 검증 오류가 발생하는 경우:
 
 ```
 RuntimeError: Could not authenticate to CyberArk Conjur: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate in certificate chain
 ```
 
-This typically occurs when your CyberArk Conjur instance uses a self-signed certificate. You can disable SSL verification by setting:
+이는 일반적으로 CyberArk Conjur 인스턴스가 자체 서명 인증서를 사용할 때 발생합니다. 다음 설정으로 SSL 검증을 비활성화할 수 있습니다.
 
 ```bash
 CYBERARK_SSL_VERIFY="false"
 ```
 
 :::warning
-Disabling SSL verification is insecure and should only be used for testing or development environments with self-signed certificates. For production, configure your certificate chain properly or use certificate-based authentication with `CYBERARK_CLIENT_CERT` and `CYBERARK_CLIENT_KEY`.
+SSL 검증 비활성화는 안전하지 않으며 자체 서명 인증서를 사용하는 테스트 또는 개발 환경에서만 사용해야 합니다. 프로덕션에서는 인증서 체인을 올바르게 구성하거나 `CYBERARK_CLIENT_CERT` 및 `CYBERARK_CLIENT_KEY`를 사용하는 인증서 기반 인증을 사용하세요.
 :::
 
-## Video Walkthrough
+## 동영상 안내 {#video-walkthrough}
 
-This video walks through using CyberArk Conjur as a secret manager with LiteLLM. We create a virtual key in the LiteLLM Admin UI and verify it exists in CyberArk. Then we rotate the secret key and verify it exists in CyberArk.
+이 동영상은 CyberArk Conjur를 LiteLLM의 시크릿 관리자로 사용하는 과정을 안내합니다. LiteLLM 관리자 UI에서 가상 키를 만들고 CyberArk에 존재하는지 확인합니다. 그런 다음 시크릿 키를 교체하고 CyberArk에 존재하는지 다시 확인합니다.
 
 <iframe width="840" height="500" src="https://www.loom.com/embed/e9892ae6cb9545d1b709b82e8695db91" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>

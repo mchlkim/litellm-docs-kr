@@ -3,19 +3,19 @@ import TabItem from '@theme/TabItem';
 
 # OpenAI Agents SDK
 
-Use OpenAI Agents SDK with any LLM provider through LiteLLM Proxy.
+LiteLLM Proxy를 통해 모든 LLM 제공자와 함께 OpenAI Agents SDK를 사용하세요.
 
-The [OpenAI Agents SDK](https://github.com/openai/openai-agents-python) is a lightweight framework for building multi-agent workflows. It includes an official LiteLLM extension that lets you use any of the 100+ supported providers.
+[OpenAI Agents SDK](https://github.com/openai/openai-agents-python)는 다중 에이전트 워크플로를 구축하기 위한 경량 프레임워크입니다. 100개 이상의 지원 제공자를 사용할 수 있는 공식 LiteLLM 확장이 포함되어 있습니다.
 
-## Quick Start
+## 빠른 시작
 
-### 1. Install Dependencies
+### 1. 의존성 설치 {#install-dependencies}
 
 ```bash
 uv add "openai-agents[litellm]"
 ```
 
-### 2. Add Model to Config
+### 2. 설정에 모델 추가 {#add-model-to-config}
 
 ```yaml title="config.yaml"
 model_list:
@@ -35,16 +35,16 @@ model_list:
       api_key: "os.environ/GEMINI_API_KEY"
 ```
 
-### 3. Start LiteLLM Proxy
+### 3. LiteLLM Proxy 시작 {#start-litellm-proxy}
 
 ```bash
 litellm --config config.yaml
 ```
 
-### 4. Use with Proxy
+### 4. Proxy와 함께 사용 {#use-with-proxy}
 
 <Tabs>
-<TabItem value="proxy" label="Via Proxy">
+<TabItem value="proxy" label="Proxy 경유">
 
 ```python
 from agents import Agent, Runner
@@ -66,7 +66,7 @@ print(result.final_output)
 ```
 
 </TabItem>
-<TabItem value="direct" label="Direct (No Proxy)">
+<TabItem value="direct" label="직접 사용(Proxy 없음)">
 
 ```python
 from agents import Agent, Runner
@@ -89,9 +89,9 @@ print(result.final_output)
 </TabItem>
 </Tabs>
 
-## Track Usage
+## 사용량 추적 {#track-usage}
 
-Enable usage tracking to monitor token consumption:
+토큰 사용량을 모니터링하려면 사용량 추적을 활성화하세요.
 
 ```python
 from agents import Agent, ModelSettings
@@ -107,15 +107,15 @@ result = await Runner.run(agent, "Hello")
 print(result.context_wrapper.usage)  # Token counts
 ```
 
-## Environment Variables
+## 환경 변수 {#environment-variables}
 
-| Variable | Value | Description |
+| 변수 | 값 | 설명 |
 |----------|-------|-------------|
 | `LITELLM_BASE_URL` | `http://localhost:4000` | LiteLLM proxy URL |
-| `LITELLM_API_KEY` | `sk-1234` | Your LiteLLM API key |
+| `LITELLM_API_KEY` | `sk-1234` | 사용자의 LiteLLM API 키 |
 
-## Related Resources
+## 관련 자료 {#related-resources}
 
-- [OpenAI Agents SDK Documentation](https://openai.github.io/openai-agents-python/)
-- [LiteLLM Extension Docs](https://openai.github.io/openai-agents-python/models/litellm/)
-- [LiteLLM Proxy Quick Start](../proxy/quick_start)
+- [OpenAI Agents SDK 문서](https://openai.github.io/openai-agents-python/)
+- [LiteLLM Extension 문서](https://openai.github.io/openai-agents-python/models/litellm/)
+- [LiteLLM Proxy 빠른 시작](../proxy/quick_start)

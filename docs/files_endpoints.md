@@ -2,33 +2,33 @@
 import TabItem from '@theme/TabItem';
 import Tabs from '@theme/Tabs';
 
-# Provider Files Endpoints
+# Provider Files 엔드포인트
 
-Files are used to upload documents that can be used with features like Assistants, Fine-tuning, and Batch API.
+Files는 Assistants, Fine-tuning, Batch API 같은 기능에서 사용할 문서를 업로드하는 데 사용됩니다.
 
-Use this to call the provider's `/files` endpoints directly, in the OpenAI format. 
+Provider의 `/files` endpoint를 OpenAI 형식으로 직접 호출할 때 사용합니다.
 
-## Quick Start
+## 빠른 시작
 
-- Upload a File
-- List Files
-- Retrieve File Information
-- Delete File
-- Get File Content
+- 파일 업로드
+- 파일 목록 조회
+- 파일 정보 조회
+- 파일 삭제
+- 파일 내용 가져오기
 
-## Multi-Account Support (Multiple OpenAI Keys)
+## Multi-Account 지원(Multiple OpenAI Keys)
 
-Use different OpenAI API keys for files and batches by specifying a `model` parameter that references entries in your `model_list`. This approach works **without requiring a database** and allows you to route files/batches to different OpenAI accounts.
+`model_list` 항목을 참조하는 `model` 파라미터를 지정하면 files와 batches에 서로 다른 OpenAI API key를 사용할 수 있습니다. 이 방식은 **데이터베이스 없이도** 동작하며, files/batches를 서로 다른 OpenAI account로 routing할 수 있습니다.
 
-### How It Works
+### 동작 방식
 
-1. Define models in `model_list` with different API keys
-2. Pass `model` parameter when creating files
-3. LiteLLM returns encoded IDs that contain routing information
-4. Use encoded IDs for all subsequent operations (retrieve, delete, batches)
-5. No need to specify model again - routing info is in the ID
+1. 서로 다른 API key를 사용하는 모델을 `model_list`에 정의합니다.
+2. File을 생성할 때 `model` 파라미터를 전달합니다.
+3. LiteLLM은 routing 정보가 들어 있는 encoded ID를 반환합니다.
+4. 이후 작업(retrieve, delete, batches)에는 encoded ID를 사용합니다.
+5. Routing 정보가 ID에 들어 있으므로 model을 다시 지정할 필요가 없습니다.
 
-### Setup
+### 설정
 
 ```yaml
 model_list:
@@ -45,7 +45,7 @@ model_list:
       api_key: os.environ/OPENAI_FREE_API_KEY
 ```
 
-### Usage Example
+### 사용법 예제
 
 ```python
 from openai import OpenAI
@@ -89,35 +89,36 @@ batches = client.batches.list(
 )
 ```
 
-### Parameter Options
+### 파라미터 옵션
 
-You can pass the `model` parameter via:
+`model` 파라미터는 다음 방식으로 전달할 수 있습니다.
+
 - **Request body**: `extra_body={"model": "gpt-4o-litellm"}`
 - **Query parameter**: `?model=gpt-4o-litellm`
 - **Header**: `x-litellm-model: gpt-4o-litellm`
 
-### How Encoded IDs Work
+### Encoded ID 동작 방식
 
-- When you create a file/batch with a `model` parameter, LiteLLM encodes the model name into the returned ID
-- The encoded ID is base64-encoded and looks like: `file-bGl0ZWxsbTpmaWxlLWFiYzEyMzttb2RlbCxncHQtNG8taWZvb2Q`
-- When you use this ID in subsequent operations (retrieve, delete, batch create), LiteLLM automatically:
-  1. Decodes the ID
-  2. Extracts the model name
-  3. Looks up the credentials
-  4. Routes the request to the correct OpenAI account
-- The original provider file/batch ID is preserved internally
+- `model` 파라미터로 file/batch를 만들면 LiteLLM은 반환 ID 안에 model name을 encode합니다.
+- Encoded ID는 base64로 encode되며 다음처럼 보입니다. `file-bGl0ZWxsbTpmaWxlLWFiYzEyMzttb2RlbCxncHQtNG8taWZvb2Q`
+- 이후 작업(retrieve, delete, batch create)에서 이 ID를 사용하면 LiteLLM이 자동으로 다음을 수행합니다.
+  1. ID를 decode합니다.
+  2. Model name을 추출합니다.
+  3. Credential을 조회합니다.
+  4. 요청을 올바른 OpenAI account로 routing합니다.
+- 원래 provider file/batch ID는 내부에 보존됩니다.
 
-### Benefits
+### 장점
 
-✅ **No Database Required** - All routing info stored in the ID  
-✅ **Stateless** - Works across proxy restarts  
-✅ **Simple** - Just pass the ID around like normal  
-✅ **Backward Compatible** - Existing `custom_llm_provider` and `files_settings` still work  
-✅ **Future-Proof** - Aligns with managed batches approach  
+- **데이터베이스 불필요** - 모든 routing 정보가 ID에 저장됩니다.
+- **Stateless** - Proxy 재시작 후에도 동작합니다.
+- **단순함** - 일반 ID처럼 전달하기만 하면 됩니다.
+- **하위 호환** - 기존 `custom_llm_provider`와 `files_settings`도 계속 동작합니다.
+- **확장 가능** - Managed batches 접근 방식과 맞춰져 있습니다.
 
-### Migration from files_settings
+### files_settings에서 마이그레이션
 
-**Old approach (still works):**
+**기존 방식(계속 동작):**
 ```yaml
 files_settings:
   - custom_llm_provider: openai
@@ -130,7 +131,7 @@ client.files.create(..., extra_headers={"custom-llm-provider": "openai"})
 client.files.retrieve(file_id, extra_headers={"custom-llm-provider": "openai"})
 ```
 
-**New approach (recommended):**
+**새 방식(권장):**
 ```yaml
 model_list:
   - model_name: "gpt-4o-account1"
@@ -151,7 +152,7 @@ client.batches.create(input_file_id=file.id)  # Routes correctly
 <Tabs>
 <TabItem value="proxy" label="LiteLLM PROXY Server">
 
-1. Setup config.yaml
+1. `config.yaml`을 설정합니다.
 
 ```
 # for /files endpoints
@@ -164,7 +165,7 @@ files_settings:
     api_key: os.environ/OPENAI_API_KEY
 ```
 
-2. Start LiteLLM PROXY Server
+2. LiteLLM PROXY Server를 시작합니다.
 
 ```bash
 litellm --config /path/to/config.yaml
@@ -172,9 +173,9 @@ litellm --config /path/to/config.yaml
 ## RUNNING on http://0.0.0.0:4000
 ```
 
-3. Use OpenAI's /files endpoints
+3. OpenAI의 `/files` endpoint를 사용합니다.
 
-Upload a File
+파일 업로드
 
 ```python
 from openai import OpenAI
@@ -191,7 +192,7 @@ client.files.create(
 )
 ```
 
-List Files
+파일 목록 조회
 
 ```python
 from openai import OpenAI
@@ -205,7 +206,7 @@ files = client.files.list(extra_headers={"custom-llm-provider": "openai"})
 print("files=", files)
 ```
 
-Retrieve File Information
+파일 정보 조회
 
 ```python
 from openai import OpenAI
@@ -219,7 +220,7 @@ file = client.files.retrieve(file_id="file-abc123", extra_headers={"custom-llm-p
 print("file=", file)
 ```
 
-Delete File
+파일 삭제
 
 ```python
 from openai import OpenAI
@@ -233,7 +234,7 @@ response = client.files.delete(file_id="file-abc123", extra_headers={"custom-llm
 print("delete response=", response)
 ```
 
-Get File Content
+파일 내용 가져오기
 
 ```python
 from openai import OpenAI
@@ -250,7 +251,7 @@ print("content=", content)
 </TabItem>
 <TabItem value="sdk" label="SDK">
 
-**Upload a File**
+**파일 업로드**
 ```python
 from litellm
 import os 
@@ -265,7 +266,7 @@ file_obj = await litellm.acreate_file(
 print("Response from creating file=", file_obj)
 ```
 
-**List Files**
+**파일 목록 조회**
 ```python
 files = await litellm.alist_files(
     custom_llm_provider="openai",
@@ -274,7 +275,7 @@ files = await litellm.alist_files(
 print("files=", files)
 ```
 
-**Retrieve File Information**
+**파일 정보 조회**
 ```python
 file = await litellm.aretrieve_file(
     file_id="file-abc123",
@@ -283,7 +284,7 @@ file = await litellm.aretrieve_file(
 print("file=", file)
 ```
 
-**Delete File**
+**파일 삭제**
 ```python
 response = await litellm.adelete_file(
     file_id="file-abc123",
@@ -292,7 +293,7 @@ response = await litellm.adelete_file(
 print("delete response=", response)
 ```
 
-**Get File Content**
+**파일 내용 가져오기**
 ```python
 content = await litellm.afile_content(
     file_id="file-abc123",
@@ -301,7 +302,7 @@ content = await litellm.afile_content(
 print("file content=", content)
 ```
 
-**Get File Content (Bedrock)**
+**파일 내용 가져오기(Bedrock)**
 ```python
 # For Bedrock batch output files stored in S3
 content = await litellm.afile_content(
@@ -316,7 +317,7 @@ print("file content=", content.text)
 </Tabs>
 
 
-## **Supported Providers**:
+## **지원 프로바이더**:
 
 ### [OpenAI](#quick-start)
 
@@ -324,12 +325,12 @@ print("file content=", content.text)
 
 ### [Vertex AI](./providers/vertex#batch-apis)
 
-### [Bedrock](./providers/bedrock_batches#4-retrieve-batch-results)
+### [Bedrock 배치 결과 조회](./providers/bedrock_batches#4-retrieve-batch-results)
 
-### [Anthropic](./providers/anthropic#files-api)
+### [Anthropic 파일 API](./providers/anthropic#files-api)
 
 :::note
-Anthropic Files API has a different purpose than OpenAI's. It's **not** for Batches or Fine-tuning—it's for uploading files once and referencing them by `file_id` in multiple messages, avoiding re-uploads. File API operations are free — file content used in Messages requests is priced as input tokens.
+Anthropic Files API는 OpenAI와 목적이 다릅니다. **Batches나 Fine-tuning용이 아니라**, 파일을 한 번 업로드한 뒤 여러 메시지에서 `file_id`로 참조해 재업로드를 피하기 위한 기능입니다. File API 작업 자체는 무료이며, Messages 요청에서 사용된 file content는 input token으로 과금됩니다.
 :::
 
 ## [Swagger API Reference](https://litellm-api.up.railway.app/#/files)

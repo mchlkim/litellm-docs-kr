@@ -1,24 +1,24 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# LiteLLM Prompt Management (GitOps)
+# LiteLLM 프롬프트 관리 (GitOps) {#litellm-prompt-management-gitops}
 
-Store prompts as `.prompt` files in your repository and use them directly with LiteLLM. No external services required.
+프롬프트를 저장소의 `.prompt` 파일로 보관하고 LiteLLM에서 바로 사용하세요. 외부 서비스는 필요하지 않습니다.
 
-## Supported Integrations
+## 지원되는 통합 {#supported-integrations}
 
-- **File System**: Store `.prompt` files locally
-- **BitBucket**: Store `.prompt` files in BitBucket repositories with team-based access control
-- **Gitlab**: Store `.prompt` files in Gitlab repositories with team-based access control
-## Quick Start
+- **File System**: `.prompt` 파일을 로컬에 저장합니다.
+- **BitBucket**: 팀 기반 액세스 제어가 적용된 BitBucket 저장소에 `.prompt` 파일을 저장합니다.
+- **Gitlab**: 팀 기반 액세스 제어가 적용된 Gitlab 저장소에 `.prompt` 파일을 저장합니다.
+## 빠른 시작
 
 <Tabs>
 
 <TabItem value="sdk" label="SDK">
 
-**1. Create a .prompt file**
+**1. .prompt 파일 생성**
 
-Create `prompts/hello.prompt`:
+`prompts/hello.prompt`를 생성합니다.
 
 ```yaml
 ---
@@ -30,7 +30,7 @@ System: You are a helpful assistant.
 User: {{user_message}}
 ```
 
-**2. Use with LiteLLM**
+**2. LiteLLM에서 사용**
 
 ```python
 import litellm
@@ -48,9 +48,9 @@ response = litellm.completion(
 </TabItem>
 <TabItem value="bitbucket" label="BITBUCKET">
 
-**1. Create a .prompt file in BitBucket**
+**1. BitBucket에 .prompt 파일 생성**
 
-Create `prompts/hello.prompt` in your BitBucket repository:
+BitBucket 저장소에 `prompts/hello.prompt`를 생성합니다.
 
 ```yaml
 ---
@@ -62,7 +62,7 @@ System: You are a helpful assistant.
 User: {{user_message}}
 ```
 
-**2. Configure BitBucket access**
+**2. BitBucket 액세스 설정**
 
 ```python
 import litellm
@@ -79,7 +79,7 @@ bitbucket_config = {
 litellm.set_global_bitbucket_config(bitbucket_config)
 ```
 
-**3. Use with LiteLLM**
+**3. LiteLLM에서 사용**
 
 ```python
 response = litellm.completion(
@@ -92,9 +92,9 @@ response = litellm.completion(
 </TabItem>
 <TabItem value="gitlab" label="GITLAB">
 
-**1. Create a .prompt file in a gitlab repo**
+**1. Gitlab 저장소에 .prompt 파일 생성**
 
-Create `prompts/hello.prompt` in your gitlab repository:
+Gitlab 저장소에 `prompts/hello.prompt`를 생성합니다.
 
 ```yaml
 ---
@@ -106,7 +106,7 @@ System: You are a helpful assistant.
 User: {{user_message}}
 ```
 
-**2. Configure Gitlab access**
+**2. Gitlab 액세스 설정**
 
 ```python
 import litellm
@@ -123,7 +123,7 @@ gitlab_config = {
 litellm.set_global_gitlab_config(gitlab_config)
 ```
 
-**3. Use with LiteLLM**
+**3. LiteLLM에서 사용**
 
 ```python
 response = litellm.completion(
@@ -137,9 +137,9 @@ response = litellm.completion(
 
 <TabItem value="proxy" label="PROXY">
 
-**1. Create a .prompt file**
+**1. .prompt 파일 생성**
 
-Create `prompts/hello.prompt`:
+`prompts/hello.prompt`를 생성합니다.
 
 ```yaml
 ---
@@ -151,7 +151,7 @@ System: You are a helpful assistant.
 User: {{user_message}}
 ```
 
-**2. Setup config.yaml**
+**2. config.yaml 설정**
 
 ```yaml
 model_list:
@@ -177,13 +177,13 @@ litellm_settings:
     branch: "main"
 ```
 
-**3. Start the proxy**
+**3. 프록시 시작**
 
 ```bash
 litellm --config config.yaml --detailed_debug
 ```
 
-**4. Test it!**
+**4. 테스트**
 
 ```bash
 curl -L -X POST 'http://0.0.0.0:4000/v1/chat/completions' \
@@ -201,9 +201,9 @@ curl -L -X POST 'http://0.0.0.0:4000/v1/chat/completions' \
 </TabItem>
 </Tabs>
 
-### .prompt File Format
+### .prompt 파일 형식 {#prompt-file-format}
 
-`.prompt` files use YAML frontmatter for metadata and support Jinja2 templating:
+`.prompt` 파일은 메타데이터에 YAML frontmatter를 사용하며 Jinja2 템플릿을 지원합니다.
 
 ```yaml
 ---
@@ -219,9 +219,9 @@ System: You are a helpful {{role}} assistant.
 User: {{user_message}}
 ```
 
-### Advanced Features
+### 고급 기능 {#advanced-features}
 
-**Multi-role conversations:**
+**다중 역할 대화:**
 
 ```yaml
 ---
@@ -233,7 +233,7 @@ System: You are a helpful coding assistant.
 User: {{user_question}}
 ```
 
-**Dynamic model selection:**
+**동적 모델 선택:**
 
 ```yaml
 ---
@@ -245,9 +245,9 @@ System: You are a helpful assistant specialized in {{domain}}.
 User: {{user_message}}
 ```
 
-### API Reference
+### API 참고 자료 {#api-reference}
 
-For prompt integrations, use these parameters:
+프롬프트 통합에는 다음 파라미터를 사용합니다.
 
 **File System (dotprompt):**
 ```
@@ -272,7 +272,7 @@ prompt_variables: Optional[dict]  # optional - variables for template rendering
 gitlab_config: Optional[dict]     # optional - Gitlab configuration (if not set globally)
 ```
 
-**Example API calls:**
+**예제 API 호출:**
 
 ```python
 # File system integration

@@ -1,126 +1,126 @@
-# Fee/Price Margin on LLM Costs
+# LLM 비용의 수수료/가격 마진
 
-Apply percentage-based or fixed-amount margins to specific providers or globally. This is useful for enterprises that need to add operational overhead costs to bill internal consumers.
+특정 공급자 또는 전체 공급자에 백분율 기반 또는 고정 금액 마진을 적용합니다. 내부 사용자에게 비용을 청구할 때 운영 오버헤드 비용을 더해야 하는 엔터프라이즈에 유용합니다.
 
-## When to Use This Feature
+## 이 기능을 사용할 때
 
-If your Generative AI platform involves various operational and architectural overheads, along with infrastructure costs, you may need the capability to apply an additional fee or margin to the total LLM costs. 
+Generative AI 플랫폼에 인프라 비용뿐 아니라 다양한 운영/아키텍처 오버헤드가 포함된다면, 총 LLM 비용에 추가 수수료 또는 마진을 적용하는 기능이 필요할 수 있습니다.
 
-**Common use cases:**
-- **Internal chargebacks** - Add operational overhead costs when billing internal teams
-- **Cost recovery** - Recover infrastructure, support, and platform maintenance costs
+**일반적인 사용 사례:**
+- **내부 비용 배부** - 내부 팀에 비용을 청구할 때 운영 오버헤드 비용 추가
+- **비용 회수** - 인프라, 지원, 플랫폼 유지보수 비용 회수
 
-## Setup Margins via UI
+## UI로 마진 설정
 
-This walkthrough shows how to add a provider margin and view the cost breakdown in the LiteLLM UI.
+이 워크스루에서는 LiteLLM UI에서 공급자 마진을 추가하고 비용 breakdown을 확인하는 방법을 보여줍니다.
 
-### Step 1: Navigate to Settings
+### 1단계: Settings로 이동
 
-From the LiteLLM dashboard, click on **Settings** in the left sidebar.
+LiteLLM dashboard의 왼쪽 사이드바에서 **Settings**를 클릭합니다.
 
 ![Click Settings](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-25/a9a42382-1c93-4338-8c7e-c0ebc4ee239f/ascreenshot.jpeg?tl_px=0,730&br_px=2064,1884&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=47,292)
 
-### Step 2: Open Cost Tracking
+### 2단계: Cost Tracking 열기
 
-Click on **Cost Tracking** to access the cost configuration options.
+비용 설정 옵션에 접근하려면 **Cost Tracking**을 클릭합니다.
 
 ![Click Cost Tracking](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-25/c3ad52c0-1c8d-4be5-bd04-1e37ce186c8e/ascreenshot.jpeg?tl_px=0,730&br_px=2064,1884&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=65,403)
 
-### Step 3: Select Fee/Price Margin
+### 3단계: Fee/Price Margin 선택
 
-Click on **Fee/Price Margin** - this section allows you to add fees or margins to LLM costs for internal billing and cost recovery.
+**Fee/Price Margin**을 클릭합니다. 이 섹션에서는 내부 과금과 비용 회수를 위해 LLM 비용에 수수료 또는 마진을 추가할 수 있습니다.
 
 ![Click Fee/Price Margin](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-25/0810c7bf-e927-4ab6-a55d-37c51d8c17af/ascreenshot.jpeg?tl_px=553,0&br_px=2618,1153&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=551,220)
 
-### Step 4: Add Provider Margin
+### 4단계: Provider Margin 추가
 
-Click **+ Add Provider Margin** to create a new margin configuration.
+새 마진 설정을 만들려면 마진 추가 버튼을 클릭합니다.
 
 ![Click Add Provider Margin](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-25/8762b7d9-74e5-45eb-acc3-be0d9c5b799d/ascreenshot.jpeg?tl_px=553,2&br_px=2618,1155&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=929,277)
 
-### Step 5: Select Provider
+### 5단계: 공급자 선택
 
-Click the search field to select which provider to apply the margin to.
+마진을 적용할 공급자를 선택하려면 검색 필드를 클릭합니다.
 
 ![Click search field](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-25/7ff01cdc-2749-43f3-a46f-4fd5543446e3/ascreenshot.jpeg?tl_px=507,0&br_px=2572,1153&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=524,177)
 
-You can select **Global (All Providers)** to apply the margin to all providers, or choose a specific provider like Bedrock, OpenAI, or Anthropic.
+모든 공급자에 마진을 적용하려면 전체 공급자 옵션을 선택하거나, Bedrock, OpenAI, Anthropic 같은 특정 공급자를 선택할 수 있습니다.
 
 ![Select Global](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-25/c9efe187-0995-45ae-9366-290cb20835a2/ascreenshot.jpeg?tl_px=0,0&br_px=2064,1153&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=485,182)
 
-In this example, we'll select **Bedrock** as the provider.
+이 예제에서는 공급자로 **Bedrock**을 선택합니다.
 
 ![Select Bedrock](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-25/ea1524ed-7217-4ee6-9beb-797e3ff08b3a/ascreenshot.jpeg?tl_px=0,0&br_px=2617,1462&force_format=jpeg&q=100&width=1120.0)
 
-### Step 6: Choose Margin Type
+### 6단계: 마진 타입 선택
 
-Select the margin type. You can choose between **Percentage-based** (e.g., 10% markup) or **Fixed Amount** (e.g., $0.001 per request).
+마진 타입을 선택합니다. **Percentage-based**(예: 10% markup) 또는 **Fixed Amount**(예: 요청당 $0.001) 중 하나를 선택할 수 있습니다.
 
 ![Click Percentage-based](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-25/137ffea5-0a5e-445a-809f-a85d20701c87/ascreenshot.jpeg?tl_px=0,0&br_px=2064,1153&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=355,259)
 
-For this example, we'll select **Fixed Amount** to add a flat fee per request.
+이 예제에서는 요청당 고정 수수료를 추가하기 위해 **Fixed Amount**를 선택합니다.
 
 ![Click Fixed Amount](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-25/56828562-2bae-4f69-b68e-13b1b6a03aa6/ascreenshot.jpeg?tl_px=0,0&br_px=2064,1153&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=493,252)
 
-### Step 7: Enter Margin Value
+### 7단계: 마진 값 입력
 
-Enter the margin value. In this example, we're adding a $25 fixed fee per request.
+마진 값을 입력합니다. 이 예제에서는 요청당 $25 고정 수수료를 추가합니다.
 
 ![Enter margin value](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-25/80018d4b-0205-43a3-a534-9a0e39ddf139/ascreenshot.jpeg?tl_px=0,0&br_px=2618,1462&force_format=jpeg&q=100&width=1120.0)
 
-### Step 8: Save the Margin
+### 8단계: 마진 저장
 
-Click **Add Provider Margin** to save your configuration.
+설정을 저장하려면 마진 추가 버튼을 클릭합니다.
 
 ![Click Add Provider Margin](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-25/84a5bcb8-f475-4aef-83ec-f0b3b620613f/ascreenshot.jpeg?tl_px=553,206&br_px=2618,1359&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=636,276)
 
-### Step 9: Test the Margin in Playground
+### 9단계: Playground에서 마진 테스트
 
-Navigate to **Playground** to test your margin configuration by making a request.
+요청을 보내 마진 설정을 테스트하려면 **Playground**로 이동합니다.
 
 ![Click Playground](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-25/cda7293a-2439-4301-bc44-211e6d6833a6/ascreenshot.jpeg?tl_px=0,0&br_px=2064,1153&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=37,106)
 
-Select a model and send a test message.
+모델을 선택하고 테스트 메시지를 보냅니다.
 
 ![Send test message](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-25/48c3e28e-a01a-483c-838d-2d1643f44be7/ascreenshot.jpeg?tl_px=0,0&br_px=2617,1462&force_format=jpeg&q=100&width=1120.0)
 
-Enter your prompt in the message field and submit.
+메시지 필드에 프롬프트를 입력하고 제출합니다.
 
 ![Enter prompt](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-25/88963dbe-6bad-4aac-8bd3-7f4eac0dd995/ascreenshot.jpeg?tl_px=243,730&br_px=2308,1884&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=524,451)
 
-You'll receive a response from the model.
+모델의 응답을 받게 됩니다.
 
 ![View response](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-25/1d69ef9c-cc22-40ad-8f10-f14a359d2fb6/ascreenshot.jpeg?tl_px=553,17&br_px=2618,1170&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=549,276)
 
-### Step 10: View Cost Breakdown in Logs
+### 10단계: 로그에서 비용 breakdown 보기
 
-Navigate to **Logs** to view the detailed cost breakdown for your request.
+요청의 상세 비용 breakdown을 보려면 **로그**로 이동합니다.
 
-![Click Logs](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-25/5cf6dd8b-0783-41ee-b23a-32f3424c2092/ascreenshot.jpeg?tl_px=0,99&br_px=2064,1252&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=32,276)
+![Click 로그](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-25/5cf6dd8b-0783-41ee-b23a-32f3424c2092/ascreenshot.jpeg?tl_px=0,99&br_px=2064,1252&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=32,276)
 
-Click on the expand icon to view the request details.
+요청 세부 정보를 보려면 펼치기 아이콘을 클릭합니다.
 
 ![Click expand icon](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-25/3ae2900f-1515-4bb9-a4aa-328b43f13b61/ascreenshot.jpeg?tl_px=0,12&br_px=2064,1165&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=187,277)
 
-### Step 11: View Cost Breakdown Details
+### 11단계: 비용 breakdown 세부 정보 보기
 
-Click on **Cost Breakdown** to see how the total cost was calculated, including the margin.
+마진을 포함해 총 비용이 어떻게 계산되었는지 보려면 **Cost Breakdown**을 클릭합니다.
 
 ![Click Cost Breakdown](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-25/8bce9050-58ca-4860-9e18-1b704e086cf4/ascreenshot.jpeg?tl_px=392,575&br_px=2457,1728&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=524,276)
 
-The cost breakdown shows the margin amount that was added. In this example, you can see the **+$25.00** margin clearly displayed.
+비용 breakdown에는 추가된 마진 금액이 표시됩니다. 이 예제에서는 **+$25.00** 마진이 명확히 표시됩니다.
 
 ![View margin amount](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-25/c4a65d38-a47a-4634-baf2-608447a7d711/ascreenshot.jpeg?tl_px=0,730&br_px=2064,1884&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=388,282)
 
-The total cost reflects the base LLM cost plus the margin, giving you full transparency into your cost structure.
+총 비용은 기본 LLM 비용에 마진을 더한 값이며, 비용 구조를 투명하게 확인할 수 있습니다.
 
 ![View total cost](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-25/3b13550d-5255-4818-b3ee-3d4391991c13/ascreenshot.jpeg?tl_px=0,730&br_px=2064,1884&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=384,323)
 
-## Setup Margins via Config
+## 설정 파일로 마진 설정
 
-You can also configure margins directly in your `config.yaml` file.
+`config.yaml` 파일에서 마진을 직접 설정할 수도 있습니다.
 
-**Step 1: Add margin config to config.yaml**
+**1단계: config.yaml에 마진 설정 추가**
 
 ```yaml
 # Apply margins to providers
@@ -132,66 +132,66 @@ litellm_settings:
       fixed_amount: 0.001   # $0.001 fixed fee per request
 ```
 
-**Step 2: Start proxy**
+**2단계: 프록시 시작**
 
 ```bash
 litellm /path/to/config.yaml
 ```
 
-The margin will be automatically applied to all cost calculations for the configured providers.
+설정된 공급자의 모든 비용 계산에 마진이 자동으로 적용됩니다.
 
-## How Margins Work
+## 마진 작동 방식
 
-- Margins are applied **after** discounts (if configured)
-- Margins are calculated independently from discounts
-- You can use:
-  - **Percentage-based**: `{"openai": 0.10}` = 10% margin
-  - **Fixed amount**: `{"openai": {"fixed_amount": 0.001}}` = $0.001 per request
-  - **Global**: `{"global": 0.05}` = 5% margin on all providers (unless provider-specific margin exists)
-- Provider-specific margins override global margins
-- Margin information is tracked in cost breakdown logs
-- Margin information is returned in response headers:
-  - `x-litellm-response-cost-margin-amount` - Total margin added in USD
-  - `x-litellm-response-cost-margin-percent` - Margin percentage applied
+- 마진은 할인(설정된 경우) **이후**에 적용됩니다.
+- 마진은 할인과 독립적으로 계산됩니다.
+- 다음 방식을 사용할 수 있습니다.
+  - **Percentage-based**: `{"openai": 0.10}` = 10% 마진
+  - **Fixed amount**: `{"openai": {"fixed_amount": 0.001}}` = 요청당 $0.001
+  - **Global**: `{"global": 0.05}` = 모든 공급자에 5% 마진(공급자별 마진이 없는 경우)
+- 공급자별 마진은 전역 마진을 재정의합니다.
+- 마진 정보는 비용 breakdown 로그에 추적됩니다.
+- 마진 정보는 응답 헤더로 반환됩니다.
+  - `x-litellm-response-cost-margin-amount` - USD 기준으로 추가된 총 마진
+  - `x-litellm-response-cost-margin-percent` - 적용된 마진 백분율
 
-## Margin Calculation Examples
+## 마진 계산 예제
 
-**Example 1: Percentage-only margin**
+**예제 1: 백분율 마진만 사용**
 ```yaml
 litellm_settings:
   cost_margin_config:
     openai: 0.10  # 10% margin
 ```
-If base cost is $1.00, final cost = $1.00 x 1.10 = $1.10
+기본 비용이 $1.00이면 최종 비용 = $1.00 x 1.10 = $1.10
 
-**Example 2: Fixed amount only**
+**예제 2: 고정 금액만 사용**
 ```yaml
 litellm_settings:
   cost_margin_config:
     anthropic:
       fixed_amount: 0.001  # $0.001 per request
 ```
-If base cost is $1.00, final cost = $1.00 + $0.001 = $1.001
+기본 비용이 $1.00이면 최종 비용 = $1.00 + $0.001 = $1.001
 
-**Example 3: Global margin with provider override**
+**예제 3: 공급자별 재정의가 있는 전역 마진**
 ```yaml
 litellm_settings:
   cost_margin_config:
     global: 0.05   # 5% global margin
     openai: 0.10   # 10% margin for OpenAI (overrides global)
 ```
-- OpenAI requests: 10% margin applied
-- All other providers: 5% margin applied
+- OpenAI 요청: 10% 마진 적용
+- 그 외 모든 공급자: 5% 마진 적용
 
-## Margins with Discounts
+## 할인과 함께 사용하는 마진
 
-Margins and discounts are calculated independently:
+마진과 할인은 독립적으로 계산됩니다.
 
-1. Base cost is calculated
-2. Discount is applied (if configured)
-3. Margin is applied to the discounted cost
+1. 기본 비용이 계산됩니다.
+2. 할인이 적용됩니다(설정된 경우).
+3. 할인된 비용에 마진이 적용됩니다.
 
-**Example:**
+**예제:**
 ```yaml
 litellm_settings:
   cost_discount_config:
@@ -200,15 +200,15 @@ litellm_settings:
     openai: 0.10  # 10% margin
 ```
 
-If base cost is $1.00:
-- After discount: $1.00 x 0.95 = $0.95
-- After margin: $0.95 x 1.10 = $1.045
+기본 비용이 $1.00인 경우:
+- 할인 후: $1.00 x 0.95 = $0.95
+- 마진 적용 후: $0.95 x 1.10 = $1.045
 
-## Supported Providers
+## 지원 프로바이더
 
-You can apply margins to all LiteLLM supported providers, or use `global` to apply to all providers. Common examples:
+마진은 LiteLLM이 지원하는 모든 공급자에 적용할 수 있으며, `global`을 사용해 모든 공급자에 적용할 수도 있습니다. 일반적인 예시는 다음과 같습니다.
 
-- `global` - Applies to all providers (unless provider-specific margin exists)
+- `global` - 모든 공급자에 적용(공급자별 마진이 없는 경우)
 - `openai` - OpenAI
 - `anthropic` - Anthropic
 - `vertex_ai` - Google Vertex AI
@@ -216,4 +216,4 @@ You can apply margins to all LiteLLM supported providers, or use `global` to app
 - `azure` - Azure OpenAI
 - `bedrock` - AWS Bedrock
 
-See the full list of providers in the [LlmProviders](https://github.com/BerriAI/litellm/blob/main/litellm/types/utils.py) enum.
+전체 공급자 목록은 [LlmProviders](https://github.com/BerriAI/litellm/blob/main/litellm/types/utils.py) enum에서 확인하세요.

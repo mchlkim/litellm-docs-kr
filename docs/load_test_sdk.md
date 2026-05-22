@@ -1,6 +1,6 @@
-# LiteLLM SDK vs OpenAI
+# LiteLLM SDK와 OpenAI 비교
 
-Here is a script to load test LiteLLM vs OpenAI 
+LiteLLM과 OpenAI를 부하 테스트하는 스크립트입니다.
 
 ```python
 from openai import AsyncOpenAI, AsyncAzureOpenAI

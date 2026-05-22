@@ -1,18 +1,18 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Bedrock - Writer Palmyra
+# `Bedrock - Writer Palmyra` {#bedrock---writer-palmyra}
 
-## Overview
+## 개요
 
-| Property | Details |
+| 속성 | 세부 정보 |
 |-------|-------|
-| Description | Writer Palmyra X5 and X4 foundation models on Amazon Bedrock, offering advanced reasoning, tool calling, and document processing capabilities |
-| Provider Route on LiteLLM | `bedrock/` |
-| Supported Operations | `/chat/completions` |
-| Link to Provider Doc | [Writer on AWS Bedrock ↗](https://aws.amazon.com/bedrock/writer/) |
+| 설명 | Amazon Bedrock의 Writer Palmyra X5 및 X4 foundation model입니다. 고급 추론, 도구 호출, 문서 처리 기능을 제공합니다. |
+| LiteLLM Provider 경로 | `bedrock/` |
+| 지원 작업 | `/chat/completions` |
+| Provider 문서 링크 | [Writer on AWS Bedrock ↗](https://aws.amazon.com/bedrock/writer/) |
 
-## Quick Start
+## 빠른 시작
 
 ### LiteLLM SDK
 
@@ -34,7 +34,7 @@ print(response.choices[0].message.content)
 
 ### LiteLLM Proxy
 
-**1. Setup config.yaml**
+**1. `config.yaml` 설정**
 
 ```yaml showLineNumbers title="proxy_config.yaml"
 model_list:
@@ -46,13 +46,13 @@ model_list:
       aws_region_name: us-west-2
 ```
 
-**2. Start the proxy**
+**2. 프록시 시작**
 
 ```bash showLineNumbers title="Start Proxy"
 litellm --config config.yaml
 ```
 
-**3. Call the proxy**
+**3. Proxy 호출**
 
 <Tabs>
 <TabItem value="curl" label="curl">
@@ -89,9 +89,9 @@ print(response.choices[0].message.content)
 </TabItem>
 </Tabs>
 
-## Tool Calling
+## 도구 호출
 
-Writer Palmyra models support multi-step tool calling for complex workflows.
+Writer Palmyra 모델은 복잡한 workflow를 위한 multi-step 도구 호출을 지원합니다.
 
 ### LiteLLM SDK
 
@@ -195,9 +195,9 @@ response = client.chat.completions.create(
 </TabItem>
 </Tabs>
 
-## Document Input
+## 문서 입력 {#document-input}
 
-Writer Palmyra models support document inputs including PDFs.
+Writer Palmyra 모델은 PDF를 포함한 문서 입력을 지원합니다.
 
 ### LiteLLM SDK
 
@@ -302,15 +302,15 @@ response = client.chat.completions.create(
 </TabItem>
 </Tabs>
 
-## Supported Models
+## 지원 모델 {#supported-models}
 
-| Model ID | Context Window | Input Cost (per 1K tokens) | Output Cost (per 1K tokens) |
+| Model ID | Context Window | 입력 비용(1K tokens당) | 출력 비용(1K tokens당) |
 |----------|---------------|---------------------------|----------------------------|
 | `bedrock/us.writer.palmyra-x5-v1:0` | 1M tokens | $0.0006 | $0.006 |
 | `bedrock/us.writer.palmyra-x4-v1:0` | 128K tokens | $0.0025 | $0.010 |
 | `bedrock/writer.palmyra-x5-v1:0` | 1M tokens | $0.0006 | $0.006 |
 | `bedrock/writer.palmyra-x4-v1:0` | 128K tokens | $0.0025 | $0.010 |
 
-:::info Cross-Region Inference
-The `us.writer.*` model IDs use cross-region inference profiles. Use these for production workloads.
+:::info 교차 리전 추론
+`us.writer.*` model ID는 cross-region inference profile을 사용합니다. 프로덕션 workload에는 이 ID를 사용하세요.
 :::

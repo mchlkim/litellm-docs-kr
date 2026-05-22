@@ -1,10 +1,10 @@
 ---
 slug: gemini_embedding_2_ga
-title: "Gemini Embedding 2 (GA): Multimodal Embeddings on LiteLLM"
+title: "Gemini Embedding 2(GA): LiteLLM의 멀티모달 임베딩"
 date: 2026-04-24T10:00:00
 authors:
   - sameer
-description: "Use generally available gemini-embedding-2 for multimodal embeddings on LiteLLM via Gemini API and Vertex AI—the same flows as preview, stable model id."
+description: "Gemini API와 Vertex AI를 통해 LiteLLM에서 GA 모델인 gemini-embedding-2로 멀티모달 임베딩을 사용하는 방법입니다. Preview와 같은 흐름을 사용하되 안정화된 모델 ID를 사용합니다."
 tags: [gemini, embeddings, multimodal, vertex ai]
 hide_table_of_contents: false
 ---
@@ -12,35 +12,35 @@ hide_table_of_contents: false
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Gemini Embedding 2 (GA): Multimodal Embeddings
+# Gemini Embedding 2(GA): 멀티모달 임베딩
 
-Litellm now fully supports Gemini Embedding 2 GA.
+LiteLLM은 이제 Gemini Embedding 2 GA를 완전히 지원합니다.
 
 :::info
-For end-to-end behavior, input shapes, and MIME types, see the [Gemini Embedding 2 Preview walkthrough](/blog/gemini_embedding_2_multimodal). This post focuses on **GA naming**, **cost map** coverage.
+엔드투엔드 동작, 입력 형태, MIME type은 [Gemini Embedding 2 Preview 안내](/blog/gemini_embedding_2_multimodal)를 참고하세요. 이 글은 **GA 이름 체계**와 **비용 맵** 적용 범위에 집중합니다.
 :::
 
 {/* truncate */}
 
-## Supported Input Types
+## 지원 입력 유형
 
-| Modality | Supported Formats |
+| 모달리티 | 지원 형식 |
 |----------|-------------------|
-| **Text** | Plain text |
-| **Image** | PNG, JPEG |
-| **Audio** | MP3, WAV |
-| **Video** | MP4, MOV |
-| **Documents** | PDF |
+| **텍스트** | 일반 텍스트 |
+| **이미지** | PNG, JPEG |
+| **오디오** | MP3, WAV |
+| **비디오** | MP4, MOV |
+| **문서** | PDF |
 
-## Input Formats
+## 입력 형식
 
-LiteLLM accepts three input formats for multimodal content:
+LiteLLM은 멀티모달 콘텐츠에 대해 세 가지 입력 형식을 받습니다.
 
-1. **Data URIs** – Base64-encoded inline: `data:image/png;base64,<encoded_data>`
-2. **GCS URLs** – Cloud Storage paths (Vertex AI): `gs://bucket/path/to/file.png`
-3. **Gemini File References** – Pre-uploaded files (Gemini API): `files/abc123`
+1. **Data URI** – Base64 인코딩 inline 데이터: `data:image/png;base64,<encoded_data>`
+2. **GCS URL** – Cloud Storage 경로(Vertex AI): `gs://bucket/path/to/file.png`
+3. **Gemini 파일 참조** – 미리 업로드된 파일(Gemini API): `files/abc123`
 
-## Quick Start
+## 빠른 시작
 
 <Tabs>
 <TabItem value="gemini" label="Gemini API">
@@ -88,7 +88,7 @@ print(response)
 
 <TabItem value="proxy" label="LiteLLM Proxy">
 
-**1. Config (config.yaml)**
+**1. Config 설정(config.yaml)**
 
 ```yaml
 model_list:
@@ -106,13 +106,13 @@ general_settings:
   master_key: sk-1234
 ```
 
-**2. Start proxy**
+**2. Proxy 시작**
 
 ```bash
 litellm --config config.yaml
 ```
 
-**3. Call embeddings** (OpenAI-compatible **`POST /v1/embeddings`** on the proxy)
+**3. 임베딩 호출**(Proxy의 OpenAI 호환 **`POST /v1/embeddings`**)
 
 ```bash
 curl -sS -X POST http://localhost:4000/v1/embeddings \
@@ -130,24 +130,24 @@ curl -sS -X POST http://localhost:4000/v1/embeddings \
 </TabItem>
 </Tabs>
 
-## Input Format Examples
+## 입력 형식 예제
 
-| Format | Example | Provider |
+| 형식 | 예제 | 제공자 |
 |--------|---------|----------|
 | **Data URI** | `data:image/png;base64,...` | Gemini, Vertex AI |
 | **GCS URL** | `gs://bucket/path/image.png` | Vertex AI |
-| **File reference** | `files/abc123` | Gemini API only |
+| **파일 참조** | `files/abc123` | Gemini API 전용 |
 
-### Supported MIME Types for Data URIs
+### Data URI에서 지원되는 MIME Type
 
-- **Images:** `image/png`, `image/jpeg`
-- **Audio:** `audio/mpeg`, `audio/wav`
-- **Video:** `video/mp4`, `video/quicktime`
-- **Documents:** `application/pdf`
+- **이미지:** `image/png`, `image/jpeg`
+- **오디오:** `audio/mpeg`, `audio/wav`
+- **비디오:** `video/mp4`, `video/quicktime`
+- **문서:** `application/pdf`
 
-### GCS URL MIME Inference
+### GCS URL MIME 추론
 
-For Vertex AI, MIME types are inferred from file extensions:
+Vertex AI에서는 파일 확장자로 MIME type을 추론합니다.
 
 - `.png` → `image/png`
 - `.jpg` / `.jpeg` → `image/jpeg`
@@ -157,11 +157,11 @@ For Vertex AI, MIME types are inferred from file extensions:
 - `.mov` → `video/quicktime`
 - `.pdf` → `application/pdf`
 
-## Optional Parameters
+## 선택 파라미터
 
-| Parameter | Description | Maps to |
+| 파라미터 | 설명 | 매핑 대상 |
 |-----------|-------------|---------|
-| `dimensions` | Output embedding size | `outputDimensionality` |
+| `dimensions` | 출력 임베딩 크기 | `outputDimensionality` |
 
 ```python
 response = embedding(

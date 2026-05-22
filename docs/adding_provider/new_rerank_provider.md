@@ -1,10 +1,10 @@
-# Add Rerank Provider
+# Rerank Provider 추가하기
 
-LiteLLM **follows the Cohere Rerank API format** for all rerank providers. Here's how to add a new rerank provider:
+LiteLLM은 모든 rerank provider에 대해 **Cohere Rerank API 형식**을 따릅니다. 새 rerank provider를 추가하는 방법은 다음과 같습니다.
 
-## 1. Create a transformation.py file
+## 1. transformation.py 파일 만들기
 
-Create a config class named `<Provider><Endpoint>Config` that inherits from [`BaseRerankConfig`](https://github.com/BerriAI/litellm/blob/main/litellm/llms/base_llm/rerank/transformation.py):
+[`BaseRerankConfig`](https://github.com/BerriAI/litellm/blob/main/litellm/llms/base_llm/rerank/transformation.py)를 상속하는 `<Provider><Endpoint>Config` 이름의 config class를 만듭니다.
 
 ```python
 from litellm.types.rerank import OptionalRerankParams, RerankRequest, RerankResponse
@@ -27,8 +27,8 @@ class YourProviderRerankConfig(BaseRerankConfig):
 ```
 
 
-## 2. Register Your Provider
-Add your provider to `litellm.utils.get_provider_rerank_config()`:
+## 2. Provider 등록하기
+`litellm.utils.get_provider_rerank_config()`에 provider를 추가합니다.
 
 ```python
 elif litellm.LlmProviders.YOUR_PROVIDER == provider:
@@ -36,9 +36,9 @@ elif litellm.LlmProviders.YOUR_PROVIDER == provider:
 ```
 
 
-## 3. Add Provider to `rerank_api/main.py`
+## 3. `rerank_api/main.py`에 Provider 추가하기
 
-Add a code block to handle when your provider is called. Your provider should use the `base_llm_http_handler.rerank` method
+provider가 호출될 때 처리할 코드 블록을 추가합니다. 이 provider는 `base_llm_http_handler.rerank` 메서드를 사용해야 합니다.
 
 
 ```python
@@ -60,9 +60,9 @@ elif _custom_llm_provider == "your_provider":
     ...
 ```
 
-## 4. Add Tests
+## 4. 테스트 추가하기
 
-Add a test file to [`tests/llm_translation`](https://github.com/BerriAI/litellm/tree/main/tests/llm_translation)
+[`tests/llm_translation`](https://github.com/BerriAI/litellm/tree/main/tests/llm_translation)에 테스트 파일을 추가합니다.
 
 ```python
 def test_basic_rerank_cohere():
@@ -80,5 +80,5 @@ def test_basic_rerank_cohere():
 ```
 
 
-## Reference PRs
-- [Add Infinity Rerank](https://github.com/BerriAI/litellm/pull/7321)
+## 참고 PR
+- [Infinity Rerank 추가](https://github.com/BerriAI/litellm/pull/7321)

@@ -1,15 +1,15 @@
-# Gradio Chatbot + LiteLLM Tutorial
-Simple tutorial for integrating LiteLLM completion calls with streaming Gradio chatbot demos
+# Gradio 챗봇 + LiteLLM 튜토리얼 {#gradio-chatbot--litellm-tutorial}
+스트리밍 Gradio 챗봇 데모에 LiteLLM completion 호출을 통합하는 간단한 튜토리얼입니다.
 
-### Install & Import Dependencies
+### 종속성 설치 및 가져오기 {#install--import-dependencies}
 ```python
 !uv add gradio litellm
 import gradio
 import litellm
 ```
 
-### Define Inference Function
-Remember to set `model` and `api_base` as expected by the server hosting your LLM.
+### 추론 함수 정의 {#define-inference-function}
+LLM을 호스팅하는 서버에서 요구하는 값에 맞게 `model`과 `api_base`를 설정해야 합니다.
 ```python
 def inference(message, history):
     try:
@@ -33,7 +33,7 @@ def inference(message, history):
         yield f"An Error occurred please 'Clear' the error and try your question again"
 ```
 
-### Define Chat Interface
+### 채팅 인터페이스 정의 {#define-chat-interface}
 ```python
 gr.ChatInterface(
     inference,
@@ -51,12 +51,12 @@ gr.ChatInterface(
     theme=theme,
 ).queue().launch()
 ```
-### Launch Gradio App
-1. From command line: `python app.py` or `gradio app.py` (latter enables live deployment updates)
-2. Visit provided hyperlink in your browser.
-3. Enjoy prompt-agnostic interaction with remote LLM server.
+### Gradio 앱 실행 {#launch-gradio-app}
+1. 명령줄에서 `python app.py` 또는 `gradio app.py`를 실행합니다. 후자는 실시간 배포 업데이트를 활성화합니다.
+2. 브라우저에서 제공된 하이퍼링크로 이동합니다.
+3. 원격 LLM 서버와 프롬프트에 종속되지 않는 방식으로 상호작용합니다.
 
-### Recommended Extensions:
-* Add command line arguments to define target model & inference endpoints
+### 권장 확장 {#recommended-extensions}
+* 대상 모델 및 추론 엔드포인트를 정의할 수 있도록 명령줄 인수를 추가합니다.
 
-Credits to [ZQ](https://x.com/ZQ_Dev), for this tutorial.
+이 튜토리얼은 [ZQ](https://x.com/ZQ_Dev)에게 크레딧을 돌립니다.

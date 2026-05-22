@@ -1,8 +1,7 @@
-# Telemetry 
+# Telemetry
 
-There is no Telemetry on LiteLLM - no data is stored by us
+LiteLLM에는 Telemetry가 없습니다. 어떤 데이터도 LiteLLM 측에 저장되지 않습니다.
 
-## What is logged? 
+## 무엇이 로깅되나요?
 
-NOTHING - no data is sent to LiteLLM Servers
-
+아무것도 로깅되지 않습니다. LiteLLM 서버로 전송되는 데이터가 없습니다.

@@ -1,23 +1,23 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Azure AI Search - Vector Store (Unified API)
+# Azure AI Search - Vector Store (통합 API)
 
-Use this to **search** Azure AI Search Vector Stores, with LiteLLM's unified `/chat/completions` API.
+LiteLLM의 통합 `/chat/completions` API로 Azure AI Search Vector Stores를 **검색**할 때 사용합니다.
 
-## Quick Start
+## 빠른 시작
 
-You need three things:
-1. An Azure AI Search service
-2. An embedding model (to convert your queries to vectors)
-3. A search index with vector fields
+다음 세 가지가 필요합니다.
+1. Azure AI Search 서비스
+2. 임베딩 모델(쿼리를 벡터로 변환)
+3. 벡터 필드가 있는 검색 인덱스
 
-## Usage
+## 사용법
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
 
-### Basic Search
+### 기본 검색
 
 ```python
 from litellm import vector_stores
@@ -45,7 +45,7 @@ response = vector_stores.search(
 print(response)
 ```
 
-### Async Search
+### 비동기 검색
 
 ```python
 from litellm import vector_stores
@@ -66,7 +66,7 @@ response = await vector_stores.asearch(
 print(response)
 ```
 
-### Advanced Options
+### 고급 옵션
 
 ```python
 from litellm import vector_stores
@@ -93,9 +93,9 @@ print(response)
 
 <TabItem value="proxy" label="PROXY">
 
-### Setup Config
+### 설정 구성
 
-Add this to your config.yaml:
+다음을 config.yaml에 추가합니다.
 
 ```yaml
 vector_store_registry:
@@ -111,13 +111,13 @@ vector_store_registry:
             api_version: "2025-09-01"
 ```
 
-### Start Proxy
+### 프록시 시작
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-### Search via API
+### API로 검색
 
 ```bash
 curl -X POST 'http://0.0.0.0:4000/v1/vector_stores/my-vector-index/search' \
@@ -131,30 +131,30 @@ curl -X POST 'http://0.0.0.0:4000/v1/vector_stores/my-vector-index/search' \
 </TabItem>
 </Tabs>
 
-## Required Parameters
+## 필수 파라미터
 
-| Parameter | Type | Description |
+| 파라미터 | 타입 | 설명 |
 |-----------|------|-------------|
-| `vector_store_id` | string | Your Azure AI Search index name |
-| `custom_llm_provider` | string | Set to `"azure_ai"` |
-| `azure_search_service_name` | string | Name of your Azure AI Search service |
-| `litellm_embedding_model` | string | Model to generate query embeddings (e.g., `"azure/text-embedding-3-large"`) |
-| `litellm_embedding_config` | dict | Config for the embedding model (api_base, api_key, api_version) |
-| `api_key` | string | Your Azure AI Search API key |
+| `vector_store_id` | string | Azure AI Search 인덱스 이름 |
+| `custom_llm_provider` | string | `"azure_ai"`로 설정합니다 |
+| `azure_search_service_name` | string | Azure AI Search 서비스 이름 |
+| `litellm_embedding_model` | string | 쿼리 임베딩을 생성할 모델(예: `"azure/text-embedding-3-large"`) |
+| `litellm_embedding_config` | dict | 임베딩 모델 설정(api_base, api_key, api_version) |
+| `api_key` | string | Azure AI Search API 키 |
 
-## Supported Features
+## 지원 기능
 
-| Feature | Status | Notes |
+| 기능 | 상태 | 참고 |
 |---------|--------|-------|
-| Logging | ✅ Supported | Full logging support available |
-| Guardrails | ❌ Not Yet Supported | Guardrails are not currently supported for vector stores |
-| Cost Tracking | ✅ Supported | Cost is $0 according to Azure |
-| Unified API | ✅ Supported | Call via OpenAI compatible `/v1/vector_stores/search` endpoint |
-| Passthrough | ❌ Not yet supported |  |
+| 로깅 | ✅ 지원됨 | 전체 로깅 지원 사용 가능 |
+| 가드레일 | ❌ 아직 지원되지 않음 | 현재 벡터 스토어에서는 가드레일을 지원하지 않습니다 |
+| 비용 추적 | ✅ 지원됨 | Azure 기준 비용은 $0입니다 |
+| 통합 API | ✅ 지원됨 | OpenAI 호환 `/v1/vector_stores/search` 엔드포인트로 호출합니다 |
+| Passthrough | ❌ 아직 지원되지 않음 |  |
 
-## Response Format
+## 응답 형식
 
-The response follows the standard LiteLLM vector store format:
+응답은 표준 LiteLLM 벡터 스토어 형식을 따릅니다.
 
 ```json
 {
@@ -179,20 +179,20 @@ The response follows the standard LiteLLM vector store format:
 }
 ```
 
-## How It Works
+## 작동 방식
 
-When you search:
+검색할 때의 흐름은 다음과 같습니다.
 
-1. LiteLLM converts your query to a vector using the embedding model you specified
-2. It sends the vector to Azure AI Search
-3. Azure AI Search finds the most similar documents in your index
-4. Results come back with similarity scores
+1. LiteLLM이 지정한 임베딩 모델을 사용해 쿼리를 벡터로 변환합니다
+2. 해당 벡터를 Azure AI Search로 전송합니다
+3. Azure AI Search가 인덱스에서 가장 유사한 문서를 찾습니다
+4. 결과가 유사도 점수와 함께 반환됩니다
 
-The embedding model can be any model supported by LiteLLM - Azure OpenAI, OpenAI, Bedrock, etc.
+임베딩 모델은 Azure OpenAI, OpenAI, Bedrock 등 LiteLLM에서 지원하는 어떤 모델이든 사용할 수 있습니다.
 
-## Setting Up Your Azure AI Search Index
+## Azure AI Search 인덱스 설정
 
-Your index needs a vector field. Here's what that looks like:
+인덱스에는 벡터 필드가 필요합니다. 예시는 다음과 같습니다.
 
 ```json
 {
@@ -218,28 +218,27 @@ Your index needs a vector field. Here's what that looks like:
 }
 ```
 
-The vector dimensions must match your embedding model. For example:
-- `text-embedding-3-large`: 1536 dimensions
-- `text-embedding-3-small`: 1536 dimensions
-- `text-embedding-ada-002`: 1536 dimensions
+벡터 차원은 임베딩 모델과 일치해야 합니다. 예를 들면 다음과 같습니다.
+- `text-embedding-3-large`: 1536차원
+- `text-embedding-3-small`: 1536차원
+- `text-embedding-ada-002`: 1536차원
 
 
-## Common Issues
+## 자주 발생하는 문제
 
 **"Failed to generate embedding for query"**
 
-Your embedding model config is wrong. Check:
-- `litellm_embedding_config` has the right api_base and api_key
-- The embedding model name is correct
-- Your credentials work
+임베딩 모델 설정이 잘못되었습니다. 다음을 확인하세요.
+- `litellm_embedding_config`에 올바른 api_base와 api_key가 있는지
+- 임베딩 모델 이름이 올바른지
+- 자격 증명이 정상적으로 동작하는지
 
 **"Index not found"**
 
-The `vector_store_id` doesn't match any index in your search service. Check:
-- The index name is correct
-- You're using the right search service name
+`vector_store_id`가 검색 서비스의 어떤 인덱스와도 일치하지 않습니다. 다음을 확인하세요.
+- 인덱스 이름이 올바른지
+- 올바른 검색 서비스 이름을 사용 중인지
 
 **"Field 'contentVector' not found"**
 
-Your index uses a different vector field name. Pass it via `azure_search_vector_field`.
-
+인덱스에서 다른 벡터 필드 이름을 사용하고 있습니다. `azure_search_vector_field`로 전달하세요.

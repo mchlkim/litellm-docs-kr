@@ -1,18 +1,18 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Bedrock Imported Models
+# Bedrock Imported 모델
 
-Bedrock Imported Models (Deepseek, Deepseek R1, Qwen, OpenAI-compatible models)
+Bedrock Imported 모델 (Deepseek, Deepseek R1, Qwen, OpenAI 호환 모델)
 
 ### Deepseek R1
 
-This is a separate route, as the chat template is different.
+채팅 템플릿이 다르기 때문에 별도 라우트입니다.
 
-| Property | Details |
+| 속성 | 세부 정보 |
 |----------|---------|
-| Provider Route | `bedrock/deepseek_r1/{model_arn}` |
-| Provider Documentation | [Bedrock Imported Models](https://docs.aws.amazon.com/bedrock/latest/userguide/model-customization-import-model.html), [Deepseek Bedrock Imported Model](https://aws.amazon.com/blogs/machine-learning/deploy-deepseek-r1-distilled-llama-models-with-amazon-bedrock-custom-model-import/) |
+| 제공자 라우트 | `bedrock/deepseek_r1/{model_arn}` |
+| 제공자 문서 | [Bedrock Imported 모델](https://docs.aws.amazon.com/bedrock/latest/userguide/model-customization-import-model.html), [Deepseek Bedrock Imported 모델](https://aws.amazon.com/blogs/machine-learning/deploy-deepseek-r1-distilled-llama-models-with-amazon-bedrock-custom-model-import/) |
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -32,7 +32,7 @@ response = completion(
 <TabItem value="proxy" label="Proxy">
 
 
-**1. Add to config**
+**1. 설정에 추가**
 
 ```yaml
 model_list:
@@ -42,7 +42,7 @@ model_list:
 
 ```
 
-**2. Start proxy**
+**2. 프록시 시작**
 
 ```bash
 litellm --config /path/to/config.yaml
@@ -50,7 +50,7 @@ litellm --config /path/to/config.yaml
 # RUNNING at http://0.0.0.0:4000
 ```
 
-**3. Test it!**
+**3. 테스트**
 
 ```bash
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -71,16 +71,16 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 </Tabs>
 
 
-### Deepseek (not R1)
+### Deepseek (R1 아님)
 
-| Property | Details |
+| 속성 | 세부 정보 |
 |----------|---------|
-| Provider Route | `bedrock/llama/{model_arn}` |
-| Provider Documentation | [Bedrock Imported Models](https://docs.aws.amazon.com/bedrock/latest/userguide/model-customization-import-model.html), [Deepseek Bedrock Imported Model](https://aws.amazon.com/blogs/machine-learning/deploy-deepseek-r1-distilled-llama-models-with-amazon-bedrock-custom-model-import/) |
+| 제공자 라우트 | `bedrock/llama/{model_arn}` |
+| 제공자 문서 | [Bedrock Imported 모델](https://docs.aws.amazon.com/bedrock/latest/userguide/model-customization-import-model.html), [Deepseek Bedrock Imported 모델](https://aws.amazon.com/blogs/machine-learning/deploy-deepseek-r1-distilled-llama-models-with-amazon-bedrock-custom-model-import/) |
 
 
 
-Use this route to call Bedrock Imported Models that follow the `llama` Invoke Request / Response spec
+`llama` Invoke Request / Response 사양을 따르는 Bedrock Imported 모델을 호출할 때 이 라우트를 사용하세요.
 
 
 <Tabs>
@@ -101,7 +101,7 @@ response = completion(
 <TabItem value="proxy" label="Proxy">
 
 
-**1. Add to config**
+**1. 설정에 추가**
 
 ```yaml
 model_list:
@@ -111,7 +111,7 @@ model_list:
 
 ```
 
-**2. Start proxy**
+**2. 프록시 시작**
 
 ```bash
 litellm --config /path/to/config.yaml
@@ -119,7 +119,7 @@ litellm --config /path/to/config.yaml
 # RUNNING at http://0.0.0.0:4000
 ```
 
-**3. Test it!**
+**3. 테스트**
 
 ```bash
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -139,12 +139,12 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 </TabItem>
 </Tabs>
 
-### Qwen3 Imported Models
+### Qwen3 Imported 모델
 
-| Property | Details |
+| 속성 | 세부 정보 |
 |----------|---------|
-| Provider Route | `bedrock/qwen3/{model_arn}` |
-| Provider Documentation | [Bedrock Imported Models](https://docs.aws.amazon.com/bedrock/latest/userguide/model-customization-import-model.html), [Qwen3 Models](https://aws.amazon.com/about-aws/whats-new/2025/09/qwen3-models-fully-managed-amazon-bedrock/) |
+| 제공자 라우트 | `bedrock/qwen3/{model_arn}` |
+| 제공자 문서 | [Bedrock Imported 모델](https://docs.aws.amazon.com/bedrock/latest/userguide/model-customization-import-model.html), [Qwen3 모델](https://aws.amazon.com/about-aws/whats-new/2025/09/qwen3-models-fully-managed-amazon-bedrock/) |
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -165,7 +165,7 @@ response = completion(
 
 <TabItem value="proxy" label="Proxy">
 
-**1. Add to config**
+**1. 설정에 추가**
 
 ```yaml
 model_list:
@@ -175,7 +175,7 @@ model_list:
 
 ```
 
-**2. Start proxy**
+**2. 프록시 시작**
 
 ```bash
 litellm --config /path/to/config.yaml
@@ -183,7 +183,7 @@ litellm --config /path/to/config.yaml
 # RUNNING at http://0.0.0.0:4000
 ```
 
-**3. Test it!**
+**3. 테스트**
 
 ```bash
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -203,13 +203,13 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 </TabItem>
 </Tabs>
 
-### Qwen2 Imported Models
+### Qwen2 Imported 모델
 
-| Property | Details |
+| 속성 | 세부 정보 |
 |----------|---------|
-| Provider Route | `bedrock/qwen2/{model_arn}` |
-| Provider Documentation | [Bedrock Imported Models](https://docs.aws.amazon.com/bedrock/latest/userguide/model-customization-import-model.html) |
-| Note | Qwen2 and Qwen3 architectures are mostly similar. The main difference is in the response format: Qwen2 uses "text" field while Qwen3 uses "generation" field. |
+| 제공자 라우트 | `bedrock/qwen2/{model_arn}` |
+| 제공자 문서 | [Bedrock Imported 모델](https://docs.aws.amazon.com/bedrock/latest/userguide/model-customization-import-model.html) |
+| 참고 | Qwen2와 Qwen3 아키텍처는 대부분 유사합니다. 주요 차이는 응답 형식에 있습니다. Qwen2는 "text" 필드를 사용하고 Qwen3는 "generation" 필드를 사용합니다. |
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -230,7 +230,7 @@ response = completion(
 
 <TabItem value="proxy" label="Proxy">
 
-**1. Add to config**
+**1. 설정에 추가**
 
 ```yaml
 model_list:
@@ -240,7 +240,7 @@ model_list:
 
 ```
 
-**2. Start proxy**
+**2. 프록시 시작**
 
 ```bash
 litellm --config /path/to/config.yaml
@@ -248,7 +248,7 @@ litellm --config /path/to/config.yaml
 # RUNNING at http://0.0.0.0:4000
 ```
 
-**3. Test it!**
+**3. 테스트**
 
 ```bash
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -268,19 +268,19 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 </TabItem>
 </Tabs>
 
-### OpenAI-Compatible Imported Models (Qwen 2.5 VL, etc.)
+### OpenAI 호환 Imported 모델 (Qwen 2.5 VL 등)
 
-Use this route for Bedrock imported models that follow the **OpenAI Chat Completions API spec**. This includes models like Qwen 2.5 VL that accept OpenAI-formatted messages with support for vision (images), tool calling, and other OpenAI features.
+**OpenAI Chat Completions API 사양**을 따르는 Bedrock Imported 모델에는 이 라우트를 사용하세요. 여기에는 비전(이미지), 도구 호출 및 기타 OpenAI 기능을 지원하는 OpenAI 형식 메시지를 받는 Qwen 2.5 VL 같은 모델이 포함됩니다.
 
-| Property | Details |
+| 속성 | 세부 정보 |
 |----------|---------|
-| Provider Route | `bedrock/openai/{model_arn}` |
-| Provider Documentation | [Bedrock Imported Models](https://docs.aws.amazon.com/bedrock/latest/userguide/model-customization-import-model.html) |
-| Supported Features | Vision (images), tool calling, streaming, system messages |
+| 제공자 라우트 | `bedrock/openai/{model_arn}` |
+| 제공자 문서 | [Bedrock Imported 모델](https://docs.aws.amazon.com/bedrock/latest/userguide/model-customization-import-model.html) |
+| 지원 기능 | 비전(이미지), 도구 호출, 스트리밍, 시스템 메시지 |
 
-#### LiteLLMSDK Usage
+#### LiteLLM SDK 사용법
 
-**Basic Usage**
+**기본 사용법**
 
 ```python
 from litellm import completion
@@ -293,7 +293,7 @@ response = completion(
 )
 ```
 
-**With Vision (Images)**
+**비전(이미지) 사용**
 
 ```python
 import base64
@@ -326,7 +326,7 @@ response = completion(
 )
 ```
 
-**Comparing Multiple Images**
+**여러 이미지 비교**
 
 ```python
 import base64
@@ -365,9 +365,9 @@ response = completion(
 )
 ```
 
-#### LiteLLM Proxy Usage (AI Gateway)
+#### LiteLLM Proxy 사용법 (AI Gateway)
 
-**1. Add to config**
+**1. 설정에 추가**
 
 ```yaml
 model_list:
@@ -376,7 +376,7 @@ model_list:
         model: bedrock/openai/arn:aws:bedrock:us-east-1:046319184608:imported-model/0m2lasirsp6z
 ```
 
-**2. Start proxy**
+**2. 프록시 시작**
 
 ```bash
 litellm --config /path/to/config.yaml
@@ -384,9 +384,9 @@ litellm --config /path/to/config.yaml
 # RUNNING at http://0.0.0.0:4000
 ```
 
-**3. Test it!**
+**3. 테스트**
 
-Basic text request:
+기본 텍스트 요청:
 
 ```bash
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -404,7 +404,7 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
         }'
 ```
 
-With vision (image):
+비전(이미지) 사용:
 
 ```bash
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -433,25 +433,25 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
         }'
 ```
 
-### Moonshot Kimi K2 Thinking
+### Moonshot Kimi K2 Thinking 모델
 
-Moonshot AI's Kimi K2 Thinking model is now available on Amazon Bedrock. This model features advanced reasoning capabilities with automatic reasoning content extraction.
+Moonshot AI의 Kimi K2 Thinking 모델을 이제 Amazon Bedrock에서 사용할 수 있습니다. 이 모델은 추론 콘텐츠 자동 추출을 포함한 고급 추론 기능을 제공합니다.
 
-| Property | Details |
+| 속성 | 세부 정보 |
 |----------|---------|
-| Provider Route | `bedrock/moonshot.kimi-k2-thinking`, `bedrock/invoke/moonshot.kimi-k2-thinking` |
-| Provider Documentation | [AWS Bedrock Moonshot Announcement ↗](https://aws.amazon.com/about-aws/whats-new/2025/12/amazon-bedrock-fully-managed-open-weight-models/) |
-| Supported Parameters | `temperature`, `max_tokens`, `top_p`, `stream`, `tools`, `tool_choice` |
-| Special Features | Reasoning content extraction, Tool calling |
+| 제공자 라우트 | `bedrock/moonshot.kimi-k2-thinking`, `bedrock/invoke/moonshot.kimi-k2-thinking` |
+| 제공자 문서 | [AWS Bedrock Moonshot 발표 ↗](https://aws.amazon.com/about-aws/whats-new/2025/12/amazon-bedrock-fully-managed-open-weight-models/) |
+| 지원 파라미터 | `temperature`, `max_tokens`, `top_p`, `stream`, `tools`, `tool_choice` |
+| 특수 기능 | 추론 콘텐츠 추출, 도구 호출 |
 
-#### Supported Features
+#### 지원 기능
 
-- **Reasoning Content Extraction**: Automatically extracts `<reasoning>` tags and returns them as `reasoning_content` (similar to OpenAI's o1 models)
-- **Tool Calling**: Full support for function/tool calling with tool responses
-- **Streaming**: Both streaming and non-streaming responses
-- **System Messages**: System message support
+- **추론 콘텐츠 추출**: `<reasoning>` 태그를 자동으로 추출하여 `reasoning_content`로 반환합니다(OpenAI의 o1 모델과 유사).
+- **도구 호출**: 도구 응답을 포함한 함수/도구 호출을 완전히 지원합니다.
+- **스트리밍**: 스트리밍 및 비스트리밍 응답을 모두 지원합니다.
+- **시스템 메시지**: 시스템 메시지를 지원합니다.
 
-#### Basic Usage
+#### 기본 사용법
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -484,7 +484,7 @@ if response.choices[0].message.reasoning_content:
 </TabItem>
 <TabItem value="proxy" label="Proxy">
 
-**1. Add to config**
+**1. 설정에 추가**
 
 ```yaml title="config.yaml" showLineNumbers
 model_list:
@@ -496,7 +496,7 @@ model_list:
       aws_region_name: us-west-2
 ```
 
-**2. Start proxy**
+**2. 프록시 시작**
 
 ```bash title="Start LiteLLM Proxy" showLineNumbers
 litellm --config /path/to/config.yaml
@@ -504,7 +504,7 @@ litellm --config /path/to/config.yaml
 # RUNNING at http://0.0.0.0:4000
 ```
 
-**3. Test it!**
+**3. 테스트**
 
 ```bash title="Test Kimi K2 via Proxy" showLineNumbers
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -526,7 +526,7 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 </TabItem>
 </Tabs>
 
-#### Tool Calling Example
+#### 도구 호출 예제
 
 ```python title="Kimi K2 with Tool Calling" showLineNumbers
 from litellm import completion
@@ -569,7 +569,7 @@ if response.choices[0].message.tool_calls:
     print(f"Arguments: {tool_call.function.arguments}")
 ```
 
-#### Streaming Example
+#### 스트리밍 예제
 
 ```python title="Kimi K2 Streaming" showLineNumbers
 from litellm import completion
@@ -597,14 +597,14 @@ for chunk in response:
         print(f"\n[Reasoning: {chunk.choices[0].delta.reasoning_content}]")
 ```
 
-#### Supported Parameters
+#### 지원 파라미터
 
-| Parameter | Type | Description | Supported |
+| 파라미터 | 유형 | 설명 | 지원 여부 |
 |-----------|------|-------------|-----------|
-| `temperature` | float (0-1) | Controls randomness in output | ✅ |
-| `max_tokens` | integer | Maximum tokens to generate | ✅ |
-| `top_p` | float | Nucleus sampling parameter | ✅ |
-| `stream` | boolean | Enable streaming responses | ✅ |
-| `tools` | array | Tool/function definitions | ✅ |
-| `tool_choice` | string/object | Tool choice specification | ✅ |
-| `stop` | array | Stop sequences | ❌ (Not supported on Bedrock) |
+| `temperature` | float (0-1) | 출력의 무작위성을 제어합니다. | ✅ |
+| `max_tokens` | integer | 생성할 최대 토큰 수입니다. | ✅ |
+| `top_p` | float | 뉴클리어스 샘플링 파라미터입니다. | ✅ |
+| `stream` | boolean | 스트리밍 응답을 활성화합니다. | ✅ |
+| `tools` | array | 도구/함수 정의입니다. | ✅ |
+| `tool_choice` | string/object | 도구 선택 사양입니다. | ✅ |
+| `stop` | array | 중지 시퀀스입니다. | ❌ (Bedrock에서 지원되지 않음) |

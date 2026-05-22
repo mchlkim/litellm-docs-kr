@@ -3,22 +3,22 @@ import TabItem from '@theme/TabItem';
 
 # /guardrails/apply_guardrail
 
-Use this endpoint to directly call a guardrail configured on your LiteLLM instance. This is useful when you have services that need to directly call a guardrail.
+이 엔드포인트를 사용하면 LiteLLM 인스턴스에 설정된 guardrail을 직접 호출할 수 있습니다. guardrail을 직접 호출해야 하는 서비스가 있을 때 유용합니다.
 
-## Supported Guardrail Types
+## 지원되는 Guardrail 유형
 
-This endpoint supports various guardrail types including:
-- **Presidio** - PII detection and masking
-- **Bedrock** - AWS Bedrock guardrails for content moderation
-- **Lakera** - AI safety guardrails
-- **PANW Prisma AIRS** - Threat detection, DLP, and policy enforcement
-- **Custom guardrails** - User-defined guardrails
+이 엔드포인트는 다음을 포함한 다양한 guardrail 유형을 지원합니다.
+- **Presidio** - PII 감지 및 마스킹
+- **Bedrock** - 콘텐츠 조정을 위한 AWS Bedrock guardrails
+- **Lakera** - AI 안전 guardrails
+- **PANW Prisma AIRS** - 위협 감지, DLP 및 정책 적용
+- **Custom guardrails** - 사용자 정의 guardrails
 
-## Configuration
+## 설정
 
-### Bedrock Guardrail Configuration
+### Bedrock Guardrail 설정
 
-To use Bedrock guardrails with the apply_guardrail endpoint, configure your guardrail in your LiteLLM config.yaml:
+apply_guardrail 엔드포인트에서 Bedrock guardrails를 사용하려면 LiteLLM config.yaml에 guardrail을 설정하세요.
 
 ```yaml
 guardrails:
@@ -33,22 +33,22 @@ guardrails:
       default_on: true
 ```
 
-**Required AWS Setup:**
-1. Create a Bedrock guardrail in AWS Console
-2. Get the guardrail ID and version
-3. Ensure your AWS credentials have Bedrock permissions
-4. Configure the guardrail in your LiteLLM config 
+**필수 AWS 설정:**
+1. AWS Console에서 Bedrock guardrail을 생성합니다.
+2. guardrail ID와 버전을 가져옵니다.
+3. AWS credentials에 Bedrock 권한이 있는지 확인합니다.
+4. LiteLLM config에 guardrail을 설정합니다.
 
 
-## Usage
+## 사용법
 ---
 
 <Tabs>
 <TabItem value="presidio" label="Presidio PII Guardrail" default>
 
-In this example `mask_pii` is a Presidio guardrail configured on LiteLLM.
+이 예제에서 `mask_pii`는 LiteLLM에 설정된 Presidio guardrail입니다.
 
-```bash showLineNumbers title="Example calling the endpoint"
+```bash showLineNumbers title="엔드포인트 호출 예제"
 curl -X POST 'http://localhost:4000/guardrails/apply_guardrail' \
 -H 'Content-Type: application/json' \
 -H 'Authorization: Bearer your-api-key' \
@@ -63,9 +63,9 @@ curl -X POST 'http://localhost:4000/guardrails/apply_guardrail' \
 </TabItem>
 <TabItem value="bedrock" label="Bedrock Guardrail">
 
-In this example `bedrock-content-guard` is a Bedrock guardrail configured on LiteLLM.
+이 예제에서 `bedrock-content-guard`는 LiteLLM에 설정된 Bedrock guardrail입니다.
 
-```bash showLineNumbers title="Example calling the endpoint"
+```bash showLineNumbers title="엔드포인트 호출 예제"
 curl -X POST 'http://localhost:4000/guardrails/apply_guardrail' \
 -H 'Content-Type: application/json' \
 -H 'Authorization: Bearer your-api-key' \
@@ -76,18 +76,18 @@ curl -X POST 'http://localhost:4000/guardrails/apply_guardrail' \
 }'
 ```
 
-**Note**: For Bedrock guardrails, the `entities` parameter is not used as Bedrock handles content moderation based on its own policies.
+**참고**: Bedrock guardrails에서는 Bedrock이 자체 정책에 따라 콘텐츠 조정을 처리하므로 `entities` 파라미터를 사용하지 않습니다.
 
 </TabItem>
 </Tabs>
 
 
-## Request Format
+## 요청 형식
 ---
 
-The request body should follow the ApplyGuardrailRequest format.
+요청 본문은 ApplyGuardrailRequest 형식을 따라야 합니다.
 
-#### Example Request Body
+#### 예제 요청 본문
 
 ```json
 {
@@ -98,27 +98,27 @@ The request body should follow the ApplyGuardrailRequest format.
 }
 ```
 
-#### Required Fields
+#### 필수 필드
 - **guardrail_name** (string):  
-  The identifier for the guardrail to apply (e.g., "mask_pii").
+  적용할 guardrail의 식별자입니다(예: "mask_pii").
 - **text** (string):  
-  The input text to process through the guardrail.
+  guardrail을 통해 처리할 입력 텍스트입니다.
 
-#### Optional Fields
+#### 선택 필드
 - **language** (string):  
-  The language of the input text (e.g., "en" for English).
-- **entities** (array of strings):  
-  Specific entities to process or filter (e.g., ["NAME", "EMAIL"]).
+  입력 텍스트의 언어입니다(예: 영어의 경우 "en").
+- **entities** (*string array*):  
+  처리하거나 필터링할 특정 entities입니다(예: ["NAME", "EMAIL"]).
 
-## Response Format
+## 응답 형식
 ---
 
-The response will contain the processed text after applying the guardrail.
+응답에는 guardrail을 적용한 뒤 처리된 텍스트가 포함됩니다.
 
-#### Example Response
+#### 예제 응답
 
 <Tabs>
-<TabItem value="presidio" label="Presidio Response" default>
+<TabItem value="presidio" label="Presidio 응답" default>
 
 ```json
 {
@@ -127,7 +127,7 @@ The response will contain the processed text after applying the guardrail.
 ```
 
 </TabItem>
-<TabItem value="bedrock" label="Bedrock Response">
+<TabItem value="bedrock" label="Bedrock 응답">
 
 ```json
 {
@@ -135,18 +135,18 @@ The response will contain the processed text after applying the guardrail.
 }
 ```
 
-**Note**: If Bedrock guardrail blocks the content, the endpoint will return an error with the blocking reason.
+**참고**: Bedrock guardrail이 콘텐츠를 차단하면 엔드포인트는 차단 사유와 함께 오류를 반환합니다.
 
 </TabItem>
 </Tabs>
 
-#### Response Fields
+#### 응답 필드
 - **response_text** (string):  
-  The text after applying the guardrail.
+  guardrail을 적용한 뒤의 텍스트입니다.
 
-#### Error Responses
+#### 오류 응답
 
-If a guardrail blocks content (e.g., Bedrock guardrail), the endpoint will return an error:
+guardrail이 콘텐츠를 차단하면(예: Bedrock guardrail) 엔드포인트는 오류를 반환합니다.
 
 ```json
 {

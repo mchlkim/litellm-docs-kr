@@ -1,5 +1,5 @@
 ---
-title: v1.65.0 - Team Model Add - update
+title: v1.65.0 - 팀 모델 추가 - 업데이트
 slug: v1.65.0
 date: 2025-03-28T10:00:00
 authors:
@@ -17,18 +17,18 @@ hide_table_of_contents: false
 
 import Image from '@theme/IdealImage';
 
-v1.65.0 updates the `/model/new` endpoint to prevent non-team admins from creating team models.
+v1.65.0에서는 팀 관리자가 아닌 사용자가 팀 모델을 생성하지 못하도록 `/model/new` 엔드포인트를 업데이트했습니다.
 
-This means that only proxy admins or team admins can create team models.
+즉, 프록시 관리자 또는 팀 관리자만 팀 모델을 생성할 수 있습니다.
 
-## Additional Changes
+## 추가 변경 사항 {#additional-changes}
 
-- Allows team admins to call `/model/update` to update team models.
-- Allows team admins to call `/model/delete` to delete team models.
-- Introduces new `user_models_only` param to `/v2/model/info` - only return models added by this user.
+- 팀 관리자가 `/model/update`를 호출해 팀 모델을 업데이트할 수 있습니다.
+- 팀 관리자가 `/model/delete`를 호출해 팀 모델을 삭제할 수 있습니다.
+- `/v2/model/info`에 새로운 `user_models_only` 매개변수를 도입했습니다. 이 사용자가 추가한 모델만 반환합니다.
 
 
-These changes enable team admins to add and manage models for their team on the LiteLLM UI + API.
+이 변경으로 팀 관리자는 LiteLLM UI와 API에서 자신의 팀용 모델을 추가하고 관리할 수 있습니다.
 
 
 <Image img={require('../../img/release_notes/team_model_add.png')} />

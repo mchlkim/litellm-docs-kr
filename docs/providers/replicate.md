@@ -3,21 +3,21 @@ import TabItem from '@theme/TabItem';
 
 # Replicate
 
-LiteLLM supports all models on Replicate
+LiteLLM은 Replicate의 모든 모델을 지원합니다.
 
 
-## Usage
+## 사용법
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
 
-### API KEYS
+### API 키
 ```python
 import os 
 os.environ["REPLICATE_API_KEY"] = ""
 ```
 
-### Example Call
+### 호출 예제
 
 ```python
 from litellm import completion
@@ -35,7 +35,7 @@ response = completion(
 </TabItem>
 <TabItem value="proxy" label="PROXY">
 
-1. Add models to your config.yaml
+1. `config.yaml`에 모델을 추가합니다.
 
   ```yaml
   model_list:
@@ -47,13 +47,13 @@ response = completion(
 
 
 
-2. Start the proxy 
+2. 프록시 시작 
 
   ```bash
   $ litellm --config /path/to/config.yaml --debug
   ```
 
-3. Send Request to LiteLLM Proxy Server
+3. LiteLLM 프록시 서버로 요청을 보냅니다.
 
   <Tabs>
 
@@ -110,9 +110,9 @@ response = completion(
   </Tabs>
 
 
-### Expected Replicate Call 
+### 예상 Replicate 호출
 
-This is the call litellm will make to replicate, from the above example: 
+위 예제에서 litellm이 replicate로 보내는 호출은 다음과 같습니다.
 
 ```bash
 
@@ -127,11 +127,11 @@ https://api.replicate.com/v1/models/meta/meta-llama-3-8b-instruct \
 
 </Tabs>
 
-## Advanced Usage - Prompt Formatting 
+## 고급 사용법 - 프롬프트 형식 지정
 
-LiteLLM has prompt template mappings for all `meta-llama` llama3 instruct models. [**See Code**](https://github.com/BerriAI/litellm/blob/4f46b4c3975cd0f72b8c5acb2cb429d23580c18a/litellm/llms/prompt_templates/factory.py#L1360)
+LiteLLM에는 모든 `meta-llama` Llama 3 Instruct 모델에 대한 프롬프트 템플릿 매핑이 있습니다. [**코드 보기**](https://github.com/BerriAI/litellm/blob/4f46b4c3975cd0f72b8c5acb2cb429d23580c18a/litellm/llms/prompt_templates/factory.py#L1360)
 
-To apply a custom prompt template: 
+사용자 지정 프롬프트 템플릿을 적용하려면 다음과 같이 설정합니다.
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -193,9 +193,9 @@ model_list:
 
 </Tabs>
 
-## Advanced Usage - Calling Replicate Deployments
-Calling a [deployed replicate LLM](https://replicate.com/deployments)
-Add the `replicate/deployments/` prefix to your model, so litellm will call the `deployments` endpoint. This will call `ishaan-jaff/ishaan-mistral` deployment on replicate
+## 고급 사용법 - Replicate 배포 호출
+[배포된 Replicate LLM](https://replicate.com/deployments)을 호출합니다.
+모델에 `replicate/deployments/` 접두사를 추가하면 LiteLLM이 `deployments` 엔드포인트를 호출합니다. 아래 예시는 Replicate의 `ishaan-jaff/ishaan-mistral` 배포를 호출합니다.
 
 ```python
 response = completion(
@@ -204,31 +204,31 @@ response = completion(
 )
 ```
 
-:::warning Replicate Cold Boots
+:::warning Replicate 콜드 부팅
 
-Replicate responses can take 3-5 mins due to replicate cold boots, if you're trying to debug try making the request with `litellm.set_verbose=True`. [More info on replicate cold boots](https://replicate.com/docs/how-does-replicate-work#cold-boots)
+Replicate 콜드 부팅으로 인해 Replicate 응답에는 3~5분이 걸릴 수 있습니다. 디버깅 중이라면 `litellm.set_verbose=True`로 요청해 보세요. [Replicate 콜드 부팅에 대해 더 보기](https://replicate.com/docs/how-does-replicate-work#cold-boots)
 
 :::
 
-## Replicate Models
-liteLLM supports all replicate LLMs
+## Replicate 모델
+LiteLLM은 모든 Replicate LLM을 지원합니다.
 
-For replicate models ensure to add a `replicate/` prefix to the `model` arg. liteLLM detects it using this arg. 
+Replicate 모델의 경우 `model` 인수에 `replicate/` 접두사를 반드시 추가하세요. LiteLLM은 이 인수를 사용해 모델을 감지합니다.
 
-Below are examples on how to call replicate LLMs using liteLLM 
+다음은 LiteLLM으로 Replicate LLM을 호출하는 예제입니다.
 
-Model Name                  | Function Call                                                  | Required OS Variables                |
+모델 이름                  | 함수 호출                                                  | 필수 OS 변수                |
 -----------------------------|----------------------------------------------------------------|--------------------------------------|
- replicate/llama-2-70b-chat | `completion(model='replicate/llama-2-70b-chat:2796ee9483c3fd7aa2e171d38f4ca12251a30609463dcfd4cd76703f22e96cdf', messages)` | `os.environ['REPLICATE_API_KEY']`    |
- a16z-infra/llama-2-13b-chat| `completion(model='replicate/a16z-infra/llama-2-13b-chat:2a7f981751ec7fdf87b5b91ad4db53683a98082e9ff7bfd12c8cd5ea85980a52', messages)`| `os.environ['REPLICATE_API_KEY']`    |
- replicate/vicuna-13b  | `completion(model='replicate/vicuna-13b:6282abe6a492de4145d7bb601023762212f9ddbbe78278bd6771c8b3b2f2a13b', messages)` | `os.environ['REPLICATE_API_KEY']` |
- daanelson/flan-t5-large    | `completion(model='replicate/daanelson/flan-t5-large:ce962b3f6792a57074a601d3979db5839697add2e4e02696b3ced4c022d4767f', messages)`    | `os.environ['REPLICATE_API_KEY']`    |
- custom-llm    | `completion(model='replicate/custom-llm-version-id', messages)`    | `os.environ['REPLICATE_API_KEY']`    |
-  replicate deployment    | `completion(model='replicate/deployments/ishaan-jaff/ishaan-mistral', messages)`    | `os.environ['REPLICATE_API_KEY']`    |
+ `replicate/llama-2-70b-chat` | `completion(model='replicate/llama-2-70b-chat:2796ee9483c3fd7aa2e171d38f4ca12251a30609463dcfd4cd76703f22e96cdf', messages)` | `os.environ['REPLICATE_API_KEY']`    |
+ `a16z-infra/llama-2-13b-chat`| `completion(model='replicate/a16z-infra/llama-2-13b-chat:2a7f981751ec7fdf87b5b91ad4db53683a98082e9ff7bfd12c8cd5ea85980a52', messages)`| `os.environ['REPLICATE_API_KEY']`    |
+ `replicate/vicuna-13b`  | `completion(model='replicate/vicuna-13b:6282abe6a492de4145d7bb601023762212f9ddbbe78278bd6771c8b3b2f2a13b', messages)` | `os.environ['REPLICATE_API_KEY']` |
+ `daanelson/flan-t5-large`    | `completion(model='replicate/daanelson/flan-t5-large:ce962b3f6792a57074a601d3979db5839697add2e4e02696b3ced4c022d4767f', messages)`    | `os.environ['REPLICATE_API_KEY']`    |
+ `custom-llm`    | `completion(model='replicate/custom-llm-version-id', messages)`    | `os.environ['REPLICATE_API_KEY']`    |
+  Replicate 배포    | `completion(model='replicate/deployments/ishaan-jaff/ishaan-mistral', messages)`    | `os.environ['REPLICATE_API_KEY']`    |
 
 
-## Passing additional params - max_tokens, temperature 
-See all litellm.completion supported params [here](https://docs.litellm.ai/docs/completion/input)
+## 추가 매개변수 전달 - `max_tokens`, `temperature`
+`litellm.completion`에서 지원하는 모든 매개변수는 [여기](https://docs.litellm.ai/docs/completion/input)에서 확인하세요.
 
 ```python
 # !uv add litellm
@@ -246,7 +246,7 @@ response = completion(
 )
 ```
 
-**proxy**
+**프록시**
 
 ```yaml
   model_list:
@@ -258,10 +258,10 @@ response = completion(
         temperature: 0.5
 ```
 
-## Passings Replicate specific params
-Send params [not supported by `litellm.completion()`](https://docs.litellm.ai/docs/completion/input) but supported by Replicate by passing them to `litellm.completion`
+## Replicate 전용 매개변수 전달
+[`litellm.completion()`에서 지원하지 않지만](https://docs.litellm.ai/docs/completion/input) Replicate에서 지원하는 매개변수는 `litellm.completion`에 전달할 수 있습니다.
 
-Example `seed`, `min_tokens` are Replicate specific param
+예를 들어 `seed`, `min_tokens`는 Replicate 전용 매개변수입니다.
 
 ```python
 # !uv add litellm
@@ -280,7 +280,7 @@ response = completion(
 )
 ```
 
-**proxy**
+**프록시**
 
 ```yaml
   model_list:

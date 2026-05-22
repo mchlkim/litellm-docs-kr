@@ -3,31 +3,31 @@ import TabItem from '@theme/TabItem';
 
 # Web Fetch
 
-The web fetch tool allows LLMs to retrieve full content from specified web pages and PDF documents. This enables AI models to access real-time information from the internet and incorporate web content into their responses. 
+web fetch 도구를 사용하면 LLM이 지정된 웹페이지와 PDF 문서의 전체 콘텐츠를 가져올 수 있습니다. 이를 통해 AI 모델은 인터넷의 실시간 정보에 접근하고 웹 콘텐츠를 응답에 반영할 수 있습니다.
 
-## Web Fetch vs Web Search
+## Web Fetch와 Web Search 비교
 
-**Web Fetch** retrieves the full content from specific web pages that you provide URLs for, while **Web Search** performs internet searches to find relevant information based on your queries.
+**Web Fetch**는 사용자가 URL로 지정한 특정 웹페이지의 전체 콘텐츠를 가져옵니다. 반면 **Web Search**는 사용자의 질의를 기반으로 관련 정보를 찾기 위해 인터넷 검색을 수행합니다.
 
-| Feature | Web Fetch | Web Search |
+| 기능 | Web Fetch | Web Search |
 |---------|-----------|------------|
-| **Purpose** | Retrieve content from specific URLs | Search the internet for information |
-| **Input** | You provide exact URLs to fetch | You provide search queries/questions |
-| **Output** | Full page content from specified URLs | Search results with relevant information |
-| **Use Cases** | - Analyzing specific articles<br/>- Comparing content from known websites<br/>- Extracting data from particular pages | - Finding current news/events<br/>- Researching topics<br/>- Getting real-time information |
+| **목적** | 특정 URL의 콘텐츠 가져오기 | 정보를 찾기 위해 인터넷 검색 |
+| **입력** | 가져올 정확한 URL 제공 | 검색 질의/질문 제공 |
+| **출력** | 지정된 URL의 전체 페이지 콘텐츠 | 관련 정보가 포함된 검색 결과 |
+| **사용 사례** | - 특정 기사 분석<br/>- 알려진 웹사이트 콘텐츠 비교<br/>- 특정 페이지에서 데이터 추출 | - 최신 뉴스/이벤트 찾기<br/>- 주제 조사<br/>- 실시간 정보 확보 |
 
 
-**Example Web Fetch**: "Fetch the content from https://example.com/pricing and summarize it"  
-**Example Web Search**: "What are the latest AI developments this week?"
+**예제 Web Fetch**: "Fetch the content from https://example.com/pricing and summarize it"  
+**예제 Web Search**: "What are the latest AI developments this week?"
 
-**Supported Providers:**
+**지원 프로바이더:**
 - Anthropic API (`anthropic/`)
 
-**Supported Tool Types:**
-- `web_fetch_20250910` - Web content retrieval tool with usage limits, domain filtering, and citation support
+**지원 도구 타입:**
+- `web_fetch_20250910` - 사용량 제한, 도메인 필터링, citation 지원이 포함된 웹 콘텐츠 가져오기 도구
 
 
-## Quick Start
+## 빠른 시작
 
 ### LiteLLM Python SDK
 
@@ -64,7 +64,7 @@ print(response)
 
 ### LiteLLM Proxy
 
-1. Define web fetch models on config.yaml
+1. `config.yaml`에 web fetch 모델을 정의합니다.
 
 ```yaml
 model_list:
@@ -74,13 +74,13 @@ model_list:
       api_key: os.environ/ANTHROPIC_API_KEY
 ```
 
-2. Run proxy server
+2. Proxy server를 실행합니다.
 
 ```bash
 litellm --config config.yaml
 ```
 
-3. Test it using the OpenAI Python SDK
+3. OpenAI Python SDK로 테스트합니다.
 
 ```python
 import os 
@@ -111,9 +111,9 @@ response = client.chat.completions.create(
 print(response)
 ```
 
-## Supported Models
+## 지원 모델
 
-Web fetch is available on the following Anthropic API models:
+web fetch는 다음 Anthropic API 모델에서 사용할 수 있습니다.
 
 - `claude-opus-4-6` (Claude Opus 4.6)
 - `claude-sonnet-4-6` (Claude Sonnet 4.6)
@@ -124,16 +124,16 @@ Web fetch is available on the following Anthropic API models:
 - `claude-opus-4-20250514` (Claude Opus 4)
 - `claude-sonnet-4-20250514` (Claude Sonnet 4)
 - `claude-3-7-sonnet-20250219` (Claude Sonnet 3.7)
-- `claude-3-5-sonnet-latest` (Claude Sonnet 3.5 v2 - deprecated)
+- `claude-3-5-sonnet-latest` (Claude Sonnet 3.5 v2 - 지원 중단됨)
 - `claude-3-5-haiku-latest` (Claude Haiku 3.5)
 
 :::note
-The web fetch tool currently does not support websites dynamically rendered via JavaScript.
+web fetch 도구는 현재 JavaScript로 동적 렌더링되는 웹사이트를 지원하지 않습니다.
 :::
 
-## Usage Examples
+## 사용법 예제
 
-### Basic Web Content Retrieval
+### 기본 웹 콘텐츠 가져오기
 
 ```python
 import os 
@@ -165,7 +165,7 @@ response = completion(
 print(response)
 ```
 
-### Research and Analysis
+### 조사 및 분석
 
 ```python
 import os 
@@ -197,7 +197,7 @@ response = completion(
 print(response)
 ```
 
-### Content Comparison
+### 콘텐츠 비교
 
 ```python
 import os 
@@ -229,9 +229,9 @@ response = completion(
 print(response)
 ```
 
-## Advanced Usage with Multiple Tools
+## 여러 도구와 함께 쓰는 고급 사용법
 
-You can combine web fetch with other tools like computer use or text editor:
+web fetch는 computer use 또는 text editor 같은 다른 도구와 함께 사용할 수 있습니다.
 
 ```python
 import os 
@@ -267,11 +267,11 @@ response = completion(
 print(response)
 ```
 
-## Spec
+## 사양
 
 ### Web Fetch Tool (`web_fetch_20250910`)
 
-The web fetch tool supports the following parameters:
+web fetch 도구는 다음 파라미터를 지원합니다.
 
 ```json
 {
@@ -296,4 +296,3 @@ The web fetch tool supports the following parameters:
   "max_content_tokens": 100000
 }
 ```
-

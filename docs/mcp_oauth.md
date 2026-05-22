@@ -1,18 +1,18 @@
 # MCP OAuth
 
-LiteLLM supports two OAuth 2.0 flows for MCP servers:
+LiteLLM은 MCP 서버에 대해 세 가지 OAuth 2.0 흐름을 지원합니다.
 
-| Flow | Use Case | How It Works |
+| 흐름 | 사용 사례 | 동작 방식 |
 |------|----------|--------------|
-| **Interactive (PKCE)** | User-facing apps (Claude Code, Cursor) | Browser-based consent, per-user tokens |
-| **Machine-to-Machine (M2M)** | Backend services, CI/CD, automated agents | `client_credentials` grant, proxy-managed tokens |
-| **On-Behalf-Of (OBO)** | User-context tool calls to protected MCP servers | LiteLLM exchanges the caller token for a scoped MCP token. See [MCP OBO Auth](./mcp_obo_auth.md). |
+| **대화형(PKCE)** | 사용자 대상 앱(Claude Code, Cursor) | 브라우저 기반 동의, 사용자별 토큰 |
+| **머신 투 머신(M2M)** | 백엔드 서비스, CI/CD, 자동화 에이전트 | `client_credentials` grant, Proxy가 관리하는 토큰 |
+| **On-Behalf-Of(OBO)** | 보호된 MCP 서버에 대한 사용자 컨텍스트 도구 호출 | LiteLLM이 호출자 토큰을 범위가 제한된 MCP 토큰으로 교환합니다. [MCP OBO Auth](./mcp_obo_auth.md)를 참고하세요. |
 
-## Interactive OAuth (PKCE)
+## 대화형 OAuth (PKCE)
 
-For user-facing MCP clients (Claude Code, Cursor), LiteLLM supports the full OAuth 2.0 authorization code flow with PKCE.
+사용자 대상 MCP 클라이언트(Claude Code, Cursor)의 경우 LiteLLM은 PKCE를 사용하는 전체 OAuth 2.0 authorization code 흐름을 지원합니다.
 
-### Setup
+### 설정
 
 ```yaml title="config.yaml" showLineNumbers
 mcp_servers:
@@ -23,9 +23,9 @@ mcp_servers:
     client_secret: os.environ/GITHUB_OAUTH_CLIENT_SECRET
 ```
 
-[**See Claude Code Tutorial**](./tutorials/claude_responses_api#connecting-mcp-servers)
+[**Claude Code 튜토리얼 보기**](./tutorials/claude_responses_api#connecting-mcp-servers)
 
-### How It Works
+### 동작 방식
 
 ```mermaid
 sequenceDiagram
@@ -71,128 +71,70 @@ sequenceDiagram
     LiteLLM-->>Client: Return MCP response
 ```
 
-**Participants**
+**참여자**
 
-- **Client** -- The MCP-capable AI agent (e.g., Claude Code, Cursor, or another IDE/agent) that initiates OAuth discovery, authorization, and tool invocations on behalf of the user.
-- **LiteLLM Proxy** -- Mediates all OAuth discovery, registration, token exchange, and MCP traffic while protecting stored credentials.
-- **Authorization Server** -- Issues OAuth 2.0 tokens via dynamic client registration, PKCE authorization, and token endpoints.
-- **MCP Server (Resource Server)** -- The protected MCP endpoint that receives LiteLLM's authenticated JSON-RPC requests.
-- **User-Agent (Browser)** -- Temporarily involved so the end user can grant consent during the authorization step.
+- **Client** -- 사용자를 대신해 OAuth 검색, 권한 부여, 도구 호출을 시작하는 MCP 지원 AI 에이전트입니다. 예: Claude Code, Cursor, 기타 IDE/에이전트.
+- **LiteLLM Proxy** -- 저장된 자격 증명을 보호하면서 모든 OAuth 검색, 등록, 토큰 교환, MCP 트래픽을 중개합니다.
+- **Authorization Server** -- dynamic client registration, PKCE authorization, token endpoint를 통해 OAuth 2.0 토큰을 발급합니다.
+- **MCP Server (Resource Server)** -- LiteLLM의 인증된 JSON-RPC 요청을 받는 보호된 MCP endpoint입니다.
+- **User-Agent (Browser)** -- authorization 단계에서 최종 사용자가 동의할 수 있도록 일시적으로 관여합니다.
 
-**Flow Steps**
+**흐름 단계**
 
-1. **Resource Discovery**: The client fetches MCP resource metadata from LiteLLM's `.well-known/oauth-protected-resource` endpoint to understand scopes and capabilities.
-2. **Authorization Server Discovery**: The client retrieves the OAuth server metadata (token endpoint, authorization endpoint, supported PKCE methods) through LiteLLM's `.well-known/oauth-authorization-server` endpoint.
-3. **Dynamic Client Registration**: The client registers through LiteLLM, which forwards the request to the authorization server (RFC 7591). If the provider doesn't support dynamic registration, you can pre-store `client_id`/`client_secret` in LiteLLM (e.g., GitHub MCP) and the flow proceeds the same way.
-4. **User Authorization**: The client launches a browser session (with code challenge and resource hints). The user approves access, the authorization server sends the code through LiteLLM back to the client.
-5. **Token Exchange**: The client calls LiteLLM with the authorization code, code verifier, and resource. LiteLLM exchanges them with the authorization server and returns the issued access/refresh tokens.
-6. **MCP Invocation**: With a valid token, the client sends the MCP JSON-RPC request (plus LiteLLM API key) to LiteLLM, which forwards it to the MCP server and relays the tool response.
+1. **리소스 검색**: 클라이언트는 LiteLLM의 `.well-known/oauth-protected-resource` endpoint에서 MCP resource metadata를 가져와 scope와 capability를 파악합니다.
+2. **Authorization Server 검색**: 클라이언트는 LiteLLM의 `.well-known/oauth-authorization-server` endpoint를 통해 OAuth server metadata(token endpoint, authorization endpoint, 지원되는 PKCE method)를 가져옵니다.
+3. **Dynamic Client Registration**: 클라이언트는 LiteLLM을 통해 등록하고, LiteLLM은 요청을 authorization server(RFC 7591)로 전달합니다. provider가 dynamic registration을 지원하지 않으면 `client_id`/`client_secret`을 LiteLLM에 미리 저장할 수 있으며(예: GitHub MCP), 이후 흐름은 동일하게 진행됩니다.
+4. **사용자 권한 부여**: 클라이언트는 브라우저 세션을 시작합니다(code challenge와 resource hint 포함). 사용자가 접근을 승인하면 authorization server가 LiteLLM을 거쳐 클라이언트로 code를 보냅니다.
+5. **토큰 교환**: 클라이언트는 authorization code, code verifier, resource를 포함해 LiteLLM을 호출합니다. LiteLLM은 이를 authorization server와 교환하고 발급된 access/refresh token을 반환합니다.
+6. **MCP 호출**: 유효한 토큰이 있으면 클라이언트는 MCP JSON-RPC 요청과 LiteLLM API key를 LiteLLM으로 보냅니다. LiteLLM은 이를 MCP server로 전달하고 도구 응답을 다시 중계합니다.
 
-See the official [MCP Authorization Flow](https://modelcontextprotocol.io/specification/2025-06-18/basic/authorization#authorization-flow-steps) for additional reference.
+추가 참고 자료는 공식 [MCP Authorization Flow](https://modelcontextprotocol.io/specification/2025-06-18/basic/authorization#authorization-flow-steps)를 확인하세요.
 
-### Reverse proxy and ingress configuration {#reverse-proxy-and-ingress-configuration}
+## 머신 투 머신(M2M) 인증 {#machine-to-machine-m2m-authentication}
 
-If LiteLLM runs behind a TLS-terminating ingress (Kubernetes, ALB, nginx, Cloudflare, etc.), the proxy needs to know its public origin so the OAuth `authorize` endpoint can compare the browser-supplied `redirect_uri` (e.g. `https://llm.example.com/ui/mcp/oauth/callback`) against its own scheme + host + port. If the proxy resolves to its internal address (`http://<pod-ip>:4000`) the same-origin check fails and the **Connect** button on the MCP server page returns `400 Bad Request` with `{"detail":"invalid_request"}`.
+LiteLLM은 `client_credentials` grant를 사용해 OAuth2 토큰을 자동으로 가져오고, 캐시하고, 갱신합니다. 수동 토큰 관리는 필요하지 않습니다.
 
-The simplest and recommended fix is to set `PROXY_BASE_URL` to the exact origin users see in the address bar:
+### 설정
 
-```bash
-PROXY_BASE_URL=https://llm.example.com
-```
+M2M OAuth는 LiteLLM UI 또는 `config.yaml`로 설정할 수 있습니다.
 
-Rules for the value:
+### UI 설정
 
-- Full origin only: scheme + host (+ port if non-default).
-- No trailing slash, no path component.
-- Must match the address bar exactly. `https://llm.example.com` and `https://llm.example.com:443` are accepted as the same origin (the default port is normalized away), but `https://llm.example.com` will not match a browser running against `https://llm.example.com:8443`.
-
-When `PROXY_BASE_URL` is set, LiteLLM uses it directly and skips the `X-Forwarded-*` trust path described below.
-
-#### Origin resolution order
-
-For MCP OAuth endpoints, LiteLLM resolves the proxy's public origin in this order:
-
-1. **`PROXY_BASE_URL` env var** — used verbatim if set to a valid `http(s)` URL. Invalid values are ignored with a warning.
-2. **`X-Forwarded-Proto` / `X-Forwarded-Host` / `X-Forwarded-Port`** — only honored when **both** [`use_x_forwarded_for`](./proxy/config_settings#general_settings---reference) is `true` **and** the request peer's IP falls inside [`mcp_trusted_proxy_ranges`](./proxy/config_settings#general_settings---reference). If `use_x_forwarded_for` is enabled without `mcp_trusted_proxy_ranges`, the headers are not trusted (there is no way to distinguish a trusted reverse proxy from a direct attacker).
-3. **`request.base_url`** — the literal URL FastAPI sees on the request. For ingressed deployments this is typically `http://<internal-host>:4000` and will not match the browser origin.
-
-If you cannot or do not want to set `PROXY_BASE_URL`, configure the X-Forwarded path explicitly:
-
-```yaml title="config.yaml" showLineNumbers
-general_settings:
-  use_x_forwarded_for: true
-  mcp_trusted_proxy_ranges:
-    - "10.0.0.0/8"      # your ingress / load-balancer CIDR(s)
-```
-
-and verify your ingress sends `X-Forwarded-Proto`, `X-Forwarded-Host`, and (if non-default) `X-Forwarded-Port`. See [MCP OAuth troubleshooting](./mcp_troubleshoot#mcp-oauth-invalid-request) for the diagnostic curl.
-
-#### Allowing additional first-party redirect_uri origins {#allowing-additional-first-party-redirect_uri-origins}
-
-If a first-party OAuth client lives on a sister domain (for example, an internal web app on `app.example.com` registering against the MCP proxy on `llm.example.com`), set `MCP_TRUSTED_REDIRECT_ORIGINS` to allowlist its origin in addition to the proxy's own:
-
-```bash
-MCP_TRUSTED_REDIRECT_ORIGINS=app.example.com,*.tools.example.com
-```
-
-- Comma-separated list of `host` or `host:port` entries.
-- HTTPS only. The allowlist path rejects any non-`https` `redirect_uri`.
-- A `*.suffix` entry matches any strictly-deeper subdomain of `suffix` (`*.tools.example.com` matches `a.tools.example.com` but not `tools.example.com`).
-- Loopback (`localhost`, `127.0.0.0/8`, `::1`) is always accepted regardless of this setting.
-
-This is for first-party OAuth clients you control. For the standard ingress case, prefer `PROXY_BASE_URL`.
-
-#### Why the same-origin check exists
-
-The MCP proxy's `/v1/mcp/server/oauth/<server_id>/authorize` endpoint validates that the caller's `redirect_uri` shares scheme + host + port with the proxy's own public origin (or with one of the loopback / allowlisted entries above). The check exists to stop an attacker from phishing a logged-in admin into a link that bounces an authorization code — for an upstream OAuth-protected MCP server such as GitHub or Slack — through an attacker-controlled host. Same-origin (plus an explicit ops allowlist) is the threat-model-safe equivalent of the loopback-only rule used for native MCP clients.
-
-`PROXY_BASE_URL` is the right escape hatch for ingressed deployments because the operator is declaring the proxy's true public origin out of band, rather than asking the proxy to infer it from headers an attacker might be able to set. The check itself is not relaxed.
-
-## Machine-to-Machine (M2M) Auth
-
-LiteLLM automatically fetches, caches, and refreshes OAuth2 tokens using the `client_credentials` grant. No manual token management required.
-
-### Setup
-
-You can configure M2M OAuth via the LiteLLM UI or `config.yaml`.
-
-### UI Setup
-
-Navigate to the **MCP Servers** page and click **+ Add New MCP Server**.
+**MCP Servers** 페이지로 이동한 뒤 **+ Add New MCP Server**를 클릭합니다.
 
 ![](https://colony-recorder.s3.amazonaws.com/files/2026-02-10/d1f1e89c-a789-4975-8846-b15d9821984a/ascreenshot_630800e00a2e4b598baabfc25efbabd3_text_export.jpeg)
 
-Enter a name for your server and select **HTTP** as the transport type.
+서버 이름을 입력하고 전송 유형으로 **HTTP**를 선택합니다.
 
 ![](https://colony-recorder.s3.amazonaws.com/files/2026-02-10/2008c9d6-6093-4121-beab-1e52c71376aa/ascreenshot_516ffd6c7b524465a253a56048c3d228_text_export.jpeg)
 
-Paste the MCP server URL.
+MCP server URL을 붙여 넣습니다.
 
 ![](https://colony-recorder.s3.amazonaws.com/files/2026-02-10/b0ee8b7d-6de8-492b-8962-287987feec29/ascreenshot_b3efca82078a4c6bb1453c58161909f9_text_export.jpeg)
 
-Under **Authentication**, select **OAuth**.
+**인증** 아래에서 **OAuth**를 선택합니다.
 
 ![](https://colony-recorder.s3.amazonaws.com/files/2026-02-10/e1597814-ff8e-40b9-9d7b-864dcdbe0910/ascreenshot_2097612712264d8f9e553f7ca9175fb0_text_export.jpeg)
 
 ![](https://colony-recorder.s3.amazonaws.com/files/2026-02-10/f6ea5694-f28a-4bc3-9c9a-bb79f199bd65/ascreenshot_9be839f55b1b4f96bfe24030ba2c7f8d_text_export.jpeg)
 
-Choose **Machine-to-Machine (M2M)** as the OAuth flow type. This is for server-to-server authentication using the `client_credentials` grant — no browser interaction required.
+OAuth 흐름 유형으로 **머신 투 머신(M2M)**을 선택합니다. 이는 `client_credentials` grant를 사용하는 서버 간 인증용이며, 브라우저 상호작용이 필요하지 않습니다.
 
 ![](https://colony-recorder.s3.amazonaws.com/files/2026-02-10/9853310c-1d86-4628-bad1-7a391eca0e4d/ascreenshot_f302a286fa264fdd8d56db53b8f9395c_text_export.jpeg)
 
 ![](https://colony-recorder.s3.amazonaws.com/files/2026-02-10/df64dc65-ef86-475d-adaf-12e227d5e873/ascreenshot_9e2f41d43a76435f918a00b52ffcc639_text_export.jpeg)
 
-Fill in the **Client ID** and **Client Secret** provided by your OAuth provider.
+OAuth provider가 제공한 **Client ID**와 **Client Secret**을 입력합니다.
 
 ![](https://colony-recorder.s3.amazonaws.com/files/2026-02-10/0de5a7bd-9898-4fc7-8843-b23dd5aac47f/ascreenshot_b9087aaa81a14b5b9c199929efc4a563_text_export.jpeg)
 
-Enter the **Token URL** — this is the endpoint LiteLLM will call to fetch access tokens using `client_credentials`.
+**Token URL**을 입력합니다. LiteLLM이 `client_credentials`를 사용해 access token을 가져오기 위해 호출하는 endpoint입니다.
 
 ![](https://colony-recorder.s3.amazonaws.com/files/2026-02-10/0aea70f1-558c-4dca-91bc-1175fe1ddc89/ascreenshot_b3fcf8a1287e4e2d9a3d67c4a29f7bff_text_export.jpeg)
 
 ![](https://colony-recorder.s3.amazonaws.com/files/2026-02-10/e842ef09-1fd7-47a6-909b-252d389f0abc/ascreenshot_2a87dad3624847e7ac370591d1d1aedd_text_export.jpeg)
 
-Scroll down and review the server URL and all fields, then click **Create MCP Server**.
+아래로 스크롤해 server URL과 모든 필드를 검토한 뒤 **Create MCP Server**를 클릭합니다.
 
 ![](https://colony-recorder.s3.amazonaws.com/files/2026-02-10/0857712b-4b53-40f8-8c1f-a4c72edaa644/ascreenshot_47be3fcd5de64ed391f70c1fb74a8bfc_text_export.jpeg)
 
@@ -200,13 +142,13 @@ Scroll down and review the server URL and all fields, then click **Create MCP Se
 
 ![](https://colony-recorder.s3.amazonaws.com/files/2026-02-10/3825d5fa-8fd1-4e71-b090-77ff0259c3f6/ascreenshot_2509a7ebd9bf421eb0e82f2553566745_text_export.jpeg)
 
-Once created, open the server and navigate to the **MCP Tools** tab to verify that LiteLLM can connect and list available tools.
+생성 후 서버를 열고 **MCP Tools** 탭으로 이동해 LiteLLM이 연결하고 사용 가능한 도구 목록을 가져올 수 있는지 확인합니다.
 
 ![](https://colony-recorder.s3.amazonaws.com/files/2026-02-10/8107e27b-5072-4675-8fd6-89b47692b1bd/ascreenshot_f774bc76138f430d808fb4482ebfcdca_text_export.jpeg)
 
 ![](https://colony-recorder.s3.amazonaws.com/files/2026-02-10/ce94bb7b-c81b-4396-9939-178efb2cdfce/ascreenshot_28b838ab6ae34c76858454555c4c1d79_text_export.jpeg)
 
-Select a tool (e.g. **echo**) to test it. Fill in the required parameters and click **Call Tool**.
+테스트할 도구(예: **echo**)를 선택합니다. 필요한 파라미터를 입력하고 **Call Tool**을 클릭합니다.
 
 ![](https://colony-recorder.s3.amazonaws.com/files/2026-02-10/c459c1d3-ec29-4211-9c28-37fbe7783bbc/ascreenshot_e9b138b3c2cc4440bb1a6f42ac7ae861_text_export.jpeg)
 
@@ -214,11 +156,11 @@ Select a tool (e.g. **echo**) to test it. Fill in the required parameters and cl
 
 ![](https://colony-recorder.s3.amazonaws.com/files/2026-02-10/a8f6821b-3982-4b4d-9b25-70c8aff5ac31/ascreenshot_28d474d0e62545a482cff6128527883a_text_export.jpeg)
 
-LiteLLM automatically fetches an OAuth token behind the scenes and calls the tool. The result confirms the M2M OAuth flow is working end-to-end.
+LiteLLM은 내부적으로 OAuth 토큰을 자동으로 가져온 뒤 도구를 호출합니다. 결과가 표시되면 M2M OAuth 흐름이 처음부터 끝까지 동작하는 것입니다.
 
 ![](https://colony-recorder.s3.amazonaws.com/files/2026-02-10/c3924549-a949-48d1-ac67-ab4c30475859/ascreenshot_8f6eca9d717f45478d50a881bd244bb3_text_export.jpeg)
 
-### Config.yaml Setup
+### Config.yaml 설정
 
 ```yaml title="config.yaml" showLineNumbers
 mcp_servers:
@@ -231,12 +173,12 @@ mcp_servers:
     scopes: ["mcp:read", "mcp:write"]  # optional
 ```
 
-### How It Works
+### 동작 방식
 
-1. On first MCP request, LiteLLM POSTs to `token_url` with `grant_type=client_credentials`
-2. The access token is cached in-memory with TTL = `expires_in - 60s`
-3. Subsequent requests reuse the cached token
-4. When the token expires, LiteLLM fetches a new one automatically
+1. 첫 MCP 요청에서 LiteLLM은 `grant_type=client_credentials`를 사용해 `token_url`로 POST합니다.
+2. access token은 TTL = `expires_in - 60s`로 메모리에 캐시됩니다.
+3. 이후 요청은 캐시된 토큰을 재사용합니다.
+4. 토큰이 만료되면 LiteLLM이 새 토큰을 자동으로 가져옵니다.
 
 ```mermaid
 sequenceDiagram
@@ -259,9 +201,9 @@ sequenceDiagram
     LiteLLM-->>Client: MCP response
 ```
 
-### Test with Mock Server
+### Mock Server로 테스트
 
-Use [BerriAI/mock-oauth2-mcp-server](https://github.com/BerriAI/mock-oauth2-mcp-server) to test locally:
+[BerriAI/mock-oauth2-mcp-server](https://github.com/BerriAI/mock-oauth2-mcp-server)를 사용해 로컬에서 테스트할 수 있습니다.
 
 ```bash title="Terminal 1 - Start mock server" showLineNumbers
 uv add fastapi uvicorn
@@ -292,28 +234,23 @@ curl http://localhost:4000/mcp-rest/tools/call \
   -d '{"name": "echo", "arguments": {"message": "hello"}}'
 ```
 
-### Config Reference
+### Config 참조
 
-| Field | Required | Description |
+| 필드 | 필수 | 설명 |
 |-------|----------|-------------|
-| `auth_type` | Yes | Must be `oauth2`. For RFC 8693 On-Behalf-Of, use `oauth2_token_exchange` instead — see [MCP OBO Auth](./mcp_obo_auth.md). |
-| `oauth2_flow` | No | Explicit flow selector. One of `"client_credentials"` (M2M) or `"authorization_code"` (interactive PKCE). If omitted, LiteLLM infers from the other fields: `authorization_url` present → interactive; only `token_url` + `client_id` + `client_secret` → client credentials. Set explicitly when in doubt — for example, when a legacy DB row has both `authorization_url` and `token_url` but you want M2M. |
-| `client_id` | Yes for M2M, optional for interactive | OAuth2 client ID. Required for `client_credentials`. For interactive flows, can be obtained via Dynamic Client Registration (RFC 7591) at `POST /{server_name}/register` if the upstream supports it. Supports `os.environ/VAR_NAME`. |
-| `client_secret` | Yes for M2M, optional for interactive | OAuth2 client secret. Same applicability as `client_id`. Supports `os.environ/VAR_NAME`. |
-| `token_url` | Yes for M2M, optional for interactive | Token endpoint URL. LiteLLM POSTs to this for `client_credentials` and for the authorization-code exchange. |
-| `authorization_url` | Interactive only | Upstream authorization endpoint. When present, LiteLLM treats the server as interactive PKCE and proxies `GET /{server_name}/authorize` to this URL. |
-| `registration_url` | Optional | Upstream Dynamic Client Registration endpoint (RFC 7591). When present, `POST /{server_name}/register` proxies through to this URL. |
-| `scopes` | No | List of scopes to request. For M2M, joined into the `scope` parameter on the token request. For interactive, forwarded on the authorize request. |
-| `token_validation` | No | Dict of key-value rules checked against the OAuth token response after the `/token` exchange. Any rule mismatch fails the exchange with `token_validation_failed`. Useful for asserting a tenant claim like `{"team.enterprise_id": "T12345"}`. |
-| `token_storage_ttl_seconds` | No | Override the TTL for the per-user token cache (interactive flow). If unset, LiteLLM uses `expires_in - buffer` from the token response. |
+| `auth_type` | 예 | 반드시 `oauth2`여야 합니다. |
+| `client_id` | 예 | OAuth2 client ID입니다. `os.environ/VAR_NAME`을 지원합니다. |
+| `client_secret` | 예 | OAuth2 client secret입니다. `os.environ/VAR_NAME`을 지원합니다. |
+| `token_url` | 예 | Token endpoint URL입니다. |
+| `scopes` | 아니요 | 요청할 scope 목록입니다. |
 
-## Debugging OAuth
+## OAuth 디버깅
 
-When the LiteLLM proxy is hosted remotely and you cannot access server logs, enable **debug headers** to get masked authentication diagnostics in the HTTP response.
+LiteLLM proxy가 원격에 호스팅되어 서버 로그에 접근할 수 없는 경우 **debug headers**를 활성화하면 HTTP response에서 마스킹된 인증 진단 정보를 받을 수 있습니다.
 
-### Enable Debug Mode
+### 디버그 모드 활성화 {#debug-mode}
 
-Add the `x-litellm-mcp-debug: true` header to your MCP client request.
+MCP client 요청에 `x-litellm-mcp-debug: true` header를 추가합니다.
 
 **Claude Code:**
 
@@ -333,19 +270,19 @@ curl -X POST http://localhost:4000/atlassian_mcp/mcp \
   -d '{"jsonrpc":"2.0","id":1,"method":"tools/list","params":{}}'
 ```
 
-### Reading the Debug Response Headers
+### 디버그 응답 헤더 읽기 {#debug-response-headers}
 
-The response includes these headers (all sensitive values are masked):
+응답에는 다음 header가 포함됩니다. 모든 민감한 값은 마스킹됩니다.
 
-| Header | Description |
+| Header | 설명 |
 |--------|-------------|
-| `x-mcp-debug-inbound-auth` | Which inbound auth headers were present. |
-| `x-mcp-debug-oauth2-token` | The OAuth2 token (masked). Shows `SAME_AS_LITELLM_KEY` if the LiteLLM key is leaking. |
-| `x-mcp-debug-auth-resolution` | Which auth method was used: `oauth2-passthrough`, `m2m-client-credentials`, `per-request-header`, `static-token`, or `no-auth`. |
-| `x-mcp-debug-outbound-url` | The upstream MCP server URL. |
-| `x-mcp-debug-server-auth-type` | The `auth_type` configured on the server. |
+| `x-mcp-debug-inbound-auth` | 어떤 inbound auth header가 있었는지 표시합니다. |
+| `x-mcp-debug-oauth2-token` | OAuth2 token입니다(마스킹됨). LiteLLM key가 누출되는 경우 `SAME_AS_LITELLM_KEY`가 표시됩니다. |
+| `x-mcp-debug-auth-resolution` | 사용된 auth method를 표시합니다: `oauth2-passthrough`, `m2m-client-credentials`, `per-request-header`, `static-token`, `no-auth`. |
+| `x-mcp-debug-outbound-url` | upstream MCP server URL입니다. |
+| `x-mcp-debug-server-auth-type` | 서버에 설정된 `auth_type`입니다. |
 
-**Example — healthy OAuth2 passthrough:**
+**예제 — 정상 OAuth2 passthrough:**
 
 ```
 x-mcp-debug-inbound-auth: x-litellm-api-key=Bearer****1234; authorization=Bearer****ef01
@@ -355,7 +292,7 @@ x-mcp-debug-outbound-url: https://mcp.atlassian.com/v1/mcp
 x-mcp-debug-server-auth-type: oauth2
 ```
 
-**Example — LiteLLM key leaking (misconfigured):**
+**예제 — LiteLLM key 누출(잘못된 설정):**
 
 ```
 x-mcp-debug-inbound-auth: authorization=Bearer****1234
@@ -365,15 +302,15 @@ x-mcp-debug-outbound-url: https://mcp.atlassian.com/v1/mcp
 x-mcp-debug-server-auth-type: oauth2
 ```
 
-### Common Issues
+### 자주 발생하는 문제
 
-#### LiteLLM API key leaking to the MCP server
+#### LiteLLM API key가 MCP server로 누출됨
 
-**Symptom:** `x-mcp-debug-oauth2-token` shows `SAME_AS_LITELLM_KEY`.
+**증상:** `x-mcp-debug-oauth2-token`에 `SAME_AS_LITELLM_KEY`가 표시됩니다.
 
-The `Authorization` header carries the LiteLLM API key instead of an OAuth2 token. The OAuth2 flow never ran because the client already had an `Authorization` header set.
+`Authorization` header가 OAuth2 token 대신 LiteLLM API key를 담고 있습니다. 클라이언트에 이미 `Authorization` header가 설정되어 있어 OAuth2 흐름이 실행되지 않은 상태입니다.
 
-**Fix:** Move the LiteLLM key to `x-litellm-api-key`:
+**해결:** LiteLLM key를 `x-litellm-api-key`로 옮깁니다.
 
 ```bash
 # WRONG — blocks OAuth2 discovery
@@ -385,96 +322,17 @@ claude mcp add --transport http my_server http://proxy/mcp/server \
     --header "x-litellm-api-key: Bearer sk-..."
 ```
 
-#### No OAuth2 token present
+#### OAuth2 token이 없음
 
-**Symptom:** `x-mcp-debug-oauth2-token` shows `(none)` and `x-mcp-debug-auth-resolution` shows `no-auth`.
+**증상:** `x-mcp-debug-oauth2-token`에 `(none)`이 표시되고 `x-mcp-debug-auth-resolution`에는 `no-auth`가 표시됩니다.
 
-Check that:
-1. The `Authorization` header is NOT set as a static header in the client config.
-2. The MCP server in LiteLLM config has `auth_type: oauth2`.
-3. The `.well-known/oauth-protected-resource` endpoint returns valid metadata.
+다음을 확인하세요.
+1. client config에 `Authorization` header가 static header로 설정되어 있지 않아야 합니다.
+2. LiteLLM config의 MCP server에 `auth_type: oauth2`가 있어야 합니다.
+3. `.well-known/oauth-protected-resource` endpoint가 유효한 metadata를 반환해야 합니다.
 
-#### M2M token used instead of user token
+#### user token 대신 M2M token이 사용됨
 
-**Symptom:** `x-mcp-debug-auth-resolution` shows `m2m-client-credentials`.
+**증상:** `x-mcp-debug-auth-resolution`에 `m2m-client-credentials`가 표시됩니다.
 
-The server has `client_id`/`client_secret`/`token_url` configured so LiteLLM is fetching a machine-to-machine token instead of using the per-user OAuth2 token. To use per-user tokens, remove the client credentials from the server config.
-
-
-## Delegate Auth to Upstream (PKCE Passthrough) {#delegate-auth-to-upstream-pkce-passthrough}
-
-For OAuth2 MCP servers where the client (Claude Code, Cursor, ChatGPT, etc.) already authenticates directly against the upstream server's own OAuth issuer, you can opt the route into **upstream-delegated auth**: LiteLLM stops checking its own API key / SSO and lets the client's PKCE flow run end-to-end with the upstream MCP server.
-
-Use this when the upstream server is the source of truth for who can access it and you don't want LiteLLM to gate the route a second time.
-
-### Setup
-
-```yaml title="config.yaml" showLineNumbers
-mcp_servers:
-  notion_mcp:
-    url: "https://mcp.notion.com/mcp"
-    auth_type: oauth2
-    delegate_auth_to_upstream: true
-```
-
-That's the entire change. The flag is honored **only** when `auth_type: oauth2`; setting it on any other auth type is silently ignored.
-
-:::warning Internal-only (`available_on_public_internet: false`) **and** upstream PKCE delegation
-
-Using **`available_on_public_internet: false`** together with **`delegate_auth_to_upstream: true`** on an **`auth_type: oauth2`** interactive server (not `oauth2_flow: client_credentials`) still allows **anonymous** callers to reach the upstream OAuth2 **`/authorize`** flow and complete PKCE for matching MCP routes **without a LiteLLM API key session**. The internal-only flag mainly controls IP-based discovery and related behavior ([see guide](./mcp_public_internet.md)); it does **not** disable this delegate bypass.
-
-**What to do:** Enforce access at the upstream IdP and network edge. The LiteLLM UI surfaces a warning when both settings are enabled; the proxy logs a warning when the server is loaded from config or the database.
-
-:::
-
-### How It Works
-
-1. Client sends an MCP request to LiteLLM with no `x-litellm-api-key` (and optionally no `Authorization` header).
-2. LiteLLM detects that every target server in the request is `auth_type: oauth2` AND has `delegate_auth_to_upstream: true`, and skips its own API-key/SSO check.
-3. LiteLLM also skips its pre-emptive 401, so the upstream MCP server's own `401` + `WWW-Authenticate` flows back to the client.
-4. The client completes PKCE directly with the upstream OAuth issuer.
-5. The client retries with `Authorization: Bearer <upstream-token>`. LiteLLM forwards it untouched.
-
-```mermaid
-sequenceDiagram
-    participant Client
-    participant LiteLLM as LiteLLM Proxy
-    participant MCP as Upstream MCP Server
-    participant Auth as Upstream OAuth Server
-
-    Client->>LiteLLM: MCP request (no LiteLLM key)
-    LiteLLM->>MCP: Forward request (no Authorization)
-    MCP-->>LiteLLM: 401 + WWW-Authenticate
-    LiteLLM-->>Client: 401 + WWW-Authenticate (passthrough)
-
-    Note over Client,Auth: Client runs PKCE directly with upstream
-    Client->>Auth: Authorize + token exchange (PKCE)
-    Auth-->>Client: access_token
-
-    Client->>LiteLLM: MCP request + Bearer access_token
-    LiteLLM->>MCP: Forward request + Bearer access_token
-    MCP-->>LiteLLM: MCP response
-    LiteLLM-->>Client: MCP response
-```
-
-### Fail-Closed Behavior
-
-The bypass only fires when **every** target the request resolves to opts in. It fails closed and runs normal LiteLLM auth in any of these cases:
-
-- The server's `auth_type` is anything other than `oauth2`.
-- `delegate_auth_to_upstream` is not explicitly `true`.
-- The request targets multiple servers (`x-mcp-servers: a,b`) and any one of them is not delegated.
-- The target server cannot be resolved from the URL path or `x-mcp-servers` header.
-
-### Security Trade-offs
-
-- This flag turns the MCP route into an **unauthenticated** ingress at the LiteLLM layer. Spend tracking, per-key rate limits, and any guardrails that depend on `user_api_key_auth.user_id` will not run for these requests.
-- LiteLLM cannot tell who the caller is — that's the entire point — so per-user auditing must come from the upstream MCP server's own logs.
-- Only enable this on servers whose upstream OAuth issuer you trust to enforce access control.
-
-### Config Reference
-
-| Field | Required | Description |
-|-------|----------|-------------|
-| `auth_type` | Yes | Must be `oauth2`. The flag is ignored otherwise. |
-| `delegate_auth_to_upstream` | Yes | Set to `true` to opt this server into PKCE passthrough. |
+서버에 `client_id`/`client_secret`/`token_url`이 설정되어 있어 LiteLLM이 사용자별 OAuth2 token 대신 머신 투 머신 토큰을 가져오고 있습니다. 사용자별 토큰을 사용하려면 server config에서 client credentials를 제거하세요.

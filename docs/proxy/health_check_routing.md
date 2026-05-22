@@ -1,9 +1,9 @@
-# Health Check Driven Routing
+# Health Check 기반 라우팅
 
-Route traffic away from unhealthy deployments before users hit errors. Background health checks run on a configurable interval, and any deployment that fails gets removed from the routing pool proactively, not after a user request already failed.
+사용자가 오류를 만나기 전에 비정상 deployment로 향하는 트래픽을 우회합니다. 백그라운드 health check는 설정 가능한 주기로 실행되며, 실패한 deployment는 사용자 요청이 이미 실패한 뒤가 아니라 사전에 라우팅 풀에서 제거됩니다.
 
 
-## Architecture
+## 아키텍처
 
 <svg viewBox="0 0 860 600" xmlns="http://www.w3.org/2000/svg" style={{maxWidth: '100%', fontFamily: 'system-ui, sans-serif'}}>
   {/* Background */}
@@ -11,8 +11,8 @@ Route traffic away from unhealthy deployments before users hit errors. Backgroun
 
   {/* LEFT PANEL: Background health check loop */}
   <rect x="20" y="20" width="240" height="560" fill="#eff6ff" rx="10" stroke="#bfdbfe" strokeWidth="1.5"/>
-  <text x="140" y="48" textAnchor="middle" fill="#1d4ed8" fontSize="13" fontWeight="600">Background Loop</text>
-  <text x="140" y="64" textAnchor="middle" fill="#3b82f6" fontSize="11">every health_check_interval seconds</text>
+  <text x="140" y="48" textAnchor="middle" fill="#1d4ed8" fontSize="13" fontWeight="600">백그라운드 루프</text>
+  <text x="140" y="64" textAnchor="middle" fill="#3b82f6" fontSize="11">health_check_interval초마다</text>
 
   {/* Deployment A */}
   <rect x="40" y="82" width="200" height="50" fill="white" rx="8" stroke="#93c5fd" strokeWidth="1.5"/>
@@ -33,48 +33,48 @@ Route traffic away from unhealthy deployments before users hit errors. Backgroun
   <rect x="40" y="282" width="200" height="68" fill="#fefce8" rx="8" stroke="#fde047" strokeWidth="1.5"/>
   <text x="140" y="302" textAnchor="middle" fill="#713f12" fontSize="11" fontWeight="600">ignore_transient_errors: true</text>
   <text x="140" y="320" textAnchor="middle" fill="#92400e" fontSize="11">429 / 408 → ignored</text>
-  <text x="140" y="338" textAnchor="middle" fill="#92400e" fontSize="11">not written to cache</text>
+  <text x="140" y="338" textAnchor="middle" fill="#92400e" fontSize="11">캐시에 기록하지 않음</text>
 
   {/* allowed_fails_policy box */}
   <rect x="40" y="368" width="200" height="84" fill="#f0fdf4" rx="8" stroke="#86efac" strokeWidth="1.5"/>
   <text x="140" y="388" textAnchor="middle" fill="#166534" fontSize="11" fontWeight="600">allowed_fails_policy</text>
-  <text x="140" y="406" textAnchor="middle" fill="#15803d" fontSize="11">401 → increment counter</text>
+  <text x="140" y="406" textAnchor="middle" fill="#15803d" fontSize="11">401 → counter 증가</text>
   <text x="140" y="424" textAnchor="middle" fill="#15803d" fontSize="11">counter &gt; threshold</text>
-  <text x="140" y="442" textAnchor="middle" fill="#15803d" fontSize="11">→ cooldown triggered</text>
+  <text x="140" y="442" textAnchor="middle" fill="#15803d" fontSize="11">→ cooldown 발생</text>
 
   {/* CENTER PANEL: Shared State */}
   <rect x="300" y="20" width="220" height="560" fill="#f5f3ff" rx="10" stroke="#c4b5fd" strokeWidth="1.5"/>
-  <text x="410" y="48" textAnchor="middle" fill="#6d28d9" fontSize="13" fontWeight="600">Shared State</text>
+  <text x="410" y="48" textAnchor="middle" fill="#6d28d9" fontSize="13" fontWeight="600">공유 상태</text>
 
   {/* Health State Cache */}
   <rect x="320" y="62" width="180" height="116" fill="white" rx="8" stroke="#a78bfa" strokeWidth="1.5"/>
   <text x="410" y="84" textAnchor="middle" fill="#5b21b6" fontSize="12" fontWeight="600">DeploymentHealthCache</text>
   <text x="410" y="104" textAnchor="middle" fill="#64748b" fontSize="11">A → healthy ✓</text>
   <text x="410" y="122" textAnchor="middle" fill="#64748b" fontSize="11">B → unhealthy ✗</text>
-  <text x="410" y="140" textAnchor="middle" fill="#64748b" fontSize="11">C → not written (ignored)</text>
+  <text x="410" y="140" textAnchor="middle" fill="#64748b" fontSize="11">C → 기록 안 함(무시됨)</text>
   <text x="410" y="164" textAnchor="middle" fill="#94a3b8" fontSize="10">TTL: staleness_threshold × 1.5</text>
 
   {/* Cooldown Cache */}
   <rect x="320" y="196" width="180" height="104" fill="white" rx="8" stroke="#a78bfa" strokeWidth="1.5"/>
   <text x="410" y="218" textAnchor="middle" fill="#5b21b6" fontSize="12" fontWeight="600">Cooldown Cache</text>
-  <text x="410" y="238" textAnchor="middle" fill="#64748b" fontSize="11">B → cooling down</text>
-  <text x="410" y="256" textAnchor="middle" fill="#64748b" fontSize="11">(after policy threshold)</text>
+  <text x="410" y="238" textAnchor="middle" fill="#64748b" fontSize="11">B → cooldown 중</text>
+  <text x="410" y="256" textAnchor="middle" fill="#64748b" fontSize="11">(policy threshold 이후)</text>
   <text x="410" y="278" textAnchor="middle" fill="#94a3b8" fontSize="10">TTL: cooldown_time</text>
 
   {/* failed_calls counter */}
   <rect x="320" y="318" width="180" height="90" fill="white" rx="8" stroke="#a78bfa" strokeWidth="1.5"/>
   <text x="410" y="340" textAnchor="middle" fill="#5b21b6" fontSize="12" fontWeight="600">failed_calls counter</text>
   <text x="410" y="360" textAnchor="middle" fill="#64748b" fontSize="11">B: 2 / AuthAllowedFails: 1</text>
-  <text x="410" y="378" textAnchor="middle" fill="#64748b" fontSize="11">→ threshold exceeded</text>
+  <text x="410" y="378" textAnchor="middle" fill="#64748b" fontSize="11">→ threshold 초과</text>
   <text x="410" y="398" textAnchor="middle" fill="#94a3b8" fontSize="10">TTL: cooldown_time (must &gt; interval)</text>
 
   {/* RIGHT PANEL: Request path */}
   <rect x="560" y="20" width="280" height="560" fill="#fff7ed" rx="10" stroke="#fed7aa" strokeWidth="1.5"/>
-  <text x="700" y="48" textAnchor="middle" fill="#c2410c" fontSize="13" fontWeight="600">Request Path</text>
+  <text x="700" y="48" textAnchor="middle" fill="#c2410c" fontSize="13" fontWeight="600">요청 경로</text>
 
   {/* Incoming request */}
   <rect x="580" y="62" width="240" height="38" fill="#fff" rx="7" stroke="#fb923c" strokeWidth="1.5"/>
-  <text x="700" y="85" textAnchor="middle" fill="#9a3412" fontSize="12" fontWeight="500">Incoming request</text>
+  <text x="700" y="85" textAnchor="middle" fill="#9a3412" fontSize="12" fontWeight="500">수신 요청</text>
 
   {/* All deployments */}
   <rect x="580" y="120" width="240" height="38" fill="#fff" rx="7" stroke="#fb923c" strokeWidth="1.5"/>
@@ -84,23 +84,23 @@ Route traffic away from unhealthy deployments before users hit errors. Backgroun
 
   {/* Health check filter */}
   <rect x="580" y="178" width="240" height="62" fill="#fff" rx="7" stroke="#fb923c" strokeWidth="1.5"/>
-  <text x="700" y="200" textAnchor="middle" fill="#9a3412" fontSize="12" fontWeight="600">① Health Check Filter</text>
-  <text x="700" y="218" textAnchor="middle" fill="#64748b" fontSize="11">if policy set → bypass</text>
-  <text x="700" y="234" textAnchor="middle" fill="#64748b" fontSize="11">else → remove unhealthy</text>
+  <text x="700" y="200" textAnchor="middle" fill="#9a3412" fontSize="12" fontWeight="600">① Health Check 필터</text>
+  <text x="700" y="218" textAnchor="middle" fill="#64748b" fontSize="11">policy 설정 시 → 우회</text>
+  <text x="700" y="234" textAnchor="middle" fill="#64748b" fontSize="11">그 외 → unhealthy 제거</text>
 
   <line x1="700" y1="158" x2="700" y2="178" stroke="#fb923c" strokeWidth="1.5" markerEnd="url(#arrow-orange)"/>
 
   {/* Cooldown filter */}
   <rect x="580" y="262" width="240" height="50" fill="#fff" rx="7" stroke="#fb923c" strokeWidth="1.5"/>
-  <text x="700" y="284" textAnchor="middle" fill="#9a3412" fontSize="12" fontWeight="600">② Cooldown Filter</text>
-  <text x="700" y="302" textAnchor="middle" fill="#64748b" fontSize="11">remove deployments in cooldown</text>
+  <text x="700" y="284" textAnchor="middle" fill="#9a3412" fontSize="12" fontWeight="600">② Cooldown 필터</text>
+  <text x="700" y="302" textAnchor="middle" fill="#64748b" fontSize="11">cooldown 중인 deployment 제거</text>
 
   <line x1="700" y1="240" x2="700" y2="262" stroke="#fb923c" strokeWidth="1.5" markerEnd="url(#arrow-orange)"/>
 
   {/* Safety net */}
   <rect x="580" y="334" width="240" height="52" fill="#fef9c3" rx="7" stroke="#fbbf24" strokeWidth="1.5"/>
-  <text x="700" y="356" textAnchor="middle" fill="#713f12" fontSize="12" fontWeight="600">Safety Net</text>
-  <text x="700" y="376" textAnchor="middle" fill="#713f12" fontSize="11">if all removed → return all</text>
+  <text x="700" y="356" textAnchor="middle" fill="#713f12" fontSize="12" fontWeight="600">안전장치</text>
+  <text x="700" y="376" textAnchor="middle" fill="#713f12" fontSize="11">모두 제거되면 → 전체 반환</text>
 
   <line x1="700" y1="312" x2="700" y2="334" stroke="#fb923c" strokeWidth="1.5" markerEnd="url(#arrow-orange)"/>
 
@@ -112,7 +112,7 @@ Route traffic away from unhealthy deployments before users hit errors. Backgroun
 
   {/* Selected deployment */}
   <rect x="580" y="468" width="240" height="38" fill="#dcfce7" rx="7" stroke="#4ade80" strokeWidth="1.5"/>
-  <text x="700" y="491" textAnchor="middle" fill="#14532d" fontSize="12" fontWeight="600">Selected: Deployment A ✓</text>
+  <text x="700" y="491" textAnchor="middle" fill="#14532d" fontSize="12" fontWeight="600">선택됨: Deployment A ✓</text>
 
   <line x1="700" y1="446" x2="700" y2="468" stroke="#4ade80" strokeWidth="1.5" markerEnd="url(#arrow-green)"/>
 
@@ -150,20 +150,20 @@ Route traffic away from unhealthy deployments before users hit errors. Backgroun
 </svg>
 
 
-## What problem does this solve?
+## 어떤 문제를 해결하나요?
 
-By default, LiteLLM routes traffic to all deployments and only stops sending to a broken one after it has already failed a user request. The cooldown system is reactive.
+기본적으로 LiteLLM은 모든 deployment로 트래픽을 라우팅하고, 특정 deployment가 사용자 요청을 이미 실패시킨 뒤에야 해당 deployment로 보내는 것을 중단합니다. cooldown 시스템은 반응형입니다.
 
-Health check driven routing makes this **proactive**: a background loop pings every deployment on a configurable interval. If a deployment fails its health check, it gets removed from the routing pool immediately, before a user request lands on it.
+Health check 기반 라우팅은 이를 **사전 대응형**으로 바꿉니다. 백그라운드 루프가 설정 가능한 주기로 모든 deployment를 ping합니다. deployment가 health check에 실패하면 사용자 요청이 도달하기 전에 라우팅 풀에서 즉시 제거됩니다.
 
-When you also set `allowed_fails_policy`, you control exactly how many health check failures of each error type (auth errors, rate limits, timeouts) are needed before a deployment enters cooldown. This avoids false positives from transient noise.
+`allowed_fails_policy`도 설정하면 deployment가 cooldown에 들어가기 전에 오류 유형별(auth error, rate limit, timeout) health check 실패를 몇 번까지 허용할지 정확히 제어할 수 있습니다. 이를 통해 일시적인 노이즈로 인한 오탐을 줄일 수 있습니다.
 
 
-## Setup
+## 설정
 
-### Step 1: Enable background health checks
+### 1단계: 백그라운드 health check 활성화
 
-Background health checks are off by default. Turn them on in `general_settings`:
+백그라운드 health check는 기본적으로 꺼져 있습니다. `general_settings`에서 활성화합니다.
 
 ```yaml
 general_settings:
@@ -171,7 +171,7 @@ general_settings:
   health_check_interval: 60    # seconds between each full check cycle
 ```
 
-### Step 2: Enable health check routing
+### 2단계: health check 라우팅 활성화
 
 ```yaml
 general_settings:
@@ -180,11 +180,11 @@ general_settings:
   enable_health_check_routing: true  # ← route away from unhealthy deployments
 ```
 
-At this point, any deployment that fails its health check is immediately excluded from routing until the next check cycle clears it.
+이 시점부터 health check에 실패한 deployment는 다음 check cycle에서 정상으로 확인될 때까지 라우팅에서 즉시 제외됩니다.
 
-### Step 3: Add a policy to control how many failures trigger cooldown
+### 3단계: cooldown을 유발할 실패 횟수 제어 정책 추가
 
-Without a policy, the first health check failure marks a deployment as unhealthy. If you want more tolerance (e.g., only act after 2 consecutive auth failures), use `allowed_fails_policy`:
+정책이 없으면 첫 번째 health check 실패만으로 deployment가 unhealthy로 표시됩니다. 더 많은 허용치가 필요하다면, 예를 들어 연속 auth failure 2회 이후에만 동작하게 하려면 `allowed_fails_policy`를 사용합니다.
 
 ```yaml
 model_list:
@@ -210,11 +210,11 @@ router_settings:
     TimeoutErrorAllowedFails: 3          # cooldown after 4th timeout
 ```
 
-When `allowed_fails_policy` is set, the binary health check filter is bypassed. Only the cooldown system controls routing exclusion, and it only fires after your configured threshold is crossed.
+`allowed_fails_policy`가 설정되면 이진 health check 필터는 우회됩니다. 라우팅 제외는 cooldown 시스템만 제어하며, 설정한 threshold를 넘은 뒤에만 동작합니다.
 
-### Step 4 (optional): Ignore transient errors
+### 4단계(선택 사항): 일시적 오류 무시
 
-429 (rate limit) and 408 (timeout) from a health check usually mean the deployment is temporarily overloaded, not broken. To prevent these from affecting routing at all:
+health check에서 발생한 429(rate limit)와 408(timeout)은 보통 deployment가 고장난 것이 아니라 일시적으로 과부하 상태임을 의미합니다. 이 오류가 라우팅에 영향을 주지 않게 하려면 다음을 설정합니다.
 
 ```yaml
 general_settings:
@@ -224,10 +224,10 @@ general_settings:
   health_check_ignore_transient_errors: true  # 429 and 408 never affect routing
 ```
 
-With this on, only hard failures (401, 404, 5xx) from health checks contribute to cooldown.
+이 옵션을 켜면 health check의 hard failure(401, 404, 5xx)만 cooldown에 반영됩니다.
 
 
-## Full example
+## 전체 예제
 
 ```yaml
 model_list:
@@ -262,34 +262,34 @@ router_settings:
 ```
 
 
-## Configuration reference
+## 설정 참조
 
-| Setting | Where | Default | Description |
+| Setting | Where | Default | 설명 |
 |---|---|---|---|
-| `enable_health_check_routing` | `general_settings` | `false` | Route away from deployments that fail health checks |
-| `background_health_checks` | `general_settings` | `false` | Must be `true` for health check routing to work |
-| `health_check_interval` | `general_settings` | `300` | Seconds between full health check cycles |
-| `health_check_staleness_threshold` | `general_settings` | `interval x 2` | Seconds before cached health state is ignored |
-| `health_check_ignore_transient_errors` | `general_settings` | `false` | Ignore 429 and 408 from health checks; these never affect routing |
-| `cooldown_time` | `router_settings` | `5` | Seconds a deployment stays in cooldown after threshold is crossed |
-| `allowed_fails_policy` | `router_settings` | `null` | Per-error-type failure thresholds before cooldown (see below) |
+| `enable_health_check_routing` | `general_settings` | `false` | health check에 실패한 deployment를 우회합니다. |
+| `background_health_checks` | `general_settings` | `false` | health check 라우팅이 동작하려면 `true`여야 합니다. |
+| `health_check_interval` | `general_settings` | `300` | 전체 health check cycle 사이의 초 단위 간격입니다. |
+| `health_check_staleness_threshold` | `general_settings` | `interval x 2` | 캐시된 health state를 무시하기 전까지의 초 단위 시간입니다. |
+| `health_check_ignore_transient_errors` | `general_settings` | `false` | health check의 429와 408을 무시합니다. 이 오류는 라우팅에 영향을 주지 않습니다. |
+| `cooldown_time` | `router_settings` | `5` | threshold를 넘은 뒤 deployment가 cooldown에 머무는 초 단위 시간입니다. |
+| `allowed_fails_policy` | `router_settings` | `null` | cooldown 전 오류 유형별 실패 threshold입니다. 아래를 참고하세요. |
 
-### `allowed_fails_policy` fields
+### `allowed_fails_policy` 필드
 
-| Field | Error type | HTTP status |
+| Field | 오류 유형 | HTTP status |
 |---|---|---|
-| `AuthenticationErrorAllowedFails` | Bad API key | 401 |
-| `TimeoutErrorAllowedFails` | Request timeout | 408 |
-| `RateLimitErrorAllowedFails` | Rate limit exceeded | 429 |
-| `BadRequestErrorAllowedFails` | Malformed request | 400 |
-| `ContentPolicyViolationErrorAllowedFails` | Content filtered | 400 |
+| `AuthenticationErrorAllowedFails` | 잘못된 API key | 401 |
+| `TimeoutErrorAllowedFails` | 요청 timeout | 408 |
+| `RateLimitErrorAllowedFails` | rate limit 초과 | 429 |
+| `BadRequestErrorAllowedFails` | 잘못된 형식의 요청 | 400 |
+| `ContentPolicyViolationErrorAllowedFails` | content filtering | 400 |
 
-The value is the number of failures **tolerated** before cooldown. `0` means cooldown on the first failure. `2` means cooldown on the third.
+값은 cooldown 전에 **허용**할 실패 횟수입니다. `0`은 첫 번째 실패에서 cooldown을 의미합니다. `2`는 세 번째 실패에서 cooldown을 의미합니다.
 
 
-## Things to keep in mind
+## 유의 사항
 
-- **Counter TTL must be longer than the health check interval.** `allowed_fails_policy` works by incrementing a `failed_calls` counter per deployment. That counter expires after `cooldown_time` seconds. If `cooldown_time` is shorter than `health_check_interval`, the counter resets between every check cycle and failures never accumulate. Set `cooldown_time` greater than `health_check_interval` when using `allowed_fails_policy`.
+- **Counter TTL은 health check interval보다 길어야 합니다.** `allowed_fails_policy`는 deployment별 `failed_calls` counter를 증가시키는 방식으로 동작합니다. 이 counter는 `cooldown_time`초 후 만료됩니다. `cooldown_time`이 `health_check_interval`보다 짧으면 매 check cycle 사이에 counter가 초기화되어 실패가 누적되지 않습니다. `allowed_fails_policy`를 사용할 때는 `cooldown_time`을 `health_check_interval`보다 크게 설정하세요.
 
   ```yaml
   router_settings:
@@ -299,42 +299,42 @@ The value is the number of failures **tolerated** before cooldown. `0` means coo
     health_check_interval: 30
   ```
 
-- **`AllowedFails: N` means cooldown on the (N+1)th failure.** The counter check is `updated_fails > allowed_fails`, so `0` triggers on the 1st failure, `1` on the 2nd, `2` on the 3rd.
+- **`AllowedFails: N`은 (N+1)번째 실패에서 cooldown이 발생한다는 뜻입니다.** counter 검사는 `updated_fails > allowed_fails`이므로 `0`은 1번째 실패, `1`은 2번째 실패, `2`는 3번째 실패에서 트리거됩니다.
 
-  | `AllowedFails` | Cooldown triggers after |
+  | `AllowedFails` | Cooldown 발생 시점 |
   |---|---|
-  | `0` | 1st failure |
-  | `1` | 2nd failure |
-  | `2` | 3rd failure |
+  | `0` | 1번째 실패 |
+  | `1` | 2번째 실패 |
+  | `2` | 3번째 실패 |
 
-- **Without `allowed_fails_policy`, the first failure is enough.** The first failed health check immediately excludes the deployment from routing. Use `allowed_fails_policy` when you want tolerance for flaky checks.
+- **`allowed_fails_policy`가 없으면 첫 번째 실패만으로 충분합니다.** 첫 번째 health check 실패는 deployment를 즉시 라우팅에서 제외합니다. 불안정한 check에 허용치를 두고 싶을 때 `allowed_fails_policy`를 사용하세요.
 
-- **If all deployments are unhealthy, the filter is bypassed.** Traffic keeps flowing rather than returning no deployment at all. Requests will fail, but the router keeps trying.
+- **모든 deployment가 unhealthy이면 필터가 우회됩니다.** deployment가 전혀 없다고 반환하는 대신 트래픽 흐름은 유지됩니다. 요청은 실패하겠지만 router는 계속 시도합니다.
 
-- **Health check failures and request failures share the same counters.** When `allowed_fails_policy` is set, both sources increment the same `failed_calls` counter. A deployment at 1 health check failure that then receives 1 failing request will hit the threshold for `AllowedFails: 1` and enter cooldown.
+- **Health check 실패와 요청 실패는 같은 counter를 공유합니다.** `allowed_fails_policy`가 설정되면 두 소스가 동일한 `failed_calls` counter를 증가시킵니다. health check 실패가 1회 있는 deployment가 실패 요청을 1회 더 받으면 `AllowedFails: 1`의 threshold에 도달해 cooldown에 들어갑니다.
 
 
-## Debugging
+## 디버깅
 
-Run the proxy with `--detailed_debug` and look for these log lines:
+`--detailed_debug`로 proxy를 실행하고 다음 로그 라인을 확인합니다.
 
-After each health check cycle (written at DEBUG level):
+각 health check cycle 이후(DEBUG level에 기록):
 ```
 health_check_routing_state_updated healthy=2 unhealthy=1
 ```
 
-When a health check failure increments the counter and triggers cooldown (DEBUG level):
+health check 실패가 counter를 증가시키고 cooldown을 트리거할 때(DEBUG level):
 ```
 checks 'should_run_cooldown_logic'
 Attempting to add <deployment_id> to cooldown list
 ```
 
-When safety net fires because all deployments are in cooldown:
+모든 deployment가 cooldown 상태라 safety net이 동작할 때:
 ```
 All deployments in cooldown via health-check routing, bypassing cooldown filter
 ```
 
-When safety net fires because all deployments are unhealthy (binary filter, no `allowed_fails_policy`):
+모든 deployment가 unhealthy라 safety net이 동작할 때(binary filter, `allowed_fails_policy` 없음):
 ```
 All deployments marked unhealthy by health checks, bypassing health filter
 ```

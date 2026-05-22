@@ -1,30 +1,30 @@
-# Secret Managers Overview
+# Secret Managers 개요 {#secret-managers-overview}
 
 :::info
 
-✨ **This is an Enterprise Feature**
+✨ **엔터프라이즈 기능입니다**
 
-[Enterprise Pricing](https://www.litellm.ai/#pricing)
+[엔터프라이즈 요금제](https://www.litellm.ai/#pricing)
 
-[Contact us here to get a free trial](https://enterprise.litellm.ai/demo)
+[무료 체험을 받으려면 여기로 문의하세요](https://enterprise.litellm.ai/demo)
 
 :::
 
-LiteLLM supports **reading secrets (eg. `OPENAI_API_KEY`)** and **writing secrets (eg. Virtual Keys)** from Azure Key Vault, Google Secret Manager, Hashicorp Vault, CyberArk Conjur, and AWS Secret Manager.
+LiteLLM은 Azure Key Vault, Google Secret Manager, Hashicorp Vault, CyberArk Conjur, AWS Secret Manager에서 **secret 읽기(예: `OPENAI_API_KEY`)** 및 **secret 쓰기(예: 가상 키)**를 지원합니다.
 
-## Supported Secret Managers
+## 지원되는 Secret Managers {#supported-secret-managers}
 
-- [AWS Key Management Service](./secret_managers/aws_kms)
+- [`AWS Key Management Service`](./secret_managers/aws_kms)
 - [AWS Secret Manager](./secret_managers/aws_secret_manager)
 - [Azure Key Vault](./secret_managers/azure_key_vault)
 - [CyberArk Conjur](./secret_managers/cyberark)
-- [Google Secret Manager](./secret_managers/google_secret_manager)
-- [Google Key Management Service](./secret_managers/google_kms)
+- [`Google Secret Manager`](./secret_managers/google_secret_manager)
+- [`Google Key Management Service`](./secret_managers/google_kms)
 - [Hashicorp Vault](./secret_managers/hashicorp_vault)
 
-## All Secret Manager Settings
+## 모든 Secret Manager 설정 {#all-secret-manager-settings}
 
-All settings related to secret management
+secret 관리와 관련된 모든 설정입니다.
 
 ```yaml
 general_settings:

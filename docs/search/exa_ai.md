@@ -35,7 +35,7 @@ search_tools:
       api_key: os.environ/EXA_API_KEY
 ```
 
-### 2. Start the proxy
+### 2. 프록시 시작
 
 ```bash
 litellm --config /path/to/config.yaml
@@ -43,7 +43,7 @@ litellm --config /path/to/config.yaml
 # RUNNING on http://0.0.0.0:4000
 ```
 
-### 3. Test the search endpoint
+### 3. 검색 엔드포인트 테스트
 
 ```bash showLineNumbers title="Test Request"
 curl http://0.0.0.0:4000/v1/search/exa-search \
@@ -55,7 +55,7 @@ curl http://0.0.0.0:4000/v1/search/exa-search \
   }'
 ```
 
-## Provider-specific Parameters
+## Provider별 파라미터
 
 ```python showLineNumbers title="Exa AI Search with Provider-specific Parameters"
 import os
@@ -74,4 +74,3 @@ response = search(
     use_autoprompt=True              # Enable Exa's autoprompt
 )
 ```
-

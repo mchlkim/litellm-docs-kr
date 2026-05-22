@@ -1,22 +1,22 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Azure AI Image Editing
+# Azure AI 이미지 편집
 
-Azure AI provides powerful image editing capabilities using FLUX models from Black Forest Labs to modify existing images based on text descriptions.
+Azure AI는 Black Forest Labs의 FLUX 모델을 사용해 텍스트 설명에 따라 기존 이미지를 수정하는 강력한 이미지 편집 기능을 제공합니다.
 
-## Overview
+## 개요
 
-| Property | Details |
+| 속성 | 세부 정보 |
 |----------|---------|
-| Description | Azure AI Image Editing uses FLUX models to modify existing images based on text prompts. |
-| Provider Route on LiteLLM | `azure_ai/` |
-| Provider Doc | [Azure AI FLUX Models ↗](https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/black-forest-labs-flux-1-kontext-pro-and-flux1-1-pro-now-available-in-azure-ai-f/4434659) |
-| Supported Operations | [`/images/edits`](#image-editing) |
+| 설명 | Azure AI 이미지 편집은 FLUX 모델을 사용해 텍스트 프롬프트에 따라 기존 이미지를 수정합니다. |
+| LiteLLM의 Provider Route | `azure_ai/` |
+| Provider 문서 | [Azure AI FLUX 모델 ↗](https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/black-forest-labs-flux-1-kontext-pro-and-flux1-1-pro-now-available-in-azure-ai-f/4434659) |
+| 지원 작업 | [`/images/edits`](#image-editing) |
 
-## Setup
+## 설정
 
-### API Key & Base URL & API Version
+### API Key, Base URL, API Version 설정
 
 ```python showLineNumbers
 # Set your Azure AI API credentials
@@ -26,20 +26,20 @@ os.environ["AZURE_AI_API_BASE"] = "your-azure-ai-endpoint"  # e.g., https://your
 os.environ["AZURE_AI_API_VERSION"] = "2025-04-01-preview"  # Example API version
 ```
 
-Get your API key and endpoint from [Azure AI Studio](https://ai.azure.com/).
+[Azure AI Studio](https://ai.azure.com/)에서 API key와 endpoint를 가져오세요.
 
-## Supported Models
+## 지원 모델
 
-| Model Name | Description | Cost per Image |
+| 모델 이름 | 설명 | 이미지당 비용 |
 |------------|-------------|----------------|
-| `azure_ai/FLUX.1-Kontext-pro` | FLUX 1 Kontext Pro model with enhanced context understanding for editing | $0.04 |
+| `azure_ai/FLUX.1-Kontext-pro` | 편집을 위한 향상된 컨텍스트 이해 기능을 갖춘 FLUX 1 Kontext Pro 모델 | $0.04 |
 
-## Image Editing
+## 이미지 편집 {#image-editing}
 
-### Usage - LiteLLM Python SDK
+### 사용법 - LiteLLM Python SDK
 
 <Tabs>
-<TabItem value="basic-edit" label="Basic Usage">
+<TabItem value="basic-edit" label="기본 사용법">
 
 ```python showLineNumbers title="Basic Image Editing"
 import os
@@ -71,7 +71,7 @@ path.write_bytes(img_bytes)
 
 </TabItem>
 
-<TabItem value="async-edit" label="Async Usage">
+<TabItem value="async-edit" label="비동기 사용법">
 
 ```python showLineNumbers title="Async Image Editing"
 import os
@@ -107,7 +107,7 @@ asyncio.run(edit_image())
 
 </TabItem>
 
-<TabItem value="advanced-edit" label="Advanced Parameters">
+<TabItem value="advanced-edit" label="고급 파라미터">
 
 ```python showLineNumbers title="Advanced Image Editing with Parameters"
 import os
@@ -140,9 +140,9 @@ path.write_bytes(img_bytes)
 </TabItem>
 </Tabs>
 
-### Usage - LiteLLM Proxy Server
+### 사용법 - LiteLLM Proxy Server
 
-#### 1. Configure your config.yaml
+#### 1. config.yaml 구성
 
 ```yaml showLineNumbers title="Azure AI Image Editing Configuration"
 model_list:
@@ -159,7 +159,7 @@ general_settings:
   master_key: sk-1234
 ```
 
-#### 2. Start LiteLLM Proxy Server
+#### 2. LiteLLM Proxy Server 시작
 
 ```bash showLineNumbers title="Start LiteLLM Proxy Server"
 litellm --config /path/to/config.yaml
@@ -167,7 +167,7 @@ litellm --config /path/to/config.yaml
 # RUNNING on http://0.0.0.0:4000
 ```
 
-#### 3. Make image editing requests with OpenAI Python SDK
+#### 3. OpenAI Python SDK로 이미지 편집 요청 보내기
 
 <Tabs>
 <TabItem value="openai-edit-sdk" label="OpenAI SDK">
@@ -231,30 +231,30 @@ curl --location 'http://localhost:4000/v1/images/edits' \
 </TabItem>
 </Tabs>
 
-## Supported Parameters
+## 지원 파라미터
 
-Azure AI Image Editing supports the following OpenAI-compatible parameters:
+Azure AI 이미지 편집은 다음 OpenAI 호환 파라미터를 지원합니다.
 
-| Parameter | Type | Description | Default | Example |
+| 파라미터 | 타입 | 설명 | 기본값 | 예제 |
 |-----------|------|-------------|---------|---------|
-| `image` | file | The image file to edit | Required | File object or binary data |
-| `prompt` | string | Text description of the desired changes | Required | `"Add snow and winter elements"` |
-| `model` | string | The FLUX model to use for editing | Required | `"azure_ai/FLUX.1-Kontext-pro"` |
-| `n` | integer | Number of edited images to generate (You can specify only 1) | `1` | `1` |
-| `api_base` | string | Your Azure AI endpoint URL | Required | `"https://your-endpoint.eastus2.inference.ai.azure.com/"` |
-| `api_key` | string | Your Azure AI API key | Required | Environment variable or direct value |
-| `api_version` | string | API version for Azure AI | Required | `"2025-04-01-preview"` |
+| `image` | file | 편집할 이미지 파일 | 필수 | 파일 객체 또는 바이너리 데이터 |
+| `prompt` | string | 원하는 변경 사항에 대한 텍스트 설명 | 필수 | `"Add snow and winter elements"` |
+| `model` | string | 편집에 사용할 FLUX 모델 | 필수 | `"azure_ai/FLUX.1-Kontext-pro"` |
+| `n` | integer | 생성할 편집 이미지 수(1만 지정 가능) | `1` | `1` |
+| `api_base` | string | Azure AI endpoint URL | 필수 | `"https://your-endpoint.eastus2.inference.ai.azure.com/"` |
+| `api_key` | string | Azure AI API key | 필수 | 환경 변수 또는 직접 값 |
+| `api_version` | string | Azure AI의 API version | 필수 | `"2025-04-01-preview"` |
 
-## Getting Started
+## 시작하기
 
-1. Create an account at [Azure AI Studio](https://ai.azure.com/)
-2. Deploy a FLUX model in your Azure AI Studio workspace
-3. Get your API key and endpoint from the deployment details
-4. Set your `AZURE_AI_API_KEY`, `AZURE_AI_API_BASE` and `AZURE_AI_API_VERSION` environment variables
-5. Prepare your source image
-6. Use `litellm.image_edit()` to modify your images with text instructions
+1. [Azure AI Studio](https://ai.azure.com/)에서 계정을 만듭니다.
+2. Azure AI Studio workspace에 FLUX 모델을 배포합니다.
+3. 배포 세부 정보에서 API key와 endpoint를 가져옵니다.
+4. `AZURE_AI_API_KEY`, `AZURE_AI_API_BASE`, `AZURE_AI_API_VERSION` 환경 변수를 설정합니다.
+5. 원본 이미지를 준비합니다.
+6. `litellm.image_edit()`을 사용해 텍스트 지침으로 이미지를 수정합니다.
 
-## Additional Resources
+## 추가 리소스
 
-- [Azure AI Studio Documentation](https://docs.microsoft.com/en-us/azure/ai-services/)
-- [FLUX Models Announcement](https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/black-forest-labs-flux-1-kontext-pro-and-flux1-1-pro-now-available-in-azure-ai-f/4434659)
+- [Azure AI Studio 문서](https://docs.microsoft.com/en-us/azure/ai-services/)
+- [FLUX 모델 발표](https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/black-forest-labs-flux-1-kontext-pro-and-flux1-1-pro-now-available-in-azure-ai-f/4434659)

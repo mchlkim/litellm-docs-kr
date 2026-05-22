@@ -1,12 +1,12 @@
 ---
 slug: minimax_m2_5
-title: "Day 0 Support: MiniMax-M2.5"
+title: "출시 당일 지원: MiniMax-M2.5"
 date: 2026-02-12T10:00:00
 authors:
   - sameer
   - krrish
   - ishaan-alt
-description: "Day 0 support for MiniMax-M2.5 on LiteLLM"
+description: "LiteLLM의 MiniMax-M2.5 출시 당일 지원 안내"
 tags: [minimax, M2.5, llm]
 hide_table_of_contents: false
 ---
@@ -14,39 +14,39 @@ hide_table_of_contents: false
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-LiteLLM now supports MiniMax-M2.5 on Day 0. Use it across OpenAI-compatible and Anthropic-compatible APIs through the LiteLLM AI Gateway.
+LiteLLM은 이제 MiniMax-M2.5를 출시 당일부터 지원합니다. LiteLLM AI Gateway를 통해 OpenAI 호환 및 Anthropic 호환 API 전반에서 사용할 수 있습니다.
 
 {/* truncate */}
 
-## Supported Models
+## 지원 모델
 
-LiteLLM supports the following MiniMax models:
+LiteLLM은 다음 MiniMax 모델을 지원합니다.
 
-| Model | Description | Input Cost | Output Cost | Context Window |
+| 모델 | 설명 | 입력 비용 | 출력 비용 | 컨텍스트 창 |
 |-------|-------------|------------|-------------|----------------|
-| **MiniMax-M2.5** | Advanced reasoning, Agentic capabilities | $0.3/M tokens | $1.2/M tokens | 1M tokens |
-| **MiniMax-M2.5-lightning** | Faster and More Agile (~100 tps) | $0.3/M tokens | $2.4/M tokens | 1M tokens |
+| **MiniMax-M2.5** | 고급 추론 및 에이전트 기능 | $0.3/M tokens | $1.2/M tokens | 1M tokens |
+| **MiniMax-M2.5-lightning** | 더 빠른 모델(~100 tps) | $0.3/M tokens | $2.4/M tokens | 1M tokens |
 
-## Features Supported
+## 지원 기능
 
-- **Prompt Caching**: Reduce costs with cached prompts ($0.03/M tokens for cache read, $0.375/M tokens for cache write)
-- **Function Calling**: Built-in tool calling support
-- **Reasoning**: Advanced reasoning capabilities with thinking support
-- **System Messages**: Full system message support
-- **Cost Tracking**: Automatic cost calculation for all requests
+- **프롬프트 캐싱**: 캐시된 프롬프트로 비용 절감(cache read $0.03/M tokens, cache write $0.375/M tokens)
+- **함수 호출**: 내장 도구 호출 지원
+- **추론**: thinking 지원이 포함된 고급 추론 기능
+- **시스템 메시지**: 전체 system message 지원
+- **비용 추적**: 모든 요청에 대한 자동 비용 계산
 
-## Docker Image
+## Docker 이미지
 
 ```bash
 docker pull litellm/litellm:v1.81.3-stable
 ```
 
-## Usage - OpenAI Compatible API (/v1/chat/completions)
+## 사용법 - OpenAI 호환 API (/v1/chat/completions)
 
 <Tabs>
 <TabItem value="proxy" label="LiteLLM Proxy">
 
-**1. Setup config.yaml**
+**1. config.yaml 설정**
 
 ```yaml
 model_list:
@@ -57,7 +57,7 @@ model_list:
       api_base: https://api.minimax.io/v1
 ```
 
-**2. Start the proxy**
+**2. 프록시 시작**
 
 ```bash
 docker run -d \
@@ -68,7 +68,7 @@ docker run -d \
   --config /app/config.yaml
 ```
 
-**3. Test it!**
+**3. 테스트**
 
 ```bash
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -88,7 +88,7 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 </TabItem>
 </Tabs>
 
-### With Reasoning Split
+### Reasoning Split 사용
 
 ```bash
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -108,12 +108,12 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 }'
 ```
 
-## Usage - Anthropic Compatible API (/v1/messages)
+## 사용법 - Anthropic 호환 API (/v1/messages)
 
 <Tabs>
 <TabItem value="proxy" label="LiteLLM Proxy">
 
-**1. Setup config.yaml**
+**1. config.yaml 설정**
 
 ```yaml
 model_list:
@@ -124,7 +124,7 @@ model_list:
       api_base: https://api.minimax.io/anthropic/v1/messages
 ```
 
-**2. Start the proxy**
+**2. 프록시 시작**
 
 ```bash
 docker run -d \
@@ -135,7 +135,7 @@ docker run -d \
   --config /app/config.yaml
 ```
 
-**3. Test it!**
+**3. 테스트**
 
 ```bash
 curl --location 'http://0.0.0.0:4000/v1/messages' \
@@ -156,7 +156,7 @@ curl --location 'http://0.0.0.0:4000/v1/messages' \
 </TabItem>
 </Tabs>
 
-### With Thinking
+### Thinking 사용
 
 ```bash
 curl --location 'http://0.0.0.0:4000/v1/messages' \
@@ -178,9 +178,9 @@ curl --location 'http://0.0.0.0:4000/v1/messages' \
 }'
 ```
 
-## Usage - LiteLLM SDK
+## 사용법 - LiteLLM SDK
 
-### OpenAI-compatible API
+### OpenAI 호환 API
 
 ```python
 import litellm
@@ -197,7 +197,7 @@ response = litellm.completion(
 print(response.choices[0].message.content)
 ```
 
-### Anthropic-compatible API
+### Anthropic 호환 API
 
 ```python
 import litellm
@@ -213,7 +213,7 @@ response = litellm.anthropic.messages.acreate(
 print(response.choices[0].message.content)
 ```
 
-### With Thinking
+### Thinking 사용
 
 ```python
 response = litellm.anthropic.messages.acreate(
@@ -229,7 +229,7 @@ for block in response.choices[0].message.content:
         print(f"Thinking: {block.thinking}")
 ```
 
-### With Reasoning Split (OpenAI API)
+### Reasoning Split 사용(OpenAI API)
 
 ```python
 response = litellm.completion(
@@ -248,16 +248,16 @@ if hasattr(response.choices[0].message, 'reasoning_details'):
 print(f"Response: {response.choices[0].message.content}")
 ```
 
-## Cost Tracking
+## 비용 추적
 
-LiteLLM automatically tracks costs for MiniMax-M2.5 requests. The pricing is:
+LiteLLM은 MiniMax-M2.5 요청 비용을 자동으로 추적합니다. 가격은 다음과 같습니다.
 
-- **Input**: $0.3 per 1M tokens
-- **Output**: $1.2 per 1M tokens
-- **Cache Read**: $0.03 per 1M tokens
-- **Cache Write**: $0.375 per 1M tokens
+- **입력**: 1M tokens당 $0.3
+- **출력**: 1M tokens당 $1.2
+- **캐시 읽기**: 1M tokens당 $0.03
+- **캐시 쓰기**: 1M tokens당 $0.375
 
-### Accessing Cost Information
+### 비용 정보 접근
 
 ```python
 response = litellm.completion(
@@ -270,7 +270,7 @@ response = litellm.completion(
 print(f"Cost: ${response._hidden_params.get('response_cost', 0)}")
 ```
 
-## Streaming Support
+## Streaming 지원
 
 ### OpenAI API
 
@@ -288,7 +288,7 @@ for chunk in response:
         print(chunk.choices[0].delta.content, end="")
 ```
 
-### Streaming with Reasoning Split
+### Reasoning Split과 함께 Streaming 사용
 
 ```python
 stream = litellm.completion(
@@ -323,9 +323,9 @@ for chunk in stream:
             text_buffer = content_text
 ```
 
-## Using with Native SDKs
+## 네이티브 SDK와 함께 사용
 
-### Anthropic SDK via LiteLLM Proxy
+### LiteLLM Proxy를 통한 Anthropic SDK
 
 ```python
 import os
@@ -360,7 +360,7 @@ for block in message.content:
         print(f"Text:\n{block.text}\n")
 ```
 
-### OpenAI SDK via LiteLLM Proxy
+### LiteLLM Proxy를 통한 OpenAI SDK
 
 ```python
 import os

@@ -4,12 +4,12 @@ import TabItem from '@theme/TabItem';
 
 # Lakera AI
 
-**Supported endpoints:** The Lakera v2 integration only supports the **chat completions** endpoint (`/v1/chat/completions`). It is not supported for the Responses API, `/v1/messages`, MCP, A2A, or other proxy endpoints.
+**지원 엔드포인트:** Lakera v2 통합은 **chat completions** 엔드포인트(`/v1/chat/completions`)만 지원합니다. Responses API, `/v1/messages`, MCP, A2A 또는 기타 프록시 엔드포인트는 지원하지 않습니다.
 
-## Quick Start
-### 1. Define Guardrails on your LiteLLM config.yaml 
+## 빠른 시작
+### 1. LiteLLM config.yaml에 가드레일 정의하기 
 
-Define your guardrails under the `guardrails` section
+`guardrails` 섹션 아래에 guardrails를 정의합니다.
 
 ```yaml showLineNumbers title="litellm config.yaml"
 model_list:
@@ -41,27 +41,27 @@ guardrails:
   
 ```
 
-#### Supported values for `mode`
+#### `mode`에서 지원되는 값
 
-- `pre_call` Run **before** LLM call, on **input**
-- `post_call` Run **after** LLM call, on **input & output**
-- `during_call` Run **during** LLM call, on **input** Same as `pre_call` but runs in parallel as LLM call.  Response not returned until guardrail check completes
+- `pre_call`: **LLM 호출 전** 입력에 대해 실행합니다.
+- `post_call`: **LLM 호출 후** 입력과 출력에 대해 실행합니다.
+- `during_call`: **LLM 호출 중** 입력에 대해 실행합니다. `pre_call`과 같지만 LLM 호출과 병렬로 실행됩니다. 가드레일 검사가 완료될 때까지 응답은 반환되지 않습니다.
 
-### 2. Start LiteLLM Gateway 
+### 2. LiteLLM Gateway 시작하기 
 
 
 ```shell
 litellm --config config.yaml --detailed_debug
 ```
 
-### 3. Test request 
+### 3. 요청 테스트하기 
 
-**[Langchain, OpenAI SDK Usage Examples](../proxy/user_keys#request-format)**
+**[Langchain, OpenAI SDK 사용법 예제](../proxy/user_keys#request-format)**
 
 <Tabs>
-<TabItem label="Unsuccessful call" value = "not-allowed">
+<TabItem label="실패하는 호출" value = "not-allowed">
 
-Expect this to fail since since `ishaan@berri.ai` in the request is PII
+요청에 포함된 `ishaan@berri.ai`가 PII이므로 실패해야 합니다.
 
 ```shell showLineNumbers title="Curl Request"
 curl -i http://localhost:4000/v1/chat/completions \
@@ -76,7 +76,7 @@ curl -i http://localhost:4000/v1/chat/completions \
   }'
 ```
 
-Expected response on failure
+실패 시 예상 응답
 
 ```shell
 {
@@ -116,7 +116,7 @@ Expected response on failure
 
 </TabItem>
 
-<TabItem label="Successful Call " value = "allowed">
+<TabItem label="성공하는 호출" value = "allowed">
 
 ```shell showLineNumbers title="Curl Request"
 curl -i http://localhost:4000/v1/chat/completions \
@@ -137,7 +137,7 @@ curl -i http://localhost:4000/v1/chat/completions \
 </Tabs>
 
 
-## Supported Params 
+## 지원되는 파라미터 
 
 ```yaml
 guardrails:
@@ -156,13 +156,13 @@ guardrails:
       # on_flagged: Optional[str] = "block",  # "block" or "monitor"
 ```
 
-- `api_base`: (Optional[str]) The base of the Lakera integration. Defaults to `https://api.lakera.ai` 
-- `api_key`: (str) The API Key for the Lakera integration.
-- `project_id`: (Optional[str]) ID of the relevant project
-- `payload`: (Optional[bool]) When true the response will return a payload object containing any PII, profanity or custom detector regex matches detected, along with their location within the contents. 
-- `breakdown`: (Optional[bool]) When true the response will return a breakdown list of the detectors that were run, as defined in the policy, and whether each of them detected something or not.
-- `metadata`: (Optional[Dict]) Metadata tags can be attached to screening requests as an object that can contain any arbitrary key-value pairs. 
-- `dev_info`: (Optional[bool]) When true the response will return an object with developer information about the build of Lakera Guard.
-- `on_flagged`: (Optional[str]) Action to take when content is flagged. Defaults to `"block"`. 
-  - `"block"`: Raises an HTTP 400 exception when violations are detected (default behavior)
-  - `"monitor"`: Logs violations but allows the request to proceed. Useful for tuning security policies without blocking legitimate requests.
+- `api_base`: (Optional[str]) Lakera 통합의 base URL입니다. 기본값은 `https://api.lakera.ai`입니다.
+- `api_key`: (str) Lakera 통합용 API Key입니다.
+- `project_id`: (Optional[str]) 관련 프로젝트의 ID입니다.
+- `payload`: (Optional[bool]) `true`이면 감지된 PII, 욕설 또는 사용자 지정 detector regex match와 콘텐츠 내 위치를 포함하는 payload 객체를 응답에 반환합니다.
+- `breakdown`: (Optional[bool]) `true`이면 정책에 정의된 실행 detector 목록과 각 detector의 감지 여부를 breakdown 목록으로 반환합니다.
+- `metadata`: (Optional[Dict]) screening 요청에 metadata tag를 객체로 첨부할 수 있으며, 임의의 key-value 쌍을 포함할 수 있습니다.
+- `dev_info`: (Optional[bool]) `true`이면 Lakera Guard 빌드에 대한 개발자 정보 객체를 응답에 반환합니다.
+- `on_flagged`: (Optional[str]) 콘텐츠가 flagged 되었을 때 수행할 작업입니다. 기본값은 `"block"`입니다.
+  - `"block"`: 위반이 감지되면 HTTP 400 예외를 발생시킵니다(기본 동작).
+  - `"monitor"`: 위반 사항을 로깅하지만 요청 진행은 허용합니다. 정상 요청을 차단하지 않고 보안 정책을 조정할 때 유용합니다.

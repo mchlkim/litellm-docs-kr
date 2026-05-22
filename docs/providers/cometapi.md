@@ -1,17 +1,17 @@
 # CometAPI
-LiteLLM supports all AI models from [CometAPI](https://www.cometapi.com/). CometAPI provides access to 500+ AI models through a unified API interface, including cutting-edge models like GPT-5, Claude Opus 4.1, and various other state-of-the-art language models.
+LiteLLM은 [CometAPI](https://www.cometapi.com/)의 모든 AI 모델을 지원합니다. CometAPI는 통합 API 인터페이스를 통해 GPT-5, Claude Opus 4.1과 여러 최신 언어 모델을 포함한 500개 이상의 AI 모델에 접근할 수 있게 합니다.
 
 <a target="_blank" href="https://colab.research.google.com/github/BerriAI/litellm/blob/main/cookbook/LiteLLM_CometAPI.ipynb">
   <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
 </a>
 
-## Authentication
+## 인증
 
-To use CometAPI models, you need to obtain an API key from [CometAPI Token Console](https://api.cometapi.com/console/token). CometAPI offers free tokens for new users - you can get your free API key instantly by registering.
+CometAPI 모델을 사용하려면 [CometAPI Token Console](https://api.cometapi.com/console/token)에서 API 키를 발급받아야 합니다. CometAPI는 신규 사용자에게 무료 토큰을 제공하므로, 가입하면 무료 API 키를 즉시 받을 수 있습니다.
 
-## Usage
+## 사용법
 
-Set your CometAPI key as an environment variable and use the completion function:
+CometAPI 키를 환경 변수로 설정한 뒤 `completion` 함수를 사용합니다.
 
 ```python
 import os
@@ -32,9 +32,9 @@ response = completion(
 print(response.choices[0].message.content)
 ```
 
-### Alternative Usage - Explicit API Key
+### 대체 사용법 - 명시적 API 키 {#alternative-사용법---explicit-api-key}
 
-You can also pass the API key explicitly:
+API 키를 명시적으로 전달할 수도 있습니다.
 
 ```python
 import os
@@ -53,9 +53,9 @@ response = completion(
 print(response.choices[0].message.content)
 ```
 
-## Usage - Streaming
+## 사용법 - 스트리밍 {#사용법---streaming}
 
-Just set `stream=True` when calling completion:
+completion을 호출할 때 `stream=True`만 설정하면 됩니다.
 
 ```python
 import os
@@ -75,9 +75,9 @@ for chunk in response:
     print(chunk.choices[0].delta.content or "", end="")
 ```
 
-## Usage - Async Streaming
+## 사용법 - 비동기 스트리밍 {#사용법---async-streaming}
 
-For async streaming, use `acompletion`:
+비동기 스트리밍에는 `acompletion`을 사용합니다.
 
 ```python
 from litellm import acompletion
@@ -104,28 +104,28 @@ async def completion_call():
 await completion_call()
 ```
 
-## CometAPI Models
+## CometAPI 모델
 
-CometAPI offers access to 500+ AI models through a unified API. Some popular models include:
+CometAPI는 통합 API를 통해 500개 이상의 AI 모델에 접근할 수 있게 합니다. 많이 사용하는 모델은 다음과 같습니다.
 
-| Model Name | Function Call |
+| 모델 이름 | 함수 호출 |
 |------------|---------------|
-| cometapi/gpt-5 | `completion('cometapi/gpt-5', messages)` |
-| cometapi/gpt-5-mini | `completion('cometapi/gpt-5-mini', messages)` |
-| cometapi/gpt-5-nano | `completion('cometapi/gpt-5-nano', messages)` |
-| cometapi/gpt-oss-20b | `completion('cometapi/gpt-oss-20b', messages)` |
-| cometapi/gpt-oss-120b | `completion('cometapi/gpt-oss-120b', messages)` |
-| cometapi/chatgpt-4o-latest | `completion('cometapi/chatgpt-4o-latest', messages)` |
+| `cometapi/gpt-5` | `completion('cometapi/gpt-5', messages)` |
+| `cometapi/gpt-5-mini` | `completion('cometapi/gpt-5-mini', messages)` |
+| `cometapi/gpt-5-nano` | `completion('cometapi/gpt-5-nano', messages)` |
+| `cometapi/gpt-oss-20b` | `completion('cometapi/gpt-oss-20b', messages)` |
+| `cometapi/gpt-oss-120b` | `completion('cometapi/gpt-oss-120b', messages)` |
+| `cometapi/chatgpt-4o-latest` | `completion('cometapi/chatgpt-4o-latest', messages)` |
 
-For a complete list of available models, visit the [CometAPI Models page](https://www.cometapi.com/model/).
+사용 가능한 전체 모델 목록은 [CometAPI 모델 페이지](https://www.cometapi.com/model/)를 참조하세요.
 
-## Environment Variables
+## 환경 변수 {#environment-variables}
 
-| Variable | Description | Required |
+| 변수 | 설명 | 필수 여부 |
 |----------|-------------|----------|
-| `COMETAPI_KEY` | Your CometAPI API key | Yes |
+| `COMETAPI_KEY` | CometAPI API 키 | 예 |
 
-## Error Handling
+## 오류 처리 {#error-handling}
 
 ```python
 import os

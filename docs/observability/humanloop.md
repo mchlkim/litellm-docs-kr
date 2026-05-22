@@ -4,12 +4,12 @@ import TabItem from '@theme/TabItem';
 
 # Humanloop
 
-[Humanloop](https://humanloop.com/docs/v5/getting-started/overview) enables product teams to build robust AI features with LLMs, using best-in-class tooling for Evaluation, Prompt Management, and Observability.
+[Humanloop](https://humanloop.com/docs/v5/getting-started/overview)은 평가, 프롬프트 관리, 관측성을 위한 우수한 도구를 사용해 제품 팀이 LLM 기반 AI 기능을 안정적으로 구축하도록 지원합니다.
 
 
-## Getting Started
+## 시작하기
 
-Use Humanloop to manage prompts across all LiteLLM Providers.
+Humanloop을 사용하면 모든 LiteLLM Provider 전반에서 프롬프트를 관리할 수 있습니다.
 
 
 
@@ -39,7 +39,7 @@ resp = litellm.completion(
 </TabItem>
 <TabItem value="proxy" label="PROXY">
 
-1. Setup config.yaml
+1. config.yaml 설정
 
 ```yaml
 model_list:
@@ -50,13 +50,13 @@ model_list:
       api_key: os.environ/OPENAI_API_KEY
 ```
 
-2. Start the proxy
+2. 프록시 시작
 
 ```bash
 litellm --config config.yaml --detailed_debug
 ```
 
-3. Test it! 
+3. 테스트합니다.
 
 <Tabs>
 <TabItem value="curl" label="CURL">
@@ -114,7 +114,7 @@ print(response)
 </Tabs>
 
 
-**Expected Logs:**
+**Expected 로그:**
 
 ```
 POST Request Sent from LiteLLM:
@@ -123,14 +123,14 @@ https://api.openai.com/v1/ \
 -d '{'model': 'gpt-3.5-turbo', 'messages': <YOUR HUMANLOOP PROMPT TEMPLATE>}'
 ```
 
-## How to set model 
+## 모델 설정 방법
 
 
-## How to set model 
+## 모델 설정 방법 
 
-### Set the model on LiteLLM 
+### LiteLLM에서 모델 설정하기 
 
-You can do `humanloop/<litellm_model_name>`
+`humanloop/<litellm_model_name>` 형식을 사용할 수 있습니다.
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -157,11 +157,11 @@ model_list:
 </TabItem>
 </Tabs>
 
-### Set the model on Humanloop
+### Humanloop에서 모델 설정하기
 
-LiteLLM will call humanloop's `https://api.humanloop.com/v5/prompts/<your-prompt-id>` endpoint, to get the prompt template.
+LiteLLM은 프롬프트 템플릿을 가져오기 위해 Humanloop의 `https://api.humanloop.com/v5/prompts/<your-prompt-id>` 엔드포인트를 호출합니다.
 
-This also returns the template model set on Humanloop.
+이 호출은 Humanloop에 설정된 템플릿 모델도 함께 반환합니다.
 
 ```bash
 {
@@ -173,4 +173,3 @@ This also returns the template model set on Humanloop.
   "model": "gpt-3.5-turbo" # your template model
 }
 ```
-

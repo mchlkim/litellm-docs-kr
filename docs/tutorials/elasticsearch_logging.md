@@ -2,15 +2,15 @@ import Image from '@theme/IdealImage';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Elasticsearch Logging with LiteLLM
+# LiteLLM으로 Elasticsearch 로깅하기 {#elasticsearch-logging-with-litellm}
 
-Send your LLM requests, responses, costs, and performance data to Elasticsearch for analytics and monitoring using OpenTelemetry.
+OpenTelemetry를 사용해 LLM 요청, 응답, 비용, 성능 데이터를 Elasticsearch로 보내 분석과 모니터링에 활용합니다.
 
 <Image img={require('../../img/elasticsearch_demo.png')} />
 
-## Quick Start
+## 빠른 시작
 
-### 1. Start Elasticsearch
+### 1. Elasticsearch 시작 {#start-elasticsearch}
 
 ```bash
 # Using Docker (simplest)
@@ -22,9 +22,9 @@ docker run -d \
   docker.elastic.co/elasticsearch/elasticsearch:8.18.2
 ```
 
-### 2. Set up OpenTelemetry Collector
+### 2. OpenTelemetry Collector 설정 {#set-up-opentelemetry-collector}
 
-Create an OTEL collector configuration file `otel_config.yaml`:
+`otel_config.yaml` OTEL collector 구성 파일을 만듭니다.
 
 ```yaml
 receivers:
@@ -61,7 +61,7 @@ service:
       exporters: [debug, otlphttp/elastic]
 ```
 
-Start the OpenTelemetry collector:
+OpenTelemetry collector를 시작합니다.
 ```bash
 docker run -p 4317:4317 -p 4318:4318 \
     -v $(pwd)/otel_config.yaml:/etc/otel-collector-config.yaml \
@@ -69,18 +69,18 @@ docker run -p 4317:4317 -p 4318:4318 \
     --config=/etc/otel-collector-config.yaml
 ```
 
-### 3. Install OpenTelemetry Dependencies
+### 3. OpenTelemetry 의존성 설치 {#install-opentelemetry-dependencies}
 
 ```bash
 uv add opentelemetry-api opentelemetry-sdk opentelemetry-exporter-otlp
 ```
 
-### 4. Configure LiteLLM
+### 4. LiteLLM 구성 {#configure-litellm}
 
 <Tabs>
 <TabItem value="proxy" label="LiteLLM Proxy">
 
-Create a `config.yaml` file:
+`config.yaml` 파일을 만듭니다.
 
 ```yaml
 model_list:
@@ -96,7 +96,7 @@ general_settings:
   otel: true
 ```
 
-Set environment variables and start the proxy:
+환경 변수를 설정하고 proxy를 시작합니다.
 ```bash
 export OTEL_EXPORTER_OTLP_ENDPOINT="http://localhost:4317"
 litellm --config config.yaml
@@ -105,7 +105,7 @@ litellm --config config.yaml
 </TabItem>
 <TabItem value="python-sdk" label="Python SDK">
 
-Configure OpenTelemetry in your Python code:
+Python 코드에서 OpenTelemetry를 구성합니다.
 
 ```python
 import litellm
@@ -127,9 +127,9 @@ response = litellm.completion(
 </TabItem>
 </Tabs>
 
-### 5. Test the Integration
+### 5. 연동 테스트 {#test-the-integration}
 
-Make a test request to verify logging is working:
+로깅이 작동하는지 확인하기 위해 테스트 요청을 보냅니다.
 
 <Tabs>
 <TabItem value="curl-proxy" label="Test Proxy">
@@ -161,32 +161,32 @@ print("Response:", response.choices[0].message.content)
 </TabItem>
 </Tabs>
 
-### 6. Verify It's Working
+### 6. 작동 여부 확인 {#verify-its-working}
 
 ```bash
 # Check if traces are being created in Elasticsearch
 curl "localhost:9200/_search?pretty&size=1"
 ```
 
-You should see OpenTelemetry trace data with structured fields for your LLM requests.
+LLM 요청에 대한 구조화된 필드가 포함된 OpenTelemetry trace 데이터를 볼 수 있어야 합니다.
 
-### 7. Visualize in Kibana
+### 7. Kibana에서 시각화 {#visualize-in-kibana}
 
-Start Kibana to visualize your LLM telemetry data:
+LLM telemetry 데이터를 시각화하기 위해 Kibana를 시작합니다.
 
 ```bash
 docker run -d --name kibana --link elasticsearch:elasticsearch -p 5601:5601 docker.elastic.co/kibana/kibana:8.18.2
 ```
 
-Open Kibana at http://localhost:5601 and create an index pattern for your LiteLLM traces:
+http://localhost:5601 에서 Kibana를 열고 LiteLLM trace용 index pattern을 만듭니다.
 
 <Image img={require('../../img/elasticsearch_demo.png')} />
 
-## Production Setup
+## 프로덕션 설정 {#production-setup}
 
-**With Elasticsearch Cloud:**
+**Elasticsearch Cloud 사용:**
 
-Update your `otel_config.yaml`:
+`otel_config.yaml`을 업데이트합니다.
 ```yaml
 exporters:
   otlphttp/elastic:
@@ -196,7 +196,7 @@ exporters:
       "Content-Type": "application/json"
 ```
 
-**Docker Compose (Full Stack):**
+**Docker Compose (전체 스택):**
 ```yaml
 # docker-compose.yml
 version: '3.8'

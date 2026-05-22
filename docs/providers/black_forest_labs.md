@@ -1,22 +1,22 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Black Forest Labs Image Generation
+# Black Forest Labs 이미지 생성
 
-Black Forest Labs provides state-of-the-art text-to-image generation using their FLUX models.
+Black Forest Labs는 FLUX 모델을 사용해 최신 텍스트-이미지 생성을 제공합니다.
 
-## Overview
+## 개요
 
-| Property | Details |
+| 속성 | 세부 정보 |
 |----------|---------|
-| Description | Black Forest Labs FLUX models for high-quality text-to-image generation |
-| Provider Route on LiteLLM | `black_forest_labs/` |
-| Provider Doc | [Black Forest Labs API ↗](https://docs.bfl.ai/) |
-| Supported Operations | [`/images/generations`](#image-generation) |
+| 설명 | 고품질 텍스트-이미지 생성을 위한 Black Forest Labs FLUX 모델 |
+| LiteLLM의 Provider Route | `black_forest_labs/` |
+| Provider 문서 | [Black Forest Labs API ↗](https://docs.bfl.ai/) |
+| 지원 작업 | [`/images/generations`](#image-generation) |
 
-## Setup
+## 설정
 
-### API Key
+### API 키
 
 ```python showLineNumbers
 import os
@@ -25,23 +25,23 @@ import os
 os.environ["BFL_API_KEY"] = "your-api-key-here"
 ```
 
-Get your API key from [Black Forest Labs](https://blackforestlabs.ai/).
+[Black Forest Labs](https://blackforestlabs.ai/)에서 API 키를 가져오세요.
 
-## Supported Models
+## Supported 모델
 
-| Model Name | Description | Price |
+| 모델 이름 | 설명 | 가격 |
 |------------|-------------|-------|
-| `black_forest_labs/flux-pro-1.1` | Fast & reliable standard generation | $0.04/image |
-| `black_forest_labs/flux-pro-1.1-ultra` | Ultra high-resolution (up to 4MP) | $0.06/image |
-| `black_forest_labs/flux-dev` | Development/open-source variant | $0.025/image |
-| `black_forest_labs/flux-pro` | Original pro model | $0.05/image |
+| `black_forest_labs/flux-pro-1.1` | 빠르고 안정적인 표준 생성 | $0.04/image |
+| `black_forest_labs/flux-pro-1.1-ultra` | 초고해상도(최대 4MP) | $0.06/image |
+| `black_forest_labs/flux-dev` | 개발/오픈 소스 변형 | $0.025/image |
+| `black_forest_labs/flux-pro` | 원본 pro 모델 | $0.05/image |
 
-## Image Generation
+## 이미지 생성
 
-### Usage - LiteLLM Python SDK
+### 사용법 - LiteLLM Python SDK
 
 <Tabs>
-<TabItem value="basic" label="Basic Usage">
+<TabItem value="basic" label="기본 사용법">
 
 ```python showLineNumbers title="Basic Image Generation"
 import os
@@ -62,7 +62,7 @@ print(response.data[0].url)
 
 </TabItem>
 
-<TabItem value="async" label="Async Usage">
+<TabItem value="async" label="Async 사용법">
 
 ```python showLineNumbers title="Async Image Generation"
 import os
@@ -85,7 +85,7 @@ asyncio.run(generate_image())
 
 </TabItem>
 
-<TabItem value="size" label="Custom Size">
+<TabItem value="size" label="사용자 지정 크기">
 
 ```python showLineNumbers title="Image Generation with Custom Size"
 import os
@@ -106,7 +106,7 @@ print(response.data[0].url)
 
 </TabItem>
 
-<TabItem value="ultra" label="Ultra High-Res">
+<TabItem value="ultra" label="초고해상도">
 
 ```python showLineNumbers title="Ultra High Resolution with flux-pro-1.1-ultra"
 import os
@@ -128,7 +128,7 @@ print(response.data[0].url)
 
 </TabItem>
 
-<TabItem value="advanced" label="Advanced Parameters">
+<TabItem value="advanced" label="고급 파라미터">
 
 ```python showLineNumbers title="Advanced Image Generation with BFL Parameters"
 import os
@@ -153,9 +153,9 @@ print(response.data[0].url)
 </TabItem>
 </Tabs>
 
-### Usage - LiteLLM Proxy Server
+### 사용법 - LiteLLM Proxy Server
 
-#### 1. Configure your config.yaml
+#### 1. config.yaml 구성
 
 ```yaml showLineNumbers title="Black Forest Labs Image Generation Configuration"
 model_list:
@@ -184,7 +184,7 @@ general_settings:
   master_key: sk-1234
 ```
 
-#### 2. Start LiteLLM Proxy Server
+#### 2. LiteLLM Proxy Server 시작
 
 ```bash showLineNumbers title="Start LiteLLM Proxy Server"
 litellm --config /path/to/config.yaml
@@ -192,7 +192,7 @@ litellm --config /path/to/config.yaml
 # RUNNING on http://0.0.0.0:4000
 ```
 
-#### 3. Make image generation requests
+#### 3. 이미지 생성 요청 보내기
 
 <Tabs>
 <TabItem value="openai-sdk" label="OpenAI SDK">
@@ -234,58 +234,58 @@ curl -X POST 'http://localhost:4000/v1/images/generations' \
 </TabItem>
 </Tabs>
 
-## Supported Parameters
+## 지원 파라미터
 
-### OpenAI-Compatible Parameters
+### OpenAI 호환 파라미터
 
-| Parameter | Type | Description | Mapping |
+| 파라미터 | 타입 | 설명 | 매핑 |
 |-----------|------|-------------|---------|
-| `prompt` | string | Text description of the image to generate | Direct |
-| `model` | string | The FLUX model to use | Direct |
-| `size` | string | Image dimensions (e.g., `1024x1024`) | Maps to `width` and `height` |
-| `n` | integer | Number of images (ultra model only, up to 4) | Maps to `num_images` |
-| `quality` | string | `hd` for natural look | Maps to `raw=True` for ultra |
-| `response_format` | string | `url` or `b64_json` | Direct |
+| `prompt` | string | 생성할 이미지의 텍스트 설명 | 직접 전달 |
+| `model` | string | 사용할 FLUX 모델 | 직접 전달 |
+| `size` | string | 이미지 크기(예: `1024x1024`) | `width` 및 `height`로 매핑 |
+| `n` | integer | 이미지 수(ultra 모델만 해당, 최대 4개) | `num_images`로 매핑 |
+| `quality` | string | 자연스러운 느낌에는 `hd` 사용 | ultra에서는 `raw=True`로 매핑 |
+| `response_format` | string | `url` 또는 `b64_json` | 직접 전달 |
 
-### Black Forest Labs Specific Parameters
+### Black Forest Labs 전용 파라미터
 
-| Parameter | Type | Description | Default |
+| 파라미터 | 타입 | 설명 | 기본값 |
 |-----------|------|-------------|---------|
-| `width` | integer | Image width (256-1920, multiples of 16) | 1024 |
-| `height` | integer | Image height (256-1920, multiples of 16) | 1024 |
-| `aspect_ratio` | string | Alternative to width/height (e.g., `16:9`, `1:1`) | - |
-| `seed` | integer | Seed for reproducible results | Random |
-| `output_format` | string | Output format: `png` or `jpeg` | `png` |
-| `safety_tolerance` | integer | Safety filter tolerance (0-6, higher = more permissive) | 2 |
-| `prompt_upsampling` | boolean | Enhance prompt for better results | `false` |
+| `width` | integer | 이미지 너비(256-1920, 16의 배수) | 1024 |
+| `height` | integer | 이미지 높이(256-1920, 16의 배수) | 1024 |
+| `aspect_ratio` | string | width/height 대신 사용할 비율(예: `16:9`, `1:1`) | - |
+| `seed` | integer | 재현 가능한 결과를 위한 시드 | 랜덤 |
+| `output_format` | string | 출력 형식: `png` 또는 `jpeg` | `png` |
+| `safety_tolerance` | integer | 안전 필터 허용치(0-6, 높을수록 더 허용적) | 2 |
+| `prompt_upsampling` | boolean | 더 나은 결과를 위해 프롬프트 개선 | `false` |
 
-### Ultra Model Specific Parameters
+### Ultra 모델 전용 파라미터
 
-| Parameter | Type | Description | Default |
+| 파라미터 | 타입 | 설명 | 기본값 |
 |-----------|------|-------------|---------|
-| `raw` | boolean | Raw mode for more natural, less synthetic look | `false` |
-| `num_images` | integer | Number of images to generate (1-4) | 1 |
+| `raw` | boolean | 더 자연스럽고 덜 합성된 느낌을 위한 raw 모드 | `false` |
+| `num_images` | integer | 생성할 이미지 수(1-4) | 1 |
 
-## How It Works
+## 작동 방식
 
-Black Forest Labs uses a polling-based API:
+Black Forest Labs는 폴링 기반 API를 사용합니다.
 
-1. **Submit Request**: LiteLLM sends your prompt to BFL
-2. **Get Task ID**: BFL returns a task ID and polling URL
-3. **Poll for Result**: LiteLLM automatically polls until the image is ready
-4. **Return Result**: The generated image URL is returned
+1. **요청 제출**: LiteLLM이 프롬프트를 BFL로 전송합니다.
+2. **작업 ID 가져오기**: BFL이 작업 ID와 폴링 URL을 반환합니다.
+3. **결과 폴링**: 이미지가 준비될 때까지 LiteLLM이 자동으로 폴링합니다.
+4. **결과 반환**: 생성된 이미지 URL이 반환됩니다.
 
-This polling is handled automatically by LiteLLM - you just call `image_generation()` and get the result.
+이 폴링은 LiteLLM이 자동으로 처리하므로 `image_generation()`을 호출하면 결과를 받을 수 있습니다.
 
-## Getting Started
+## 시작하기
 
-1. Create an account at [Black Forest Labs](https://blackforestlabs.ai/)
-2. Get your API key from the dashboard
-3. Set your `BFL_API_KEY` environment variable
-4. Use `litellm.image_generation()` with any supported model
+1. [Black Forest Labs](https://blackforestlabs.ai/)에서 계정을 만듭니다.
+2. 대시보드에서 API 키를 가져옵니다.
+3. `BFL_API_KEY` 환경 변수를 설정합니다.
+4. 지원되는 모델 중 하나와 함께 `litellm.image_generation()`을 사용합니다.
 
-## Additional Resources
+## 추가 리소스
 
 - [Black Forest Labs Documentation](https://docs.bfl.ai/)
-- [Black Forest Labs Image Editing](./black_forest_labs_img_edit.md) - For editing existing images
+- [Black Forest Labs Image Editing](./black_forest_labs_img_edit.md) - 기존 이미지 편집용
 - [FLUX Model Information](https://blackforestlabs.ai/)

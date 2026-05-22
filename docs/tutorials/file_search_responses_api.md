@@ -1,32 +1,33 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# File Search in the Responses API
+# Responses API의 File Search
 
-LiteLLM now supports `file_search` in the Responses API across both:
-- providers that support it natively (like OpenAI / Azure), and
-- providers that do not (like Anthropic, Bedrock, and other non-native providers) via emulation.
+LiteLLM은 이제 Responses API에서 다음 두 경로 모두에 대해 `file_search`를 지원합니다.
 
-## What this is
+- OpenAI / Azure처럼 이를 native로 지원하는 provider
+- Anthropic, Bedrock, 기타 non-native provider처럼 emulation이 필요한 provider
 
-`file_search` lets models retrieve grounded context from your vector stores and answer with citations.
-LiteLLM keeps one OpenAI-compatible output shape while routing requests through either native passthrough or an emulated fallback.
+## 이 기능의 의미
 
-Two paths are covered:
+`file_search`를 사용하면 모델이 vector store에서 근거 context를 검색하고 citation과 함께 답변할 수 있습니다.
+LiteLLM은 요청을 native passthrough 또는 emulated fallback으로 routing하면서도 하나의 OpenAI-compatible output shape를 유지합니다.
 
-| Path | When it runs | What LiteLLM does |
+두 가지 경로를 다룹니다.
+
+| 경로 | 실행 조건 | LiteLLM 동작 |
 | --- | --- | --- |
-| **Native passthrough** | Provider natively supports `file_search` (OpenAI, Azure) | Decodes unified vector store ID → forwards to provider as-is |
-| **Emulated fallback** | Provider doesn't support `file_search` (Anthropic, Bedrock, etc.) | Converts to a function tool → intercepts tool call → runs vector search → synthesizes OpenAI-format output |
+| **Native passthrough** | Provider가 `file_search`를 native로 지원함(OpenAI, Azure) | Unified vector store ID를 decode한 뒤 provider로 그대로 전달 |
+| **Emulated fallback** | Provider가 `file_search`를 지원하지 않음(Anthropic, Bedrock 등) | Function tool로 변환 → tool call 가로채기 → vector search 실행 → OpenAI-format output 합성 |
 
-In `tools[].vector_store_ids`, LiteLLM accepts both provider-native IDs (e.g. `vs_...`) **and** **managed vector store unified IDs** (URL-safe base64 strings from the proxy managed-vector flow), e.g. `litellm.responses(..., tools=[{"type": "file_search", "vector_store_ids": ["bGl0ZWxsbV9wcm94eT..."]}])`.
+`tools[].vector_store_ids`에서 LiteLLM은 provider-native ID(예: `vs_...`)와 **managed vector store unified ID**(proxy managed-vector flow에서 나온 URL-safe base64 string)를 모두 허용합니다. 예: `litellm.responses(..., tools=[{"type": "file_search", "vector_store_ids": ["bGl0ZWxsbV9wcm94eT..."]}])`.
 
-## Usage
+## 사용법
 
 <Tabs>
 <TabItem value="proxy" label="LiteLLM Proxy" default>
 
-### 1. Setup `config.yaml`
+### 1. `config.yaml` 설정
 
 ```yaml title="config.yaml"
 model_list:
@@ -41,13 +42,13 @@ model_list:
       api_key: os.environ/ANTHROPIC_API_KEY
 ```
 
-### 2. Start the proxy
+### 2. 프록시 시작
 
 ```bash
 litellm --config config.yaml
 ```
 
-### 3. Call Responses API with `file_search`
+### 3. `file_search`로 Responses API 호출
 
 ```python title="Proxy call"
 from openai import OpenAI
@@ -70,7 +71,7 @@ print(response.output)
 </TabItem>
 <TabItem value="sdk" label="LiteLLM SDK">
 
-### 1. Install + set keys
+### 1. 설치 및 key 설정
 
 ```bash
 uv add litellm
@@ -78,7 +79,7 @@ export OPENAI_API_KEY="sk-..."
 export ANTHROPIC_API_KEY="sk-ant-..."
 ```
 
-### 2. Call Responses API with `file_search`
+### 2. `file_search`로 Responses API 호출
 
 ```python title="SDK call"
 import litellm
@@ -99,16 +100,16 @@ print(response.output)
 </TabItem>
 </Tabs>
 
-### Behavior Matrix
+### 동작 매트릭스
 
-| Path | SDK model | Proxy model | Behavior |
+| 경로 | SDK model | Proxy model | 동작 |
 | --- | --- | --- | --- |
-| Native passthrough | `openai/gpt-4.1` | `gpt-4.1` | Provider executes native `file_search` |
-| Emulated fallback | `anthropic/claude-sonnet-4-5` | `claude-sonnet` | LiteLLM converts to function tool and synthesizes OpenAI-format output |
+| Native passthrough | `openai/gpt-4.1` | `gpt-4.1` | Provider가 native `file_search`를 실행합니다. |
+| Emulated fallback | `anthropic/claude-sonnet-4-5` | `claude-sonnet` | LiteLLM이 function tool로 변환하고 OpenAI-format output을 합성합니다. |
 
 
 
-## Architecture Diagram
+## 아키텍처 Diagram
 
 ```mermaid
 flowchart TD
@@ -132,7 +133,7 @@ flowchart TD
 
 
 
-## Prerequisites
+## 사전 준비
 
 ```bash
 uv tool install 'litellm[proxy]'
@@ -142,11 +143,11 @@ export ANTHROPIC_API_KEY="sk-ant-..."  # for emulated path
 
 
 
-## Example response shape
+## 예제 response shape
 
-## Validating the Output Format
+## Output Format 검증
 
-Regardless of which path ran, the response always follows the OpenAI Responses API format:
+어떤 경로가 실행되든 response는 항상 OpenAI Responses API format을 따릅니다.
 
 ```json
 {
@@ -180,7 +181,7 @@ Regardless of which path ran, the response always follows the OpenAI Responses A
 }
 ```
 
-**Validation script:**
+**검증 script:**
 
 ```python showLineNumbers title="Validate response structure"
 def validate_file_search_response(response):
@@ -220,22 +221,22 @@ validate_file_search_response(response)
 
 ## Q&A
 
-- **Why do I see `UnsupportedParamsError`?** This usually means `file_search` was passed to a provider that does not support it natively and emulation could not route correctly. Check:
-  - The model string is valid (for example, `anthropic/claude-sonnet-4-5`).
-  - `custom_llm_provider` resolves correctly so LiteLLM can load the provider config.
-- **Why does vector search return no results?** Common causes:
-  - The vector store ID is wrong or has no files attached.
-  - In LiteLLM-managed stores, file ingestion is not complete (`status != completed`).
-  - The query is too narrow; try a broader query.
-- **Why am I getting `403 Access denied` on vector store calls?** The caller does not have access to that vector store.
-  - The store may belong to another team.
-  - Use an admin/proxy key if your setup requires cross-team access.
-- **Why are `annotations` empty in emulated mode?** `file_citation` annotations require `file_id` metadata in search results. If your vector backend does not return file-level metadata, the answer text is still generated but citations can be empty.
+- **왜 `UnsupportedParamsError`가 보이나요?** 보통 `file_search`가 native로 지원하지 않는 provider에 전달됐고 emulation routing도 올바르게 처리되지 않았다는 뜻입니다. 다음을 확인하세요.
+  - Model string이 유효한지 확인합니다(예: `anthropic/claude-sonnet-4-5`).
+  - LiteLLM이 provider config를 load할 수 있도록 `custom_llm_provider`가 올바르게 resolve되는지 확인합니다.
+- **왜 vector search 결과가 없나요?** 일반적인 원인은 다음과 같습니다.
+  - Vector store ID가 틀렸거나 연결된 file이 없습니다.
+  - LiteLLM-managed store에서 file ingestion이 완료되지 않았습니다(`status != completed`).
+  - Query가 너무 좁습니다. 더 넓은 query를 시도하세요.
+- **Vector store 호출에서 왜 `403 Access denied`가 발생하나요?** 호출자가 해당 vector store에 접근 권한이 없습니다.
+  - Store가 다른 team에 속해 있을 수 있습니다.
+  - Cross-team access가 필요한 설정이라면 admin/proxy key를 사용하세요.
+- **Emulated mode에서 왜 `annotations`가 비어 있나요?** `file_citation` annotation에는 search result의 `file_id` metadata가 필요합니다. Vector backend가 file-level metadata를 반환하지 않으면 답변 text는 생성되지만 citation은 비어 있을 수 있습니다.
 
 
 
-## What to check next
+## 다음에 확인할 항목
 
-- [File Search reference in Responses API docs](/docs/response_api#file-search-vector-stores) — full API reference
-- [Vector Store management](/docs/vector_store_files) — create and manage vector stores
+- [Responses API docs의 File Search reference](/docs/response_api#file-search-vector-stores) — 전체 API reference
+- [Vector Store 관리](/docs/vector_store_files) — vector store 생성 및 관리
 - [Managed vector stores](/docs/providers/bedrock_vector_store) — provider-specific setup

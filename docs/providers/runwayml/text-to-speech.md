@@ -1,17 +1,17 @@
-# RunwayML - Text-to-Speech
+# RunwayML - 텍스트 음성 변환
 
-## Overview
+## 개요
 
-| Property | Details |
+| 속성 | 세부 정보 |
 |-------|-------|
-| Description | RunwayML provides high-quality AI-powered text-to-speech with natural-sounding voices |
-| Provider Route on LiteLLM | `runwayml/` |
-| Supported Operations | [`/audio/speech`](#quick-start) |
-| Link to Provider Doc | [RunwayML API ↗](https://docs.dev.runwayml.com/) |
+| 설명 | RunwayML은 자연스럽게 들리는 음성으로 고품질 AI 기반 텍스트 음성 변환을 제공합니다 |
+| LiteLLM의 공급자 라우트 | `runwayml/` |
+| 지원 작업 | [`/audio/speech`](#quick-start) |
+| 공급자 문서 링크 | [RunwayML API ↗](https://docs.dev.runwayml.com/) |
 
-LiteLLM supports RunwayML's text-to-speech API with automatic task polling, allowing you to generate natural-sounding audio from text.
+LiteLLM은 자동 작업 폴링과 함께 RunwayML의 텍스트 음성 변환 API를 지원하여, 텍스트에서 자연스럽게 들리는 오디오를 생성할 수 있게 합니다.
 
-## Quick Start
+## 빠른 시작
 
 ```python showLineNumbers title="Basic Text-to-Speech"
 from litellm import speech
@@ -30,9 +30,9 @@ with open("output.mp3", "wb") as f:
     f.write(response.content)
 ```
 
-## Authentication
+## 인증
 
-Set your RunwayML API key:
+RunwayML API 키를 설정합니다.
 
 ```python showLineNumbers title="Set API Key"
 import os
@@ -40,19 +40,19 @@ import os
 os.environ["RUNWAYML_API_KEY"] = "your-api-key"
 ```
 
-## Supported Parameters
+## 지원 파라미터
 
-| Parameter | Type | Required | Description |
+| 파라미터 | 타입 | 필수 | 설명 |
 |-----------|------|----------|-------------|
-| `model` | string | Yes | Model to use (e.g., `runwayml/eleven_multilingual_v2`) |
-| `input` | string | Yes | Text to convert to speech |
-| `voice` | string or dict | Yes | Voice to use (OpenAI name, RunwayML preset, or voice config) |
+| `model` | string | 예 | 사용할 모델(예: `runwayml/eleven_multilingual_v2`) |
+| `input` | string | 예 | 음성으로 변환할 텍스트 |
+| `voice` | string 또는 dict | 예 | 사용할 음성(OpenAI 이름, RunwayML 프리셋 또는 음성 구성) |
 
-## Voice Options
+## 음성 옵션
 
-### Using OpenAI Voice Names
+### OpenAI 음성 이름 사용
 
-OpenAI voice names are automatically mapped to appropriate RunwayML voices:
+OpenAI 음성 이름은 적절한 RunwayML 음성에 자동으로 매핑됩니다.
 
 ```python showLineNumbers title="OpenAI Voice Names"
 from litellm import speech
@@ -65,17 +65,17 @@ response = speech(
 )
 ```
 
-**Voice Mappings:**
-- `alloy` → Maya (neutral, balanced female voice)
-- `echo` → James (male voice)
-- `fable` → Bernard (warm, storytelling voice)
-- `onyx` → Vincent (deep male voice)
-- `nova` → Serene (warm, expressive female voice)
-- `shimmer` → Ella (clear, friendly female voice)
+**음성 매핑:**
+- `alloy` → Maya(중립적이고 균형 잡힌 여성 음성)
+- `echo` → James(남성 음성)
+- `fable` → Bernard(따뜻한 스토리텔링 음성)
+- `onyx` → Vincent(깊은 남성 음성)
+- `nova` → Serene(따뜻하고 표현력 있는 여성 음성)
+- `shimmer` → Ella(명확하고 친근한 여성 음성)
 
-### Using RunwayML Preset Voices
+### RunwayML 프리셋 음성 사용
 
-You can directly specify any RunwayML preset voice by passing the preset name as a string:
+프리셋 이름을 문자열로 전달하여 RunwayML 프리셋 음성을 직접 지정할 수 있습니다.
 
 ```python showLineNumbers title="RunwayML Preset Names"
 from litellm import speech
@@ -95,15 +95,15 @@ response = speech(
 )
 ```
 
-**Available RunwayML Voices:**
+**사용 가능한 RunwayML 음성:**
 
-Maya, Arjun, Serene, Bernard, Billy, Mark, Clint, Mabel, Chad, Leslie, Eleanor, Elias, Elliot, Grungle, Brodie, Sandra, Kirk, Kylie, Lara, Lisa, Malachi, Marlene, Martin, Miriam, Monster, Paula, Pip, Rusty, Ragnar, Xylar, Maggie, Jack, Katie, Noah, James, Rina, Ella, Mariah, Frank, Claudia, Niki, Vincent, Kendrick, Myrna, Tom, Wanda, Benjamin, Kiana, Rachel
+`Maya`, `Arjun`, `Serene`, `Bernard`, `Billy`, `Mark`, `Clint`, `Mabel`, `Chad`, `Leslie`, `Eleanor`, `Elias`, `Elliot`, `Grungle`, `Brodie`, `Sandra`, `Kirk`, `Kylie`, `Lara`, `Lisa`, `Malachi`, `Marlene`, `Martin`, `Miriam`, `Monster`, `Paula`, `Pip`, `Rusty`, `Ragnar`, `Xylar`, `Maggie`, `Jack`, `Katie`, `Noah`, `James`, `Rina`, `Ella`, `Mariah`, `Frank`, `Claudia`, `Niki`, `Vincent`, `Kendrick`, `Myrna`, `Tom`, `Wanda`, `Benjamin`, `Kiana`, `Rachel`
 
 :::tip
-Simply pass the voice name as a string - LiteLLM automatically handles the internal RunwayML API format conversion.
+음성 이름을 문자열로 전달하기만 하면 됩니다. LiteLLM이 내부 RunwayML API 형식 변환을 자동으로 처리합니다.
 :::
 
-## Async Usage
+## 비동기 사용법
 
 ```python showLineNumbers title="Async Text-to-Speech"
 from litellm import aspeech
@@ -127,9 +127,9 @@ async def generate_speech():
 asyncio.run(generate_speech())
 ```
 
-## LiteLLM Proxy Usage
+## LiteLLM 프록시 사용법
 
-Add RunwayML to your proxy configuration:
+프록시 구성에 RunwayML을 추가합니다.
 
 ```yaml showLineNumbers title="config.yaml"
 model_list:
@@ -139,13 +139,13 @@ model_list:
       api_key: os.environ/RUNWAYML_API_KEY
 ```
 
-Start the proxy:
+프록시 시작:
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-Generate speech through the proxy:
+프록시를 통해 음성을 생성합니다.
 
 ```bash showLineNumbers title="Proxy Request"
 curl --location 'http://localhost:4000/v1/audio/speech' \
@@ -158,7 +158,7 @@ curl --location 'http://localhost:4000/v1/audio/speech' \
 }'
 ```
 
-With RunwayML-specific voice:
+RunwayML 전용 음성을 사용하는 예시는 다음과 같습니다.
 
 ```bash showLineNumbers title="Proxy Request with RunwayML Voice"
 curl --location 'http://localhost:4000/v1/audio/speech' \
@@ -171,15 +171,15 @@ curl --location 'http://localhost:4000/v1/audio/speech' \
 }'
 ```
 
-## Supported Models
+## 지원 모델
 
-| Model | Description |
+| 모델 | 설명 |
 |-------|-------------|
-| `runwayml/eleven_multilingual_v2` | High-quality multilingual text-to-speech |
+| `runwayml/eleven_multilingual_v2` | 고품질 다국어 텍스트 음성 변환 |
 
-## Cost Tracking
+## 비용 추적
 
-LiteLLM automatically tracks RunwayML text-to-speech costs:
+LiteLLM은 RunwayML 텍스트 음성 변환 비용을 자동으로 추적합니다.
 
 ```python showLineNumbers title="Cost Tracking"
 from litellm import speech, completion_cost
@@ -194,22 +194,22 @@ cost = completion_cost(completion_response=response)
 print(f"Text-to-speech cost: ${cost}")
 ```
 
-## Supported Features
+## 지원 기능
 
-| Feature | Supported |
+| 기능 | 지원 여부 |
 |---------|-----------|
-| Text-to-Speech | ✅ |
-| Cost Tracking | ✅ |
-| Logging | ✅ |
-| Fallbacks | ✅ |
-| Load Balancing | ✅ |
-| 50+ Voice Presets | ✅ |
+| 텍스트 음성 변환 | ✅ |
+| 비용 추적 | ✅ |
+| 로깅 | ✅ |
+| 폴백 | ✅ |
+| 로드 밸런싱 | ✅ |
+| 50개 이상의 음성 프리셋 | ✅ |
 
-## How It Works
+## 작동 방식
 
-RunwayML uses an asynchronous task-based API pattern. LiteLLM handles the polling and response transformation automatically.
+RunwayML은 비동기 작업 기반 API 패턴을 사용합니다. LiteLLM은 폴링과 응답 변환을 자동으로 처리합니다.
 
-### Complete Flow Diagram
+### 전체 흐름 다이어그램
 
 ```mermaid
 sequenceDiagram
@@ -241,4 +241,3 @@ sequenceDiagram
     Note over LiteLLM: Return audio content
     LiteLLM-->>Client: Audio Response (binary)
 ```
-

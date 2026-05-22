@@ -1,17 +1,17 @@
-# Supabase Tutorial 
-[Supabase](https://supabase.com/) is an open source Firebase alternative.
-Start your project with a Postgres database, Authentication, instant APIs, Edge Functions, Realtime subscriptions, Storage, and Vector embeddings.
+# Supabase 튜토리얼
+[Supabase](https://supabase.com/)는 오픈 소스 Firebase 대안입니다.
+Postgres 데이터베이스, Authentication, 즉시 사용 가능한 API, Edge Functions, Realtime 구독, Storage, Vector 임베딩으로 프로젝트를 시작하세요.
 
-## Use Supabase to log requests and see total spend across all LLM Providers (OpenAI, Azure, Anthropic, Cohere, Replicate, PaLM)
-liteLLM provides `success_callbacks` and `failure_callbacks`, making it easy for you to send data to a particular provider depending on the status of your responses. 
+## Supabase를 사용해 모든 LLM 제공업체(OpenAI, Azure, Anthropic, Cohere, Replicate, PaLM)의 요청을 기록하고 총 지출 확인하기
+liteLLM은 `success_callbacks`와 `failure_callbacks`를 제공하므로 응답 상태에 따라 특정 제공업체로 데이터를 쉽게 보낼 수 있습니다.
 
-In this case, we want to log requests to Supabase in both scenarios - when it succeeds and fails. 
+이 경우에는 성공과 실패 두 상황 모두에서 Supabase에 요청을 기록하려고 합니다.
 
-### Create a supabase table 
+### Supabase 테이블 만들기
 
-Go to your Supabase project > go to the [Supabase SQL Editor](https://supabase.com/dashboard/projects) and create a new table with this configuration.
+Supabase 프로젝트에서 [Supabase SQL Editor](https://supabase.com/dashboard/projects)로 이동한 뒤, 이 구성으로 새 테이블을 만드세요.
 
-Note: You can change the table name. Just don't change the column names. 
+참고: 테이블 이름은 변경할 수 있습니다. 단, 컬럼 이름은 변경하지 마세요.
 
 ```sql
 create table
@@ -30,15 +30,15 @@ create table
   ) tablespace pg_default;
 ```
 
-### Use Callbacks 
-Use just 2 lines of code, to instantly see costs and log your responses **across all providers** with Supabase: 
+### 콜백 사용하기
+코드 두 줄만으로 비용을 즉시 확인하고 **모든 제공업체의** 응답을 Supabase에 기록할 수 있습니다.
 
 ```
 litellm.success_callback=["supabase"]
 litellm.failure_callback=["supabase"]
 ```
 
-Complete code
+전체 코드
 ```python
 from litellm import completion
 
@@ -61,19 +61,19 @@ response = completion(model="gpt-3.5-turbo", messages=[{"role": "user", "content
 response = completion(model="chatgpt-test", messages=[{"role": "user", "content": "Hi 👋 - i'm a bad call to test error logging"}]) 
 ```
 
-### Additional Controls 
+### 추가 제어 옵션
 
-**Different Table name**
+**다른 테이블 이름**
 
-If you modified your table name, here's how to pass the new name.
+테이블 이름을 변경했다면 다음과 같이 새 이름을 전달할 수 있습니다.
 
 ```python 
 litellm.modify_integration("supabase",{"table_name": "litellm_logs"})
 ```
 
-**Identify end-user**
+**최종 사용자 식별**
 
-Here's how to map your llm call to an end-user 
+LLM 호출을 최종 사용자에 매핑하는 방법은 다음과 같습니다.
 
 ```python
 litellm.identify({"end_user": "krrish@berri.ai"})

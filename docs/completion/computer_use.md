@@ -1,24 +1,24 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Computer Use
+# 컴퓨터 사용 {#computer-use}
 
-Computer use allows models to interact with computer interfaces by taking screenshots and performing actions like clicking, typing, and scrolling. This enables AI models to autonomously operate desktop environments.
+컴퓨터 사용을 통해 모델은 스크린샷을 찍고 클릭, 입력, 스크롤 같은 작업을 수행하면서 컴퓨터 인터페이스와 상호작용할 수 있습니다. 이를 통해 AI 모델이 데스크톱 환경을 자율적으로 조작할 수 있습니다.
 
-**Supported Providers:**
+**지원 프로바이더:**
 - Anthropic API (`anthropic/`)
 - Bedrock (Anthropic) (`bedrock/`)
 - Vertex AI (Anthropic) (`vertex_ai/`)
 
-**Supported Tool Types:**
-- `computer` - Computer interaction tool with display parameters
-- `bash` - Bash shell tool  
-- `text_editor` - Text editor tool
-- `web_search` - Web search tool
+**지원 툴 유형:**
+- `computer` - 디스플레이 매개변수를 포함한 컴퓨터 상호작용 툴
+- `bash` - Bash 셸 툴
+- `text_editor` - 텍스트 편집기 툴
+- `web_search` - 웹 검색 툴
 
-LiteLLM will standardize the computer use tools across all supported providers.
+LiteLLM은 지원되는 모든 프로바이더에서 컴퓨터 사용 툴을 표준화합니다.
 
-## Quick Start
+## 빠른 시작 {#quick-start}
 
 <Tabs>
 <TabItem value="sdk" label="LiteLLM Python SDK">
@@ -70,7 +70,7 @@ print(response)
 </TabItem>
 <TabItem value="proxy" label="LiteLLM Proxy Server">
 
-1. Define computer use models on config.yaml
+1. config.yaml에 컴퓨터 사용 모델을 정의합니다.
 
 ```yaml
 model_list:
@@ -88,13 +88,13 @@ model_list:
       supports_computer_use: True        # set supports_computer_use to True so /model/info returns this attribute as True
 ```
 
-2. Run proxy server
+2. 프록시 서버를 실행합니다.
 
 ```bash
 litellm --config config.yaml
 ```
 
-3. Test it using the OpenAI Python SDK
+3. OpenAI Python SDK로 테스트합니다.
 
 ```python
 import os 
@@ -141,12 +141,12 @@ print(response)
 </TabItem>
 </Tabs>
 
-## Checking if a model supports `computer use`
+## 모델이 `computer use`를 지원하는지 확인하기 {#checking-if-a-model-supports-computer-use}
 
 <Tabs>
 <TabItem label="LiteLLM Python SDK" value="Python">
 
-Use `litellm.supports_computer_use(model="")` -> returns `True` if model supports computer use and `False` if not
+`litellm.supports_computer_use(model="")`를 사용합니다. 모델이 컴퓨터 사용을 지원하면 `True`, 지원하지 않으면 `False`를 반환합니다.
 
 ```python
 import litellm
@@ -161,7 +161,7 @@ assert litellm.supports_computer_use(model="openai/gpt-4") == False
 
 <TabItem label="LiteLLM Proxy Server" value="proxy">
 
-1. Define computer use models on config.yaml
+1. config.yaml에 컴퓨터 사용 모델을 정의합니다.
 
 ```yaml
 model_list:
@@ -179,13 +179,13 @@ model_list:
       supports_computer_use: True        # set supports_computer_use to True so /model/info returns this attribute as True
 ```
 
-2. Run proxy server
+2. 프록시 서버를 실행합니다.
 
 ```bash
 litellm --config config.yaml
 ```
 
-3. Call `/model_group/info` to check if your model supports `computer use`
+3. 모델이 `computer use`를 지원하는지 확인하려면 `/model_group/info`를 호출합니다.
 
 ```shell
 curl -X 'GET' \
@@ -194,7 +194,7 @@ curl -X 'GET' \
   -H 'x-api-key: sk-1234'
 ```
 
-Expected Response 
+예상 응답
 
 ```json
 {
@@ -226,14 +226,14 @@ Expected Response
 </TabItem>
 </Tabs>
 
-## Different Tool Types
+## 여러 툴 유형 {#different-tool-types}
 
-Computer use supports several different tool types for various interaction modes:
+컴퓨터 사용은 다양한 상호작용 모드를 위해 여러 툴 유형을 지원합니다.
 
 <Tabs>
-<TabItem value="computer" label="Computer Tool">
+<TabItem value="computer" label="컴퓨터 툴">
 
-The `computer_20241022` tool provides direct screen interaction capabilities.
+`computer_20241022` 툴은 직접적인 화면 상호작용 기능을 제공합니다.
 
 ```python
 import os 
@@ -279,9 +279,9 @@ print(response)
 ```
 
 </TabItem>
-<TabItem value="bash" label="Bash Tool">
+<TabItem value="bash" label="Bash 툴">
 
-The `bash_20241022` tool provides command line interface access.
+`bash_20241022` 툴은 명령줄 인터페이스 접근 기능을 제공합니다.
 
 ```python
 import os 
@@ -313,9 +313,9 @@ print(response)
 ```
 
 </TabItem>
-<TabItem value="text_editor" label="Text Editor Tool">
+<TabItem value="text_editor" label="텍스트 편집기 툴">
 
-The `text_editor_20250124` tool provides text file editing capabilities.
+`text_editor_20250124` 툴은 텍스트 파일 편집 기능을 제공합니다.
 
 ```python
 import os 
@@ -349,9 +349,9 @@ print(response)
 </TabItem>
 </Tabs>
 
-## Advanced Usage with Multiple Tools
+## 여러 툴을 함께 사용하는 고급 사용법 {#advanced-usage-with-multiple-tools}
 
-You can combine different computer use tools in a single request:
+하나의 요청에서 여러 컴퓨터 사용 툴을 함께 사용할 수 있습니다.
 
 ```python
 import os 
@@ -404,9 +404,9 @@ response = completion(
 print(response)
 ```
 
-## Spec
+## 사양 {#spec}
 
-### Computer Tool (`computer_20241022`)
+### 컴퓨터 툴 (`computer_20241022`) {#computer-tool-computer_20241022}
 
 ```json
 {
@@ -418,7 +418,7 @@ print(response)
 }
 ```
 
-### Bash Tool (`bash_20241022`)
+### Bash 툴 (`bash_20241022`) {#bash-tool-bash_20241022}
 
 ```json
 {
@@ -427,7 +427,7 @@ print(response)
 }
 ```
 
-### Text Editor Tool (`text_editor_20250124`)
+### 텍스트 편집기 툴 (`text_editor_20250124`) {#text-editor-tool-text_editor_20250124}
 
 ```json
 {
@@ -436,7 +436,7 @@ print(response)
 }
 ```
 
-### Web Search Tool (`web_search_20250305`)
+### 웹 검색 툴 (`web_search_20250305`) {#web-search-tool-web_search_20250305}
 
 ```json
 {

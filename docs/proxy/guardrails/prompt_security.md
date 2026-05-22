@@ -4,13 +4,13 @@ import TabItem from '@theme/TabItem';
 
 # Prompt Security
 
-Use [Prompt Security](https://prompt.security/) to protect your LLM applications from prompt injection attacks, jailbreaks, harmful content, PII leakage, and malicious file uploads through comprehensive input and output validation.
+[Prompt Security](https://prompt.security/)를 사용하면 포괄적인 입력/출력 검증으로 LLM 애플리케이션을 프롬프트 주입 공격, jailbreak, 유해 콘텐츠, PII 유출, 악성 파일 업로드로부터 보호할 수 있습니다.
 
-## Quick Start
+## 빠른 시작
 
-### 1. Define Guardrails on your LiteLLM config.yaml 
+### 1. LiteLLM config.yaml에 가드레일 정의
 
-Define your guardrails under the `guardrails` section:
+`guardrails` 섹션 아래에 guardrail을 정의합니다.
 
 ```yaml showLineNumbers title="config.yaml"
 model_list:
@@ -31,13 +31,13 @@ guardrails:
       default_on: true
 ```
 
-#### Supported values for `mode`
+#### `mode` 지원 값
 
-- `pre_call` - Run **before** LLM call to validate **user input**. Blocks requests with detected policy violations (jailbreaks, harmful prompts, PII, malicious files, etc.)
-- `post_call` - Run **after** LLM call to validate **model output**. Blocks responses containing harmful content, policy violations, or sensitive information
-- `during_call` - Run **both** pre and post call validation for comprehensive protection
+- `pre_call` - LLM 호출 **전** 실행되어 **사용자 입력**을 검증합니다. 정책 위반(jailbreak, 유해 프롬프트, PII, 악성 파일 등)이 감지된 요청을 차단합니다.
+- `post_call` - LLM 호출 **후** 실행되어 **모델 출력**을 검증합니다. 유해 콘텐츠, 정책 위반, 민감 정보가 포함된 응답을 차단합니다.
+- `during_call` - 포괄적인 보호를 위해 pre-call과 post-call 검증을 **모두** 실행합니다.
 
-### 2. Set Environment Variables
+### 2. 환경 변수 설정
 
 ```shell
 export PROMPT_SECURITY_API_KEY="your-api-key"
@@ -46,18 +46,18 @@ export PROMPT_SECURITY_USER="optional-user-id"  # Optional: for user tracking
 export PROMPT_SECURITY_SYSTEM_PROMPT="optional-system-prompt"  # Optional: for context
 ```
 
-### 3. Start LiteLLM Gateway 
+### 3. LiteLLM Gateway 시작
 
 ```shell
 litellm --config config.yaml --detailed_debug
 ```
 
-### 4. Test request 
+### 4. 요청 테스트
 
 <Tabs>
 <TabItem label="Pre-call Guardrail Test" value = "pre-call-test">
 
-Test input validation with a prompt injection attempt:
+Prompt injection 시도로 입력 검증을 테스트합니다.
 
 ```shell
 curl -i http://0.0.0.0:4000/v1/chat/completions \
@@ -71,7 +71,7 @@ curl -i http://0.0.0.0:4000/v1/chat/completions \
   }'
 ```
 
-Expected response on policy violation:
+정책 위반 시 예상 응답:
 
 ```shell
 {
@@ -88,7 +88,7 @@ Expected response on policy violation:
 
 <TabItem label="Post-call Guardrail Test" value = "post-call-test">
 
-Test output validation to prevent sensitive information leakage:
+민감 정보 유출을 방지하기 위한 출력 검증을 테스트합니다.
 
 ```shell
 curl -i http://0.0.0.0:4000/v1/chat/completions \
@@ -102,7 +102,7 @@ curl -i http://0.0.0.0:4000/v1/chat/completions \
   }'
 ```
 
-Expected response when model output violates policies:
+모델 출력이 정책을 위반할 때의 예상 응답:
 
 ```shell
 {
@@ -119,7 +119,7 @@ Expected response when model output violates policies:
 
 <TabItem label="Successful Call" value = "allowed">
 
-Test with safe content that passes all guardrails:
+모든 guardrail을 통과하는 안전한 콘텐츠로 테스트합니다.
 
 ```shell
 curl -i http://0.0.0.0:4000/v1/chat/completions \
@@ -133,7 +133,7 @@ curl -i http://0.0.0.0:4000/v1/chat/completions \
   }'
 ```
 
-Expected response:
+예상 응답:
 
 ```shell
 {
@@ -162,29 +162,29 @@ Expected response:
 </TabItem>
 </Tabs>
 
-## File Sanitization
+## 파일 Sanitization
 
-Prompt Security provides advanced file sanitization capabilities to detect and block malicious content in uploaded files, including images, PDFs, and documents.
+Prompt Security는 이미지, PDF, 문서 등 업로드된 파일에서 악성 콘텐츠를 감지하고 차단하는 고급 파일 sanitization 기능을 제공합니다.
 
-### Supported File Types
+### 지원 파일 유형
 
-- **Images**: PNG, JPEG, GIF, WebP
-- **Documents**: PDF, DOCX, XLSX, PPTX
-- **Text Files**: TXT, CSV, JSON
+- **이미지**: PNG, JPEG, GIF, WebP
+- **문서**: PDF, DOCX, XLSX, PPTX
+- **텍스트 파일**: TXT, CSV, JSON
 
-### How File Sanitization Works
+### 파일 Sanitization 동작 방식
 
-When a message contains file content (encoded as base64 in data URLs), the guardrail:
+메시지에 파일 콘텐츠가 포함되어 있으면(data URL의 base64로 인코딩), guardrail은 다음을 수행합니다.
 
-1. **Extracts** the file data from the message
-2. **Uploads** the file to Prompt Security's sanitization API
-3. **Polls** the API for sanitization results (with configurable timeout)
-4. **Takes action** based on the verdict:
-   - `block`: Rejects the request with violation details
-   - `modify`: Replaces file content with sanitized version
-   - `allow`: Passes the file through unchanged
+1. 메시지에서 파일 데이터를 **추출**합니다.
+2. 파일을 Prompt Security의 sanitization API로 **업로드**합니다.
+3. sanitization 결과를 받을 때까지 API를 **polling**합니다(설정 가능한 timeout 사용).
+4. 판정에 따라 **action**을 수행합니다.
+   - `block`: 위반 세부 정보와 함께 요청을 거부합니다.
+   - `modify`: 파일 콘텐츠를 sanitized version으로 교체합니다.
+   - `allow`: 파일을 변경하지 않고 통과시킵니다.
 
-### File Upload Example
+### 파일 업로드 예제
 
 <Tabs>
 <TabItem label="Image Upload" value="image-upload">
@@ -215,7 +215,7 @@ curl -i http://0.0.0.0:4000/v1/chat/completions \
   }'
 ```
 
-If the image contains malicious content:
+이미지에 악성 콘텐츠가 포함된 경우:
 
 ```shell
 {
@@ -258,7 +258,7 @@ curl -i http://0.0.0.0:4000/v1/chat/completions \
   }'
 ```
 
-If the PDF contains malicious scripts or harmful content:
+PDF에 악성 script 또는 유해 콘텐츠가 포함된 경우:
 
 ```shell
 {
@@ -274,21 +274,21 @@ If the PDF contains malicious scripts or harmful content:
 </TabItem>
 </Tabs>
 
-**Note**: File sanitization uses a job-based async API. The guardrail:
-- Submits the file and receives a `jobId`
-- Polls `/api/sanitizeFile?jobId={jobId}` until status is `done`
-- Times out after `max_poll_attempts * poll_interval` seconds (default: 60 seconds)
+**참고**: 파일 sanitization은 job 기반 async API를 사용합니다. Guardrail은 다음을 수행합니다.
+- 파일을 제출하고 `jobId`를 받습니다.
+- status가 `done`이 될 때까지 `/api/sanitizeFile?jobId={jobId}`를 polling합니다.
+- `max_poll_attempts * poll_interval`초 후 timeout됩니다(기본값: 60초).
 
-## Prompt Modification
+## Prompt 수정
 
-When violations are detected but can be mitigated, Prompt Security can modify the content instead of blocking it entirely.
+위반이 감지되었지만 완화할 수 있는 경우, Prompt Security는 콘텐츠를 완전히 차단하는 대신 수정할 수 있습니다.
 
-### Modification Example
+### 수정 예제
 
 <Tabs>
 <TabItem label="Input Modification" value="input-mod">
 
-**Original Request:**
+**원본 요청:**
 ```json
 {
   "messages": [
@@ -300,7 +300,7 @@ When violations are detected but can be mitigated, Prompt Security can modify th
 }
 ```
 
-**Modified Request (sent to LLM):**
+**수정된 요청(LLM으로 전송):**
 ```json
 {
   "messages": [
@@ -312,30 +312,30 @@ When violations are detected but can be mitigated, Prompt Security can modify th
 }
 ```
 
-The request proceeds with sensitive information masked.
+민감 정보가 마스킹된 상태로 요청이 진행됩니다.
 
 </TabItem>
 
 <TabItem label="Output Modification" value="output-mod">
 
-**Original LLM Response:**
+**원본 LLM 응답:**
 ```
 "Here's a sample API key: sk-1234567890abcdef. You can use this for testing."
 ```
 
-**Modified Response (returned to user):**
+**수정된 응답(사용자에게 반환):**
 ```
 "Here's a sample API key: [REDACTED]. You can use this for testing."
 ```
 
-Sensitive data in the response is automatically redacted.
+응답의 민감 데이터가 자동으로 마스킹됩니다.
 
 </TabItem>
 </Tabs>
 
-## Streaming Support
+## Streaming 지원
 
-Prompt Security guardrail fully supports streaming responses with chunk-based validation:
+Prompt Security guardrail은 chunk 기반 검증으로 streaming 응답을 완전히 지원합니다.
 
 ```shell
 curl -i http://0.0.0.0:4000/v1/chat/completions \
@@ -350,24 +350,24 @@ curl -i http://0.0.0.0:4000/v1/chat/completions \
   }'
 ```
 
-### Streaming Behavior
+### Streaming 동작
 
-- **Window-based validation**: Chunks are buffered and validated in windows (default: 250 characters)
-- **Smart chunking**: Splits on word boundaries to avoid breaking mid-word
-- **Real-time blocking**: If harmful content is detected, streaming stops immediately
-- **Modification support**: Modified chunks are streamed in real-time
+- **Window 기반 검증**: chunk를 window 단위로 buffer하고 검증합니다(기본값: 250자).
+- **Smart chunking**: 단어 중간에서 끊기지 않도록 단어 경계에서 분할합니다.
+- **실시간 차단**: 유해 콘텐츠가 감지되면 streaming이 즉시 중단됩니다.
+- **수정 지원**: 수정된 chunk가 실시간으로 streaming됩니다.
 
-If a violation is detected during streaming:
+Streaming 중 위반이 감지되면:
 
 ```
 data: {"error": "Blocked by Prompt Security, Violations: harmful_content"}
 ```
 
-## Advanced Configuration
+## 고급 설정
 
-### User and System Prompt Tracking
+### User 및 System Prompt 추적
 
-Track users and provide system context for better security analysis:
+더 나은 보안 분석을 위해 사용자를 추적하고 system context를 제공합니다.
 
 ```yaml
 guardrails:
@@ -381,9 +381,9 @@ guardrails:
       system_prompt: os.environ/PROMPT_SECURITY_SYSTEM_PROMPT  # Optional: System context
 ```
 
-### Configuration via Code
+### Code로 설정
 
-You can also configure guardrails programmatically:
+Guardrail은 코드에서도 설정할 수 있습니다.
 
 ```python
 from litellm.proxy.guardrails.guardrail_hooks.prompt_security import PromptSecurityGuardrail
@@ -396,9 +396,9 @@ guardrail = PromptSecurityGuardrail(
 )
 ```
 
-### Multiple Guardrail Configuration
+### 여러 Guardrail 설정
 
-Configure separate pre-call and post-call guardrails for fine-grained control:
+세밀한 제어를 위해 pre-call과 post-call guardrail을 별도로 구성합니다.
 
 ```yaml
 guardrails:
@@ -417,35 +417,35 @@ guardrails:
       api_base: os.environ/PROMPT_SECURITY_API_BASE
 ```
 
-## Security Features
+## 보안 기능
 
-Prompt Security provides comprehensive protection against:
+Prompt Security는 다음에 대한 포괄적인 보호를 제공합니다.
 
-### Input Threats
-- **Prompt Injection**: Detects attempts to override system instructions
-- **Jailbreak Attempts**: Identifies bypass techniques and instruction manipulation
-- **PII in Prompts**: Detects personally identifiable information in user inputs
-- **Malicious Files**: Scans uploaded files for embedded threats (malware, scripts, steganography)
-- **Document Exploits**: Analyzes PDFs and Office documents for vulnerabilities
+### 입력 위협
+- **Prompt Injection**: system instruction을 override하려는 시도를 감지합니다.
+- **Jailbreak 시도**: 우회 기법과 instruction manipulation을 식별합니다.
+- **프롬프트의 PII**: 사용자 입력의 personally identifiable information을 감지합니다.
+- **악성 파일**: 업로드된 파일에서 embedded threat(malware, script, steganography)를 scan합니다.
+- **문서 Exploit**: PDF 및 Office 문서의 vulnerability를 분석합니다.
 
-### Output Threats  
-- **Data Leakage**: Prevents sensitive information exposure in responses
-- **PII in Responses**: Detects and can redact PII in model outputs
-- **Harmful Content**: Identifies violent, hateful, or illegal content generation
-- **Code Injection**: Detects potentially malicious code in responses
-- **Credential Exposure**: Prevents API keys, passwords, and tokens from being revealed
+### 출력 위협
+- **데이터 유출**: 응답에서 민감 정보가 노출되는 것을 방지합니다.
+- **응답의 PII**: 모델 출력의 PII를 감지하고 마스킹할 수 있습니다.
+- **유해 콘텐츠**: 폭력적, 혐오적, 불법적인 콘텐츠 생성을 식별합니다.
+- **Code Injection**: 응답의 잠재적 악성 코드를 감지합니다.
+- **Credential 노출**: API key, password, token이 노출되지 않도록 방지합니다.
 
 ### Actions
 
-The guardrail takes three types of actions based on risk:
+Guardrail은 risk에 따라 세 가지 action을 수행합니다.
 
-- **`block`**: Completely blocks the request/response and returns an error with violation details
-- **`modify`**: Sanitizes the content (redacts PII, removes harmful parts) and allows it to proceed
-- **`allow`**: Passes the content through unchanged
+- **`block`**: 요청/응답을 완전히 차단하고 위반 세부 정보가 포함된 error를 반환합니다.
+- **`modify`**: 콘텐츠를 sanitize(PII 마스킹, 유해 부분 제거)하고 계속 진행하도록 허용합니다.
+- **`allow`**: 콘텐츠를 변경하지 않고 통과시킵니다.
 
-## Violation Reporting
+## 위반 보고
 
-All blocked requests include detailed violation information:
+차단된 모든 요청에는 자세한 위반 정보가 포함됩니다.
 
 ```json
 {
@@ -458,19 +458,19 @@ All blocked requests include detailed violation information:
 }
 ```
 
-Violations are comma-separated strings that help you understand why content was blocked.
+Violation은 콘텐츠가 차단된 이유를 이해하는 데 도움이 되는 comma-separated string입니다.
 
-## Error Handling
+## 오류 처리
 
-### Common Errors
+### 일반적인 오류
 
-**Missing API Credentials:**
+**API 자격 증명 누락:**
 ```
 PromptSecurityGuardrailMissingSecrets: Couldn't get Prompt Security api base or key
 ```
-Solution: Set `PROMPT_SECURITY_API_KEY` and `PROMPT_SECURITY_API_BASE` environment variables
+해결: `PROMPT_SECURITY_API_KEY` 및 `PROMPT_SECURITY_API_BASE` 환경 변수를 설정합니다.
 
-**File Sanitization Timeout:**
+**파일 Sanitization Timeout:**
 ```
 {
   "error": {
@@ -479,9 +479,9 @@ Solution: Set `PROMPT_SECURITY_API_KEY` and `PROMPT_SECURITY_API_BASE` environme
   }
 }
 ```
-Solution: Increase `max_poll_attempts` or reduce file size
+해결: `max_poll_attempts`를 늘리거나 파일 크기를 줄입니다.
 
-**Invalid File Format:**
+**잘못된 파일 형식:**
 ```
 {
   "error": {
@@ -490,23 +490,23 @@ Solution: Increase `max_poll_attempts` or reduce file size
   }
 }
 ```
-Solution: Ensure files are properly base64-encoded in data URLs
+해결: 파일이 data URL에서 올바르게 base64 인코딩되었는지 확인합니다.
 
-## Best Practices
+## 권장 사항
 
-1. **Use `during_call` mode** for comprehensive protection of both inputs and outputs
-2. **Enable for production workloads** using `default_on: true` to protect all requests by default
-3. **Configure user tracking** to identify patterns across user sessions
-4. **Monitor violations** in Prompt Security dashboard to tune policies
-5. **Test file uploads** thoroughly with various file types before production deployment
-6. **Set appropriate timeouts** for file sanitization based on expected file sizes
-7. **Combine with other guardrails** for defense-in-depth security
+1. 입력과 출력을 모두 포괄적으로 보호하려면 **`during_call` mode 사용**
+2. 모든 요청을 기본 보호하려면 `default_on: true`로 **production workload에서 활성화**
+3. 사용자 session 전반의 pattern을 식별하려면 **user tracking 구성**
+4. policy를 조정하려면 Prompt Security dashboard에서 **violation monitoring**
+5. Production 배포 전에 다양한 파일 유형으로 **파일 업로드 충분히 테스트**
+6. 예상 파일 크기에 맞춰 파일 sanitization용 **적절한 timeout 설정**
+7. defense-in-depth 보안을 위해 **다른 guardrail과 결합**
 
-## Troubleshooting
+## 문제 해결
 
-### Guardrail Not Running
+### Guardrail이 실행되지 않음
 
-Check that the guardrail is enabled in your config:
+Config에서 guardrail이 활성화되어 있는지 확인하세요.
 
 ```yaml
 guardrails:
@@ -516,21 +516,21 @@ guardrails:
       default_on: true  # Ensure this is set
 ```
 
-### Files Not Being Sanitized
+### 파일이 sanitization되지 않음
 
-Verify that:
-1. Files are base64-encoded in proper data URL format
-2. MIME type is included: `data:image/png;base64,...`
-3. Content type is `image_url`, `document`, or `file`
+다음을 확인하세요.
+1. 파일이 올바른 data URL 형식으로 base64 인코딩되어 있어야 합니다.
+2. MIME type이 포함되어야 합니다: `data:image/png;base64,...`
+3. content type이 `image_url`, `document`, `file` 중 하나여야 합니다.
 
-### High Latency
+### 높은 지연 시간
 
-File sanitization adds latency due to upload and polling. To optimize:
-1. Reduce `poll_interval` for faster polling (but more API calls)
-2. Increase `max_poll_attempts` for larger files
-3. Consider caching sanitization results for frequently uploaded files
+파일 sanitization은 upload와 polling 때문에 latency를 추가합니다. 최적화하려면 다음을 고려하세요.
+1. 더 빠른 polling을 위해 `poll_interval`을 줄입니다. 단, API call이 늘어납니다.
+2. 더 큰 파일을 위해 `max_poll_attempts`를 늘립니다.
+3. 자주 업로드되는 파일의 sanitization 결과를 cache하는 방안을 고려합니다.
 
-## Need Help?
+## 도움이 필요하신가요?
 
-- **Documentation**: [https://support.prompt.security](https://support.prompt.security)
-- **Support**: Contact Prompt Security support team
+- **문서**: [https://support.prompt.security](https://support.prompt.security)
+- **지원**: Prompt Security support team에 문의하세요.

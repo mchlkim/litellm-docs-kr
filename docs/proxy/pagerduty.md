@@ -1,31 +1,31 @@
 import Image from '@theme/IdealImage';
 
-# PagerDuty Alerting
+# PagerDuty 알림 {#pagerduty-alerting}
 
 :::info
 
-✨ PagerDuty Alerting is on LiteLLM Enterprise
+✨ PagerDuty 알림은 LiteLLM 엔터프라이즈에서 사용할 수 있습니다
 
-[Enterprise Pricing](https://www.litellm.ai/#pricing)
+[엔터프라이즈 요금](https://www.litellm.ai/#pricing)
 
-[Get free 7-day trial key](https://www.litellm.ai/enterprise#trial)
+[무료 7일 체험 키 받기](https://www.litellm.ai/enterprise#trial)
 
 :::
 
-Handles two types of alerts:
-- High LLM API Failure Rate. Configure X fails in Y seconds to trigger an alert.
-- High Number of Hanging LLM Requests. Configure X hangs in Y seconds to trigger an alert.
+두 가지 유형의 알림을 처리합니다.
+- 높은 LLM API 실패율. Y초 안에 X번 실패하면 알림이 트리거되도록 설정합니다.
+- 많은 수의 지연 중인 LLM 요청. Y초 안에 X번 지연되면 알림이 트리거되도록 설정합니다.
 
 
-## Quick Start
+## 빠른 시작
 
-1. Set `PAGERDUTY_API_KEY="d8bxxxxx"` in your environment variables.
+1. 환경 변수에 `PAGERDUTY_API_KEY="d8bxxxxx"`를 설정합니다.
 
 ```
 PAGERDUTY_API_KEY="d8bxxxxx"
 ```
 
-2. Set PagerDuty Alerting in your config file.
+2. 설정 파일에서 PagerDuty 알림을 설정합니다.
 
 ```yaml
 model_list:
@@ -46,17 +46,17 @@ general_settings:
 ```
 
 
-3. Test it 
+3. 테스트합니다
 
 
-Start LiteLLM Proxy
+LiteLLM Proxy를 시작합니다
 
 ```shell
 litellm --config config.yaml
 ```
 
-### LLM API Failure Alert
-Try sending a bad request to proxy 
+### LLM API 실패 알림 {#llm-api-failure-alert}
+프록시에 잘못된 요청을 보내봅니다
 
 ```shell
 curl -i --location 'http://0.0.0.0:4000/chat/completions' \
@@ -77,11 +77,11 @@ curl -i --location 'http://0.0.0.0:4000/chat/completions' \
 
 <Image img={require('../../img/pagerduty_fail.png')} />
 
-### LLM Hanging Alert
+### LLM 지연 알림 {#llm-hanging-alert}
 
-Try sending a hanging request to proxy 
+프록시에 지연되는 요청을 보내봅니다
 
-Since our hanging threshold is 0.0000001 seconds, you should see an alert.
+지연 임계값이 0.0000001초이므로 알림이 표시됩니다.
 
 ```shell
 curl -i --location 'http://0.0.0.0:4000/chat/completions' \
@@ -101,6 +101,4 @@ curl -i --location 'http://0.0.0.0:4000/chat/completions' \
 ```
 
 <Image img={require('../../img/pagerduty_hanging.png')} />
-
-
 

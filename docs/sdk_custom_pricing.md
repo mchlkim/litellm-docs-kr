@@ -1,8 +1,8 @@
-# Custom Pricing - SageMaker, Azure, etc
+# 사용자 지정 가격 책정 - SageMaker, Azure 등
 
-Register custom pricing for sagemaker completion model. 
+SageMaker completion 모델의 사용자 지정 가격을 등록합니다.
 
-For cost per second pricing, you **just** need to register `input_cost_per_second`. 
+초당 비용 기반 가격 책정에는 `input_cost_per_second`만 등록하면 됩니다.
 
 ```python
 # !uv add boto3 
@@ -31,7 +31,7 @@ def test_completion_sagemaker():
 ```
 
 
-## Cost Per Token (e.g. Azure)
+## 토큰당 비용(예: Azure)
 
 
 ```python

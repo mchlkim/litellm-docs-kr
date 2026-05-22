@@ -1,13 +1,13 @@
-# Replacing OpenAI ChatCompletion with Completion()
+# OpenAI ChatCompletion을 Completion()으로 교체하기 {#replacing-openai-chatcompletion-with-completion}
 
-* [Supported OpenAI LLMs](https://docs.litellm.ai/docs/providers/openai)
-* [Supported Azure OpenAI LLMs](https://docs.litellm.ai/docs/providers/azure)
+* [지원되는 OpenAI LLM](https://docs.litellm.ai/docs/providers/openai)
+* [지원되는 Azure OpenAI LLM](https://docs.litellm.ai/docs/providers/azure)
 
 <a target="_blank" href="https://colab.research.google.com/github/BerriAI/litellm/blob/main/cookbook/LiteLLM_Azure_and_OpenAI_example.ipynb">
-  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
+  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Colab에서 열기"/>
 </a>
 
-## Completion() - Quick Start
+## Completion() - 빠른 시작
 ```python
 import os 
 from litellm import completion
@@ -39,7 +39,7 @@ print("Azure Response\n")
 print(response)
 ```
 
-## Completion() with Streaming
+## Streaming과 함께 Completion() 사용하기 {#completion-with-streaming}
 ```python
 import os 
 from litellm import completion
@@ -76,7 +76,7 @@ for chunk in response:
 
 ```
 
-## Completion() with Streaming + Async
+## Streaming 및 Async와 함께 Completion() 사용하기 {#completion-with-streaming--async}
 ```python
 import os 
 from litellm import acompletion
@@ -107,7 +107,7 @@ response = acompletion(
 
 ```
 
-## Completion() multi-threaded
+## Completion() 멀티스레드 실행 {#completion-multi-threaded}
 
 ```python
 import os

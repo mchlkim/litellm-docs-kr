@@ -1,12 +1,12 @@
-# Rotating Master Key
+# Master Key 교체 {#rotating-master-key}
 
-Here are our recommended steps for rotating your master key.
+master key를 교체할 때 권장하는 절차는 다음과 같습니다.
 
 
-**1. Backup your DB**
-In case of any errors during the encryption/de-encryption process, this will allow you to revert back to current state without issues.
+**1. DB 백업**
+암호화/복호화 과정에서 오류가 발생할 경우, 문제 없이 현재 상태로 되돌릴 수 있도록 DB를 먼저 백업하세요.
 
-**2. Call `/key/regenerate` with the new master key**
+**2. 새 master key로 `/key/regenerate` 호출**
 
 ```bash
 curl -L -X POST 'http://localhost:4000/key/regenerate' \
@@ -18,24 +18,24 @@ curl -L -X POST 'http://localhost:4000/key/regenerate' \
 }'
 ```
 
-This will re-encrypt any models in your Proxy_ModelTable with the new master key.
+이 작업은 `Proxy_ModelTable`의 모든 모델을 새 master key로 다시 암호화합니다.
 
-Expect to start seeing decryption errors in logs, as your old master key is no longer able to decrypt the new values.
+기존 master key로는 새 값을 더 이상 복호화할 수 없으므로, 로그에 복호화 오류가 나타나기 시작할 수 있습니다.
 
 ```bash
    raise Exception("Unable to decrypt value={}".format(v))
 Exception: Unable to decrypt value=<new-encrypted-value>
 ```
 
-**3. Update LITELLM_MASTER_KEY**
+**3. `LITELLM_MASTER_KEY` 업데이트**
 
-In your environment variables update the value of LITELLM_MASTER_KEY to the new_master_key from Step 2.
+environment variable에서 `LITELLM_MASTER_KEY` 값을 2단계의 `new_master_key`로 업데이트합니다.
 
-This ensures the key used for decryption from db is the new key.
+이렇게 하면 DB에서 값을 복호화할 때 새 key가 사용됩니다.
 
-**4. Test it**
+**4. 테스트**
 
-Make a test request to a model stored on proxy with a litellm key (new master key or virtual key) and see if it works
+LiteLLM key(새 master key 또는 virtual key)를 사용해 proxy에 저장된 모델로 테스트 request를 보내 정상 동작하는지 확인합니다.
 
 ```bash
  curl -L -X POST 'http://0.0.0.0:4000/v1/chat/completions' \

@@ -1,7 +1,7 @@
 ---
 id: index
-title: Getting Started
-sidebar_label: Quickstart
+title: 시작하기
+sidebar_label: 빠른 시작
 ---
 
 import Tabs from '@theme/Tabs';
@@ -9,27 +9,31 @@ import TabItem from '@theme/TabItem';
 import NavigationCards from '@site/src/components/NavigationCards';
 import Image from '@theme/IdealImage';
 
+:::note 보안 업데이트
+Trivy 공급망 침해 이슈는 조치가 완료되었습니다 :tada: . 영향을 받은 패키지는 모두 삭제되었고, 현재 릴리스에는 침해된 코드나 컴포넌트가 포함되어 있지 않습니다. 자세한 배경은 [Security Townhall](/blog/security-townhall-updates)을 참고하고, 이후 개선 방향은 [CI/CD v2](/blog/ci-cd-v2-improvements)에서 확인하세요.
+:::
+
 <Image style={{padding: '10px', margin: '0 0 2.5rem'}} img={require('../img/hero.png')} />
 
-**LiteLLM** is an open-source library that gives you a single, unified interface to call 100+ LLMs — OpenAI, Anthropic, Vertex AI, Bedrock, and more — using the OpenAI format.
+**LiteLLM**은 OpenAI 형식으로 100개 이상의 LLM을 호출할 수 있게 해 주는 오픈소스 라이브러리입니다. OpenAI, Anthropic, Vertex AI, Bedrock 등 여러 프로바이더를 하나의 통합 인터페이스로 다룹니다.
 
-- Call any provider using the same `completion()` interface — no re-learning the API for each one
-- Consistent output format regardless of which provider or model you use
-- Built-in retry / fallback logic across multiple deployments via the [Router](./routing.md)
-- Self-hosted [LLM Gateway (Proxy)](./simple_proxy) with virtual keys, cost tracking, and an admin UI
+- 어떤 프로바이더든 동일한 `completion()` 인터페이스로 호출할 수 있어 API를 매번 다시 익힐 필요가 없습니다.
+- 사용하는 프로바이더나 모델과 관계없이 일관된 출력 형식을 제공합니다.
+- [Router](./routing.md)를 통해 여러 배포 대상 간 재시도와 fallback 로직을 내장합니다.
+- 가상 키, 비용 추적, 관리자 UI를 제공하는 자체 호스팅 [LLM Gateway (Proxy)](./simple_proxy)를 운영할 수 있습니다.
 
 [![PyPI](https://img.shields.io/pypi/v/litellm.svg)](https://pypi.org/project/litellm/)
 [![GitHub Stars](https://img.shields.io/github/stars/BerriAI/litellm?style=social)](https://github.com/BerriAI/litellm)
 
 ---
 
-## Installation
+## 설치
 
 ```shell
 uv add litellm
 ```
 
-To run the full Proxy Server (LLM Gateway):
+전체 Proxy Server(LLM Gateway)를 실행하려면 다음을 사용합니다:
 
 ```shell
 uv tool install 'litellm[proxy]'
@@ -37,9 +41,9 @@ uv tool install 'litellm[proxy]'
 
 ---
 
-## Quick Start
+## 빠른 시작
 
-Make your first LLM call using the provider of your choice:
+원하는 프로바이더를 선택해 첫 LLM 호출을 실행합니다:
 
 <Tabs>
 <TabItem value="openai" label="OpenAI">
@@ -144,11 +148,11 @@ print(response.choices[0].message.content)
 </TabItem>
 </Tabs>
 
-Every response follows the OpenAI Chat Completions format, regardless of provider. ✅
+어떤 프로바이더를 사용하든 모든 응답은 OpenAI Chat Completions 형식을 따릅니다. ✅
 
-### Response Format
+### 응답 형식
 
-Non-streaming responses return a `ModelResponse` object:
+비스트리밍 응답은 `ModelResponse` 객체를 반환합니다:
 
 ```json
 {
@@ -174,7 +178,7 @@ Non-streaming responses return a `ModelResponse` object:
 }
 ```
 
-Streaming responses (`stream=True`) yield `ModelResponseStream` chunks:
+스트리밍 응답(`stream=True`)은 `ModelResponseStream` 청크를 반환합니다:
 
 ```json
 {
@@ -195,9 +199,9 @@ Streaming responses (`stream=True`) yield `ModelResponseStream` chunks:
 }
 ```
 
-📖 [Full output format reference →](./completion/output)
+📖 [전체 출력 형식 참고 →](./completion/output)
 
-:::tip Open in Colab
+:::tip Colab에서 열기
 <a target="_blank" href="https://colab.research.google.com/github/BerriAI/litellm/blob/main/cookbook/liteLLM_Getting_Started.ipynb">
 <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
 </a>
@@ -205,15 +209,15 @@ Streaming responses (`stream=True`) yield `ModelResponseStream` chunks:
 
 ---
 
-## New to LiteLLM?
+## LiteLLM이 처음인가요?
 
-**Want to get started fast?** Head to [Tutorials](/docs/tutorials) for step-by-step walkthroughs — AI coding tools, agent SDKs, proxy setup, and more.
+**빠르게 시작하고 싶다면** [튜토리얼](/docs/tutorials)에서 AI 코딩 도구, 에이전트 SDK, 프록시 설정 등을 단계별로 따라 할 수 있습니다.
 
-**Need to understand a specific feature?** Check [Guides](/docs/guides) for streaming, function calling, prompt caching, and other how-tos.
+**특정 기능을 이해해야 한다면** [가이드](/docs/guides)에서 스트리밍, 함수 호출, 프롬프트 캐싱 등 기능별 사용법을 확인하세요.
 
 ---
 
-## Choose Your Path
+## 사용 경로 선택
 
 <NavigationCards
 columns={2}
@@ -221,24 +225,24 @@ items={[
 {
 icon: "🐍",
 title: "Python SDK",
-description: "Integrate LiteLLM directly into your Python application. Drop-in replacement for the OpenAI client.",
+description: "LiteLLM을 Python 애플리케이션에 직접 통합합니다. OpenAI 클라이언트를 거의 그대로 대체할 수 있습니다.",
 listDescription: [
-"completion(), embedding(), image_generation() and more",
-"Router with retry, fallback, and load balancing",
-"OpenAI-compatible exceptions across all providers",
-"Observability callbacks (Langfuse, MLflow, Helicone…)",
+"completion(), embedding(), image_generation() 등 지원",
+"재시도, fallback, 부하 분산을 제공하는 Router",
+"모든 프로바이더에서 OpenAI 호환 예외 형식 제공",
+"Langfuse, MLflow, Helicone 등 관측성 callback 연동",
 ],
 to: "#litellm-python-sdk",
 },
 {
 icon: "🖥️",
 title: "Proxy Server (LLM Gateway)",
-description: "Self-hosted gateway for platform teams managing LLM access across an organization.",
+description: "조직 전체의 LLM 접근을 관리하는 플랫폼 팀을 위한 자체 호스팅 게이트웨이입니다.",
 listDescription: [
-"Virtual keys with per-key/team/user budgets",
-"Centralized logging, guardrails, and caching",
-"Admin UI for monitoring and management",
-"Drop-in replacement for any OpenAI-compatible client",
+"키/팀/사용자별 예산을 설정할 수 있는 가상 키",
+"중앙화된 로깅, 가드레일, 캐싱",
+"모니터링과 관리를 위한 관리자 UI",
+"OpenAI 호환 클라이언트에서 그대로 교체 가능한 인터페이스",
 ],
 to: "#litellm-proxy-server-llm-gateway",
 },
@@ -251,7 +255,7 @@ to: "#litellm-proxy-server-llm-gateway",
 
 ### Streaming
 
-Add `stream=True` to receive chunks as they are generated:
+생성되는 청크를 바로 받으려면 `stream=True`를 추가합니다:
 
 ```python
 from litellm import completion
@@ -267,9 +271,9 @@ for chunk in completion(
     print(chunk.choices[0].delta.content or "", end="")
 ```
 
-### Exception Handling
+### 예외 처리
 
-LiteLLM maps every provider's errors to the OpenAI exception types — your existing error handling works out of the box:
+LiteLLM은 모든 프로바이더의 오류를 OpenAI 예외 타입으로 매핑하므로, 기존 오류 처리 로직을 그대로 사용할 수 있습니다.
 
 ```python
 import litellm
@@ -287,9 +291,9 @@ except litellm.APIError as e:
     print(f"API error: {e}")
 ```
 
-### Logging & Observability
+### 로깅 및 관측성
 
-Send input/output to Langfuse, MLflow, Helicone, Lunary, and more with a single line:
+한 줄 설정으로 입력/출력을 Langfuse, MLflow, Helicone, Lunary 등으로 보낼 수 있습니다.
 
 ```python
 import litellm
@@ -302,11 +306,11 @@ response = litellm.completion(
 )
 ```
 
-📖 [See all observability integrations →](/docs/observability/agentops_integration)
+📖 [전체 관측성 연동 보기 →](/docs/observability/agentops_integration)
 
-### Track Costs & Usage
+### 비용 추적 및 사용법
 
-Use a callback to capture cost per response:
+callback을 사용해 응답별 비용을 기록할 수 있습니다.
 
 ```python
 import litellm
@@ -323,17 +327,17 @@ litellm.completion(
 )
 ```
 
-📖 [Custom callback docs →](./observability/custom_callback)
+📖 [사용자 정의 callback 문서 →](./observability/custom_callback)
 
 ---
 
-## LiteLLM Proxy Server (LLM Gateway)
+## LiteLLM Proxy {#litellm-proxy-server-llm-gateway}
 
-The proxy is a self-hosted OpenAI-compatible gateway. Any client that works with OpenAI works with the proxy — no code changes needed.
+Proxy는 자체 호스팅 OpenAI 호환 게이트웨이입니다. OpenAI와 함께 동작하는 클라이언트라면 코드 변경 없이 proxy와 함께 사용할 수 있습니다.
 
 ![LiteLLM Proxy Dashboard](https://github.com/BerriAI/litellm/assets/29436595/47c97d5e-b9be-4839-b28c-43d7f4f10033)
 
-#### Step 1 — Start the proxy
+#### Step 1 — 프록시 시작
 
 <Tabs>
 <TabItem value="cli" label="LiteLLM CLI">
@@ -369,7 +373,7 @@ docker run \
 </TabItem>
 </Tabs>
 
-#### Step 2 — Call it with the OpenAI client
+#### Step 2 — OpenAI 클라이언트로 호출
 
 ```python
 import openai
@@ -383,19 +387,19 @@ response = client.chat.completions.create(
 print(response.choices[0].message.content)
 ```
 
-👉 [Full proxy quickstart with Docker →](./proxy/docker_quick_start)
+👉 [Docker 기반 전체 proxy 빠른 시작 →](./proxy/docker_quick_start)
 
-:::tip Debugging tool
-Use [**`/utils/transform_request`**](./utils/transform_request) to inspect exactly what LiteLLM sends to any provider — useful for debugging prompt formatting, header issues, and provider-specific parameters.
+:::tip 디버깅 도구
+[**`/utils/transform_request`**](./utils/transform_request)를 사용하면 LiteLLM이 각 프로바이더로 보내는 내용을 정확히 확인할 수 있습니다. 프롬프트 형식, header 문제, provider별 parameter를 디버깅할 때 유용합니다.
 :::
 
-🔗 [Interactive API explorer (Swagger) →](https://litellm-api.up.railway.app/)
+🔗 [대화형 API explorer (Swagger) →](https://litellm-api.up.railway.app/)
 
 ---
 
-## Agent & MCP Gateway
+## Agent 및 MCP Gateway
 
-LiteLLM is a unified gateway for **LLMs, agents, and MCP** — you don't need a separate agent or MCP gateway. One endpoint for 100+ models, A2A agents, and MCP tools.
+LiteLLM은 **LLM, agent, MCP**를 위한 통합 gateway입니다. 별도의 agent gateway나 MCP gateway가 필요 없고, 하나의 endpoint로 100개 이상의 모델, `A2A agent`, `MCP tool`을 사용할 수 있습니다.
 
 <NavigationCards
 columns={2}
@@ -403,13 +407,13 @@ items={[
 {
 icon: "🔗",
 title: "A2A Agents",
-description: "Add and invoke A2A agents via the LiteLLM gateway.",
+description: "LiteLLM gateway를 통해 A2A agent를 추가하고 호출합니다.",
 to: "/docs/a2a",
 },
 {
 icon: "🛠️",
 title: "MCP Gateway",
-description: "Central MCP endpoint with per-key access control.",
+description: "key별 접근 제어가 포함된 중앙 MCP endpoint입니다.",
 to: "/docs/mcp",
 },
 ]}
@@ -417,45 +421,45 @@ to: "/docs/mcp",
 
 ---
 
-## What to Explore Next
+## 다음에 살펴볼 항목
 
 <NavigationCards
 columns={3}
 items={[
 {
 icon: "🔀",
-title: "Routing & Load Balancing",
-description: "Load balance across deployments and set automatic fallbacks.",
+title: "라우팅 및 부하 분산",
+description: "여러 deployment에 load balancing을 적용하고 자동 fallback을 설정합니다.",
 to: "/docs/routing-load-balancing",
 },
 {
 icon: "🔑",
-title: "Virtual Keys",
-description: "Manage access, budgets, and rate limits per team or user.",
+title: "가상 키",
+description: "team 또는 user별 접근, budget, rate limit을 관리합니다.",
 to: "/docs/proxy/virtual_keys",
 },
 {
 icon: "📊",
-title: "Spend Tracking",
-description: "Track costs per key, team, and user across all providers.",
+title: "비용 추적",
+description: "모든 provider에서 key, team, user별 비용을 추적합니다.",
 to: "/docs/proxy/cost_tracking",
 },
 {
 icon: "🛡️",
-title: "Guardrails",
-description: "Add content filtering, PII masking, and safety checks.",
+title: "가드레일",
+description: "content filtering, PII masking, safety check를 추가합니다.",
 to: "/docs/proxy/guardrails/quick_start",
 },
 {
 icon: "📡",
-title: "Observability",
-description: "Integrate with Langfuse, MLflow, Helicone, and more.",
+title: "관측성",
+description: "Langfuse, MLflow, Helicone 등과 연동합니다.",
 to: "/docs/observability/agentops_integration",
 },
 {
 icon: "🏭",
-title: "Enterprise",
-description: "SSO/SAML, audit logs, and advanced security for production.",
+title: "엔터프라이즈",
+description: "production용 SSO/SAML, audit log, 고급 security 기능을 제공합니다.",
 to: "/docs/enterprise",
 },
 ]}

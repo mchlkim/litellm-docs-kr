@@ -24,11 +24,11 @@ export default function TOC({ className, ...props }) {
         <div className={styles.promoEmoji}>🚅</div>
         <div className={styles.promoHeading}>LiteLLM Enterprise</div>
         <div className={styles.promoDescription}>
-          SSO/SAML, audit logs, spend tracking, multi-team management, and
-          guardrails — built for production.
+          SSO/SAML, 감사 로그, 지출 추적, 멀티 팀 관리,
+          가드레일을 프로덕션용으로 제공합니다.
         </div>
         <Link to="/docs/enterprise" className={styles.promoButton}>
-          Learn more →
+          자세히 보기 →
         </Link>
       </div>
     </div>

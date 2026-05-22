@@ -25,7 +25,7 @@ function CopyButton({ text }: { text: string }) {
     <button
       className={styles.copyBtn}
       onClick={handleCopy}
-      title="Copy full SHA-256"
+      title="전체 SHA-256 복사"
     >
       {copied ? "✓" : "⧉"}
     </button>
@@ -38,12 +38,12 @@ export default function VersionVerificationTable({ entries }: Props) {
       <table className={styles.table}>
         <thead>
           <tr>
-            <th>Version</th>
+            <th>버전</th>
             <th>SHA-256</th>
-            <th>Clean of IOCs</th>
-            <th>Matches Git</th>
+            <th>IOC 없음</th>
+            <th>Git 일치</th>
             <th>Git Commit</th>
-            <th>Status</th>
+            <th>상태</th>
           </tr>
         </thead>
         <tbody>
@@ -57,10 +57,10 @@ export default function VersionVerificationTable({ entries }: Props) {
                 </span>
               </td>
               <td>
-                <span className={styles.badgeClean}>✔ CLEAN</span>
+                <span className={styles.badgeClean}>✔ 정상</span>
               </td>
               <td>
-                <span className={styles.badgeYes}>✔ YES</span>
+                <span className={styles.badgeYes}>✔ 예</span>
               </td>
               <td>
                 <a
@@ -73,7 +73,7 @@ export default function VersionVerificationTable({ entries }: Props) {
                 </a>
               </td>
               <td>
-                <span className={styles.badgeClean}>✔ CLEAN</span>
+                <span className={styles.badgeClean}>✔ 정상</span>
               </td>
             </tr>
           ))}

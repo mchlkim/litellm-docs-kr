@@ -1,14 +1,14 @@
-# Bedrock Realtime API
+# `Bedrock Realtime API` {#bedrock-realtime-api}
 
-## Overview
+## 개요
 
-Amazon Bedrock's Nova Sonic model supports real-time bidirectional audio streaming for voice conversations. This tutorial shows how to use it through LiteLLM Proxy.
+Amazon Bedrock의 Nova Sonic 모델은 음성 대화를 위한 실시간 양방향 오디오 스트리밍을 지원합니다. 이 튜토리얼은 LiteLLM Proxy를 통해 사용하는 방법을 보여줍니다.
 
-## Setup
+## 설정 {#setup}
 
-### 1. Configure LiteLLM Proxy
+### 1. LiteLLM Proxy 구성 {#1-configure-litellm-proxy}
 
-Create a `config.yaml` file:
+`config.yaml` 파일을 생성합니다.
 
 ```yaml
 model_list:
@@ -20,13 +20,13 @@ model_list:
       mode: realtime
 ```
 
-### 2. Start LiteLLM Proxy
+### 2. LiteLLM Proxy 시작 {#2-start-litellm-proxy}
 
 ```bash
 litellm --config config.yaml
 ```
 
-## Basic Text Interaction
+## 기본 텍스트 상호작용 {#basic-text-interaction}
 
 ```python
 import asyncio
@@ -87,7 +87,7 @@ if __name__ == "__main__":
     asyncio.run(test_text_conversation())
 ```
 
-## Audio Streaming with Voice Conversation
+## 음성 대화를 위한 오디오 스트리밍 {#audio-streaming-with-voice-conversation}
 
 ```python
 import asyncio
@@ -187,7 +187,7 @@ if __name__ == "__main__":
         print("\n\nGoodbye!")
 ```
 
-## Using Tools/Function Calling
+## 도구/함수 호출 사용 {#using-toolsfunction-calling}
 
 ```python
 import asyncio
@@ -294,37 +294,37 @@ if __name__ == "__main__":
     asyncio.run(conversation_with_tools())
 ```
 
-## Configuration Options
+## 설정 옵션 {#설정-options}
 
-### Voice Options
-Available voices: `matthew`, `joanna`, `ruth`, `stephen`, `gregory`, `amy`
+### 음성 옵션 {#voice-options}
+사용 가능한 음성: `matthew`, `joanna`, `ruth`, `stephen`, `gregory`, `amy`
 
-### Audio Formats
-- **Input**: 16kHz PCM16 (mono)
-- **Output**: 24kHz PCM16 (mono)
+### 오디오 형식 {#audio-formats}
+- **입력**: 16kHz PCM16 (mono)
+- **출력**: 24kHz PCM16 (mono)
 
 ### Modalities
-- `["text"]` - Text only
-- `["audio"]` - Audio only  
-- `["text", "audio"]` - Both text and audio
+- `["text"]` - 텍스트만
+- `["audio"]` - 오디오만  
+- `["text", "audio"]` - 텍스트와 오디오 모두
 
-## Example Test Scripts
+## 예제 테스트 스크립트 {#예제-test-scripts}
 
-Complete working examples are available in the LiteLLM repository:
+완전히 동작하는 예제는 LiteLLM 저장소에서 확인할 수 있습니다.
 
-- **Basic audio streaming**: `test_bedrock_realtime_client.py`
-- **Simple text test**: `test_bedrock_realtime_simple.py`
-- **Tool calling**: `test_bedrock_realtime_tools.py`
+- **기본 오디오 스트리밍**: `test_bedrock_realtime_client.py`
+- **간단한 텍스트 테스트**: `test_bedrock_realtime_simple.py`
+- **도구 호출**: `test_bedrock_realtime_tools.py`
 
-## Requirements
+## 요구 사항 {#requirements}
 
 ```bash
 uv add litellm websockets pyaudio
 ```
 
-## AWS Configuration
+## AWS 설정
 
-Ensure your AWS credentials are configured:
+AWS 자격 증명이 구성되어 있는지 확인합니다.
 
 ```bash
 export AWS_ACCESS_KEY_ID=your_access_key
@@ -332,31 +332,31 @@ export AWS_SECRET_ACCESS_KEY=your_secret_key
 export AWS_REGION_NAME=us-east-1
 ```
 
-Or use AWS CLI configuration:
+또는 AWS CLI 구성을 사용합니다.
 
 ```bash
 aws configure
 ```
 
-## Troubleshooting
+## 문제 해결
 
-### Connection Issues
-- Ensure LiteLLM proxy is running on the correct port
-- Verify AWS credentials are properly configured
-- Check that the Bedrock model is available in your region
+### 연결 문제 {#connection-issues}
+- LiteLLM proxy가 올바른 포트에서 실행 중인지 확인합니다.
+- AWS 자격 증명이 올바르게 구성되어 있는지 확인합니다.
+- 해당 Bedrock 모델을 현재 리전에서 사용할 수 있는지 확인합니다.
 
-### Audio Issues
-- Verify PyAudio is properly installed
-- Check microphone/speaker permissions
-- Ensure correct sample rates (16kHz input, 24kHz output)
+### 오디오 문제 {#audio-issues}
+- PyAudio가 올바르게 설치되어 있는지 확인합니다.
+- 마이크/스피커 권한을 확인합니다.
+- 올바른 샘플 레이트를 사용하는지 확인합니다(16kHz 입력, 24kHz 출력).
 
-### Tool Calling Issues
-- Ensure tools are properly defined in session.update
-- Verify tool results are sent back with correct call_id
-- Check that response.create is sent after tool result
+### 도구 호출 문제 {#도구-호출-issues}
+- 도구가 `session.update`에 올바르게 정의되어 있는지 확인합니다.
+- 도구 결과가 올바른 `call_id`와 함께 다시 전송되는지 확인합니다.
+- 도구 결과 이후 `response.create`가 전송되는지 확인합니다.
 
-## Related Resources
+## 관련 리소스 {#related-resources}
 
-- [OpenAI Realtime API Documentation](https://platform.openai.com/docs/guides/realtime)
-- [Amazon Bedrock Nova Sonic Documentation](https://docs.aws.amazon.com/bedrock/latest/userguide/nova-sonic.html)
-- [LiteLLM Realtime API Documentation](/docs/realtime)
+- [OpenAI Realtime API 문서](https://platform.openai.com/docs/guides/realtime)
+- [Amazon Bedrock Nova Sonic 문서](https://docs.aws.amazon.com/bedrock/latest/userguide/nova-sonic.html)
+- [LiteLLM Realtime API 문서](/docs/realtime)

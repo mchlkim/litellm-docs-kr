@@ -1,35 +1,35 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Gray Swan Cygnal Guardrail
+# Gray Swan Cygnal 가드레일
 
-Use [Gray Swan Cygnal](https://docs.grayswan.ai/cygnal/monitor-requests) to continuously monitor conversations for policy violations, indirect prompt injection (IPI), jailbreak attempts, and other safety risks.
+[Gray Swan Cygnal](https://docs.grayswan.ai/cygnal/monitor-requests)을 사용해 정책 위반, 간접 프롬프트 인젝션(IPI), 탈옥 시도, 기타 안전 리스크가 있는지 대화를 지속적으로 모니터링합니다.
 
-Cygnal returns a `violation` score between `0` and `1` (higher means more likely to violate policy), plus metadata such as violated rule indices, mutation detection, and IPI flags. LiteLLM can automatically block or monitor requests based on this signal.
+Cygnal은 `0`에서 `1` 사이의 `violation` 점수(높을수록 정책 위반 가능성이 큼)와 함께 위반된 규칙 인덱스, 변형 감지, IPI 플래그 같은 메타데이터를 반환합니다. LiteLLM은 이 신호를 기준으로 요청을 자동 차단하거나 모니터링할 수 있습니다.
 
 ---
 
-## Quick Start
+## 빠른 시작
 
-### 1. Obtain Credentials
+### 1. 자격 증명 받기
 
-1. Log in to our Gray Swan platform and generate a Cygnal API key. 
+1. Gray Swan 플랫폼에 로그인하고 Cygnal API 키를 생성합니다.
 
-    For existing customers, you should already have access to our [platform](https://platform.grayswan.ai).
+    기존 고객은 이미 [플랫폼](https://platform.grayswan.ai)에 접근할 수 있어야 합니다.
 
-    For new users, please register at this [page](https://hubs.ly/Q03-sX1J0) and we are more than happy to give you an onboarding!
+    신규 사용자는 이 [페이지](https://hubs.ly/Q03-sX1J0)에서 등록해 주세요. 온보딩을 기꺼이 도와드리겠습니다.
 
 
-2. Configure environment variables for the LiteLLM proxy host:
+2. LiteLLM 프록시 호스트의 환경 변수를 구성합니다.
 
     ```bash
     export GRAYSWAN_API_KEY="your-grayswan-key"
     export GRAYSWAN_API_BASE="https://api.grayswan.ai"
     ```
 
-### 2. Configure `config.yaml`
+### 2. `config.yaml` 구성
 
-Add a guardrail entry that references the Gray Swan integration. Below is our recommmended settings.
+Gray Swan 통합을 참조하는 가드레일 항목을 추가합니다. 아래는 권장 설정입니다.
 
 ```yaml
 model_list:                                 # this part is a standard litellm configuration for reference
@@ -62,7 +62,7 @@ litellm_settings:
   set_verbose: true
 ```
 
-### 3. Launch the Proxy
+### 3. 프록시 실행
 
 ```bash
 litellm --config config.yaml --port 4000
@@ -70,44 +70,44 @@ litellm --config config.yaml --port 4000
 
 ---
 
-## Choosing Guardrail Modes
+## 가드레일 모드 선택
 
-Gray Swan can run during `pre_call`, `during_call`, and `post_call` stages. Combine modes based on your latency and coverage requirements. 
+Gray Swan은 `pre_call`, `during_call`, `post_call` 단계에서 실행할 수 있습니다. 지연 시간과 적용 범위 요구사항에 맞게 모드를 조합하세요.
 
-| Mode         | When it Runs      | Protects              | Typical Use Case |
+| Mode         | 실행 시점      | 보호 대상              | 일반적인 사용 사례 |
 |--------------|-------------------|-----------------------|------------------|
-| `pre_call`   | Before LLM call   | User input only       | Block prompt injection before it reaches the model |
-| `during_call`| Parallel to call  | User input only       | Low-latency monitoring without blocking |
-| `post_call`  | After response    | Model Outputs         | Scan output for policy violations, leaked secrets, or IPI |
+| `pre_call`   | LLM 호출 전   | 사용자 입력만       | 모델에 도달하기 전에 프롬프트 인젝션 차단 |
+| `during_call`| 호출과 병렬  | 사용자 입력만       | 차단 없이 낮은 지연 시간으로 모니터링 |
+| `post_call`  | 응답 후    | 모델 출력         | 정책 위반, 유출된 시크릿 또는 IPI가 있는지 출력 스캔 |
 
 
-When using `during_call` with `on_flagged_action: block` or `on_flagged_action: passthrough`:
+`during_call`을 `on_flagged_action: block` 또는 `on_flagged_action: passthrough`와 함께 사용할 때:
 
-- **The LLM call runs in parallel** with the guardrail check using `asyncio.gather`
-- **LLM tokens are still consumed** even if the guardrail detects a violation
-- The guardrail exception prevents the response from reaching the user, but **does not cancel the running LLM task**
-- This means you pay full LLM costs while returning an error/passthrough message to the user
+- `asyncio.gather`를 사용해 가드레일 검사와 **LLM 호출이 병렬로 실행됩니다**
+- 가드레일이 위반을 감지해도 **LLM 토큰은 계속 소비됩니다**
+- 가드레일 예외는 응답이 사용자에게 전달되지 않도록 막지만, **실행 중인 LLM 작업을 취소하지는 않습니다**
+- 즉, 사용자에게 오류/패스스루 메시지를 반환하면서도 전체 LLM 비용은 지불하게 됩니다
 
-**Recommendation:** Use `pre_call` and `post_call` instead of `during_call` for `passthrough` (or `block`) `on_flagged_action` (see our recommended configuration above). Reserve `during_call` for `monitor` mode ONLY when you want low-latency logging without impacting the user experience.
+**권장 사항:** `passthrough`(또는 `block`) `on_flagged_action`에는 `during_call` 대신 `pre_call`과 `post_call`을 사용하세요(위 권장 구성을 참고). 사용자 경험에 영향을 주지 않으면서 낮은 지연 시간의 로깅이 필요한 경우에만 `monitor` 모드에서 `during_call`을 사용하세요.
 
 
 ---
 
-## Work with Claude Code
+## Claude Code와 함께 사용
 
-Follow the official litellm [guide](https://docs.litellm.ai/docs/tutorials/claude_responses_api) on setting up Claude Code with litellm, with the guardrail part mentioned above added to your litellm configuration. Cygnal natively supports coding agent policies defense. Define your own policy or use the provided coding policies on the platform. The example config we show above is also the recommended setup for Claude Code (with the `policy_id` replaced with an appropriate one).
+Claude Code를 litellm과 함께 설정하는 방법은 공식 litellm [가이드](https://docs.litellm.ai/docs/tutorials/claude_responses_api)를 따르고, 위에서 설명한 가드레일 부분을 litellm 구성에 추가하세요. Cygnal은 코딩 에이전트 정책 방어를 기본 지원합니다. 자체 정책을 정의하거나 플랫폼에서 제공되는 코딩 정책을 사용하세요. 위에 표시한 예시 구성은 Claude Code에도 권장되는 설정입니다(`policy_id`는 적절한 값으로 교체).
 
 ---
 
-## Per-request overrides via `extra_body`
+## `extra_body`를 통한 요청별 재정의
 
-You can override parts of the Gray Swan guardrail configuration on a per-request basis by passing `litellm_metadata.guardrails[*].grayswan.extra_body`.
+`litellm_metadata.guardrails[*].grayswan.extra_body`를 전달해 Gray Swan 가드레일 구성의 일부를 요청별로 재정의할 수 있습니다.
 
-`extra_body` is merged into the Cygnal request body and takes precedence over specific fields from `config.yaml`, which are `policy_id`, `violation_threshold`, and `reasoning_mode`.
+`extra_body`는 Cygnal 요청 본문에 병합되며 `config.yaml`의 특정 필드인 `policy_id`, `violation_threshold`, `reasoning_mode`보다 우선합니다.
 
-If you include a `metadata` field inside `extra_body`, it is forwarded to the Cygnal API as-is under the request body's `metadata` field.
+`extra_body` 안에 `metadata` 필드를 포함하면 요청 본문의 `metadata` 필드 아래에 그대로 Cygnal API로 전달됩니다.
 
-Example:
+예제:
 
 ```bash
 curl -X POST "http://0.0.0.0:4000/v1/messages?beta=true" \
@@ -133,7 +133,7 @@ curl -X POST "http://0.0.0.0:4000/v1/messages?beta=true" \
   }'
 ```
 
-OpenAI client:
+OpenAI 클라이언트:
 
 ```python
 from openai import OpenAI
@@ -160,7 +160,7 @@ resp = client.responses.create(
 )
 ```
 
-Anthropic client:
+Anthropic 클라이언트:
 
 ```python
 from anthropic import Anthropic
@@ -188,26 +188,26 @@ resp = client.messages.create(
 )
 ```
 
-Notes:
+참고:
 
-- The guardrail name (for example, `cygnal-monitor`) must match the `guardrail_name` in `config.yaml`.
-- Per-request guardrail overrides may require a premium license, depending on your proxy settings.
+- 가드레일 이름(예: `cygnal-monitor`)은 `config.yaml`의 `guardrail_name`과 일치해야 합니다.
+- 프록시 설정에 따라 요청별 가드레일 재정의에는 프리미엄 라이선스가 필요할 수 있습니다.
 
 ---
 
-## Configuration Reference
+## 설정 참조
 
-| Parameter                             | Type            | Description |
+| 파라미터                             | 유형            | 설명 |
 |---------------------------------------|-----------------|-------------|
-| `api_key`                             | string          | Gray Swan Cygnal API key. Reads from `GRAYSWAN_API_KEY` if omitted. |
-| `api_base`                            | string          | Override for the Gray Swan API base URL. Defaults to `https://api.grayswan.ai` or `GRAYSWAN_API_BASE`. |
-| `mode`                                | string or list  | Guardrail stages (`pre_call`, `during_call`, `post_call`). |
-| `optional_params.on_flagged_action`   | string          | `monitor` (log only), `block` (raise `HTTPException`), or `passthrough` (replace response content with violation message, no 400 error). |
-| `optional_params.violation_threshold` | number (0-1)    | Scores at or above this value are considered violations. |
-| `optional_params.reasoning_mode`      | string          | `off`, `hybrid`, or `thinking`. Enables Cygnal's reasoning capabilities. |
-| `optional_params.categories`          | object          | Map of custom category names to descriptions. |
-| `optional_params.policy_id`           | string          | Gray Swan policy identifier. |
-| `guardrail_timeout`                   | number          | Timeout in seconds for the Cygnal request. Defaults to 30. |
-| `fail_open`                           | boolean         | If true, errors contacting Cygnal are logged and the request proceeds; if false, errors propagate. Defaults to treu. |
-| `streaming_end_of_stream_only`        | boolean         | For streaming `post_call`, only send the final assembled response to Cygnal. Defaults to false. |
-| `default_on`                          | boolean         | Run the guardrail on every request by default. |
+| `api_key`                             | string          | Gray Swan Cygnal API 키입니다. 생략하면 `GRAYSWAN_API_KEY`에서 읽습니다. |
+| `api_base`                            | string          | Gray Swan API 기본 URL을 재정의합니다. 기본값은 `https://api.grayswan.ai` 또는 `GRAYSWAN_API_BASE`입니다. |
+| `mode`                                | string or list  | 가드레일 단계(`pre_call`, `during_call`, `post_call`)입니다. |
+| `optional_params.on_flagged_action`   | string          | `monitor`(로그만 기록), `block`(`HTTPException` 발생) 또는 `passthrough`(400 오류 없이 응답 내용을 위반 메시지로 교체)입니다. |
+| `optional_params.violation_threshold` | number (0-1)    | 이 값 이상인 점수는 위반으로 간주됩니다. |
+| `optional_params.reasoning_mode`      | string          | `off`, `hybrid` 또는 `thinking`입니다. Cygnal의 추론 기능을 활성화합니다. |
+| `optional_params.categories`          | object          | 사용자 지정 카테고리 이름을 설명에 매핑합니다. |
+| `optional_params.policy_id`           | string          | Gray Swan 정책 식별자입니다. |
+| `guardrail_timeout`                   | number          | Cygnal 요청의 제한 시간(초)입니다. 기본값은 30입니다. |
+| `fail_open`                           | boolean         | true이면 Cygnal 연결 오류를 기록하고 요청을 계속 진행합니다. false이면 오류를 전파합니다. 기본값은 true입니다. |
+| `streaming_end_of_stream_only`        | boolean         | 스트리밍 `post_call`의 경우 최종 조립된 응답만 Cygnal에 보냅니다. 기본값은 false입니다. |
+| `default_on`                          | boolean         | 기본적으로 모든 요청에서 가드레일을 실행합니다. |

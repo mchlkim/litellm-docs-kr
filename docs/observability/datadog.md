@@ -2,27 +2,27 @@ import Image from '@theme/IdealImage';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# DataDog
+# Datadog
 
-LiteLLM Supports logging to the following Datdog Integrations:
-- `datadog` [Datadog Logs](https://docs.datadoghq.com/logs/)
-- `datadog_llm_observability` [Datadog LLM Observability](https://www.datadoghq.com/product/llm-observability/)
-- `datadog_metrics` [Datadog Custom Metrics](#datadog-custom-metrics)
-- `datadog_cost_management` [Datadog Cloud Cost Management](#datadog-cloud-cost-management)
-- `ddtrace-run` [Datadog Tracing](#datadog-tracing)
+LiteLLM은 다음 Datadog 통합으로 로그를 전송할 수 있습니다.
+- `datadog` [Datadog 로그](https://docs.datadoghq.com/logs/)
+- `datadog_llm_observability` [Datadog LLM 관측성](https://www.datadoghq.com/product/llm-observability/)
+- `datadog_metrics` [Datadog 사용자 지정 메트릭](#datadog-custom-metrics)
+- `datadog_cost_management` [Datadog 클라우드 비용 관리](#datadog-cloud-cost-management)
+- `ddtrace-run` [Datadog 추적](#datadog-tracing)
 
-## Datadog Logs
+## Datadog 로그
 
-| Feature | Details |
+| 기능 | 세부 정보 |
 |---------|---------|
-| **What is logged** | [StandardLoggingPayload](../proxy/logging_spec) |
-| **Events** | Success + Failure |
-| **Product Link** | [Datadog Logs](https://docs.datadoghq.com/logs/) |
+| **로그 대상** | [StandardLoggingPayload](../proxy/logging_spec) |
+| **이벤트** | 성공 + 실패 |
+| **제품 링크** | [Datadog 로그](https://docs.datadoghq.com/logs/) |
 
 
-We will use the `--config` to set `litellm.callbacks = ["datadog"]` this will log all successful LLM calls to DataDog
+`--config`로 `litellm.callbacks = ["datadog"]`를 설정합니다. 이렇게 하면 모든 성공한 LLM 호출이 Datadog에 기록됩니다.
 
-**Step 1**: Create a `config.yaml` file and set `litellm_settings`: `success_callback`
+**1단계**: `config.yaml` 파일을 만들고 `litellm_settings`: `success_callback`을 설정합니다.
 
 ```yaml
 model_list:
@@ -35,15 +35,15 @@ litellm_settings:
 ```
 
 
-## Datadog LLM Observability
+## Datadog LLM 관측성
 
-**Overview**
+**개요**
 
-| Feature | Details |
+| 기능 | 세부 정보 |
 |---------|---------|
-| **What is logged** | [StandardLoggingPayload](../proxy/logging_spec) |
-| **Events** | Success + Failure |
-| **Product Link** | [Datadog LLM Observability](https://www.datadoghq.com/product/llm-observability/) |
+| **로그 대상** | [StandardLoggingPayload](../proxy/logging_spec) |
+| **이벤트** | 성공 + 실패 |
+| **제품 링크** | [Datadog LLM 관측성](https://www.datadoghq.com/product/llm-observability/) |
 
 ```yaml
 model_list:
@@ -56,11 +56,11 @@ litellm_settings:
 
 
 
-**Step 2**: Set Required env variables for datadog
+**2단계**: Datadog에 필요한 환경 변수를 설정합니다.
 
 #### Direct API
 
-Send logs directly to Datadog API:
+로그를 Datadog API로 직접 전송합니다.
 
 ```shell
 DD_API_KEY="5f2d0f310***********" # your datadog API Key
@@ -70,7 +70,7 @@ DD_SOURCE="litellm_dev"       # [OPTIONAL] your datadog source. use to different
 
 #### Via DataDog Agent
 
-Send logs through a local DataDog agent (useful for containerized environments):
+로컬 DataDog Agent를 통해 로그를 전송합니다. 컨테이너 환경에서 유용합니다.
 
 ```shell
 LITELLM_DD_AGENT_HOST="localhost"         # hostname or IP of DataDog agent
@@ -79,25 +79,25 @@ DD_API_KEY="5f2d0f310***********"         # [OPTIONAL] your datadog API Key (Age
 DD_SOURCE="litellm_dev"                   # [OPTIONAL] your datadog source
 ```
 
-When `LITELLM_DD_AGENT_HOST` is set, logs are sent to the agent instead of directly to DataDog API. This is useful for:
-- Centralized log shipping in containerized environments
-- Reducing direct API calls from multiple services
-- Leveraging agent-side processing and filtering
+`LITELLM_DD_AGENT_HOST`가 설정되면 로그는 Datadog API로 직접 전송되지 않고 Agent로 전송됩니다. 다음 상황에 유용합니다.
+- 컨테이너 환경에서 로그 전송을 중앙화할 때
+- 여러 서비스에서 발생하는 직접 API 호출을 줄일 때
+- Agent 측 처리와 필터링을 활용할 때
 
-**Note:** We use `LITELLM_DD_AGENT_HOST` instead of `DD_AGENT_HOST` to avoid conflicts with `ddtrace` which automatically sets `DD_AGENT_HOST` for APM tracing.
+**참고:** APM 추적을 위해 `DD_AGENT_HOST`를 자동 설정하는 `ddtrace`와의 충돌을 피하려고 `DD_AGENT_HOST` 대신 `LITELLM_DD_AGENT_HOST`를 사용합니다.
 
 > [!IMPORTANT]
-> **Datadog LLM Observability**: `DD_API_KEY` is **REQUIRED** even when using the Datadog Agent (`LITELLM_DD_AGENT_HOST`). The agent acts as a proxy but the API key header is mandatory for the LLM Observability endpoint.
+> **Datadog LLM 관측성**: Datadog Agent(`LITELLM_DD_AGENT_HOST`)를 사용하는 경우에도 `DD_API_KEY`는 **필수**입니다. Agent는 프록시 역할을 하지만 LLM 관측성 엔드포인트에는 API 키 헤더가 반드시 필요합니다.
 
-**Step 3**: Start the proxy, make a test request
+**3단계**: 프록시를 시작하고 테스트 요청을 보냅니다.
 
-Start proxy
+프록시 시작:
 
 ```shell
 litellm --config config.yaml --debug
 ```
 
-Test Request
+테스트 요청:
 
 ```shell
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -116,18 +116,18 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 }'
 ```
 
-Expected output on Datadog
+Datadog에서 예상되는 출력:
 
 <Image img={require('../../img/dd_small1.png')} />
 
-### Redacting Messages and Responses
+### 메시지와 응답 마스킹
 
-This section covers how to redact sensitive data from messages and responses in the logged payload on Datadog LLM Observability.
+이 섹션은 Datadog LLM 관측성에 기록되는 페이로드에서 메시지와 응답의 민감 데이터를 마스킹하는 방법을 설명합니다.
 
 
-When redaction is enabled, the actual message content and response text will be excluded from Datadog logs while preserving metadata like token counts, latency, and model information.
+마스킹이 활성화되면 실제 메시지 내용과 응답 텍스트는 Datadog 로그에서 제외되고, 토큰 수, 지연 시간, 모델 정보 같은 메타데이터는 유지됩니다.
 
-**Step 1**: Configure redaction in your `config.yaml`
+**1단계**: `config.yaml`에서 마스킹을 설정합니다.
 
 ```yaml showLineNumbers title="config.yaml"
 model_list:
@@ -142,7 +142,7 @@ litellm_settings:
     turn_off_message_logging: true # redacts input messages and output responses
 ```
 
-**Step 2**: Send a chat completion request
+**2단계**: 채팅 완료 요청을 보냅니다.
 
 ```shell
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -158,38 +158,38 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 }'
 ```
 
-**Step 3**: Verify redaction in Datadog LLM Observability
+**3단계**: Datadog LLM 관측성에서 마스킹을 확인합니다.
 
-On the Datadog LLM Observability page, you should see that both input messages and output responses are redacted, while metadata (token counts, timing, model info) remains visible.
-
-<Image img={require('../../img/dd_llm_obs.png')} />
-
-
+Datadog LLM 관측성 페이지에서 입력 메시지와 출력 응답이 모두 마스킹되고, 메타데이터(토큰 수, 시간, 모델 정보)는 계속 표시되는지 확인합니다.
 
 <Image img={require('../../img/dd_llm_obs.png')} />
 
 
-## Datadog Custom Metrics
 
-| Feature | Details |
+<Image img={require('../../img/dd_llm_obs.png')} />
+
+
+## Datadog 사용자 지정 메트릭
+
+| 기능 | 세부 정보 |
 |---------|---------|
-| **What is logged** | Latency metrics, request counts by status code |
-| **Events** | Success + Failure |
-| **Product Link** | [Datadog Metrics](https://docs.datadoghq.com/metrics/) |
+| **로그 대상** | 지연 시간 메트릭, 상태 코드별 요청 수 |
+| **이벤트** | 성공 + 실패 |
+| **제품 링크** | [Datadog Metrics](https://docs.datadoghq.com/metrics/) |
 
-Publishes the following metrics to Datadog via the `/api/v2/series` endpoint:
+`/api/v2/series` 엔드포인트를 통해 다음 메트릭을 Datadog에 게시합니다.
 
-| Metric | Type | Description |
+| 메트릭 | 유형 | 설명 |
 |--------|------|-------------|
-| `litellm.request.total_latency` | Gauge | End-to-end request latency (seconds) |
-| `litellm.llm_api.latency` | Gauge | Time spent waiting for the LLM provider response (seconds) |
-| `litellm.llm_api.request_count` | Count | Request count, tagged with status code |
+| `litellm.request.total_latency` | Gauge | 엔드투엔드 요청 지연 시간(초) |
+| `litellm.llm_api.latency` | Gauge | LLM 제공자 응답을 기다리는 데 걸린 시간(초) |
+| `litellm.llm_api.request_count` | Count | 상태 코드 태그가 포함된 요청 수 |
 
-Using `total_latency` and `llm_api.latency`, you can derive **internal latency** = `total_latency - llm_api.latency`.
+`total_latency`와 `llm_api.latency`를 사용해 **내부 지연 시간** = `total_latency - llm_api.latency`를 계산할 수 있습니다.
 
-All metrics include the following tags: `env`, `service`, `version`, `HOSTNAME`, `POD_NAME`, `provider`, `model_name`, `model_group`, `team`, `status_code`.
+모든 메트릭에는 `env`, `service`, `version`, `HOSTNAME`, `POD_NAME`, `provider`, `model_name`, `model_group`, `team`, `status_code` 태그가 포함됩니다.
 
-**Step 1**: Create a `config.yaml` file
+**1단계**: `config.yaml` 파일을 만듭니다.
 
 ```yaml
 model_list:
@@ -201,14 +201,14 @@ litellm_settings:
   failure_callback: ["datadog_metrics"]
 ```
 
-**Step 2**: Set required env variables
+**2단계**: 필요한 환경 변수를 설정합니다.
 
 ```shell
 DD_API_KEY="your-api-key"
 DD_SITE="us5.datadoghq.com"  # your datadog site
 ```
 
-**Step 3**: Start the proxy and make a test request
+**3단계**: 프록시를 시작하고 테스트 요청을 보냅니다.
 
 ```shell
 litellm --config config.yaml
@@ -224,21 +224,21 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 }'
 ```
 
-**Step 4**: View metrics in Datadog Metrics Explorer
+**4단계**: Datadog Metrics Explorer에서 메트릭을 확인합니다.
 
-Navigate to **Metrics > Explorer** in Datadog and search for `litellm.request.total_latency`, `litellm.llm_api.latency`, or `litellm.llm_api.request_count`.
+Datadog에서 **Metrics > Explorer**로 이동한 뒤 `litellm.request.total_latency`, `litellm.llm_api.latency`, 또는 `litellm.llm_api.request_count`를 검색합니다.
 
-## Datadog Cloud Cost Management
+## Datadog 클라우드 비용 관리
 
-| Feature | Details |
+| 기능 | 세부 정보 |
 |---------|---------|
-| **What is logged** | Aggregated LLM Costs (FOCUS format) |
-| **Events** | Periodic Uploads of Aggregated Cost Data |
-| **Product Link** | [Datadog Cloud Cost Management](https://docs.datadoghq.com/cost_management/) |
+| **로그 대상** | 집계된 LLM 비용(FOCUS 형식) |
+| **이벤트** | 집계 비용 데이터의 주기적 업로드 |
+| **제품 링크** | [Datadog Cloud Cost Management](https://docs.datadoghq.com/cost_management/) |
 
-We will use the `--config` to set `litellm.callbacks = ["datadog_cost_management"]`. This will periodically upload aggregated LLM cost data to Datadog.
+`--config`로 `litellm.callbacks = ["datadog_cost_management"]`를 설정합니다. 이렇게 하면 집계된 LLM 비용 데이터가 Datadog에 주기적으로 업로드됩니다.
 
-**Step 1**: Create a `config.yaml` file and set `litellm_settings`: `success_callback`
+**1단계**: `config.yaml` 파일을 만들고 `litellm_settings`: `success_callback`을 설정합니다.
 
 ```yaml
 model_list:
@@ -249,7 +249,7 @@ litellm_settings:
   callbacks: ["datadog_cost_management"]
 ```
 
-**Step 2**: Set Required env variables
+**2단계**: 필요한 환경 변수를 설정합니다.
 
 ```shell
 DD_API_KEY="your-api-key"
@@ -257,30 +257,30 @@ DD_APP_KEY="your-app-key" # REQUIRED for Cost Management
 DD_SITE="us5.datadoghq.com"
 ```
 
-**Step 3**: Start the proxy
+**3단계**: 프록시 시작
 
 ```shell
 litellm --config config.yaml
 ```
 
-**How it works**
-* LiteLLM aggregates costs in-memory by Provider, Model, Date, and Tags.
-* Requires `DD_APP_KEY` for the Custom Costs API.
-* Costs are uploaded periodically (flushed).
+**동작 방식**
+* LiteLLM은 Provider, Model, Date, Tags 기준으로 비용을 메모리에서 집계합니다.
+* Custom Costs API에는 `DD_APP_KEY`가 필요합니다.
+* 비용은 주기적으로 업로드(flush)됩니다.
 
 
-### Datadog Tracing
+### Datadog 추적
 
-Use `ddtrace-run` to enable [Datadog Tracing](https://ddtrace.readthedocs.io/en/stable/installation_quickstart.html) on litellm proxy
+LiteLLM 프록시에서 [Datadog Tracing](https://ddtrace.readthedocs.io/en/stable/installation_quickstart.html)을 활성화하려면 `ddtrace-run`을 사용합니다.
 
 **DD Tracer**
-Pass `USE_DDTRACE=true` to the docker run command. When `USE_DDTRACE=true`, the proxy will run `ddtrace-run litellm` as the `ENTRYPOINT` instead of just `litellm`
+Docker 실행 명령에 `USE_DDTRACE=true`를 전달합니다. `USE_DDTRACE=true`이면 프록시는 단순히 `litellm`을 실행하지 않고 `ENTRYPOINT`로 `ddtrace-run litellm`을 실행합니다.
 
 **DD Profiler**
 
-Pass `USE_DDPROFILER=true` to the docker run command. When `USE_DDPROFILER=true`, the proxy will activate the [Datadog Profiler](https://docs.datadoghq.com/profiler/enabling/python/). This is useful for debugging CPU% and memory usage.
+Docker 실행 명령에 `USE_DDPROFILER=true`를 전달합니다. `USE_DDPROFILER=true`이면 프록시는 [Datadog Profiler](https://docs.datadoghq.com/profiler/enabling/python/)를 활성화합니다. CPU%와 메모리 사용량을 디버깅할 때 유용합니다.
 
-We don't recommend using `USE_DDPROFILER` in production. It is only recommended for debugging CPU% and memory usage.
+프로덕션에서 `USE_DDPROFILER`를 사용하는 것은 권장하지 않습니다. CPU%와 메모리 사용량을 디버깅할 때만 권장됩니다.
 
 
 ```bash
@@ -293,33 +293,31 @@ docker run \
     --config /app/config.yaml --detailed_debug
 ```
 
-## Set DD variables (`DD_SERVICE` etc)
+## DD 변수 설정(`DD_SERVICE` 등)
 
-LiteLLM supports customizing the following Datadog environment variables
+LiteLLM은 다음 Datadog 환경 변수의 사용자 지정을 지원합니다.
 
-| Environment Variable | Description | Default Value | Required |
+| 환경 변수 | 설명 | 기본값 | 필수 여부 |
 |---------------------|-------------|---------------|----------|
-| `DD_API_KEY` | Your Datadog API key for authentication (required for direct API, optional for agent) | None | Conditional* |
-| `DD_SITE` | Your Datadog site (e.g., "us5.datadoghq.com") (required for direct API) | None | Conditional* |
-| `LITELLM_DD_AGENT_HOST` | Hostname or IP of DataDog agent (e.g., "localhost"). When set, logs are sent to agent instead of direct API | None | ❌ No |
-| `LITELLM_DD_AGENT_PORT` | Port of DataDog agent for log intake | "10518" | ❌ No |
-| `DD_ENV` | Environment tag for your logs (e.g., "production", "staging") | "unknown" | ❌ No |
-| `DD_SERVICE` | Service name for your logs | "litellm-server" | ❌ No |
-| `DD_LLMOBS_ML_APP` | Default ml_app name for LLM Observability (Application column). Can be overridden per-request via `metadata.ml_app`. | Falls back to `DD_SERVICE` | ❌ No |
-| `DD_SOURCE` | Source name for your logs | "litellm" | ❌ No |
-| `DD_VERSION` | Version tag for your logs | "unknown" | ❌ No |
-| `HOSTNAME` | Hostname tag for your logs | "" | ❌ No |
-| `POD_NAME` | Pod name tag (useful for Kubernetes deployments) | "unknown" | ❌ No |
+| `DD_API_KEY` | 인증에 사용하는 Datadog API 키(Direct API에는 필수, Agent에는 선택 사항) | None | 조건부* |
+| `DD_SITE` | Datadog 사이트(예: "us5.datadoghq.com", Direct API에는 필수) | None | 조건부* |
+| `LITELLM_DD_AGENT_HOST` | DataDog Agent의 호스트명 또는 IP(예: "localhost"). 설정하면 로그가 직접 API 대신 Agent로 전송됩니다. | None | ❌ 아니요 |
+| `LITELLM_DD_AGENT_PORT` | 로그 수집용 DataDog Agent 포트 | "10518" | ❌ 아니요 |
+| `DD_ENV` | 로그의 환경 태그(예: "production", "staging") | "unknown" | ❌ 아니요 |
+| `DD_SERVICE` | 로그의 서비스 이름 | "litellm-server" | ❌ 아니요 |
+| `DD_SOURCE` | 로그의 소스 이름 | "litellm" | ❌ 아니요 |
+| `DD_VERSION` | 로그의 버전 태그 | "unknown" | ❌ 아니요 |
+| `HOSTNAME` | 로그의 호스트명 태그 | "" | ❌ 아니요 |
+| `POD_NAME` | Pod 이름 태그(Kubernetes 배포에 유용) | "unknown" | ❌ 아니요 |
 
-\* **Required when using Direct API** (default): `DD_API_KEY` and `DD_SITE` are required  
-\* **Optional when using DataDog Agent**: Set `LITELLM_DD_AGENT_HOST` to use agent mode; `DD_API_KEY` and `DD_SITE` are not required for **Datadog Logs**. (**Note: `DD_API_KEY` IS REQUIRED for Datadog LLM Observability**)
+\* **Direct API 사용 시 필수**(기본값): `DD_API_KEY`와 `DD_SITE`가 필요합니다.  
+\* **DataDog Agent 사용 시 선택 사항**: Agent 모드를 사용하려면 `LITELLM_DD_AGENT_HOST`를 설정합니다. **Datadog 로그**에는 `DD_API_KEY`와 `DD_SITE`가 필요하지 않습니다. (**참고: Datadog LLM 관측성에는 `DD_API_KEY`가 필수입니다.**)
 
-## Automatic Tags
+## 자동 태그
 
-LiteLLM automatically adds the following tags to your Datadog logs and metrics if the information is available in the request:
+요청에서 정보를 사용할 수 있으면 LiteLLM은 Datadog 로그와 메트릭에 다음 태그를 자동으로 추가합니다.
 
-| Tag | Description | Source |
+| 태그 | 설명 | 소스 |
 |-----|-------------|--------|
-| `team` | The team alias or ID associated with the API Key | `user_api_key_team_alias`, `team_alias`, `user_api_key_team_id`, or `team_id` in metadata |
-| `request_tag` | Custom tags passed in the request | `request_tags` in logging payload |
-
+| `team` | API Key와 연결된 팀 별칭 또는 ID | metadata의 `user_api_key_team_alias`, `team_alias`, `user_api_key_team_id`, 또는 `team_id` |
+| `request_tag` | 요청에 전달된 사용자 지정 태그 | logging payload의 `request_tags` |

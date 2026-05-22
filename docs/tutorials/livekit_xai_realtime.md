@@ -1,23 +1,23 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# LiveKit xAI Realtime Voice Agent
+# LiveKit xAI Realtime 음성 에이전트 {#livekit-xai-realtime-voice-agent}
 
-Use LiveKit's xAI Grok Voice Agent plugin with LiteLLM Proxy to build low-latency voice AI agents.
+LiteLLM Proxy와 함께 LiveKit의 xAI Grok Voice Agent 플러그인을 사용해 지연 시간이 낮은 음성 AI 에이전트를 빌드합니다.
 
-The LiveKit Agents framework provides tools for building real-time voice and video AI applications. By routing through LiteLLM Proxy, you get unified access to multiple realtime voice providers, cost tracking, rate limiting, and more.
+LiveKit Agents 프레임워크는 실시간 음성 및 비디오 AI 애플리케이션을 만들기 위한 도구를 제공합니다. LiteLLM Proxy를 통해 라우팅하면 여러 realtime 음성 provider에 대한 통합 접근, 비용 추적, rate limit 등을 사용할 수 있습니다.
 
-## Quick Start
+## 빠른 시작
 
-### 1. Install Dependencies
+### 1. 의존성 설치 {#1-install-dependencies}
 
 ```bash
 uv add livekit-agents[xai]
 ```
 
-### 2. Start LiteLLM Proxy
+### 2. LiteLLM Proxy 시작 {#2-start-litellm-proxy}
 
-Create a config file with your xAI realtime model:
+xAI realtime 모델을 포함한 설정 파일을 만듭니다.
 
 ```yaml title="config.yaml" showLineNumbers
 model_list:
@@ -35,15 +35,15 @@ general_settings:
   master_key: sk-1234  # Change this to a secure key
 ```
 
-Start the proxy:
+프록시 시작:
 
 ```bash
 litellm --config config.yaml --port 4000
 ```
 
-### 3. Configure LiveKit xAI Plugin
+### 3. LiveKit xAI 플러그인 구성 {#3-configure-livekit-xai-plugin}
 
-Point LiveKit's xAI plugin to your LiteLLM proxy:
+LiveKit의 xAI 플러그인이 LiteLLM proxy를 바라보도록 설정합니다.
 
 ```python
 from livekit.plugins import xai
@@ -56,9 +56,9 @@ model = xai.realtime.RealtimeModel(
 )
 ```
 
-## Complete Example
+## 전체 예제 {#complete-example}
 
-Here's a complete working example:
+아래는 바로 실행 가능한 전체 예제입니다.
 
 <Tabs>
 <TabItem value="python" label="Python Client">
@@ -155,19 +155,19 @@ if __name__ == "__main__":
 </TabItem>
 </Tabs>
 
-## Running the Example
+## 예제 실행 {#running-the-example}
 
-1. **Start LiteLLM Proxy** (if not already running):
+1. **LiteLLM Proxy 시작**(아직 실행 중이 아니라면):
    ```bash
    litellm --config config.yaml --port 4000
    ```
 
-2. **Run the example**:
+2. **예제 실행**:
    ```bash
    python your_script.py
    ```
 
-## Expected Output
+## 예상 출력 {#expected-output}
 
 ```
 ✅ Connected: conversation.created
@@ -178,12 +178,12 @@ Because they make up everything!
 ```
 
 
-## Complete Working Example
+## 전체 동작 예제 {#complete-working-example}
 
 **[LiveKit Agent SDK Cookbook](https://github.com/BerriAI/litellm/tree/main/cookbook/livekit_agent_sdk)**
 
 
-## Learn More
+## 학습 더 보기
 
 - [xAI Realtime API](/docs/providers/xai_realtime)
 - [LiveKit xAI Plugin](https://docs.livekit.io/agents/models/realtime/plugins/xai/)

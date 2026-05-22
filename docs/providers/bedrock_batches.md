@@ -1,32 +1,32 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Bedrock Batches
+# Bedrock 배치 {#bedrock-batches}
 
-Use Amazon Bedrock Batch Inference API through LiteLLM.
+LiteLLM을 통해 Amazon Bedrock Batch Inference API를 사용합니다.
 
-| Property | Details |
+| 속성 | 세부 정보 |
 |----------|---------|
-| Description | Amazon Bedrock Batch Inference allows you to run inference on large datasets asynchronously |
-| Provider Doc | [AWS Bedrock Batch Inference ↗](https://docs.aws.amazon.com/bedrock/latest/userguide/batch-inference.html) |
-| Cost Tracking | ✅ Supported |
+| 설명 | Amazon Bedrock Batch Inference를 사용하면 대규모 데이터셋에서 비동기적으로 추론을 실행할 수 있습니다 |
+| 제공자 문서 | [AWS Bedrock Batch Inference ↗](https://docs.aws.amazon.com/bedrock/latest/userguide/batch-inference.html) |
+| 비용 추적 | ✅ 지원됨 |
 
-## Overview
+## 개요
 
-Use this to:
+다음 용도로 사용합니다:
 
-- Run batch inference on large datasets with Bedrock models
-- Control batch model access by key/user/team (same as chat completion models)
-- Manage S3 storage for batch input/output files
+- Bedrock 모델로 대규모 데이터셋에 대한 배치 추론 실행
+- 키/사용자/팀별 배치 모델 접근 제어(chat completion 모델과 동일)
+- 배치 입력/출력 파일용 S3 스토리지 관리
 
-## (Proxy Admin) Usage
+## (Proxy 관리자) 사용법 {#proxy-admin-사용법}
 
-Here's how to give developers access to your Bedrock Batch models.
+개발자에게 Bedrock Batch 모델 접근 권한을 부여하는 방법입니다.
 
-### 1. Setup config.yaml
+### 1. config.yaml 설정 {#1-setup-configyaml}
 
-- Specify `mode: batch` for each model: Allows developers to know this is a batch model
-- Configure S3 bucket and AWS credentials for batch operations
+- 각 모델에 `mode: batch`를 지정합니다. 개발자가 해당 모델이 배치 모델임을 알 수 있습니다.
+- 배치 작업에 사용할 S3 버킷과 AWS 자격 증명을 구성합니다.
 
 ```yaml showLineNumbers title="litellm_config.yaml"
 model_list:
@@ -46,24 +46,24 @@ model_list:
       mode: batch # 👈 SPECIFY MODE AS BATCH, to tell user this is a batch model
 ```
 
-**Required Parameters:**
+**필수 매개변수:**
 
-| Parameter | Description |
+| 매개변수 | 설명 |
 |-----------|-------------|
-| `s3_bucket_name` | S3 bucket for batch input/output files |
-| `s3_region_name` | AWS region for S3 bucket |
-| `s3_access_key_id` | AWS access key for S3 bucket |
-| `s3_secret_access_key` | AWS secret key for S3 bucket |
-| `aws_batch_role_arn` | IAM role ARN for Bedrock batch operations. Bedrock Batch APIs require an IAM role ARN to be set. |
-| `mode: batch` | Indicates to LiteLLM this is a batch model |
+| `s3_bucket_name` | 배치 입력/출력 파일용 S3 버킷 |
+| `s3_region_name` | S3 버킷의 AWS 리전 |
+| `s3_access_key_id` | S3 버킷용 AWS 액세스 키 |
+| `s3_secret_access_key` | S3 버킷용 AWS 시크릿 키 |
+| `aws_batch_role_arn` | Bedrock 배치 작업용 IAM role ARN입니다. Bedrock Batch API에는 IAM role ARN 설정이 필요합니다. |
+| `mode: batch` | LiteLLM에 이 모델이 배치 모델임을 나타냅니다 |
 
-**Optional Parameters:**
+**선택 매개변수:**
 
-| Parameter | Description |
+| 매개변수 | 설명 |
 |-----------|-------------|
-| `s3_encryption_key_id` | Custom KMS encryption key ID for S3 output data. If not specified, Bedrock uses AWS managed encryption keys. |
+| `s3_encryption_key_id` | S3 출력 데이터용 사용자 지정 KMS 암호화 키 ID입니다. 지정하지 않으면 Bedrock은 AWS 관리형 암호화 키를 사용합니다. |
 
-### 2. Create Virtual Key
+### 2. Virtual Key 생성 {#2-create-virtual-key}
 
 ```bash showLineNumbers title="create_virtual_key.sh"
 curl -L -X POST 'https://{PROXY_BASE_URL}/key/generate' \
@@ -72,32 +72,32 @@ curl -L -X POST 'https://{PROXY_BASE_URL}/key/generate' \
 -d '{"models": ["bedrock-batch-claude"]}'
 ```
 
-You can now use the virtual key to access the batch models (See Developer flow).
+이제 virtual key를 사용해 배치 모델에 접근할 수 있습니다(개발자 흐름 참고).
 
-## (Developer) Usage
+## (개발자) 사용법 {#developer-사용법}
 
-Here's how to create a LiteLLM managed file and execute Bedrock Batch CRUD operations with the file.
+LiteLLM 관리 파일을 생성하고 해당 파일로 Bedrock Batch CRUD 작업을 실행하는 방법입니다.
 
-### 1. Create request.jsonl
+### 1. request.jsonl 생성 {#1-create-requestjsonl}
 
-- Check models available via `/model_group/info`
-- See all models with `mode: batch`
-- Set `model` in .jsonl to the model from `/model_group/info`
+- `/model_group/info`를 통해 사용 가능한 모델을 확인합니다.
+- `mode: batch`가 있는 모든 모델을 확인합니다.
+- .jsonl의 `model`을 `/model_group/info`에서 확인한 모델로 설정합니다.
 
 ```json showLineNumbers title="bedrock_batch_completions.jsonl"
 {"custom_id": "request-1", "method": "POST", "url": "/v1/chat/completions", "body": {"model": "bedrock-batch-claude", "messages": [{"role": "system", "content": "You are a helpful assistant."}, {"role": "user", "content": "Hello world!"}], "max_tokens": 1000}}
 {"custom_id": "request-2", "method": "POST", "url": "/v1/chat/completions", "body": {"model": "bedrock-batch-claude", "messages": [{"role": "system", "content": "You are an unhelpful assistant."}, {"role": "user", "content": "Hello world!"}], "max_tokens": 1000}}
 ```
 
-Expectation:
+예상 동작:
 
-- LiteLLM translates this to the bedrock deployment specific value (e.g. `bedrock/us.anthropic.claude-3-5-sonnet-20240620-v1:0`)
+- LiteLLM은 이를 Bedrock 배포별 값으로 변환합니다(예: `bedrock/us.anthropic.claude-3-5-sonnet-20240620-v1:0`).
 
-### 2. Upload File
+### 2. 파일 업로드 {#2-upload-file}
 
-Specify `target_model_names: "<model-name>"` to enable LiteLLM managed files and request validation.
+LiteLLM 관리 파일과 요청 검증을 활성화하려면 `target_model_names: "<model-name>"`을 지정합니다.
 
-model-name should be the same as the model-name in the request.jsonl
+모델 이름은 request.jsonl의 모델 이름과 같아야 합니다.
 
 <Tabs>
 <TabItem value="python" label="Python">
@@ -133,11 +133,11 @@ curl http://localhost:4000/v1/files \
 </TabItem>
 </Tabs>
 
-**Where is the file written?**:
+**파일은 어디에 기록되나요?**:
 
-The file is written to S3 bucket specified in your config and prepared for Bedrock batch inference.
+파일은 구성에 지정된 S3 버킷에 기록되고 Bedrock 배치 추론을 위해 준비됩니다.
 
-### 3. Create the batch
+### 3. 배치 생성 {#3-create-the-batch}
 
 <Tabs>
 <TabItem value="python" label="Python">
@@ -172,9 +172,9 @@ curl http://localhost:4000/v1/batches \
 </TabItem>
 </Tabs>
 
-### 4. Retrieve batch results
+### 4. 배치 결과 조회 {#4-retrieve-batch-results}
 
-Once the batch job is completed, download the results from S3:
+배치 작업이 완료되면 S3에서 결과를 다운로드합니다:
 
 <Tabs>
 <TabItem value="python" label="Python">
@@ -238,9 +238,9 @@ print(result.text)
 </TabItem>
 </Tabs>
 
-**Output Format:**
+**출력 형식:**
 
-The batch output file is in JSONL format with each line containing:
+배치 출력 파일은 JSONL 형식이며 각 줄에는 다음이 포함됩니다:
 
 ```json
 {
@@ -263,23 +263,23 @@ The batch output file is in JSONL format with each line containing:
 }
 ```
 
-## FAQ
+## FAQ {#faq}
 
-### Where are my files written?
+### 파일은 어디에 기록되나요? {#where-are-my-files-written}
 
-When a `target_model_names` is specified, the file is written to the S3 bucket configured in your Bedrock batch model configuration.
+`target_model_names`를 지정하면 파일은 Bedrock 배치 모델 구성에 설정된 S3 버킷에 기록됩니다.
 
-### What models are supported?
+### 어떤 모델이 지원되나요? {#what-models-are-supported}
 
-LiteLLM only supports Bedrock Anthropic Models for Batch API. If you want other bedrock models file an issue [here](https://github.com/BerriAI/litellm/issues/new/choose).
+LiteLLM은 Batch API에서 Bedrock Anthropic 모델만 지원합니다. 다른 Bedrock 모델을 원하면 [여기](https://github.com/BerriAI/litellm/issues/new/choose)에 이슈를 등록하세요.
 
-### How do I use a custom KMS encryption key?
+### 사용자 지정 KMS 암호화 키는 어떻게 사용하나요? {#how-do-i-use-a-custom-kms-encryption-key}
 
-If your S3 bucket requires a custom KMS encryption key, you can specify it in your configuration using `s3_encryption_key_id`. This is useful for enterprise customers with specific encryption requirements.
+S3 버킷에 사용자 지정 KMS 암호화 키가 필요한 경우 `s3_encryption_key_id`를 사용해 구성에서 지정할 수 있습니다. 특정 암호화 요구사항이 있는 엔터프라이즈 고객에게 유용합니다.
 
-You can set the encryption key in 2 ways:
+암호화 키는 두 가지 방법으로 설정할 수 있습니다:
 
-1. **In config.yaml** (recommended):
+1. **config.yaml에서 설정**(권장):
 ```yaml
 model_list:
   - model_name: "bedrock-batch-claude"
@@ -289,15 +289,15 @@ model_list:
       # ... other params
 ```
 
-2. **As an environment variable**:
+2. **환경 변수로 설정**:
 ```bash
 export AWS_S3_ENCRYPTION_KEY_ID=arn:aws:kms:us-west-2:123456789012:key/12345678-1234-1234-1234-123456789012
 ```
 
 
 
-## Further Reading
+## 추가 자료 {#further-reading}
 
-- [AWS Bedrock Batch Inference Documentation](https://docs.aws.amazon.com/bedrock/latest/userguide/batch-inference.html)
-- [LiteLLM Managed Batches](../proxy/managed_batches)
-- [LiteLLM Authentication to Bedrock](https://docs.litellm.ai/docs/providers/bedrock#boto3---authentication)
+- [AWS Bedrock Batch Inference 문서](https://docs.aws.amazon.com/bedrock/latest/userguide/batch-inference.html)
+- [LiteLLM 관리형 배치](../proxy/managed_batches)
+- [LiteLLM Bedrock 인증](https://docs.litellm.ai/docs/providers/bedrock#boto3---authentication)

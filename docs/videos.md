@@ -1,24 +1,24 @@
 # /videos
 
-| Feature | Supported | 
+| 기능 | 지원 여부 | 
 |---------|-----------|
-| Cost Tracking | ✅ |
-| Logging | ✅ (Full request/response logging) |
-Fallbacks | ✅ (Between supported models) |
+| 비용 추적 | ✅ |
+| 로깅 | ✅ (전체 request/response 로깅) |
+| Fallbacks | ✅ (지원 모델 간) |
 | Load Balancing | ✅ |
-| Guardrails Support | ✅ Content moderation and safety checks |
-| Proxy Server Support | ✅ Full proxy integration with virtual keys |
-| Spend Management | ✅ Budget tracking and rate limiting |
-| Supported Providers | `openai`, `azure`, `gemini`, `vertex_ai`, `runwayml` |
+| 가드레일 Support | ✅ Content moderation 및 safety check 지원 |
+| Proxy Server Support | ✅ Virtual key와 전체 proxy 통합 |
+| Spend Management | ✅ Budget tracking 및 rate limiting |
+| 지원 프로바이더 | `openai`, `azure`, `gemini`, `vertex_ai`, `runwayml` |
 
 :::tip
 
-LiteLLM follows the [OpenAI Video Generation API specification](https://platform.openai.com/docs/guides/video-generation)
+LiteLLM은 [OpenAI Video Generation API specification](https://platform.openai.com/docs/guides/video-generation)을 따릅니다.
 
 :::
 
-## **LiteLLM Python SDK Usage**
-### Quick Start 
+## **LiteLLM Python SDK 사용법**
+### 빠른 시작 
 
 ```python
 from litellm import video_generation, video_status, video_content
@@ -64,7 +64,7 @@ with open("generated_video.mp4", "wb") as f:
     f.write(video_bytes)
 ```
 
-### Async Usage 
+### Async 사용법 
 
 ```python
 from litellm import avideo_generation, avideo_status, avideo_content
@@ -111,7 +111,7 @@ async def test_async_video():
 asyncio.run(test_async_video())
 ```
 
-### Video Status Checking
+### Video 상태 확인
 
 ```python
 from litellm import video_status
@@ -125,9 +125,9 @@ print(f"Created At: {status_response.created_at}")
 print(f"Model: {status_response.model}")
 ```
 
-### List Videos
+### Video 목록 조회
 
-For listing videos, you need to specify the provider since there's no video_id to decode from:
+Video 목록을 조회할 때는 decode할 `video_id`가 없으므로 provider를 지정해야 합니다.
 
 ```python
 from litellm import video_list
@@ -139,7 +139,7 @@ for video in videos:
     print(f"Video ID: {video['id']}")
 ```
 
-### Video Generation with Reference Image
+### Reference Image로 Video 생성
 
 ```python
 from litellm import video_generation
@@ -156,7 +156,7 @@ response = video_generation(
 print(f"Video ID: {response.id}")
 ```
 
-### Video Remix (Video Editing)
+### Video Remix(Video 편집)
 
 ```python
 from litellm import video_remix
@@ -172,7 +172,7 @@ response = video_remix(
 print(f"Video ID: {response.id}")
 ```
 
-### Optional Parameters
+### 선택 파라미터
 
 ```python
 response = video_generation(
@@ -185,7 +185,7 @@ response = video_generation(
 )
 ```
 
-### Azure Video Generation
+### Azure Video 생성
 
 ```python
 from litellm import video_generation
@@ -205,18 +205,18 @@ response = video_generation(
 print(f"Video ID: {response.id}")
 ```
 
-## **LiteLLM Proxy Usage**
+## **LiteLLM Proxy 사용법**
 
-LiteLLM provides OpenAI API compatible video endpoints for complete video generation workflow:
+LiteLLM은 전체 video 생성 workflow를 위한 OpenAI API 호환 video endpoint를 제공합니다.
 
-- `/videos` - Generate new videos
-- `/videos/remix` - Edit existing videos with reference images  
-- `/videos/status` - Check video generation status
-- `/videos/retrieval` - Download completed videos
+- `/videos` - 새 video 생성
+- `/videos/remix` - reference image로 기존 video 편집
+- `/videos/status` - video generation 상태 확인
+- `/videos/retrieval` - 완료된 video 다운로드
 
-**Setup**
+**설정**
 
-Add this to your litellm proxy config.yaml
+LiteLLM proxy `config.yaml`에 다음을 추가합니다.
 
 ```yaml
 model_list:
@@ -231,7 +231,7 @@ model_list:
       api_base: os.environ/AZURE_OPENAI_API_BASE
 ```
 
-Start litellm
+LiteLLM을 시작합니다.
 
 ```bash
 litellm --config /path/to/config.yaml
@@ -239,7 +239,7 @@ litellm --config /path/to/config.yaml
 # RUNNING on http://0.0.0.0:4000
 ```
 
-Test video generation request
+Video 생성 request를 테스트합니다.
 
 ```bash
 curl --location 'http://localhost:4000/v1/videos' \
@@ -251,14 +251,14 @@ curl --location 'http://localhost:4000/v1/videos' \
 }'
 ```
 
-Test video status request
+Video 상태 request를 테스트합니다.
 
 ```bash
 curl --location 'http://localhost:4000/v1/videos/{video_id}' \
 --header 'x-litellm-api-key: sk-1234'
 ```
 
-Test video retrieval request
+Video retrieval request를 테스트합니다.
 
 ```bash
 curl --location 'http://localhost:4000/v1/videos/{video_id}/content' \
@@ -266,7 +266,7 @@ curl --location 'http://localhost:4000/v1/videos/{video_id}/content' \
 --output video.mp4
 ```
 
-Test video remix request
+Video remix request를 테스트합니다.
 
 ```bash
 curl --location --request POST 'http://localhost:4000/v1/videos/{video_id}/remix' \
@@ -277,7 +277,7 @@ curl --location --request POST 'http://localhost:4000/v1/videos/{video_id}/remix
 }'
 ```
 
-Test video list request (requires custom_llm_provider)
+Video list request를 테스트합니다(`custom_llm_provider` 필요).
 
 ```bash
 # Note: video_list requires custom_llm_provider since there's no video_id to decode from
@@ -290,29 +290,29 @@ curl --location 'http://localhost:4000/v1/videos' \
 --header 'custom-llm-provider: azure'
 ```
 
-### Character, Edit, and Extension Endpoints
+### Character, Edit, Extension 엔드포인트
 
-LiteLLM proxy also supports these OpenAI-compatible video routes:
+LiteLLM proxy는 다음 OpenAI 호환 video route도 지원합니다.
 
 - `POST /v1/videos/characters`
 - `GET /v1/videos/characters/{character_id}`
 - `POST /v1/videos/edits`
 - `POST /v1/videos/extensions`
 
-#### Routing Behavior (`target_model_names`, encoded IDs, and provider overrides)
+#### Routing 동작(`target_model_names`, encoded ID, provider override)
 
-- `POST /v1/videos/characters` supports `target_model_names` like `POST /v1/videos`.
-- When `target_model_names` is provided on character creation, LiteLLM encodes the returned `character_id` with routing metadata.
-- `GET /v1/videos/characters/{character_id}` accepts encoded character IDs directly. LiteLLM decodes the ID internally and routes with the correct model/provider metadata.
-- `POST /v1/videos/edits` and `POST /v1/videos/extensions` support both:
+- `POST /v1/videos/characters`는 `POST /v1/videos`처럼 `target_model_names`를 지원합니다.
+- Character 생성 시 `target_model_names`가 제공되면 LiteLLM은 반환되는 `character_id`에 routing metadata를 encoding합니다.
+- `GET /v1/videos/characters/{character_id}`는 encoded character ID를 직접 받을 수 있습니다. LiteLLM은 내부에서 ID를 decode하고 올바른 model/provider metadata로 route합니다.
+- `POST /v1/videos/edits`와 `POST /v1/videos/extensions`는 다음 두 형식을 모두 지원합니다.
   - plain `video.id`
-  - encoded `video.id` values returned by LiteLLM
-- `custom_llm_provider` can be supplied using the same patterns as other proxy endpoints:
+  - LiteLLM이 반환한 encoded `video.id` 값
+- `custom_llm_provider`는 다른 proxy endpoint와 같은 패턴으로 제공할 수 있습니다.
   - header: `custom-llm-provider`
   - query: `?custom_llm_provider=...`
-  - body: `custom_llm_provider` (or `extra_body.custom_llm_provider` where applicable)
+  - body: `custom_llm_provider` (또는 적용 가능한 경우 `extra_body.custom_llm_provider`)
 
-#### Character create with `target_model_names`
+#### `target_model_names`로 Character 생성
 
 ```bash
 curl --location 'http://localhost:4000/v1/videos/characters' \
@@ -322,7 +322,7 @@ curl --location 'http://localhost:4000/v1/videos/characters' \
 -F 'video=@/path/to/character.mp4'
 ```
 
-Example response (encoded `id`):
+예제 response(encoded `id`):
 
 ```json
 {
@@ -333,14 +333,14 @@ Example response (encoded `id`):
 }
 ```
 
-#### Get character using encoded `character_id`
+#### Encoded `character_id`로 character 조회
 
 ```bash
 curl --location 'http://localhost:4000/v1/videos/characters/character_...' \
 --header 'Authorization: Bearer sk-1234'
 ```
 
-#### Video edit with encoded `video.id`
+#### Encoded `video.id`로 video edit
 
 ```bash
 curl --location 'http://localhost:4000/v1/videos/edits' \
@@ -352,7 +352,7 @@ curl --location 'http://localhost:4000/v1/videos/edits' \
 }'
 ```
 
-#### Video extension with provider override from `extra_body`
+#### `extra_body`의 provider override로 video extension
 
 ```bash
 curl --location 'http://localhost:4000/v1/videos/extensions' \
@@ -366,7 +366,7 @@ curl --location 'http://localhost:4000/v1/videos/extensions' \
 }'
 ```
 
-Test Azure video generation request
+Azure video 생성 request를 테스트합니다.
 
 ```bash
 curl http://localhost:4000/v1/videos \
@@ -380,13 +380,13 @@ curl http://localhost:4000/v1/videos \
   }'
 ```
 
-## **Using OpenAI Client with LiteLLM Proxy**
+## **LiteLLM Proxy에서 OpenAI Client 사용**
 
-You can use the standard OpenAI Python client to interact with LiteLLM's video endpoints. This provides a familiar interface while leveraging LiteLLM's provider abstraction and proxy features.
+표준 OpenAI Python client로 LiteLLM의 video endpoint를 사용할 수 있습니다. 익숙한 interface를 유지하면서 LiteLLM의 provider abstraction과 proxy 기능을 함께 활용할 수 있습니다.
 
-### Setup
+### 설정
 
-First, configure your OpenAI client to point to your LiteLLM proxy:
+먼저 OpenAI client가 LiteLLM proxy를 바라보도록 설정합니다.
 
 ```python
 from openai import OpenAI
@@ -398,9 +398,9 @@ client = OpenAI(
 )
 ```
 
-### Video Generation
+### Video 생성
 
-Generate a new video using the OpenAI client interface:
+OpenAI client interface로 새 video를 생성합니다.
 
 ```python
 # Basic video generation
@@ -415,9 +415,9 @@ print(f"Video ID: {response.id}")
 print(f"Status: {response.status}")
 ```
 
-### Video Generation with Reference Image
+### Reference Image로 Video 생성
 
-Create a video using a reference image:
+reference image를 사용해 video를 생성합니다.
 
 ```python
 # Video generation with reference image
@@ -432,9 +432,9 @@ print(f"Video ID: {response.id}")
 print(f"Status: {response.status}")
 ```
 
-### Video Status Checking
+### Video 상태 확인
 
-Check the status of a video generation:
+video generation 상태를 확인합니다.
 
 ```python
 # Check video status
@@ -456,9 +456,9 @@ while status_response.status not in ["completed", "failed"]:
     print(f"Current status: {status_response.status}")
 ```
 
-### List Videos
+### Video 목록 조회
 
-Get a list of your videos:
+video 목록을 가져옵니다.
 
 ```python
 # List all videos
@@ -468,9 +468,9 @@ for video in videos.data:
     print(f"Video ID: {video.id}, Status: {video.status}")
 ```
 
-### Download Video Content
+### Video Content 다운로드
 
-Download the completed video:
+완료된 video를 다운로드합니다.
 
 ```python
 # Download video content
@@ -485,9 +485,9 @@ with open("generated_video.mp4", "wb") as f:
 print("Video downloaded successfully!")
 ```
 
-### Video Remix (Editing)
+### Video Remix(편집)
 
-Edit an existing video with new instructions:
+새 instruction으로 기존 video를 편집합니다.
 
 ```python
 # Remix/edit an existing video
@@ -501,9 +501,9 @@ print(f"Remix Video ID: {response.id}")
 print(f"Status: {response.status}")
 ```
 
-### Complete Workflow Example
+### Complete Workflow 예제
 
-Here's a complete example showing the full video generation workflow:
+전체 video 생성 workflow를 보여주는 완성 예제입니다.
 
 ```python
 from openai import OpenAI
@@ -562,17 +562,17 @@ remix_response = client.videos.remix(
 print(f"Remix started. ID: {remix_response.id}")
 ```
 
-## **Request/Response Format**
+## **Request/응답 형식**
 
 :::info
 
-LiteLLM follows the **OpenAI Video Generation API specification**. 
+LiteLLM은 **OpenAI Video Generation API specification**을 따릅니다.
 
-See the [official OpenAI Video Generation documentation](https://platform.openai.com/docs/guides/video-generation) for complete details.
+전체 세부사항은 [official OpenAI Video Generation documentation](https://platform.openai.com/docs/guides/video-generation)을 참고하세요.
 
 :::
 
-### Example Request
+### 예제 Request
 
 ```python
 {
@@ -588,17 +588,17 @@ See the [official OpenAI Video Generation documentation](https://platform.openai
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| `model` | string | Yes | The video generation model to use (e.g., `"openai/sora-2"`) |
-| `prompt` | string | Yes | Text description of the desired video |
-| `seconds` | string | No | Video duration in seconds (e.g., "8", "16") |
-| `size` | string | No | Video dimensions (e.g., "720x1280", "1280x720") |
-| `input_reference` | file object | No | Reference image for video generation or editing (both generation and remix) |
-| `user` | string | No | User identifier for tracking |
-| `video_id` | string | Yes (status/retrieval) | Video ID for status checking or retrieval |
+| `model` | string | Yes | 사용할 video 생성 model입니다(예: `"openai/sora-2"`). |
+| `prompt` | string | Yes | 원하는 video를 설명하는 text입니다. |
+| `seconds` | string | No | video 길이(초)입니다(예: "8", "16"). |
+| `size` | string | No | video dimensions입니다(예: "720x1280", "1280x720"). |
+| `input_reference` | file object | No | video generation 또는 editing에 사용할 reference image입니다(generation과 remix 모두). |
+| `user` | string | No | 추적용 user identifier입니다. |
+| `video_id` | string | Yes (status/retrieval) | 상태 확인 또는 retrieval에 사용할 Video ID입니다. |
 
-#### Video Generation Request Example
+#### Video 생성 Request 예제
 
-**For video generation:**
+**video generation의 경우:**
 ```json
 {
   "model": "sora-2",
@@ -608,7 +608,7 @@ See the [official OpenAI Video Generation documentation](https://platform.openai
 }
 ```
 
-**For video generation with reference image:**
+**reference image를 사용한 video generation의 경우:**
 ```python
 {
   "model": "sora-2",
@@ -619,7 +619,7 @@ See the [official OpenAI Video Generation documentation](https://platform.openai
 }
 ```
 
-**For video status check:**
+**video status check의 경우:**
 ```json
 {
   "video_id": "video_1234567890",
@@ -627,7 +627,7 @@ See the [official OpenAI Video Generation documentation](https://platform.openai
 }
 ```
 
-**For video retrieval:**
+**video retrieval의 경우:**
 ```json
 {
   "video_id": "video_1234567890",
@@ -635,9 +635,9 @@ See the [official OpenAI Video Generation documentation](https://platform.openai
 }
 ```
 
-### Response Format
+### 응답 형식
 
-The response follows OpenAI's video generation format with the following structure:
+response는 다음 구조의 OpenAI video generation format을 따릅니다.
 
 ```json
 {
@@ -663,22 +663,22 @@ The response follows OpenAI's video generation format with the following structu
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `id` | string | Unique identifier for the video |
-| `object` | string | Always `"video"` for video responses |
-| `status` | string | Video processing status (`"queued"`, `"processing"`, `"completed"`) |
-| `created_at` | integer | Unix timestamp when the video was created |
-| `model` | string | The model used for video generation |
-| `size` | string | Video dimensions |
-| `seconds` | string | Video duration in seconds |
-| `usage` | object | Token usage and duration information |
+| `id` | string | video의 unique identifier입니다. |
+| `object` | string | video response에서는 항상 `"video"`입니다. |
+| `status` | string | video 처리 status입니다(`"queued"`, `"processing"`, `"completed"`). |
+| `created_at` | integer | video가 생성된 시점의 Unix timestamp입니다. |
+| `model` | string | video generation에 사용된 model입니다. |
+| `size` | string | video dimensions입니다. |
+| `seconds` | string | video 길이(초)입니다. |
+| `usage` | object | token usage 및 duration information입니다. |
 
 
-## **Supported Providers**
+## **지원 프로바이더**
 
-| Provider    | Link to Usage      |
+| Provider    | 사용법 Link      |
 |-------------|--------------------|
-| OpenAI      |   [Usage](providers/openai/videos)  |
-| Azure       |   [Usage](providers/azure/videos)   |
-| Gemini       |   [Usage](providers/gemini/videos)   |
-| Vertex AI   |   [Usage](providers/vertex_ai/videos) |
-| RunwayML    |   [Usage](providers/runwayml/videos) |
+| OpenAI      |   [사용법](providers/openai/videos)  |
+| Azure       |   [사용법](providers/azure/videos)   |
+| Gemini       |   [사용법](providers/gemini/videos)   |
+| Vertex AI   |   [사용법](providers/vertex_ai/videos) |
+| RunwayML    |   [사용법](providers/runwayml/videos) |

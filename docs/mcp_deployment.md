@@ -1,31 +1,31 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# MCP Deployment Guide
+# MCP 배포 가이드
 
-How to deploy LiteLLM as a central gateway for LLMs, MCP servers, and agents.
+LiteLLM을 LLM, MCP 서버, agent를 위한 중앙 Gateway로 배포하는 방법입니다.
 
 ---
 
-## The core idea
+## 핵심 개념
 
-LiteLLM is a single control plane for three resource types:
+LiteLLM은 세 가지 resource type을 위한 단일 control plane입니다.
 
-| Resource | Registered as |
+| 리소스 | 등록 방식 |
 |----------|--------------|
-| **LLM** | `model_list` in config or via API |
-| **MCP Server** | `mcp_servers` in config or via UI |
-| **Agent** | A2A routes |
+| **LLM** | config의 `model_list` 또는 API |
+| **MCP Server** | config의 `mcp_servers` 또는 UI |
+| **Agent** | A2A route |
 
-All three share the same auth (LiteLLM API key), rate limiting, and usage dashboard — a central catalog without separate registries.
+세 리소스는 모두 같은 인증(LiteLLM API key), rate limiting, usage dashboard를 공유합니다. 별도 registry 없이 중앙 catalog를 제공하는 구조입니다.
 
 ---
 
-## Deployment topologies
+## 배포 토폴로지
 
-### Option A: Single gateway (recommended)
+### 옵션 A: 단일 Gateway(권장)
 
-One LiteLLM instance handles LLM routing, MCP tool calls, and A2A agent invocations.
+하나의 LiteLLM instance가 LLM 라우팅, MCP tool 호출, A2A agent 호출을 모두 처리합니다.
 
 ```
 Agents / AI clients
@@ -43,7 +43,7 @@ Agents / AI clients
    Azure    (public)
 ```
 
-One service, one config, one set of API keys. Use the [public internet filter](./mcp_public_internet.md) to control which MCP servers are visible to external callers (Claude Desktop, ChatGPT) vs. internal-only.
+하나의 서비스, 하나의 config, 하나의 API key 집합만 관리하면 됩니다. [public internet filter](./mcp_public_internet.md)를 사용해 어떤 MCP 서버를 외부 caller(Claude Desktop, ChatGPT)에 노출하고, 어떤 서버를 internal-only로 둘지 제어합니다.
 
 ```yaml title="config.yaml" showLineNumbers
 general_settings:
@@ -75,9 +75,9 @@ mcp_servers:
 
 ---
 
-### Option B: Separate LLM gateway and MCP gateway
+### 옵션 B: LLM Gateway와 MCP Gateway 분리
 
-Split into two LiteLLM deployments: one for LLM routing (no internet exposure), one for MCP serving (optionally internet-facing).
+LiteLLM 배포를 두 개로 나눕니다. 하나는 LLM routing용(인터넷 노출 없음), 다른 하나는 MCP serving용(필요 시 인터넷 노출)입니다.
 
 ```
 Internal AI clients             External AI clients
@@ -94,22 +94,22 @@ Internal AI clients             External AI clients
     (OpenAI, Bedrock, …)       (internal + public)
 ```
 
-LLM API keys stay behind the firewall. A compromise of the MCP gateway does not expose them. Use this when external MCP access is needed but LLM credentials must stay fully private.
+LLM API key는 firewall 뒤에 남습니다. MCP Gateway가 침해되더라도 LLM credential은 노출되지 않습니다. 외부 MCP 접근은 필요하지만 LLM credential은 완전히 private로 유지해야 할 때 이 방식을 사용하세요.
 
 ---
 
-## Central catalog
+## 중앙 catalog
 
-LiteLLM exposes all resource types through standard endpoints:
+LiteLLM은 모든 resource type을 표준 endpoint로 노출합니다.
 
-| Endpoint | Returns |
+| 엔드포인트 | 반환 |
 |----------|---------|
-| `GET /v1/models` | All registered LLMs |
-| `GET /v1/mcp/server` | All MCP servers |
-| `GET /mcp` | All MCP tools (across all servers) |
+| `GET /v1/models` | 등록된 모든 LLM |
+| `GET /v1/mcp/server` | 모든 MCP server |
+| `GET /mcp` | 모든 MCP tool(전체 server 기준) |
 | `GET /.well-known/agent.json` | A2A agent card |
 
-**MCP registry** (opt-in) — expose a discovery endpoint for Claude Desktop / Cursor:
+**MCP registry**(opt-in) — Claude Desktop / Cursor용 discovery endpoint를 노출합니다.
 
 ```yaml title="config.yaml"
 general_settings:
@@ -129,41 +129,41 @@ general_settings:
 
 ---
 
-## Security considerations
+## 보안 고려사항
 
-### The open-port problem
+### open-port 문제
 
-If you expose LiteLLM's port to the internet (for Claude Desktop / ChatGPT), `/v1/chat/completions` is also reachable externally. LLM credentials stay protected by key auth, but be deliberate about this.
+Claude Desktop / ChatGPT용으로 LiteLLM port를 인터넷에 노출하면 `/v1/chat/completions`도 외부에서 접근 가능해집니다. LLM credential은 key auth로 보호되지만, 이 노출 범위는 의도적으로 관리해야 합니다.
 
-**Mitigations:**
-1. **Separate deployments** (Option B) — the LLM gateway never gets a public port
-2. **Firewall** — block `/v1/chat/completions` from public IPs at the network layer
-3. **Short-lived scoped keys** — limit blast radius if a key leaks
+**완화 방법:**
+1. **배포 분리**(옵션 B) — LLM Gateway에는 public port를 부여하지 않습니다.
+2. **Firewall** — network layer에서 public IP의 `/v1/chat/completions` 접근을 차단합니다.
+3. **짧은 수명의 scoped key** — key가 유출되더라도 blast radius를 제한합니다.
 
-### MCP servers can reach the public internet
+### MCP server의 public internet 접근
 
-When you register an external MCP URL (e.g. `https://mcp.exa.ai/mcp`), LiteLLM makes outbound requests to it on every tool call. Check that your network policy allows it and that your security team is comfortable with data leaving the perimeter.
+외부 MCP URL(예: `https://mcp.exa.ai/mcp`)을 등록하면 LiteLLM은 tool call마다 해당 URL로 outbound request를 보냅니다. network policy가 이를 허용하는지, perimeter 밖으로 데이터가 나가는 것에 보안팀이 동의하는지 확인하세요.
 
-For air-gapped networks: only register MCP servers inside your perimeter and leave `available_on_public_internet: false` (the default).
+air-gapped network에서는 perimeter 내부의 MCP server만 등록하고 `available_on_public_internet: false`(기본값)를 유지하세요.
 
-### Access controls
+### 접근 제어
 
-By default all authenticated callers can call all MCP tools. Use these to restrict:
+기본적으로 인증된 모든 caller는 모든 MCP tool을 호출할 수 있습니다. 제한하려면 다음 기능을 사용하세요.
 
-| Control | Where |
+| 제어 | 위치 |
 |---------|-------|
-| Per-key tool access | [Key-level MCP permissions](./mcp_control.md) |
-| Per-team tool access | [Team-level MCP permissions](./mcp_control.md) |
-| Hide internal servers from external callers | [available_on_public_internet](./mcp_public_internet.md) |
-| Verify requests came through LiteLLM | [MCP Zero Trust (JWT)](./mcp_zero_trust.md) |
-| Block sensitive data in responses | [MCP Guardrails](./mcp_guardrail.md) |
+| key별 tool access | [Key-level MCP permissions](./mcp_control.md) |
+| team별 tool access | [Team-level MCP permissions](./mcp_control.md) |
+| 외부 caller에서 internal server 숨김 | [available_on_public_internet](./mcp_public_internet.md) |
+| 요청이 LiteLLM을 통해 왔는지 검증 | [MCP Zero Trust (JWT)](./mcp_zero_trust.md) |
+| 응답의 민감 데이터 차단 | [MCP 가드레일](./mcp_guardrail.md) |
 
 ---
 
-## Related
+## 관련 문서
 
-- [MCP Overview](./mcp.md)
-- [Public Internet Filter](./mcp_public_internet.md)
+- [MCP 개요](./mcp.md)
+- [Public Internet 필터](./mcp_public_internet.md)
 - [MCP Access Control](./mcp_control.md)
 - [MCP Zero Trust](./mcp_zero_trust.md)
-- [MCP Guardrails](./mcp_guardrail.md)
+- [MCP 가드레일](./mcp_guardrail.md)

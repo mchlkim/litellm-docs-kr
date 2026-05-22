@@ -4,28 +4,28 @@ import TabItem from '@theme/TabItem';
 
 # Endpoint Activity
 
-Track and visualize API endpoint usage directly in the dashboard. Monitor endpoint-level activity analytics, spend breakdowns, and performance metrics to understand which endpoints are receiving the most traffic and how they're performing.
+대시보드에서 API 엔드포인트 사용량을 직접 추적하고 시각화합니다. 엔드포인트별 활동 분석, 지출 내역, 성능 지표를 모니터링하여 어떤 엔드포인트에 가장 많은 트래픽이 발생하는지와 각 엔드포인트가 어떻게 동작하는지 파악할 수 있습니다.
 
-## Overview
+## 개요
 
-Endpoint Activity enables you to track spend and usage for individual API endpoints automatically. Every time you call an endpoint through the LiteLLM proxy, activity is automatically tracked and aggregated. This allows you to:
+Endpoint Activity를 사용하면 개별 API 엔드포인트의 지출과 사용량을 자동으로 추적할 수 있습니다. LiteLLM proxy를 통해 엔드포인트를 호출할 때마다 활동이 자동으로 추적되고 집계됩니다. 이를 통해 다음을 수행할 수 있습니다.
 
-- Track spend per endpoint automatically
-- View endpoint-level usage analytics in the Admin UI
-- Monitor token consumption by endpoint
-- Analyze success and failure rates per endpoint
-- Identify which endpoints are getting the most activity
-- View trend data showing endpoint usage over time
+- 엔드포인트별 지출을 자동으로 추적
+- 관리자 UI에서 엔드포인트별 사용량 분석 확인
+- 엔드포인트별 토큰 소비량 모니터링
+- 엔드포인트별 성공률과 실패율 분석
+- 활동이 가장 많은 엔드포인트 식별
+- 시간에 따른 엔드포인트 사용량을 보여주는 추세 데이터 확인
 
 <Image img={require('../../img/ui_endpoint_activity.png')} />
 
-## How Endpoint Activity Works
+## Endpoint Activity 작동 방식
 
-Endpoint activity is **automatically tracked** whenever you make API calls through the LiteLLM proxy. No additional configuration is required - simply call your endpoints as usual and activity will be tracked.
+LiteLLM proxy를 통해 API 호출을 수행할 때마다 엔드포인트 활동이 **자동으로 추적**됩니다. 추가 구성이 필요하지 않으며, 평소처럼 엔드포인트를 호출하기만 하면 활동이 추적됩니다.
 
-### Example API Call
+### 예제 API 호출
 
-When you make a request to any endpoint, activity is automatically recorded:
+어떤 엔드포인트로든 요청을 보내면 활동이 자동으로 기록됩니다.
 
 ```bash showLineNumbers title="Endpoint activity is automatically tracked"
 curl -X POST 'http://0.0.0.0:4000/chat/completions' \ # 👈 ENDPOINT AUTOMATICALLY TRACKED
@@ -42,76 +42,76 @@ curl -X POST 'http://0.0.0.0:4000/chat/completions' \ # 👈 ENDPOINT AUTOMATICA
   }'
 ```
 
-The endpoint (`/chat/completions`) will be automatically tracked with:
+엔드포인트(`/chat/completions`)는 다음 정보와 함께 자동으로 추적됩니다.
 
-- Token counts (prompt tokens, completion tokens, total tokens)
-- Spend for the request
-- Request status (success or failure)
-- Timestamp and other metadata
+- 토큰 수(프롬프트 토큰, 완료 토큰, 전체 토큰)
+- 요청 지출
+- 요청 상태(성공 또는 실패)
+- 타임스탬프 및 기타 메타데이터
 
-## How to View Endpoint Activity
+## Endpoint Activity 확인 방법
 
-### View Activity in Admin UI
+### 관리자 UI에서 활동 보기
 
-Navigate to the Endpoint Activity tab in the Admin UI to view endpoint-level analytics:
+관리자 UI의 Endpoint Activity 탭으로 이동하면 엔드포인트별 분석을 확인할 수 있습니다.
 
-#### 1. Access Endpoint Activity
+#### 1. Endpoint Activity 접근
 
-Go to the Usage page in the Admin UI (`PROXY_BASE_URL/ui/?login=success&page=new_usage`) and click on the **Endpoint Activity** tab.
+관리자 UI의 사용법 페이지(`PROXY_BASE_URL/ui/?login=success&page=new_usage`)로 이동한 뒤 **Endpoint Activity** 탭을 클릭합니다.
 
 ![](https://colony-recorder.s3.amazonaws.com/files/2026-01-10/67601fc0-8415-49b4-8e55-0673d37540c2/ascreenshot_f609a506dfe745c5aadccd332681c32d_text_export.jpeg)
 
-#### 2. View Endpoint Analytics
+#### 2. 엔드포인트 분석 보기
 
-The Endpoint Activity dashboard provides:
+Endpoint Activity 대시보드는 다음을 제공합니다.
 
-- **Endpoint usage table**: View all endpoints with aggregated metrics including:
-  - Total requests (successful and failed)
-  - Success rate percentage
-  - Total tokens consumed
-  - Total spend per endpoint
-- **Success vs Failed requests chart**: Visualize request success and failure rates by endpoint
-- **Usage trends**: See how endpoint activity changes over time with daily trend data
+- **엔드포인트 사용량 표**: 다음 집계 지표와 함께 모든 엔드포인트를 확인합니다.
+  - 전체 요청 수(성공 및 실패)
+  - 성공률 백분율
+  - 소비된 전체 토큰
+  - 엔드포인트별 전체 지출
+- **성공 요청과 실패 요청 차트**: 엔드포인트별 요청 성공률과 실패율을 시각화합니다.
+- **사용량 추세**: 일별 추세 데이터로 엔드포인트 활동이 시간에 따라 어떻게 변하는지 확인합니다.
 
 ![](https://colony-recorder.s3.amazonaws.com/files/2026-01-10/41b2b158-3ab3-4154-a0d0-7233451d3f2b/ascreenshot_ff46db6e09b54ea9bf34ae9028aff58a_text_export.jpeg)
 
 ![](https://colony-recorder.s3.amazonaws.com/files/2026-01-10/bce32f99-f0ba-4502-8a3a-76257ff5e47a/ascreenshot_2273d3a94acd42e983ad7d6436722c2a_text_export.jpeg)
 
-#### 3. Understand Endpoint Metrics
+#### 3. 엔드포인트 지표 이해
 
-Each endpoint displays the following metrics:
+각 엔드포인트에는 다음 지표가 표시됩니다.
 
-- **Successful Requests**: Number of requests that completed successfully
-- **Failed Requests**: Number of requests that encountered errors
-- **Total Requests**: Sum of successful and failed requests
-- **Success Rate**: Percentage of successful requests
-- **Total Tokens**: Sum of prompt and completion tokens
-- **Spend**: Total cost for all requests to that endpoint
+- **Successful Requests**: 성공적으로 완료된 요청 수
+- **Failed Requests**: 오류가 발생한 요청 수
+- **Total Requests**: 성공 요청과 실패 요청의 합계
+- **Success Rate**: 성공한 요청의 비율
+- **Total Tokens**: 프롬프트 토큰과 완료 토큰의 합계
+- **Spend**: 해당 엔드포인트로 보낸 모든 요청의 총비용
 
-## Use Cases
+## 사용 사례
 
-### Performance Monitoring
+### 성능 모니터링
 
-Monitor endpoint health and performance:
+엔드포인트 상태와 성능을 모니터링합니다.
 
-- Identify endpoints with high failure rates
-- Track which endpoints are receiving the most traffic
-- Monitor token consumption patterns by endpoint
-- Detect anomalies in endpoint usage
+- 실패율이 높은 엔드포인트 식별
+- 트래픽을 가장 많이 받는 엔드포인트 추적
+- 엔드포인트별 토큰 소비 패턴 모니터링
+- 엔드포인트 사용량의 이상 징후 감지
 
-### Cost Optimization
+### 비용 최적화
 
-Understand spend distribution across endpoints:
+엔드포인트 전반의 지출 분포를 파악합니다.
 
-- Identify high-cost endpoints
-- Optimize expensive endpoints
-- Allocate budget based on endpoint usage
-- Track cost trends over time
+- 비용이 높은 엔드포인트 식별
+- 비용이 많이 드는 엔드포인트 최적화
+- 엔드포인트 사용량을 기준으로 예산 배분
+- 시간에 따른 비용 추세 추적
 
 ---
 
-## Related Features
+## 관련 기능
 
-- [Customer Usage](./customer_usage.md) - Track spend and usage for individual customers
-- [Cost Tracking](./cost_tracking.md) - Comprehensive cost tracking and analytics
-- [Spend Logs](./cost_tracking.md#-spend-logs-api---individual-transaction-logs) - Detailed request-level spend logs
+- [Customer 사용법](./customer_usage.md) - 개별 고객의 지출과 사용량 추적
+- [Cost Tracking](./cost_tracking.md) - 포괄적인 비용 추적 및 분석
+- [Spend 로그](./cost_tracking.md#-spend-logs-api---individual-transaction-logs) - 자세한 요청 수준 지출 로그

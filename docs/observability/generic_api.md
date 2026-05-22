@@ -1,8 +1,8 @@
-# Generic API Callback (Webhook)
+# Generic API 콜백(Webhook) {#generic-api-callback-webhook}
 
-Send LiteLLM logs to any HTTP endpoint.
+LiteLLM 로그를 원하는 HTTP 엔드포인트로 전송합니다.
 
-## Quick Start
+## 빠른 시작
 
 ```yaml
 model_list:
@@ -22,9 +22,9 @@ callback_settings:
       Authorization: Bearer sk-1234
 ```
 
-## Configuration
+## 설정
 
-### Basic Setup
+### 기본 설정 {#basic-setup}
 
 ```yaml
 callback_settings:
@@ -39,19 +39,19 @@ callback_settings:
       - llm_api_failure
 ```
 
-### Parameters
+### 파라미터 {#parameters}
 
-| Parameter | Type | Required | Description |
+| 파라미터 | 유형 | 필수 여부 | 설명 |
 |-----------|------|----------|-------------|
-| `callback_type` | string | Yes | Must be `generic_api` |
-| `endpoint` | string | Yes | HTTP endpoint to send logs to |
-| `headers` | dict | No | Custom headers for the request |
-| `event_types` | list | No | Filter events: `llm_api_success`, `llm_api_failure`. Defaults to all events. |
-| `log_format` | string | No | Output format: `json_array` (default), `ndjson`, or `single`. Controls how logs are batched and sent. |
+| `callback_type` | string | 예 | `generic_api`여야 합니다. |
+| `endpoint` | string | 예 | 로그를 전송할 HTTP 엔드포인트입니다. |
+| `headers` | dict | 아니요 | 요청에 사용할 사용자 지정 헤더입니다. |
+| `event_types` | list | 아니요 | 이벤트를 필터링합니다: `llm_api_success`, `llm_api_failure`. 기본값은 모든 이벤트입니다. |
+| `log_format` | string | 아니요 | 출력 형식입니다: `json_array`(기본값), `ndjson`, 또는 `single`. 로그를 배치 처리하고 전송하는 방식을 제어합니다. |
 
-## Pre-configured Callbacks
+## 사전 구성된 콜백 {#pre-configured-callbacks}
 
-Use built-in configurations from `generic_api_compatible_callbacks.json`:
+`generic_api_compatible_callbacks.json`의 기본 제공 구성을 사용할 수 있습니다.
 
 ```yaml
 litellm_settings:
@@ -65,9 +65,9 @@ callback_settings:
       Authorization: Bearer ${RUBRIK_API_KEY}
 ```
 
-## Payload Format
+## 페이로드 형식 {#payload-format}
 
-Logs are sent as `StandardLoggingPayload` [objects](https://docs.litellm.ai/docs/proxy/logging_spec) in JSON format:
+로그는 JSON 형식의 `StandardLoggingPayload` [객체](https://docs.litellm.ai/docs/proxy/logging_spec)로 전송됩니다.
 
 ```json
 [
@@ -86,18 +86,18 @@ Logs are sent as `StandardLoggingPayload` [objects](https://docs.litellm.ai/docs
 ]
 ```
 
-## Environment Variables
+## 환경 변수 {#environment-variables}
 
-Set via environment variables instead of config:
+설정 파일 대신 환경 변수로 지정할 수 있습니다.
 
 ```bash
 export GENERIC_LOGGER_ENDPOINT=https://your-endpoint.com
 export GENERIC_LOGGER_HEADERS="Authorization=Bearer token,Custom-Header=value"
 ```
 
-## Batch Settings
+## 배치 설정 {#batch-settings}
 
-Control batching behavior (inherits from `CustomBatchLogger`):
+배치 처리 동작을 제어합니다(`CustomBatchLogger`에서 상속).
 
 ```yaml
 callback_settings:
@@ -108,11 +108,11 @@ callback_settings:
     flush_interval: 60     # seconds, default: 60
 ```
 
-## Log Format Options
+## 로그 형식 옵션 {#log-format-options}
 
-Control how logs are formatted and sent to your endpoint.
+로그가 어떤 형식으로 엔드포인트에 전송되는지 제어합니다.
 
-### JSON Array (Default)
+### JSON Array(기본값) {#json-array-default}
 
 ```yaml
 callback_settings:
@@ -122,11 +122,11 @@ callback_settings:
     log_format: json_array  # default if not specified
 ```
 
-Sends all logs in a batch as a single JSON array `[{log1}, {log2}, ...]`. This is the default behavior and maintains backward compatibility.
+배치의 모든 로그를 단일 JSON 배열 `[{log1}, {log2}, ...]`로 전송합니다. 이는 기본 동작이며 이전 버전과의 호환성을 유지합니다.
 
-**When to use**: Most HTTP endpoints expecting batched JSON data.
+**사용 시점**: 배치 JSON 데이터를 기대하는 대부분의 HTTP 엔드포인트.
 
-### NDJSON (Newline-Delimited JSON)
+### NDJSON(줄 구분 JSON) {#ndjson-newline-delimited-json}
 
 ```yaml
 callback_settings:
@@ -136,19 +136,19 @@ callback_settings:
     log_format: ndjson
 ```
 
-Sends logs as newline-delimited JSON (one record per line):
+로그를 줄 단위 JSON(한 줄에 한 레코드)으로 전송합니다.
 ```
 {log1}
 {log2}
 {log3}
 ```
 
-**When to use**: Log aggregation services like Sumo Logic, Splunk, or Datadog that support field extraction on individual records.
+**사용 시점**: 개별 레코드의 필드 추출을 지원하는 Sumo Logic, Splunk, Datadog 같은 로그 집계 서비스.
 
-**Benefits**:
-- Each log is ingested as a separate message
-- Field Extraction Rules work at ingest time
-- Better parsing and querying performance
+**장점**:
+- 각 로그가 별도 메시지로 수집됩니다.
+- 수집 시점에 Field Extraction Rules가 동작합니다.
+- 파싱 및 쿼리 성능이 더 좋습니다.
 
 ### Single
 
@@ -160,10 +160,8 @@ callback_settings:
     log_format: single
 ```
 
-Sends each log as an individual HTTP request in parallel when the batch is flushed.
+배치가 플러시될 때 각 로그를 개별 HTTP 요청으로 병렬 전송합니다.
 
-**When to use**: Endpoints that expect individual records, or when you need maximum compatibility.
+**사용 시점**: 개별 레코드를 기대하는 엔드포인트이거나 최대 호환성이 필요한 경우.
 
-**Note**: This mode sends N HTTP requests per batch (more overhead). Consider using `ndjson` instead if your endpoint supports it.
-
-
+**참고**: 이 모드는 배치당 N개의 HTTP 요청을 전송하므로 오버헤드가 더 큽니다. 엔드포인트가 지원한다면 대신 `ndjson` 사용을 고려하세요.

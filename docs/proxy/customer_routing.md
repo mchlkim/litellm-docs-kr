@@ -1,23 +1,23 @@
-# [DEPRECATED] Region-based Routing
+# [지원 중단됨] 지역 기반 라우팅 {#deprecated-region-based-routing}
 
 :::info
 
-This is deprecated, please use [Tag Based Routing](./tag_routing.md) instead
+이 기능은 지원 중단되었습니다. 대신 [태그 기반 라우팅](./tag_routing.md)을 사용하세요.
 
 :::
 
 
-Route specific customers to eu-only models.
+특정 고객을 eu 전용 모델로 라우팅합니다.
 
-By specifying 'allowed_model_region' for a customer, LiteLLM will filter-out any models in a model group which is not in the allowed region (i.e. 'eu').
+고객에 대해 'allowed_model_region'을 지정하면 LiteLLM은 모델 그룹에서 허용된 리전(예: 'eu')에 속하지 않는 모델을 필터링합니다.
 
-[**See Code**](https://github.com/BerriAI/litellm/blob/5eb12e30cc5faa73799ebc7e48fc86ebf449c879/litellm/router.py#L2938)
+[**코드 보기**](https://github.com/BerriAI/litellm/blob/5eb12e30cc5faa73799ebc7e48fc86ebf449c879/litellm/router.py#L2938)
 
-### 1. Create customer with region-specification
+### 1. 리전 지정 고객 생성 {#1-create-customer-with-region-specification}
 
-Use the litellm 'end-user' object for this. 
+이를 위해 litellm 'end-user' 객체를 사용합니다.
 
-End-users can be tracked / id'ed by passing the 'user' param to litellm in an openai chat completion/embedding call.
+openai chat completion/embedding 호출에서 'user' 매개변수를 litellm에 전달하면 최종 사용자를 추적하거나 식별할 수 있습니다.
 
 ```bash
 curl -X POST --location 'http://0.0.0.0:4000/end_user/new' \
@@ -29,11 +29,11 @@ curl -X POST --location 'http://0.0.0.0:4000/end_user/new' \
 }'
 ```
 
-### 2. Add eu models to model-group 
+### 2. 모델 그룹에 eu 모델 추가 {#2-add-eu-models-to-model-group}
 
-Add eu models to a model group. Use the 'region_name' param to specify the region for each model.
+모델 그룹에 eu 모델을 추가합니다. 각 모델의 리전을 지정하려면 'region_name' 매개변수를 사용하세요.
 
-Supported regions are 'eu' and 'us'.
+지원되는 리전은 'eu'와 'us'입니다.
 
 ```yaml
 model_list:
@@ -55,15 +55,15 @@ router_settings:
   enable_pre_call_checks: true # 👈 IMPORTANT
 ```
 
-Start the proxy
+프록시 시작
 
 ```yaml
 litellm --config /path/to/config.yaml
 ```
 
-### 3. Test it!
+### 3. 테스트 {#3-test-it}
 
-Make a simple chat completions call to the proxy. In the response headers, you should see the returned api base. 
+프록시에 간단한 chat completions 호출을 보냅니다. 응답 헤더에서 반환된 api base를 확인할 수 있습니다.
 
 ```bash
 curl -X POST --location 'http://localhost:4000/chat/completions' \
@@ -81,15 +81,15 @@ curl -X POST --location 'http://localhost:4000/chat/completions' \
 '
 ```
 
-Expected API Base in response headers 
+응답 헤더의 예상 API Base
 
 ```
 x-litellm-api-base: "https://my-endpoint-europe-berri-992.openai.azure.com/"
 x-litellm-model-region: "eu" # 👈 CONFIRMS REGION-BASED ROUTING WORKED
 ```
 
-### FAQ 
+### 자주 묻는 질문 {#faq}
 
-**What happens if there are no available models for that region?**
+**해당 리전에 사용 가능한 모델이 없으면 어떻게 되나요?**
 
-Since the router filters out models not in the specified region, it will return back as an error to the user, if no models in that region are available. 
+라우터는 지정된 리전에 속하지 않는 모델을 필터링하므로, 해당 리전에 사용 가능한 모델이 없으면 사용자에게 오류를 반환합니다.

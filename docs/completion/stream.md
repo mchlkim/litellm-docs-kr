@@ -5,13 +5,13 @@ import TabItem from '@theme/TabItem';
 
 | Feature | LiteLLM SDK | LiteLLM Proxy |
 |---------|-------------|---------------|
-| Streaming | ✅ [start here](#streaming-responses) | ✅ [start here](../proxy/user_keys#streaming) |
-| Async | ✅ [start here](#async-completion) | ✅ [start here](../proxy/user_keys#streaming) |
-| Async Streaming | ✅ [start here](#async-streaming) | ✅ [start here](../proxy/user_keys#streaming) |
+| Streaming | ✅ [여기서 시작](#streaming-responses) | ✅ [여기서 시작](../proxy/user_keys#streaming) |
+| Async | ✅ [여기서 시작](#async-completion) | ✅ [여기서 시작](../proxy/user_keys#streaming) |
+| Async Streaming | ✅ [여기서 시작](#async-streaming) | ✅ [여기서 시작](../proxy/user_keys#streaming) |
 
-## Streaming Responses
-LiteLLM supports streaming the model response back by passing `stream=True` as an argument to the completion function
-### Usage
+## Streaming Response {#streaming-responses}
+LiteLLM은 completion 함수에 `stream=True`를 argument로 전달해 model response를 streaming으로 반환하는 기능을 지원합니다.
+### 사용법
 ```python
 from litellm import completion
 messages = [{"role": "user", "content": "Hey, how's it going?"}]
@@ -22,7 +22,7 @@ for part in response:
 
 ### Helper function
 
-LiteLLM also exposes a helper function to rebuild the complete streaming response from the list of chunks. 
+LiteLLM은 chunk list에서 완전한 streaming response를 다시 조립하는 helper function도 제공합니다. 
 
 ```python
 from litellm import completion
@@ -35,9 +35,9 @@ for chunk in response:
 print(litellm.stream_chunk_builder(chunks, messages=messages))
 ```
 
-## Async Completion
-Asynchronous Completion with LiteLLM. LiteLLM provides an asynchronous version of the completion function called `acompletion`
-### Usage
+## Async Completion {#async-completion}
+LiteLLM으로 asynchronous completion을 사용할 수 있습니다. LiteLLM은 completion 함수의 asynchronous version인 `acompletion`을 제공합니다.
+### 사용법
 ```python
 from litellm import acompletion
 import asyncio
@@ -53,11 +53,11 @@ print(response)
 
 ```
 
-## Async Streaming
-We've implemented an `__anext__()` function in the streaming object returned. This enables async iteration over the streaming object. 
+## Async Streaming {#async-streaming}
+반환되는 streaming object에는 `__anext__()` function이 구현되어 있습니다. 이를 통해 streaming object를 async iteration으로 순회할 수 있습니다. 
 
-### Usage
-Here's an example of using it with openai.
+### 사용법
+OpenAI와 함께 사용하는 예제입니다.
 ```python
 from litellm import acompletion
 import asyncio, os, traceback
@@ -80,17 +80,17 @@ async def completion_call():
 asyncio.run(completion_call())
 ```
 
-## Error Handling - Infinite Loops
+## 오류 처리 - 무한 루프
 
-Sometimes a model might enter an infinite loop, and keep repeating the same chunks - [e.g. issue](https://github.com/BerriAI/litellm/issues/5158)
+때때로 model이 infinite loop에 들어가 같은 chunk를 계속 반복할 수 있습니다. 예시는 [이 issue](https://github.com/BerriAI/litellm/issues/5158)를 참고하세요.
 
-Break out of it with: 
+다음 설정으로 빠져나올 수 있습니다. 
 
 ```python
 litellm.REPEATED_STREAMING_CHUNK_LIMIT = 100 # # catch if model starts looping the same chunk while streaming. Uses high default to prevent false positives.
 ```
 
-LiteLLM provides error handling for this, by checking if a chunk is repeated 'n' times (Default is 100). If it exceeds that limit, it will raise a `litellm.InternalServerError`, to allow retry logic to happen. 
+LiteLLM은 chunk가 'n'번 반복되는지 확인해 이 상황을 처리합니다(default는 100). 이 limit을 넘으면 `litellm.InternalServerError`를 발생시켜 retry logic이 동작할 수 있게 합니다. 
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -137,14 +137,14 @@ for chunk in response:
 </TabItem>
 <TabItem value="proxy" label="PROXY">
 
-Define this on your config.yaml on the proxy. 
+Proxy의 config.yaml에 다음을 정의하세요. 
 
 ```yaml
 litellm_settings:
     REPEATED_STREAMING_CHUNK_LIMIT: 100 # this overrides the litellm default
 ```
 
-The proxy uses the litellm SDK. To validate this works, try the 'SDK' code snippet. 
+Proxy는 litellm SDK를 사용합니다. 이 동작을 검증하려면 'SDK' code snippet을 실행해 보세요. 
 
 </TabItem>
 </Tabs>

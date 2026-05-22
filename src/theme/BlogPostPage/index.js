@@ -9,7 +9,7 @@ function BackLink() {
         <svg className={styles.backArrow} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16l-4-4m0 0l4-4m-4 4h18" />
         </svg>
-        Blog
+        블로그
       </a>
     </div>
   );
@@ -19,19 +19,19 @@ function HiringCTA() {
   return (
     <div className={styles.ctaOuter}>
       <div className={styles.cta}>
-        <p className={styles.ctaEyebrow}>We're hiring</p>
+        <p className={styles.ctaEyebrow}>채용 중입니다</p>
         <a
           href="https://jobs.ashbyhq.com/litellm"
           target="_blank"
           rel="noopener noreferrer"
           className={styles.ctaLink}
         >
-          Like what you see? Join us
+          마음에 드셨나요? 함께하세요
           <svg className={styles.ctaArrow} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
           </svg>
         </a>
-        <p className={styles.ctaSub}>Come build the future of AI infrastructure.</p>
+        <p className={styles.ctaSub}>AI 인프라의 미래를 함께 만들어가세요.</p>
       </div>
     </div>
   );

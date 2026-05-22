@@ -1,37 +1,37 @@
 ---
 slug: gpt_5_5
-title: "Day 0 Support: GPT-5.5 and GPT-5.5 Pro"
+title: "출시 당일 지원: GPT-5.5 및 GPT-5.5 Pro"
 date: 2026-04-24T10:00:00
 authors:
   - mateo
   - krrish
   - ishaan-alt
-description: "Day 0 support for GPT-5.5 and GPT-5.5 Pro on LiteLLM."
-tags: [openai, gpt-5.5, gpt-5.5-pro, completion, day 0 support]
+description: "LiteLLM에서 GPT-5.5 및 GPT-5.5 Pro를 출시 당일 지원합니다."
+tags: [openai, gpt-5.5, gpt-5.5-pro, completion, 출시 당일 지원]
 hide_table_of_contents: false
 ---
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-LiteLLM now supports [GPT-5.5 and GPT-5.5 Pro](https://openai.com/index/introducing-gpt-5-5/) on Day 0. Route traffic to OpenAI's latest frontier model through the LiteLLM AI Gateway with no code changes.
+LiteLLM은 이제 [GPT-5.5 및 GPT-5.5 Pro](https://openai.com/index/introducing-gpt-5-5/)를 출시 당일 지원합니다. 코드 변경 없이 LiteLLM AI Gateway를 통해 OpenAI의 최신 frontier 모델로 트래픽을 라우팅할 수 있습니다.
 
 {/* truncate */}
 
-GPT-5.5 is OpenAI's "smartest and most intuitive to use model" yet, with significant gains on agentic coding, computer use, and deep research workflows. Per OpenAI, it is a faster, sharper thinker for fewer tokens compared to GPT-5.4. GPT-5.5 Pro targets the most demanding reasoning tasks.
+GPT-5.5는 OpenAI가 소개한 가장 직관적이고 강력한 모델로, 에이전트형 코딩, computer use, 심층 리서치 워크플로에서 큰 개선을 제공합니다. OpenAI 설명에 따르면 GPT-5.4보다 더 적은 토큰으로 더 빠르고 선명한 추론을 수행합니다. GPT-5.5 Pro는 가장 까다로운 추론 작업을 대상으로 합니다.
 
 :::note
-**No Docker image upgrade needed.** GPT-5.5 routes through the existing `OpenAIGPT5Config` in LiteLLM, so any recent version works out of the box.
+**Docker image upgrade는 필요하지 않습니다.** GPT-5.5는 LiteLLM의 기존 `OpenAIGPT5Config`를 통해 라우팅되므로, 최근 버전이면 바로 동작합니다.
 
-For cost tracking, hit the **Reload Model Cost Map** button in the Admin UI (or `POST /reload/model_cost_map`) to pull the latest pricing from GitHub. This feature is available on `v1.76.0` and above.
+비용 추적을 위해서는 관리자 UI의 **모델 비용 맵 다시 불러오기** 버튼 또는 `POST /reload/model_cost_map`을 사용해 GitHub에서 최신 가격 정보를 가져오세요. 이 기능은 `v1.76.0` 이상에서 사용할 수 있습니다.
 :::
 
-## Usage
+## 사용법
 
 <Tabs>
 <TabItem value="proxy" label="LiteLLM Proxy">
 
-**1. Setup config.yaml**
+**1. config.yaml 설정**
 
 ```yaml
 model_list:
@@ -45,7 +45,7 @@ model_list:
       api_key: os.environ/OPENAI_API_KEY
 ```
 
-**2. Start the proxy**
+**2. 프록시 시작**
 
 ```bash
 docker run -d \
@@ -56,7 +56,7 @@ docker run -d \
   --config /app/config.yaml
 ```
 
-**3. Test it**
+**3. 테스트**
 
 ```bash
 curl -X POST "http://0.0.0.0:4000/chat/completions" \
@@ -103,7 +103,7 @@ print(response.choices[0].message.content)
 
 ## Responses API
 
-For agentic and multi-turn workflows, use `/v1/responses` to preserve reasoning state and output item metadata across turns.
+에이전트형 워크플로와 multi-turn 워크플로에서는 `/v1/responses`를 사용해 turn 사이의 추론 상태와 출력 항목 메타데이터를 보존합니다.
 
 ```bash
 curl -X POST "http://0.0.0.0:4000/v1/responses" \
@@ -115,11 +115,11 @@ curl -X POST "http://0.0.0.0:4000/v1/responses" \
   }'
 ```
 
-## Reasoning Effort
+## 추론 강도
 
-`reasoning_effort` controls how much thinking the model applies. Supported values per model (verified against OpenAI's live API on 2026-04-24):
+`reasoning_effort`는 모델이 적용하는 추론 강도를 제어합니다. 모델별 지원 값은 다음과 같습니다. 이 값은 2026-04-24에 OpenAI live API 기준으로 검증되었습니다.
 
-| Model | Default | Allowed values |
+| 모델 | 기본값 | 허용 값 |
 |-------|---------|----------------|
 | `gpt-5.5` | `medium` | `none`, `low`, `medium`, `high`, `xhigh` |
 | `gpt-5.5-pro` | `high` | `medium`, `high`, `xhigh` |
@@ -134,12 +134,12 @@ response = completion(
 )
 ```
 
-LiteLLM enforces these caps locally — passing an unsupported value (e.g. `minimal`) raises an `UnsupportedParamsError` instead of round-tripping to OpenAI for a 400.
+LiteLLM은 이 제한을 로컬에서 적용합니다. 지원하지 않는 값(예: `minimal`)을 전달하면 OpenAI까지 왕복해 400을 받기 전에 `UnsupportedParamsError`를 발생시킵니다.
 
-## Notes
+## 참고
 
-- For cost tracking on `gpt-5.5` and `gpt-5.5-pro`, hit the **Reload Model Cost Map** button in the Admin UI (or `POST /reload/model_cost_map`). Works on any LiteLLM version `v1.76.0` or newer — no container restart or image upgrade required.
-- `gpt-5.5-pro` is a Responses API-only model (`mode: "responses"`). LiteLLM's Responses API bridge transparently translates `completion()` calls to `/v1/responses`, so the SDK example above works without code changes.
-- GPT-5.5 supports reasoning, function calling, parallel tool calls, vision (image input), PDF input, prompt caching, web search, and structured output — see the [OpenAI provider docs](../../docs/providers/openai) for advanced usage.
-- Context window: 1.05M input tokens / 128K output tokens. Long-context tier pricing kicks in above 272K tokens.
-- Azure availability: not yet — this post covers OpenAI direct only.
+- `gpt-5.5` 및 `gpt-5.5-pro` 비용 추적은 관리자 UI의 **모델 비용 맵 다시 불러오기** 버튼 또는 `POST /reload/model_cost_map`으로 최신 가격 정보를 불러오면 됩니다. LiteLLM `v1.76.0` 이상에서 동작하며 container restart나 image upgrade는 필요하지 않습니다.
+- `gpt-5.5-pro`는 Responses API 전용 모델입니다(`mode: "responses"`). LiteLLM의 Responses API bridge는 `completion()` 호출을 `/v1/responses`로 투명하게 변환하므로, 위 SDK 예제는 코드 변경 없이 동작합니다.
+- GPT-5.5는 reasoning, function calling, parallel tool calls, vision(image input), PDF input, prompt caching, web search, structured output을 지원합니다. 고급 사용법은 [OpenAI 제공자 문서](../../docs/providers/openai)를 참고하세요.
+- 컨텍스트 창: 입력 1.05M token / 출력 128K token. 272K token을 초과하면 long-context tier 가격이 적용됩니다.
+- Azure 제공 여부: 아직 제공되지 않습니다. 이 글은 OpenAI direct만 다룹니다.

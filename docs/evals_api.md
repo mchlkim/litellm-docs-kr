@@ -1,19 +1,19 @@
 # /evals
 
-LiteLLM Proxy supports OpenAI's Evaluations (Evals) API, allowing you to create, manage, and run evaluations to measure model performance against defined testing criteria.
+LiteLLM Proxy는 OpenAI Evaluations(Evals) API를 지원합니다. 정의한 테스트 기준에 따라 모델 성능을 측정하도록 평가를 만들고, 관리하고, 실행할 수 있습니다.
 
-## What are Evals?
+## Evals란?
 
-OpenAI Evals API provides a structured way to:
-- **Create Evaluations**: Define testing criteria and data sources for evaluating model outputs
-- **Run Evaluations**: Execute evaluations against specific models and datasets
-- **Track Results**: Monitor evaluation progress and review detailed results
+OpenAI Evals API는 다음을 구조적으로 수행하는 방법을 제공합니다.
+- **평가 생성**: 모델 출력 평가에 사용할 테스트 기준과 데이터 소스를 정의합니다.
+- **평가 실행**: 특정 모델과 데이터셋을 대상으로 평가를 실행합니다.
+- **결과 추적**: 평가 진행 상황을 모니터링하고 상세 결과를 검토합니다.
 
-## Quick Start
+## 빠른 시작
 
-### Setup LiteLLM Proxy
+### LiteLLM Proxy 설정
 
-First, start your LiteLLM Proxy server:
+먼저 LiteLLM Proxy 서버를 시작합니다.
 
 ```bash
 litellm --config config.yaml
@@ -21,7 +21,7 @@ litellm --config config.yaml
 # Proxy will run on http://localhost:4000
 ```
 
-### Initialize OpenAI Client
+### OpenAI Client 초기화
 
 ```python
 from openai import OpenAI
@@ -34,7 +34,7 @@ client = OpenAI(
 ```
 
 
-For async operations:
+비동기 작업에는 다음을 사용합니다.
 
 ```python
 from openai import AsyncOpenAI
@@ -47,13 +47,13 @@ client = AsyncOpenAI(
 
 ---
 
-## Evaluation Management
+## 평가 관리
 
-### Create an Evaluation
+### 평가 생성
 
-Create an evaluation with testing criteria and data source configuration.
+테스트 기준과 데이터 소스 구성으로 평가를 생성합니다.
 
-#### Example: Sentiment Classification Eval
+#### 예제: 감성 분류 Eval
 
 ```python
 from openai import OpenAI
@@ -97,9 +97,9 @@ print(f"Created eval: {eval_obj.id}")
 print(f"Eval name: {eval_obj.name}")
 ```
 
-#### Example: Push Notifications Summarizer Monitoring
+#### 예제: Push Notifications 요약기 모니터링
 
-This example shows how to monitor prompt changes for regressions in a push notifications summarizer:
+이 예제는 push notifications 요약기에서 prompt 변경으로 인한 회귀를 모니터링하는 방법을 보여줍니다.
 
 ```python
 from openai import AsyncOpenAI
@@ -160,9 +160,9 @@ eval_id = eval_result.id
 print(f"Created eval: {eval_id}")
 ```
 
-### List Evaluations
+### 평가 목록 조회
 
-Retrieve a list of all your evaluations with pagination support.
+페이지네이션을 지원하는 전체 평가 목록을 조회합니다.
 
 ```python
 # List all evaluations
@@ -183,9 +183,9 @@ if evals_response.has_more:
     )
 ```
 
-### Get a Specific Evaluation
+### 특정 평가 조회
 
-Retrieve details of a specific evaluation by ID.
+ID로 특정 평가의 세부 정보를 조회합니다.
 
 ```python
 eval = client.evals.retrieve(
@@ -198,9 +198,9 @@ print(f"Data Source: {eval.data_source_config}")
 print(f"Testing Criteria: {eval.testing_criteria}")
 ```
 
-### Update an Evaluation
+### 평가 업데이트
 
-Update evaluation metadata or name.
+평가 metadata 또는 이름을 업데이트합니다.
 
 ```python
 updated_eval = client.evals.update(
@@ -215,9 +215,9 @@ updated_eval = client.evals.update(
 print(f"Updated eval: {updated_eval.name}")
 ```
 
-### Delete an Evaluation
+### 평가 삭제
 
-Permanently delete an evaluation.
+평가를 영구 삭제합니다.
 
 ```python
 delete_response = client.evals.delete(
@@ -229,15 +229,15 @@ print(f"Deleted: {delete_response.deleted}")  # True
 
 ---
 
-## Evaluation Runs
+## 평가 실행
 
-### Create a Run
+### Run 생성
 
-Execute an evaluation by creating a run. The run processes your data through the model and applies testing criteria.
+run을 생성해 평가를 실행합니다. run은 데이터를 모델로 처리하고 테스트 기준을 적용합니다.
 
-#### Using Stored Completions
+#### Stored Completions 사용
 
-First, generate some test data by making chat completions with metadata:
+먼저 metadata가 포함된 chat completions를 만들어 테스트 데이터를 생성합니다.
 
 ```python
 from openai import AsyncOpenAI
@@ -301,7 +301,7 @@ for notifications in push_notification_data:
 await asyncio.gather(*tasks)
 ```
 
-Now create runs to evaluate different prompt versions:
+이제 서로 다른 prompt version을 평가하는 run을 생성합니다.
 
 ```python
 # Grade prompt_version=v1
@@ -342,9 +342,9 @@ print(f"Run ID: {eval_run_result_v2.id}")
 print(f"Report URL: {eval_run_result_v2.report_url}")
 ```
 
-#### Using Completions with Different Models
+#### 서로 다른 모델로 Completions 사용
 
-Test how different models perform on the same inputs:
+동일한 입력에서 서로 다른 모델이 어떻게 동작하는지 테스트합니다.
 
 ```python
 # Test with GPT-4o using stored completions as input
@@ -374,9 +374,9 @@ for run in results:
     print(f"Report URL: {run.report_url}")
 ```
 
-### List Runs
+### Run 목록 조회
 
-Get all runs for a specific evaluation.
+특정 평가의 모든 run을 조회합니다.
 
 ```python
 # List all runs for an evaluation
@@ -394,9 +394,9 @@ for run in runs_response.data:
         print(f"Results: {run.result_counts.passed}/{run.result_counts.total} passed")
 ```
 
-### Get Run Details
+### Run 세부 정보 조회
 
-Retrieve detailed information about a specific run, including results.
+결과를 포함해 특정 run의 상세 정보를 조회합니다.
 
 ```python
 run = client.evals.runs.retrieve(
@@ -425,9 +425,9 @@ if run.per_testing_criteria_results:
         print(f"  Average Score: {criteria_result.average_score}")
 ```
 
-### Delete a Run
+### Run 삭제
 
-Permanently delete a run and its results.
+run과 해당 결과를 영구 삭제합니다.
 
 ```python
 delete_response = await client.evals.runs.delete(
@@ -438,4 +438,3 @@ delete_response = await client.evals.runs.delete(
 print(f"Deleted: {delete_response.deleted}")  # True
 print(f"Run ID: {delete_response.run_id}")
 ```
-

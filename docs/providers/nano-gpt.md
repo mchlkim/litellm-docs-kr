@@ -1,36 +1,36 @@
 # NanoGPT
 
-## Overview
+## 개요
 
-| Property | Details |
+| 속성 | 세부 정보 |
 |-------|-------|
-| Description | NanoGPT is a pay-per-prompt and subscription based AI service providing instant access to over 200+ powerful AI models with no subscriptions or registration required. |
-| Provider Route on LiteLLM | `nano-gpt/` |
-| Link to Provider Doc | [NanoGPT Website ↗](https://nano-gpt.com) |
+| 설명 | NanoGPT는 pay-per-prompt 및 subscription 기반 AI 서비스로, subscription이나 registration 없이 200개 이상의 강력한 AI 모델에 즉시 접근할 수 있습니다. |
+| LiteLLM Provider 경로 | `nano-gpt/` |
+| Provider 문서 링크 | [NanoGPT Website ↗](https://nano-gpt.com) |
 | Base URL | `https://nano-gpt.com/api/v1` |
-| Supported Operations | [`/chat/completions`](#sample-usage), [`/completions`](#text-completion), [`/embeddings`](#embeddings) |
+| 지원 작업 | [`/chat/completions`](#sample-usage), [`/completions`](#text-completion), [`/embeddings`](#embeddings) |
 
 <br />
 
-## What is NanoGPT?
+## NanoGPT란?
 
-NanoGPT is a flexible AI API service that offers:
-- **Pay-Per-Prompt Pricing**: No subscriptions, pay only for what you use
-- **200+ AI Models**: Access to text, image, and video generation models
-- **No Registration Required**: Get started instantly
-- **OpenAI-Compatible API**: Easy integration with existing code
-- **Streaming Support**: Real-time response streaming
-- **Tool Calling**: Support for function calling
+NanoGPT는 다음을 제공하는 유연한 AI API 서비스입니다.
+- **Pay-Per-Prompt 가격 책정**: subscription 없이 사용한 만큼만 지불
+- **200+ AI 모델**: text, image, video generation 모델 접근
+- **Registration 불필요**: 즉시 시작 가능
+- **OpenAI 호환 API**: 기존 코드와 쉽게 통합
+- **Streaming 지원**: 실시간 response streaming
+- **도구 호출**: function calling 지원
 
-## Required Variables
+## 필수 변수
 
 ```python showLineNumbers title="Environment Variables"
 os.environ["NANOGPT_API_KEY"] = ""  # your NanoGPT API key
 ```
 
-Get your NanoGPT API key from [nano-gpt.com](https://nano-gpt.com).
+[nano-gpt.com](https://nano-gpt.com)에서 NanoGPT API key를 가져오세요.
 
-## Usage - LiteLLM Python SDK
+## 사용법 - LiteLLM Python SDK
 
 ### Non-streaming
 
@@ -74,7 +74,7 @@ for chunk in response:
     print(chunk)
 ```
 
-### Tool Calling
+### 도구 호출
 
 ```python showLineNumbers title="NanoGPT Tool Calling"
 import os
@@ -105,15 +105,15 @@ response = litellm.completion(
 )
 ```
 
-## Usage - LiteLLM Proxy Server
+## 사용법 - LiteLLM Proxy Server
 
-### 1. Save key in your environment
+### 1. 환경에 key 저장
 
 ```bash
 export NANOGPT_API_KEY=""
 ```
 
-### 2. Start the proxy
+### 2. 프록시 시작
 
 ```yaml
 model_list:
@@ -123,47 +123,47 @@ model_list:
       api_key: os.environ/NANOGPT_API_KEY
 ```
 
-## Supported OpenAI Parameters
+## 지원되는 OpenAI 파라미터
 
-NanoGPT supports all standard OpenAI-compatible parameters:
+NanoGPT는 모든 표준 OpenAI 호환 파라미터를 지원합니다.
 
-| Parameter | Type | Description |
+| 파라미터 | 타입 | 설명 |
 |-----------|------|-------------|
-| `messages` | array | **Required**. Array of message objects with 'role' and 'content' |
-| `model` | string | **Required**. Model ID from 200+ available models |
-| `stream` | boolean | Optional. Enable streaming responses |
-| `temperature` | float | Optional. Sampling temperature |
-| `top_p` | float | Optional. Nucleus sampling parameter |
-| `max_tokens` | integer | Optional. Maximum tokens to generate |
-| `frequency_penalty` | float | Optional. Penalize frequent tokens |
-| `presence_penalty` | float | Optional. Penalize tokens based on presence |
-| `stop` | string/array | Optional. Stop sequences |
-| `n` | integer | Optional. Number of completions to generate |
-| `tools` | array | Optional. List of available tools/functions |
-| `tool_choice` | string/object | Optional. Control tool/function calling |
-| `response_format` | object | Optional. Response format specification |
-| `user` | string | Optional. User identifier |
+| `messages` | array | **필수**. 'role'과 'content'가 있는 message object 배열 |
+| `model` | string | **필수**. 200개 이상의 사용 가능 모델 중 Model ID |
+| `stream` | boolean | 선택 사항. streaming response 활성화 |
+| `temperature` | float | 선택 사항. sampling temperature |
+| `top_p` | float | 선택 사항. nucleus sampling 파라미터 |
+| `max_tokens` | integer | 선택 사항. 생성할 최대 token 수 |
+| `frequency_penalty` | float | 선택 사항. 자주 등장하는 token에 penalty 적용 |
+| `presence_penalty` | float | 선택 사항. presence 기반 token penalty 적용 |
+| `stop` | string/array | 선택 사항. stop sequence |
+| `n` | integer | 선택 사항. 생성할 completion 수 |
+| `tools` | array | 선택 사항. 사용 가능한 tool/function 목록 |
+| `tool_choice` | string/object | 선택 사항. tool/function calling 제어 |
+| `response_format` | object | 선택 사항. response format specification |
+| `user` | string | 선택 사항. user identifier |
 
-## Model Categories
+## 모델 카테고리
 
-NanoGPT provides access to multiple model categories:
-- **Text Generation**: 200+ LLMs for chat, completion, and analysis
-- **Image Generation**: AI models for creating images
-- **Video Generation**: AI models for video creation
-- **Embedding Models**: Text embedding models for vector search
+NanoGPT는 여러 모델 카테고리에 대한 접근을 제공합니다.
+- **Text Generation**: chat, completion, analysis용 200개 이상의 LLM
+- **Image Generation**: image 생성을 위한 AI 모델
+- **Video Generation**: video 생성을 위한 AI 모델
+- **Embedding 모델**: vector search용 text embedding 모델
 
-## Pricing Model
+## 가격 모델
 
-NanoGPT offers a flexible pricing structure:
-- **Pay-Per-Prompt**: No subscription required
-- **No Registration**: Get started immediately
-- **Transparent Pricing**: Pay only for what you use
+NanoGPT는 유연한 가격 구조를 제공합니다.
+- **Pay-Per-Prompt**: subscription 불필요
+- **Registration 없음**: 즉시 시작
+- **투명한 가격 책정**: 사용한 만큼만 지불
 
-## API Documentation
+## API 문서
 
-For detailed API documentation, visit [docs.nano-gpt.com](https://docs.nano-gpt.com).
+자세한 API 문서는 [docs.nano-gpt.com](https://docs.nano-gpt.com)을 확인하세요.
 
-## Additional Resources
+## 추가 리소스
 
 - [NanoGPT Website](https://nano-gpt.com)
 - [NanoGPT API Documentation](https://nano-gpt.com/api)

@@ -1,35 +1,35 @@
 ---
 slug: gpt_5_4
-title: "Day 0 Support: GPT-5.4"
+title: "출시 당일 지원: GPT-5.4"
 date: 2026-03-05T10:00:00
 authors:
   - sameer
   - krrish
   - ishaan-alt
-description: "GPT-5.4 model support in LiteLLM"
-tags: [openai, gpt-5.4, completion]
+description: "LiteLLM의 GPT-5.4 모델 지원 안내"
+tags: [openai, gpt-5.4, completion, 출시-당일-지원]
 hide_table_of_contents: false
 ---
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-LiteLLM now supports fully GPT-5.4!
+LiteLLM은 이제 GPT-5.4를 완전히 지원합니다.
 
 {/* truncate */}
 
-## Docker Image
+## Docker 이미지
 
 ```bash
 docker pull ghcr.io/berriai/litellm:v1.81.14-stable.gpt-5.4_patch
 ```
 
-## Usage
+## 사용법
 
 <Tabs>
 <TabItem value="proxy" label="LiteLLM Proxy">
 
-**1. Setup config.yaml**
+**1. config.yaml 설정**
 
 ```yaml
 model_list:
@@ -39,7 +39,7 @@ model_list:
       api_key: os.environ/OPENAI_API_KEY
 ```
 
-**2. Start the proxy**
+**2. 프록시 시작**
 
 ```bash
 docker run -d \
@@ -50,7 +50,7 @@ docker run -d \
   --config /app/config.yaml
 ```
 
-**3. Test it**
+**3. 테스트**
 
 ```bash
 curl -X POST "http://0.0.0.0:4000/chat/completions" \
@@ -83,8 +83,8 @@ print(response.choices[0].message.content)
 </TabItem>
 </Tabs>
 
-## Notes
+## 참고
 
-- Restart your container to get the cost tracking for this model.
-- Use `/responses` for better model performance.
-- GPT-5.4 supports reasoning, function calling, vision, and tool-use — see the [OpenAI provider docs](../../docs/providers/openai) for advanced usage.
+- 이 모델의 비용 추적을 적용하려면 container를 재시작하세요.
+- 더 나은 모델 성능을 위해 `/responses`를 사용하세요.
+- GPT-5.4는 reasoning, function calling, vision, tool-use를 지원합니다. 고급 사용법은 [OpenAI 제공자 문서](../../docs/providers/openai)를 참고하세요.

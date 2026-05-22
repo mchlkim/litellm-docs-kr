@@ -2,11 +2,11 @@ import Image from '@theme/IdealImage';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Custom Prompt Management
+# 사용자 지정 프롬프트 관리 {#custom-prompt-management}
 
-Connect LiteLLM to your prompt management system with custom hooks.
+사용자 지정 훅으로 LiteLLM을 프롬프트 관리 시스템에 연결합니다.
 
-## Overview
+## 개요
 
 
 <Image 
@@ -15,17 +15,17 @@ Connect LiteLLM to your prompt management system with custom hooks.
 />
 
 
-## How it works
+## 동작 방식
 
-## Quick Start
+## 빠른 시작
 
-### 1. Create Your Custom Prompt Manager
+### 1. 사용자 지정 프롬프트 관리자 만들기 {#1-create-your-custom-prompt-manager}
 
-Create a class that inherits from `CustomPromptManagement` to handle prompt retrieval and formatting:
+`CustomPromptManagement`를 상속하는 클래스를 만들어 프롬프트 조회와 형식 지정을 처리합니다.
 
-**Example Implementation**
+**예제 구현**
 
-Create a new file called `custom_prompt.py` and add this code. The key method here is `get_chat_completion_prompt` you can implement custom logic to retrieve and format prompts based on the `prompt_id` and `prompt_variables`.
+`custom_prompt.py`라는 새 파일을 만들고 이 코드를 추가합니다. 여기서 핵심 메서드는 `get_chat_completion_prompt`이며, `prompt_id`와 `prompt_variables`를 기준으로 프롬프트를 조회하고 형식을 지정하는 사용자 지정 로직을 구현할 수 있습니다.
 
 ```python
 from typing import List, Tuple, Optional
@@ -65,7 +65,7 @@ class MyCustomPromptManagement(CustomPromptManagement):
 prompt_management = MyCustomPromptManagement()
 ```
 
-### 2. Configure Your Prompt Manager in LiteLLM `config.yaml`
+### 2. LiteLLM `config.yaml`에서 프롬프트 관리자 설정하기 {#2-configure-your-prompt-manager-in-litellm-configyaml}
 
 ```yaml
 model_list:
@@ -78,12 +78,12 @@ litellm_settings:
   callbacks: custom_prompt.prompt_management  # sets litellm.callbacks = [prompt_management]
 ```
 
-### 3. Start LiteLLM Gateway
+### 3. LiteLLM Gateway 시작하기 {#3-start-litellm-gateway}
 
 <Tabs>
 <TabItem value="docker" label="Docker Run">
 
-Mount your `custom_logger.py` on the LiteLLM Docker container.
+LiteLLM Docker 컨테이너에 `custom_logger.py`를 마운트합니다.
 
 ```shell
 docker run -d \
@@ -109,9 +109,9 @@ litellm --config config.yaml --detailed_debug
 </TabItem>
 </Tabs>
 
-### 4. Test Your Custom Prompt Manager
+### 4. 사용자 지정 프롬프트 관리자 테스트하기 {#4-test-your-custom-prompt-manager}
 
-When you pass `prompt_id="1234"`, the custom prompt manager will add a system message "Be a good Bot!" to your conversation:
+`prompt_id="1234"`를 전달하면 사용자 지정 프롬프트 관리자가 대화에 시스템 메시지 "Be a good Bot!"을 추가합니다.
 
 <Tabs>
 <TabItem value="openai" label="OpenAI Python v1.0.0+">
@@ -173,9 +173,9 @@ curl -X POST http://0.0.0.0:4000/v1/chat/completions \
 </TabItem>
 </Tabs>
 
-### Using the LiteLLM SDK Directly
+### LiteLLM SDK 직접 사용하기 {#using-the-litellm-sdk-directly}
 
-If you call `litellm.completion()` from a Python script (without going through the proxy), register your custom prompt manager before making the request:
+Python 스크립트에서 프록시를 거치지 않고 `litellm.completion()`을 호출하는 경우, 요청을 보내기 전에 사용자 지정 프롬프트 관리자를 등록합니다.
 
 ```python
 
@@ -193,9 +193,9 @@ response = litellm.completion(
 )
 ```
 
-> **Note:** `litellm.callbacks = [prompt_management]` (or equivalently `litellm.logging_callback_manager.add_litellm_callback(prompt_management)`) is required in SDK scripts. The proxy reads `callbacks` from `config.yaml` automatically, but standalone scripts do not.
+> **참고:** SDK 스크립트에서는 `litellm.callbacks = [prompt_management]` 또는 동일한 동작의 `litellm.logging_callback_manager.add_litellm_callback(prompt_management)`가 필요합니다. 프록시는 `config.yaml`에서 `callbacks`를 자동으로 읽지만, 독립 실행형 스크립트는 그렇지 않습니다.
 
-The request will be transformed from:
+요청은 다음 형식에서
 ```json
 {
     "model": "gemini-1.5-pro",
@@ -204,7 +204,7 @@ The request will be transformed from:
 }
 ```
 
-To:
+다음 형식으로 변환됩니다.
 ```json
 {
     "model": "gemini-1.5-pro",
@@ -214,5 +214,4 @@ To:
     ]
 }
 ```
-
 

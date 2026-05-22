@@ -1,15 +1,15 @@
-# Azure Text to Speech (tts)
+# Azure TTS 사용 {#azure-text-to-speech-tts}
 
-## Overview
+## 개요
 
-| Property | Details |
+| 속성 | 세부 정보 |
 |-------|-------|
-| Description | Convert text to natural-sounding speech using Azure OpenAI's Text to Speech models |
-| Provider Route on LiteLLM | `azure/` |
-| Supported Operations | `/audio/speech` |
-| Link to Provider Doc | [Azure OpenAI TTS ↗](https://learn.microsoft.com/en-us/azure/ai-services/openai/text-to-speech-quickstart)
+| 설명 | Azure OpenAI의 Text to Speech 모델을 사용하여 텍스트를 자연스러운 음성으로 변환합니다 |
+| LiteLLM의 Provider Route | `azure/` |
+| 지원 작업 | `/audio/speech` |
+| Provider 문서 링크 | [Azure OpenAI TTS ↗](https://learn.microsoft.com/en-us/azure/ai-services/openai/text-to-speech-quickstart)
 
-## Quick Start
+## 빠른 시작
 
 ### **LiteLLM SDK**
 
@@ -45,17 +45,17 @@ model_list:
       api_version: "os.environ/AZURE_API_VERSION" 
 ```
 
-## Available Voices
+## 사용 가능한 음성 {#available-voices}
 
-Azure OpenAI supports the following voices:
-- `alloy` - Neutral and balanced
-- `echo` - Warm and upbeat
-- `fable` - Expressive and dramatic
-- `onyx` - Deep and authoritative
-- `nova` - Friendly and conversational
-- `shimmer` - Bright and cheerful
+Azure OpenAI는 다음 음성을 지원합니다.
+- `alloy` - 중립적이고 균형 잡힌 음성
+- `echo` - 따뜻하고 활기찬 음성
+- `fable` - 표현력이 풍부하고 극적인 음성
+- `onyx` - 깊이 있고 권위 있는 음성
+- `nova` - 친근하고 대화체에 가까운 음성
+- `shimmer` - 밝고 경쾌한 음성
 
-## Supported Parameters
+## 지원 파라미터
 
 ```python showLineNumbers title="All Parameters"
 response = speech(
@@ -67,9 +67,9 @@ response = speech(
 )
 ```
 
-## Supported Models
+## 지원 모델 {#supported-models}
 
-- `tts-1` - Standard quality, optimized for speed
-- `tts-1-hd` - High definition, optimized for quality
+- `tts-1` - 표준 품질, 속도에 최적화됨
+- `tts-1-hd` - 고해상도 품질, 품질에 최적화됨
 
-Use your Azure deployment name: `azure/<your-deployment-name>`
+Azure 배포 이름을 사용하세요: `azure/<your-deployment-name>`

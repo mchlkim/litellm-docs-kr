@@ -3,38 +3,38 @@ import TabItem from '@theme/TabItem';
 
 # PublicAI
 
-## Overview
+## 개요
 
-| Property | Details |
+| 속성 | 세부 정보 |
 |-------|-------|
-| Description | PublicAI provides large language models including essential models like the swiss-ai apertus model. |
-| Provider Route on LiteLLM | `publicai/` |
-| Link to Provider Doc | [PublicAI ↗](https://platform.publicai.co/) |
+| 설명 | PublicAI는 swiss-ai apertus 모델 같은 주요 모델을 포함한 대규모 언어 모델을 제공합니다. |
+| LiteLLM의 Provider Route | `publicai/` |
+| Provider 문서 링크 | [PublicAI ↗](https://platform.publicai.co/) |
 | Base URL | `https://platform.publicai.co/` |
-| Supported Operations | [`/chat/completions`](#sample-usage) |
+| 지원 작업 | [`/chat/completions`](#sample-usage) |
 
 <br />
 <br />
 
 https://platform.publicai.co/
 
-**We support ALL PublicAI models, just set `publicai/` as a prefix when sending completion requests**
+**모든 PublicAI 모델을 지원합니다. completion 요청을 보낼 때 `publicai/`를 prefix로 설정하기만 하면 됩니다.**
 
-## Required Variables
+## 필수 변수 {#required-variables}
 
 ```python showLineNumbers title="Environment Variables"
 os.environ["PUBLICAI_API_KEY"] = ""  # your PublicAI API key
 ```
 
-You can overwrite the base url with:
+다음과 같이 base url을 덮어쓸 수 있습니다.
 
 ```
 os.environ["PUBLICAI_API_BASE"] = "https://platform.publicai.co/v1"
 ```
 
-## Usage - LiteLLM Python SDK
+## 사용법 - LiteLLM Python SDK
 
-### Non-streaming
+### 비스트리밍 {#non-streaming}
 
 ```python showLineNumbers title="PublicAI Non-streaming Completion"
 import os
@@ -54,7 +54,7 @@ response = completion(
 print(response)
 ```
 
-### Streaming
+### 스트리밍 {#streaming}
 
 ```python showLineNumbers title="PublicAI Streaming Completion"
 import os
@@ -76,9 +76,9 @@ for chunk in response:
     print(chunk)
 ```
 
-## Usage - LiteLLM Proxy
+## 사용법 - LiteLLM Proxy
 
-Add the following to your LiteLLM Proxy configuration file:
+LiteLLM Proxy 구성 파일에 다음 내용을 추가하세요.
 
 ```yaml showLineNumbers title="config.yaml"
 model_list:
@@ -93,7 +93,7 @@ model_list:
       api_key: os.environ/PUBLICAI_API_KEY
 ```
 
-Start your LiteLLM Proxy server:
+LiteLLM Proxy 서버를 시작하세요.
 
 ```bash showLineNumbers title="Start LiteLLM Proxy"
 litellm --config config.yaml
@@ -206,4 +206,4 @@ curl http://localhost:4000/v1/chat/completions \
 </TabItem>
 </Tabs>
 
-For more detailed information on using the LiteLLM Proxy, see the [LiteLLM Proxy documentation](../providers/litellm_proxy).
+LiteLLM Proxy 사용에 대한 자세한 정보는 [LiteLLM Proxy documentation](../providers/litellm_proxy)을 참고하세요.

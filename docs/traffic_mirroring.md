@@ -1,18 +1,18 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# A/B Testing - Traffic Mirroring
+# A/B Testing - 트래픽 미러링
 
-Traffic mirroring allows you to "mimic" production traffic to a secondary (silent) model for evaluation purposes. The silent model's response is gathered in the background and does not affect the latency or result of the primary request.
+Traffic mirroring은 평가 목적으로 운영 트래픽을 보조(silent) 모델에 "복제"할 수 있게 합니다. silent 모델의 응답은 백그라운드에서 수집되며, 기본 요청의 지연 시간이나 결과에는 영향을 주지 않습니다.
 
-This is useful for:
-- Testing a new model's performance on production prompts before switching.
-- Comparing costs and latency between different providers.
-- Debugging issues by mirroring traffic to a more verbose model.
+이 기능은 다음 상황에 유용합니다.
+- 전환 전에 운영 prompt로 새 모델의 성능을 테스트할 때
+- 서로 다른 provider 간 비용과 지연 시간을 비교할 때
+- 더 자세한 출력을 제공하는 모델로 트래픽을 mirroring해 문제를 디버깅할 때
 
-## Quick Start
+## 빠른 시작
 
-To enable traffic mirroring, add `silent_model` to the `litellm_params` of a deployment.
+traffic mirroring을 활성화하려면 deployment의 `litellm_params`에 `silent_model`을 추가합니다.
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -50,7 +50,7 @@ response = await router.acompletion(
 </TabItem>
 <TabItem value="proxy" label="Proxy">
 
-Add `silent_model` to your `config.yaml`:
+`config.yaml`에 `silent_model`을 추가합니다.
 
 ```yaml
 model_list:
@@ -68,16 +68,16 @@ model_list:
 </TabItem>
 </Tabs>
 
-## How it works
-1. **Request Received**: A request is made to a model group (e.g. `primary-model`).
-2. **Deployment Picked**: LiteLLM picks a deployment from the group.
-3. **Primary Call**: LiteLLM makes the call to the primary deployment.
-4. **Mirroring**: If `silent_model` is present, LiteLLM triggers a background call to that model. 
-   - For **Sync** calls: Uses a shared thread pool.
-   - For **Async** calls: Uses `asyncio.create_task`.
-5. **Isolation**: The background call uses a `deepcopy` of the original request parameters and sets `metadata["is_silent_experiment"] = True`. It also strips out logging IDs to prevent collisions in usage tracking.
+## 동작 방식
+1. **요청 수신**: model group(예: `primary-model`)으로 요청이 들어옵니다.
+2. **Deployment 선택**: LiteLLM이 group에서 deployment를 선택합니다.
+3. **Primary 호출**: LiteLLM이 primary deployment를 호출합니다.
+4. **Mirroring**: `silent_model`이 있으면 LiteLLM이 해당 모델에 대한 백그라운드 호출을 시작합니다.
+   - **Sync** 호출: 공유 thread pool을 사용합니다.
+   - **Async** 호출: `asyncio.create_task`를 사용합니다.
+5. **격리**: 백그라운드 호출은 원래 요청 파라미터의 `deepcopy`를 사용하고 `metadata["is_silent_experiment"] = True`를 설정합니다. 또한 사용량 추적에서 충돌을 방지하기 위해 logging ID를 제거합니다.
 
-## Key Features
-- **Latency Isolation**: The primary request returns as soon as it's ready. The background (silent) call does not block.
-- **Unified Logging**: Background calls are processed via the Router, meaning they are automatically logged to your configured observability tools (Langfuse, S3, etc.).
-- **Evaluation**: Use the `is_silent_experiment: True` flag in your logs to filter and compare results between the primary and mirrored calls.
+## 주요 기능
+- **지연 시간 격리**: primary 요청은 준비되는 즉시 반환됩니다. 백그라운드(silent) 호출은 요청을 차단하지 않습니다.
+- **통합 로깅**: 백그라운드 호출은 Router를 통해 처리되므로 설정된 observability 도구(Langfuse, S3 등)에 자동으로 기록됩니다.
+- **평가**: 로그의 `is_silent_experiment: True` flag를 사용해 primary 호출과 mirrored 호출의 결과를 필터링하고 비교할 수 있습니다.

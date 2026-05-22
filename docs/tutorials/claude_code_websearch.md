@@ -1,14 +1,14 @@
 import Image from '@theme/IdealImage';
 
-# Claude Code - WebSearch Across All Providers
+# Claude Code - 모든 프로바이더에서 WebSearch 사용
 
-Enable Claude Code's web search tool to work with any provider (Bedrock, Azure, Vertex, etc.). LiteLLM automatically intercepts web search requests and executes them server-side.
+Claude Code의 웹 검색 도구가 모든 프로바이더(Bedrock, Azure, Vertex 등)에서 작동하도록 설정합니다. LiteLLM은 웹 검색 요청을 자동으로 가로채 서버 측에서 실행합니다.
 
 <Image img={require('../../img/claude_code_websearch.png')} />
 
-## Proxy Configuration
+## Proxy 설정
 
-Add WebSearch interception to your `litellm_config.yaml`:
+`litellm_config.yaml`에 WebSearch 가로채기를 추가합니다.
 
 ```yaml showLineNumbers title="litellm_config.yaml"
 model_list:
@@ -19,13 +19,13 @@ model_list:
 
 # Enable WebSearch interception for providers
 litellm_settings:
-  callbacks: ["websearch_interception"]
-  websearch_interception_params:
-    enabled_providers:
-      - bedrock
-      - azure
-      - vertex_ai
-    search_tool_name: perplexity-search  # Optional: specific search tool
+  callbacks:
+    - websearch_interception:
+        enabled_providers:
+          - bedrock
+          - azure
+          - vertex_ai
+        search_tool_name: perplexity-search  # Optional: specific search tool
 
 # Configure search provider
 search_tools:
@@ -35,11 +35,11 @@ search_tools:
       api_key: os.environ/PERPLEXITY_API_KEY
 ```
 
-## Quick Start
+## 빠른 시작
 
-### 1. Configure LiteLLM Proxy
+### 1. LiteLLM Proxy 설정
 
-Create `config.yaml`:
+`config.yaml`을 생성합니다.
 
 ```yaml showLineNumbers title="config.yaml"
 model_list:
@@ -49,9 +49,9 @@ model_list:
       aws_region_name: us-east-1
 
 litellm_settings:
-  callbacks: ["websearch_interception"]
-  websearch_interception_params:
-    enabled_providers: [bedrock]
+  callbacks:
+    - websearch_interception:
+        enabled_providers: [bedrock]
 
 search_tools:
   - search_tool_name: perplexity-search
@@ -60,14 +60,14 @@ search_tools:
       api_key: os.environ/PERPLEXITY_API_KEY
 ```
 
-### 2. Start Proxy
+### 2. Proxy 시작
 
 ```bash showLineNumbers title="Start LiteLLM Proxy"
 export PERPLEXITY_API_KEY=your-key
 litellm --config config.yaml
 ```
 
-### 3. Use with Claude Code
+### 3. Claude Code와 함께 사용
 
 ```bash showLineNumbers title="Configure Claude Code"
 export ANTHROPIC_BASE_URL=http://localhost:4000
@@ -75,15 +75,15 @@ export ANTHROPIC_API_KEY=sk-1234
 claude
 ```
 
-Now use web search in Claude Code - it works with any provider!
+이제 Claude Code에서 웹 검색을 사용하면 모든 프로바이더에서 작동합니다.
 
-## How It Works
+## 작동 방식
 
-When Claude Code sends a web search request, LiteLLM:
-1. Intercepts the native `web_search` tool
-2. Converts it to LiteLLM's standard format
-3. Executes the search via Perplexity/Tavily
-4. Returns the final answer to Claude Code
+Claude Code가 웹 검색 요청을 보내면 LiteLLM은 다음을 수행합니다.
+1. 네이티브 `web_search` 도구를 가로챕니다.
+2. LiteLLM의 표준 형식으로 변환합니다.
+3. Perplexity/Tavily를 통해 검색을 실행합니다.
+4. 최종 답변을 Claude Code에 반환합니다.
 
 ```mermaid
 sequenceDiagram
@@ -104,23 +104,23 @@ sequenceDiagram
     LP-->>CC: Final answer with search results
 ```
 
-**Result**: One API call from Claude Code → Complete answer with search results
+**결과**: Claude Code의 API 호출 1회 → 검색 결과가 포함된 완성된 답변
 
-## Supported Providers
+## 지원 프로바이더
 
-| Provider | Native Web Search | With LiteLLM |
+| 프로바이더 | 네이티브 웹 검색 | LiteLLM 사용 시 |
 |----------|-------------------|--------------|
-| **Anthropic** | ✅ Yes | ✅ Yes |
-| **Bedrock** | ❌ No | ✅ Yes |
-| **Azure** | ❌ No | ✅ Yes |
-| **Vertex AI** | ❌ No | ✅ Yes |
-| **Other Providers** | ❌ No | ✅ Yes |
+| **Anthropic** | ✅ 예 | ✅ 예 |
+| **Bedrock** | ❌ 아니요 | ✅ 예 |
+| **Azure** | ❌ 아니요 | ✅ 예 |
+| **Vertex AI** | ❌ 아니요 | ✅ 예 |
+| **기타 프로바이더** | ❌ 아니요 | ✅ 예 |
 
-## Search Providers
+## 검색 프로바이더
 
-Configure which search provider to use. LiteLLM supports multiple search providers:
+사용할 검색 프로바이더를 설정합니다. LiteLLM은 여러 검색 프로바이더를 지원합니다.
 
-| Provider | `search_provider` Value | Environment Variable |
+| 프로바이더 | `search_provider` 값 | 환경 변수 |
 |----------|------------------------|----------------------|
 | **Perplexity AI** | `perplexity` | `PERPLEXITYAI_API_KEY` |
 | **Tavily** | `tavily` | `TAVILY_API_KEY` |
@@ -129,32 +129,32 @@ Configure which search provider to use. LiteLLM supports multiple search provide
 | **Google PSE** | `google_pse` | `GOOGLE_PSE_API_KEY`, `GOOGLE_PSE_ENGINE_ID` |
 | **DataForSEO** | `dataforseo` | `DATAFORSEO_LOGIN`, `DATAFORSEO_PASSWORD` |
 | **Firecrawl** | `firecrawl` | `FIRECRAWL_API_KEY` |
-| **SearXNG** | `searxng` | `SEARXNG_API_BASE` (required) |
+| **SearXNG** | `searxng` | `SEARXNG_API_BASE` (필수) |
 | **Linkup** | `linkup` | `LINKUP_API_KEY` |
 
-See [all supported search providers](../search/index.md) for detailed setup instructions and provider-specific parameters.
+자세한 설정 지침과 프로바이더별 파라미터는 [지원되는 모든 검색 프로바이더](../search/index.md)를 참조하세요.
 
-## Configuration Options
+## 설정 옵션
 
-### WebSearch Interception Parameters
+### WebSearch 가로채기 파라미터
 
-| Parameter | Type | Required | Description | Example |
+| 파라미터 | 타입 | 필수 여부 | 설명 | 예제 |
 |-----------|------|----------|-------------|---------|
-| `enabled_providers` | List[String] | Yes | List of providers to enable web search interception for | `[bedrock, azure, vertex_ai]` |
-| `search_tool_name` | String | No | Specific search tool from `search_tools` config. If not set, uses first available search tool. | `perplexity-search` |
+| `enabled_providers` | List[String] | 예 | 웹 검색 가로채기를 활성화할 프로바이더 목록 | `[bedrock, azure, vertex_ai]` |
+| `search_tool_name` | String | 아니요 | `search_tools` 설정의 특정 검색 도구입니다. 설정하지 않으면 사용 가능한 첫 번째 검색 도구를 사용합니다. | `perplexity-search` |
 
-### Supported Provider Values
+### 지원되는 프로바이더 값
 
-Use these values in `enabled_providers`:
+`enabled_providers`에는 다음 값을 사용합니다.
 
-| Provider | Value | Description |
+| 프로바이더 | 값 | 설명 |
 |----------|-------|-------------|
-| AWS Bedrock | `bedrock` | Amazon Bedrock Claude models |
-| Azure OpenAI | `azure` | Azure-hosted models |
-| Google Vertex AI | `vertex_ai` | Google Cloud Vertex AI |
-| Any Other | Provider name | Any LiteLLM-supported provider |
+| AWS Bedrock | `bedrock` | Amazon Bedrock Claude 모델 |
+| Azure OpenAI | `azure` | Azure에서 호스팅되는 모델 |
+| Google Vertex AI | `vertex_ai` | `Google Cloud Vertex AI` |
+| 기타 | 프로바이더 이름 | LiteLLM이 지원하는 모든 프로바이더 |
 
-### Complete Configuration Example
+### 전체 설정 예제
 
 ```yaml showLineNumbers title="Complete config.yaml"
 model_list:
@@ -170,13 +170,13 @@ model_list:
       api_key: os.environ/AZURE_API_KEY
 
 litellm_settings:
-  callbacks: ["websearch_interception"]
-  websearch_interception_params:
-    enabled_providers:
-      - bedrock        # Enable for AWS Bedrock
-      - azure          # Enable for Azure OpenAI
-      - vertex_ai      # Enable for Google Vertex
-    search_tool_name: perplexity-search  # Optional: use specific search tool
+  callbacks:
+    - websearch_interception:
+        enabled_providers:
+          - bedrock        # Enable for AWS Bedrock
+          - azure          # Enable for Azure OpenAI
+          - vertex_ai      # Enable for Google Vertex
+        search_tool_name: perplexity-search  # Optional: use specific search tool
 
 # Configure search tools
 search_tools:
@@ -191,13 +191,13 @@ search_tools:
       api_key: os.environ/TAVILY_API_KEY
 ```
 
-**How search tool selection works:**
-- If `search_tool_name` is specified → Uses that specific search tool
-- If `search_tool_name` is not specified → Uses first search tool in `search_tools` list
-- In example above: Without `search_tool_name`, would use `perplexity-search` (first in list)
+**검색 도구 선택 방식:**
+- `search_tool_name`이 지정된 경우 → 해당 특정 검색 도구를 사용합니다.
+- `search_tool_name`이 지정되지 않은 경우 → `search_tools` 목록의 첫 번째 검색 도구를 사용합니다.
+- 위 예제에서 `search_tool_name`이 없으면 `perplexity-search`(목록의 첫 번째 항목)를 사용합니다.
 
-## Related
+## 관련 문서
 
-- [Claude Code Quickstart](./claude_responses_api.md)
-- [Claude Code Cost Tracking](./claude_code_customer_tracking.md)
-- [Using Non-Anthropic Models](./claude_non_anthropic_models.md)
+- [Claude Code 빠른 시작](./claude_responses_api.md)
+- [Claude Code 비용 추적](./claude_code_customer_tracking.md)
+- [Non-Anthropic 모델 사용](./claude_non_anthropic_models.md)

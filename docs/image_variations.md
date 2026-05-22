@@ -1,8 +1,8 @@
 # [BETA] Image Variations
 
-OpenAI's `/image/variations` endpoint is now supported.
+OpenAI의 `/image/variations` endpoint가 이제 지원됩니다.
 
-## Quick Start
+## 빠른 시작
 
 ```python
 from litellm import image_variation
@@ -25,7 +25,7 @@ response = image_variation(
 print(response)
 ```
 
-## Supported Providers
+## 지원 프로바이더
 
 - OpenAI
 - Topaz

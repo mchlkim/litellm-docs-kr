@@ -3,52 +3,52 @@ import TabItem from '@theme/TabItem';
 
 # Hyperbolic
 
-## Overview
+## 개요
 
-| Property | Details |
+| 속성 | 세부 정보 |
 |-------|-------|
-| Description | Hyperbolic provides access to the latest models at a fraction of legacy cloud costs, with OpenAI-compatible APIs for LLMs, image generation, and more. |
-| Provider Route on LiteLLM | `hyperbolic/` |
-| Link to Provider Doc | [Hyperbolic Documentation ↗](https://docs.hyperbolic.xyz) |
-| Base URL | `https://api.hyperbolic.xyz/v1` |
-| Supported Operations | [`/chat/completions`](#sample-usage) |
+| 설명 | Hyperbolic은 기존 클라우드 비용보다 훨씬 낮은 비용으로 최신 모델을 사용할 수 있게 하며, LLM, 이미지 생성 등을 위한 OpenAI 호환 API를 제공합니다. |
+| LiteLLM 제공자 라우트 | `hyperbolic/` |
+| 제공자 문서 링크 | [Hyperbolic Documentation ↗](https://docs.hyperbolic.xyz) |
+| 기본 URL | `https://api.hyperbolic.xyz/v1` |
+| 지원 작업 | [`/chat/completions`](#sample-usage) |
 
 <br />
 <br />
 
 https://docs.hyperbolic.xyz
 
-**We support ALL Hyperbolic models, just set `hyperbolic/` as a prefix when sending completion requests**
+**모든 Hyperbolic 모델을 지원합니다. completion 요청을 보낼 때 `hyperbolic/`을 접두사로 설정하기만 하면 됩니다.**
 
-## Available Models
+## 사용 가능한 모델
 
-### Language Models
+### 언어 모델
 
-| Model | Description | Context Window | Pricing per 1M tokens |
+| 모델 | 설명 | 컨텍스트 창 | 토큰 100만 개당 가격 |
 |-------|-------------|----------------|----------------------|
-| `hyperbolic/deepseek-ai/DeepSeek-V3` | DeepSeek V3 - Fast and efficient | 131,072 tokens | $0.25 |
-| `hyperbolic/deepseek-ai/DeepSeek-V3-0324` | DeepSeek V3 March 2024 version | 131,072 tokens | $0.25 |
-| `hyperbolic/deepseek-ai/DeepSeek-R1` | DeepSeek R1 - Reasoning model | 131,072 tokens | $2.00 |
-| `hyperbolic/deepseek-ai/DeepSeek-R1-0528` | DeepSeek R1 May 2028 version | 131,072 tokens | $0.25 |
-| `hyperbolic/Qwen/Qwen2.5-72B-Instruct` | Qwen 2.5 72B Instruct | 131,072 tokens | $0.40 |
-| `hyperbolic/Qwen/Qwen2.5-Coder-32B-Instruct` | Qwen 2.5 Coder 32B for code generation | 131,072 tokens | $0.20 |
-| `hyperbolic/Qwen/Qwen3-235B-A22B` | Qwen 3 235B A22B variant | 131,072 tokens | $2.00 |
+| `hyperbolic/deepseek-ai/DeepSeek-V3` | DeepSeek V3 - 빠르고 효율적 | 131,072 tokens | $0.25 |
+| `hyperbolic/deepseek-ai/DeepSeek-V3-0324` | DeepSeek V3 2024년 3월 버전 | 131,072 tokens | $0.25 |
+| `hyperbolic/deepseek-ai/DeepSeek-R1` | DeepSeek R1 - 추론 모델 | 131,072 tokens | $2.00 |
+| `hyperbolic/deepseek-ai/DeepSeek-R1-0528` | DeepSeek R1 2028년 5월 버전 | 131,072 tokens | $0.25 |
+| `hyperbolic/Qwen/Qwen2.5-72B-Instruct` | Qwen 2.5 72B Instruct 모델 | 131,072 tokens | $0.40 |
+| `hyperbolic/Qwen/Qwen2.5-Coder-32B-Instruct` | 코드 생성용 Qwen 2.5 Coder 32B | 131,072 tokens | $0.20 |
+| `hyperbolic/Qwen/Qwen3-235B-A22B` | Qwen 3 235B A22B 변형 | 131,072 tokens | $2.00 |
 | `hyperbolic/Qwen/QwQ-32B` | Qwen QwQ 32B | 131,072 tokens | $0.20 |
-| `hyperbolic/meta-llama/Llama-3.3-70B-Instruct` | Llama 3.3 70B Instruct | 131,072 tokens | $0.80 |
-| `hyperbolic/meta-llama/Meta-Llama-3.1-405B-Instruct` | Llama 3.1 405B Instruct | 131,072 tokens | $5.00 |
+| `hyperbolic/meta-llama/Llama-3.3-70B-Instruct` | Llama 3.3 70B Instruct 모델 | 131,072 tokens | $0.80 |
+| `hyperbolic/meta-llama/Meta-Llama-3.1-405B-Instruct` | Llama 3.1 405B Instruct 모델 | 131,072 tokens | $5.00 |
 | `hyperbolic/moonshotai/Kimi-K2-Instruct` | Kimi K2 Instruct | 131,072 tokens | $2.00 |
 
-## Required Variables
+## 필수 변수
 
 ```python showLineNumbers title="Environment Variables"
 os.environ["HYPERBOLIC_API_KEY"] = ""  # your Hyperbolic API key
 ```
 
-Get your API key from [Hyperbolic dashboard](https://app.hyperbolic.ai).
+[Hyperbolic dashboard](https://app.hyperbolic.ai)에서 API 키를 가져오세요.
 
-## Usage - LiteLLM Python SDK
+## 사용법 - LiteLLM Python SDK
 
-### Non-streaming
+### 비스트리밍
 
 ```python showLineNumbers title="Hyperbolic Non-streaming Completion"
 import os
@@ -68,7 +68,7 @@ response = completion(
 print(response)
 ```
 
-### Streaming
+### 스트리밍
 
 ```python showLineNumbers title="Hyperbolic Streaming Completion"
 import os
@@ -90,7 +90,7 @@ for chunk in response:
     print(chunk)
 ```
 
-### Function Calling
+### 함수 호출
 
 ```python showLineNumbers title="Hyperbolic Function Calling"
 import os
@@ -133,9 +133,9 @@ response = completion(
 print(response)
 ```
 
-## Usage - LiteLLM Proxy
+## 사용법 - LiteLLM Proxy
 
-Add the following to your LiteLLM Proxy configuration file:
+LiteLLM Proxy 설정 파일에 다음 내용을 추가하세요.
 
 ```yaml showLineNumbers title="config.yaml"
 model_list:
@@ -155,7 +155,7 @@ model_list:
       api_key: os.environ/HYPERBOLIC_API_KEY
 ```
 
-Start your LiteLLM Proxy server:
+LiteLLM Proxy 서버를 시작하세요.
 
 ```bash showLineNumbers title="Start LiteLLM Proxy"
 litellm --config config.yaml
@@ -268,35 +268,35 @@ curl http://localhost:4000/v1/chat/completions \
 </TabItem>
 </Tabs>
 
-For more detailed information on using the LiteLLM Proxy, see the [LiteLLM Proxy documentation](../providers/litellm_proxy).
+LiteLLM Proxy 사용에 대한 자세한 내용은 [LiteLLM Proxy documentation](../providers/litellm_proxy)을 참고하세요.
 
-## Supported OpenAI Parameters
+## 지원되는 OpenAI 파라미터
 
-Hyperbolic supports the following OpenAI-compatible parameters:
+Hyperbolic은 다음 OpenAI 호환 파라미터를 지원합니다.
 
-| Parameter | Type | Description |
+| 파라미터 | 타입 | 설명 |
 |-----------|------|-------------|
-| `messages` | array | **Required**. Array of message objects with 'role' and 'content' |
-| `model` | string | **Required**. Model ID (e.g., deepseek-ai/DeepSeek-V3, Qwen/Qwen2.5-72B-Instruct) |
-| `stream` | boolean | Optional. Enable streaming responses |
-| `temperature` | float | Optional. Sampling temperature (0.0 to 2.0) |
-| `top_p` | float | Optional. Nucleus sampling parameter |
-| `max_tokens` | integer | Optional. Maximum tokens to generate |
-| `frequency_penalty` | float | Optional. Penalize frequent tokens |
-| `presence_penalty` | float | Optional. Penalize tokens based on presence |
-| `stop` | string/array | Optional. Stop sequences |
-| `n` | integer | Optional. Number of completions to generate |
-| `tools` | array | Optional. List of available tools/functions |
-| `tool_choice` | string/object | Optional. Control tool/function calling |
-| `response_format` | object | Optional. Response format specification |
-| `seed` | integer | Optional. Random seed for reproducibility |
-| `user` | string | Optional. User identifier |
+| `messages` | array | **필수**. 'role'과 'content'가 포함된 메시지 객체 배열 |
+| `model` | string | **필수**. 모델 ID(예: deepseek-ai/DeepSeek-V3, Qwen/Qwen2.5-72B-Instruct) |
+| `stream` | boolean | 선택 사항. 스트리밍 응답 활성화 |
+| `temperature` | float | 선택 사항. 샘플링 온도(0.0~2.0) |
+| `top_p` | float | 선택 사항. Nucleus sampling 파라미터 |
+| `max_tokens` | integer | 선택 사항. 생성할 최대 토큰 수 |
+| `frequency_penalty` | float | 선택 사항. 자주 등장하는 토큰에 패널티 적용 |
+| `presence_penalty` | float | 선택 사항. 등장 여부를 기준으로 토큰에 패널티 적용 |
+| `stop` | string/array | 선택 사항. 중지 시퀀스 |
+| `n` | integer | 선택 사항. 생성할 completion 수 |
+| `tools` | array | 선택 사항. 사용 가능한 도구/함수 목록 |
+| `tool_choice` | string/object | 선택 사항. 도구/함수 호출 제어 |
+| `response_format` | object | 선택 사항. 응답 형식 명세 |
+| `seed` | integer | 선택 사항. 재현성을 위한 난수 시드 |
+| `user` | string | 선택 사항. 사용자 식별자 |
 
-## Advanced Usage
+## 고급 사용법
 
-### Custom API Base
+### 사용자 지정 API Base
 
-If you're using a custom Hyperbolic deployment:
+사용자 지정 Hyperbolic 배포를 사용하는 경우:
 
 ```python showLineNumbers title="Custom API Base"
 import litellm
@@ -309,22 +309,22 @@ response = litellm.completion(
 )
 ```
 
-### Rate Limits
+### 사용량 제한
 
-Hyperbolic offers different tiers:
-- **Basic**: 60 requests per minute (RPM)
+Hyperbolic은 여러 티어를 제공합니다.
+- **Basic**: 분당 요청 60건(RPM)
 - **Pro**: 600 RPM
-- **Enterprise**: Custom limits
+- **엔터프라이즈**: 사용자 지정 제한
 
-## Pricing
+## 가격
 
-Hyperbolic offers competitive pay-as-you-go pricing with no hidden fees or long-term commitments. See the model table above for specific pricing per million tokens.
+Hyperbolic은 숨겨진 수수료나 장기 약정 없이 경쟁력 있는 종량제 가격을 제공합니다. 토큰 100만 개당 구체적인 가격은 위의 모델 표를 참고하세요.
 
-### Precision Options
-- **BF16**: Best precision and performance, suitable for tasks where accuracy is critical
-- **FP8**: Optimized for efficiency and speed, ideal for high-throughput applications at lower cost
+### 정밀도 옵션
+- **BF16**: 가장 좋은 정밀도와 성능을 제공하며, 정확도가 중요한 작업에 적합합니다.
+- **FP8**: 효율성과 속도에 최적화되어 있으며, 더 낮은 비용의 고처리량 애플리케이션에 적합합니다.
 
-## Additional Resources
+## 추가 리소스
 
 - [Hyperbolic Official Documentation](https://docs.hyperbolic.xyz)
 - [Hyperbolic Dashboard](https://app.hyperbolic.ai)

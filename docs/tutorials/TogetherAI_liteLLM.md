@@ -1,4 +1,4 @@
-# Llama2 Together AI Tutorial
+# Llama2 Together AI 튜토리얼 {#llama2-together-ai-tutorial}
 https://together.ai/
 
 
@@ -16,7 +16,7 @@ user_message = "Hello, whats the weather in San Francisco??"
 messages = [{ "content": user_message,"role": "user"}]
 ```
 
-## Calling Llama2 on TogetherAI
+## TogetherAI에서 Llama2 호출하기 {#calling-llama2-on-togetherai}
 https://api.together.xyz/playground/chat?model=togethercomputer%2Fllama-2-70b-chat
 
 ```python
@@ -32,12 +32,12 @@ print(response)
 ```
 
 
-LiteLLM handles the prompt formatting for Together AI's Llama2 models as well, converting your message to the 
-`[INST] <your instruction> [/INST]` format required. 
+LiteLLM은 Together AI의 Llama2 모델에 대한 프롬프트 형식 지정도 처리하며, 메시지를 필요한 
+`[INST] <your instruction> [/INST]` 형식으로 변환합니다. 
 
-[Implementation Code](https://github.com/BerriAI/litellm/blob/64f3d3c56ef02ac5544983efc78293de31c1c201/litellm/llms/prompt_templates/factory.py#L17)
+[구현 코드](https://github.com/BerriAI/litellm/blob/64f3d3c56ef02ac5544983efc78293de31c1c201/litellm/llms/prompt_templates/factory.py#L17)
 
-## With Streaming
+## 스트리밍 사용하기 {#with-streaming}
 
 
 ```python
@@ -48,15 +48,15 @@ for chunk in response:
 ```
 
 
-## Use Llama2 variants with Custom Prompt Templates
+## 사용자 지정 프롬프트 템플릿으로 Llama2 변형 사용하기 {#use-llama2-variants-with-custom-prompt-templates}
 
-Using a version of Llama2 on TogetherAI that needs custom prompt formatting? 
+사용자 지정 프롬프트 형식 지정이 필요한 TogetherAI의 Llama2 버전을 사용하고 있나요? 
 
-You can create a custom prompt template. 
+사용자 지정 프롬프트 템플릿을 만들 수 있습니다. 
 
-Let's make one for `OpenAssistant/llama2-70b-oasst-sft-v10`!
+`OpenAssistant/llama2-70b-oasst-sft-v10`용 템플릿을 하나 만들어 보겠습니다.
 
-The accepted template format is: [Reference](https://huggingface.co/OpenAssistant/llama2-70b-oasst-sft-v10)
+허용되는 템플릿 형식은 다음과 같습니다. [참조](https://huggingface.co/OpenAssistant/llama2-70b-oasst-sft-v10)
 ```
 """
 <|im_start|>system
@@ -67,7 +67,7 @@ The accepted template format is: [Reference](https://huggingface.co/OpenAssistan
 """
 ```
 
-Let's register our custom prompt template: [Implementation Code](https://github.com/BerriAI/litellm/blob/64f3d3c56ef02ac5544983efc78293de31c1c201/litellm/llms/prompt_templates/factory.py#L77)
+사용자 지정 프롬프트 템플릿을 등록해 보겠습니다. [구현 코드](https://github.com/BerriAI/litellm/blob/64f3d3c56ef02ac5544983efc78293de31c1c201/litellm/llms/prompt_templates/factory.py#L77)
 ```python
 import litellm 
 
@@ -79,7 +79,7 @@ litellm.register_prompt_template(
 )
 ```
 
-Let's use it! 
+이제 사용해 보겠습니다.
 
 ```python
 from litellm import completion 
@@ -92,7 +92,7 @@ messages=[{"role":"user", "content": "Write me a poem about the blue sky"}]
 completion(model="together_ai/OpenAssistant/llama2-70b-oasst-sft-v10", messages=messages)
 ```
 
-**Complete Code**
+**전체 코드**
 
 ```python
 import litellm 
@@ -115,7 +115,7 @@ response = completion(model="together_ai/OpenAssistant/llama2-70b-oasst-sft-v10"
 print(response)
 ```
 
-**Output**
+**출력**
 ```json
 {
   "choices": [

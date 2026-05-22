@@ -2,9 +2,9 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Image from '@theme/IdealImage';
 
-# Agent Gateway (A2A Protocol) - Overview
+# 에이전트 게이트웨이(A2A Protocol) 개요 {#agent-gatewaya2a-protocol}
 
-Add A2A Agents on LiteLLM AI Gateway, Invoke agents in A2A Protocol, track request/response logs in LiteLLM Logs. Manage which Teams, Keys can access which Agents onboarded.
+LiteLLM AI Gateway에 A2A 에이전트를 추가하고, A2A Protocol로 에이전트를 호출하며, LiteLLM 로그에서 요청/응답 로그를 추적합니다. 등록된 에이전트에 어떤 팀과 키가 접근할 수 있는지도 관리할 수 있습니다.
 
 <Image 
   img={require('../img/a2a_gateway.png')}
@@ -14,73 +14,73 @@ Add A2A Agents on LiteLLM AI Gateway, Invoke agents in A2A Protocol, track reque
 <br />
 <br />
 
-| Feature | Supported | 
+| 기능 | 지원 여부 |
 |---------|-----------|
-| Supported Agent Providers | A2A, Vertex AI Agent Engine, LangGraph, Azure AI Foundry, Bedrock AgentCore, Pydantic AI |
-| Logging | ✅ |
-| Load Balancing | ✅ |
-| Streaming | ✅ |
-| [Iteration Budgets](a2a_iteration_budgets) | ✅ |
+| 지원 에이전트 제공자 | `A2A`, `Vertex AI Agent Engine`, `LangGraph`, `Azure AI Foundry`, `Bedrock AgentCore`, `Pydantic AI` |
+| 로깅 | ✅ |
+| 로드 밸런싱 | ✅ |
+| 스트리밍 | ✅ |
+| [반복 예산](a2a_iteration_budgets) | ✅ |
 
 
 :::tip
 
-LiteLLM follows the [A2A (Agent-to-Agent) Protocol](https://github.com/google/A2A) for invoking agents.
+LiteLLM은 에이전트 호출에 [A2A(Agent-to-Agent) Protocol](https://github.com/google/A2A)을 따릅니다.
 
 :::
 
-## Adding your Agent
+## 에이전트 추가 {#agent-addition}
 
-### Add A2A Agents
+### A2A 에이전트 추가 {#a2a-agent}
 
-You can add A2A-compatible agents through the LiteLLM Admin UI.
+LiteLLM 관리자 UI에서 A2A 호환 에이전트를 추가할 수 있습니다.
 
-1. Navigate to the **Agents** tab
-2. Click **Add Agent**
-3. Enter the agent name (e.g., `ij-local`) and the URL of your A2A agent
+1. **Agents** 탭으로 이동합니다.
+2. **Add Agent**를 클릭합니다.
+3. 에이전트 이름(예: `ij-local`)과 A2A 에이전트 URL을 입력합니다.
 
 <Image 
   img={require('../img/add_agent_1.png')}
   style={{width: '80%', display: 'block', margin: '0'}}
 />
 
-The URL should be the invocation URL for your A2A agent (e.g., `http://localhost:10001`).
+URL은 A2A 에이전트의 호출 URL이어야 합니다(예: `http://localhost:10001`).
 
 
-### Add Azure AI Foundry Agents
+### Azure AI Foundry 에이전트 추가 {#azure-ai-foundry-agent}
 
-Follow [this guide, to add your azure ai foundry agent to LiteLLM Agent Gateway](./providers/azure_ai_agents#litellm-a2a-gateway)
+[이 가이드](/docs/providers/azure_ai_agents#litellm-a2a-gateway)에 따라 Azure AI Foundry 에이전트를 LiteLLM Agent Gateway에 추가하세요.
 
-### Add Vertex AI Agent Engine
+### Vertex AI Agent Engine 추가 {#vertex-ai-agent-engine}
 
-Follow [this guide, to add your Vertex AI Agent Engine to LiteLLM Agent Gateway](./providers/vertex_ai_agent_engine)
+[이 가이드](./providers/vertex_ai_agent_engine)에 따라 Vertex AI Agent Engine을 LiteLLM Agent Gateway에 추가하세요.
 
-### Add Bedrock AgentCore Agents
+### Bedrock AgentCore 에이전트 추가 {#bedrock-agentcore-agent}
 
-Follow [this guide, to add your bedrock agentcore agent to LiteLLM Agent Gateway](./providers/bedrock_agentcore#litellm-a2a-gateway)
+[이 가이드](/docs/providers/bedrock_agentcore#litellm-a2a-gateway)에 따라 Bedrock AgentCore 에이전트를 LiteLLM Agent Gateway에 추가하세요.
 
-### Add LangGraph Agents
+### LangGraph 에이전트 추가 {#langgraph-agent}
 
-Follow [this guide, to add your langgraph agent to LiteLLM Agent Gateway](./providers/langgraph#litellm-a2a-gateway)
+[이 가이드](/docs/providers/langgraph#litellm-a2a-gateway)에 따라 LangGraph 에이전트를 LiteLLM Agent Gateway에 추가하세요.
 
-### Add Pydantic AI Agents
+### Pydantic AI 에이전트 추가 {#pydantic-ai-agent}
 
-Follow [this guide, to add your pydantic ai agent to LiteLLM Agent Gateway](./providers/pydantic_ai_agent#litellm-a2a-gateway)
+[이 가이드](/docs/providers/pydantic_ai_agent#litellm-a2a-gateway)에 따라 Pydantic AI 에이전트를 LiteLLM Agent Gateway에 추가하세요.
 
-## Invoking your Agents
+## 에이전트 호출 {#agent-invocation}
 
-See the [Invoking A2A Agents](./a2a_invoking_agents) guide to learn how to call your agents using:
-- **A2A SDK** - Native A2A protocol with full support for tasks and artifacts
-- **OpenAI SDK** - Familiar `/chat/completions` interface with `a2a/` model prefix
+[A2A 에이전트 호출](./a2a_invoking_agents) 가이드에서 다음 방식으로 에이전트를 호출하는 방법을 확인하세요.
+- **A2A SDK** - task와 artifact를 완전히 지원하는 네이티브 A2A protocol
+- **OpenAI SDK** - `a2a/` model prefix를 사용하는 익숙한 `/chat/completions` 인터페이스
 
-## Tracking Agent Logs
+## 에이전트 로그 추적 {#agent-log-tracking}
 
-After invoking an agent, you can view the request logs in the LiteLLM **Logs** tab.
+에이전트를 호출한 뒤 LiteLLM **로그** 탭에서 요청 로그를 확인할 수 있습니다.
 
-The logs show:
-- **Request/Response content** sent to and received from the agent
-- **User, Key, Team** information for tracking who made the request
-- **Latency and cost** metrics
+로그에는 다음 정보가 표시됩니다.
+- 에이전트로 보내고 받은 **요청/응답 내용**
+- 요청자를 추적하기 위한 **user, key, team** 정보
+- **latency 및 cost** 지표
 
 <Image 
   img={require('../img/agent2.png')}
@@ -88,23 +88,23 @@ The logs show:
 />
 
 
-## Forwarding LiteLLM Context Headers
+## LiteLLM 컨텍스트 헤더 전달
 
-When LiteLLM invokes your A2A agent, it sends special headers that enable:
-- **Trace Grouping**: All LLM calls from the same agent execution appear under one trace
-- **Agent Spend Tracking**: Costs are attributed to the specific agent
+LiteLLM이 A2A 에이전트를 호출할 때 다음 기능을 가능하게 하는 특별한 헤더를 보냅니다.
+- **trace grouping**: 같은 에이전트 실행에서 발생한 모든 LLM 호출이 하나의 trace 아래에 표시됩니다.
+- **에이전트 비용 추적**: 비용이 특정 에이전트에 귀속됩니다.
 
-| Header | Purpose |
+| 헤더 | 목적 |
 |--------|---------|
-| `X-LiteLLM-Trace-Id` | Links all LLM calls to the same execution flow |
-| `X-LiteLLM-Agent-Id` | Attributes spend to the correct agent |
+| `X-LiteLLM-Trace-Id` | 모든 LLM 호출을 같은 실행 흐름에 연결 |
+| `X-LiteLLM-Agent-Id` | 지출을 올바른 에이전트에 귀속 |
 
 
-To enable these features, your A2A server must **forward these headers** to any LLM calls it makes back to LiteLLM.
+이 기능을 활성화하려면 A2A 서버가 LiteLLM으로 다시 보내는 모든 LLM 호출에 대해 **이 헤더들을 전달**해야 합니다.
 
-### Implementation Steps
+### 구현 단계
 
-**Step 1: Extract headers from incoming A2A request**
+**1단계: 들어오는 A2A 요청에서 헤더 추출**
 ```python def get_litellm_headers(request) -> dict:
     """Extract X-LiteLLM-* headers from incoming A2A request."""
     all_headers = request.call_context.state.get('headers', {})
@@ -114,8 +114,8 @@ To enable these features, your A2A server must **forward these headers** to any 
     }
 ```
 
-**Step 2: Forward headers to your LLM calls**
-Pass the extracted headers when making calls back to LiteLLM:
+**2단계: LLM 호출에 헤더 전달**
+LiteLLM으로 다시 호출할 때 추출한 헤더를 전달합니다.
 <Tabs>
 <TabItem value="openai" label="OpenAI SDK" default>
 
@@ -183,77 +183,43 @@ response = httpx.post(
 </TabItem>
 </Tabs>
 
-### Result
+### 결과
 
-With header forwarding enabled, you'll see:
+헤더 전달이 활성화되면 다음을 볼 수 있습니다.
 
-**Trace Grouping in Langfuse:**
+**Langfuse의 trace grouping:**
 
 <Image
   img={require('../img/a2a_trace_grouping.png')}
   style={{width: '80%', display: 'block', margin: '0', borderRadius: '8px'}}
 />
 
-**Agent Spend Attribution:**
+**에이전트 지출 귀속:**
 
 <Image
   img={require('../img/a2a_agent_spend.png')}
   style={{width: '80%', display: 'block', margin: '0', borderRadius: '8px'}}
 />
 
-## API Reference
+## API 참조
 
-### Endpoint
+### 엔드포인트
 
 ```
 POST /a2a/{agent_name}/message/send
 ```
 
-### Authentication
+### 인증
 
-Include your LiteLLM Virtual Key in either of two headers — `x-litellm-api-key` is preferred when the inbound `Authorization` header may carry a token destined for the backend agent (e.g. when using the [convention-based passthrough](./a2a_agent_headers#method-3--convention-based-forwarding) to forward the caller's identity).
+`Authorization` 헤더에 LiteLLM Virtual Key를 포함합니다.
 
 ```
 Authorization: Bearer sk-your-litellm-key
-# or
-x-litellm-api-key: Bearer sk-your-litellm-key
 ```
 
-#### Per-agent permission check
+### 요청 형식
 
-After the virtual key is authenticated, LiteLLM checks whether the calling key (and its team) is allowed to invoke the requested agent. If not, the response is HTTP 403. See [Agent Permission Management](./a2a_agent_permissions) for the full intersection model and access groups.
-
-#### Trace ID enforcement (optional, per-agent)
-
-An agent can require every inbound request to carry a trace ID for cross-system audit threading. Set `require_trace_id_on_calls_to_agent: true` in the agent's `litellm_params`. When set, requests missing `x-litellm-trace-id` (or `x-litellm-session-id`) are rejected with HTTP 400.
-
-```bash title="Register an agent that requires inbound trace IDs" showLineNumbers
-curl -X POST http://localhost:4000/v1/agents \
-  -H "Authorization: Bearer sk-master-key" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "agent_name": "audit-critical-agent",
-    "agent_card_params": { ... },
-    "litellm_params": {
-      "require_trace_id_on_calls_to_agent": true
-    }
-  }'
-```
-
-The reverse direction — enforcing trace ID on **outbound** calls made by a key owned by an agent — is controlled by `require_trace_id_on_calls_by_agent` on the same `litellm_params` block.
-
-#### Sub-agent identity propagation
-
-When the backend agent itself calls LiteLLM (for chat completions or to invoke a sub-agent), LiteLLM forwards two headers to maintain trace continuity:
-
-- `X-LiteLLM-Trace-Id` — links all calls in the chain to a single trace
-- `X-LiteLLM-Agent-Id` — attributes spend to the originating agent
-
-The caller's **virtual key** and **end-user ID** are not automatically forwarded. If the downstream agent needs the user's identity, propagate it explicitly via [`extra_headers` or the `x-a2a-{agent_name_or_id}-{header}` convention](./a2a_agent_headers).
-
-### Request Format
-
-LiteLLM follows the [A2A JSON-RPC 2.0 specification](https://github.com/google/A2A):
+LiteLLM은 [A2A JSON-RPC 2.0 사양](https://github.com/google/A2A)을 따릅니다.
 
 ```json title="Request Body"
 {
@@ -270,7 +236,7 @@ LiteLLM follows the [A2A JSON-RPC 2.0 specification](https://github.com/google/A
 }
 ```
 
-### Response Format
+### 응답 형식
 
 ```json title="Response"
 {
@@ -292,8 +258,8 @@ LiteLLM follows the [A2A JSON-RPC 2.0 specification](https://github.com/google/A
 }
 ```
 
-## Agent Registry
+## 에이전트 레지스트리 {#agent-registry}
 
-Want to create a central registry so your team can discover what agents are available within your company?
+팀이 회사 안에서 사용할 수 있는 에이전트를 찾을 수 있도록 중앙 레지스트리를 만들고 싶으신가요?
 
-Use the [AI Hub](./proxy/ai_hub) to make agents public and discoverable across your organization. This allows developers to browse available agents without needing to rebuild them.
+[AI Hub](./proxy/ai_hub)를 사용해 에이전트를 조직 전체에 공개하고 검색 가능하게 만들 수 있습니다. 이를 통해 개발자는 에이전트를 다시 만들 필요 없이 사용 가능한 에이전트를 탐색할 수 있습니다.

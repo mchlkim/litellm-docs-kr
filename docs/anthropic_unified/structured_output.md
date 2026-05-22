@@ -1,27 +1,27 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Structured Output /v1/messages
+# 구조화된 출력 /v1/messages {#structured-output-v1messages}
 
-Use LiteLLM to call Anthropic's structured output feature via the `/v1/messages` endpoint.
+LiteLLM을 사용해 `/v1/messages` 엔드포인트로 Anthropic의 구조화된 출력 기능을 호출합니다.
 
-## Supported Providers
+## 지원 프로바이더
 
-| Provider | Supported | Notes |
+| Provider | 지원 여부 | 참고 |
 |----------|-----------|-------|
-| Anthropic | ✅ | Native support |
-| Azure AI (Anthropic models) | ✅ | Claude models on Azure AI |
-| Bedrock (Converse Anthropic models) | ✅ | Claude models via Bedrock Converse API |
-| Bedrock (Invoke Anthropic models) | ✅ | Claude models via Bedrock Invoke API |
+| Anthropic | ✅ | 네이티브 지원 |
+| Azure AI (Anthropic models) | ✅ | Azure AI의 Claude models |
+| Bedrock (Converse Anthropic models) | ✅ | Bedrock Converse API를 통한 Claude models |
+| Bedrock (Invoke Anthropic models) | ✅ | Bedrock Invoke API를 통한 Claude models |
 
-## Usage
+## 사용법
 
-### LiteLLM Proxy Server
+### LiteLLM Proxy 서버 {#litellm-proxy-server}
 
 <Tabs>
 <TabItem value="anthropic" label="Anthropic">
 
-1. Setup config.yaml
+1. config.yaml 설정
 
 ```yaml
 model_list:
@@ -31,13 +31,13 @@ model_list:
       api_key: os.environ/ANTHROPIC_API_KEY
 ```
 
-2. Start proxy
+2. Proxy 시작
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-3. Test it!
+3. 테스트
 
 ```bash
 curl http://localhost:4000/v1/messages \
@@ -74,7 +74,7 @@ curl http://localhost:4000/v1/messages \
 
 <TabItem value="azure_ai" label="Azure AI (Anthropic)">
 
-1. Setup config.yaml
+1. config.yaml 설정
 
 ```yaml
 model_list:
@@ -85,13 +85,13 @@ model_list:
       api_base: https://your-endpoint.inference.ai.azure.com
 ```
 
-2. Start proxy
+2. Proxy 시작
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-3. Test it!
+3. 테스트
 
 ```bash
 curl http://localhost:4000/v1/messages \
@@ -128,7 +128,7 @@ curl http://localhost:4000/v1/messages \
 
 <TabItem value="bedrock" label="Bedrock (Converse)">
 
-1. Setup config.yaml
+1. config.yaml 설정
 
 ```yaml
 model_list:
@@ -140,13 +140,13 @@ model_list:
       aws_region_name: us-west-2
 ```
 
-2. Start proxy
+2. Proxy 시작
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-3. Test it!
+3. 테스트
 
 ```bash
 curl http://localhost:4000/v1/messages \
@@ -183,7 +183,7 @@ curl http://localhost:4000/v1/messages \
 
 <TabItem value="bedrock_invoke" label="Bedrock (Invoke)">
 
-1. Setup config.yaml
+1. config.yaml 설정
 
 ```yaml
 model_list:
@@ -195,13 +195,13 @@ model_list:
       aws_region_name: us-west-2
 ```
 
-2. Start proxy
+2. Proxy 시작
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-3. Test it!
+3. 테스트
 
 ```bash
 curl http://localhost:4000/v1/messages \
@@ -238,7 +238,7 @@ curl http://localhost:4000/v1/messages \
 </TabItem>
 </Tabs>
 
-## Example Response
+## 예제 응답 {#example-response}
 
 ```json
 {
@@ -261,11 +261,11 @@ curl http://localhost:4000/v1/messages \
 }
 ```
 
-## Request Format
+## 요청 형식
 
 ### output_format
 
-The `output_format` parameter specifies the structured output format.
+`output_format` 파라미터는 구조화된 출력 형식을 지정합니다.
 
 ```json
 {
@@ -284,11 +284,11 @@ The `output_format` parameter specifies the structured output format.
 }
 ```
 
-#### Fields
+#### 필드 {#fields}
 
-- **type** (string): Must be `"json_schema"`
-- **schema** (object): A JSON Schema object defining the expected output structure
-  - **type** (string): The root type, typically `"object"`
-  - **properties** (object): Defines the fields and their types
-  - **required** (array): List of required field names
-  - **additionalProperties** (boolean): Set to `false` to enforce strict schema adherence
+- **type** (string): 반드시 `"json_schema"`여야 합니다.
+- **schema** (object): 예상 출력 구조를 정의하는 JSON Schema 객체입니다.
+  - **type** (string): 루트 타입이며, 일반적으로 `"object"`입니다.
+  - **properties** (object): 필드와 각 필드의 타입을 정의합니다.
+  - **required** (array): 필수 필드 이름 목록입니다.
+  - **additionalProperties** (boolean): 엄격한 스키마 준수를 강제하려면 `false`로 설정합니다.

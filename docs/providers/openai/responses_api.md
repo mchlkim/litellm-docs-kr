@@ -1,14 +1,14 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# OpenAI - Response API
+# `OpenAI Responses API`
 
-## Usage
+## 사용법
 
 ### LiteLLM Python SDK
 
 
-#### Non-streaming
+#### 비스트리밍
 ```python showLineNumbers title="OpenAI Non-streaming Response"
 import litellm
 
@@ -22,7 +22,7 @@ response = litellm.responses(
 print(response)
 ```
 
-#### Streaming
+#### 스트리밍
 ```python showLineNumbers title="OpenAI Streaming Response"
 import litellm
 
@@ -53,9 +53,9 @@ response = litellm.responses(
 print(response)
 ```
 
-For full details, see the [Web Search guide](../../completion/web_search.md).
+자세한 내용은 [Web Search 가이드](../../completion/web_search.md)를 참고하세요.
 
-#### Image Generation with Streaming
+#### 스트리밍을 사용한 이미지 생성
 ```python showLineNumbers title="OpenAI Streaming Image Generation"
 import litellm
 import base64
@@ -78,7 +78,7 @@ for event in stream:
             f.write(image_bytes)
 ```
 
-#### GET a Response
+#### Response 조회
 ```python showLineNumbers title="Get Response by ID"
 import litellm
 
@@ -103,7 +103,7 @@ print(retrieved_response)
 # retrieved_response = await litellm.aget_responses(response_id=response_id)
 ```
 
-#### DELETE a Response
+#### Response 삭제
 ```python showLineNumbers title="Delete Response by ID"
 import litellm
 
@@ -129,9 +129,9 @@ print(delete_response)
 ```
 
 
-### LiteLLM Proxy with OpenAI SDK
+### OpenAI SDK로 LiteLLM Proxy 사용
 
-1. Set up config.yaml
+1. config.yaml 설정
 
 ```yaml showLineNumbers title="OpenAI Proxy Configuration"
 model_list:
@@ -141,7 +141,7 @@ model_list:
       api_key: os.environ/OPENAI_API_KEY
 ```
 
-2. Start LiteLLM Proxy Server
+2. LiteLLM Proxy Server 시작
 
 ```bash title="Start LiteLLM Proxy Server"
 litellm --config /path/to/config.yaml
@@ -149,9 +149,9 @@ litellm --config /path/to/config.yaml
 # RUNNING on http://0.0.0.0:4000
 ```
 
-3. Use OpenAI SDK with LiteLLM Proxy
+3. LiteLLM Proxy에서 OpenAI SDK 사용
 
-#### Non-streaming
+#### 비스트리밍
 ```python showLineNumbers title="OpenAI Proxy Non-streaming Response"
 from openai import OpenAI
 
@@ -170,7 +170,7 @@ response = client.responses.create(
 print(response)
 ```
 
-#### Streaming
+#### 스트리밍
 ```python showLineNumbers title="OpenAI Proxy Streaming Response"
 from openai import OpenAI
 
@@ -191,7 +191,7 @@ for event in response:
     print(event)
 ```
 
-#### Image Generation with Streaming
+#### 스트리밍을 사용한 이미지 생성
 ```python showLineNumbers title="OpenAI Proxy Streaming Image Generation"
 from openai import OpenAI
 import base64
@@ -218,7 +218,7 @@ for event in stream:
 
 ```
 
-#### GET a Response
+#### Response 조회
 ```python showLineNumbers title="Get Response by ID with OpenAI SDK"
 from openai import OpenAI
 
@@ -243,7 +243,7 @@ retrieved_response = client.responses.retrieve(response_id)
 print(retrieved_response)
 ```
 
-#### DELETE a Response
+#### Response 삭제
 ```python showLineNumbers title="Delete Response by ID with OpenAI SDK"
 from openai import OpenAI
 
@@ -269,15 +269,15 @@ print(delete_response)
 ```
 
 
-## Supported Responses API Parameters
+## 지원되는 Responses API 파라미터
 
-| Provider | Supported Parameters |
+| Provider | 지원 파라미터 |
 |----------|---------------------|
-| `openai` | [All Responses API parameters are supported](https://github.com/BerriAI/litellm/blob/7c3df984da8e4dff9201e4c5353fdc7a2b441831/litellm/llms/openai/responses/transformation.py#L23) |
+| `openai` | [모든 Responses API 파라미터가 지원됩니다](https://github.com/BerriAI/litellm/blob/7c3df984da8e4dff9201e4c5353fdc7a2b441831/litellm/llms/openai/responses/transformation.py#L23) |
 
-## Reusable Prompts
+## 재사용 가능한 프롬프트 {#reusable-prompts}
 
-Use the `prompt` parameter to reference a stored prompt template and optionally supply variables.
+`prompt` 파라미터를 사용해 저장된 프롬프트 템플릿을 참조하고, 필요하면 변수를 제공할 수 있습니다.
 
 ```python showLineNumbers title="Stored Prompt"
 import litellm
@@ -297,7 +297,7 @@ response = litellm.responses(
 print(response)
 ```
 
-The same parameter is supported when calling the LiteLLM proxy with the OpenAI SDK:
+OpenAI SDK로 LiteLLM proxy를 호출할 때도 같은 파라미터가 지원됩니다.
 
 ```python showLineNumbers title="Stored Prompt via Proxy"
 from openai import OpenAI
@@ -364,7 +364,7 @@ print(response.output)
 </TabItem>
 <TabItem value="proxy" label="LiteLLM Proxy">
 
-1. Set up config.yaml
+1. config.yaml 설정
 
 ```yaml showLineNumbers title="OpenAI Proxy Configuration"
 model_list:
@@ -374,7 +374,7 @@ model_list:
       api_key: os.environ/OPENAI_API_KEY
 ```
 
-2. Start LiteLLM Proxy Server
+2. LiteLLM Proxy Server 시작
 
 ```bash title="Start LiteLLM Proxy Server"
 litellm --config /path/to/config.yaml
@@ -382,7 +382,7 @@ litellm --config /path/to/config.yaml
 # RUNNING on http://0.0.0.0:4000
 ```
 
-3. Test it!
+3. 테스트
 
 ```python showLineNumbers title="OpenAI Proxy Non-streaming Response"
 from openai import OpenAI
@@ -485,7 +485,7 @@ print(response_with_mcp_call)
 </TabItem>
 <TabItem value="proxy" label="LiteLLM Proxy">
 
-1. Set up config.yaml
+1. config.yaml 설정
 
 ```yaml showLineNumbers title="OpenAI Proxy Configuration"
 model_list:
@@ -495,7 +495,7 @@ model_list:
       api_key: os.environ/OPENAI_API_KEY
 ```
 
-2. Start LiteLLM Proxy Server
+2. LiteLLM Proxy Server 시작
 
 ```bash title="Start LiteLLM Proxy Server"
 litellm --config /path/to/config.yaml
@@ -503,7 +503,7 @@ litellm --config /path/to/config.yaml
 # RUNNING on http://0.0.0.0:4000
 ```
 
-3. Test it!
+3. 테스트
 
 ```python showLineNumbers title="MCP Tools with OpenAI SDK via LiteLLM Proxy"
 from openai import OpenAI
@@ -560,9 +560,9 @@ print(response_with_mcp_call)
 </Tabs>
 
 
-## Verbosity Parameter
+## Verbosity 파라미터
 
-The `verbosity` parameter is supported for the `responses` API.
+`responses` API에서는 `verbosity` 파라미터가 지원됩니다.
 
 <Tabs>
 <TabItem value="sdk" label="LiteLLM Python SDK">
@@ -691,13 +691,13 @@ final_response = litellm.responses(
 print(final_response.output)
 ```
 
-Set `parallel_tool_calls=False` to ensure zero or one tool is called per turn. [More details](https://platform.openai.com/docs/guides/function-calling#parallel-function-calling).
+턴마다 도구가 0개 또는 1개만 호출되도록 하려면 `parallel_tool_calls=False`를 설정하세요. [자세히 보기](https://platform.openai.com/docs/guides/function-calling#parallel-function-calling).
 
-## Tool Search & Namespaces
+## Tool Search 및 네임스페이스
 
-Tool search lets models dynamically load tools at runtime instead of sending every tool definition in the prompt. Group functions into **namespaces** and mark them with `defer_loading: true` — the model only loads the schemas it actually needs, saving tokens.
+Tool search를 사용하면 프롬프트에 모든 도구 정의를 보내는 대신, 모델이 런타임에 도구를 동적으로 로드할 수 있습니다. 함수를 **네임스페이스**로 그룹화하고 `defer_loading: true`로 표시하세요. 모델은 실제로 필요한 스키마만 로드하므로 토큰을 절약할 수 있습니다.
 
-Requires `gpt-5.4` or later. See [OpenAI Tool Search docs](https://developers.openai.com/api/docs/guides/tools-tool-search) for full details.
+`gpt-5.4` 이상이 필요합니다. 자세한 내용은 [OpenAI Tool Search 문서](https://developers.openai.com/api/docs/guides/tools-tool-search)를 참고하세요.
 
 <Tabs>
 <TabItem value="sdk" label="LiteLLM Python SDK">
@@ -785,7 +785,7 @@ for item in response.output:
 </TabItem>
 <TabItem value="proxy" label="LiteLLM Proxy">
 
-1. Set up config.yaml
+1. config.yaml 설정
 
 ```yaml showLineNumbers title="OpenAI Proxy Configuration"
 model_list:
@@ -795,7 +795,7 @@ model_list:
       api_key: os.environ/OPENAI_API_KEY
 ```
 
-2. Start LiteLLM Proxy Server
+2. LiteLLM Proxy Server 시작
 
 ```bash title="Start LiteLLM Proxy Server"
 litellm --config /path/to/config.yaml
@@ -803,7 +803,7 @@ litellm --config /path/to/config.yaml
 # RUNNING on http://0.0.0.0:4000
 ```
 
-3. Test it!
+3. 테스트
 
 ```python showLineNumbers title="Tool Search via OpenAI SDK with LiteLLM Proxy"
 from openai import OpenAI
@@ -845,9 +845,9 @@ print(response.output)
 </TabItem>
 </Tabs>
 
-### Tool Search via Chat Completions Bridge
+### Chat Completions Bridge를 통한 Tool Search
 
-You can also use tool search through the `/v1/chat/completions` endpoint by prefixing the model with `openai/responses/`. The request is routed through the Responses API but returns a standard chat completions response.
+모델 앞에 `openai/responses/`를 붙이면 `/v1/chat/completions` 엔드포인트를 통해서도 tool search를 사용할 수 있습니다. 요청은 Responses API를 통해 라우팅되지만 표준 chat completions 응답을 반환합니다.
 
 <Tabs>
 <TabItem value="sdk" label="LiteLLM Python SDK">
@@ -923,7 +923,7 @@ curl http://localhost:4000/v1/chat/completions \
 </TabItem>
 </Tabs>
 
-## Free-form Function Calling
+## 자유 형식 Function Calling
 
 <Tabs>
 <TabItem value="sdk" label="LiteLLM Python SDK">
@@ -977,7 +977,7 @@ print(response.output)
 </TabItem>
 </Tabs>
 
-## Context-Free Grammar 
+## 문맥 자유 문법
 
 <Tabs>
 <TabItem value="sdk" label="LiteLLM Python SDK">

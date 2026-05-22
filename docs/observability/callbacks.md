@@ -1,18 +1,18 @@
 # Callbacks
 
-## Use Callbacks to send Output Data to Posthog, Sentry etc
+## Callbacks로 출력 데이터를 Posthog, Sentry 등으로 보내기
 
-liteLLM provides `input_callbacks`, `success_callbacks` and `failure_callbacks`, making it easy for you to send data to a particular provider depending on the status of your responses.
+liteLLM은 `input_callbacks`, `success_callbacks`, `failure_callbacks`를 제공하므로 응답 상태에 따라 특정 provider로 데이터를 쉽게 보낼 수 있습니다.
 
 :::tip
-**New to LiteLLM Callbacks?**
+**LiteLLM Callbacks가 처음인가요?**
 
-- For proxy/server logging and observability, see the [Proxy Logging Guide](https://docs.litellm.ai/docs/proxy/logging).
-- To write your own callback logic, see the [Custom Callbacks Guide](https://docs.litellm.ai/docs/observability/custom_callback).
+- 프록시/서버 로깅과 관측성은 [Proxy Logging Guide](https://docs.litellm.ai/docs/proxy/logging)를 참고하세요.
+- 직접 callback 로직을 작성하려면 [Custom Callbacks Guide](https://docs.litellm.ai/docs/observability/custom_callback)를 참고하세요.
 :::
 
 
-### Supported Callback Integrations
+### 지원되는 Callback 통합
 
 - [Lunary](https://lunary.ai/docs)
 - [Langfuse](https://langfuse.com/docs)
@@ -26,18 +26,18 @@ liteLLM provides `input_callbacks`, `success_callbacks` and `failure_callbacks`,
 - [Arize](https://docs.arize.com/)
 - [PromptLayer](https://docs.promptlayer.com/)
 
-This is **not** an extensive list. Please check the dropdown for all logging integrations.
+이 목록은 **전체 목록이 아닙니다**. 모든 로깅 통합은 드롭다운에서 확인하세요.
 
-### Related Cookbooks
-Try out our cookbooks for code snippets and interactive demos:
+### 관련 Cookbooks
+코드 스니펫과 대화형 데모는 다음 cookbooks에서 확인할 수 있습니다.
 
-- [Langfuse Callback Example (Colab)](https://colab.research.google.com/github/BerriAI/litellm/blob/main/cookbook/logging_observability/LiteLLM_Langfuse.ipynb)
-- [Lunary Callback Example (Colab)](https://colab.research.google.com/github/BerriAI/litellm/blob/main/cookbook/logging_observability/LiteLLM_Lunary.ipynb)
-- [Arize Callback Example (Colab)](https://colab.research.google.com/github/BerriAI/litellm/blob/main/cookbook/logging_observability/LiteLLM_Arize.ipynb)
-- [Proxy + Langfuse Callback Example (Colab)](https://colab.research.google.com/github/BerriAI/litellm/blob/main/cookbook/logging_observability/LiteLLM_Proxy_Langfuse.ipynb)
-- [PromptLayer Callback Example (Colab)](https://colab.research.google.com/github/BerriAI/litellm/blob/main/cookbook/LiteLLM_PromptLayer.ipynb)
+- [Langfuse Callback 예제 (Colab)](https://colab.research.google.com/github/BerriAI/litellm/blob/main/cookbook/logging_observability/LiteLLM_Langfuse.ipynb)
+- [Lunary Callback 예제 (Colab)](https://colab.research.google.com/github/BerriAI/litellm/blob/main/cookbook/logging_observability/LiteLLM_Lunary.ipynb)
+- [Arize Callback 예제 (Colab)](https://colab.research.google.com/github/BerriAI/litellm/blob/main/cookbook/logging_observability/LiteLLM_Arize.ipynb)
+- [Proxy + Langfuse Callback 예제 (Colab)](https://colab.research.google.com/github/BerriAI/litellm/blob/main/cookbook/logging_observability/LiteLLM_Proxy_Langfuse.ipynb)
+- [PromptLayer Callback 예제 (Colab)](https://colab.research.google.com/github/BerriAI/litellm/blob/main/cookbook/LiteLLM_PromptLayer.ipynb)
 
-### Quick Start
+### 빠른 시작
 
 ```python
 from litellm import completion

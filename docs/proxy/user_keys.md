@@ -1,9 +1,9 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Langchain, OpenAI SDK, LlamaIndex, Instructor, Curl examples
+# Langchain, OpenAI SDK, LlamaIndex, Instructor, Curl 예제 {#langchain-openai-sdk-llamaindex-instructor-curl-examples}
 
-LiteLLM Proxy is **OpenAI-Compatible**, and supports:
+LiteLLM Proxy는 **OpenAI-Compatible**이며 다음을 지원합니다.
 * /chat/completions 
 * /embeddings
 * /completions 
@@ -11,52 +11,52 @@ LiteLLM Proxy is **OpenAI-Compatible**, and supports:
 * /moderations 
 * /audio/transcriptions
 * /audio/speech
-* [Assistants API endpoints](https://docs.litellm.ai/docs/assistants)
-* [Batches API endpoints](https://docs.litellm.ai/docs/batches)
-* [Fine-Tuning API endpoints](https://docs.litellm.ai/docs/fine_tuning)
+* [Assistants API 엔드포인트](https://docs.litellm.ai/docs/assistants)
+* [Batches API 엔드포인트](https://docs.litellm.ai/docs/batches)
+* [Fine-Tuning API 엔드포인트](https://docs.litellm.ai/docs/fine_tuning)
 
-LiteLLM Proxy is **Azure OpenAI-compatible**:
+LiteLLM Proxy는 **Azure OpenAI-compatible**입니다.
 * /chat/completions
 * /completions
 * /embeddings 
 
-LiteLLM Proxy is **Anthropic-compatible**: 
+LiteLLM Proxy는 **Anthropic-compatible**입니다.
 * /messages 
 
-LiteLLM Proxy is **Vertex AI compatible**:
-- [Supports ALL Vertex Endpoints](../vertex_ai)
+LiteLLM Proxy는 **Vertex AI compatible**입니다.
+- [모든 Vertex Endpoints 지원](../vertex_ai)
 
-This doc covers:
+이 문서에서 다루는 내용은 다음과 같습니다.
 
 *   /chat/completion
 *   /embedding
 
 
-These are **selected examples**. LiteLLM Proxy is **OpenAI-Compatible**, it works with any project that calls OpenAI. Just change the `base_url`, `api_key` and `model`.
+아래는 **선별된 예제**입니다. LiteLLM Proxy는 **OpenAI-Compatible**이므로 OpenAI를 호출하는 모든 프로젝트에서 작동합니다. `base_url`, `api_key`, `model`만 변경하면 됩니다.
 
-To pass provider-specific args, [go here](https://docs.litellm.ai/docs/completion/provider_specific_params#proxy-usage)
+provider별 인자를 전달하려면 [여기](https://docs.litellm.ai/docs/completion/provider_specific_params#proxy-usage)를 확인하세요.
 
-To drop unsupported params (E.g. frequency_penalty for bedrock with librechat), [go here](https://docs.litellm.ai/docs/completion/drop_params#openai-proxy-usage)
+지원되지 않는 파라미터를 제거하려면(예: librechat에서 bedrock에 사용하는 frequency_penalty) [여기](https://docs.litellm.ai/docs/completion/drop_params#openai-proxy-usage)를 확인하세요.
 
 
 :::info
 
-**Input, Output, Exceptions are mapped to the OpenAI format for all supported models**
+**지원되는 모든 모델에서 Input, Output, Exceptions는 OpenAI 형식으로 매핑됩니다.**
 
 :::
 
-How to send requests to the proxy, pass metadata, allow users to pass in their OpenAI API key
+proxy로 요청을 보내고, metadata를 전달하며, 사용자가 자신의 OpenAI API key를 전달할 수 있게 하는 방법입니다.
 
 ## `/chat/completions`
 
-### Request Format
+### 요청 형식
 
 <Tabs>
 
 
 <TabItem value="openai" label="OpenAI Python v1.0.0+">
 
-Set `extra_body={"metadata": { }}` to `metadata` you want to pass
+전달하려는 `metadata`에 `extra_body={"metadata": { }}`를 설정하세요.
 
 ```python
 import openai
@@ -89,12 +89,12 @@ print(response)
 </TabItem>
 <TabItem value="litellm_sdk" label="LiteLLM Python SDK">
 
-[**👉 Go Here**](../providers/litellm_proxy#send-all-sdk-requests-to-litellm-proxy)
+<a href="../providers/litellm_proxy#send-all-sdk-requests-to-litellm-proxy"><strong>👉 LiteLLM Proxy provider 문서로 이동</strong></a>
 
 </TabItem>
 <TabItem value="azureopenai" label="AzureOpenAI Python">
 
-Set `extra_body={"metadata": { }}` to `metadata` you want to pass
+전달하려는 `metadata`에 `extra_body={"metadata": { }}`를 설정하세요.
 
 ```python
 import openai
@@ -163,7 +163,7 @@ print(response)
 
 <TabItem value="Curl" label="Curl Request">
 
-Pass `metadata` as part of the request body
+request body의 일부로 `metadata`를 전달하세요.
 
 ```shell
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -357,9 +357,9 @@ assert user.age == 25
 </TabItem>
 </Tabs>
 
-## Using Tags for Categorization and Tracking
+## 분류와 추적에 Tags 사용하기 {#using-tags-for-categorization-and-tracking}
 
-Tags allow you to categorize, filter, and track your LLM requests. Add tags to your metadata for better organization and analytics.
+Tags를 사용하면 LLM 요청을 분류, 필터링, 추적할 수 있습니다. 더 나은 구성과 분석을 위해 metadata에 tags를 추가하세요.
 
 <Tabs>
 <TabItem value="openai-python" label="OpenAI Python">
@@ -450,14 +450,14 @@ async function main() {
 </TabItem>
 </Tabs>
 
-### Tag Benefits
+### Tag의 장점 {#tag-benefits}
 
-- **Cost Tracking**: Monitor spending by project/team/feature
-- **Analytics**: Filter requests by tags in logs and dashboards  
-- **Routing**: Use tags for conditional model routing
-- **Debugging**: Easier troubleshooting with categorized requests
+- **비용 추적**: project/team/feature별 지출을 모니터링합니다.
+- **분석**: logs와 dashboards에서 tags로 요청을 필터링합니다.
+- **라우팅**: 조건부 model routing에 tags를 사용합니다.
+- **디버깅**: 분류된 요청으로 문제 해결이 더 쉬워집니다.
 
-### Response Format
+### 응답 형식
 
 ```json
 {
@@ -486,7 +486,7 @@ async function main() {
 
 ```
 
-### **Streaming**
+### **스트리밍** {#streaming}
 
 
 <Tabs>
@@ -531,11 +531,11 @@ print(completion)
 </Tabs>
 
 
-### Function Calling 
+### 함수 호출 {#function-calling}
 
-Here's some examples of doing function calling with the proxy. 
+proxy로 function calling을 수행하는 몇 가지 예제입니다.
 
-You can use the proxy for function calling with **any** openai-compatible project. 
+**모든** openai-compatible 프로젝트에서 proxy를 function calling에 사용할 수 있습니다.
 
 <Tabs>
 <TabItem value="curl" label="curl">
@@ -624,8 +624,8 @@ print(completion)
 
 ## `/embeddings`
 
-### Request Format
-Input, Output and Exceptions are mapped to the OpenAI format for all supported models
+### 요청 형식
+지원되는 모든 모델에서 Input, Output, Exceptions는 OpenAI 형식으로 매핑됩니다.
 
 <Tabs>
 <TabItem value="openai" label="OpenAI Python v1.0.0+">
@@ -696,7 +696,7 @@ print(query_result[:5])
 </Tabs>
 
 
-### Response Format
+### 응답 형식
 
 ```json
 {
@@ -725,8 +725,8 @@ print(query_result[:5])
 ## `/moderations`
 
 
-### Request Format
-Input, Output and Exceptions are mapped to the OpenAI format for all supported models
+### 요청 형식
+지원되는 모든 모델에서 Input, Output, Exceptions는 OpenAI 형식으로 매핑됩니다.
 
 <Tabs>
 <TabItem value="openai" label="OpenAI Python v1.0.0+">
@@ -760,7 +760,7 @@ curl --location 'http://0.0.0.0:4000/moderations' \
 </Tabs>
 
 
-### Response Format
+### 응답 형식
 
 ```json
 {
@@ -801,8 +801,8 @@ curl --location 'http://0.0.0.0:4000/moderations' \
 ```
 
 
-## Using with OpenAI compatible projects
-Set `base_url` to the LiteLLM Proxy server
+## OpenAI compatible 프로젝트와 함께 사용하기 {#using-with-openai-compatible-projects}
+`base_url`을 LiteLLM Proxy server로 설정하세요.
 
 <Tabs>
 <TabItem value="openai" label="OpenAI v1.0.0+">
@@ -828,34 +828,34 @@ print(response)
 </TabItem>
 <TabItem value="librechat" label="LibreChat">
 
-#### Start the LiteLLM proxy
+#### LiteLLM proxy 시작하기 {#start-the-litellm-proxy}
 ```shell
 litellm --model gpt-3.5-turbo
 
 #INFO: Proxy running on http://0.0.0.0:4000
 ```
 
-#### 1. Clone the repo
+#### 1. repo 복제하기 {#1-clone-the-repo}
 
 ```shell
 git clone https://github.com/danny-avila/LibreChat.git
 ```
 
 
-#### 2. Modify Librechat's `docker-compose.yml`
-LiteLLM Proxy is running on port `4000`, set `4000` as the proxy below
+#### 2. Librechat의 `docker-compose.yml` 수정하기 {#2-modify-librechats-docker-composeyml}
+LiteLLM Proxy가 port `4000`에서 실행 중이므로, 아래 proxy에 `4000`을 설정하세요.
 ```yaml
 OPENAI_REVERSE_PROXY=http://host.docker.internal:4000/v1/chat/completions
 ```
 
-#### 3. Save fake OpenAI key in Librechat's `.env` 
+#### 3. Librechat의 `.env`에 가짜 OpenAI key 저장하기 {#3-save-fake-openai-key-in-librechats-env}
 
-Copy Librechat's `.env.example` to `.env` and overwrite the default OPENAI_API_KEY (by default it requires the user to pass a key).
+Librechat의 `.env.example`을 `.env`로 복사하고 기본 OPENAI_API_KEY를 덮어쓰세요(기본적으로 사용자가 key를 전달해야 합니다).
 ```env
 OPENAI_API_KEY=sk-1234
 ```
 
-#### 4. Run LibreChat: 
+#### 4. LibreChat 실행하기 {#4-run-librechat}
 ```shell
 docker compose up
 ```
@@ -863,9 +863,9 @@ docker compose up
 
 <TabItem value="continue-dev" label="ContinueDev">
 
-Continue-Dev brings ChatGPT to VSCode. See how to [install it here](https://continue.dev/docs/quickstart).
+Continue-Dev는 ChatGPT를 VSCode로 가져옵니다. [여기](https://continue.dev/docs/quickstart)에서 설치 방법을 확인하세요.
 
-In the [config.py](https://continue.dev/docs/reference/Models/openai) set this as your default model.
+[config.py](https://continue.dev/docs/reference/모델/openai)에서 이것을 기본 모델로 설정하세요.
 ```python
   default=OpenAI(
       api_key="IGNORED",
@@ -875,7 +875,7 @@ In the [config.py](https://continue.dev/docs/reference/Models/openai) set this a
   ),
 ```
 
-Credits [@vividfog](https://github.com/ollama/ollama/issues/305#issuecomment-1751848077) for this tutorial. 
+이 튜토리얼에 대한 크레딧은 [@vividfog](https://github.com/ollama/ollama/issues/305#issuecomment-1751848077)에게 있습니다.
 </TabItem>
 
 <TabItem value="aider" label="Aider">
@@ -915,16 +915,16 @@ user_proxy = UserProxyAgent("user_proxy")
 user_proxy.initiate_chat(assistant, message="Plot a chart of META and TESLA stock price change YTD.", config_list=config_list)
 ```
 
-Credits [@victordibia](https://github.com/microsoft/autogen/issues/45#issuecomment-1749921972) for this tutorial.
+이 튜토리얼에 대한 크레딧은 [@victordibia](https://github.com/microsoft/autogen/issues/45#issuecomment-1749921972)에게 있습니다.
 </TabItem>
 
 <TabItem value="guidance" label="guidance">
-A guidance language for controlling large language models.
+대규모 언어 모델을 제어하기 위한 guidance 언어입니다.
 https://github.com/guidance-ai/guidance
 
-**NOTE:** Guidance sends additional params like `stop_sequences` which can cause some models to fail if they don't support it. 
+**참고:** Guidance는 `stop_sequences` 같은 추가 파라미터를 보내며, 일부 모델이 이를 지원하지 않으면 실패할 수 있습니다.
 
-**Fix**: Start your proxy using the `--drop_params` flag
+**해결 방법**: `--drop_params` flag를 사용해 proxy를 시작하세요.
 
 ```shell
 litellm --model ollama/codellama --temperature 0.3 --max_tokens 2048 --drop_params
@@ -960,21 +960,21 @@ print(result)
 </TabItem>
 </Tabs>
 
-## Using with Vertex, Boto3, Anthropic SDK (Native format)
+## Vertex, Boto3, Anthropic SDK와 함께 사용하기(Native format) {#using-with-vertex-boto3-anthropic-sdk-native-format}
 
-👉 **[Here's how to use litellm proxy with Vertex, boto3, Anthropic SDK - in the native format](../pass_through/vertex_ai.md)**
+👉 **[native format에서 Vertex, boto3, Anthropic SDK와 함께 litellm proxy를 사용하는 방법](../pass_through/vertex_ai.md)**
 
-## Advanced
+## 고급 {#advanced}
 
-### (BETA) Batch Completions - pass multiple models
+### (BETA) Batch Completions - 여러 모델 전달하기 {#beta-batch-completions-pass-multiple-models}
 
-Use this when you want to send 1 request to N Models
+하나의 요청을 N개 모델로 보내고 싶을 때 사용하세요.
 
-#### Expected Request Format
+#### 예상 요청 형식 {#expected-request-format}
 
-Pass model as a string of comma separated value of models. Example `"model"="llama3,gpt-3.5-turbo"`
+model을 쉼표로 구분된 모델 값의 문자열로 전달하세요. 예제 `"model"="llama3,gpt-3.5-turbo"`
 
-This same request will be sent to the following model groups on the [litellm proxy config.yaml](https://docs.litellm.ai/docs/proxy/configs)
+동일한 요청이 [litellm proxy config.yaml](https://docs.litellm.ai/docs/proxy/configs)의 다음 model groups로 전송됩니다.
 - `model_name="llama3"`
 - `model_name="gpt-3.5-turbo"` 
 
@@ -1000,9 +1000,9 @@ print(response)
 
 
 
-#### Expected Response Format
+#### 예상 응답 형식 {#expected-response-format}
 
-Get a list of responses when `model` is passed as a list
+`model`이 list로 전달되면 responses list를 받습니다.
 
 ```python
 [
@@ -1087,9 +1087,9 @@ curl --location 'http://localhost:4000/chat/completions' \
 
 
 
-#### Expected Response Format
+#### 예상 응답 형식 {#expected-response-format-1}
 
-Get a list of responses when `model` is passed as a list
+`model`이 list로 전달되면 responses list를 받습니다.
 
 ```json
 [
@@ -1143,6 +1143,3 @@ Get a list of responses when `model` is passed as a list
 
 </TabItem>
 </Tabs>
-
-
-

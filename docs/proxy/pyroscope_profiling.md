@@ -1,33 +1,31 @@
-# Grafana Pyroscope CPU profiling
+# Grafana Pyroscope CPU 프로파일링 {#grafana-pyroscope-cpu-profiling}
 
-LiteLLM proxy can send continuous CPU profiles to [Grafana Pyroscope](https://grafana.com/docs/pyroscope/latest/) when enabled via environment variables. This is optional and off by default.
+LiteLLM proxy는 환경 변수로 활성화하면 지속적인 CPU profile을 [Grafana Pyroscope](https://grafana.com/docs/pyroscope/latest/)로 전송할 수 있습니다. 이 기능은 선택 사항이며 기본적으로 꺼져 있습니다.
 
-## Quick start
+## 빠른 시작 {#quick-start}
 
-1. **Install the optional dependency** (required only when enabling Pyroscope):
+1. **선택적 dependency 설치**(Pyroscope를 활성화할 때만 필요):
 
    ```bash
    uv add pyroscope-io
    ```
 
-   Or install the proxy extra:
+   또는 proxy extra를 설치합니다.
 
    ```bash
    uv add "litellm[proxy]"
    ```
 
-2. **Set environment variables** before starting the proxy:
+2. proxy를 시작하기 전에 **환경 변수 설정**:
 
-   | Variable | Required | Description |
+   | 변수 | 필수 여부 | 설명 |
    |----------|----------|-------------|
-   | `LITELLM_ENABLE_PYROSCOPE` | Yes (to enable) | Set to `true` to enable Pyroscope profiling. |
-   | `PYROSCOPE_APP_NAME` | Yes (when enabled) | Application name shown in the Pyroscope UI. |
-   | `PYROSCOPE_SERVER_ADDRESS` | Yes (when enabled) | Pyroscope server URL (e.g. `http://localhost:4040`). |
-   | `PYROSCOPE_SAMPLE_RATE` | No | Sample rate (integer). If unset, the pyroscope-io library default is used. |
-   | `PYROSCOPE_GRAFANA_USER` | No | Grafana Cloud Pyroscope user/tenant ID. Required when `PYROSCOPE_GRAFANA_API_TOKEN` is set. |
-   | `PYROSCOPE_GRAFANA_API_TOKEN` | No | Grafana Cloud API/access policy token. Used as the Pyroscope basic auth password. |
+   | `LITELLM_ENABLE_PYROSCOPE` | 예(활성화 시) | Pyroscope profiling을 활성화하려면 `true`로 설정합니다. |
+   | `PYROSCOPE_APP_NAME` | 예(활성화된 경우) | Pyroscope UI에 표시되는 application name입니다. |
+   | `PYROSCOPE_SERVER_ADDRESS` | 예(활성화된 경우) | Pyroscope server URL입니다(예: `http://localhost:4040`). |
+   | `PYROSCOPE_SAMPLE_RATE` | 아니요 | Sample rate(integer)입니다. 설정하지 않으면 pyroscope-io library 기본값을 사용합니다. |
 
-3. **Start the proxy**; profiling will begin automatically when the proxy starts.
+3. **프록시 시작**; proxy가 시작되면 profiling이 자동으로 시작됩니다.
 
    ```bash
    export LITELLM_ENABLE_PYROSCOPE=true
@@ -36,22 +34,10 @@ LiteLLM proxy can send continuous CPU profiles to [Grafana Pyroscope](https://gr
    litellm --config config.yaml
    ```
 
-   For Grafana Cloud Pyroscope, use the Profiles endpoint as `PYROSCOPE_SERVER_ADDRESS`
-   and set the Grafana Cloud credentials:
+4. Pyroscope(또는 Grafana) UI에서 **profile 보기**를 열고 `PYROSCOPE_APP_NAME`을 선택합니다.
 
-   ```bash
-   export LITELLM_ENABLE_PYROSCOPE=true
-   export PYROSCOPE_APP_NAME=litellm-proxy
-   export PYROSCOPE_SERVER_ADDRESS=https://profiles-prod-<region>.grafana.net
-   export PYROSCOPE_GRAFANA_USER=<grafana-cloud-pyroscope-user>
-   export PYROSCOPE_GRAFANA_API_TOKEN=<grafana-cloud-api-or-access-policy-token>
-   litellm --config config.yaml
-   ```
+## 참고
 
-4. **View profiles** in the Pyroscope (or Grafana) UI and select your `PYROSCOPE_APP_NAME`.
-
-## Notes
-
-- **Optional dependency**: `pyroscope-io` is an optional dependency. If it is not installed and `LITELLM_ENABLE_PYROSCOPE=true`, the proxy will log a warning and continue without profiling.
-- **Platform support**: The `pyroscope-io` package uses a native extension and is not available on all platforms (e.g. Windows is excluded by the package).
-- **Other settings**: See [Configuration settings](/proxy/config_settings) for all proxy environment variables.
+- **선택적 dependency**: `pyroscope-io`는 선택적 dependency입니다. 설치되어 있지 않은 상태에서 `LITELLM_ENABLE_PYROSCOPE=true`이면 proxy는 warning log를 남기고 profiling 없이 계속 실행됩니다.
+- **Platform 지원**: `pyroscope-io` package는 native extension을 사용하므로 모든 platform에서 사용할 수 있는 것은 아닙니다(예: Windows는 package에서 제외됨).
+- **기타 설정**: 모든 proxy 환경 변수는 [설정 settings](/proxy/config_settings)를 참고하세요.

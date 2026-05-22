@@ -6,17 +6,17 @@ https://platform.xiaomimimo.com/#/docs
 
 :::tip
 
-**We support ALL Xiaomi MiMo models, just set `model=xiaomi_mimo/<any-model-on-xiaomi-mimo>` as a prefix when sending litellm requests**
+**모든 Xiaomi MiMo 모델을 지원합니다. litellm 요청을 보낼 때 `model=xiaomi_mimo/<any-model-on-xiaomi-mimo>` 접두사만 설정하면 됩니다.**
 
 :::
 
-## API Key
+## API 키
 ```python
 # env variable
 os.environ['XIAOMI_MIMO_API_KEY']
 ```
 
-## Sample Usage
+## 샘플 사용법
 ```python
 from litellm import completion
 import os
@@ -37,7 +37,7 @@ response = completion(
 print(response)
 ```
 
-## Sample Usage - Streaming
+## 샘플 사용법 - 스트리밍
 ```python
 from litellm import completion
 import os
@@ -62,11 +62,11 @@ for chunk in response:
 ```
 
 
-## Usage with LiteLLM Proxy Server
+## LiteLLM Proxy Server 사용법
 
-Here's how to call a Xiaomi MiMo model with the LiteLLM Proxy Server
+LiteLLM Proxy Server로 Xiaomi MiMo 모델을 호출하는 방법입니다.
 
-1. Modify the config.yaml 
+1. config.yaml 수정 
 
   ```yaml
   model_list:
@@ -77,13 +77,13 @@ Here's how to call a Xiaomi MiMo model with the LiteLLM Proxy Server
   ```
 
 
-2. Start the proxy 
+2. 프록시 시작 
 
   ```bash
   $ litellm --config /path/to/config.yaml
   ```
 
-3. Send Request to LiteLLM Proxy Server
+3. LiteLLM Proxy Server로 요청 보내기
 
   <Tabs>
 
@@ -130,8 +130,8 @@ Here's how to call a Xiaomi MiMo model with the LiteLLM Proxy Server
 
   </Tabs>
 
-## Supported Models
+## 지원 모델
 
-| Model Name | Usage |
+| 모델 이름 | 사용법 |
 |------------|-------|
 | mimo-v2-flash | `completion(model="xiaomi_mimo/mimo-v2-flash", messages)` |

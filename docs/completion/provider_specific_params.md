@@ -1,16 +1,16 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Provider-specific Params
+# Provider별 Param
 
-Providers might offer params not supported by OpenAI (e.g. top_k). LiteLLM treats any non-openai param, as a provider-specific param, and passes it to the provider in the request body, as a kwarg. [**See Reserved Params**](https://github.com/BerriAI/litellm/blob/aa2fd29e48245f360e771a8810a69376464b195e/litellm/main.py#L700)
+Provider는 OpenAI에서 지원하지 않는 param을 제공할 수 있습니다(예: top_k). LiteLLM은 OpenAI param이 아닌 모든 값을 provider-specific param으로 간주하고, request body의 kwarg로 provider에 전달합니다. [**Reserved Params 보기**](https://github.com/BerriAI/litellm/blob/aa2fd29e48245f360e771a8810a69376464b195e/litellm/main.py#L700)
 
-You can pass those in 2 ways: 
-- via completion(): We'll pass the non-openai param, straight to the provider as part of the request body.
-    - e.g. `completion(model="claude-instant-1", top_k=3)`
-- via provider-specific config variable (e.g. `litellm.OpenAIConfig()`). 
+이 값은 두 가지 방식으로 전달할 수 있습니다. 
+- completion() 사용: OpenAI param이 아닌 값을 request body의 일부로 provider에 그대로 전달합니다.
+    - 예: `completion(model="claude-instant-1", top_k=3)`
+- provider별 config variable 사용(예: `litellm.OpenAIConfig()`). 
 
-## SDK Usage
+## SDK 사용법
 <Tabs>
 <TabItem value="openai" label="OpenAI">
 
@@ -399,12 +399,12 @@ assert len(response_2_text) > len(response_1_text)
 </Tabs>
 
 
-[**Check out the tutorial!**](../tutorials/provider_specific_params.md)
+[**튜토리얼 보기**](../tutorials/provider_specific_params.md)
 
 
-## Proxy Usage 
+## Proxy 사용법 
 
-**via Config**
+**Config 사용**
 
 ```yaml
 model_list:
@@ -417,7 +417,7 @@ model_list:
         adapter_base: <my-special_base> # 👈 PROVIDER-SPECIFIC PARAM
 ```
 
-**via Request**
+**Request 사용**
 
 ```bash
 curl -X POST 'http://0.0.0.0:4000/chat/completions' \
@@ -435,13 +435,13 @@ curl -X POST 'http://0.0.0.0:4000/chat/completions' \
 }'
 ```
 
-## Provider-Specific Metadata Parameters
+## Provider별 Metadata Parameter
 
-| Provider | Parameter | Use Case |
+| Provider | Parameter | 사용 사례 |
 |----------|-----------|----------|
-| **AWS Bedrock** | `requestMetadata` | Cost attribution, logging |
-| **Gemini/Vertex AI** | `labels` | Resource labeling |
-| **Anthropic** | `metadata` | User identification |
+| **AWS Bedrock** | `requestMetadata` | 비용 귀속, logging |
+| **Gemini/Vertex AI** | `labels` | resource labeling |
+| **Anthropic** | `metadata` | user 식별 |
 
 <Tabs>
 <TabItem value="bedrock" label="AWS Bedrock">

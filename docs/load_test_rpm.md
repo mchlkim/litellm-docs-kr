@@ -1,25 +1,25 @@
 
 
-# Multi-Instance TPM/RPM (litellm.Router)
+# 다중 인스턴스 TPM/RPM (litellm.Router)
 
-Test if your defined tpm/rpm limits are respected across multiple instances of the Router object. 
+정의한 tpm/rpm 제한이 여러 Router 객체 인스턴스에서 지켜지는지 테스트합니다. 
 
-In our test:
-- Max RPM per deployment is = 100 requests per minute
-- Max Throughput / min on router = 200 requests per minute (2 deployments)
-- Load we'll send through router = 600 requests per minute
+이 테스트에서는:
+- deployment당 최대 RPM = 분당 100개 요청
+- router의 분당 최대 처리량 = 분당 200개 요청(2개 deployments)
+- router로 보낼 부하 = 분당 600개 요청
 
 :::info
 
-If you don't want to call a real LLM API endpoint, you can setup a fake openai server. [See code](#extra---setup-fake-openai-server)
+실제 LLM API 엔드포인트를 호출하고 싶지 않다면 가짜 OpenAI 서버를 설정할 수 있습니다. [코드 보기](#extra---setup-fake-openai-server)
 
 :::
 
-### Code 
+### 코드 
 
-Let's hit the router with 600 requests per minute. 
+router에 분당 600개 요청을 보냅니다. 
 
-Copy this script 👇. Save it as `test_loadtest_router.py` AND run it with `python3 test_loadtest_router.py`
+이 스크립트를 복사하세요 👇. `test_loadtest_router.py`로 저장한 뒤 `python3 test_loadtest_router.py`로 실행합니다.
 
 
 ```python
@@ -100,27 +100,27 @@ async def parent_fn():
 
 asyncio.run(parent_fn())
 ```
-## Multi-Instance TPM/RPM Load Test (Proxy)
+## 다중 인스턴스 TPM/RPM 부하 테스트 (Proxy)
 
-Test if your defined tpm/rpm limits are respected across multiple instances. 
+정의한 tpm/rpm 제한이 여러 인스턴스에서 지켜지는지 테스트합니다. 
 
-The quickest way to do this is by testing the [proxy](./proxy/quick_start.md). The proxy uses the [router](./routing.md) under the hood, so if you're using either of them, this test should work for you. 
+가장 빠른 방법은 [proxy](./proxy/quick_start.md)를 테스트하는 것입니다. proxy는 내부적으로 [router](./routing.md)를 사용하므로, 둘 중 하나를 사용 중이라면 이 테스트가 동작합니다. 
 
-In our test:
-- Max RPM per deployment is = 100 requests per minute
-- Max Throughput / min on proxy = 200 requests per minute (2 deployments)
-- Load we'll send to proxy = 600 requests per minute
+이 테스트에서는:
+- deployment당 최대 RPM = 분당 100개 요청
+- proxy의 분당 최대 처리량 = 분당 200개 요청(2개 deployments)
+- proxy로 보낼 부하 = 분당 600개 요청
 
 
-So we'll send 600 requests per minute, but expect only 200 requests per minute to succeed.
+따라서 분당 600개 요청을 보내지만, 분당 200개 요청만 성공할 것으로 예상합니다.
 
 :::info
 
-If you don't want to call a real LLM API endpoint, you can setup a fake openai server. [See code](#extra---setup-fake-openai-server)
+실제 LLM API 엔드포인트를 호출하고 싶지 않다면 가짜 OpenAI 서버를 설정할 수 있습니다. [코드 보기](#extra---setup-fake-openai-server)
 
 :::
 
-### 1. Setup config 
+### 1. config 설정 
 
 ```yaml
 model_list:
@@ -145,27 +145,27 @@ router_settings:
   routing_strategy: simple-shuffle # recommended for best performance
 ```
 
-### 2. Start proxy 2 instances
+### 2. proxy 인스턴스 2개 시작
 
-**Instance 1**
+**인스턴스 1**
 ```bash
 litellm --config /path/to/config.yaml --port 4000
 
 ## RUNNING on http://0.0.0.0:4000
 ```
 
-**Instance 2**
+**인스턴스 2**
 ```bash
 litellm --config /path/to/config.yaml --port 4001
 
 ## RUNNING on http://0.0.0.0:4001
 ```
 
-### 3. Run Test 
+### 3. 테스트 실행 
 
-Let's hit the proxy with 600 requests per minute. 
+proxy에 분당 600개 요청을 보냅니다. 
 
-Copy this script 👇. Save it as `test_loadtest_proxy.py` AND run it with `python3 test_loadtest_proxy.py`
+이 스크립트를 복사하세요 👇. `test_loadtest_proxy.py`로 저장한 뒤 `python3 test_loadtest_proxy.py`로 실행합니다.
 
 ```python
 from openai import AsyncOpenAI, AsyncAzureOpenAI
@@ -228,11 +228,11 @@ asyncio.run(parent_fn())
 ```
 
 
-### Extra - Setup Fake OpenAI Server 
+### 추가 - 가짜 OpenAI 서버 설정 {#extra---setup-fake-openai-server}
 
-Let's setup a fake openai server with a RPM limit of 100.
+RPM 제한이 100인 가짜 OpenAI 서버를 설정합니다.
 
-Let's call our file `fake_openai_server.py`. 
+파일 이름은 `fake_openai_server.py`로 지정합니다. 
 
 ```
 # import sys, os

@@ -3,31 +3,31 @@ import TabItem from '@theme/TabItem';
 
 # /v1/messages
 
-Use LiteLLM to call all your LLM APIs in the Anthropic `v1/messages` format. 
+LiteLLM으로 모든 LLM API를 Anthropic `v1/messages` 형식으로 호출합니다.
 
 
-## Overview 
+## 개요 
 
-| Feature | Supported | Notes | 
+| 기능 | 지원 | 참고 | 
 |-------|-------|-------|
-| Cost Tracking | ✅ | Works with all supported models |
-| Logging | ✅ | Works across all integrations |
-| End-user Tracking | ✅ | |
-| Streaming | ✅ | |
-| Fallbacks | ✅ | Works between supported models |
-| Loadbalancing | ✅ | Works between supported models |
-| Guardrails | ✅ | Applies to input and output text (non-streaming only) |
-| Supported Providers | **All LiteLLM supported providers** | `openai`, `anthropic`, `bedrock`, `vertex_ai`, `gemini`, `azure`, `azure_ai`, etc. |
+| 비용 추적 | ✅ | 지원되는 모든 모델에서 동작 |
+| 로깅 | ✅ | 모든 통합 전반에서 동작 |
+| 최종 사용자 추적 | ✅ | |
+| 스트리밍 | ✅ | |
+| 폴백 | ✅ | 지원되는 모델 간 동작 |
+| 로드 밸런싱 | ✅ | 지원되는 모델 간 동작 |
+| 가드레일 | ✅ | 입력 및 출력 텍스트에 적용(비스트리밍 전용) |
+| 지원 프로바이더 | **LiteLLM이 지원하는 모든 프로바이더** | `openai`, `anthropic`, `bedrock`, `vertex_ai`, `gemini`, `azure`, `azure_ai` 등 |
 
-## Usage 
+## 사용법 
 ---
 
-### LiteLLM Python SDK 
+### LiteLLM Python SDK 사용
 
 <Tabs>
 <TabItem value="anthropic" label="Anthropic">
 
-#### Non-streaming example
+#### 비스트리밍 예제
 ```python showLineNumbers title="Anthropic Example using LiteLLM Python SDK"
 import litellm
 response = await litellm.anthropic.messages.acreate(
@@ -38,7 +38,7 @@ response = await litellm.anthropic.messages.acreate(
 )
 ```
 
-#### Streaming example
+#### 스트리밍 예제
 ```python showLineNumbers title="Anthropic Streaming Example using LiteLLM Python SDK"
 import litellm
 response = await litellm.anthropic.messages.acreate(
@@ -56,7 +56,7 @@ async for chunk in response:
 
 <TabItem value="openai" label="OpenAI">
 
-#### Non-streaming example
+#### 비스트리밍 예제
 ```python showLineNumbers title="OpenAI Example using LiteLLM Python SDK"
 import litellm
 import os
@@ -71,7 +71,7 @@ response = await litellm.anthropic.messages.acreate(
 )
 ```
 
-#### Streaming example
+#### 스트리밍 예제
 ```python showLineNumbers title="OpenAI Streaming Example using LiteLLM Python SDK"
 import litellm
 import os
@@ -93,7 +93,7 @@ async for chunk in response:
 
 <TabItem value="gemini" label="Google AI Studio">
 
-#### Non-streaming example
+#### 비스트리밍 예제
 ```python showLineNumbers title="Google Gemini Example using LiteLLM Python SDK"
 import litellm
 import os
@@ -108,7 +108,7 @@ response = await litellm.anthropic.messages.acreate(
 )
 ```
 
-#### Streaming example
+#### 스트리밍 예제
 ```python showLineNumbers title="Google Gemini Streaming Example using LiteLLM Python SDK"
 import litellm
 import os
@@ -130,7 +130,7 @@ async for chunk in response:
 
 <TabItem value="vertex" label="Vertex AI">
 
-#### Non-streaming example
+#### 비스트리밍 예제
 ```python showLineNumbers title="Vertex AI Example using LiteLLM Python SDK"
 import litellm
 import os
@@ -147,7 +147,7 @@ response = await litellm.anthropic.messages.acreate(
 )
 ```
 
-#### Streaming example
+#### 스트리밍 예제
 ```python showLineNumbers title="Vertex AI Streaming Example using LiteLLM Python SDK"
 import litellm
 import os
@@ -171,7 +171,7 @@ async for chunk in response:
 
 <TabItem value="bedrock" label="AWS Bedrock">
 
-#### Non-streaming example
+#### 비스트리밍 예제
 ```python showLineNumbers title="AWS Bedrock Example using LiteLLM Python SDK"
 import litellm
 import os
@@ -188,7 +188,7 @@ response = await litellm.anthropic.messages.acreate(
 )
 ```
 
-#### Streaming example
+#### 스트리밍 예제
 ```python showLineNumbers title="AWS Bedrock Streaming Example using LiteLLM Python SDK"
 import litellm
 import os
@@ -211,7 +211,7 @@ async for chunk in response:
 </TabItem>
 </Tabs>
 
-Example response:
+예제 응답:
 ```json
 {
   "content": [
@@ -235,12 +235,12 @@ Example response:
 }
 ```
 
-### LiteLLM Proxy Server 
+### LiteLLM Proxy Server 사용
 
 <Tabs>
 <TabItem value="anthropic-proxy" label="Anthropic">
 
-1. Setup config.yaml
+1. config.yaml 설정
 
 ```yaml
 model_list:
@@ -250,13 +250,13 @@ model_list:
         api_key: os.environ/ANTHROPIC_API_KEY
 ```
 
-2. Start proxy 
+2. 프록시 시작
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-3. Test it! 
+3. 테스트
 
 ```python showLineNumbers title="Anthropic Example using LiteLLM Proxy Server"
 import anthropic
@@ -278,7 +278,7 @@ response = client.messages.create(
 
 <TabItem value="openai-proxy" label="OpenAI">
 
-1. Setup config.yaml
+1. config.yaml 설정
 
 ```yaml
 model_list:
@@ -288,13 +288,13 @@ model_list:
         api_key: os.environ/OPENAI_API_KEY
 ```
 
-2. Start proxy 
+2. 프록시 시작
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-3. Test it! 
+3. 테스트
 
 ```python showLineNumbers title="OpenAI Example using LiteLLM Proxy Server"
 import anthropic
@@ -316,7 +316,7 @@ response = client.messages.create(
 
 <TabItem value="gemini-proxy" label="Google AI Studio">
 
-1. Setup config.yaml
+1. config.yaml 설정
 
 ```yaml
 model_list:
@@ -326,13 +326,13 @@ model_list:
         api_key: os.environ/GEMINI_API_KEY
 ```
 
-2. Start proxy 
+2. 프록시 시작
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-3. Test it! 
+3. 테스트
 
 ```python showLineNumbers title="Google Gemini Example using LiteLLM Proxy Server"
 import anthropic
@@ -354,7 +354,7 @@ response = client.messages.create(
 
 <TabItem value="vertex-proxy" label="Vertex AI">
 
-1. Setup config.yaml
+1. config.yaml 설정
 
 ```yaml
 model_list:
@@ -365,13 +365,13 @@ model_list:
         vertex_location: us-central1
 ```
 
-2. Start proxy 
+2. 프록시 시작
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-3. Test it! 
+3. 테스트
 
 ```python showLineNumbers title="Vertex AI Example using LiteLLM Proxy Server"
 import anthropic
@@ -393,7 +393,7 @@ response = client.messages.create(
 
 <TabItem value="bedrock-proxy" label="AWS Bedrock">
 
-1. Setup config.yaml
+1. config.yaml 설정
 
 ```yaml
 model_list:
@@ -405,13 +405,13 @@ model_list:
         aws_region_name: us-west-2
 ```
 
-2. Start proxy 
+2. 프록시 시작
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-3. Test it! 
+3. 테스트
 
 ```python showLineNumbers title="AWS Bedrock Example using LiteLLM Proxy Server"
 import anthropic
@@ -453,12 +453,12 @@ curl -L -X POST 'http://0.0.0.0:4000/v1/messages' \
 </TabItem>
 </Tabs>
 
-## Request Format
+## 요청 형식
 ---
 
-Request body will be in the Anthropic messages API format. **litellm follows the Anthropic messages specification for this endpoint.**
+요청 본문은 Anthropic messages API 형식을 사용합니다. **litellm은 이 엔드포인트에서 Anthropic messages 사양을 따릅니다.**
 
-#### Example request body
+#### 예제 요청 본문
 
 ```json
 {
@@ -473,70 +473,70 @@ Request body will be in the Anthropic messages API format. **litellm follows the
 }
 ```
 
-#### Required Fields
+#### 필수 필드
 - **model** (string):  
-  The model identifier (e.g., `"claude-3-7-sonnet-20250219"`).
+  모델 식별자입니다(예: `"claude-3-7-sonnet-20250219"`).
 - **max_tokens** (integer):  
-  The maximum number of tokens to generate before stopping.  
-  _Note: The model may stop before reaching this limit; value must be greater than 1._
-- **messages** (array of objects):  
-  An ordered list of conversational turns.  
-  Each message object must include:
-  - **role** (enum: `"user"` or `"assistant"`):  
-    Specifies the speaker of the message.
-  - **content** (string or array of content blocks):  
-    The text or content blocks (e.g., an array containing objects with a `type` such as `"text"`) that form the message.  
-    _Example equivalence:_
+  중지하기 전까지 생성할 최대 토큰 수입니다.  
+  _참고: 모델은 이 제한에 도달하기 전에 중지될 수 있으며, 값은 1보다 커야 합니다._
+- **messages** (객체 배열):  
+  대화 턴의 순서 있는 목록입니다.  
+  각 메시지 객체는 다음을 포함해야 합니다.
+  - **role** (enum: `"user"` 또는 `"assistant"`):  
+    메시지의 발화자를 지정합니다.
+  - **content** (문자열 또는 content block 배열):  
+    메시지를 구성하는 텍스트 또는 content block입니다(예: `"text"` 같은 `type`을 가진 객체 배열).  
+    _동등한 예제:_
     ```json
     {"role": "user", "content": "Hello, Claude"}
     ```
-    is equivalent to:
+    위 요청은 다음과 동일합니다.
     ```json
     {"role": "user", "content": [{"type": "text", "text": "Hello, Claude"}]}
     ```
 
-#### Optional Fields
+#### 선택 필드
 - **metadata** (object):  
-  Contains additional metadata about the request (e.g., `user_id` as an opaque identifier).
-- **stop_sequences** (array of strings):  
-  Custom sequences that, when encountered in the generated text, cause the model to stop.
+  요청에 대한 추가 메타데이터를 포함합니다(예: 불투명 식별자로 사용하는 `user_id`).
+- **stop_sequences** (문자열 배열):  
+  생성된 텍스트에서 발견되면 모델을 중지시키는 사용자 지정 시퀀스입니다.
 - **stream** (boolean):  
-  Indicates whether to stream the response using server-sent events.
-- **system** (string or array):  
-  A system prompt providing context or specific instructions to the model.
+  Server-Sent Events를 사용해 응답을 스트리밍할지 여부를 나타냅니다.
+- **system** (문자열 또는 배열):  
+  모델에 컨텍스트나 특정 지시를 제공하는 시스템 프롬프트입니다.
 - **temperature** (number):  
-  Controls randomness in the model's responses. Valid range: `0 < temperature < 1`.
+  모델 응답의 무작위성을 제어합니다. 유효 범위는 `0 < temperature < 1`입니다.
 - **thinking** (object):
-  Configuration for enabling extended thinking. If enabled, it includes:
+  extended thinking을 활성화하기 위한 설정입니다. 활성화하면 다음을 포함합니다.
   - **budget_tokens** (integer):
-    Minimum of 1024 tokens (and less than `max_tokens`).
+    최소 1024 토큰이며 `max_tokens`보다 작아야 합니다.
   - **type** (enum):
-    E.g., `"enabled"`.
+    예: `"enabled"`.
   - **summary** (string, optional):
-    Enables the summary style for thinking blocks. Possible values: `"auto"`, `"concise"`, `"detailed"`, `"disabled"`.
-    When routing to non-Anthropic providers (e.g., `openai/gpt-5.1`), the `summary` value is preserved and forwarded to the downstream API.
+    thinking block의 요약 스타일을 활성화합니다. 가능한 값은 `"auto"`, `"concise"`, `"detailed"`, `"disabled"`입니다.
+    Anthropic이 아닌 프로바이더(예: `openai/gpt-5.1`)로 라우팅할 때 `summary` 값은 보존되어 다운스트림 API로 전달됩니다.
 - **tool_choice** (object):  
-  Instructs how the model should utilize any provided tools.
-- **tools** (array of objects):  
-  Definitions for tools available to the model. Each tool includes:
+  제공된 도구를 모델이 어떻게 사용할지 지시합니다.
+- **tools** (객체 배열):  
+  모델이 사용할 수 있는 도구 정의입니다. 각 도구는 다음을 포함합니다.
   - **name** (string):  
-    The tool's name.
+    도구 이름입니다.
   - **description** (string):  
-    A detailed description of the tool.
+    도구에 대한 상세 설명입니다.
   - **input_schema** (object):  
-    A JSON schema describing the expected input format for the tool.
+    도구가 기대하는 입력 형식을 설명하는 JSON 스키마입니다.
 - **top_k** (integer):  
-  Limits sampling to the top K options.
+  샘플링을 상위 K개 옵션으로 제한합니다.
 - **top_p** (number):  
-  Enables nucleus sampling with a cumulative probability cutoff. Valid range: `0 < top_p < 1`.
+  누적 확률 컷오프를 사용하는 뉴클리어스 샘플링을 활성화합니다. 유효 범위는 `0 < top_p < 1`입니다.
 
 
-## Response Format
+## 응답 형식
 ---
 
-Responses will be in the Anthropic messages API format.
+응답은 Anthropic messages API 형식입니다.
 
-#### Example Response
+#### 예제 응답
 
 ```json
 {
@@ -561,60 +561,60 @@ Responses will be in the Anthropic messages API format.
 }
 ```
 
-#### Response fields
+#### 응답 필드
 
-- **content** (array of objects):  
-  Contains the generated content blocks from the model. Each block includes:
+- **content** (객체 배열):  
+  모델이 생성한 content block을 포함합니다. 각 block은 다음을 포함합니다.
   - **type** (string):  
-    Indicates the type of content (e.g., `"text"`, `"tool_use"`, `"thinking"`, or `"redacted_thinking"`).
+    content의 타입을 나타냅니다(예: `"text"`, `"tool_use"`, `"thinking"`, `"redacted_thinking"`).
   - **text** (string):  
-    The generated text from the model.  
-    _Note: Maximum length is 5,000,000 characters._
-  - **citations** (array of objects or `null`):  
-    Optional field providing citation details. Each citation includes:
+    모델이 생성한 텍스트입니다.  
+    _참고: 최대 길이는 5,000,000자입니다._
+  - **citations** (객체 배열 또는 `null`):  
+    citation 세부 정보를 제공하는 선택 필드입니다. 각 citation은 다음을 포함합니다.
     - **cited_text** (string):  
-      The excerpt being cited.
+      인용되는 발췌문입니다.
     - **document_index** (integer):  
-      An index referencing the cited document.
+      인용 문서를 참조하는 인덱스입니다.
     - **document_title** (string or `null`):  
-      The title of the cited document.
+      인용 문서의 제목입니다.
     - **start_char_index** (integer):  
-      The starting character index for the citation.
+      citation의 시작 문자 인덱스입니다.
     - **end_char_index** (integer):  
-      The ending character index for the citation.
+      citation의 종료 문자 인덱스입니다.
     - **type** (string):  
-      Typically `"char_location"`.
+      일반적으로 `"char_location"`입니다.
 
 - **id** (string):  
-  A unique identifier for the response message.  
-  _Note: The format and length of IDs may change over time._
+  응답 메시지의 고유 식별자입니다.  
+  _참고: ID의 형식과 길이는 시간이 지나며 변경될 수 있습니다._
 
 - **model** (string):  
-  Specifies the model that generated the response.
+  응답을 생성한 모델을 지정합니다.
 
 - **role** (string):  
-  Indicates the role of the generated message. For responses, this is always `"assistant"`.
+  생성된 메시지의 role을 나타냅니다. 응답에서는 항상 `"assistant"`입니다.
 
 - **stop_reason** (string):  
-  Explains why the model stopped generating text. Possible values include:
-  - `"end_turn"`: The model reached a natural stopping point.
-  - `"max_tokens"`: The generation stopped because the maximum token limit was reached.
-  - `"stop_sequence"`: A custom stop sequence was encountered.
-  - `"tool_use"`: The model invoked one or more tools.
+  모델이 텍스트 생성을 중지한 이유를 설명합니다. 가능한 값은 다음과 같습니다.
+  - `"end_turn"`: 모델이 자연스러운 중지 지점에 도달했습니다.
+  - `"max_tokens"`: 최대 토큰 제한에 도달해 생성이 중지되었습니다.
+  - `"stop_sequence"`: 사용자 지정 stop sequence가 발견되었습니다.
+  - `"tool_use"`: 모델이 하나 이상의 도구를 호출했습니다.
 
 - **stop_sequence** (string or `null`):  
-  Contains the specific stop sequence that caused the generation to halt, if applicable; otherwise, it is `null`.
+  생성 중지를 유발한 특정 stop sequence를 포함합니다. 해당하지 않으면 `null`입니다.
 
 - **type** (string):  
-  Denotes the type of response object, which is always `"message"`.
+  응답 객체의 타입을 나타내며 항상 `"message"`입니다.
 
 - **usage** (object):  
-  Provides details on token usage for billing and rate limiting. This includes:
+  과금과 rate limiting을 위한 토큰 사용량 세부 정보를 제공합니다. 다음을 포함합니다.
   - **input_tokens** (integer):  
-    Total number of input tokens processed.
+    처리된 총 입력 토큰 수입니다.
   - **output_tokens** (integer):  
-    Total number of output tokens generated.
+    생성된 총 출력 토큰 수입니다.
   - **cache_creation_input_tokens** (integer or `null`):  
-    Number of tokens used to create a cache entry.
+    캐시 항목 생성에 사용된 토큰 수입니다.
   - **cache_read_input_tokens** (integer or `null`):  
-    Number of tokens read from the cache.
+    캐시에서 읽은 토큰 수입니다.

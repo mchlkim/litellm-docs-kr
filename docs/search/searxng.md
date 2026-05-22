@@ -1,14 +1,14 @@
-# SearXNG Search
+# SearXNG 검색
 
-**Open Source:** [https://github.com/searxng/searxng](https://github.com/searxng/searxng)
+**오픈 소스:** [https://github.com/searxng/searxng](https://github.com/searxng/searxng)
 
-**Public Instances:** [https://searx.space/](https://searx.space/)
+**공개 인스턴스:** [https://searx.space/](https://searx.space/)
 
-## Overview
+## 개요
 
-SearXNG is a free, open-source metasearch engine that aggregates results from multiple search engines while protecting user privacy. It can be self-hosted or used via public instances.
+SearXNG는 사용자 개인정보를 보호하면서 여러 검색 엔진의 결과를 모아 주는 무료 오픈 소스 메타검색 엔진입니다. 직접 호스팅하거나 공개 인스턴스를 통해 사용할 수 있습니다.
 
-**Note:** SearXNG returns a fixed number of results per page (~20 by default) and does not support limiting results via the API. The `max_results` parameter is not directly supported by SearXNG.
+**참고:** SearXNG는 페이지당 고정된 수의 결과를 반환하며(기본값 약 20개), API로 결과 수를 제한하는 기능을 지원하지 않습니다. `max_results` 파라미터는 SearXNG에서 직접 지원되지 않습니다.
 
 ## LiteLLM Python SDK
 
@@ -28,7 +28,7 @@ response = search(
 
 ## LiteLLM AI Gateway
 
-### 1. Setup config.yaml
+### 1. config.yaml 설정
 
 ```yaml showLineNumbers title="config.yaml"
 model_list:
@@ -44,7 +44,7 @@ search_tools:
       api_base: https://serxng-deployment-production.up.railway.app
 ```
 
-### 2. Start the proxy
+### 2. 프록시 시작
 
 ```bash
 litellm --config /path/to/config.yaml
@@ -52,7 +52,7 @@ litellm --config /path/to/config.yaml
 # RUNNING on http://0.0.0.0:4000
 ```
 
-### 3. Test the search endpoint
+### 3. 검색 엔드포인트 테스트
 
 ```bash showLineNumbers title="Test Request"
 curl http://0.0.0.0:4000/v1/search/searxng-search \
@@ -64,7 +64,7 @@ curl http://0.0.0.0:4000/v1/search/searxng-search \
   }'
 ```
 
-## Provider-specific Parameters
+## 공급자별 파라미터
 
 ```python showLineNumbers title="SearXNG Search with Provider-specific Parameters"
 import os
@@ -86,65 +86,65 @@ response = search(
 )
 ```
 
-## Features
+## 기능
 
-SearXNG provides powerful metasearch capabilities:
+SearXNG는 강력한 메타검색 기능을 제공합니다.
 
-### Multiple Search Engines
-Aggregate results from multiple search engines simultaneously:
-- Google, DuckDuckGo, Bing, Brave
-- Wikipedia, Startpage
-- And many more
+### 여러 검색 엔진
+여러 검색 엔진의 결과를 동시에 모읍니다.
+- Google, DuckDuckGo, Bing, Brave 등
+- Wikipedia, Startpage 등
+- 그 외 다수
 
-### Categories
-Search within specific categories:
-- `general` - General web search
-- `science` - Scientific articles and papers
-- `images` - Image search
-- `news` - News articles
-- `videos` - Video content
-- `music` - Music and audio
-- `files` - File search
-- `it` - IT and technology
-- `map` - Maps and location
+### 카테고리
+특정 카테고리 안에서 검색합니다.
+- `general` - 일반 웹 검색
+- `science` - 과학 논문 및 문서
+- `images` - 이미지 검색
+- `news` - 뉴스 기사
+- `videos` - 동영상 콘텐츠
+- `music` - 음악 및 오디오
+- `files` - 파일 검색
+- `it` - IT 및 기술
+- `map` - 지도 및 위치
 
-### Time-Based Filtering
-Filter results by time range:
-- `day` - Past day
-- `month` - Past month
-- `year` - Past year
+### 시간 기반 필터링
+시간 범위별로 결과를 필터링합니다.
+- `day` - 지난 하루
+- `month` - 지난 한 달
+- `year` - 지난 1년
 
-### Privacy-Focused
-- No user tracking
-- No cookies required
-- No profiling
-- No ads
+### 개인정보 보호 중심
+- 사용자 추적 없음
+- 쿠키 불필요
+- 프로파일링 없음
+- 광고 없음
 
-### Language Support
-Support for 60+ languages with the `language` parameter.
+### 언어 지원
+`language` 파라미터로 60개 이상의 언어를 지원합니다.
 
-## Self-Hosting
+## 셀프 호스팅
 
-SearXNG can be self-hosted for complete control.
+SearXNG는 완전한 제어가 필요할 때 직접 호스팅할 수 있습니다.
 
-### Quick Deploy
+### 빠른 배포
 
-Use our pre-configured deployment repository for easy setup:
+간편한 설정을 위해 미리 구성된 배포 저장소를 사용하세요.
 
-**[Fork and Deploy: github.com/BerriAI/serxng-deployment](https://github.com/BerriAI/serxng-deployment)**
+**[Fork 및 배포: github.com/BerriAI/serxng-deployment](https://github.com/BerriAI/serxng-deployment)**
 
-This repository includes:
-- Docker and Docker Compose setup
-- JSON API format pre-configured
-- Ready to deploy
+이 저장소에는 다음이 포함되어 있습니다.
+- Docker 및 Docker Compose 설정
+- 사전 구성된 JSON API 형식
+- 바로 배포 가능한 구성
 
-### Manual Installation
+### 수동 설치
 
-See the [official SearXNG installation instructions](https://docs.searxng.org/admin/installation.html) for detailed setup.
+자세한 설정은 [공식 SearXNG 설치 안내](https://docs.searxng.org/admin/installation.html)를 참고하세요.
 
-**Important:** When you install SearXNG, the only active output format by default is the HTML format. You need to activate the JSON format to use the API.
+**중요:** SearXNG를 설치하면 기본적으로 활성화된 출력 형식은 HTML뿐입니다. API를 사용하려면 JSON 형식을 활성화해야 합니다.
 
-Add the following to your `settings.yml` file:
+`settings.yml` 파일에 다음 내용을 추가하세요.
 
 ```yaml
 search:
@@ -153,7 +153,7 @@ search:
     - json
 ```
 
-Then restart SearXNG:
+그런 다음 SearXNG를 다시 시작하세요.
 
 ```bash
 # Using Docker
@@ -166,11 +166,11 @@ docker run -d -p 8080:8080 \
 export SEARXNG_API_BASE=http://localhost:8080
 ```
 
-## Configuration
+## 설정
 
-### Setting API Base URL (Required)
+### API Base URL 설정(필수)
 
-You **must** specify a SearXNG instance URL either via environment variable or in the search call:
+환경 변수 또는 검색 호출에서 SearXNG 인스턴스 URL을 **반드시** 지정해야 합니다.
 
 ```python
 # Option 1: Environment variable (Recommended)
@@ -190,11 +190,11 @@ response = search(
 )
 ```
 
-**Note:** There is no default instance URL. You must choose either a [public instance](https://searx.space/) or self-host your own.
+**참고:** 기본 인스턴스 URL은 없습니다. [공개 인스턴스](https://searx.space/)를 선택하거나 직접 호스팅해야 합니다.
 
-### Optional Authentication
+### 선택적 인증
 
-Some SearXNG instances may require authentication:
+일부 SearXNG 인스턴스는 인증을 요구할 수 있습니다.
 
 ```python
 import os
@@ -208,16 +208,16 @@ response = search(
 )
 ```
 
-## Cost
+## 비용
 
-SearXNG is completely free:
-- **Open source** - No licensing costs
-- **Self-hosted** - Only infrastructure costs
-- **Public instances** - Usually free, check instance policies
+SearXNG는 완전히 무료입니다.
+- **오픈 소스** - 라이선스 비용 없음
+- **셀프 호스팅** - 인프라 비용만 발생
+- **공개 인스턴스** - 일반적으로 무료이며, 인스턴스 정책을 확인하세요
 
-## Advanced Usage
+## 고급 사용법
 
-### Custom Engine Selection
+### 사용자 지정 엔진 선택
 
 ```python
 response = search(
@@ -228,7 +228,7 @@ response = search(
 )
 ```
 
-### Multi-Category Search
+### 다중 카테고리 검색
 
 ```python
 response = search(
@@ -239,7 +239,7 @@ response = search(
 )
 ```
 
-### Pagination
+### 페이지네이션
 
 ```python
 # Get page 1
@@ -257,9 +257,9 @@ page2 = search(
 )
 ```
 
-## Response Format
+## 응답 형식
 
-SearXNG returns results in the standard LiteLLM search format:
+SearXNG는 표준 LiteLLM 검색 형식으로 결과를 반환합니다.
 
 ```json
 {
@@ -276,11 +276,11 @@ SearXNG returns results in the standard LiteLLM search format:
 }
 ```
 
-## Troubleshooting
+## 문제 해결
 
-### Test Your Instance First
+### 먼저 인스턴스 테스트
 
-If LiteLLM with searxng search provider is not working, test your SearXNG instance directly with curl:
+searxng 검색 공급자와 함께 LiteLLM이 작동하지 않는 경우, curl로 SearXNG 인스턴스를 직접 테스트하세요.
 
 ```bash
 # Test if JSON API is working
@@ -290,29 +290,28 @@ curl -s "https://your-searxng-instance.com/search?q=test&format=json" | head -50
 curl -s "https://serxng-deployment-production.up.railway.app/search?q=test&format=json" | head -50
 ```
 
-**Expected response**: JSON with search results  
-**If you get HTML**: JSON format is not enabled in the instance's `settings.yml`
+**예상 응답**: 검색 결과가 포함된 JSON  
+**HTML을 받는 경우**: 인스턴스의 `settings.yml`에서 JSON 형식이 활성화되지 않은 것입니다
 
-### No Results
+### 결과 없음
 
-If you get no results:
+결과가 없는 경우:
 
-1. **Try different engines**: Specify `engines` parameter
-2. **Broaden categories**: Use multiple categories
-3. **Adjust language**: Set appropriate `language` parameter
+1. **다른 엔진 시도**: `engines` 파라미터를 지정하세요
+2. **카테고리 확장**: 여러 카테고리를 사용하세요
+3. **언어 조정**: 적절한 `language` 파라미터를 설정하세요
 
-### JSON Format Not Enabled
+### JSON 형식이 활성화되지 않음
 
-If you get HTML instead of JSON:
+JSON 대신 HTML을 받는 경우:
 
-1. **Test with curl**: Use the curl command above to verify JSON output
-2. **Self-host your own instance**: Use [our deployment repo](https://github.com/BerriAI/serxng-deployment) with JSON pre-configured
-3. **Check instance configuration**: Not all public instances have JSON enabled
-4. **Enable JSON manually**: Add to `settings.yml`:
+1. **curl로 테스트**: 위의 curl 명령으로 JSON 출력을 확인하세요
+2. **직접 인스턴스 호스팅**: JSON이 사전 구성된 [배포 저장소](https://github.com/BerriAI/serxng-deployment)를 사용하세요
+3. **인스턴스 구성 확인**: 모든 공개 인스턴스에서 JSON이 활성화되어 있지는 않습니다
+4. **JSON 수동 활성화**: `settings.yml`에 추가하세요:
    ```yaml
    search:
      formats:
        - html
        - json
    ```
-

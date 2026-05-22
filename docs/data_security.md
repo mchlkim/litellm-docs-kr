@@ -1,157 +1,156 @@
-# Data Privacy and Security
+# 데이터 개인정보 보호 및 보안 {#data-privacy-and-security}
 
-At LiteLLM, **safeguarding your data privacy and security** is our top priority. We recognize the critical importance of the data you share with us and handle it with the highest level of diligence.
+LiteLLM에서는 **데이터 개인정보 보호와 보안**을 최우선으로 둡니다. 사용자가 공유하는 데이터의 중요성을 잘 알고 있으며, 가장 높은 수준의 주의로 처리합니다.
 
-With LiteLLM Cloud, we handle:
+LiteLLM Cloud에서는 다음을 처리합니다.
 
-- Deployment
-- Scaling
-- Upgrades and security patches
-- Ensuring high availability
+- 배포
+- 스케일링
+- 업그레이드와 보안 패치
+- 고가용성 보장
 
   <iframe
     src="https://status.litellm.ai/badge?theme=light"
     width="250"
     height="30"
-    className="inline-block dark:hidden"
     style={{
       colorScheme: "light",
       marginTop: "5px",
     }}
   ></iframe>
 
-## Security Measures
+## 보안 조치 {#security-measures}
 
 ### LiteLLM Cloud
 
-- We encrypt all data stored using your `LITELLM_MASTER_KEY` and in transit using TLS.
-- Our database and application run on GCP, AWS infrastructure, partly managed by NeonDB.
-    - US data region: Northern California (AWS/GCP `us-west-1`) & Virginia (AWS `us-east-1`)
-    - EU data region Germany/Frankfurt (AWS/GCP `eu-central-1`)
-- All users have access to SSO (Single Sign-On) through OAuth 2.0 with Google, Okta, Microsoft, KeyCloak. 
-- Audit Logs with retention policy
-- Control Allowed IP Addresses that can access your Cloud LiteLLM Instance
+- 저장 데이터는 사용자의 `LITELLM_MASTER_KEY`로 암호화하고, 전송 중 데이터는 TLS로 보호합니다.
+- database와 application은 GCP, AWS 인프라에서 실행되며 일부는 NeonDB가 관리합니다.
+    - 미국 data region: Northern California(AWS/GCP `us-west-1`) 및 Virginia(AWS `us-east-1`)
+    - EU 데이터 region: Germany/Frankfurt(AWS/GCP `eu-central-1`)
+- 모든 사용자는 Google, Okta, Microsoft, KeyCloak의 OAuth 2.0을 통한 SSO(싱글 사인온)를 사용할 수 있습니다.
+- retention policy가 있는 audit log
+- Cloud LiteLLM Instance에 접근할 수 있는 허용 IP 주소 제어
 
-### Self-hosted Instances LiteLLM
+### LiteLLM 자체 호스팅 인스턴스 {#litellm-self-hosted-instance}
 
-- **No data or telemetry is stored on LiteLLM Servers when you self-host**
-- For installation and configuration, see: [Self-hosting guide](../docs/proxy/deploy.md)
-- **Telemetry**: We run no telemetry when you self-host LiteLLM
+- **자체 호스팅 시 LiteLLM server에는 데이터나 telemetry가 저장되지 않습니다.**
+- 설치와 설정은 [Self-hosting guide](../docs/proxy/deploy.md)를 참고하세요.
+- **Telemetry**: LiteLLM을 자체 호스팅할 때 telemetry를 실행하지 않습니다.
 
-For security inquiries, please contact us at support@berri.ai
+보안 문의는 support@berri.ai 로 연락해 주세요.
 
-## **Security Certifications**
+## **보안 인증** {#security-certifications}
 
-| **Certification** | **Status**                                                                                      |
+| **인증** | **상태**                                                                                      |
 |-------------------|-------------------------------------------------------------------------------------------------|
-| SOC 2 Type I      | Certified. Report available upon request on Enterprise plan.                                                           |
-| SOC 2 Type II     | Certified. Report available upon request on Enterprise plan.                   |
-| ISO 27001          | Certified. Report available upon request on Enterprise                              |
+| SOC 2 Type I      | 인증 완료. 엔터프라이즈 plan에서 요청 시 report 제공.                                                           |
+| SOC 2 Type II     | 인증 완료. 엔터프라이즈 plan에서 요청 시 report 제공.                   |
+| ISO 27001          | 인증 완료. 엔터프라이즈 plan에서 요청 시 report 제공.                              |
 
 
-## Supported Data Regions for LiteLLM Cloud
+## LiteLLM Cloud 지원 데이터 region {#supported-litellm-cloud-data-regions}
 
-LiteLLM supports the following data regions:
+LiteLLM은 다음 data region을 지원합니다.
 
-- US, Northern California (AWS/GCP `us-west-1`)
-- Europe, Frankfurt, Germany (AWS/GCP `eu-central-1`)
+- 미국, Northern California (AWS/GCP `us-west-1`)
+- 유럽, Frankfurt, Germany (AWS/GCP `eu-central-1`)
 
-All data, user accounts, and infrastructure are completely separated between these two regions
+모든 데이터, 사용자 계정, 인프라는 이 두 region 간에 완전히 분리됩니다.
 
-## Collection of Personal Data
+## 개인 데이터 수집 {#personal-data-collection}
 
-### For Self-hosted LiteLLM Users:
-- No personal data is collected or transmitted to LiteLLM servers when you self-host our software.
-- Any data generated or processed remains entirely within your own infrastructure.
+### 자체 호스팅 LiteLLM 사용자: {#self-hosted-litellm-users}
+- 소프트웨어를 자체 호스팅하는 경우 개인 데이터는 LiteLLM server로 수집되거나 전송되지 않습니다.
+- 생성되거나 처리되는 모든 데이터는 사용자의 자체 인프라 안에만 남습니다.
 
-### For LiteLLM Cloud Users:
-- LiteLLM Cloud tracks LLM usage data - We do not access or store the message / response content of your API requests or responses. You can see the [fields tracked here](https://github.com/BerriAI/litellm/blob/main/schema.prisma#L174)
+### LiteLLM Cloud 사용자: {#litellm-cloud-users}
+- LiteLLM Cloud는 LLM 사용 데이터를 추적합니다. API request 또는 response의 message / response content에는 접근하거나 저장하지 않습니다. 추적되는 field는 [여기](https://github.com/BerriAI/litellm/blob/main/schema.prisma#L174)에서 확인할 수 있습니다.
 
-**How to Use and Share the Personal Data**
-- Only proxy admins can view their usage data, and they can only see the usage data of their organization.
-- Proxy admins have the ability to invite other users / admins to their server to view their own usage data
-- LiteLLM Cloud does not sell or share any usage data with any third parties.
-
-
-## Cookies Information, Security, and Privacy
-
-### For Self-hosted LiteLLM Users:
-- Cookie data remains within your own infrastructure.
-- LiteLLM uses minimal cookies, solely for the purpose of allowing Proxy users to access the LiteLLM Admin UI.
-- These cookies are stored in your web browser after you log in.
-- We do not use cookies for advertising, tracking, or any purpose beyond maintaining your login session.
-- The only cookies used are essential for maintaining user authentication and session management for the app UI.
-- Session cookies expire when you close your browser, logout or after 24 hours.
-- LiteLLM does not use any third-party cookies.
-- The Admin UI accesses the cookie to authenticate your login session.
-- The cookie is stored as JWT and is not accessible to any other part of the system.
-- We (LiteLLM) do not access or share this cookie data for any other purpose.
+**개인 데이터 사용 및 공유 방식**
+- proxy admin만 사용 데이터를 볼 수 있으며, 자신의 organization 사용 데이터만 확인할 수 있습니다.
+- proxy admin은 다른 user / admin을 server에 초대해 각자의 사용 데이터를 보게 할 수 있습니다.
+- LiteLLM Cloud는 사용 데이터를 제3자에게 판매하거나 공유하지 않습니다.
 
 
-### For LiteLLM Cloud Users:
-- LiteLLM uses minimal cookies, solely for the purpose of allowing Proxy users to access the LiteLLM Admin UI.
-- These cookies are stored in your web browser after you log in.
-- We do not use cookies for advertising, tracking, or any purpose beyond maintaining your login session.
-- The only cookies used are essential for maintaining user authentication and session management for the app UI.
-- Session cookies expire when you close your browser, logout or after 24 hours.
-- LiteLLM does not use any third-party cookies.
-- The Admin UI accesses the cookie to authenticate your login session.
-- The cookie is stored as JWT and is not accessible to any other part of the system.
-- We (LiteLLM) do not access or share this cookie data for any other purpose.
+## Cookie 정보, 보안, 개인정보 보호 {#cookie-information-security-privacy}
 
-## Security Vulnerability Reporting Guidelines
+### 자체 호스팅 LiteLLM 사용자: {#self-hosted-litellm-users-1}
+- Cookie data는 사용자의 자체 인프라 안에 남습니다.
+- LiteLLM은 Proxy 사용자가 LiteLLM 관리자 UI에 접근하도록 하기 위한 목적에만 최소한의 cookie를 사용합니다.
+- 이 cookie는 로그인 후 사용자의 web browser에 저장됩니다.
+- 광고, 추적 또는 login session 유지 외의 목적으로 cookie를 사용하지 않습니다.
+- 사용되는 cookie는 app UI의 사용자 인증과 session management 유지에 필수적인 cookie뿐입니다.
+- Session cookie는 browser를 닫거나 logout하거나 24시간이 지나면 만료됩니다.
+- LiteLLM은 third-party cookie를 사용하지 않습니다.
+- 관리자 UI는 login session 인증을 위해 cookie에 접근합니다.
+- cookie는 JWT로 저장되며 system의 다른 부분에서는 접근할 수 없습니다.
+- LiteLLM은 이 cookie data에 다른 목적으로 접근하거나 공유하지 않습니다.
 
-We value the security community's role in protecting our systems and users. To report a security vulnerability:
 
-- Email support@berri.ai with details
-- Include steps to reproduce the issue
-- Provide any relevant additional information
+### LiteLLM Cloud 사용자: {#litellm-cloud-users-1}
+- LiteLLM은 Proxy 사용자가 LiteLLM 관리자 UI에 접근하도록 하기 위한 목적에만 최소한의 cookie를 사용합니다.
+- 이 cookie는 로그인 후 사용자의 web browser에 저장됩니다.
+- 광고, 추적 또는 login session 유지 외의 목적으로 cookie를 사용하지 않습니다.
+- 사용되는 cookie는 app UI의 사용자 인증과 session management 유지에 필수적인 cookie뿐입니다.
+- Session cookie는 browser를 닫거나 logout하거나 24시간이 지나면 만료됩니다.
+- LiteLLM은 third-party cookie를 사용하지 않습니다.
+- 관리자 UI는 login session 인증을 위해 cookie에 접근합니다.
+- cookie는 JWT로 저장되며 system의 다른 부분에서는 접근할 수 없습니다.
+- LiteLLM은 이 cookie data에 다른 목적으로 접근하거나 공유하지 않습니다.
 
-We'll review all reports promptly. Note that we don't currently offer a bug bounty program.
+## 보안 취약점 신고 가이드라인 {#security-vulnerability-reporting-guidelines}
 
-## Vulnerability Scanning
+시스템과 사용자를 보호하는 데 있어 보안 커뮤니티의 역할을 중요하게 생각합니다. 보안 취약점을 신고하려면:
 
-- LiteLLM runs [`grype`](https://github.com/anchore/grype) security scans on all built Docker images.
-    - See [`grype litellm` check on ci/cd](https://github.com/BerriAI/litellm/blob/main/.circleci/config.yml#L1099). 
-    - Current Status: ✅ Passing. 0 High/Critical severity vulnerabilities found.
+- 상세 내용을 support@berri.ai 로 이메일로 보내 주세요.
+- 문제를 재현하는 단계를 포함해 주세요.
+- 관련 추가 정보를 제공해 주세요.
 
-## Legal/Compliance FAQs
+모든 report를 신속히 검토하겠습니다. 현재는 bug bounty program을 제공하지 않습니다.
 
-### Procurement Options
+## 취약점 스캔 {#vulnerability-scanning}
+
+- LiteLLM은 빌드된 모든 Docker image에 대해 [`grype`](https://github.com/anchore/grype) security scan을 실행합니다.
+    - [`grype litellm` CI/CD check](https://github.com/BerriAI/litellm/blob/main/.circleci/config.yml#L1099)를 참고하세요.
+    - 현재 상태: ✅ Passing. High/Critical severity 취약점 0건.
+
+## 법무/컴플라이언스 FAQ {#legalcompliance-faq}
+
+### 조달 옵션 {#procurement-options}
 
 1. Invoicing
 2. AWS Marketplace
 3. Azure Marketplace
 
 
-### Vendor Information
+### 공급업체 정보 {#vendor-information}
 
-Legal Entity Name: Berrie AI Incorporated
+법인명: Berrie AI Incorporated
 
-Point of contact email address for security incidents: krrish@berri.ai
+보안 incident 연락처 이메일 주소: krrish@berri.ai
 
-Point of contact email address for general security-related questions: krrish@berri.ai 
+일반 보안 관련 질문 연락처 이메일 주소: krrish@berri.ai 
 
-Has the Vendor been audited / certified? 
-- SOC 2 Type I. Certified. Report available upon request on Enterprise plan.
-- SOC 2 Type II. In progress. Certificate available by April 15th, 2025.
-- ISO 27001. Certified. Report available upon request on Enterprise plan.
+Vendor가 audit / certification을 받았나요?
+- SOC 2 Type I. 인증 완료. 엔터프라이즈 plan에서 요청 시 report 제공.
+- SOC 2 Type II. 진행 중. 2025년 4월 15일까지 certificate 제공 가능.
+- ISO 27001. 인증 완료. 엔터프라이즈 plan에서 요청 시 report 제공.
 
-Has an information security management system been implemented? 
-- Yes - [CodeQL](https://codeql.github.com/) and a comprehensive ISMS covering multiple security domains.
+information security management system이 구현되어 있나요?
+- 예. [CodeQL](https://codeql.github.com/)과 여러 security domain을 포함하는 포괄적인 ISMS를 운영합니다.
 
-Is logging of key events - auth, creation, update changes occurring? 
-- Yes - we have [audit logs](https://docs.litellm.ai/docs/proxy/multiple_admins#1-switch-on-audit-logs)
+auth, creation, update change 같은 주요 event logging이 이루어지나요?
+- 예. [audit logs](https://docs.litellm.ai/docs/proxy/multiple_admins#1-switch-on-audit-logs)가 있습니다.
 
-Does the Vendor have an established Cybersecurity incident management program? 
-- Yes, Incident Response Policy available upon request.
+Vendor에 수립된 Cybersecurity incident management program이 있나요?
+- 예. 요청 시 Incident Response Policy를 제공할 수 있습니다.
 
 
-Does the vendor have a vulnerability disclosure policy in place? [Yes](https://github.com/BerriAI/litellm?tab=security-ov-file#security-vulnerability-reporting-guidelines)
+vendor에 vulnerability disclosure policy가 있나요? [예](https://github.com/BerriAI/litellm?tab=security-ov-file#security-vulnerability-reporting-guidelines)
 
-Does the vendor perform vulnerability scans? 
-- Yes, regular vulnerability scans are conducted as detailed in the [Vulnerability Scanning](#vulnerability-scanning) section.
+vendor가 vulnerability scan을 수행하나요?
+- 예. [취약점 스캔](#취약점-스캔) 섹션에 설명된 대로 정기 vulnerability scan을 수행합니다.
 
-Signer Name: Krish Amit Dholakia
+서명자 이름: Krish Amit Dholakia
 
-Signer Email: krrish@berri.ai
+서명자 이메일: krrish@berri.ai

@@ -1,33 +1,33 @@
-# Greenscale - Track LLM Spend and Responsible Usage
+# Greenscale - LLM 지출 및 책임 있는 사용량 추적하기 {#greenscale---track-llm-spend-and-responsible-usage}
 
 
 :::tip
 
-This is community maintained, Please make an issue if you run into a bug
+이 문서는 커뮤니티에서 유지 관리합니다. 버그가 발생하면 이슈를 만들어 주세요.
 https://github.com/BerriAI/litellm
 
 :::
 
 
-[Greenscale](https://greenscale.ai/) is a production monitoring platform for your LLM-powered app that provides you granular key insights into your GenAI spending and responsible usage. Greenscale only captures metadata to minimize the exposure risk of personally identifiable information (PII).
+[Greenscale](https://greenscale.ai/)는 LLM 기반 앱을 위한 프로덕션 모니터링 플랫폼으로, GenAI 지출과 책임 있는 사용량에 대한 세분화된 핵심 인사이트를 제공합니다. Greenscale은 개인 식별 정보(PII) 노출 위험을 최소화하기 위해 메타데이터만 캡처합니다.
 
-## Getting Started
+## 시작하기
 
-Use Greenscale to log requests across all LLM Providers
+Greenscale을 사용하면 모든 LLM 공급자 전반의 요청을 로깅할 수 있습니다.
 
-liteLLM provides `callbacks`, making it easy for you to log data depending on the status of your responses.
+liteLLM은 `callbacks`를 제공하므로 응답 상태에 따라 데이터를 쉽게 로깅할 수 있습니다.
 
-## Using Callbacks
+## Callbacks 사용하기 {#using-callbacks}
 
-First, email `hello@greenscale.ai` to get an API_KEY.
+먼저 `hello@greenscale.ai`로 이메일을 보내 API_KEY를 발급받으세요.
 
-Use just 1 line of code, to instantly log your responses **across all providers** with Greenscale:
+코드 한 줄만으로 Greenscale을 통해 **모든 공급자 전반의** 응답을 즉시 로깅할 수 있습니다.
 
 ```python
 litellm.success_callback = ["greenscale"]
 ```
 
-### Complete code
+### 전체 코드 {#complete-code}
 
 ```python
 from litellm import completion
@@ -51,9 +51,9 @@ response = completion(
 )
 ```
 
-## Additional information in metadata
+## metadata에 추가 정보 전달하기 {#additional-information-in-metadata}
 
-You can send any additional information to Greenscale by using the `metadata` field in completion and `greenscale_` prefix. This can be useful for sending metadata about the request, such as the project and application name, customer_id, environment, or any other information you want to track usage. `greenscale_project` and `greenscale_application` are required fields.
+completion의 `metadata` 필드와 `greenscale_` 접두사를 사용해 Greenscale로 추가 정보를 보낼 수 있습니다. 이는 프로젝트 및 애플리케이션 이름, customer_id, environment 또는 사용량 추적에 필요한 기타 정보처럼 요청 관련 메타데이터를 보낼 때 유용합니다. `greenscale_project`와 `greenscale_application`은 필수 필드입니다.
 
 ```python
 #openai call with additional metadata
@@ -70,8 +70,8 @@ response = completion(
 )
 ```
 
-## Support & Talk with Greenscale Team
+## 지원 및 Greenscale 팀에 문의하기 {#support--talk-with-greenscale-team}
 
-- [Schedule Demo 👋](https://calendly.com/nandesh/greenscale)
-- [Website 💻](https://greenscale.ai)
-- Our email ✉️ `hello@greenscale.ai`
+- [데모 예약 👋](https://calendly.com/nandesh/greenscale)
+- [웹사이트 💻](https://greenscale.ai)
+- 문의 이메일 ✉️ `hello@greenscale.ai`

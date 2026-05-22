@@ -1,35 +1,35 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Google GenAI SDK with LiteLLM
+# LiteLLM으로 Google GenAI SDK 사용하기 {#google-genai-sdk-with-litellm}
 
-Use Google's official GenAI SDK (JavaScript/TypeScript and Python) with any LLM provider through LiteLLM Proxy.
+LiteLLM Proxy를 통해 Google의 공식 GenAI SDK(JavaScript/TypeScript 및 Python)를 원하는 LLM 공급자와 함께 사용하세요.
 
-The Google GenAI SDK (`@google/genai` for JS, `google-genai` for Python) provides a native interface for calling Gemini models. By pointing it to LiteLLM, you can use the same SDK with OpenAI, Anthropic, Bedrock, Azure, Vertex AI, or any other provider — while keeping the native Gemini request/response format.
+Google GenAI SDK(JS용 `@google/genai`, Python용 `google-genai`)는 Gemini 모델을 호출하는 네이티브 인터페이스를 제공합니다. 이 SDK가 LiteLLM을 바라보도록 설정하면 네이티브 Gemini 요청/응답 형식은 유지하면서 동일한 SDK로 OpenAI, Anthropic, Bedrock, Azure, Vertex AI 또는 다른 공급자를 사용할 수 있습니다.
 
-## Why Use LiteLLM with Google GenAI SDK?
+## Google GenAI SDK와 함께 LiteLLM을 사용하는 이유 {#why-use-litellm-with-google-genai-sdk}
 
-**Developer Benefits:**
-- **Universal Model Access**: Use any LiteLLM-supported model (Anthropic, OpenAI, Vertex AI, Bedrock, etc.) through the Google GenAI SDK interface
-- **Higher Rate Limits & Reliability**: Load balance across multiple models and providers to avoid hitting individual provider limits, with fallbacks to ensure you get responses even if one provider fails
+**개발자 이점:**
+- **범용 모델 접근**: Google GenAI SDK 인터페이스를 통해 LiteLLM이 지원하는 모든 모델(Anthropic, OpenAI, Vertex AI, Bedrock 등)을 사용할 수 있습니다.
+- **더 높은 속도 제한과 안정성**: 여러 모델과 공급자에 걸쳐 로드 밸런싱하여 개별 공급자 제한에 걸리지 않도록 하고, 한 공급자가 실패해도 응답을 받을 수 있도록 폴백을 사용할 수 있습니다.
 
-**Proxy Admin Benefits:**
-- **Centralized Management**: Control access to all models through a single LiteLLM proxy instance without giving developers API keys to each provider
-- **Budget Controls**: Set spending limits and track costs across all SDK usage
-- **Logging & Observability**: Track all requests with cost tracking, logging, and analytics
+**Proxy 관리자 이점:**
+- **중앙 집중식 관리**: 개발자에게 각 공급자의 API 키를 제공하지 않고도 단일 LiteLLM proxy 인스턴스를 통해 모든 모델 접근을 제어할 수 있습니다.
+- **예산 제어**: 모든 SDK 사용량에 대해 지출 한도를 설정하고 비용을 추적할 수 있습니다.
+- **로깅 및 관측성**: 비용 추적, 로깅, 분석으로 모든 요청을 추적할 수 있습니다.
 
-| Feature | Supported | Notes |
+| 기능 | 지원 여부 | 참고 |
 |---------|-----------|-------|
-| Cost Tracking | ✅ | All models on `/generateContent` endpoint |
-| Logging | ✅ | Works across all integrations |
-| Streaming | ✅ | `streamGenerateContent` supported |
-| Virtual Keys | ✅ | Use LiteLLM keys instead of Google keys |
-| Load Balancing | ✅ | Via native router endpoints |
-| Fallbacks | ✅ | Via native router endpoints |
+| 비용 추적 | ✅ | `/generateContent` 엔드포인트의 모든 모델 |
+| 로깅 | ✅ | 모든 통합에서 작동 |
+| 스트리밍 | ✅ | `streamGenerateContent` 지원 |
+| 가상 키 | ✅ | Google 키 대신 LiteLLM 키 사용 |
+| 로드 밸런싱 | ✅ | 네이티브 router 엔드포인트를 통해 제공 |
+| 폴백 | ✅ | 네이티브 router 엔드포인트를 통해 제공 |
 
-## Quick Start
+## 빠른 시작
 
-### 1. Install the SDK
+### 1. SDK 설치 {#1-install-the-sdk}
 
 <Tabs>
 <TabItem value="js" label="JavaScript/TypeScript">
@@ -48,7 +48,7 @@ uv add google-genai
 </TabItem>
 </Tabs>
 
-### 2. Start LiteLLM Proxy
+### 2. LiteLLM Proxy 시작 {#2-start-litellm-proxy}
 
 ```yaml title="config.yaml" showLineNumbers
 model_list:
@@ -62,7 +62,7 @@ model_list:
 litellm --config config.yaml
 ```
 
-### 3. Call the SDK through LiteLLM
+### 3. LiteLLM을 통해 SDK 호출 {#3-call-the-sdk-through-litellm}
 
 <Tabs>
 <TabItem value="js" label="JavaScript/TypeScript">
@@ -123,7 +123,7 @@ curl "http://localhost:4000/gemini/v1beta/models/gemini-2.5-flash:generateConten
 </TabItem>
 </Tabs>
 
-## Streaming
+## 스트리밍 {#streaming}
 
 <Tabs>
 <TabItem value="js" label="JavaScript/TypeScript">
@@ -175,7 +175,7 @@ for chunk in response:
 </TabItem>
 </Tabs>
 
-## Multi-turn Chat
+## 멀티턴 채팅 {#multi-turn-chat}
 
 <Tabs>
 <TabItem value="js" label="JavaScript/TypeScript">
@@ -229,22 +229,22 @@ print(response2.text)
 </Tabs>
 
 
-## Advanced: Use Any Model with the GenAI SDK
+## 고급: GenAI SDK로 모든 모델 사용 {#advanced-use-any-model-with-the-genai-sdk}
 
-By default, the GenAI SDK talks to Gemini models. But with LiteLLM's router, you can route GenAI SDK requests to **any provider** — Anthropic, OpenAI, Bedrock, etc.
+기본적으로 GenAI SDK는 Gemini 모델과 통신합니다. 하지만 LiteLLM의 router를 사용하면 GenAI SDK 요청을 Anthropic, OpenAI, Bedrock 등 **원하는 공급자**로 라우팅할 수 있습니다.
 
-This works by using `model_group_alias` to map Gemini model names to your desired provider models. LiteLLM handles the format translation internally.
+이는 `model_group_alias`로 Gemini 모델 이름을 원하는 공급자 모델에 매핑하는 방식으로 동작합니다. LiteLLM은 내부에서 형식 변환을 처리합니다.
 
 :::info
 
-For this to work, point the SDK `baseUrl` to `http://localhost:4000` (without `/gemini`). This routes requests through LiteLLM's native Google endpoints, which go through the router and support model aliasing.
+이 기능을 사용하려면 SDK `baseUrl`이 `/gemini`를 제외한 `http://localhost:4000`을 가리키도록 설정하세요. 그러면 요청이 LiteLLM의 네이티브 Google 엔드포인트를 통해 라우팅되고, 해당 경로는 router를 거치며 모델 alias를 지원합니다.
 
 :::
 
 <Tabs>
 <TabItem value="anthropic" label="Anthropic">
 
-Route `gemini-2.5-flash` requests to Claude Sonnet:
+`gemini-2.5-flash` 요청을 Claude Sonnet으로 라우팅합니다.
 
 ```yaml title="config.yaml" showLineNumbers
 model_list:
@@ -260,7 +260,7 @@ router_settings:
 </TabItem>
 <TabItem value="openai" label="OpenAI">
 
-Route `gemini-2.5-flash` requests to GPT-4o:
+`gemini-2.5-flash` 요청을 GPT-4o로 라우팅합니다.
 
 ```yaml title="config.yaml" showLineNumbers
 model_list:
@@ -276,7 +276,7 @@ router_settings:
 </TabItem>
 <TabItem value="bedrock" label="Bedrock">
 
-Route `gemini-2.5-flash` requests to Claude on Bedrock:
+`gemini-2.5-flash` 요청을 Bedrock의 Claude로 라우팅합니다.
 
 ```yaml title="config.yaml" showLineNumbers
 model_list:
@@ -292,9 +292,9 @@ router_settings:
 ```
 
 </TabItem>
-<TabItem value="multi" label="Multi-Provider Load Balancing">
+<TabItem value="multi" label="다중 공급자 로드 밸런싱">
 
-Load balance across Anthropic and OpenAI:
+Anthropic과 OpenAI에 걸쳐 로드 밸런싱합니다.
 
 ```yaml title="config.yaml" showLineNumbers
 model_list:
@@ -314,7 +314,7 @@ router_settings:
 </TabItem>
 </Tabs>
 
-Then use the SDK with `baseUrl` pointing to LiteLLM (without `/gemini`):
+그런 다음 `/gemini`를 제외하고 LiteLLM을 가리키는 `baseUrl`로 SDK를 사용합니다.
 
 <Tabs>
 <TabItem value="js" label="JavaScript/TypeScript">
@@ -364,24 +364,24 @@ print(response.text)
 </Tabs>
 
 
-## Pass-through vs Native Router Endpoints
+## Pass-through와 네이티브 Router 엔드포인트 비교 {#pass-through-vs-native-router-endpoints}
 
-LiteLLM offers two ways to handle GenAI SDK requests:
+LiteLLM은 GenAI SDK 요청을 처리하는 두 가지 방식을 제공합니다.
 
-| | Pass-through (`/gemini`) | Native Router (`/`) |
+| | Pass-through (`/gemini`) | 네이티브 Router (`/`) |
 |---|---|---|
 | **baseUrl** | `http://localhost:4000/gemini` | `http://localhost:4000` |
-| **Models** | Gemini only | Any provider via `model_group_alias` |
-| **Translation** | None — proxies directly to Google | Translates internally |
-| **Cost Tracking** | ✅ | ✅ |
-| **Virtual Keys** | ✅ | ✅ |
-| **Load Balancing** | ❌ | ✅ |
-| **Fallbacks** | ❌ | ✅ |
-| **Best for** | Simple Gemini proxy | Multi-provider routing |
+| **모델** | Gemini만 지원 | `model_group_alias`를 통한 모든 공급자 |
+| **변환** | 없음 - Google로 직접 프록시 | 내부에서 변환 |
+| **비용 추적** | ✅ | ✅ |
+| **가상 키** | ✅ | ✅ |
+| **로드 밸런싱** | ❌ | ✅ |
+| **폴백** | ❌ | ✅ |
+| **적합한 용도** | 단순 Gemini proxy | 다중 공급자 라우팅 |
 
-## Environment Variable Configuration
+## 환경 변수 설정 {#environment-variable-설정}
 
-You can also configure the SDK via environment variables instead of code:
+코드 대신 환경 변수로 SDK를 설정할 수도 있습니다.
 
 ```bash
 # For JavaScript SDK (@google/genai)
@@ -394,13 +394,13 @@ export GEMINI_API_KEY="sk-1234"
 export GEMINI_API_KEY="sk-1234"
 ```
 
-This is especially useful for tools built on top of the GenAI SDK (like [Gemini CLI](./litellm_gemini_cli.md)).
+이는 [Gemini CLI](./litellm_gemini_cli.md)처럼 GenAI SDK 위에 구축된 도구에서 특히 유용합니다.
 
-## Related Resources
+## 관련 리소스 {#related-resources}
 
-- [Gemini CLI with LiteLLM](./litellm_gemini_cli.md)
-- [Google AI Studio Pass-Through](../pass_through/google_ai_studio)
-- [Google ADK with LiteLLM](./google_adk.md)
-- [LiteLLM Proxy Quick Start](../proxy/quick_start)
-- [`@google/genai` npm package](https://www.npmjs.com/package/@google/genai)
-- [`google-genai` PyPI package](https://pypi.org/project/google-genai/)
+- [LiteLLM으로 Gemini CLI 사용하기](./litellm_gemini_cli.md)
+- [Google AI Studio Pass-Through 사용하기](../pass_through/google_ai_studio)
+- [LiteLLM으로 Google ADK 사용하기](./google_adk.md)
+- [LiteLLM Proxy 빠른 시작](../proxy/quick_start)
+- [`@google/genai` npm 패키지](https://www.npmjs.com/package/@google/genai)
+- [`google-genai` PyPI 패키지](https://pypi.org/project/google-genai/)

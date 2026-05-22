@@ -1,21 +1,21 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Vertex AI PayGo and Priority
+# Vertex AI PayGo와 Priority
 
 ## Priority PayGo
 
-LiteLLM supports Priority PayGo.  
-Send a priority header, get priority queueing, and pay priority token rates.
+LiteLLM은 Priority PayGo를 지원합니다.  
+priority header를 보내면 priority queueing을 사용하고 priority token rate로 과금됩니다.
 
-:::info Which models support Priority PayGo?
-As of this writing: `gemini/gemini-2.5-pro`, `vertex_ai/gemini-3-pro-preview`, `vertex_ai/gemini-3.1-pro-preview`, `vertex_ai/gemini-3-flash-preview`, and their variants.  
-Check `supports_service_tier: true` in LiteLLM's [model pricing JSON](https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json).
+:::info Priority PayGo를 지원하는 모델
+현재 기준: `gemini/gemini-2.5-pro`, `vertex_ai/gemini-3-pro-preview`, `vertex_ai/gemini-3.1-pro-preview`, `vertex_ai/gemini-3-flash-preview` 및 해당 변형입니다.  
+LiteLLM의 [model pricing JSON](https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json)에서 `supports_service_tier: true`를 확인하세요.
 :::
 
-### Send a priority request
+### Priority request 보내기
 
-Use this header:
+다음 header를 사용하세요.
 
 `X-Vertex-AI-LLM-Shared-Request-Type: priority`
 
@@ -61,7 +61,7 @@ curl http://localhost:4000/v1/chat/completions \
 </TabItem>
 <TabItem value="pass-through" label="Pass-through mode">
 
-Use `x-pass-` so LiteLLM forwards provider-specific headers.
+LiteLLM이 provider-specific header를 전달하도록 `x-pass-`를 사용하세요.
 
 ```bash
 MODEL_ID="gemini-3-pro-preview-0325"
@@ -78,32 +78,32 @@ curl -X POST \
 </TabItem>
 </Tabs>
 
-### How cost tracking works
+### Cost tracking 동작 방식
 
-![Vertex AI Priority PayGo Cost Tracking Flow](/img/vertex_cost_tracking_flow.svg)
+![Vertex AI Priority PayGo 비용 추적 흐름](/img/vertex_cost_tracking_flow.svg)
 
-**`trafficType` → `service_tier` mapping**
+**`trafficType` -> `service_tier` mapping**
 
-| `usageMetadata.trafficType` | `service_tier` | Pricing keys used |
+| `usageMetadata.trafficType` | `service_tier` | 사용하는 pricing key |
 |---|---|---|
 | `ON_DEMAND` | `None` | `input_cost_per_token` |
 | `ON_DEMAND_PRIORITY` | `"priority"` | `input_cost_per_token_priority` |
 | `FLEX` / `BATCH` | `"flex"` | `input_cost_per_token_flex` |
 
-If a tier-specific key is missing, LiteLLM falls back to standard pricing keys.
+tier-specific key가 없으면 LiteLLM은 standard pricing key로 fallback합니다.
 
 ---
 
-## Standard PayGo vs Provisioned Throughput
+## Standard PayGo와 Provisioned Throughput
 
-This is a different header from priority routing:
+이 header는 priority routing과 다른 header입니다.
 
-| Header value | Behavior |
+| Header value | 동작 |
 |---|---|
-| `X-Vertex-AI-LLM-Request-Type: shared` | Force standard PayGo (bypass PT) |
-| `X-Vertex-AI-LLM-Request-Type: dedicated` | Force Provisioned Throughput only (`429` if exhausted) |
+| `X-Vertex-AI-LLM-Request-Type: shared` | standard PayGo를 강제합니다(PT 우회) |
+| `X-Vertex-AI-LLM-Request-Type: dedicated` | Provisioned Throughput만 강제합니다(소진되면 `429`) |
 
-### Native route example
+### Native route 예제
 
 ```python
 import litellm
@@ -117,7 +117,7 @@ response = litellm.completion(
 )
 ```
 
-### Pass-through example
+### Pass-through 예제
 
 ```bash
 MODEL_ID="gemini-2.0-flash-001"
@@ -135,17 +135,16 @@ curl -X POST \
 
 ---
 
-## Troubleshooting 
+## 문제 해결 
 
-**Q: What does `403 Permission denied` or `IAM_PERMISSION_DENIED` mean?**  
-A: The service account or Application Default Credentials (ADC) user does not have the `roles/aiplatform.user` role. To resolve this, re-run the `gcloud projects add-iam-policy-binding`.
+**Q: `403 Permission denied` 또는 `IAM_PERMISSION_DENIED`는 무엇을 의미하나요?**  
+답변: service account 또는 ADC user에 `roles/aiplatform.user` role이 없다는 의미입니다. 해결하려면 `gcloud projects add-iam-policy-binding`을 다시 실행하세요.
 
-**Q: What should I do if I get a `429 Quota exceeded` error?**  
-A: This means you've hit the per-region QPM (queries per minute) or TPM (tokens per minute) quota. You can:
-- Request a quota increase from the [GCP Quotas console](https://console.cloud.google.com/iam-admin/quotas)
-- Add more regions to your LiteLLM configuration for load balancing
-- Upgrade to [Provisioned Throughput](https://cloud.google.com/vertex-ai/generative-ai/docs/provisioned-throughput) for guaranteed capacity
+**Q: `429 Quota exceeded` error가 발생하면 어떻게 해야 하나요?**  
+A: region별 QPM(queries per minute) 또는 TPM(tokens per minute) quota에 도달했다는 의미입니다. 다음을 시도할 수 있습니다.
+- [GCP Quotas console](https://console.cloud.google.com/iam-admin/quotas)에서 quota 증가 요청
+- load balancing을 위해 LiteLLM configuration에 region 추가
+- 보장된 capacity가 필요하면 [Provisioned Throughput](https://cloud.google.com/vertex-ai/generative-ai/docs/provisioned-throughput)으로 upgrade
 
-**Q: How do I fix the `VERTEXAI_PROJECT not set` error?**  
-A: Either pass the `vertex_project` parameter explicitly in your LiteLLM call, or set the `VERTEXAI_PROJECT` environment variable before running your code.
-
+**Q: `VERTEXAI_PROJECT not set` error는 어떻게 해결하나요?**  
+A: LiteLLM call에서 `vertex_project` parameter를 명시적으로 전달하거나, 코드를 실행하기 전에 `VERTEXAI_PROJECT` environment variable을 설정하세요.

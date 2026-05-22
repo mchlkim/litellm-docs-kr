@@ -9,17 +9,17 @@ interface Stage {
 
 const STAGES: Stage[] = [
   {
-    label: 'Request Wrapping',
+    label: '요청 래핑',
     subtitle: '_CachedRequest',
     code: 'request = _CachedRequest(scope, receive)',
   },
   {
-    label: 'Sync Event',
+    label: '동기화 이벤트',
     subtitle: 'anyio.Event()',
     code: 'response_sent = anyio.Event()',
   },
   {
-    label: 'Memory Stream',
+    label: '메모리 스트림',
     subtitle: 'create_memory_object_stream()',
     code: 'send_stream, recv_stream = anyio.create_memory_object_stream()',
   },
@@ -29,17 +29,17 @@ const STAGES: Stage[] = [
     code: 'async with anyio.create_task_group() as task_group:',
   },
   {
-    label: 'Background Task',
+    label: '백그라운드 Task',
     subtitle: 'task_group.start_soon(coro)',
     code: 'task_group.start_soon(coro)  # app runs in separate task',
   },
   {
-    label: 'Nested Task Group',
+    label: '중첩 Task Group',
     subtitle: 'receive_or_disconnect()',
     code: 'async with anyio.create_task_group() as task_group: ...',
   },
   {
-    label: 'Response Wrapping',
+    label: '응답 래핑',
     subtitle: '_StreamingResponse',
     code: 'response = _StreamingResponse(status_code=..., content=body_stream())',
   },
@@ -99,7 +99,7 @@ export default function BaseHTTPMiddlewareAnimation() {
 
   return (
     <div className={styles.pipelineWrapper}>
-      <div className={styles.pipelineLabel}>7 steps per request</div>
+      <div className={styles.pipelineLabel}>요청당 7단계</div>
       <div className={styles.pipeline}>
         {STAGES.map((stage, i) => (
           <div className={styles.stageWrapper} key={i}>

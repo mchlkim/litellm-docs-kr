@@ -1,14 +1,14 @@
-# MCP OBO Auth
+# MCP OBO 인증
 
-OAuth 2.0 On-Behalf-Of (OBO) auth lets LiteLLM exchange a user's incoming bearer token for a scoped token that is valid for a specific MCP server.
+OAuth 2.0 대리 권한(OBO) 인증을 사용하면 LiteLLM이 사용자의 인바운드 bearer token을 특정 MCP 서버에 유효한 범위 제한 토큰으로 교환할 수 있습니다.
 
-Use OBO when:
+다음 상황에서 OBO를 사용합니다.
 
-- Your MCP server should receive a token minted specifically for that MCP server.
-- Your identity provider supports [RFC 8693 OAuth 2.0 Token Exchange](https://datatracker.ietf.org/doc/html/rfc8693).
-- You want LiteLLM to keep the user's raw token from being forwarded directly to the MCP server.
+- MCP 서버가 해당 MCP 서버용으로 발급된 토큰만 받아야 합니다.
+- IdP가 [RFC 8693 OAuth 2.0 Token Exchange](https://datatracker.ietf.org/doc/html/rfc8693)를 지원합니다.
+- 사용자의 원본 토큰이 MCP 서버로 직접 전달되지 않도록 LiteLLM에서 제어하고 싶습니다.
 
-## How It Works
+## 동작 방식
 
 ```mermaid
 flowchart TD
@@ -24,17 +24,17 @@ flowchart TD
     J --> K[MCP server executes the tool and returns the result]
 ```
 
-In short:
+요약하면 다음과 같습니다.
 
-1. The client sends a request to LiteLLM with a bearer token.
-2. LiteLLM uses that bearer token as the RFC 8693 `subject_token`.
-3. LiteLLM exchanges it at your identity provider's token exchange endpoint.
-4. LiteLLM forwards only the exchanged scoped token to the MCP server.
-5. LiteLLM caches the exchanged token until it expires, so repeated calls avoid another identity provider round trip.
+1. 클라이언트가 bearer token을 포함해 LiteLLM으로 요청을 보냅니다.
+2. LiteLLM은 해당 bearer token을 RFC 8693 `subject_token`으로 사용합니다.
+3. LiteLLM은 IdP의 token exchange endpoint에서 토큰을 교환합니다.
+4. LiteLLM은 교환된 범위 제한 토큰만 MCP 서버로 전달합니다.
+5. LiteLLM은 교환된 토큰이 만료될 때까지 캐시하므로, 반복 호출에서는 IdP 왕복을 다시 수행하지 않습니다.
 
-## Configure an MCP Server for OBO
+## OBO용 MCP 서버 구성
 
-Set `auth_type: oauth2_token_exchange` on the MCP server.
+MCP 서버에 `auth_type: oauth2_token_exchange`를 설정합니다.
 
 ```yaml title="config.yaml" showLineNumbers
 mcp_servers:
@@ -43,38 +43,38 @@ mcp_servers:
     transport: "http"
     auth_type: oauth2_token_exchange
 
-    # OAuth 2.0 Token Exchange endpoint on your identity provider
+    # IdP의 OAuth 2.0 Token Exchange endpoint
     token_exchange_endpoint: "https://idp.example.com/oauth2/token"
 
-    # Token exchange client registered with your identity provider
+    # IdP에 등록된 token exchange client
     client_id: "<idp-client-id>"
     client_secret: "<idp-client-secret>"
 
-    # Optional but recommended: restrict the exchanged token to this MCP server
+    # 선택 사항이지만 권장: 교환된 토큰을 이 MCP 서버로 제한
     audience: "api://internal-tools-mcp"
     scopes:
       - "mcp.tools.read"
       - "mcp.tools.execute"
 
-    # Optional. Defaults to access_token.
+    # 선택 사항. 기본값은 access_token.
     subject_token_type: "urn:ietf:params:oauth:token-type:access_token"
 ```
 
-### Config Fields
+### 구성 필드
 
-| Field | Required | Description |
+| 필드 | 필수 여부 | 설명 |
 |-------|----------|-------------|
-| `auth_type` | Yes | Must be `oauth2_token_exchange`. |
-| `token_exchange_endpoint` | Yes | The identity provider endpoint that accepts RFC 8693 token exchange requests. |
-| `client_id` | Yes | OAuth client identifier LiteLLM uses when calling the token exchange endpoint. |
-| `client_secret` | Yes | OAuth client secret LiteLLM uses when calling the token exchange endpoint. |
-| `audience` | Recommended | Resource identifier for the MCP server. LiteLLM sends this as the token exchange `audience`. |
-| `scopes` | Optional | Scopes LiteLLM requests for the exchanged token. LiteLLM joins the list into the OAuth `scope` parameter. |
-| `subject_token_type` | Optional | RFC 8693 subject token type. Defaults to `urn:ietf:params:oauth:token-type:access_token`. |
+| `auth_type` | 예 | `oauth2_token_exchange`여야 합니다. |
+| `token_exchange_endpoint` | 예 | RFC 8693 token exchange 요청을 받는 IdP endpoint입니다. |
+| `client_id` | 예 | LiteLLM이 token exchange endpoint를 호출할 때 사용하는 OAuth client identifier입니다. |
+| `client_secret` | 예 | LiteLLM이 token exchange endpoint를 호출할 때 사용하는 OAuth client secret입니다. |
+| `audience` | 권장 | MCP 서버의 resource identifier입니다. LiteLLM은 이를 token exchange `audience`로 전송합니다. |
+| `scopes` | 선택 | LiteLLM이 교환된 토큰에 요청하는 scope입니다. LiteLLM은 목록을 OAuth `scope` 파라미터로 결합합니다. |
+| `subject_token_type` | 선택 | RFC 8693 subject token type입니다. 기본값은 `urn:ietf:params:oauth:token-type:access_token`입니다. |
 
-## Token Exchange Request
+## Token Exchange 요청
 
-For each uncached subject token and MCP server pair, LiteLLM sends a form-encoded request like this to `token_exchange_endpoint`:
+캐시에 없는 subject token과 MCP 서버 조합마다 LiteLLM은 다음과 같은 form-encoded 요청을 `token_exchange_endpoint`로 보냅니다.
 
 ```http
 POST /oauth2/token
@@ -89,7 +89,7 @@ grant_type=urn:ietf:params:oauth:grant-type:token-exchange
 &scope=mcp.tools.read mcp.tools.execute
 ```
 
-Your identity provider should return an access token:
+IdP는 access token을 반환해야 합니다.
 
 ```json
 {
@@ -99,17 +99,17 @@ Your identity provider should return an access token:
 }
 ```
 
-LiteLLM then calls the MCP server with:
+이후 LiteLLM은 다음 헤더로 MCP 서버를 호출합니다.
 
 ```http
 Authorization: Bearer scoped-token-for-mcp-server
 ```
 
-## Calling an OBO MCP Server
+## OBO MCP 서버 호출
 
-The inbound request must include the user's bearer token so LiteLLM has a `subject_token` to exchange.
+LiteLLM이 교환할 `subject_token`을 확보할 수 있도록 인바운드 요청에는 사용자의 bearer token이 포함되어야 합니다.
 
-For direct MCP calls, keep the LiteLLM key in `x-litellm-api-key` and leave `Authorization` for the user token:
+직접 MCP 호출에서는 LiteLLM key를 `x-litellm-api-key`에 넣고, `Authorization`은 사용자 토큰용으로 남겨둡니다.
 
 ```bash title="Direct MCP call" showLineNumbers
 curl -X POST "https://litellm.example.com/internal_tools/mcp" \
@@ -119,7 +119,7 @@ curl -X POST "https://litellm.example.com/internal_tools/mcp" \
   -d '{"jsonrpc":"2.0","id":1,"method":"tools/list","params":{}}'
 ```
 
-For the Responses API, pass MCP tool headers with the LiteLLM key separated from the user token:
+Responses API에서는 LiteLLM key와 사용자 토큰을 분리해 MCP tool header로 전달합니다.
 
 ```bash title="Responses API with MCP OBO" showLineNumbers
 curl -X POST "https://litellm.example.com/v1/responses" \
@@ -144,35 +144,34 @@ curl -X POST "https://litellm.example.com/v1/responses" \
 ```
 
 :::tip
-If the MCP client can only send one `Authorization` header, use `x-litellm-api-key` for the LiteLLM key and reserve `Authorization` for the user's token. LiteLLM needs the user token as the OBO `subject_token`.
+MCP 클라이언트가 `Authorization` 헤더를 하나만 보낼 수 있다면 LiteLLM key는 `x-litellm-api-key`에 넣고, `Authorization`은 사용자 토큰용으로 남겨두세요. LiteLLM은 OBO `subject_token`으로 사용자 토큰이 필요합니다.
 :::
 
-## Caching Behavior
+## 캐싱 동작
 
-LiteLLM caches exchanged tokens by:
+LiteLLM은 교환된 토큰을 다음 기준으로 캐시합니다.
 
 - subject token
 - MCP server ID
 
-This means two different users get separate exchanged tokens, while repeated calls from the same user to the same MCP server reuse the cached token until it expires.
+즉 서로 다른 두 사용자는 별도의 교환 토큰을 받지만, 같은 사용자가 같은 MCP 서버를 반복 호출하면 만료 전까지 캐시된 토큰을 재사용합니다.
 
-The cache TTL is based on `expires_in` minus LiteLLM's OAuth expiry buffer. If `expires_in` is missing or invalid, LiteLLM uses the default OAuth token cache TTL.
+캐시 TTL은 `expires_in`에서 LiteLLM의 OAuth 만료 버퍼를 뺀 값으로 계산됩니다. `expires_in`이 없거나 유효하지 않으면 LiteLLM은 기본 OAuth token cache TTL을 사용합니다.
 
-## Fallback Behavior
+## Fallback 동작
 
-If an OBO server has no incoming subject token:
+OBO 서버에 인바운드 subject token이 없으면 다음처럼 동작합니다.
 
-- If `client_id`, `client_secret`, and `token_url` are configured, LiteLLM can fall back to OAuth `client_credentials`.
-- Otherwise, LiteLLM logs a warning and proceeds without token exchange.
+- `client_id`, `client_secret`, `token_url`이 구성되어 있으면 LiteLLM은 OAuth `client_credentials`로 fallback할 수 있습니다.
+- 그렇지 않으면 LiteLLM은 경고를 기록하고 token exchange 없이 진행합니다.
 
-For strict OBO deployments, configure clients so every request includes the user bearer token.
+엄격한 OBO 배포에서는 모든 요청에 사용자 bearer token이 포함되도록 클라이언트를 구성하세요.
 
-## Troubleshooting
+## 문제 해결
 
-| Symptom | Check |
+| 증상 | 확인할 사항 |
 |---------|-------|
-| MCP server receives the LiteLLM key | Move the LiteLLM key to `x-litellm-api-key` and use `Authorization` for the user token. |
-| Token exchange endpoint returns 400 | Confirm `audience`, `scopes`, `client_id`, and `subject_token_type` match your identity provider configuration. |
-| MCP server receives no `Authorization` header | Confirm the MCP server has `auth_type: oauth2_token_exchange` and the inbound request includes a user bearer token. |
-| Identity provider is called on every request | Confirm the identity provider returns `expires_in`, and that the same user token and MCP server are being reused. |
-
+| MCP server가 LiteLLM key를 받음 | LiteLLM key를 `x-litellm-api-key`로 옮기고, `Authorization`은 사용자 토큰에 사용합니다. |
+| Token exchange endpoint가 400을 반환함 | `audience`, `scopes`, `client_id`, `subject_token_type`이 IdP 구성과 일치하는지 확인합니다. |
+| MCP server가 `Authorization` header를 받지 못함 | MCP server에 `auth_type: oauth2_token_exchange`가 설정되어 있고, 인바운드 요청에 사용자 bearer token이 포함되어 있는지 확인합니다. |
+| IdP가 모든 요청마다 호출됨 | IdP가 `expires_in`을 반환하는지, 같은 사용자 토큰과 MCP server가 재사용되고 있는지 확인합니다. |

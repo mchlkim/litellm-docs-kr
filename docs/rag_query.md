@@ -1,15 +1,15 @@
 # /rag/query
 
-RAG Query endpoint: **Search Vector Store → (Rerank) → LLM Completion**
+RAG Query endpoint: **Vector Store 검색 → (Rerank) → LLM Completion**
 
-| Feature | Supported |
+| 기능 | 지원 여부 |
 |---------|-----------|
-| Logging | Yes |
-| Streaming | Yes |
-| Reranking | Yes (optional) |
-| Supported Providers | `openai`, `bedrock`, `vertex_ai` |
+| 로깅 | 예 |
+| Streaming | 예 |
+| Reranking | 예(선택 사항) |
+| 지원 프로바이더 | `openai`, `bedrock`, `vertex_ai` |
 
-## Quick Start
+## 빠른 시작
 
 ```bash showLineNumbers title="RAG Query with OpenAI"
 curl -X POST "http://localhost:4000/v1/rag/query" \
@@ -26,18 +26,18 @@ curl -X POST "http://localhost:4000/v1/rag/query" \
     }'
 ```
 
-## How It Works
+## 동작 방식
 
-The RAG query endpoint performs the following steps:
+RAG query endpoint는 다음 단계를 수행합니다.
 
-1. **Extract Query**: Extracts the query text from the last user message
-2. **Search Vector Store**: Searches the specified vector store for relevant context
-3. **Rerank (Optional)**: Reranks the search results using a reranking model
-4. **Generate Response**: Calls the LLM with the retrieved context prepended to the messages
+1. **Query 추출**: 마지막 user message에서 query text를 추출합니다.
+2. **Vector Store 검색**: 지정한 vector store에서 관련 context를 검색합니다.
+3. **Rerank(선택 사항)**: reranking model로 검색 결과를 다시 정렬합니다.
+4. **Response 생성**: 검색된 context를 messages 앞에 붙여 LLM을 호출합니다.
 
-## Response
+## 응답
 
-The response follows the standard OpenAI chat completion format, with additional search metadata:
+응답은 표준 OpenAI chat completion 형식을 따르며 추가 search metadata를 포함합니다.
 
 ```json
 {
@@ -67,9 +67,9 @@ The response follows the standard OpenAI chat completion format, with additional
 }
 ```
 
-## With Reranking
+## Reranking 사용
 
-Add a `rerank` configuration to improve result quality:
+결과 품질을 개선하려면 `rerank` 설정을 추가합니다.
 
 ```bash showLineNumbers title="RAG Query with Reranking"
 curl -X POST "http://localhost:4000/v1/rag/query" \
@@ -93,7 +93,7 @@ curl -X POST "http://localhost:4000/v1/rag/query" \
 
 ## Streaming
 
-Enable streaming for real-time responses:
+실시간 응답에는 streaming을 활성화합니다.
 
 ```bash showLineNumbers title="RAG Query with Streaming"
 curl -X POST "http://localhost:4000/v1/rag/query" \
@@ -110,39 +110,39 @@ curl -X POST "http://localhost:4000/v1/rag/query" \
     }'
 ```
 
-## Request Parameters
+## 요청 파라미터
 
-### Top-Level
+### 최상위
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| `model` | string | Yes | The LLM model to use for generation |
-| `messages` | array | Yes | Array of chat messages (OpenAI format) |
-| `retrieval_config` | object | Yes | Vector store search configuration |
-| `rerank` | object | No | Reranking configuration |
-| `stream` | boolean | No | Enable streaming (default: `false`) |
+| `model` | string | 예 | 생성에 사용할 LLM model |
+| `messages` | array | 예 | chat message 배열(OpenAI 형식) |
+| `retrieval_config` | object | 예 | Vector store 검색 설정 |
+| `rerank` | object | 아니요 | Reranking 설정 |
+| `stream` | boolean | 아니요 | Streaming 활성화(기본값: `false`) |
 
 ### retrieval_config
 
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
-| `vector_store_id` | string | **required** | ID of the vector store to search |
-| `custom_llm_provider` | string | `"openai"` | Vector store provider |
-| `top_k` | integer | `10` | Number of results to retrieve |
+| `vector_store_id` | string | **required** | 검색할 vector store의 ID |
+| `custom_llm_provider` | string | `"openai"` | Vector store provider 지정값 |
+| `top_k` | integer | `10` | 가져올 결과 수 |
 
 ### rerank
 
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
-| `enabled` | boolean | `false` | Enable reranking |
-| `model` | string | - | Reranking model (e.g., `cohere/rerank-english-v3.0`) |
-| `top_n` | integer | `5` | Number of results after reranking |
+| `enabled` | boolean | `false` | Reranking 활성화 |
+| `model` | string | - | Reranking model(예: `cohere/rerank-english-v3.0`) |
+| `top_n` | integer | `5` | Reranking 후 결과 수 |
 
-## End-to-End Example
+## End-to-End 예제
 
-### 1. Ingest a Document
+### 1. 문서 수집
 
-First, ingest a document using the [/rag/ingest](./rag_ingest.md) endpoint:
+먼저 [/rag/ingest](./rag_ingest.md) endpoint로 문서를 수집합니다.
 
 ```bash showLineNumbers title="Step 1: Ingest"
 curl -X POST "http://localhost:4000/v1/rag/ingest" \
@@ -162,7 +162,7 @@ curl -X POST "http://localhost:4000/v1/rag/ingest" \
     }"
 ```
 
-Response:
+응답:
 ```json
 {
   "id": "ingest_abc123",
@@ -172,9 +172,9 @@ Response:
 }
 ```
 
-### 2. Query with RAG
+### 2. RAG로 질의
 
-Now query the ingested documents:
+이제 수집된 문서에 대해 질의합니다.
 
 ```bash showLineNumbers title="Step 2: Query"
 curl -X POST "http://localhost:4000/v1/rag/query" \
@@ -193,7 +193,7 @@ curl -X POST "http://localhost:4000/v1/rag/query" \
     }'
 ```
 
-Response:
+응답:
 ```json
 {
   "id": "chatcmpl-abc123",
@@ -212,7 +212,7 @@ Response:
 }
 ```
 
-## Provider Examples
+## Provider 예제
 
 ### Bedrock
 
@@ -270,4 +270,3 @@ response = await litellm.aquery(
 
 print(response.choices[0].message.content)
 ```
-

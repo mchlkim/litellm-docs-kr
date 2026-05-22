@@ -4,13 +4,13 @@ import TabItem from '@theme/TabItem';
 
 # Qualifire
 
-Use [Qualifire](https://qualifire.ai) to evaluate LLM outputs for quality, safety, and reliability. Detect prompt injections, hallucinations, PII, harmful content, and validate that your AI follows instructions.
+[Qualifire](https://qualifire.ai)를 사용해 LLM output의 품질, 안전성, 신뢰성을 평가합니다. Prompt injection, hallucination, PII, 유해 콘텐츠를 감지하고 AI가 지시를 따르는지 검증할 수 있습니다.
 
-## Quick Start
+## 빠른 시작
 
-### 1. Define Guardrails on your LiteLLM config.yaml
+### 1. LiteLLM config.yaml에 가드레일 정의
 
-Define your guardrails under the `guardrails` section:
+`guardrails` 섹션 아래에 가드레일을 정의합니다.
 
 ```yaml showLineNumbers title="litellm config.yaml"
 model_list:
@@ -49,26 +49,26 @@ guardrails:
       prompt_injections: true
 ```
 
-#### Supported values for `mode`
+#### `mode`에서 지원되는 값
 
-- `pre_call` Run **before** LLM call, on **input**
-- `post_call` Run **after** LLM call, on **input & output**
-- `during_call` Run **during** LLM call, on **input**. Same as `pre_call` but runs in parallel as LLM call. Response not returned until guardrail check completes
+- `pre_call` LLM call **전**에 **input**을 대상으로 실행
+- `post_call` LLM call **후**에 **input & output**을 대상으로 실행
+- `during_call` LLM call **중**에 **input**을 대상으로 실행. `pre_call`과 같지만 LLM call과 병렬로 실행됩니다. 가드레일 검사가 완료될 때까지 response가 반환되지 않습니다.
 
-### 2. Start LiteLLM Gateway
+### 2. LiteLLM Gateway 시작
 
 ```shell
 litellm --config config.yaml --detailed_debug
 ```
 
-### 3. Test request
+### 3. Request 테스트
 
-**[Langchain, OpenAI SDK Usage Examples](../proxy/user_keys#request-format)**
+**[Langchain, OpenAI SDK 사용법 예제](../proxy/user_keys#request-format)**
 
 <Tabs>
-<TabItem label="Unsuccessful call" value = "not-allowed">
+<TabItem label="실패하는 호출" value = "not-allowed">
 
-Expect this to fail since it contains a prompt injection attempt:
+Prompt injection 시도가 포함되어 있으므로 실패해야 합니다.
 
 ```shell showLineNumbers title="Curl Request"
 curl -i http://localhost:4000/v1/chat/completions \
@@ -83,7 +83,7 @@ curl -i http://localhost:4000/v1/chat/completions \
   }'
 ```
 
-Expected response on failure:
+실패 시 예상 response:
 
 ```json
 {
@@ -104,7 +104,7 @@ Expected response on failure:
 
 </TabItem>
 
-<TabItem label="Successful Call" value = "allowed">
+<TabItem label="성공하는 호출" value = "allowed">
 
 ```shell showLineNumbers title="Curl Request"
 curl -i http://localhost:4000/v1/chat/completions \
@@ -122,9 +122,9 @@ curl -i http://localhost:4000/v1/chat/completions \
 </TabItem>
 </Tabs>
 
-## Using Pre-configured Evaluations
+## 사전 구성된 평가 사용
 
-You can use evaluations pre-configured in the [Qualifire Dashboard](https://app.qualifire.ai) by specifying the `evaluation_id`:
+[Qualifire Dashboard](https://app.qualifire.ai)에서 사전 구성한 평가는 `evaluation_id`를 지정해 사용할 수 있습니다.
 
 ```yaml showLineNumbers title="litellm config.yaml"
 guardrails:
@@ -136,23 +136,23 @@ guardrails:
       evaluation_id: eval_abc123 # Your evaluation ID from Qualifire dashboard
 ```
 
-When `evaluation_id` is provided, LiteLLM will use the invoke evaluation API endpoint instead of the evaluate endpoint, running the pre-configured evaluation from your dashboard.
+`evaluation_id`가 제공되면 LiteLLM은 evaluate endpoint 대신 invoke evaluation API endpoint를 사용해 dashboard의 사전 구성 평가를 실행합니다.
 
-## Available Checks
+## 사용 가능한 검사
 
-Qualifire supports the following evaluation checks:
+Qualifire는 다음 evaluation check를 지원합니다.
 
-| Check                  | Parameter                            | Description                                               |
+| 검사                  | 파라미터                            | 설명                                               |
 | ---------------------- | ------------------------------------ | --------------------------------------------------------- |
-| Prompt Injections      | `prompt_injections: true`            | Identify prompt injection attempts                        |
-| Hallucinations         | `hallucinations_check: true`         | Detect factual inaccuracies or hallucinations             |
-| Grounding              | `grounding_check: true`              | Verify output is grounded in provided context             |
-| PII Detection          | `pii_check: true`                    | Detect personally identifiable information                |
-| Content Moderation     | `content_moderation_check: true`     | Check for harmful content (harassment, hate speech, etc.) |
-| Tool Selection Quality | `tool_selection_quality_check: true` | Evaluate quality of tool/function calls                   |
-| Custom Assertions      | `assertions: [...]`                  | Custom assertions to validate against the output          |
+| Prompt Injections      | `prompt_injections: true`            | Prompt injection 시도 식별                        |
+| Hallucinations         | `hallucinations_check: true`         | 사실 오류 또는 hallucination 감지             |
+| Grounding              | `grounding_check: true`              | output이 제공된 context에 grounded되어 있는지 확인             |
+| PII Detection          | `pii_check: true`                    | 개인 식별 정보 감지                |
+| Content Moderation     | `content_moderation_check: true`     | 유해 콘텐츠 확인(harassment, hate speech 등) |
+| Tool Selection Quality | `tool_selection_quality_check: true` | tool/function call 품질 평가                   |
+| Custom Assertions      | `assertions: [...]`                  | output에 대해 검증할 custom assertion          |
 
-### Example with Multiple Checks
+### 여러 검사를 사용하는 예제
 
 ```yaml
 guardrails:
@@ -168,7 +168,7 @@ guardrails:
       content_moderation_check: true
 ```
 
-### Example with Custom Assertions
+### Custom Assertion을 사용하는 예제
 
 ```yaml
 guardrails:
@@ -183,7 +183,7 @@ guardrails:
         - "The answer must be under 100 words"
 ```
 
-## Supported Params
+## 지원 파라미터
 
 ```yaml
 guardrails:
@@ -205,32 +205,32 @@ guardrails:
       # on_flagged: "block"  # "block" or "monitor"
 ```
 
-### Parameter Reference
+### 파라미터 참조
 
-| Parameter                      | Type        | Default                      | Description                                              |
+| 파라미터                      | 타입        | 기본값                      | 설명                                              |
 | ------------------------------ | ----------- | ---------------------------- | -------------------------------------------------------- |
-| `api_key`                      | `str`       | `QUALIFIRE_API_KEY` env var  | Your Qualifire API key                                   |
-| `api_base`                     | `str`       | `https://proxy.qualifire.ai` | Custom API base URL (optional)                           |
-| `evaluation_id`                | `str`       | `None`                       | Pre-configured evaluation ID from Qualifire dashboard    |
-| `prompt_injections`            | `bool`      | `true` (if no other checks)  | Enable prompt injection detection                        |
-| `hallucinations_check`         | `bool`      | `None`                       | Enable hallucination detection                           |
-| `grounding_check`              | `bool`      | `None`                       | Enable grounding verification                            |
-| `pii_check`                    | `bool`      | `None`                       | Enable PII detection                                     |
-| `content_moderation_check`     | `bool`      | `None`                       | Enable content moderation                                |
-| `tool_selection_quality_check` | `bool`      | `None`                       | Enable tool selection quality check                      |
-| `assertions`                   | `List[str]` | `None`                       | Custom assertions to validate                            |
-| `on_flagged`                   | `str`       | `"block"`                    | Action when content is flagged: `"block"` or `"monitor"` |
+| `api_key`                      | `str`       | `QUALIFIRE_API_KEY` env var  | Qualifire API key 값                                   |
+| `api_base`                     | `str`       | `https://proxy.qualifire.ai` | Custom API base URL(선택 사항)                           |
+| `evaluation_id`                | `str`       | `None`                       | Qualifire dashboard의 사전 구성 evaluation ID    |
+| `prompt_injections`            | `bool`      | `true`(다른 check가 없을 때)  | Prompt injection detection 활성화                        |
+| `hallucinations_check`         | `bool`      | `None`                       | Hallucination detection 활성화                           |
+| `grounding_check`              | `bool`      | `None`                       | Grounding verification 활성화                            |
+| `pii_check`                    | `bool`      | `None`                       | PII detection 활성화                                     |
+| `content_moderation_check`     | `bool`      | `None`                       | Content moderation 활성화                                |
+| `tool_selection_quality_check` | `bool`      | `None`                       | Tool selection quality check 활성화                      |
+| `assertions`                   | `List[str]` | `None`                       | 검증할 custom assertion                            |
+| `on_flagged`                   | `str`       | `"block"`                    | 콘텐츠가 flagged될 때의 동작: `"block"` 또는 `"monitor"` |
 
-### Default Behavior
+### 기본 동작
 
-- If no `evaluation_id` is provided and no checks are explicitly enabled, `prompt_injections` defaults to `true`
-- When `evaluation_id` is provided, it takes precedence and individual check flags are ignored
-- `on_flagged: "block"` raises an HTTP 400 exception when violations are detected
-- `on_flagged: "monitor"` logs violations but allows the request to proceed
+- `evaluation_id`가 제공되지 않고 명시적으로 활성화된 check도 없으면 `prompt_injections`의 기본값은 `true`입니다.
+- `evaluation_id`가 제공되면 우선 적용되며 개별 check flag는 무시됩니다.
+- `on_flagged: "block"`은 위반이 감지되면 HTTP 400 exception을 발생시킵니다.
+- `on_flagged: "monitor"`는 위반을 log로 남기지만 request 진행은 허용합니다.
 
-## Tool Call Support
+## Tool Call 지원
 
-Qualifire supports evaluating tool/function calls. When using `tool_selection_quality_check`, the guardrail will analyze tool calls in assistant messages:
+Qualifire는 tool/function call 평가를 지원합니다. `tool_selection_quality_check`를 사용하면 가드레일이 assistant message 안의 tool call을 분석합니다.
 
 ```yaml
 guardrails:
@@ -242,16 +242,16 @@ guardrails:
       tool_selection_quality_check: true
 ```
 
-This evaluates whether the LLM selected the appropriate tools and provided correct arguments.
+이는 LLM이 적절한 tool을 선택했고 올바른 argument를 제공했는지 평가합니다.
 
-## Environment Variables
+## 환경 변수
 
-| Variable             | Description                    |
+| 변수             | 설명                    |
 | -------------------- | ------------------------------ |
-| `QUALIFIRE_API_KEY`  | Your Qualifire API key         |
-| `QUALIFIRE_BASE_URL` | Custom API base URL (optional) |
+| `QUALIFIRE_API_KEY`  | Qualifire API key 값         |
+| `QUALIFIRE_BASE_URL` | Custom API base URL(선택 사항) |
 
-## Links
+## 링크
 
-- [Qualifire Documentation](https://docs.qualifire.ai)
+- [Qualifire 문서](https://docs.qualifire.ai)
 - [Qualifire Dashboard](https://app.qualifire.ai)

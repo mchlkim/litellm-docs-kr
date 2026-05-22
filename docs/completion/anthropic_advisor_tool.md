@@ -1,32 +1,32 @@
 # Advisor Tool
 
-Pair a faster executor model with a higher-intelligence advisor model that provides strategic guidance mid-generation.
+더 빠른 실행 모델을 생성 중간에 전략적 지침을 제공하는 고지능 advisor 모델과 함께 사용합니다.
 
-The advisor tool lets a fast, lower-cost executor model (Sonnet or Haiku) consult a high-intelligence advisor model (Opus 4.6) mid-generation. The advisor reads the full conversation and produces a plan or course correction — typically 400–700 text tokens — and the executor continues with the task.
+advisor 도구를 사용하면 빠르고 비용이 낮은 실행 모델(Sonnet 또는 Haiku)이 생성 중간에 고지능 advisor 모델(Opus 4.6)에 자문을 구할 수 있습니다. advisor는 전체 대화를 읽고 보통 400~700개 텍스트 토큰 분량의 계획이나 방향 수정을 생성하며, 실행 모델은 이어서 작업을 계속합니다.
 
-This pattern is well-suited for long-horizon agentic workloads (coding agents, computer use, multi-step research) where most turns are mechanical but having an excellent plan is crucial. You get close to advisor-solo quality while the bulk of token generation happens at executor-model rates.
+이 패턴은 대부분의 턴은 기계적으로 처리되지만 뛰어난 계획이 중요한 장기 에이전트형 워크로드(코딩 에이전트, computer use, 다단계 리서치)에 적합합니다. 토큰 생성의 대부분은 실행 모델 요금으로 처리하면서 advisor 단독 사용에 가까운 품질을 얻을 수 있습니다.
 
-:::info Beta
+:::info 베타
 
-The advisor tool is in beta. Include `anthropic-beta: advisor-tool-2026-03-01` in your requests — LiteLLM adds this automatically when it detects the advisor tool in your `tools` array.
+advisor 도구는 베타입니다. 요청에 `anthropic-beta: advisor-tool-2026-03-01`을 포함하세요. LiteLLM은 `tools` 배열에서 advisor 도구를 감지하면 이를 자동으로 추가합니다.
 
 :::
 
-## Supported Providers
+## 지원 프로바이더 {#supported-providers}
 
-| Provider | Chat Completions API | Messages API | Notes |
+| 프로바이더 | Chat Completions API | Messages API | 참고 |
 |----------|---------------------|--------------|-------|
-| **Anthropic API** | ✅ | ✅ | Native — runs server-side |
-| **OpenAI / Azure OpenAI** | ✅ | ✅ | LiteLLM orchestration loop |
-| **Amazon Bedrock** | ✅ | ✅ | LiteLLM orchestration loop |
-| **Google Vertex AI** | ✅ | ✅ | LiteLLM orchestration loop |
-| **Groq / Mistral / others** | ✅ | ✅ | LiteLLM orchestration loop |
+| **Anthropic API** | ✅ | ✅ | 네이티브 - 서버 측에서 실행 |
+| **OpenAI / Azure OpenAI** | ✅ | ✅ | LiteLLM 오케스트레이션 루프 |
+| **Amazon Bedrock** | ✅ | ✅ | LiteLLM 오케스트레이션 루프 |
+| **Google Vertex AI** | ✅ | ✅ | LiteLLM 오케스트레이션 루프 |
+| **Groq / Mistral / 기타** | ✅ | ✅ | LiteLLM 오케스트레이션 루프 |
 
-## How it works (LiteLLM native orchestration)
+## 동작 방식 (LiteLLM 네이티브 오케스트레이션) {#how-it-works-litellm-native-orchestration}
 
-For non-Anthropic providers, LiteLLM implements the advisor loop itself. The API you call is identical — LiteLLM handles everything transparently.
+Anthropic이 아닌 프로바이더의 경우 LiteLLM이 advisor 루프를 직접 구현합니다. 호출하는 API는 동일하며, LiteLLM이 모든 과정을 투명하게 처리합니다.
 
-When a request arrives with an `advisor_20260301` tool and a non-Anthropic provider, `AdvisorOrchestrationHandler` intercepts it. It translates the advisor tool into a regular function tool the provider understands, then runs an orchestration loop:
+`advisor_20260301` 도구와 Anthropic이 아닌 프로바이더가 포함된 요청이 도착하면 `AdvisorOrchestrationHandler`가 이를 가로챕니다. advisor 도구를 프로바이더가 이해하는 일반 function tool로 변환한 다음 orchestration loop를 실행합니다.
 
 ```mermaid
 flowchart TD
@@ -49,19 +49,19 @@ flowchart TD
     D -->|"no — end_turn\nor other stop reason"| I["Clean final response\nno advisor blocks in output"]
 ```
 
-**What LiteLLM does for you:**
+**LiteLLM이 대신 처리하는 작업:**
 
-- Strips `advisor_20260301` from the outgoing request — the provider only sees a standard function tool named `advisor`
-- When the executor calls it, intercepts before the result reaches you, runs the advisor sub-call, and injects the advice
-- Strips any `advisor_tool_result` / `server_tool_use` blocks from message history on re-send so non-Anthropic providers never see Anthropic-specific types
-- Wraps the final response in an SSE stream if you requested `stream=True`
-- Enforces `max_uses` as a hard cap — `AdvisorMaxIterationsError` is raised if exceeded; `max_uses=0` disables the advisor entirely
+- 나가는 요청에서 `advisor_20260301`을 제거합니다. 프로바이더는 `advisor`라는 표준 function tool만 보게 됩니다.
+- 실행 모델이 이를 호출하면 결과가 사용자에게 도달하기 전에 가로채 advisor 하위 호출을 실행하고 조언을 삽입합니다.
+- 재전송 시 메시지 기록에서 `advisor_tool_result` / `server_tool_use` 블록을 제거하여 Anthropic이 아닌 프로바이더가 Anthropic 전용 타입을 보지 않도록 합니다.
+- `stream=True`를 요청한 경우 최종 응답을 SSE 스트림으로 감쌉니다.
+- `max_uses`를 강한 상한으로 적용합니다. 초과하면 `AdvisorMaxIterationsError`가 발생하며, `max_uses=0`은 advisor를 완전히 비활성화합니다.
 
-## Model Compatibility
+## 모델 호환성 {#model-compatibility}
 
-The executor and advisor models must form a valid pair. Currently the only supported advisor model is `claude-opus-4-6`.
+실행 모델과 advisor 모델은 유효한 조합이어야 합니다. 현재 지원되는 유일한 advisor 모델은 `claude-opus-4-6`입니다.
 
-| Executor | Advisor |
+| 실행 모델 | advisor 모델 |
 |----------|---------|
 | `claude-haiku-4-5-20251001` | `claude-opus-4-6` |
 | `claude-sonnet-4-6` | `claude-opus-4-6` |
@@ -69,11 +69,11 @@ The executor and advisor models must form a valid pair. Currently the only suppo
 
 ---
 
-## Chat Completions API
+## `Chat Completions API`
 
-### SDK Usage
+### SDK 사용법 {#sdk-usage}
 
-#### Basic Example
+#### 기본 예제 {#basic-example}
 
 ```python showLineNumbers title="Advisor Tool — litellm.completion()"
 import litellm
@@ -96,7 +96,7 @@ response = litellm.completion(
 print(response.choices[0].message.content)
 ```
 
-#### With Optional Parameters
+#### 선택적 파라미터 사용 {#using-optional-parameters}
 
 ```python showLineNumbers title="Advisor Tool with max_uses and caching"
 import litellm
@@ -119,7 +119,7 @@ response = litellm.completion(
 )
 ```
 
-#### Streaming
+#### 스트리밍 {#streaming}
 
 ```python showLineNumbers title="Streaming with Advisor Tool"
 import litellm
@@ -145,13 +145,13 @@ for chunk in response:
         print(chunk.choices[0].delta.content, end="")
 ```
 
-:::note Streaming behavior
+:::note 스트리밍 동작
 
-The advisor sub-inference does not stream. The executor's stream pauses while the advisor runs, then the full advisor result arrives in a single event. Executor output resumes streaming afterward.
+advisor 하위 추론은 스트리밍되지 않습니다. advisor가 실행되는 동안 실행 모델의 스트림은 일시 중지되고, 전체 advisor 결과가 단일 이벤트로 도착합니다. 이후 실행 모델 출력 스트리밍이 재개됩니다.
 
 :::
 
-#### Multi-Turn Conversation
+#### 멀티턴 대화 {#multi-turn-conversations}
 
 ```python showLineNumbers title="Multi-Turn with Advisor Tool"
 import litellm
@@ -189,15 +189,15 @@ response2 = litellm.completion(
 )
 ```
 
-:::tip Auto-strip on follow-up turns
+:::tip 후속 턴 자동 제거
 
-LiteLLM automatically strips `advisor_tool_result` blocks from message history when the advisor tool is not present in the current request. This prevents the Anthropic 400 error that would otherwise occur.
+현재 요청에 advisor 도구가 없으면 LiteLLM은 메시지 기록에서 `advisor_tool_result` 블록을 자동으로 제거합니다. 이 동작은 그렇지 않으면 발생할 수 있는 Anthropic 400 오류를 방지합니다.
 
 :::
 
-### AI Gateway Usage
+### AI Gateway 사용법 {#ai-gateway-usage}
 
-#### Proxy Configuration
+#### Proxy 설정 {#proxy-config}
 
 ```yaml showLineNumbers title="config.yaml"
 model_list:
@@ -207,7 +207,7 @@ model_list:
       api_key: os.environ/ANTHROPIC_API_KEY
 ```
 
-#### Client Request via Proxy
+#### Proxy를 통한 클라이언트 요청 {#client-request-through-proxy}
 
 ```python showLineNumbers title="Advisor Tool via AI Gateway"
 from openai import OpenAI
@@ -237,9 +237,9 @@ response = client.chat.completions.create(
 
 ## Messages API
 
-### SDK Usage
+### SDK 사용법 {#sdk-usage-1}
 
-#### Basic Example
+#### 기본 예제 {#basic-example-1}
 
 ```python showLineNumbers title="Advisor Tool — litellm.anthropic.messages"
 import asyncio
@@ -265,7 +265,7 @@ async def main():
 asyncio.run(main())
 ```
 
-#### Streaming
+#### 스트리밍 {#streaming-1}
 
 ```python showLineNumbers title="Messages API Streaming with Advisor Tool"
 import asyncio
@@ -301,9 +301,9 @@ async def main():
 asyncio.run(main())
 ```
 
-### AI Gateway Usage
+### AI Gateway 사용법 {#ai-gateway-usage-1}
 
-#### Proxy Configuration
+#### Proxy 설정 {#proxy-config-1}
 
 ```yaml showLineNumbers title="config.yaml"
 model_list:
@@ -313,7 +313,7 @@ model_list:
       api_key: os.environ/ANTHROPIC_API_KEY
 ```
 
-#### Client Request via Proxy (Anthropic SDK)
+#### Proxy를 통한 클라이언트 요청 (Anthropic SDK) {#client-request-through-proxy-anthropic-sdk}
 
 ```python showLineNumbers title="Advisor Tool via AI Gateway (Anthropic SDK)"
 import anthropic
@@ -341,7 +341,7 @@ response = client.beta.messages.create(
 print(response)
 ```
 
-#### Non-Anthropic Provider (LiteLLM orchestration loop)
+#### Anthropic이 아닌 프로바이더 (LiteLLM 오케스트레이션 루프) {#non-anthropic-providers-litellm-orchestration-loop}
 
 ```python showLineNumbers title="Advisor Tool with OpenAI executor"
 import asyncio
@@ -374,9 +374,9 @@ asyncio.run(main())
 
 ---
 
-## Response Structure
+## 응답 구조 {#response-structure}
 
-A successful advisor call returns `server_tool_use` and `advisor_tool_result` blocks in the assistant content:
+성공한 advisor 호출은 assistant content 안에 `server_tool_use` 및 `advisor_tool_result` 블록을 반환합니다.
 
 ```json title="Response with advisor blocks"
 {
@@ -408,13 +408,13 @@ A successful advisor call returns `server_tool_use` and `advisor_tool_result` bl
 }
 ```
 
-Pass the full assistant content, including advisor blocks, back on subsequent turns. LiteLLM handles this automatically through `provider_specific_fields`.
+후속 턴에서는 advisor 블록을 포함한 전체 assistant content를 다시 전달하세요. LiteLLM은 `provider_specific_fields`를 통해 이를 자동으로 처리합니다.
 
 ---
 
-## Cost Control
+## 비용 제어 {#cost-control}
 
-Advisor calls run as a separate sub-inference billed at the advisor model's rates. Usage is reported in `usage.iterations[]`:
+advisor 호출은 별도의 하위 추론으로 실행되며 advisor 모델 요금으로 과금됩니다. 사용량은 `usage.iterations[]`에 보고됩니다.
 
 ```json title="Usage with advisor sub-inference"
 {
@@ -443,18 +443,18 @@ Advisor calls run as a separate sub-inference billed at the advisor model's rate
 }
 ```
 
-Top-level `usage` reflects executor tokens only. Advisor tokens appear in `iterations` entries with `type: "advisor_message"` and are billed at Opus rates.
+최상위 `usage`에는 실행 모델 토큰만 반영됩니다. advisor 토큰은 `type: "advisor_message"`인 `iterations` 항목에 표시되며 Opus 요금으로 과금됩니다.
 
-**Tips:**
-- Enable `caching` on the tool definition only when you expect 3+ advisor calls per conversation; it costs more than it saves below that threshold.
-- Use `max_uses` to cap advisor calls per request. Once reached, the executor continues without further advice.
-- For conversation-level caps, count advisor calls client-side. When you reach your limit, remove the advisor tool from `tools`.
+**팁:**
+- 대화당 advisor 호출이 3회 이상 예상될 때만 도구 정의에서 `caching`을 활성화하세요. 그보다 적으면 절감되는 비용보다 추가 비용이 더 큽니다.
+- 요청당 advisor 호출 수를 제한하려면 `max_uses`를 사용하세요. 한도에 도달하면 실행 모델은 추가 조언 없이 계속 진행합니다.
+- 대화 수준의 한도를 적용하려면 클라이언트 측에서 advisor 호출 수를 계산하세요. 한도에 도달하면 `tools`에서 advisor 도구를 제거합니다.
 
 ---
 
-## Recommended System Prompt
+## 권장 시스템 프롬프트 {#recommended-system-prompt}
 
-For coding and agent tasks, Anthropic recommends prepending these blocks to your system prompt for consistent advisor timing and optimal cost/quality:
+코딩 및 에이전트 작업에서 일관된 advisor 호출 타이밍과 최적의 비용/품질을 위해 Anthropic은 시스템 프롬프트 앞에 다음 블록을 추가할 것을 권장합니다.
 
 ```text title="Timing guidance (prepend to system prompt)"
 You have access to an `advisor` tool backed by a stronger reviewer model. It takes NO parameters — when you call advisor(), your entire conversation history is automatically forwarded. They see the task, every tool call you've made, every result you've seen.
@@ -475,7 +475,7 @@ Give the advice serious weight. If you follow a step and it fails empirically, o
 If you've already retrieved data pointing one way and the advisor points another: don't silently switch. Surface the conflict in one more advisor call — "I found X, you suggest Y, which constraint breaks the tie?"
 ```
 
-To reduce advisor output length by 35–45% without losing quality, add:
+품질 손실 없이 advisor 출력 길이를 35~45% 줄이려면 다음을 추가하세요.
 
 ```text title="Cost reduction (optional, add before timing block)"
 The advisor should respond in under 100 words and use enumerated steps, not explanations.
@@ -483,7 +483,7 @@ The advisor should respond in under 100 words and use enumerated steps, not expl
 
 ---
 
-## Additional Resources
+## 추가 리소스 {#additional-resources}
 
-- [Anthropic Advisor Tool Documentation](https://platform.claude.com/docs/en/agents-and-tools/tool-use/advisor-tool)
-- [LiteLLM Tool Calling Guide](https://docs.litellm.ai/docs/completion/function_call)
+- [Anthropic Advisor Tool 문서](https://platform.claude.com/docs/en/agents-and-tools/tool-use/advisor-tool)
+- [LiteLLM 도구 호출 가이드](https://docs.litellm.ai/docs/completion/function_call)

@@ -2,38 +2,38 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Image from '@theme/IdealImage';
 
-# Using Vector Stores (Knowledge Bases)
+# Vector Store(Knowledge Base) 사용
 
 <Image 
   img={require('../../img/kb.png')}
   style={{width: '100%', display: 'block', margin: '2rem auto'}}
 />
 <p style={{textAlign: 'left', color: '#666'}}>
-  Use Vector Stores with any LiteLLM supported model
+  LiteLLM이 지원하는 모든 모델에서 Vector Store 사용
 </p>
 
 
-LiteLLM integrates with vector stores, allowing your models to access your organization's data for more accurate and contextually relevant responses.
+LiteLLM은 vector store와 통합되어 모델이 조직의 데이터에 접근할 수 있게 합니다. 이를 통해 더 정확하고 문맥에 맞는 응답을 생성할 수 있습니다.
 
-## Supported Vector Stores
+## 지원되는 Vector Store
 - [Bedrock Knowledge Bases](https://aws.amazon.com/bedrock/knowledge-bases/)
 - [OpenAI Vector Stores](https://platform.openai.com/docs/api-reference/vector-stores/search)
-- [Azure Vector Stores](https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/file-search?tabs=python#vector-stores) (Cannot be directly queried. Only available for calling in Assistants messages.)
-- [Azure AI Search](/docs/providers/azure_ai_vector_stores) (Vector search with Azure AI Search indexes)
+- [Azure Vector Stores](https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/file-search?tabs=python#vector-stores) (직접 쿼리할 수 없습니다. Assistants messages에서 호출하는 경우에만 사용할 수 있습니다.)
+- [Azure AI Search](/docs/providers/azure_ai_vector_stores) (Azure AI Search 인덱스를 사용한 vector search)
 - [Vertex AI RAG API](https://cloud.google.com/vertex-ai/generative-ai/docs/rag-overview)
 - [Gemini File Search](https://ai.google.dev/gemini-api/docs/file-search)
-- [RAGFlow Datasets](/docs/providers/ragflow_vector_store.md) (Dataset management only, search not supported)
+- [RAGFlow Datasets](/docs/providers/ragflow_vector_store.md) (dataset 관리만 지원하며 검색은 지원하지 않음)
 
-## Quick Start
+## 빠른 시작
 
-In order to use a vector store with LiteLLM, you need to 
+LiteLLM에서 vector store를 사용하려면 다음이 필요합니다.
 
-- Initialize litellm.vector_store_registry
-- Pass tools with vector_store_ids to the completion request. Where `vector_store_ids` is a list of vector store ids you initialized in litellm.vector_store_registry
+- `litellm.vector_store_registry` 초기화
+- completion request에 `vector_store_ids`가 포함된 tools를 전달합니다. 여기서 `vector_store_ids`는 `litellm.vector_store_registry`에서 초기화한 vector store ID 목록입니다.
 
 ### LiteLLM Python SDK
 
-LiteLLM's allows you to use vector stores in the [OpenAI API spec](https://platform.openai.com/docs/api-reference/chat/create) by passing a tool with vector_store_ids you want to use
+LiteLLM은 사용하려는 `vector_store_ids`가 포함된 tool을 전달하는 방식으로 [OpenAI API 사양](https://platform.openai.com/docs/api-reference/chat/create)에서 vector store를 사용할 수 있게 합니다.
 
 ```python showLineNumbers title="Basic Bedrock Knowledge Base Usage"
 import os
@@ -69,9 +69,9 @@ print(response.choices[0].message.content)
 
 ### LiteLLM Proxy
 
-#### 1. Configure your vector_store_registry
+#### 1. `vector_store_registry` 설정
 
-In order to use a vector store with LiteLLM, you need to configure your vector_store_registry. This tells litellm which vector stores to use and api provider to use for the vector store.
+LiteLLM에서 vector store를 사용하려면 `vector_store_registry`를 설정해야 합니다. 이 설정은 LiteLLM에 어떤 vector store를 사용할지, 그리고 해당 vector store에 어떤 API provider를 사용할지 알려줍니다.
 
 <Tabs>
 <TabItem value="config-yaml" label="config.yaml">
@@ -98,7 +98,7 @@ vector_store_registry:
 
 <TabItem value="litellm-ui" label="LiteLLM UI">
 
-On the LiteLLM UI, Navigate to Experimental > Vector Stores > Create Vector Store. On this page you can create a vector store with a name, vector store id and credentials.
+LiteLLM UI에서 Experimental > Vector Stores > Create Vector Store로 이동합니다. 이 페이지에서 이름, vector store ID, credential을 지정해 vector store를 생성할 수 있습니다.
 <Image 
   img={require('../../img/kb_2.png')}
   style={{width: '50%'}}
@@ -111,7 +111,7 @@ On the LiteLLM UI, Navigate to Experimental > Vector Stores > Create Vector Stor
 
 </Tabs>
 
-#### 2. Make a request with vector_store_ids parameter
+#### 2. `vector_store_ids` parameter로 요청 전송 {#2-make-a-request-with-vector_store_ids-parameter}
 
 <Tabs>
 <TabItem value="curl" label="Curl">
@@ -163,21 +163,21 @@ print(response.choices[0].message.content)
 </TabItem>
 </Tabs>
 
-## Provider Specific Guides
+## Provider별 가이드
 
-This section covers how to add your vector stores to LiteLLM. If you want support for a new provider, please file an issue [here](https://github.com/BerriAI/litellm/issues).
+이 섹션에서는 vector store를 LiteLLM에 추가하는 방법을 설명합니다. 새 provider 지원이 필요하면 [여기](https://github.com/BerriAI/litellm/issues)에 issue를 등록하세요.
 
-### Bedrock Knowledge Bases
+### Bedrock Knowledge Bases 설정 {#bedrock-knowledge-bases}
 
-**1. Set up your Bedrock Knowledge Base**
+**1. Bedrock Knowledge Base 설정**
 
-Ensure you have a Bedrock Knowledge Base created in your AWS account with the appropriate permissions configured.
+AWS 계정에 Bedrock Knowledge Base가 생성되어 있고 적절한 권한이 설정되어 있는지 확인합니다.
 
-**2. Add to LiteLLM UI**
+**2. LiteLLM UI에 추가**
 
-1. Navigate to **Tools > Vector Stores > "Add new vector store"**
-2. Select **"Bedrock"** as the provider
-3. Enter your Bedrock Knowledge Base ID in the **"Vector Store ID"** field
+1. **Tools > Vector Stores > "Add new vector store"**로 이동합니다.
+2. provider로 **"Bedrock"**을 선택합니다.
+3. **"Vector Store ID"** 필드에 Bedrock Knowledge Base ID를 입력합니다.
 
 <Image 
   img={require('../../img/kb_2.png')}
@@ -185,12 +185,12 @@ Ensure you have a Bedrock Knowledge Base created in your AWS account with the ap
 />
 
 
-### Vertex AI RAG Engine
+### Vertex AI RAG Engine 설정 {#vertex-ai-rag-engine}
 
-**1. Get your Vertex AI RAG Engine ID**
+**1. Vertex AI RAG Engine ID 가져오기**
 
-1. Navigate to your RAG Engine Corpus in the [Google Cloud Console](https://console.cloud.google.com/vertex-ai/rag/corpus)
-2. Select the **RAG Engine** you want to integrate with LiteLLM
+1. [Google Cloud Console](https://console.cloud.google.com/vertex-ai/rag/corpus)에서 RAG Engine Corpus로 이동합니다.
+2. LiteLLM과 통합하려는 **RAG Engine**을 선택합니다.
 
 <div style={{margin: '20px 0', padding: '10px', border: '1px solid #ddd', borderRadius: '8px', display: 'inline-block', boxShadow: '0 2px 8px rgba(0,0,0,0.1)'}}>
 <Image 
@@ -199,8 +199,8 @@ Ensure you have a Bedrock Knowledge Base created in your AWS account with the ap
 />
 </div>
 
-3. Click the **"Details"** button and copy the UUID for the RAG Engine
-4. The ID should look like: `6917529027641081856`
+3. **"Details"** 버튼을 클릭하고 RAG Engine의 UUID를 복사합니다.
+4. ID는 다음과 같은 형태입니다: `6917529027641081856`
 
 <div style={{margin: '20px 0', padding: '10px', border: '1px solid #ddd', borderRadius: '8px', display: 'inline-block', boxShadow: '0 2px 8px rgba(0,0,0,0.1)'}}>
 <Image 
@@ -209,11 +209,11 @@ Ensure you have a Bedrock Knowledge Base created in your AWS account with the ap
 />
 </div>
 
-**2. Add to LiteLLM UI**
+**2. LiteLLM UI에 추가**
 
-1. Navigate to **Tools > Vector Stores > "Add new vector store"**
-2. Select **"Vertex AI RAG Engine"** as the provider
-3. Enter your Vertex AI RAG Engine ID in the **"Vector Store ID"** field
+1. **Tools > Vector Stores > "Add new vector store"**로 이동합니다.
+2. provider로 **"Vertex AI RAG Engine"**을 선택합니다.
+3. **"Vector Store ID"** 필드에 Vertex AI RAG Engine ID를 입력합니다.
 
 <div style={{margin: '20px 0', padding: '10px', border: '1px solid #ddd', borderRadius: '8px', display: 'inline-block', boxShadow: '0 2px 8px rgba(0,0,0,0.1)'}}>
 <Image 
@@ -224,14 +224,14 @@ Ensure you have a Bedrock Knowledge Base created in your AWS account with the ap
 
 ### PG Vector
 
-**1. Deploy the litellm-pg-vector-store connector**
+**1. litellm-pg-vector-store connector 배포**
 
-LiteLLM provides a server that exposes OpenAI-compatible `vector_store` endpoints for PG Vector. The LiteLLM Proxy server connects to your deployed service and uses it as a vector store when querying.
+LiteLLM은 PG Vector용 OpenAI 호환 `vector_store` endpoint를 노출하는 server를 제공합니다. LiteLLM Proxy server는 배포된 service에 연결하고, 쿼리 시 이를 vector store로 사용합니다.
 
-1. Follow the deployment instructions for the litellm-pg-vector-store connector [here](https://github.com/BerriAI/litellm-pgvector)
-2. For detailed configuration options, see the [configuration guide](https://github.com/BerriAI/litellm-pgvector?tab=readme-ov-file#configuration)
+1. litellm-pg-vector-store connector 배포 지침은 [여기](https://github.com/BerriAI/litellm-pgvector)를 따르세요.
+2. 자세한 configuration option은 [configuration guide](https://github.com/BerriAI/litellm-pgvector?tab=readme-ov-file#configuration)를 참고하세요.
 
-**Example .env configuration for deploying litellm-pg-vector-store:**
+**litellm-pg-vector-store 배포용 `.env` configuration 예제:**
 
 ```env
 DATABASE_URL="postgresql://neondb_owner:xxxx"
@@ -250,14 +250,14 @@ DB_FIELDS__VECTOR_STORE_ID_FIELD="vector_store_id"
 DB_FIELDS__CREATED_AT_FIELD="created_at"
 ```
 
-**2. Add to LiteLLM UI**
+**2. LiteLLM UI에 추가**
 
-Once your litellm-pg-vector-store is deployed:
+litellm-pg-vector-store 배포가 완료되면:
 
-1. Navigate to **Tools > Vector Stores > "Add new vector store"**
-2. Select **"PG Vector"** as the provider
-3. Enter your **API Base URL** and **API Key** for your `litellm-pg-vector-store` container
-   - The API Key field corresponds to the `SERVER_API_KEY` from your .env configuration
+1. **Tools > Vector Stores > "Add new vector store"**로 이동합니다.
+2. provider로 **"PG Vector"**를 선택합니다.
+3. `litellm-pg-vector-store` container의 **API Base URL**과 **API Key**를 입력합니다.
+   - API Key 필드는 `.env` configuration의 `SERVER_API_KEY`에 해당합니다.
 
 <div style={{margin: '20px 0', padding: '10px', border: '1px solid #ddd', borderRadius: '8px', display: 'inline-block', boxShadow: '0 2px 8px rgba(0,0,0,0.1)'}}>
 <Image 
@@ -266,19 +266,19 @@ Once your litellm-pg-vector-store is deployed:
 />
 </div>
 
-### OpenAI Vector Stores
+### OpenAI Vector Stores 설정 {#openai-vector-stores}
 
-**1. Set up your OpenAI Vector Store**
+**1. OpenAI Vector Store 설정**
 
-1. Create your Vector Store on the [OpenAI platform](https://platform.openai.com/storage/vector_stores)
-2. Note your Vector Store ID (format: `vs_687ae3b2439881918b433cb99d10662e`)
+1. [OpenAI platform](https://platform.openai.com/storage/vector_stores)에서 Vector Store를 생성합니다.
+2. Vector Store ID를 기록합니다. 형식: `vs_687ae3b2439881918b433cb99d10662e`
 
-**2. Add to LiteLLM UI**
+**2. LiteLLM UI에 추가**
 
-1. Navigate to **Tools > Vector Stores > "Add new vector store"**
-2. Select **"OpenAI"** as the provider
-3. Enter your **Vector Store ID** in the corresponding field
-4. Enter your **OpenAI API Key** in the API Key field
+1. **Tools > Vector Stores > "Add new vector store"**로 이동합니다.
+2. provider로 **"OpenAI"**를 선택합니다.
+3. 해당 필드에 **Vector Store ID**를 입력합니다.
+4. API Key 필드에 **OpenAI API Key**를 입력합니다.
 
 <div style={{margin: '20px 0', padding: '10px', border: '1px solid #ddd', borderRadius: '8px', display: 'inline-block', boxShadow: '0 2px 8px rgba(0,0,0,0.1)'}}>
 <Image 
@@ -289,36 +289,36 @@ Once your litellm-pg-vector-store is deployed:
 
 
 
-## Advanced
+## 고급
 
-### Logging Vector Store Usage
+### Vector Store 사용 로깅 {#logging-vector-store-usage}
 
-LiteLLM allows you to view your vector store usage in the LiteLLM UI on the `Logs` page.
+LiteLLM은 LiteLLM UI의 `로그` 페이지에서 vector store 사용 내역을 볼 수 있게 합니다.
 
-After completing a request with a vector store, navigate to the `Logs` page on LiteLLM. Here you should be able to see the query sent to the vector store and corresponding response with scores.
+vector store를 사용하는 요청을 완료한 뒤 LiteLLM의 `로그` 페이지로 이동합니다. 여기에서 vector store로 전송된 쿼리와 score가 포함된 해당 응답을 확인할 수 있습니다.
 
 <Image 
   img={require('../../img/kb_4.png')}
   style={{width: '80%'}}
 />
 <p style={{textAlign: 'left', color: '#666'}}>
-  LiteLLM Logs Page: Vector Store Usage
+  LiteLLM 로그 페이지: Vector Store 사용법
 </p>
 
 
-### Listing available vector stores
+### 사용 가능한 vector store 목록 조회
 
-You can list all available vector stores using the /vector_store/list endpoint
+`/vector_store/list` endpoint를 사용해 사용 가능한 모든 vector store 목록을 조회할 수 있습니다.
 
-**Request:**
+**요청:**
 ```bash showLineNumbers title="List all available vector stores"
 curl -X GET "http://localhost:4000/vector_store/list" \
   -H "Authorization: Bearer $LITELLM_API_KEY"
 ```
 
-**Response:**
+**응답:**
 
-The response will be a list of all vector stores that are available to use with LiteLLM.
+응답은 LiteLLM에서 사용할 수 있는 모든 vector store 목록입니다.
 
 ```json
 {
@@ -344,11 +344,11 @@ The response will be a list of all vector stores that are available to use with 
 ```
 
 
-### Always on for a model
+### 특정 모델에서 항상 사용
 
-**Use this if you want vector stores to be used by default for a specific model.**
+**특정 모델에서 기본적으로 vector store를 사용하려면 이 설정을 사용합니다.**
 
-In this config, we add `vector_store_ids` to the claude-3-5-sonnet-with-vector-store model. This means that any request to the claude-3-5-sonnet-with-vector-store model will always use the vector store with the id `T37J8R4WTM` defined in the `vector_store_registry`.
+이 설정에서는 `claude-3-5-sonnet-with-vector-store` 모델에 `vector_store_ids`를 추가합니다. 즉, `claude-3-5-sonnet-with-vector-store` 모델로 들어오는 모든 요청은 `vector_store_registry`에 정의된 ID `T37J8R4WTM`의 vector store를 항상 사용합니다.
 
 ```yaml showLineNumbers title="Always on for a model"
 model_list:
@@ -367,21 +367,21 @@ vector_store_registry:
         source: "https://www.litellm.com/docs"
 ```
 
-## How It Works
+## 동작 방식
 
-If your request includes a `vector_store_ids` parameter where any of the vector store ids are found in the `vector_store_registry`, LiteLLM will automatically use the vector store for the request.
+요청에 `vector_store_ids` parameter가 포함되어 있고 그중 하나가 `vector_store_registry`에 존재하면, LiteLLM은 해당 요청에 vector store를 자동으로 사용합니다.
 
-1. You make a completion request with the `vector_store_ids` parameter and any of the vector store ids are found in the `litellm.vector_store_registry`
-2. LiteLLM automatically:
-   - Uses your last message as the query to retrieve relevant information from the Knowledge Base
-   - Adds the retrieved context to your conversation
-   - Sends the augmented messages to the model
+1. `vector_store_ids` parameter가 포함된 completion request를 보냅니다. 이때 vector store ID 중 하나가 `litellm.vector_store_registry`에 있어야 합니다.
+2. LiteLLM은 자동으로 다음 작업을 수행합니다.
+   - 마지막 message를 쿼리로 사용해 Knowledge Base에서 관련 정보를 검색합니다.
+   - 검색된 context를 conversation에 추가합니다.
+   - 보강된 messages를 모델에 전송합니다.
 
-#### Example Transformation
+#### 예제 변환 {#example-transformation}
 
-When you pass `vector_store_ids=["YOUR_KNOWLEDGE_BASE_ID"]`, your request flows through these steps:
+`vector_store_ids=["YOUR_KNOWLEDGE_BASE_ID"]`를 전달하면 요청은 다음 단계를 거칩니다.
 
-**1. Original Request to LiteLLM:**
+**1. LiteLLM으로 보내는 원본 요청:**
 ```json
 {
     "model": "anthropic/claude-3-5-sonnet",
@@ -392,7 +392,7 @@ When you pass `vector_store_ids=["YOUR_KNOWLEDGE_BASE_ID"]`, your request flows 
 }
 ```
 
-**2. Request to AWS Bedrock Knowledge Base:**
+**2. AWS Bedrock Knowledge Base로 보내는 요청:**
 ```json
 {
     "retrievalQuery": {
@@ -400,9 +400,9 @@ When you pass `vector_store_ids=["YOUR_KNOWLEDGE_BASE_ID"]`, your request flows 
     }
 }
 ```
-This is sent to: `https://bedrock-agent-runtime.{aws_region}.amazonaws.com/knowledgebases/YOUR_KNOWLEDGE_BASE_ID/retrieve`
+다음 endpoint로 전송됩니다: `https://bedrock-agent-runtime.{aws_region}.amazonaws.com/knowledgebases/YOUR_KNOWLEDGE_BASE_ID/retrieve`
 
-**3. Final Request to LiteLLM:**
+**3. LiteLLM 최종 요청:**
 ```json
 {
     "model": "anthropic/claude-3-5-sonnet",
@@ -413,22 +413,22 @@ This is sent to: `https://bedrock-agent-runtime.{aws_region}.amazonaws.com/knowl
 }
 ```
 
-This process happens automatically whenever you include the `vector_store_ids` parameter in your request.
+요청에 `vector_store_ids` parameter를 포함하면 이 과정이 자동으로 수행됩니다.
 
-## Accessing Search Results (Citations)
+## 검색 결과(Citation) 접근 {#accessing-search-result-citation}
 
-When using vector stores, LiteLLM automatically returns search results in `provider_specific_fields`. This allows you to show users citations for the AI's response.
+vector store를 사용하면 LiteLLM은 `provider_specific_fields`에 검색 결과를 자동으로 반환합니다. 이를 통해 AI 응답에 대한 citation을 사용자에게 표시할 수 있습니다.
 
-### Key Concept
+### 핵심 개념
 
-Search results are always in: `response.choices[0].message.provider_specific_fields["search_results"]`
+검색 결과는 항상 다음 위치에 있습니다: `response.choices[0].message.provider_specific_fields["search_results"]`
 
-For streaming: Results appear in the **final chunk** when `finish_reason == "stop"`
+streaming의 경우 `finish_reason == "stop"`일 때 **최종 chunk**에 result가 나타납니다.
 
-### Non-Streaming Example
+### Non-Streaming 예제 {#non-streaming-example}
 
 
-**Non-Streaming Response with search results:**
+**검색 결과가 포함된 non-streaming 응답:**
 
 ```json
 {
@@ -518,9 +518,9 @@ searchResults.forEach((page: any) => {
 </TabItem>
 </Tabs>
 
-### Streaming Example
+### Streaming 예제 {#streaming-example}
 
-**Streaming Response with search results (final chunk):**
+**검색 결과가 포함된 streaming 응답(최종 chunk):**
 
 ```json
 {
@@ -616,40 +616,41 @@ for await (const chunk of stream) {
 </TabItem>
 </Tabs>
 
-### Search Result Fields
+### 검색 결과 필드 {#search-result-field}
 
-| Field | Type | Description |
+| 필드 | 타입 | 설명 |
 |-------|------|-------------|
-| `search_query` | string | The query used to search the vector store |
-| `data` | array | Array of search results |
-| `data[].score` | float | Relevance score (0-1, higher is more relevant) |
-| `data[].content` | array | Content chunks with `text` and `type` |
-| `data[].filename` | string | Name of the source file (optional) |
-| `data[].file_id` | string | Identifier for the source file (optional) |
-| `data[].attributes` | object | Provider-specific metadata (optional) |
+| `search_query` | string | vector store를 검색하는 데 사용된 쿼리 |
+| `data` | array | 검색 결과 배열 |
+| `data[].score` | float | relevance score(0-1, 높을수록 더 관련 있음) |
+| `data[].content` | array | `text`와 `type`을 포함한 content chunk |
+| `data[].filename` | string | source file 이름(선택 사항) |
+| `data[].file_id` | string | source file 식별자(선택 사항) |
+| `data[].attributes` | object | provider별 metadata(선택 사항) |
 
-## API Reference
+## API 참조 {#api-reference}
 
-### LiteLLM Completion Knowledge Base Parameters
+### LiteLLM Completion Knowledge Base 파라미터 {#litellm-completion-knowledge-base-parameter}
 
-When using the Knowledge Base integration with LiteLLM, you can include the following parameters:
+LiteLLM에서 Knowledge Base integration을 사용할 때 다음 parameter를 포함할 수 있습니다.
 
-| Parameter | Type | Description |
+| Parameter | Type | 설명 |
 |-----------|------|-------------|
-| `vector_store_ids` | List[str] | List of Knowledge Base IDs to query |
+| `vector_store_ids` | List[str] | 쿼리할 Knowledge Base ID 목록 |
 
-### VectorStoreRegistry
+### `VectorStoreRegistry`
 
-The `VectorStoreRegistry` is a central component for managing vector stores in LiteLLM. It acts as a registry where you can configure and access your vector stores.
+`VectorStoreRegistry`는 LiteLLM에서 vector store를 관리하는 중심 component입니다. vector store를 설정하고 접근할 수 있는 registry 역할을 합니다.
 
-#### What is VectorStoreRegistry?
+#### VectorStoreRegistry란?
 
-`VectorStoreRegistry` is a class that:
-- Maintains a collection of vector stores that LiteLLM can use
-- Allows you to register vector stores with their credentials and metadata
-- Makes vector stores accessible via their IDs in your completion requests
+`VectorStoreRegistry`는 다음 역할을 하는 class입니다.
 
-#### Using VectorStoreRegistry in Python
+- LiteLLM이 사용할 수 있는 vector store collection을 유지합니다.
+- credential 및 metadata와 함께 vector store를 등록할 수 있게 합니다.
+- completion request에서 ID를 통해 vector store에 접근할 수 있게 합니다.
+
+#### Python에서 VectorStoreRegistry 사용
 
 ```python
 from litellm.vector_stores.vector_store_registry import VectorStoreRegistry, LiteLLM_ManagedVectorStore
@@ -665,22 +666,22 @@ litellm.vector_store_registry = VectorStoreRegistry(
 )
 ```
 
-#### LiteLLM_ManagedVectorStore Parameters
+#### LiteLLM_ManagedVectorStore 파라미터 {#litellm_managedvectorstore-parameter}
 
-Each vector store in the registry is configured using a `LiteLLM_ManagedVectorStore` object with these parameters:
+registry의 각 vector store는 다음 parameter가 포함된 `LiteLLM_ManagedVectorStore` object로 설정됩니다.
 
-| Parameter | Type | Required | Description |
+| Parameter | Type | Required | 설명 |
 |-----------|------|----------|-------------|
-| `vector_store_id` | str | Yes | Unique identifier for the vector store |
-| `custom_llm_provider` | str | Yes | The provider of the vector store (e.g., "bedrock") |
-| `vector_store_name` | str | No | A friendly name for the vector store |
-| `vector_store_description` | str | No | Description of what the vector store contains |
-| `vector_store_metadata` | dict or str | No | Additional metadata about the vector store |
-| `litellm_credential_name` | str | No | Name of the credentials to use for this vector store |
+| `vector_store_id` | str | Yes | vector store의 고유 식별자 |
+| `custom_llm_provider` | str | Yes | vector store provider(예: "bedrock") |
+| `vector_store_name` | str | No | vector store의 알아보기 쉬운 이름 |
+| `vector_store_description` | str | No | vector store에 포함된 내용 설명 |
+| `vector_store_metadata` | dict or str | No | vector store에 대한 추가 metadata |
+| `litellm_credential_name` | str | No | 이 vector store에 사용할 credential 이름 |
 
-#### Configuring VectorStoreRegistry in config.yaml
+#### config.yaml에서 VectorStoreRegistry 설정
 
-For the LiteLLM Proxy, you can configure the same registry in your `config.yaml` file:
+LiteLLM Proxy에서는 `config.yaml` 파일에 동일한 registry를 설정할 수 있습니다.
 
 ```yaml showLineNumbers title="Vector store configuration in config.yaml"
 vector_store_registry:
@@ -693,6 +694,4 @@ vector_store_registry:
         source: "https://www.litellm.com/docs"
 ```
 
-The `litellm_params` section accepts all the same parameters as the `LiteLLM_ManagedVectorStore` constructor in the Python SDK.
-
-
+`litellm_params` section은 Python SDK의 `LiteLLM_ManagedVectorStore` constructor와 동일한 모든 parameter를 허용합니다.

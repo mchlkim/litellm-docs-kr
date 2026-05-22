@@ -3,9 +3,9 @@ import TabItem from '@theme/TabItem';
 
 # Codestral API [Mistral AI]
 
-Codestral is available in select code-completion plugins but can also be queried directly. See the documentation for more details.
+Codestral은 일부 코드 완성 플러그인에서 사용할 수 있으며 직접 쿼리할 수도 있습니다. 자세한 내용은 문서를 참고하세요.
 
-## API Key
+## API 키
 ```python
 # env variable
 os.environ['CODESTRAL_API_KEY']
@@ -15,7 +15,7 @@ os.environ['CODESTRAL_API_KEY']
 
 :::info
 
-Official Mistral API Docs: https://docs.mistral.ai/api/#operation/createFIMCompletion
+공식 Mistral API 문서: https://docs.mistral.ai/api/#operation/createFIMCompletion
 
 :::
 
@@ -23,7 +23,7 @@ Official Mistral API Docs: https://docs.mistral.ai/api/#operation/createFIMCompl
 <Tabs>
 <TabItem value="no-streaming" label="No Streaming">
 
-#### Sample Usage
+#### 샘플 사용법
 
 ```python
 import os
@@ -44,7 +44,7 @@ response = await litellm.atext_completion(
 )
 ```
 
-#### Expected Response
+#### 예상 응답
 
 ```json
 {
@@ -73,7 +73,7 @@ response = await litellm.atext_completion(
 </TabItem>
 <TabItem value="stream" label="Streaming">
 
-#### Sample Usage - Streaming
+#### 샘플 사용법 - Streaming
 
 ```python
 import os
@@ -96,7 +96,7 @@ async for chunk in response:
     print(chunk)
 ```
 
-#### Expected Response
+#### 예상 응답
 
 ```json
 {
@@ -118,10 +118,10 @@ async for chunk in response:
 </TabItem>
 </Tabs>
 
-### Supported Models
-All models listed here https://docs.mistral.ai/platform/endpoints are supported. We actively maintain the list of models, pricing, token window, etc. [here](https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json).
+### 지원 모델
+https://docs.mistral.ai/platform/endpoints 에 나열된 모든 모델을 지원합니다. 모델, 가격, 토큰 윈도우 등의 목록은 [여기](https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json)에서 계속 관리합니다.
 
-| Model Name     | Function Call                                                |
+| 모델 이름     | 함수 호출                                                |
 |----------------|--------------------------------------------------------------|
 | Codestral Latest  | `completion(model="text-completion-codestral/codestral-latest", messages)` |
 | Codestral 2405 | `completion(model="text-completion-codestral/codestral-2405", messages)`|
@@ -133,14 +133,14 @@ All models listed here https://docs.mistral.ai/platform/endpoints are supported.
 
 :::info
 
-Official Mistral API Docs: https://docs.mistral.ai/api/#operation/createChatCompletion
+공식 Mistral API 문서: https://docs.mistral.ai/api/#operation/createChatCompletion
 :::
 
 
 <Tabs>
 <TabItem value="no-streaming" label="No Streaming">
 
-#### Sample Usage
+#### 샘플 사용법
 
 ```python
 import os
@@ -164,7 +164,7 @@ response = await litellm.acompletion(
 )
 ```
 
-#### Expected Response
+#### 예상 응답
 
 ```json
 {
@@ -196,7 +196,7 @@ response = await litellm.acompletion(
 </TabItem>
 <TabItem value="stream" label="Streaming">
 
-#### Sample Usage - Streaming
+#### 샘플 사용법 - Streaming
 
 ```python
 import os
@@ -223,7 +223,7 @@ async for chunk in response:
     print(chunk)
 ```
 
-#### Expected Response
+#### 예상 응답
 
 ```json
 {
@@ -246,10 +246,10 @@ async for chunk in response:
 </TabItem>
 </Tabs>
 
-### Supported Models
-All models listed here https://docs.mistral.ai/platform/endpoints are supported. We actively maintain the list of models, pricing, token window, etc. [here](https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json).
+### 지원 모델
+https://docs.mistral.ai/platform/endpoints 에 나열된 모든 모델을 지원합니다. 모델, 가격, 토큰 윈도우 등의 목록은 [여기](https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json)에서 계속 관리합니다.
 
-| Model Name     | Function Call                                                |
+| 모델 이름     | 함수 호출                                                |
 |----------------|--------------------------------------------------------------|
 | Codestral Latest  | `completion(model="codestral/codestral-latest", messages)` |
 | Codestral 2405 | `completion(model="codestral/codestral-2405", messages)`|

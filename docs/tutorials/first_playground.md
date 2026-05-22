@@ -1,27 +1,27 @@
-# Create your first LLM playground
+# 첫 LLM playground 만들기 {#create-your-first-llm-playground}
 import Image from '@theme/IdealImage';
 
-Create a playground to **evaluate multiple LLM Providers in less than 10 minutes**. If you want to see this in prod, check out our [website](https://litellm.ai/).
+**10분 이내에 여러 LLM Provider를 평가할 수 있는** playground를 만들어 봅니다. 실제 운영 예시를 보고 싶다면 [웹사이트](https://litellm.ai/)를 확인하세요.
 
-**What will it look like?**
+**완성 모습**
 <Image
   img={require('../../img/litellm_streamlit_playground.png')}
   alt="streamlit_playground"
   style={{ maxWidth: '75%', height: 'auto' }}
 />
 
-**How will we do this?**: We'll build <u>the server</u> and connect it to our template frontend, ending up with a working playground UI by the end!
+**진행 방식**: <u>server</u>를 만들고 template frontend에 연결해, 마지막에는 동작하는 playground UI를 완성합니다.
 
 :::info
 
- Before you start, make sure you have followed the [environment-setup](./installation) guide. Please note, that this tutorial relies on you having API keys from at least 1 model provider (E.g. OpenAI). 
+ 시작하기 전에 [environment-setup](./installation) guide를 완료했는지 확인하세요. 이 tutorial은 최소 1개 model provider(예: OpenAI)의 API key가 있다고 가정합니다.
 :::
 
-## 1. Quick start 
+## 1. 빠른 시작 {#1-quick-start}
 
-Let's make sure our keys are working. Run this script in any environment of your choice (e.g. [Google Colab](https://colab.research.google.com/#create=true)).
+key가 정상 동작하는지 먼저 확인합니다. 원하는 환경(예: [Google Colab](https://colab.research.google.com/#create=true))에서 이 script를 실행하세요.
 
-🚨 Don't forget to replace the placeholder key values with your keys!
+🚨 placeholder key value를 실제 key로 바꾸는 것을 잊지 마세요.
 
 ```python 
 uv add litellm
@@ -48,15 +48,15 @@ response = completion("command-nightly", messages)
 response = completion("j2-mid", messages)
 ```
 
-## 2. Set-up Server
+## 2. Server 설정 {#2-set-up-server}
 
-Let's build a basic Flask app as our backend server. We'll give it a specific route for our completion calls.  
+backend server로 사용할 기본 Flask app을 만듭니다. completion call을 위한 전용 route를 추가합니다.
 
-**Notes**:
-* 🚨 Don't forget to replace the placeholder key values with your keys!
-* `completion_with_retries`: LLM API calls can fail in production. This function wraps the normal litellm completion() call with [tenacity](https://tenacity.readthedocs.io/en/latest/) to retry the call in case it fails. 
+**참고**:
+* 🚨 placeholder key value를 실제 key로 바꾸는 것을 잊지 마세요.
+* `completion_with_retries`: 운영 환경에서는 LLM API call이 실패할 수 있습니다. 이 함수는 일반 litellm completion() call을 [tenacity](https://tenacity.readthedocs.io/en/latest/)로 감싸 실패 시 call을 retry합니다.
 
-LiteLLM specific snippet:
+LiteLLM 전용 snippet:
 
 ```python 
 import os
@@ -81,7 +81,7 @@ def api_completion():
     return response
 ```
 
-The complete code:
+전체 code:
 
 ```python 
 import os
@@ -119,13 +119,13 @@ if __name__ == '__main__':
     serve(app, host="0.0.0.0", port=4000, threads=500)
 ```
 
-### Let's test it
-Start the server:
+### 테스트 {#lets-test-it}
+server를 시작합니다.
 ```python 
 python main.py
 ```
 
-Run this curl command to test it:
+다음 curl command로 테스트합니다.
 ```curl
 curl -X POST localhost:4000/chat/completions \
 -H 'Content-Type: application/json' \
@@ -138,50 +138,50 @@ curl -X POST localhost:4000/chat/completions \
 }'
 ```
 
-This is what you should see
+다음과 같은 결과가 표시됩니다.
 
 <Image img={require('../../img/test_python_server_2.png')} alt="python_code_sample_2" />
 
-## 3. Connect to our frontend template
+## 3. Frontend template 연결 {#3-connect-to-our-frontend-template}
 
-### 3.1 Download template
+### 3.1 Template 다운로드 {#31-download-template}
 
-For our frontend, we'll use [Streamlit](https://streamlit.io/) - this enables us to build a simple python web-app.
+frontend에는 [Streamlit](https://streamlit.io/)을 사용합니다. Streamlit을 사용하면 간단한 Python web-app을 만들 수 있습니다.
 
-Let's download the playground template we (LiteLLM) have created: 
+LiteLLM에서 만든 playground template를 다운로드합니다.
 
 ```zsh
 git clone https://github.com/BerriAI/litellm_playground_fe_template.git
 ```
 
-### 3.2 Run it
+### 3.2 실행 {#32-run-it}
 
-Make sure our server from [step 2](#2-set-up-server) is still running at port 4000
+[2단계](#2-set-up-server)의 server가 여전히 port 4000에서 실행 중인지 확인하세요.
 
 :::info
 
- If you used another port, no worries - just make sure you change [this line](https://github.com/BerriAI/litellm_playground_fe_template/blob/411bea2b6a2e0b079eb0efd834886ad783b557ef/app.py#L7) in your playground template's app.py
+ 다른 port를 사용했다면 playground template의 app.py에서 [이 줄](https://github.com/BerriAI/litellm_playground_fe_template/blob/411bea2b6a2e0b079eb0efd834886ad783b557ef/app.py#L7)을 바꾸면 됩니다.
 :::
 
-Now let's run our app: 
+이제 app을 실행합니다.
 
 ```zsh
 cd litellm_playground_fe_template && streamlit run app.py
 ```
 
-If you're missing Streamlit - just uv add it (or check out their [installation guidelines](https://docs.streamlit.io/library/get-started/installation#install-streamlit-on-macoslinux))
+Streamlit이 없다면 uv로 추가하세요. 또는 [설치 가이드](https://docs.streamlit.io/library/get-started/installation#install-streamlit-on-macoslinux)를 참고하세요.
 
 ```zsh
 uv add streamlit
 ```
 
-This is what you should see: 
+다음과 같은 화면이 표시됩니다.
 <Image img={require('../../img/litellm_streamlit_playground.png')} alt="streamlit_playground" />
 
 
-# Congratulations 🚀 
+# 축하합니다 {#congratulations}
 
-You've created your first LLM Playground - with the ability to call 50+ LLM APIs. 
+첫 LLM Playground를 만들었습니다. 이제 50개 이상의 LLM API를 호출할 수 있습니다.
 
-Next Steps: 
-* [Check out the full list of LLM Providers you can now add](https://docs.litellm.ai/docs/providers)
+다음 단계:
+* [이제 추가할 수 있는 LLM Provider 전체 목록 확인](https://docs.litellm.ai/docs/providers)

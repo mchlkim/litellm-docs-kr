@@ -2,48 +2,48 @@ import Image from '@theme/IdealImage';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Control Plane for Multi-region Architecture (Enterprise)
+# 멀티 리전 아키텍처용 Control Plane (엔터프라이즈)
 
-Learn how to deploy LiteLLM across multiple regions while maintaining centralized administration and avoiding duplication of management overhead.
+중앙 집중식 관리를 유지하고 관리 오버헤드 중복을 피하면서 LiteLLM을 여러 리전에 배포하는 방법을 알아봅니다.
 
 :::info
 
-✨ This requires LiteLLM Enterprise features.
+✨ LiteLLM 엔터프라이즈 기능이 필요합니다.
 
-[Enterprise Pricing](https://www.litellm.ai/#pricing)
+[엔터프라이즈 Pricing](https://www.litellm.ai/#pricing)
 
-[Get free 7-day trial key](https://www.litellm.ai/enterprise#trial)
+[무료 7일 평가판 키 받기](https://www.litellm.ai/enterprise#trial)
 
 :::
 
-## Overview
+## 개요
 
-When scaling LiteLLM for production use, you may want to deploy multiple instances across different regions or availability zones while maintaining a single point of administration. This guide covers how to set up a distributed LiteLLM deployment with:
+프로덕션 용도로 LiteLLM을 확장할 때 단일 관리 지점을 유지하면서 여러 리전 또는 가용 영역에 여러 인스턴스를 배포해야 할 수 있습니다. 이 가이드는 다음 구성으로 분산 LiteLLM 배포를 설정하는 방법을 다룹니다.
 
-- **Regional Worker Instances**: Handle LLM requests for users in specific regions
-- **Centralized Admin Instance**: Manages configuration, users, keys, and monitoring
+- **리전별 Worker 인스턴스**: 특정 리전 사용자의 LLM 요청을 처리합니다.
+- **중앙 집중식 Admin 인스턴스**: 설정, 사용자, 키, 모니터링을 관리합니다.
 
-## Architecture Pattern: Regional + Admin Instances
+## 아키텍처 패턴: Regional + Admin 인스턴스
 
-### Typical Deployment Scenario
+### 일반적인 배포 시나리오
 
 <Image img={require('../../img/scaling_architecture.png')} />  
 
-### Benefits of This Architecture
+### 이 아키텍처의 이점
 
-1. **Reduced Management Overhead**: Only one instance needs admin capabilities
-2. **Regional Performance**: Users get low-latency access from their region
-3. **Centralized Control**: All administration happens from a single interface
-4. **Security**: Limit admin access to designated instances only
-5. **Cost Efficiency**: Avoid duplicating admin infrastructure
+1. **관리 오버헤드 감소**: 하나의 인스턴스에만 admin 기능이 필요합니다.
+2. **리전별 성능**: 사용자는 자신의 리전에서 낮은 지연 시간으로 접근할 수 있습니다.
+3. **중앙 집중식 제어**: 모든 관리는 단일 인터페이스에서 수행됩니다.
+4. **보안**: admin 접근을 지정된 인스턴스로만 제한합니다.
+5. **비용 효율성**: admin 인프라 중복을 피합니다.
 
-## Configuration
+## 설정
 
-### Admin Instance Configuration
+### Admin 인스턴스 설정
 
-The admin instance handles all management operations and provides the UI.
+Admin 인스턴스는 모든 관리 작업을 처리하고 UI를 제공합니다.
 
-**Environment Variables for Admin Instance:**
+**Admin 인스턴스용 환경 변수:**
 ```bash
 # Keep admin capabilities enabled (default behavior)
 # DISABLE_ADMIN_UI=false          # Admin UI available
@@ -53,11 +53,11 @@ DATABASE_URL=postgresql://user:pass@global-db:5432/litellm
 LITELLM_MASTER_KEY=your-master-key
 ```
 
-### Worker Instance Configuration
+### Worker 인스턴스 설정
 
-Worker instances handle LLM requests but have admin capabilities disabled.
+Worker 인스턴스는 LLM 요청을 처리하지만 admin 기능은 비활성화되어 있습니다.
 
-**Environment Variables for Worker Instances:**
+**Worker 인스턴스용 환경 변수:**
 ```bash
 # Disable admin capabilities
 DISABLE_ADMIN_UI=true           # No admin UI
@@ -67,80 +67,80 @@ DATABASE_URL=postgresql://user:pass@global-db:5432/litellm
 LITELLM_MASTER_KEY=your-master-key
 ```
 
-## Environment Variables Reference
+## 환경 변수 참조
 
 ### `DISABLE_ADMIN_UI`
 
-Disables the LiteLLM Admin UI interface.
+LiteLLM 관리자 UI 인터페이스를 비활성화합니다.
 
-- **Default**: `false`
-- **Worker Instances**: Set to `true`
-- **Admin Instance**: Leave as `false` (or don't set)
+- **기본값**: `false`
+- **Worker 인스턴스**: `true`로 설정합니다.
+- **Admin 인스턴스**: `false`로 두거나 설정하지 않습니다.
 
 ```bash
 # Worker instances
 DISABLE_ADMIN_UI=true
 ```
 
-**Effect**: When enabled, the web UI at `/ui` becomes unavailable.
+**효과**: 활성화하면 `/ui`의 웹 UI를 사용할 수 없게 됩니다.
 
 ### `DISABLE_ADMIN_ENDPOINTS`
 
 :::info
 
-✨ This is an Enterprise feature.
+✨ 엔터프라이즈 기능입니다.
 
-[Enterprise Pricing](https://www.litellm.ai/#pricing)
+[엔터프라이즈 Pricing](https://www.litellm.ai/#pricing)
 
-[Get free 7-day trial key](https://www.litellm.ai/enterprise#trial)
+[무료 7일 평가판 키 받기](https://www.litellm.ai/enterprise#trial)
 
 :::
 
-Disables all management/admin API endpoints.
+모든 관리/admin API 엔드포인트를 비활성화합니다.
 
-- **Default**: `false`  
-- **Worker Instances**: Set to `true`
-- **Admin Instance**: Leave as `false` (or don't set)
+- **기본값**: `false`  
+- **Worker 인스턴스**: `true`로 설정합니다.
+- **Admin 인스턴스**: `false`로 두거나 설정하지 않습니다.
 
 ```bash
 # Worker instances  
 DISABLE_ADMIN_ENDPOINTS=true
 ```
 
-**Disabled Endpoints Include**:
-- `/key/*` - Key management
-- `/user/*` - User management  
-- `/team/*` - Team management
-- `/config/*` - Configuration updates
-- All other administrative endpoints
+**비활성화되는 엔드포인트**:
+- `/key/*` - 키 관리
+- `/user/*` - 사용자 관리  
+- `/team/*` - 팀 관리
+- `/config/*` - 설정 업데이트
+- 기타 모든 관리 엔드포인트
 
-**Available Endpoints** (when disabled):
-- `/chat/completions` - LLM requests
-- `/v1/*` - OpenAI-compatible APIs
-- `/vertex_ai/*` - Vertex AI pass-through APIs
-- `/bedrock/*` - Bedrock pass-through APIs
-- `/health` - Basic health check
-- `/metrics` - Prometheus metrics
-- All other LLM API endpoints
+**사용 가능한 엔드포인트**(비활성화된 경우):
+- `/chat/completions` - LLM 요청
+- `/v1/*` - OpenAI 호환 API
+- `/vertex_ai/*` - Vertex AI 패스스루 API
+- `/bedrock/*` - Bedrock 패스스루 API
+- `/health` - 기본 상태 확인
+- `/metrics` - Prometheus 메트릭
+- 기타 모든 LLM API 엔드포인트
 
 
 ### `DISABLE_LLM_API_ENDPOINTS`
 
 :::info
 
-✨ This is an Enterprise feature.
+✨ 엔터프라이즈 기능입니다.
 
-[Enterprise Pricing](https://www.litellm.ai/#pricing)
+[엔터프라이즈 Pricing](https://www.litellm.ai/#pricing)
 
-[Get free 7-day trial key](https://www.litellm.ai/enterprise#trial)
+[무료 7일 평가판 키 받기](https://www.litellm.ai/enterprise#trial)
 
 :::
 
-Disables all LLM API endpoints.
+모든 LLM API 엔드포인트를 비활성화합니다.
 
-- **Default**: `false`
-- **Worker Instances**: Leave as `false` (or don't set)
-- **Admin Instance**: Set to `true`
+- **기본값**: `false`
+- **Worker 인스턴스**: `false`로 두거나 설정하지 않습니다.
+- **Admin 인스턴스**: `true`로 설정합니다.
 
 ```bash
 # Admin instance
@@ -148,31 +148,31 @@ DISABLE_LLM_API_ENDPOINTS=true
 ```
 
 
-**Disabled Endpoints Include**:
-- `/chat/completions` - LLM requests
-- `/v1/*` - OpenAI-compatible APIs
-- `/vertex_ai/*` - Vertex AI pass-through APIs
-- `/bedrock/*` - Bedrock pass-through APIs
-- All other LLM API endpoints
+**비활성화되는 엔드포인트**:
+- `/chat/completions` - LLM 요청
+- `/v1/*` - OpenAI 호환 API
+- `/vertex_ai/*` - Vertex AI 패스스루 API
+- `/bedrock/*` - Bedrock 패스스루 API
+- 기타 모든 LLM API 엔드포인트
 
 
-**Available Endpoints** (when disabled):
-- `/key/*` - Key management
-- `/user/*` - User management  
-- `/team/*` - Team management
-- `/config/*` - Configuration updates
-- All other administrative endpoints
+**사용 가능한 엔드포인트**(비활성화된 경우):
+- `/key/*` - 키 관리
+- `/user/*` - 사용자 관리  
+- `/team/*` - 팀 관리
+- `/config/*` - 설정 업데이트
+- 기타 모든 관리 엔드포인트
 
 ### `LITELLM_UI_API_DOC_BASE_URL`
 
-Optional override for the API Reference base URL (used in sample code/docs) when the admin UI runs on a different host than the proxy.
+admin UI가 proxy와 다른 호스트에서 실행될 때 API Reference 기본 URL(샘플 코드/문서에서 사용)을 선택적으로 재정의합니다.
 
 
-## Usage Patterns
+## 사용 패턴
 
-### Client Usage
+### Client 사용법
 
-**For LLM Requests** (use regional endpoints):
+**LLM 요청용**(리전별 엔드포인트 사용):
 ```python
 import openai
 
@@ -194,7 +194,7 @@ response = client_us.chat.completions.create(
 )
 ```
 
-**For Administration** (use admin endpoint):
+**관리용**(admin 엔드포인트 사용):
 ```python
 import requests
 
@@ -206,9 +206,9 @@ response = requests.post(
 )
 ```
 
-## Related Documentation
+## 관련 문서
 
-- [Virtual Keys](./virtual_keys.md) - Managing API keys and users
-- [Health Checks](./health.md) - Monitoring instance health  
-- [Prometheus Metrics](./logging.md#prometheus-metrics) - Collecting metrics
-- [Production Deployment](./prod.md) - Production best practices 
+- [가상 키](./virtual_keys.md) - API 키와 사용자를 관리합니다.
+- [Health Checks](./health.md) - 인스턴스 상태를 모니터링합니다.  
+- [Prometheus Metrics](./logging.md#prometheus-metrics) - 메트릭을 수집합니다.
+- [Production Deployment](./prod.md) - 프로덕션 모범 사례를 확인합니다. 

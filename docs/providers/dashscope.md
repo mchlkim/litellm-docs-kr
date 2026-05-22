@@ -1,21 +1,21 @@
-# Dashscope API (Qwen models)
+# Dashscope API (Qwen 모델)
 https://dashscope.console.aliyun.com/
 
-**We support ALL Qwen models (from Alibaba Cloud), just set `dashscope/` as a prefix when sending completion requests**
+**모든 Qwen 모델(Alibaba Cloud 제공)을 지원합니다. completion 요청을 보낼 때 `dashscope/`를 접두사로 지정하기만 하면 됩니다.**
 
-## API Key
+## API 키 {#api-key}
 ```python
 # env variable
 os.environ['DASHSCOPE_API_KEY']
 ```
 
-## API Base
-You can optionally specify the API base URL depending on your region:
+## API Base {#api-base}
+지역에 따라 API base URL을 선택적으로 지정할 수 있습니다.
 
-| Region | API Base |
+| 지역 | API Base |
 |--------|----------|
-| **International** | `https://dashscope-intl.aliyuncs.com/compatible-mode/v1` |
-| **China/Beijing** | `https://dashscope.aliyuncs.com/compatible-mode/v1` |
+| **국제** | `https://dashscope-intl.aliyuncs.com/compatible-mode/v1` |
+| **중국/베이징** | `https://dashscope.aliyuncs.com/compatible-mode/v1` |
 
 ```python
 # Set via environment variable
@@ -29,7 +29,7 @@ response = completion(
 )
 ```
 
-## Sample Usage
+## 사용 예시 {#sample-usage}
 ```python
 from litellm import completion
 import os
@@ -44,7 +44,7 @@ response = completion(
 print(response)
 ```
 
-## Sample Usage - Streaming
+## 사용 예시 - 스트리밍 {#sample-usage---streaming}
 ```python
 from litellm import completion
 import os
@@ -63,11 +63,11 @@ for chunk in response:
 ```
 
 
-## All supported Models
+## 지원되는 모든 모델 {#all-supported-models}
 
-[DashScope Model List](https://help.aliyun.com/zh/model-studio/compatibility-of-openai-with-dashscope?spm=a2c4g.11186623.help-menu-2400256.d_2_8_0.1efd516e2tTXBn&scm=20140722.H_2833609._.OR_help-T_cn~zh-V_1#7f9c78ae99pwz)
+[DashScope 모델 목록](https://help.aliyun.com/zh/model-studio/compatibility-of-openai-with-dashscope?spm=a2c4g.11186623.help-menu-2400256.d_2_8_0.1efd516e2tTXBn&scm=20140722.H_2833609._.OR_help-T_cn~zh-V_1#7f9c78ae99pwz)
 
-| Model Name               | Function Call                                                                                                                                                      |
+| 모델 이름               | 함수 호출                                                                                                                                                      |
 |--------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | qwen-turbo | `completion(model="dashscope/qwen-turbo", messages)` | 
 | qwen-plus | `completion(model="dashscope/qwen-plus", messages)` | 
@@ -82,4 +82,3 @@ for chunk in response:
 | qwen3-235b-a22b | `completion(model="dashscope/qwen3-235b-a22b", messages)` |  
 | qwen3-32b | `completion(model="dashscope/qwen3-32b", messages)` |  
 | qwen3-30b-a3b | `completion(model="dashscope/qwen3-30b-a3b", messages)` |
-```

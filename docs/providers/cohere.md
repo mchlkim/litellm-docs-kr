@@ -4,18 +4,18 @@ import TabItem from '@theme/TabItem';
 
 # Cohere
 
-## API KEYS
+## API 키
 
 ```python
 import os 
 os.environ["COHERE_API_KEY"] = ""
 ```
 
-## Usage
+## 사용법
 
 ### LiteLLM Python SDK
 
-#### Cohere v2 API (Default)
+#### Cohere v2 API (기본값)
 
 ```python showLineNumbers
 from litellm import completion
@@ -32,7 +32,7 @@ response = completion(
 
 #### Cohere v1 API
 
-To use the Cohere v1/chat API, prefix your model name with `cohere_chat/v1/`:
+Cohere v1/chat API를 사용하려면 모델명 앞에 `cohere_chat/v1/`를 붙이세요.
 
 ```python showLineNumbers
 from litellm import completion
@@ -47,9 +47,9 @@ response = completion(
 )
 ```
 
-#### Streaming
+#### 스트리밍
 
-**Cohere v2 Streaming:**
+**Cohere v2 스트리밍:**
 
 ```python showLineNumbers
 from litellm import completion
@@ -69,7 +69,7 @@ for chunk in response:
 ```
 
 
-**Cohere v1 Streaming:**
+**Cohere v1 스트리밍:**
 
 ```python showLineNumbers
 from litellm import completion
@@ -89,21 +89,21 @@ for chunk in response:
 ```
 
 
-## Usage with LiteLLM Proxy 
+## LiteLLM Proxy 사용법
 
-Here's how to call Cohere with the LiteLLM Proxy Server
+LiteLLM Proxy Server로 Cohere를 호출하는 방법입니다.
 
-### 1. Save key in your environment
+### 1. 환경에 키 저장
 
 ```bash
 export COHERE_API_KEY="your-api-key"
 ```
 
-### 2. Start the proxy 
+### 2. 프록시 시작 
 
-Define the cohere models you want to use in the config.yaml
+config.yaml에 사용할 Cohere 모델을 정의하세요.
 
-**For Cohere v1 models:**
+**Cohere v1 모델의 경우:**
 ```yaml showLineNumbers
 model_list:
   - model_name: command-a-03-2025 
@@ -112,7 +112,7 @@ model_list:
       api_key: "os.environ/COHERE_API_KEY"
 ```
 
-**For Cohere v2 models:**
+**Cohere v2 모델의 경우:**
 ```yaml showLineNumbers
 model_list:
   - model_name: command-a-03-2025-v2
@@ -126,10 +126,10 @@ litellm --config /path/to/config.yaml
 ```
 
 
-### 3. Test it
+### 3. 테스트
 
 <Tabs>
-<TabItem value="v1-curl" label="Cohere v1 - Curl Request">
+<TabItem value="v1-curl" label="Cohere v1 - Curl 요청">
 
 ```shell showLineNumbers
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -147,7 +147,7 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 '
 ```
 </TabItem>
-<TabItem value="v2-curl" label="Cohere v2 - Curl Request">
+<TabItem value="v2-curl" label="Cohere v2 - Curl 요청">
 
 ```shell showLineNumbers
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -208,16 +208,16 @@ print(response)
 </Tabs>
 
 
-## Supported Models
-| Model Name | Function Call |
+## 지원 모델
+| 모델명 | 함수 호출 |
 |------------|----------------|
-| command-a-03-2025 | `litellm.completion('command-a-03-2025', messages)` |
-| command-r-plus-08-2024 | `litellm.completion('command-r-plus-08-2024', messages)` |  
-| command-r-08-2024 | `litellm.completion('command-r-08-2024', messages)` |
-| command-r-plus | `litellm.completion('command-r-plus', messages)` |  
-| command-r | `litellm.completion('command-r', messages)` |
-| command-light | `litellm.completion('command-light', messages)` |  
-| command-nightly | `litellm.completion('command-nightly', messages)` |
+| `command-a-03-2025` | `litellm.completion('command-a-03-2025', messages)` |
+| `command-r-plus-08-2024` | `litellm.completion('command-r-plus-08-2024', messages)` |  
+| `command-r-08-2024` | `litellm.completion('command-r-08-2024', messages)` |
+| `command-r-plus` | `litellm.completion('command-r-plus', messages)` |  
+| `command-r` | `litellm.completion('command-r', messages)` |
+| `command-light` | `litellm.completion('command-light', messages)` |  
+| `command-nightly` | `litellm.completion('command-nightly', messages)` |
 
 
 ## Embedding
@@ -233,13 +233,13 @@ response = embedding(
 )
 ```
 
-### Setting - Input Type for v3 models
-v3 Models have a required parameter: `input_type`. LiteLLM defaults to `search_document`. It can be one of the following four values:
+### 설정 - v3 모델의 입력 유형
+v3 모델에는 필수 파라미터 `input_type`이 있습니다. LiteLLM은 기본값으로 `search_document`를 사용합니다. 다음 네 가지 값 중 하나를 사용할 수 있습니다.
 
-- `input_type="search_document"`: (default) Use this for texts (documents) you want to store in your vector database
-- `input_type="search_query"`: Use this for search queries to find the most relevant documents in your vector database
-- `input_type="classification"`: Use this if you use the embeddings as an input for a classification system
-- `input_type="clustering"`: Use this if you use the embeddings for text clustering
+- `input_type="search_document"`: (기본값) 벡터 데이터베이스에 저장하려는 텍스트(문서)에 사용하세요.
+- `input_type="search_query"`: 벡터 데이터베이스에서 가장 관련성 높은 문서를 찾기 위한 검색 쿼리에 사용하세요.
+- `input_type="classification"`: 임베딩을 분류 시스템의 입력으로 사용할 때 사용하세요.
+- `input_type="clustering"`: 임베딩을 텍스트 클러스터링에 사용할 때 사용하세요.
 
 https://txt.cohere.com/introducing-embed-v3/
 
@@ -256,25 +256,25 @@ response = embedding(
 )
 ```
 
-### Supported Embedding Models
-| Model Name               | Function Call                                                |
+### 지원 Embedding 모델
+| 모델명                    | 함수 호출                                                    |
 |--------------------------|--------------------------------------------------------------|
-| embed-english-v3.0       | `embedding(model="embed-english-v3.0", input=["good morning from litellm", "this is another item"])` |
-| embed-english-light-v3.0 | `embedding(model="embed-english-light-v3.0", input=["good morning from litellm", "this is another item"])` |
-| embed-multilingual-v3.0  | `embedding(model="embed-multilingual-v3.0", input=["good morning from litellm", "this is another item"])` |
-| embed-multilingual-light-v3.0 | `embedding(model="embed-multilingual-light-v3.0", input=["good morning from litellm", "this is another item"])` |
-| embed-english-v2.0       | `embedding(model="embed-english-v2.0", input=["good morning from litellm", "this is another item"])` |
-| embed-english-light-v2.0 | `embedding(model="embed-english-light-v2.0", input=["good morning from litellm", "this is another item"])` |
-| embed-multilingual-v2.0  | `embedding(model="embed-multilingual-v2.0", input=["good morning from litellm", "this is another item"])` |
+| `embed-english-v3.0`       | `embedding(model="embed-english-v3.0", input=["good morning from litellm", "this is another item"])` |
+| `embed-english-light-v3.0` | `embedding(model="embed-english-light-v3.0", input=["good morning from litellm", "this is another item"])` |
+| `embed-multilingual-v3.0`  | `embedding(model="embed-multilingual-v3.0", input=["good morning from litellm", "this is another item"])` |
+| `embed-multilingual-light-v3.0` | `embedding(model="embed-multilingual-light-v3.0", input=["good morning from litellm", "this is another item"])` |
+| `embed-english-v2.0`       | `embedding(model="embed-english-v2.0", input=["good morning from litellm", "this is another item"])` |
+| `embed-english-light-v2.0` | `embedding(model="embed-english-light-v2.0", input=["good morning from litellm", "this is another item"])` |
+| `embed-multilingual-v2.0`  | `embedding(model="embed-multilingual-v2.0", input=["good morning from litellm", "this is another item"])` |
 
 ## Rerank 
 
-### Usage
+### 사용법
 
-LiteLLM supports the v1 and v2 clients for Cohere rerank. By default, the `rerank` endpoint uses the v2 client, but you can specify the v1 client by explicitly calling `v1/rerank`
+LiteLLM은 Cohere rerank용 v1 및 v2 클라이언트를 지원합니다. 기본적으로 `rerank` 엔드포인트는 v2 클라이언트를 사용하지만, `v1/rerank`를 명시적으로 호출해 v1 클라이언트를 지정할 수 있습니다.
 
 <Tabs>
-<TabItem value="sdk" label="LiteLLM SDK Usage">
+<TabItem value="sdk" label="LiteLLM SDK 사용법">
 
 ```python
 from litellm import rerank
@@ -300,13 +300,13 @@ print(response)
 ```
 </TabItem>
 
-<TabItem value="proxy" label="LiteLLM Proxy Usage">
+<TabItem value="proxy" label="LiteLLM Proxy 사용법">
 
-LiteLLM provides an cohere api compatible `/rerank` endpoint for Rerank calls.
+LiteLLM은 Rerank 호출을 위해 Cohere API와 호환되는 `/rerank` 엔드포인트를 제공합니다.
 
-**Setup**
+**설정**
 
-Add this to your litellm proxy config.yaml
+litellm proxy config.yaml에 다음을 추가하세요.
 
 ```yaml
 model_list:
@@ -320,7 +320,7 @@ model_list:
       api_key: os.environ/COHERE_API_KEY
 ```
 
-Start litellm
+litellm 시작
 
 ```bash
 litellm --config /path/to/config.yaml
@@ -328,7 +328,7 @@ litellm --config /path/to/config.yaml
 # RUNNING on http://0.0.0.0:4000
 ```
 
-Test request
+테스트 요청
 
 ```bash
 curl http://0.0.0.0:4000/rerank \

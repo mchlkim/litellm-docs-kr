@@ -1,20 +1,20 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Anthropic Passthrough
+# Anthropic 패스스루 {#anthropic-passthrough}
 
-Pass-through endpoints for Anthropic - call provider-specific endpoint, in native format (no translation).
+Anthropic용 패스스루 엔드포인트입니다. 공급자별 엔드포인트를 네이티브 형식으로 호출합니다(변환 없음).
 
-| Feature | Supported | Notes | 
+| 기능 | 지원 여부 | 참고 | 
 |-------|-------|-------|
-| Cost Tracking | ✅ | supports all models on `/messages`, `/v1/messages/batches` endpoint |
-| Logging | ✅ | works across all integrations |
-| End-user Tracking | ✅ | Prometheus `end_user` label is off by default; enable via `litellm.enable_end_user_cost_tracking_prometheus_only`|
+| 비용 추적 | ✅ | `/messages`, `/v1/messages/batches` 엔드포인트의 모든 모델을 지원합니다 |
+| 로깅 | ✅ | 모든 통합에서 작동합니다 |
+| 최종 사용자 추적 | ✅ | Prometheus `end_user` 레이블은 기본적으로 꺼져 있습니다. `litellm.enable_end_user_cost_tracking_prometheus_only`로 활성화하세요 |
 | Streaming | ✅ | |
 
-Just replace `https://api.anthropic.com` with `LITELLM_PROXY_BASE_URL/anthropic`
+`https://api.anthropic.com`을 `LITELLM_PROXY_BASE_URL/anthropic`으로 바꾸기만 하면 됩니다.
 
-#### **Example Usage**
+#### **예제 사용법**
 
 
 <Tabs>
@@ -62,21 +62,21 @@ print(response)
 </TabItem>
 </Tabs>
 
-Supports **ALL** Anthropic Endpoints (including streaming).
+**모든** Anthropic 엔드포인트를 지원합니다(스트리밍 포함).
 
-[**See All Anthropic Endpoints**](https://docs.anthropic.com/en/api/messages)
+[**모든 Anthropic 엔드포인트 보기**](https://docs.anthropic.com/en/api/messages)
 
-## Quick Start
+## 빠른 시작
 
-Let's call the Anthropic [`/messages` endpoint](https://docs.anthropic.com/en/api/messages)
+Anthropic [`/messages` endpoint](https://docs.anthropic.com/en/api/messages)를 호출해 보겠습니다.
 
-1. Add Anthropic API Key to your environment 
+1. 환경에 Anthropic API 키를 추가합니다.
 
 ```bash
 export ANTHROPIC_API_KEY=""
 ```
 
-2. Start LiteLLM Proxy 
+2. LiteLLM Proxy를 시작합니다.
 
 ```bash
 litellm
@@ -84,9 +84,9 @@ litellm
 # RUNNING on http://0.0.0.0:4000
 ```
 
-3. Test it! 
+3. 테스트합니다.
 
-Let's call the Anthropic /messages endpoint
+Anthropic /messages 엔드포인트를 호출해 보겠습니다.
 
 ```bash
 curl http://0.0.0.0:4000/anthropic/v1/messages \
@@ -104,21 +104,21 @@ curl http://0.0.0.0:4000/anthropic/v1/messages \
 ```
 
 
-## Examples
+## 예제
 
-Anything after `http://0.0.0.0:4000/anthropic` is treated as a provider-specific route, and handled accordingly.
+`http://0.0.0.0:4000/anthropic` 뒤의 모든 경로는 공급자별 라우트로 취급되며 그에 맞게 처리됩니다.
 
-Key Changes: 
+주요 변경 사항:
 
-| **Original Endpoint**                                | **Replace With**                  |
+| **원래 엔드포인트**                                | **대체 값**                  |
 |------------------------------------------------------|-----------------------------------|
 | `https://api.anthropic.com`          | `http://0.0.0.0:4000/anthropic` (LITELLM_PROXY_BASE_URL="http://0.0.0.0:4000")      |
-| `bearer $ANTHROPIC_API_KEY`                                 | `bearer anything` (use `bearer LITELLM_VIRTUAL_KEY` if Virtual Keys are setup on proxy)                    |
+| `bearer $ANTHROPIC_API_KEY`                                 | `bearer anything` (프록시에 가상 키가 설정되어 있으면 `bearer LITELLM_VIRTUAL_KEY` 사용)                    |
     
 
-### **Example 1: Messages endpoint**
+### **예제 1: Messages endpoint** {#messages-endpoint}
 
-#### LiteLLM Proxy Call 
+#### LiteLLM Proxy 호출 {#litellm-proxy-call}
 
 ```bash
 curl --request POST \
@@ -135,7 +135,7 @@ curl --request POST \
   }'
 ```
 
-#### Direct Anthropic API Call 
+#### 직접 Anthropic API 호출 {#direct-anthropic-api-call}
 
 ```bash
 curl https://api.anthropic.com/v1/messages \
@@ -152,9 +152,9 @@ curl https://api.anthropic.com/v1/messages \
     }'
 ```
 
-### **Example 2: Token Counting API**
+### **예제 2: Token Counting API** {#token-counting-api}
 
-#### LiteLLM Proxy Call 
+#### LiteLLM Proxy 호출 {#litellm-proxy-call-1}
 
 ```bash
 curl --request POST \
@@ -172,7 +172,7 @@ curl --request POST \
     }'
 ```
 
-#### Direct Anthropic API Call 
+#### 직접 Anthropic API 호출 {#direct-anthropic-api-call-1}
 
 ```bash
 curl https://api.anthropic.com/v1/messages/count_tokens \
@@ -189,10 +189,10 @@ curl https://api.anthropic.com/v1/messages/count_tokens \
 }'
 ```
 
-### **Example 3: Batch Messages**
+### **예제 3: Batch Messages** {#batch-messages}
 
 
-#### LiteLLM Proxy Call 
+#### LiteLLM Proxy 호출 {#litellm-proxy-call-2}
 
 ```bash
 curl --request POST \
@@ -228,7 +228,7 @@ curl --request POST \
 }'
 ```
 
-#### Direct Anthropic API Call 
+#### 직접 Anthropic API 호출 {#direct-anthropic-api-call-2}
 
 ```bash
 curl https://api.anthropic.com/v1/messages/batches \
@@ -263,8 +263,8 @@ curl https://api.anthropic.com/v1/messages/batches \
 }'
 ```
 
-:::note Configuration Required for Batch Cost Tracking
-For batch passthrough cost tracking to work properly, you need to define the Anthropic model in your `proxy_config.yaml`:
+:::note 배치 비용 추적에 필요한 설정
+배치 패스스루 비용 추적이 제대로 작동하려면 `proxy_config.yaml`에 Anthropic 모델을 정의해야 합니다.
 
 ```yaml
 model_list:
@@ -274,19 +274,19 @@ model_list:
       api_key: os.environ/ANTHROPIC_API_KEY
 ```
 
-This ensures the polling mechanism can correctly identify the provider and retrieve batch status for cost calculation.
+이 설정을 통해 폴링 메커니즘이 공급자를 올바르게 식별하고 비용 계산에 필요한 배치 상태를 가져올 수 있습니다.
 :::
 
-## Advanced
+## 고급 {#advanced}
 
-Pre-requisites
-- [Setup proxy with DB](../proxy/virtual_keys.md#setup)
+사전 요구 사항
+- [DB로 프록시 설정](../proxy/virtual_keys.md#setup)
 
-Use this, to avoid giving developers the raw Anthropic API key, but still letting them use Anthropic endpoints.
+개발자에게 원본 Anthropic API 키를 제공하지 않으면서도 Anthropic 엔드포인트를 사용할 수 있게 하려면 이 방식을 사용하세요.
 
-### Use with Virtual Keys 
+### 가상 키와 함께 사용 {#use-with-virtual-keys}
 
-1. Setup environment
+1. 환경을 설정합니다.
 
 ```bash
 export DATABASE_URL=""
@@ -300,7 +300,7 @@ litellm
 # RUNNING on http://0.0.0.0:4000
 ```
 
-2. Generate virtual key 
+2. 가상 키를 생성합니다.
 
 ```bash
 curl -X POST 'http://0.0.0.0:4000/key/generate' \
@@ -309,7 +309,7 @@ curl -X POST 'http://0.0.0.0:4000/key/generate' \
 -d '{}'
 ```
 
-Expected Response 
+예상 응답
 
 ```bash
 {
@@ -318,7 +318,7 @@ Expected Response
 }
 ```
 
-3. Test it! 
+3. 테스트합니다.
 
 
 ```bash
@@ -337,7 +337,7 @@ curl --request POST \
 ```
 
 
-### Send `litellm_metadata` (tags, end-user cost tracking)
+### `litellm_metadata` 보내기(tags, 최종 사용자 비용 추적) {#send-litellm_metadata-tags-end-user-cost-tracking}
 
 <Tabs>
 <TabItem value="curl" label="curl">

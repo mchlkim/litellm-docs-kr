@@ -4,20 +4,20 @@ import TabItem from '@theme/TabItem';
 
 # /audio/speech
 
-## Overview
+## 개요
 
-| Feature | Supported | Notes |
+| 기능 | 지원 여부 | 참고 |
 |---------|-----------|-------|
-| Cost Tracking | ✅ | Works with all supported models |
-| Logging | ✅ | Works across all integrations |
-| End-user Tracking | ✅ | |
-| Fallbacks | ✅ | Works between supported models |
-| Loadbalancing | ✅ | Works between supported models |
-| Guardrails | ✅ | Applies to input text (non-streaming only) |
-| Supported Providers | OpenAI, Azure OpenAI, Vertex AI, AWS Polly, ElevenLabs , MiniMax |
+| 비용 추적 | ✅ | 지원되는 모든 모델에서 작동 |
+| 로깅 | ✅ | 모든 연동에서 작동 |
+| 최종 사용자 추적 | ✅ | |
+| 폴백 | ✅ | 지원되는 모델 간에 작동 |
+| 로드 밸런싱 | ✅ | 지원되는 모델 간에 작동 |
+| 가드레일 | ✅ | 입력 텍스트에 적용됨(비스트리밍 전용) |
+| 지원 프로바이더 | OpenAI, Azure OpenAI, Vertex AI, AWS Polly, ElevenLabs , MiniMax |
 
-## **LiteLLM Python SDK Usage**
-### Quick Start 
+## **LiteLLM Python SDK 사용법**
+### 빠른 시작 
 
 ```python
 from pathlib import Path
@@ -35,7 +35,7 @@ response = speech(
 response.stream_to_file(speech_file_path)
 ```
 
-### Async Usage 
+### Async 사용법 
 
 ```python
 from litellm import aspeech
@@ -64,9 +64,9 @@ async def test_async_speech():
 asyncio.run(test_async_speech())
 ```
 
-## **LiteLLM Proxy Usage**
+## **LiteLLM Proxy 사용법**
 
-LiteLLM provides an openai-compatible `/audio/speech` endpoint for Text-to-speech calls.
+LiteLLM은 Text-to-speech 호출을 위해 OpenAI와 호환되는 `/audio/speech` 엔드포인트를 제공합니다.
 
 ```bash
 curl http://0.0.0.0:4000/v1/audio/speech \
@@ -80,7 +80,7 @@ curl http://0.0.0.0:4000/v1/audio/speech \
   --output speech.mp3
 ```
 
-**Setup**
+**설정**
 
 ```bash
 - model_name: tts
@@ -94,26 +94,26 @@ litellm --config /path/to/config.yaml
 
 # RUNNING on http://0.0.0.0:4000
 ```
-## **Supported Providers**
+## **지원 프로바이더**
 
-| Provider    | Link to Usage      |
+| 프로바이더    | 사용법 링크      |
 |-------------|--------------------|
-| OpenAI      |   [Usage](#quick-start)                 |
-| Azure OpenAI|   [Usage](../docs/providers/azure#azure-text-to-speech-tts)                 |
-| Azure AI Speech Service (AVA)|   [Usage](../docs/providers/azure_ai_speech)                 |
-| AWS Polly   |   [Usage](#aws-polly-text-to-speech)                 |
-| Vertex AI   |   [Usage](../docs/providers/vertex#text-to-speech-apis)                 |
-| Gemini      |   [Usage](#gemini-text-to-speech)                 |
-| ElevenLabs  |   [Usage](../docs/providers/elevenlabs#text-to-speech-tts)                 |
-| MiniMax     |   [Usage](../docs/providers/minimax#minimax---text-to-speech)                 |
+| OpenAI      |   [사용법](#quick-start)                 |
+| Azure OpenAI|   [사용법](../docs/providers/azure#azure-text-to-speech-tts)                 |
+| Azure AI Speech Service (AVA)|   [사용법](../docs/providers/azure_ai_speech)                 |
+| AWS Polly   |   아래 AWS Polly 사용법 섹션                 |
+| Vertex AI   |   [사용법](../docs/providers/vertex#text-to-speech-apis)                 |
+| Gemini      |   아래 Gemini 사용법 섹션                 |
+| ElevenLabs  |   [사용법](../docs/providers/elevenlabs#text-to-speech-tts)                 |
+| MiniMax     |   [사용법](../docs/providers/minimax#minimax---text-to-speech)                 |
 
-## `/audio/speech` to `/chat/completions` Bridge
+## `/audio/speech`에서 `/chat/completions`로 연결하는 브리지 {#audio-speech-to-chat-completions-bridge}
 
-LiteLLM allows you to use `/chat/completions` models to generate speech through the `/audio/speech` endpoint. This is useful for models like Gemini's TTS-enabled models that are only accessible via `/chat/completions`.
+LiteLLM을 사용하면 `/chat/completions` 모델로 `/audio/speech` 엔드포인트에서 음성을 생성할 수 있습니다. 이는 `/chat/completions`를 통해서만 접근할 수 있는 Gemini의 TTS 지원 모델 같은 경우에 유용합니다.
 
-### Gemini Text-to-Speech
+### Gemini 음성 합성 {#gemini-text-to-speech}
 
-#### Python SDK Usage
+#### Python SDK 사용법
 
 ```python showLineNumbers title="Gemini Text-to-Speech SDK Usage"
 import litellm
@@ -138,7 +138,7 @@ def test_audio_speech_gemini():
 test_audio_speech_gemini()
 ```
 
-#### Async Usage
+#### Async 사용법
 
 ```python showLineNumbers title="Gemini Text-to-Speech Async Usage"
 import litellm
@@ -161,9 +161,9 @@ async def test_async_gemini_speech():
 asyncio.run(test_async_gemini_speech())
 ```
 
-#### LiteLLM Proxy Usage
+#### LiteLLM Proxy 사용법
 
-**Setup Config:**
+**설정 구성:**
 
 ```yaml showLineNumbers title="Gemini Proxy Configuration"
 model_list:
@@ -173,7 +173,7 @@ model_list:
     api_key: os.environ/GEMINI_API_KEY
 ```
 
-**Start Proxy:**
+**Proxy 시작:**
 
 ```bash showLineNumbers title="Start LiteLLM Proxy"
 litellm --config /path/to/config.yaml
@@ -181,7 +181,7 @@ litellm --config /path/to/config.yaml
 # RUNNING on http://0.0.0.0:4000
 ```
 
-**Make Request:**
+**요청 보내기:**
 
 ```bash showLineNumbers title="Gemini TTS Request"
 curl http://0.0.0.0:4000/v1/audio/speech \
@@ -195,9 +195,9 @@ curl http://0.0.0.0:4000/v1/audio/speech \
   --output gemini_speech.mp3
 ```
 
-### Vertex AI Text-to-Speech
+### Vertex AI 음성 합성 {#vertex-ai-text-to-speech}
 
-#### Python SDK Usage
+#### Python SDK 사용법
 
 ```python showLineNumbers title="Vertex AI Text-to-Speech SDK Usage"
 import litellm
@@ -221,9 +221,9 @@ def test_audio_speech_vertex():
 test_audio_speech_vertex()
 ```
 
-#### LiteLLM Proxy Usage
+#### LiteLLM Proxy 사용법
 
-**Setup Config:**
+**설정 구성:**
 
 ```yaml showLineNumbers title="Vertex AI Proxy Configuration"
 model_list:
@@ -234,7 +234,7 @@ model_list:
     vertex_location: us-central1
 ```
 
-**Make Request:**
+**요청 보내기:**
 
 ```bash showLineNumbers title="Vertex AI TTS Request"
 curl http://0.0.0.0:4000/v1/audio/speech \
@@ -248,15 +248,15 @@ curl http://0.0.0.0:4000/v1/audio/speech \
   --output vertex_speech.mp3
 ```
 
-### AWS Polly Text-to-Speech
+### AWS Polly 음성 합성 {#aws-polly-text-to-speech}
 
-AWS Polly provides neural and standard text-to-speech engines with support for multiple voices and languages.
+AWS Polly는 여러 음성과 언어를 지원하는 뉴럴 및 표준 음성 합성 엔진을 제공합니다.
 
-See the [AWS Polly provider documentation](../docs/providers/aws_polly) for detailed usage examples.
+자세한 사용 예시는 [AWS Polly 프로바이더 문서](../docs/providers/aws_polly)을 참고하세요.
 
-## ✨ Enterprise LiteLLM Proxy - Set Max Request File Size 
+## ✨ 엔터프라이즈 LiteLLM Proxy - 최대 요청 파일 크기 설정 {#-enterprise-litellm-proxy---set-max-request-file-size}
 
-Use this when you want to limit the file size for requests sent to `audio/transcriptions`
+`audio/transcriptions`로 전송되는 요청의 파일 크기를 제한하려면 이 설정을 사용하세요.
 
 ```yaml
 - model_name: whisper
@@ -268,7 +268,7 @@ Use this when you want to limit the file size for requests sent to `audio/transc
     mode: audio_transcription
 ```
 
-Make a test Request with a valid file
+유효한 파일로 테스트 요청을 보냅니다.
 ```shell
 curl --location 'http://localhost:4000/v1/audio/transcriptions' \
 --header 'Authorization: Bearer sk-1234' \
@@ -277,7 +277,7 @@ curl --location 'http://localhost:4000/v1/audio/transcriptions' \
 ```
 
 
-Expect to see the follow response 
+다음 응답이 표시되어야 합니다.
 
 ```shell
 {"error":{"message":"File size is too large. Please check your file size. Passed file size: 0.7392807006835938 MB. Max file size: 0.0001 MB","type":"bad_request","param":"file","code":500}}%  

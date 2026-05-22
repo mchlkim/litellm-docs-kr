@@ -2,17 +2,17 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Image from '@theme/IdealImage';
 
-# Clientside LLM Credentials 
+# 클라이언트 측 LLM 자격 증명
 
 
-### Pass User LLM API Keys, Fallbacks
-Allow your end-users to pass their model list, api base, OpenAI API key (any LiteLLM supported provider) to make requests 
+### 사용자 LLM API 키와 폴백 전달
+최종 사용자가 요청을 보낼 때 자신의 모델 목록, api base, OpenAI API key(LiteLLM이 지원하는 모든 공급자)를 전달할 수 있게 합니다.
 
-**Note** This is not related to [virtual keys](./virtual_keys.md). This is for when you want to pass in your users actual LLM API keys. 
+**참고** 이는 [virtual keys](./virtual_keys.md)와 관련이 없습니다. 사용자의 실제 LLM API 키를 전달하려는 경우에 사용합니다.
 
 :::info
 
-**You can pass a litellm.RouterConfig as `user_config`, See all supported params here https://github.com/BerriAI/litellm/blob/main/litellm/types/router.py **
+**litellm.RouterConfig를 `user_config`로 전달할 수 있습니다. 지원되는 모든 매개변수는 여기에서 확인하세요. https://github.com/BerriAI/litellm/blob/main/litellm/types/router.py **
 
 :::
 
@@ -20,7 +20,7 @@ Allow your end-users to pass their model list, api base, OpenAI API key (any Lit
 
 <TabItem value="openai-py" label="OpenAI Python">
 
-#### Step 1: Define user model list & config
+#### Step 1: 사용자 모델 목록 및 구성 정의
 ```python
 import os
 
@@ -61,7 +61,7 @@ user_config = {
 
 ```
 
-#### Step 2: Send user_config in `extra_body`
+#### Step 2: `extra_body`에 user_config 전송
 ```python
 import openai
 client = openai.OpenAI(
@@ -88,7 +88,7 @@ print(response)
 
 <TabItem value="openai-js" label="OpenAI JS">
 
-#### Step 1: Define user model list & config
+#### Step 1: 사용자 모델 목록 및 구성 정의
 ```javascript
 const os = require('os');
 
@@ -127,7 +127,7 @@ const userConfig = {
 };
 ```
 
-#### Step 2: Send `user_config` as a param to `openai.chat.completions.create`
+#### Step 2: `user_config`를 `openai.chat.completions.create`의 매개변수로 전송
 
 ```javascript
 const { OpenAI } = require('openai');
@@ -152,12 +152,12 @@ main();
 
 </Tabs>
 
-### Pass User LLM API Keys / API Base
-Allows your users to pass in their OpenAI API key/API base (any LiteLLM supported provider) to make requests 
+### 사용자 LLM API 키 / API Base 전달
+사용자가 요청을 보낼 때 자신의 OpenAI API key/API base(LiteLLM이 지원하는 모든 공급자)를 전달할 수 있게 합니다.
 
-Here's how to do it: 
+방법은 다음과 같습니다.
 
-#### 1. Enable configurable clientside auth credentials for a provider
+#### 1. 공급자에 대해 구성 가능한 클라이언트 측 인증 자격 증명 활성화
 
 ```yaml
 model_list:
@@ -169,16 +169,16 @@ model_list:
       configurable_clientside_auth_params: [{"api_base": "^https://litellm.*direct\.fireworks\.ai/v1$"}] # 👈 regex
 ```
 
-Specify any/all auth params you want the user to be able to configure:
+사용자가 구성할 수 있게 하려는 인증 매개변수를 일부 또는 전부 지정합니다.
 
-- api_base (✅ regex supported)
+- api_base (✅ regex 지원)
 - api_key
 - base_url 
 
-(check [provider docs](../providers/) for provider-specific auth params - e.g. `vertex_project`)
+(공급자별 인증 매개변수는 [provider docs](../providers/)를 확인하세요. 예: `vertex_project`)
 
 
-#### 2. Test it!
+#### 2. 테스트합니다!
 
 ```python
 import openai
@@ -199,11 +199,11 @@ response = client.chat.completions.create(model="gpt-3.5-turbo", messages = [
 print(response)
 ```
 
-More examples: 
+더 많은 예시:
 <Tabs>
 <TabItem value="openai-py" label="Azure Credentials">
 
-Pass in the litellm_params (E.g. api_key, api_base, etc.) via the `extra_body` parameter in the OpenAI client. 
+OpenAI 클라이언트의 `extra_body` 매개변수를 통해 litellm_params(예: api_key, api_base 등)를 전달합니다.
 
 ```python
 import openai
@@ -232,7 +232,7 @@ print(response)
 </TabItem>
 <TabItem value="openai-js" label="OpenAI JS">
 
-For JS, the OpenAI client accepts passing params in the `create(..)` body as normal.
+JS에서는 OpenAI 클라이언트가 일반적인 방식으로 `create(..)` 본문에 매개변수를 전달받습니다.
 
 ```javascript
 const { OpenAI } = require('openai');
@@ -255,13 +255,13 @@ main();
 </TabItem>
 </Tabs>
 
-### Pass provider-specific params (e.g. Region, Project ID, etc.)
+### 공급자별 매개변수 전달(예: Region, Project ID 등)
 
-Specify the region, project id, etc. to use for making requests to Vertex AI on the clientside.
+클라이언트 측에서 Vertex AI로 요청을 보낼 때 사용할 region, project id 등을 지정합니다.
 
-Any value passed in the Proxy's request body, will be checked by LiteLLM against the mapped openai / litellm auth params. 
+Proxy의 요청 본문에 전달된 값은 LiteLLM이 매핑된 openai / litellm 인증 매개변수와 대조해 확인합니다.
 
-Unmapped params, will be assumed to be provider-specific params, and will be passed through to the provider in the LLM API's request body.
+매핑되지 않은 매개변수는 공급자별 매개변수로 간주되며, LLM API의 요청 본문에서 공급자로 그대로 전달됩니다.
 
 ```bash
 import openai

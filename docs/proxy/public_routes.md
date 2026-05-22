@@ -1,29 +1,29 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Control Public & Private Routes
+# 공개 및 비공개 라우트 제어 {#control-public--private-routes}
 
 :::info
 
-Requires a LiteLLM Enterprise License. [Get a free trial](https://enterprise.litellm.ai/demo).
+LiteLLM 엔터프라이즈 라이선스가 필요합니다. [무료 체험 시작하기](https://enterprise.litellm.ai/demo).
 
 :::
 
-Control which routes require authentication and which routes are publicly accessible.
+인증이 필요한 라우트와 공개적으로 접근할 수 있는 라우트를 제어합니다.
 
-## Route Types
+## 라우트 유형 {#route-types}
 
-| Route Type | Requires Auth | Description |
+| 라우트 유형 | 인증 필요 | 설명 |
 |------------|---------------|-------------|
-| `public_routes` | No | Routes accessible without any authentication |
-| `admin_only_routes` | Yes (Admin only) | Routes only accessible by [Proxy Admin](./self_serve#available-roles) |
-| `allowed_routes` | Yes | Routes exposed on the proxy. If not set, all routes are exposed |
+| `public_routes` | 아니요 | 인증 없이 접근할 수 있는 라우트 |
+| `admin_only_routes` | 예(Admin 전용) | [Proxy Admin](./self_serve#available-roles)만 접근할 수 있는 라우트 |
+| `allowed_routes` | 예 | 프록시에 노출되는 라우트입니다. 설정하지 않으면 모든 라우트가 노출됩니다. |
 
-## Quick Start
+## 빠른 시작
 
-### Make Routes Public
+### 라우트 공개 설정 {#make-routes-public}
 
-Allow specific routes to be accessed without authentication:
+특정 라우트를 인증 없이 접근할 수 있도록 허용합니다.
 
 ```yaml
 general_settings:
@@ -31,9 +31,9 @@ general_settings:
   public_routes: ["LiteLLMRoutes.public_routes", "/spend/calculate"]
 ```
 
-### Restrict Routes to Admin Only
+### 라우트를 Admin 전용으로 제한 {#restrict-routes-to-admin-only}
 
-Restrict certain routes to only be accessible by Proxy Admin:
+특정 라우트를 Proxy Admin만 접근할 수 있도록 제한합니다.
 
 ```yaml
 general_settings:
@@ -41,9 +41,9 @@ general_settings:
   admin_only_routes: ["/key/generate", "/key/delete"]
 ```
 
-### Limit Available Routes
+### 사용 가능한 라우트 제한 {#limit-available-routes}
 
-Only expose specific routes on the proxy:
+프록시에서 특정 라우트만 노출합니다.
 
 ```yaml
 general_settings:
@@ -51,9 +51,9 @@ general_settings:
   allowed_routes: ["/chat/completions", "/embeddings", "LiteLLMRoutes.public_routes"]
 ```
 
-## Usage Examples
+## 사용법 예제
 
-### Define Public, Admin Only, and Allowed Routes
+### 공개, Admin 전용, 허용 라우트 정의 {#define-public-admin-only-and-allowed-routes}
 
 ```yaml
 general_settings:
@@ -63,9 +63,9 @@ general_settings:
   allowed_routes: ["/chat/completions", "/spend/calculate", "LiteLLMRoutes.public_routes"]
 ```
 
-`LiteLLMRoutes.public_routes` is an ENUM corresponding to the default public routes on LiteLLM. [View the source](https://github.com/BerriAI/litellm/blob/main/litellm/proxy/_types.py).
+`LiteLLMRoutes.public_routes`는 LiteLLM의 기본 공개 라우트에 해당하는 ENUM입니다. [소스 보기](https://github.com/BerriAI/litellm/blob/main/litellm/proxy/_types.py).
 
-### Testing
+### 테스트 {#testing}
 
 <Tabs>
 
@@ -81,13 +81,13 @@ curl --request POST \
   }'
 ```
 
-This endpoint works without an `Authorization` header.
+이 엔드포인트는 `Authorization` 헤더 없이 동작합니다.
 
 </TabItem>
 
 <TabItem value="admin_only_routes" label="Test admin_only_routes">
 
-**Successful Request (Admin)**
+**성공한 요청(Admin)**
 
 ```shell
 curl --location 'http://0.0.0.0:4000/key/generate' \
@@ -96,7 +96,7 @@ curl --location 'http://0.0.0.0:4000/key/generate' \
 --data '{}'
 ```
 
-**Unsuccessful Request (Non-Admin)**
+**실패한 요청(Non-Admin)**
 
 ```shell
 curl --location 'http://0.0.0.0:4000/key/generate' \
@@ -105,7 +105,7 @@ curl --location 'http://0.0.0.0:4000/key/generate' \
 --data '{"user_role": "internal_user"}'
 ```
 
-**Expected Response**
+**예상 응답**
 
 ```json
 {
@@ -122,7 +122,7 @@ curl --location 'http://0.0.0.0:4000/key/generate' \
 
 <TabItem value="allowed_routes" label="Test allowed_routes">
 
-**Successful Request**
+**성공한 요청**
 
 ```shell
 curl http://localhost:4000/chat/completions \
@@ -136,7 +136,7 @@ curl http://localhost:4000/chat/completions \
 }'
 ```
 
-**Unsuccessful Request (Route Not Allowed)**
+**실패한 요청(허용되지 않은 라우트)**
 
 ```shell
 curl --location 'http://0.0.0.0:4000/embeddings' \
@@ -148,7 +148,7 @@ curl --location 'http://0.0.0.0:4000/embeddings' \
 }'
 ```
 
-**Expected Response**
+**예상 응답**
 
 ```json
 {
@@ -165,20 +165,20 @@ curl --location 'http://0.0.0.0:4000/embeddings' \
 
 </Tabs>
 
-## Advanced: Wildcard Patterns
+## 고급: 와일드카드 패턴 {#advanced-wildcard-patterns}
 
-Use wildcard patterns to match multiple routes at once.
+와일드카드 패턴을 사용해 여러 라우트를 한 번에 일치시킬 수 있습니다.
 
-### Syntax
+### 구문 {#syntax}
 
-| Pattern | Description | Example |
+| 패턴 | 설명 | 예제 |
 |---------|-------------|---------|
-| `/path/*` | Matches any route starting with `/path/` | `/api/*` matches `/api/users`, `/api/users/123` |
+| `/path/*` | `/path/`로 시작하는 모든 라우트와 일치합니다. | `/api/*`는 `/api/users`, `/api/users/123`와 일치합니다. |
 
 
-### Examples
+### 예제
 
-#### Make All Routes Under a Path Public
+#### 경로 아래의 모든 라우트 공개 {#make-all-routes-under-a-path-public}
 
 ```yaml
 general_settings:
@@ -189,7 +189,7 @@ general_settings:
     - "/health/*"       # All health check routes
 ```
 
-#### Restrict Admin Routes with Wildcards
+#### 와일드카드로 Admin 라우트 제한 {#restrict-admin-routes-with-wildcards}
 
 ```yaml
 general_settings:
@@ -199,9 +199,9 @@ general_settings:
     - "/internal/*"     # All internal routes
 ```
 
-### Testing Wildcard Routes
+### 와일드카드 라우트 테스트 {#testing-wildcard-routes}
 
-**Config:**
+**설정:**
 ```yaml
 general_settings:
   master_key: sk-1234
@@ -209,7 +209,7 @@ general_settings:
     - "/public/*"
 ```
 
-**Test:**
+**테스트:**
 ```shell
 # This works without auth (matches /public/*)
 curl http://localhost:4000/public/status
@@ -220,4 +220,3 @@ curl http://localhost:4000/public/health/detailed
 # This requires auth (doesn't match /public/*)
 curl http://localhost:4000/private/data
 ```
-

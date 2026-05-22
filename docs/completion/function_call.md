@@ -1,8 +1,8 @@
-# Function Calling 
+# Function Calling
 
-## Checking if a model supports function calling 
+## 모델의 function calling 지원 여부 확인
 
-Use `litellm.supports_function_calling(model="")` -> returns `True` if model supports Function calling, `False` if not
+`litellm.supports_function_calling(model="")`를 사용하면 모델이 Function calling을 지원하는 경우 `True`, 지원하지 않는 경우 `False`를 반환합니다.
 
 ```python
 assert litellm.supports_function_calling(model="gpt-3.5-turbo") == True
@@ -13,30 +13,30 @@ assert litellm.supports_function_calling(model="ollama/llama2") == False
 ```
 
 
-## Checking if a model supports parallel function calling 
+## 모델의 parallel function calling 지원 여부 확인
 
-Use `litellm.supports_parallel_function_calling(model="")` -> returns `True` if model supports parallel function calling, `False` if not
+`litellm.supports_parallel_function_calling(model="")`를 사용하면 모델이 parallel function calling을 지원하는 경우 `True`, 지원하지 않는 경우 `False`를 반환합니다.
 
 ```python
 assert litellm.supports_parallel_function_calling(model="gpt-4-turbo-preview") == True
 assert litellm.supports_parallel_function_calling(model="gpt-4") == False
 ```
-## Parallel Function calling
-Parallel function calling is the model's ability to perform multiple function calls together, allowing the effects and results of these function calls to be resolved in parallel
+## 병렬 Function calling {#parallel-function-calling}
+Parallel function calling은 모델이 여러 function call을 함께 수행할 수 있는 기능이며, 각 function call의 효과와 결과를 병렬로 처리할 수 있게 합니다.
 
-## Quick Start - gpt-3.5-turbo-1106
+## 빠른 시작 - gpt-3.5-turbo-1106
 <a target="_blank" href="https://colab.research.google.com/github/BerriAI/litellm/blob/main/cookbook/Parallel_function_calling.ipynb">
-  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
+  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Colab에서 열기"/>
 </a>
 
-In this example we define a single function `get_current_weather`. 
+이 예제에서는 단일 함수 `get_current_weather`를 정의합니다.
 
-- Step 1: Send the model the `get_current_weather` with the user question
-- Step 2: Parse the output from the model response - Execute the `get_current_weather` with the model provided args
-- Step 3: Send the model the output from running the `get_current_weather` function
+- 1단계: 사용자 질문과 함께 `get_current_weather`를 모델에 보냅니다.
+- 2단계: 모델 응답의 출력을 파싱하고, 모델이 제공한 인수로 `get_current_weather`를 실행합니다.
+- 3단계: `get_current_weather` 함수 실행 결과를 모델에 보냅니다.
 
 
-### Full Code - Parallel function calling with `gpt-3.5-turbo-1106`
+### 전체 코드 - `gpt-3.5-turbo-1106`을 사용한 병렬 function calling
 
 ```python
 import litellm
@@ -133,9 +133,9 @@ def test_parallel_function_call():
 test_parallel_function_call()
 ```
 
-### Explanation - Parallel function calling
-Below is an explanation of what is happening in the code snippet above for Parallel function calling with `gpt-3.5-turbo-1106`
-### Step1: litellm.completion() with `tools` set to `get_current_weather`
+### 설명 - Parallel function calling
+아래는 `gpt-3.5-turbo-1106`을 사용한 Parallel function calling 코드 스니펫에서 어떤 일이 일어나는지에 대한 설명입니다.
+### 1단계: `tools`를 `get_current_weather`로 설정한 litellm.completion()
 ```python
 import litellm
 import json
@@ -188,8 +188,8 @@ response_message = response.choices[0].message
 tool_calls = response.choices[0].message.tool_calls
 ```
 
-##### Expected output
-In the output you can see the model calls the function multiple times - for San Francisco, Tokyo, Paris
+##### 예상 출력
+출력에서 모델이 San Francisco, Tokyo, Paris에 대해 함수를 여러 번 호출하는 것을 볼 수 있습니다.
 ```json
 ModelResponse(
   id='chatcmpl-8MHBKZ9t6bXuhBvUMzoKsfmmlv7xq', 
@@ -214,8 +214,8 @@ ModelResponse(
 )
 ```
 
-### Step 2 -  Parse the Model Response and Execute Functions
-After sending the initial request, parse the model response to identify the function calls it wants to make. In this example, we expect three tool calls, each corresponding to a location (San Francisco, Tokyo, and Paris). 
+### 2단계 - 모델 응답 파싱 및 함수 실행
+초기 요청을 보낸 후 모델 응답을 파싱하여 모델이 수행하려는 function call을 식별합니다. 이 예제에서는 각 위치(San Francisco, Tokyo, Paris)에 해당하는 세 개의 tool call을 예상합니다.
 
 ```python
 # Check if the model wants to call a function
@@ -251,8 +251,8 @@ if tool_calls:
 
 ```
 
-### Step 3 - Second litellm.completion() call 
-Once the functions are executed, send the model the information for each function call and its response. This allows the model to generate a new response considering the effects of the function calls.
+### 3단계 - 두 번째 litellm.completion() 호출
+함수가 실행되면 각 function call과 해당 응답에 대한 정보를 모델에 보냅니다. 이렇게 하면 모델이 function call의 결과를 고려하여 새 응답을 생성할 수 있습니다.
 ```python
 second_response = litellm.completion(
     model="gpt-3.5-turbo-1106",
@@ -261,7 +261,7 @@ second_response = litellm.completion(
 print("Second Response\n", second_response)
 ```
 
-#### Expected output
+#### 예상 출력
 ```json
 ModelResponse(
   id='chatcmpl-8MHBLh1ldADBP71OrifKap6YfAd4w', 
@@ -278,7 +278,7 @@ ModelResponse(
 )
 ```
 
-## Parallel Function Calling - Azure OpenAI
+## 병렬 Function Calling - Azure OpenAI {#parallel-function-calling---azure-openai}
 ```python
 # set Azure env variables
 import os
@@ -377,7 +377,7 @@ print("Second Response Message\n", second_response.choices[0].message.content)
 
 ```
 
-## Deprecated - Function Calling with `completion(functions=functions)`
+## 지원 중단됨 - `completion(functions=functions)`를 사용한 Function Calling
 ```python
 import os, litellm
 from litellm import completion
@@ -419,13 +419,13 @@ response = completion(model="gpt-3.5-turbo-0613", messages=messages, functions=f
 print(response)
 ```
 
-## litellm.function_to_dict - Convert Functions to dictionary for OpenAI function calling
-`function_to_dict` allows you to pass a function docstring and produce a dictionary usable for OpenAI function calling
+## litellm.function_to_dict - OpenAI function calling용 딕셔너리로 함수 변환
+`function_to_dict`를 사용하면 함수 docstring을 전달하여 OpenAI function calling에 사용할 수 있는 딕셔너리를 생성할 수 있습니다.
 
-### Using `function_to_dict`
-1. Define your function `get_current_weather`
-2. Add a docstring to your function `get_current_weather`
-3. Pass the function to `litellm.utils.function_to_dict` to get the dictionary for OpenAI function calling
+### `function_to_dict` 사용
+1. 함수 `get_current_weather`를 정의합니다.
+2. 함수 `get_current_weather`에 docstring을 추가합니다.
+3. 함수를 `litellm.utils.function_to_dict`에 전달하여 OpenAI function calling용 딕셔너리를 가져옵니다.
 
 ```python
 # function with docstring
@@ -452,7 +452,7 @@ function_json = litellm.utils.function_to_dict(get_current_weather)
 print(function_json)
 ```
 
-#### Output from function_to_dict
+#### function_to_dict 출력
 ```json
 {
     'name': 'get_current_weather', 
@@ -468,7 +468,7 @@ print(function_json)
 }
 ```
 
-### Using function_to_dict with Function calling
+### Function calling과 함께 function_to_dict 사용
 ```python
 import os, litellm
 from litellm import completion
@@ -503,12 +503,12 @@ response = completion(model="gpt-3.5-turbo-0613", messages=messages, functions=f
 print(response)
 ```
 
-## Function calling for Models w/out function-calling support
+## function-calling을 지원하지 않는 모델의 Function calling
 
-### Adding Function to prompt
-For Models/providers without function calling support, LiteLLM allows you to add the function to the prompt set: `litellm.add_function_to_prompt = True`
+### 프롬프트에 함수 추가
+function calling을 지원하지 않는 모델/provider의 경우, LiteLLM은 함수가 프롬프트에 추가되도록 설정할 수 있습니다: `litellm.add_function_to_prompt = True`
 
-#### Usage
+#### 사용법
 ```python
 import os, litellm
 from litellm import completion
@@ -550,4 +550,3 @@ functions = [
 response = completion(model="claude-2", messages=messages, functions=functions)
 print(response)
 ```
-

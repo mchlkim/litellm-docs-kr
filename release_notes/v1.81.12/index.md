@@ -14,7 +14,7 @@ authors:
 hide_table_of_contents: false
 ---
 
-## Deploy this version
+## 이 버전 배포
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -47,43 +47,43 @@ pip install litellm==1.81.12
 - **MCP OAuth2 M2M + Tracing** - [Add machine-to-machine OAuth2 support for MCP servers and OpenTelemetry tracing for MCP calls through AI Gateway](../../docs/mcp)
 - **Responses API `shell` Tool & `context_management` support** - [Server-side context management (compaction) and Shell tool support for the OpenAI Responses API](../../docs/response_api)
 - **Access Groups** - [Create access groups to manage model, MCP server, and agent access across teams and keys](../../docs/proxy/access_groups)
-- **50+ New Bedrock Regional Model Entries** - DeepSeek V3.2, MiniMax M2.1, Kimi K2.5, Qwen3 Coder Next, and NVIDIA Nemotron Nano across multiple regions
+- **50개 이상의 새 Bedrock 지역별 모델 항목** - 여러 region에 걸쳐 DeepSeek V3.2, MiniMax M2.1, Kimi K2.5, Qwen3 Coder Next, NVIDIA Nemotron Nano 추가
 - **Add Semgrep & fix OOMs** - [Static analysis rules and out-of-memory fixes](#add-semgrep--fix-ooms) - [PR #20912](https://github.com/BerriAI/litellm/pull/20912)
 
 ---
 
-## Add Semgrep & fix OOMs
+## Semgrep 추가 및 OOM 수정 {#add-semgrep--fix-ooms}
 
 This release fixes out-of-memory (OOM) risks from unbounded `asyncio.Queue()` usage. Log queues (e.g. GCS bucket) and DB spend-update queues were previously unbounded and could grow without limit under load. They now use a configurable max size (`LITELLM_ASYNCIO_QUEUE_MAXSIZE`, default 1000); when full, queues flush immediately to make room instead of growing memory. A Semgrep rule (`.semgrep/rules/python/unbounded-memory.yml`) was added to flag similar unbounded-memory patterns in future code. [PR #20912](https://github.com/BerriAI/litellm/pull/20912)
 
 ---
 
-## Guardrail Action Builder
+## Guardrail 작업 빌더
 
-This release adds a visual action builder for guardrail policies with conditional execution support. You can now chain guardrails into multi-step pipelines — if a simple guardrail fails, route to an advanced one instead of immediately blocking. Each step has configurable ON PASS and ON FAIL actions (Next Step, Block, or Allow), and you can test the full pipeline with a sample message before saving.
+이번 릴리스는 조건부 실행을 지원하는 guardrail 정책용 시각적 action builder를 추가합니다. 이제 guardrail을 다단계 pipeline으로 연결할 수 있습니다. 단순 guardrail이 실패하면 즉시 차단하는 대신 고급 guardrail로 라우팅할 수 있습니다. 각 단계에는 구성 가능한 성공/실패 작업(Next Step, Block, Allow)이 있으며, 저장 전에 샘플 메시지로 전체 pipeline을 테스트할 수 있습니다.
 
-![Guardrail Action Builder](../../img/release_notes/guard_actions.png)
+![Guardrail 작업 빌더](../../img/release_notes/guard_actions.png)
 
 ### Access Groups
 
-Access Groups simplify defining resource access across your organization. One group can grant access to models, MCP servers, and agents—simply attach it to a key or team. Create groups in the Admin UI, define which resources each group includes, then assign the group when creating keys or teams. Updates to a group apply automatically to all attached keys and teams.
+Access Groups는 조직 전반의 리소스 접근 정의를 단순화합니다. 하나의 group이 모델, MCP server, agent 접근 권한을 부여할 수 있으며, key 또는 team에 연결하기만 하면 됩니다. 관리자 UI에서 group을 만들고 각 group에 포함할 리소스를 정의한 뒤, key나 team 생성 시 해당 group을 할당하세요. group 업데이트는 연결된 모든 key와 team에 자동으로 적용됩니다.
 
 <Image img={require('../../img/ui_access_groups.png')} />
 
-## New Providers and Endpoints
+## 새 Provider 및 엔드포인트
 
-### New Providers (2 new providers)
+### 새 Provider(2개)
 
-| Provider | Supported LiteLLM Endpoints | Description |
+| Provider | 지원되는 LiteLLM 엔드포인트 | 설명 |
 | -------- | --------------------------- | ----------- |
 | [Scaleway](../../docs/providers/scaleway) | `/chat/completions` | Scaleway Generative APIs for chat completions |
 | [Sarvam AI](../../docs/providers/sarvam) | `/chat/completions`, `/audio/transcriptions`, `/audio/speech` | Sarvam AI STT and TTS support for Indian languages |
 
 ---
 
-## New Models / Updated Models
+## New 모델 / Updated 모델
 
-#### New Model Support (19 highlighted models)
+#### 새 모델 지원(주요 모델 19개)
 
 | Provider | Model | Context Window | Input ($/1M tokens) | Output ($/1M tokens) |
 | -------- | ----- | -------------- | ------------------- | -------------------- |
@@ -224,7 +224,7 @@ Access Groups simplify defining resource access across your organization. One gr
 
 ---
 
-## Management Endpoints / UI
+## 관리 엔드포인트 / UI
 
 #### Features
 
@@ -245,14 +245,14 @@ Access Groups simplify defining resource access across your organization. One gr
     - Invite User: Email Integration Alert - [PR #20790](https://github.com/BerriAI/litellm/pull/20790)
     - Populate identity fields in proxy admin JWT early-return path - [PR #21169](https://github.com/BerriAI/litellm/pull/21169)
 
-- **Spend Logs**
+- **Spend 로그**
     - Show predefined error codes in filter with user definable fallback - [PR #20773](https://github.com/BerriAI/litellm/pull/20773)
     - Paginated searchable model select - [PR #20892](https://github.com/BerriAI/litellm/pull/20892)
     - Sorting columns support - [PR #21143](https://github.com/BerriAI/litellm/pull/21143)
     - Allow sorting on `/spend/logs/ui` - [PR #20991](https://github.com/BerriAI/litellm/pull/20991)
 
 - **UI Improvements**
-    - Navbar: Option to hide Usage Popup - [PR #20910](https://github.com/BerriAI/litellm/pull/20910)
+    - Navbar: Option to hide 사용법 Popup - [PR #20910](https://github.com/BerriAI/litellm/pull/20910)
     - Model Page: Improve Credentials Messaging - [PR #21076](https://github.com/BerriAI/litellm/pull/21076)
     - Fallbacks: Default configurable to 10 models - [PR #21144](https://github.com/BerriAI/litellm/pull/21144)
     - Fallback display with arrows and card structure - [PR #20922](https://github.com/BerriAI/litellm/pull/20922)
@@ -263,16 +263,16 @@ Access Groups simplify defining resource access across your organization. One gr
     - Rename "HTTP" to "Streamable HTTP (Recommended)" in MCP server page - [PR #21000](https://github.com/BerriAI/litellm/pull/21000)
     - MCP server discovery UI - [PR #21079](https://github.com/BerriAI/litellm/pull/21079)
 
-- **Virtual Keys**
+- **가상 키**
     - Allow Management keys to access `user/daily/activity` and team - [PR #20124](https://github.com/BerriAI/litellm/pull/20124)
     - Skip premium check for empty metadata fields on team/key update - [PR #20598](https://github.com/BerriAI/litellm/pull/20598)
 
 #### Bugs
 
-- Logs: Fix Input and Output Copying - [PR #20657](https://github.com/BerriAI/litellm/pull/20657)
+- 로그: Fix Input and Output Copying - [PR #20657](https://github.com/BerriAI/litellm/pull/20657)
 - Teams: Fix Available Teams - [PR #20682](https://github.com/BerriAI/litellm/pull/20682)
-- Spend Logs: Reset Filters Resets Custom Date Range - [PR #21149](https://github.com/BerriAI/litellm/pull/21149)
-- Usage: Request Chart stack variant fix - [PR #20894](https://github.com/BerriAI/litellm/pull/20894)
+- Spend 로그: Reset Filters Resets Custom Date Range - [PR #21149](https://github.com/BerriAI/litellm/pull/21149)
+- 사용법: Request Chart stack variant fix - [PR #20894](https://github.com/BerriAI/litellm/pull/20894)
 - Add Auto Router: Description Text Input Focus - [PR #21004](https://github.com/BerriAI/litellm/pull/21004)
 - Guardrail Edit: LiteLLM Content Filter Categories - [PR #21002](https://github.com/BerriAI/litellm/pull/21002)
 - Add null guard for models in API keys table - [PR #20655](https://github.com/BerriAI/litellm/pull/20655)
@@ -306,9 +306,9 @@ Access Groups simplify defining resource access across your organization. One gr
     - Add `standard_logging_payload_excluded_fields` config option - [PR #20831](https://github.com/BerriAI/litellm/pull/20831)
     - Enable `verbose_logger` when `LITELLM_LOG=DEBUG` - [PR #20496](https://github.com/BerriAI/litellm/pull/20496)
     - Guard against None `litellm_metadata` in batch logging path - [PR #20832](https://github.com/BerriAI/litellm/pull/20832)
-    - Propagate model-level tags from config to SpendLogs - [PR #20769](https://github.com/BerriAI/litellm/pull/20769)
+    - Propagate model-level tags from config to Spend로그 - [PR #20769](https://github.com/BerriAI/litellm/pull/20769)
 
-### Guardrails
+### 가드레일
 
 - **Policy Templates**
     - New Policy Templates: pre-configured guardrail combinations for specific use-cases - [PR #21025](https://github.com/BerriAI/litellm/pull/21025)
@@ -317,7 +317,7 @@ Access Groups simplify defining resource access across your organization. One gr
 
 - **Pipeline Execution**
     - Add guardrail pipeline support for conditional sequential execution - [PR #21177](https://github.com/BerriAI/litellm/pull/21177)
-    - Agent Guardrails on streaming output - [PR #21206](https://github.com/BerriAI/litellm/pull/21206)
+    - Agent 가드레일 on streaming output - [PR #21206](https://github.com/BerriAI/litellm/pull/21206)
     - Pipeline flow builder UI - [PR #21188](https://github.com/BerriAI/litellm/pull/21188)
 
 - **[Zscaler AI Guard](../../docs/apply_guardrail)**
@@ -338,14 +338,14 @@ Access Groups simplify defining resource access across your organization. One gr
 
 ---
 
-## Spend Tracking, Budgets and Rate Limiting
+## 비용 추적, 예산 및 속도 제한
 
 - **Prevent shared backend model key from being polluted** by per-deployment custom pricing - [PR #20679](https://github.com/BerriAI/litellm/pull/20679)
 - **Avoid in-place mutation** in SpendUpdateQueue aggregation - [PR #20876](https://github.com/BerriAI/litellm/pull/20876)
 
 ---
 
-## MCP Gateway (12 updates)
+## MCP Gateway(업데이트 12개)
 
 - **MCP M2M OAuth2 Support** - Add support for machine-to-machine OAuth2 for MCP servers - [PR #20788](https://github.com/BerriAI/litellm/pull/20788)
 - **MCP Server Discovery UI** - Browse and discover available MCP servers from the UI - [PR #21079](https://github.com/BerriAI/litellm/pull/21079)
@@ -361,7 +361,7 @@ Access Groups simplify defining resource access across your organization. One gr
 
 ---
 
-## Performance / Loadbalancing / Reliability improvements (8 improvements)
+## 성능 / 로드 밸런싱 / 안정성 개선(개선 8개)
 
 - **Remove orphan entries from queue** - Fix memory leak in scheduler queue - [PR #20866](https://github.com/BerriAI/litellm/pull/20866)
 - **Remove repeated provider parsing** in budget limiter hot path - [PR #21043](https://github.com/BerriAI/litellm/pull/21043)
@@ -386,18 +386,18 @@ Access Groups simplify defining resource access across your organization. One gr
 | `LiteLLM_AccessGroupTable` | Column Change | Renamed `access_model_ids` to `access_model_names` | [PR #21166](https://github.com/BerriAI/litellm/pull/21166) | [Migration](https://github.com/BerriAI/litellm/blob/main/litellm-proxy-extras/litellm_proxy_extras/migrations/20260213170952_access_group_change_to_model_name/migration.sql) |
 | `LiteLLM_ManagedVectorStoreTable` | New Table | Managed vector store tracking with model mappings | - | [Migration](https://github.com/BerriAI/litellm/blob/main/litellm-proxy-extras/litellm_proxy_extras/migrations/20260213105436_add_managed_vector_store_table/migration.sql) |
 | `LiteLLM_TeamTable`, `LiteLLM_VerificationToken` | New Column | Added `access_group_ids` text array | [PR #21022](https://github.com/BerriAI/litellm/pull/21022) | [Migration](https://github.com/BerriAI/litellm/blob/main/litellm-proxy-extras/litellm_proxy_extras/migrations/20260212143306_add_access_group_table/migration.sql) |
-| `LiteLLM_GuardrailsTable` | New Column | Added `team_id` text column | - | [Migration](https://github.com/BerriAI/litellm/blob/main/litellm-proxy-extras/litellm_proxy_extras/migrations/20260214094754_schema_sync/migration.sql) |
+| `LiteLLM_가드레일Table` | New Column | Added `team_id` text column | - | [Migration](https://github.com/BerriAI/litellm/blob/main/litellm-proxy-extras/litellm_proxy_extras/migrations/20260214094754_schema_sync/migration.sql) |
 
 ---
 
-## Documentation Updates (14 updates)
+## 문서 업데이트(업데이트 14개)
 
 - LiteLLM Observatory section added to v1.81.9 release notes - [PR #20675](https://github.com/BerriAI/litellm/pull/20675)
 - Callback registration optimization added to release notes - [PR #20681](https://github.com/BerriAI/litellm/pull/20681)
 - Middleware performance blog post - [PR #20677](https://github.com/BerriAI/litellm/pull/20677)
 - UI Team Soft Budget documentation - [PR #20669](https://github.com/BerriAI/litellm/pull/20669)
-- UI Contributing and Troubleshooting guide - [PR #20674](https://github.com/BerriAI/litellm/pull/20674)
-- Reorganize Admin UI subsection - [PR #20676](https://github.com/BerriAI/litellm/pull/20676)
+- UI 기여하기 and 문제 해결 guide - [PR #20674](https://github.com/BerriAI/litellm/pull/20674)
+- Reorganize 관리자 UI subsection - [PR #20676](https://github.com/BerriAI/litellm/pull/20676)
 - SDK proxy authentication (OAuth2/JWT auto-refresh) - [PR #20680](https://github.com/BerriAI/litellm/pull/20680)
 - Forward client headers to LLM API documentation fix - [PR #20768](https://github.com/BerriAI/litellm/pull/20768)
 - Add docs guide for using policies - [PR #20914](https://github.com/BerriAI/litellm/pull/20914)
@@ -429,5 +429,5 @@ Access Groups simplify defining resource access across your organization. One gr
 
 ---
 
-## Full Changelog
+## Full 변경 이력
 [v1.81.9.rc.1...v1.81.12.rc.1](https://github.com/BerriAI/litellm/compare/v1.81.9.rc.1...v1.81.12.rc.1)

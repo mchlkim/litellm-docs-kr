@@ -2,23 +2,23 @@ import Image from '@theme/IdealImage';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# CLI - Quick Start
+# CLI 빠른 시작
 
-Setup LiteLLM Proxy quickly via CLI. 
+CLI로 LiteLLM Proxy를 빠르게 설정합니다.
 
-LiteLLM Server (LLM Gateway) manages:
+LiteLLM Server(LLM Gateway)는 다음을 관리합니다.
 
-* **Unified Interface**: Calling 100+ LLMs [Huggingface/Bedrock/TogetherAI/etc.](#other-supported-models) in the OpenAI `ChatCompletions` & `Completions` format
-* **Cost tracking**: Authentication, Spend Tracking & Budgets [Virtual Keys](https://docs.litellm.ai/docs/proxy/virtual_keys)
-* **Load Balancing**: between [Multiple Models](#multiple-models---quick-start) + [Deployments of the same model](#multiple-instances-of-1-model) - LiteLLM proxy can handle 1.5k+ requests/second during load tests.
+* **통합 인터페이스**: [Huggingface/Bedrock/TogetherAI 등](#other-supported-models) 100개 이상의 LLM을 OpenAI `ChatCompletions` 및 `Completions` 형식으로 호출합니다.
+* **비용 추적**: 인증, 비용 추적, 예산을 [가상 키](https://docs.litellm.ai/docs/proxy/virtual_keys)와 함께 관리합니다.
+* **부하 분산**: [여러 모델](#multiple-models---quick-start)과 [동일 모델의 여러 배포](#multiple-instances-of-1-model) 사이에서 라우팅합니다. LiteLLM proxy는 부하 테스트에서 초당 1.5k+ 요청을 처리할 수 있습니다.
 
 ```shell
 $ uv tool install 'litellm[proxy]'
 ```
 
-## Quick Start - LiteLLM Proxy CLI
+## 빠른 시작 - LiteLLM Proxy CLI
 
-Run the following command to start the litellm proxy
+다음 명령으로 `litellm` proxy를 시작합니다.
 ```shell
 $ litellm --model huggingface/bigcode/starcoder
 
@@ -28,22 +28,23 @@ $ litellm --model huggingface/bigcode/starcoder
 
 :::info
 
-Run with `--detailed_debug` if you need detailed debug logs 
+자세한 디버그 로그가 필요하면 `--detailed_debug`를 함께 사용합니다.
 
 ```shell
 $ litellm --model huggingface/bigcode/starcoder --detailed_debug
+```
 :::
 
-### Test
-In a new shell, run, this will make an `openai.chat.completions` request. Ensure you're using openai v1.0.0+
+### 테스트
+새 shell에서 아래 명령을 실행합니다. 이 명령은 `openai.chat.completions` 요청을 보냅니다. `openai` v1.0.0 이상을 사용 중인지 확인하세요.
 ```shell
 litellm --test
 ```
 
-This will now automatically route any requests for gpt-3.5-turbo to bigcode starcoder, hosted on huggingface inference endpoints. 
+이제 `gpt-3.5-turbo`로 들어오는 요청은 Hugging Face 추론 엔드포인트에 호스팅된 `bigcode/starcoder`로 자동 라우팅됩니다.
 
-### Supported LLMs
-All LiteLLM supported LLMs are supported on the Proxy. Seel all [supported llms](https://docs.litellm.ai/docs/providers)
+### 지원 LLM
+LiteLLM이 지원하는 모든 LLM은 Proxy에서도 사용할 수 있습니다. 전체 목록은 [지원 LLM](https://docs.litellm.ai/docs/providers)을 확인하세요.
 <Tabs>
 <TabItem value="bedrock" label="AWS Bedrock">
 
@@ -85,7 +86,7 @@ $ litellm --model ollama/<ollama-model-name>
 ```
 
 </TabItem>
-<TabItem value="openai-proxy" label="OpenAI Compatible Endpoint">
+<TabItem value="openai-proxy" label="OpenAI 호환 엔드포인트">
 
 ```shell
 $ export OPENAI_API_KEY=my-api-key
@@ -108,7 +109,7 @@ $ litellm --model vertex_ai/gemini-pro
 ```
 </TabItem>
 
-<TabItem value="huggingface" label="Huggingface (TGI) Deployed">
+<TabItem value="huggingface" label="Huggingface (TGI) 배포형">
 
 ```shell
 $ export HUGGINGFACE_API_KEY=my-api-key #[OPTIONAL]
@@ -118,7 +119,7 @@ $ litellm --model huggingface/<your model name> --api_base <your-api-base> # e.g
 ```
 
 </TabItem>
-<TabItem value="huggingface-local" label="Huggingface (TGI) Local">
+<TabItem value="huggingface-local" label="Huggingface (TGI) 로컬">
 
 ```shell
 $ litellm --model huggingface/<your model name> --api_base http://0.0.0.0:8001
@@ -149,7 +150,7 @@ $ litellm --model claude-instant-1
 
 </TabItem>
 <TabItem value="vllm-local" label="VLLM">
-Assuming you're running vllm locally
+로컬에서 vLLM을 실행 중이라고 가정합니다.
 
 ```shell
 $ litellm --model vllm/facebook/opt-125m
@@ -223,11 +224,11 @@ $ litellm --model command-nightly
 
 </Tabs>
 
-## Quick Start - LiteLLM Proxy + Config.yaml
-The config allows you to create a model list and set `api_base`, `max_tokens` (all litellm params). See more details about the config [here](https://docs.litellm.ai/docs/proxy/configs)
+## 빠른 시작 - LiteLLM Proxy + Config.yaml
+config를 사용하면 모델 목록을 만들고 `api_base`, `max_tokens`(모든 litellm 파라미터)를 설정할 수 있습니다. config에 대한 자세한 내용은 [여기](https://docs.litellm.ai/docs/proxy/configs)를 확인하세요.
 
-### Create a Config for LiteLLM Proxy
-Example config
+### LiteLLM Proxy용 config 만들기
+예시 config
 
 ```yaml
 model_list: 
@@ -248,23 +249,23 @@ model_list:
       api_key: <your-vllm-api-key|none>
 ```
 
-### Run proxy with config
+### config로 proxy 실행
 
 ```shell
 litellm --config your_config.yaml
 ```
 
 
-## Using LiteLLM Proxy - Curl Request, OpenAI Package, Langchain
+## LiteLLM Proxy 사용 - Curl 요청, OpenAI 패키지, Langchain
 
 :::info
-LiteLLM is compatible with several SDKs - including OpenAI SDK, Anthropic SDK, Mistral SDK, LLamaIndex, Langchain (Js, Python)
+LiteLLM은 OpenAI SDK, Anthropic SDK, Mistral SDK, LLamaIndex, Langchain(JS, Python)을 포함한 여러 SDK와 호환됩니다.
 
-[More examples here](user_keys)
+[더 많은 예시는 여기](user_keys)를 확인하세요.
 :::
 
 <Tabs>
-<TabItem value="Curl" label="Curl Request">
+<TabItem value="Curl" label="Curl 요청">
 
 ```shell
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -333,7 +334,7 @@ print(response)
 ```
 
 </TabItem>
-<TabItem value="langchain-embedding" label="Langchain Embeddings">
+<TabItem value="langchain-embedding" label="Langchain 임베딩">
 
 ```python
 from langchain.embeddings import OpenAIEmbeddings
@@ -369,7 +370,7 @@ print(query_result[:5])
 </TabItem>
 <TabItem value="litellm" label="LiteLLM SDK">
 
-This is **not recommended**. There is duplicate logic as the proxy also uses the sdk, which might lead to unexpected errors. 
+이 방식은 **권장하지 않습니다**. proxy도 SDK를 사용하므로 로직이 중복되어 예상치 못한 오류가 발생할 수 있습니다.
 
 ```python
 from litellm import completion 
@@ -420,43 +421,43 @@ print(message.content)
 
 </Tabs>
 
-[**More Info**](./configs.md)
+[**자세한 정보**](./configs.md)
 
 
 
-## 📖 Proxy Endpoints - [Swagger Docs](https://litellm-api.up.railway.app/)
-- POST `/chat/completions` - chat completions endpoint to call 100+ LLMs
-- POST `/completions` - completions endpoint
-- POST `/embeddings` - embedding endpoint for Azure, OpenAI, Huggingface endpoints
-- GET `/models` - available models on server
-- POST `/key/generate` - generate a key to access the proxy
+## 📖 Proxy 엔드포인트 - [Swagger 문서](https://litellm-api.up.railway.app/)
+- POST `/chat/completions` - 100개 이상의 LLM을 호출하는 chat completions 엔드포인트
+- POST `/completions` - completions 엔드포인트
+- POST `/embeddings` - Azure, OpenAI, Huggingface 엔드포인트용 embedding 엔드포인트
+- GET `/models` - 서버에서 사용 가능한 모델
+- POST `/key/generate` - proxy에 접근할 키 생성
 
 
-## Debugging Proxy 
+## Proxy 디버깅
 
-Events that occur during normal operation
+일반 작업 중 발생하는 이벤트
 ```shell
 litellm --model gpt-3.5-turbo --debug
 ```
 
-Detailed information
+자세한 정보
 ```shell
 litellm --model gpt-3.5-turbo --detailed_debug
 ```
 
-### Set Debug Level using env variables
+### 환경 변수로 디버그 수준 설정
 
-Events that occur during normal operation
+일반 작업 중 발생하는 이벤트
 ```shell
 export LITELLM_LOG=INFO
 ```
 
-Detailed information
+자세한 정보
 ```shell
 export LITELLM_LOG=DEBUG
 ```
 
-No Logs
+로그 없음
 ```shell
 export LITELLM_LOG=None
 ```

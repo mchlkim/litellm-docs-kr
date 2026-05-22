@@ -2,50 +2,45 @@ import Image from '@theme/IdealImage';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Claude Code Quickstart
+# Claude Code 빠른 시작
 
-This tutorial shows how to call Claude models through LiteLLM proxy from Claude Code.
+이 튜토리얼에서는 Claude Code에서 LiteLLM 프록시를 통해 Claude 모델을 호출하는 방법을 설명합니다.
 
 :::info 
 
-This tutorial is based on [Anthropic's official LiteLLM configuration documentation](https://code.claude.com/docs/en/llm-gateway#litellm-configuration). This integration allows you to use any LiteLLM supported model through Claude Code with centralized authentication, usage tracking, and cost controls.
+이 튜토리얼은 [Anthropic의 공식 LiteLLM 구성 문서](https://docs.anthropic.com/en/docs/claude-code/llm-gateway#litellm-configuration)를 기반으로 합니다. 이 통합을 사용하면 중앙 집중식 인증, 사용량 추적, 비용 제어와 함께 Claude Code에서 LiteLLM이 지원하는 모든 모델을 사용할 수 있습니다.
 
 :::
 
 <br />
 
-### Video Walkthrough
+### 동영상 안내
 
 <iframe width="840" height="500" src="https://www.loom.com/embed/3c17d683cdb74d36a3698763cc558f56" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
 
-## Prerequisites
+## 사전 준비
 
-- [Claude Code](https://docs.anthropic.com/en/docs/claude-code/overview) installed
-- API keys for your chosen providers
+- [Claude Code](https://docs.anthropic.com/en/docs/claude-code/overview) 설치
+- 선택한 프로바이더의 API 키
 
-## Installation
+## 설치
 
-First, install LiteLLM with proxy support:
+먼저 프록시 지원이 포함된 LiteLLM을 설치합니다.
 
 ```bash
 uv tool install 'litellm[proxy]'
 ```
 
-### 1. Setup config.yaml
+### 1. config.yaml 설정
 
-Create a secure configuration using environment variables:
+환경 변수를 사용해 안전한 구성을 만듭니다.
 
 ```yaml
 model_list:
   # Configure the models you want to use
-  - model_name: claude-opus-4-7
+  - model_name: claude-sonnet-4-5-20250929
     litellm_params:
-      model: anthropic/claude-opus-4-7
-      api_key: os.environ/ANTHROPIC_API_KEY
-
-  - model_name: claude-sonnet-4-6
-    litellm_params:
-      model: anthropic/claude-sonnet-4-6
+      model: anthropic/claude-sonnet-4-5-20250929
       api_key: os.environ/ANTHROPIC_API_KEY
 
   - model_name: claude-haiku-4-5-20251001
@@ -53,11 +48,16 @@ model_list:
       model: anthropic/claude-haiku-4-5-20251001
       api_key: os.environ/ANTHROPIC_API_KEY
 
+  - model_name: claude-opus-4-5-20251101
+    litellm_params:
+      model: anthropic/claude-opus-4-5-20251101
+      api_key: os.environ/ANTHROPIC_API_KEY
+
 litellm_settings:
   master_key: os.environ/LITELLM_MASTER_KEY
 ```
 
-Set your environment variables:
+환경 변수를 설정합니다.
 
 ```bash
 export ANTHROPIC_API_KEY="your-anthropic-api-key"
@@ -65,10 +65,10 @@ export LITELLM_MASTER_KEY="sk-1234567890"  # Generate a secure key
 ```
 
 :::tip
-Alternatively, you can store `ANTHROPIC_API_KEY` in a `.env` file in your proxy directory. LiteLLM will automatically load it when starting.
+또는 프록시 디렉터리의 `.env` 파일에 `ANTHROPIC_API_KEY`를 저장할 수 있습니다. LiteLLM은 시작할 때 이를 자동으로 로드합니다.
 :::
 
-### 2. Start proxy
+### 2. 프록시 시작
 
 ```bash
 litellm --config /path/to/config.yaml
@@ -76,302 +76,191 @@ litellm --config /path/to/config.yaml
 # RUNNING on http://0.0.0.0:4000
 ```
 
-### 3. Verify Setup
+### 3. 설정 확인
 
-Test that your proxy is working correctly:
+프록시가 올바르게 동작하는지 테스트합니다.
 
 ```bash
 curl -X POST http://0.0.0.0:4000/v1/messages \
 -H "Authorization: Bearer $LITELLM_MASTER_KEY" \
 -H "Content-Type: application/json" \
 -d '{
-    "model": "claude-opus-4-7",
+    "model": "claude-3-5-sonnet-20241022",
     "max_tokens": 1000,
     "messages": [{"role": "user", "content": "What is the capital of France?"}]
 }'
 ```
 
-### 4. Configure Claude Code
+### 4. Claude Code 구성
 
-#### Static API key
+#### 방법 1: 통합 엔드포인트(권장)
 
-Set a fixed LiteLLM key as `ANTHROPIC_AUTH_TOKEN`:
+Claude Code가 LiteLLM의 통합 엔드포인트를 사용하도록 구성합니다.
 
-```bash
-export ANTHROPIC_AUTH_TOKEN="$LITELLM_KEY"
-```
-
-:::tip
-`$LITELLM_KEY` can be your proxy **master key** or a **virtual key**. A master key gives Claude Code access to all proxy models. A virtual key is limited to the models that key has access to.
-:::
-
-#### Method 1: Unified Endpoint (Recommended)
-
-Configure Claude Code to use LiteLLM's unified endpoint:
+여기서는 가상 키 또는 마스터 키를 사용할 수 있습니다.
 
 ```bash
 export ANTHROPIC_BASE_URL="http://0.0.0.0:4000"
+export ANTHROPIC_AUTH_TOKEN="$LITELLM_MASTER_KEY"
 ```
 
-#### Method 2: Provider-specific Pass-through Endpoint
+:::tip
+`LITELLM_MASTER_KEY`는 Claude가 모든 프록시 모델에 접근할 수 있게 해 주지만, 가상 키는 UI에서 설정된 모델로 제한됩니다.
+:::
 
-Alternatively, use the Anthropic pass-through endpoint:
+#### 방법 2: 프로바이더별 패스스루 엔드포인트
+
+또는 Anthropic 패스스루 엔드포인트를 사용합니다.
 
 ```bash
 export ANTHROPIC_BASE_URL="http://0.0.0.0:4000/anthropic"
+export ANTHROPIC_AUTH_TOKEN="$LITELLM_MASTER_KEY"
 ```
 
-#### Dynamic API key with helper
+### 5. Claude Code 사용
 
-For rotating keys or per-user authentication, Claude Code can run a script to fetch a key (for example, a JWT) instead of a static `ANTHROPIC_AUTH_TOKEN`.
-
-1. Create an API key helper script:
+사용하려는 모델로 Claude Code를 시작합니다.
 
 ```bash
-#!/bin/bash
-# ~/bin/get-litellm-key.sh
-
-# Example: Generate JWT token
-jwt encode \
-  --secret="${JWT_SECRET}" \
-  --exp="+1h" \
-  '{"user":"'${USER}'","team":"engineering"}'
-```
-
-2. Configure Claude Code settings to use the helper:
-
-```json
-{
-  "apiKeyHelper": "~/bin/get-litellm-key.sh"
-}
-```
-
-3. Set token refresh interval:
-
-```bash
-# Refresh every hour (3600000 ms)
-export CLAUDE_CODE_API_KEY_HELPER_TTL_MS=3600000
-```
-
-This value will be sent as `Authorization` and `X-Api-Key` headers. The `apiKeyHelper` has lower precedence than `ANTHROPIC_AUTH_TOKEN` or `ANTHROPIC_API_KEY`.
-
-### 5. Use Claude Code
-
-Start Claude Code with the model you want to use:
-
-```bash
-# Specify model at startup (Opus 4.7 — newest Claude Code model)
-claude --model claude-opus-4-7
+# Specify model at startup
+claude --model claude-sonnet-4-5-20250929
 
 # Or specify a different model
-claude --model claude-sonnet-4-6
 claude --model claude-haiku-4-5-20251001
+claude --model claude-opus-4-5-20251101
 
 # Or change model during a session
 claude
-/model claude-opus-4-7
+/model claude-sonnet-4-5-20250929
 ```
 
-Alternatively, set default models with environment variables:
+또는 환경 변수로 기본 모델을 설정합니다.
 
 ```bash
-export ANTHROPIC_DEFAULT_OPUS_MODEL=claude-opus-4-7
-export ANTHROPIC_DEFAULT_SONNET_MODEL=claude-sonnet-4-6
+export ANTHROPIC_DEFAULT_SONNET_MODEL=claude-sonnet-4-5-20250929
 export ANTHROPIC_DEFAULT_HAIKU_MODEL=claude-haiku-4-5-20251001
+export ANTHROPIC_DEFAULT_OPUS_MODEL=claude-opus-4-5-20251101
 claude
 ```
 
-### Using 1M Context Window
+### 1M 컨텍스트 창 사용
 
-Claude Code supports extended context (1 million tokens) using the `[1m]` suffix:
+Claude Code는 `[1m]` 접미사를 사용해 확장 컨텍스트(100만 토큰)를 지원합니다.
 
 ```bash
-# Use Opus 4.7 with 1M context (requires quotes in shell)
-claude --model 'claude-opus-4-7[1m]'
+# Use Sonnet with 1M context (requires quotes in shell)
+claude --model 'claude-sonnet-4-5-20250929[1m]'
 
 # Inside a Claude Code session (no quotes needed)
-/model claude-opus-4-7[1m]
+/model claude-sonnet-4-5-20250929[1m]
 ```
 
 :::warning
-**Important:** When using `--model` with `[1m]` in the shell, you must use quotes to prevent the shell from interpreting the brackets.
+**중요:** 셸에서 `[1m]`과 함께 `--model`을 사용할 때는 셸이 대괄호를 해석하지 않도록 반드시 따옴표를 사용해야 합니다.
 :::
 
-**How it works:**
-- Claude Code strips the `[1m]` suffix before sending to LiteLLM
-- Claude Code automatically adds the header `anthropic-beta: context-1m-2025-08-07`
-- Your LiteLLM config should **NOT** include `[1m]` in model names
+**동작 방식:**
+- Claude Code는 LiteLLM으로 보내기 전에 `[1m]` 접미사를 제거합니다.
+- Claude Code는 `anthropic-beta: context-1m-2025-08-07` 헤더를 자동으로 추가합니다.
+- LiteLLM 구성의 모델 이름에는 `[1m]`을 **포함하지 않아야** 합니다.
 
-**Verify 1M context is active:**
+**1M 컨텍스트가 활성화되었는지 확인:**
 ```bash
 /context
 # Should show: 21k/1000k tokens (2%)
 ```
 
-Example conversation:
+예제 대화:
 
-## Troubleshooting
+## 문제 해결
 
-Common issues and solutions:
+일반적인 문제와 해결 방법:
 
-**Claude Code not connecting:**
-- Verify your proxy is running: `curl http://0.0.0.0:4000/health`
-- Check that `ANTHROPIC_BASE_URL` is set correctly
-- Ensure your `ANTHROPIC_AUTH_TOKEN` matches your LiteLLM master key
+**Claude Code가 연결되지 않음:**
+- 프록시가 실행 중인지 확인합니다: `curl http://0.0.0.0:4000/health`
+- `ANTHROPIC_BASE_URL`이 올바르게 설정되었는지 확인합니다.
+- `ANTHROPIC_AUTH_TOKEN`이 LiteLLM 마스터 키와 일치하는지 확인합니다.
 
-**Authentication errors:**
-- Verify your environment variables are set: `echo $LITELLM_MASTER_KEY`
-- Check that your API keys are valid and have sufficient credits
-- Ensure the `ANTHROPIC_AUTH_TOKEN` matches your LiteLLM master key
+**인증 오류:**
+- 환경 변수가 설정되었는지 확인합니다: `echo $LITELLM_MASTER_KEY`
+- API 키가 유효하고 충분한 크레딧이 있는지 확인합니다.
+- `ANTHROPIC_AUTH_TOKEN`이 LiteLLM 마스터 키와 일치하는지 확인합니다.
 
-**Model not found:**
-- Ensure the model name in Claude Code matches exactly with your `config.yaml`
-- Use `--model` flag or environment variables to specify the model
-- Check LiteLLM logs for detailed error messages
+**모델을 찾을 수 없음:**
+- Claude Code의 모델 이름이 `config.yaml`과 정확히 일치하는지 확인합니다.
+- `--model` 플래그 또는 환경 변수를 사용해 모델을 지정합니다.
+- 자세한 오류 메시지는 LiteLLM 로그에서 확인합니다.
 
-## Using Bedrock/Vertex AI/Azure Foundry Models
+## Bedrock/Vertex AI/Azure Foundry 모델 사용
 
-Expand your configuration to support multiple providers and models:
-
-:::tip Check live compatibility before you wire up a provider
-
-Compatibility between Claude Code features and each provider (Anthropic, Bedrock, Vertex AI, Azure) changes as Claude Code and LiteLLM ship updates. The [Claude Code × LiteLLM compatibility matrix](https://docs.litellm.ai/docs/claude_code_compatibility) is regenerated daily against the latest stable LiteLLM proxy across Haiku 4.5, Sonnet 4.6, and Opus 4.7 — check it first to see which `(feature, provider)` cells are currently green.
-
-:::
+여러 프로바이더와 모델을 지원하도록 구성을 확장합니다.
 
 <Tabs>
-<TabItem value="multi-provider" label="Multi-Provider Setup">
+<TabItem value="multi-provider" label="멀티 프로바이더 설정">
 
 ```yaml
 model_list:
   # Anthropic models
-  - model_name: claude-opus-4-7
+  - model_name: claude-3-5-sonnet-20241022
     litellm_params:
-      model: anthropic/claude-opus-4-7
+      model: anthropic/claude-3-5-sonnet-20241022
+      api_key: os.environ/ANTHROPIC_API_KEY
+  
+  - model_name: claude-3-5-haiku-20241022
+    litellm_params:
+      model: anthropic/claude-3-5-haiku-20241022
       api_key: os.environ/ANTHROPIC_API_KEY
 
-  - model_name: claude-sonnet-4-6
+  # AWS Bedrock
+  - model_name: claude-bedrock
     litellm_params:
-      model: anthropic/claude-sonnet-4-6
-      api_key: os.environ/ANTHROPIC_API_KEY
-
-  # AWS Bedrock (Invoke — recommended for Claude Code today, see note below)
-  - model_name: claude-bedrock-opus
-    litellm_params:
-      model: bedrock/invoke/us.anthropic.claude-opus-4-7
+      model: bedrock/anthropic.claude-haiku-4-5-20251001:0
       aws_access_key_id: os.environ/AWS_ACCESS_KEY_ID
       aws_secret_access_key: os.environ/AWS_SECRET_ACCESS_KEY
-      aws_region_name: us-west-2
-
-  - model_name: claude-bedrock-sonnet
-    litellm_params:
-      model: bedrock/invoke/us.anthropic.claude-sonnet-4-6
-      aws_access_key_id: os.environ/AWS_ACCESS_KEY_ID
-      aws_secret_access_key: os.environ/AWS_SECRET_ACCESS_KEY
-      aws_region_name: us-west-2
-
-  - model_name: claude-bedrock-haiku
-    litellm_params:
-      model: bedrock/invoke/us.anthropic.claude-haiku-4-5-20251001-v1:0
-      aws_access_key_id: os.environ/AWS_ACCESS_KEY_ID
-      aws_secret_access_key: os.environ/AWS_SECRET_ACCESS_KEY
-      aws_region_name: us-west-2
+      aws_region_name: us-east-1
 
   # Azure Foundry
-  - model_name: claude-opus-azure
+  - model_name: claude-4-azure
     litellm_params:
-      model: azure_ai/claude-opus-4-7
+      model: azure_ai/claude-opus-4-1
       api_key: os.environ/AZURE_AI_API_KEY
       api_base: os.environ/AZURE_AI_API_BASE # https://my-resource.services.ai.azure.com/anthropic
 
   # Google Vertex AI
-  - model_name: claude-opus-vertex
+  - model_name: anthropic-vertex
     litellm_params:
-      model: vertex_ai/claude-opus-4-7
+      model: vertex_ai/claude-haiku-4-5@20251001
       vertex_ai_project: "my-test-project"
-      vertex_ai_location: "us-east5"
-      vertex_credentials: os.environ/VERTEX_FILE_PATH_ENV_VAR # os.environ["VERTEX_FILE_PATH_ENV_VAR"] = "/path/to/service_account.json"
+      vertex_ai_location: "us-east-1"
+      vertex_credentials: os.environ/VERTEX_FILE_PATH_ENV_VAR # os.environ["VERTEX_FILE_PATH_ENV_VAR"] = "/path/to/service_account.json" 
+
+
+
 
 litellm_settings:
   master_key: os.environ/LITELLM_MASTER_KEY
 ```
 
-Switch between models seamlessly:
+모델 간에 원활하게 전환합니다.
 
 ```bash
-# Use Anthropic API directly (newest Claude Code model)
-claude --model claude-opus-4-7
+# Use Claude for complex reasoning
+claude --model claude-3-5-sonnet-20241022
 
-# Use Bedrock deployment (Opus 4.7 via Invoke)
-claude --model claude-bedrock-opus
+# Use Haiku for fast responses
+claude --model claude-3-5-haiku-20241022
+
+# Use Bedrock deployment
+claude --model claude-bedrock
 
 # Use Azure Foundry deployment
-claude --model claude-opus-azure
+claude --model claude-4-azure
 
 # Use Vertex AI deployment
-claude --model claude-opus-vertex
+claude --model anthropic-vertex
 ```
 
 </TabItem>
 </Tabs>
 
-### Bedrock-specific setup for Claude Code
-
-Two extra steps make Claude Code work cleanly against Bedrock through LiteLLM today. Please do both before launching `claude` against a Bedrock-backed model.
-
-:::note Temporary workaround
-
-The Invoke preference and the beta-header flag below are temporary. LiteLLM already re-implements many Anthropic-API features on top of Bedrock inside the gateway, and we're steadily extending that coverage on the Converse path. Soon, these workarounds will no longer be necessary.
-
-:::
-
-#### 1. Prefer Bedrock Invoke
-
-In the config above, Bedrock models use the `bedrock/invoke/<model-id>` prefix — currently the smoother path for Claude Code traffic. If you'd like to try Converse, swap the prefix from `bedrock/invoke/` to `bedrock/converse/` and check the matrix for the feature you need.
-
-#### 2. Disable Claude Code's experimental beta headers for Bedrock
-
-Claude Code attaches Anthropic experimental beta headers (e.g. `anthropic-beta: prompt-caching-scope-2026-01-05,advanced-tool-use-2025-11-20`) on every request. These work great against Anthropic's first-party API, but Bedrock doesn't currently accept all of them and might return a `400 invalid beta flag` error. Set the **`CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS`** environment variable to `1` to strip those headers.
-
-The recommended place to set it is your **global Claude Code user settings file** at:
-
-```
-~/.claude/settings.json
-```
-
-(That's `/Users/<you>/.claude/settings.json` on macOS / Linux, or `C:\Users\<you>\.claude\settings.json` on Windows. All Claude Code clients, incl. CLI, VS Code extension, JetBrains plugin, etc., read from this file.)
-
-**How to edit it:**
-
-1. Open `~/.claude/settings.json` in your editor of choice. If it doesn't exist yet, create it.
-
-   ```bash
-   # macOS / Linux - open with your default editor
-   ${EDITOR:-nano} ~/.claude/settings.json
-
-   # Or with VS Code
-   code ~/.claude/settings.json
-   ```
-
-2. Add (or merge into the existing) `env` block:
-
-   ```json title="~/.claude/settings.json"
-   {
-     "env": {
-       "CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS": "1"
-     }
-   }
-   ```
-
-3. **Fully quit and reopen Claude Code** so the new setting is picked up. For IDE plugins (VS Code, JetBrains), restart your IDE.
-
-:::tip Alternative: project-scoped or shell-scoped
-
-If you only want to disable beta headers for a single project, put the same `env` block in `.claude/settings.json` (committed) or `.claude/settings.local.json` (gitignored, personal) at the project root.
-
-Shell-level exports also work for the CLI (`export CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS=1` before launching `claude`), but **not** IDE plugins.
-
-:::
-
 <Image img={require('../../img/release_notes/claude_code_demo.png')} style={{ width: '500px', height: 'auto' }} />
-

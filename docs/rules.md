@@ -1,6 +1,6 @@
-# Rules
+# Rules {#rules}
 
-Use this to fail a request based on the input or output of an llm api call. 
+LLM API 호출의 입력 또는 출력을 기준으로 요청을 실패 처리할 때 사용합니다.
 
 
 ```python
@@ -22,14 +22,14 @@ response = litellm.completion(model="gpt-3.5-turbo", messages=[{"role": "user",
 "content": "Hey, how's it going?"}], fallbacks=["openrouter/gryphe/mythomax-l2-13b"])
 ```
 
-## Available Endpoints 
+## 사용 가능한 엔드포인트 {#available-endpoints}
 
-* `litellm.pre_call_rules = []` - A list of functions to iterate over before making the api call. Each function is expected to return either True (allow call) or False (fail call).
+* `litellm.pre_call_rules = []` - API 호출을 수행하기 전에 순회할 함수 목록입니다. 각 함수는 True(호출 허용) 또는 False(호출 실패 처리)를 반환해야 합니다.
 
-* `litellm.post_call_rules = []` - List of functions to iterate over before making the api call. Each function is expected to return either True (allow call) or False (fail call).
+* `litellm.post_call_rules = []` - API 호출을 수행한 뒤 순회할 함수 목록입니다. 각 함수는 True(호출 허용) 또는 False(호출 실패 처리)를 반환해야 합니다.
 
 
-## Expected format of rule 
+## rule의 예상 형식 {#expected-format-of-rule}
 
 ```python
 def my_custom_rule(input: str) -> bool: # receives the model response 
@@ -38,16 +38,16 @@ def my_custom_rule(input: str) -> bool: # receives the model response
     return True 
 ```
 
-#### Inputs
-* `input`: *str*: The user input or llm response. 
+#### 입력 {#inputs}
+* `input`: *str*: 사용자 입력 또는 LLM 응답입니다.
 
-#### Outputs
-* `bool`: Return True (allow call) or False (fail call)
+#### 출력 {#outputs}
+* `bool`: True(호출 허용) 또는 False(호출 실패 처리)를 반환합니다.
 
 
-## Example Rules 
+## 예제 Rules
 
-### Example 1: Fail if user input is too long 
+### 예제 1: 사용자 입력이 너무 길면 실패 처리 {#example-1-fail-if-user-input-is-too-long}
 
 ```python
 import litellm 
@@ -66,7 +66,7 @@ litellm.pre_call_rules = [my_custom_rule] # have these be functions that can be 
 response = litellm.completion(model="gpt-3.5-turbo", messages=[{"role": "user", "content": "Hey, how's it going?"}])
 ```
 
-### Example 2: Fallback to uncensored model if llm refuses to answer
+### 예제 2: LLM이 답변을 거부하면 uncensored model로 fallback {#example-2-fallback-to-uncensored-model-if-llm-refuses-to-answer}
 
 
 ```python

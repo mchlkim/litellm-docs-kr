@@ -1,11 +1,11 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Guardrail Load Balancing
+# 가드레일 로드 밸런싱
 
-Load balance guardrail requests across multiple guardrail deployments. This is useful when you have rate limits on guardrail providers (e.g., AWS Bedrock Guardrails) and want to distribute requests across multiple accounts or regions.
+여러 가드레일 배포 간에 가드레일 요청을 로드 밸런싱합니다. 가드레일 제공자(예: AWS Bedrock 가드레일)에 속도 제한이 있고, 요청을 여러 계정이나 리전에 분산하려는 경우 유용합니다.
 
-## How It Works
+## 작동 방식
 
 ```mermaid
 flowchart LR
@@ -26,25 +26,25 @@ flowchart LR
     G3 --> AWSN[AWS Account N]
 ```
 
-When you define multiple guardrails with the **same `guardrail_name`**, LiteLLM automatically load balances requests across them using the router's load balancing strategy.
+**같은 `guardrail_name`**으로 여러 가드레일을 정의하면 LiteLLM은 라우터의 로드 밸런싱 전략을 사용해 요청을 자동으로 분산합니다.
 
-## Why Use Guardrail Load Balancing?
+## 가드레일 로드 밸런싱을 사용하는 이유
 
-| Use Case | Benefit |
+| 사용 사례 | 이점 |
 |----------|---------|
-| **AWS Bedrock Rate Limits** | Bedrock Guardrails have per-account rate limits. Distribute across multiple AWS accounts to increase throughput |
-| **Multi-Region Redundancy** | Deploy guardrails across regions for failover and lower latency |
-| **Cost Optimization** | Spread usage across accounts with different pricing tiers or credits |
-| **A/B Testing** | Test different guardrail configurations with weighted distribution |
+| **AWS Bedrock 속도 제한** | Bedrock 가드레일에는 계정별 속도 제한이 있습니다. 처리량을 늘리려면 여러 AWS 계정에 분산하세요 |
+| **멀티 리전 이중화** | 장애 조치와 낮은 지연 시간을 위해 여러 리전에 가드레일을 배포하세요 |
+| **비용 최적화** | 서로 다른 가격 티어 또는 크레딧이 있는 계정으로 사용량을 분산하세요 |
+| **A/B 테스트** | 가중치 기반 분산으로 서로 다른 가드레일 구성을 테스트하세요 |
 
-## Quick Start
+## 빠른 시작
 
-### 1. Define Multiple Guardrails with Same Name
+### 1. 같은 이름으로 여러 가드레일 정의
 
-Define multiple guardrail entries with the **same `guardrail_name`** but different configurations:
+**같은 `guardrail_name`**을 사용하되 서로 다른 구성으로 여러 가드레일 항목을 정의합니다.
 
 <Tabs>
-<TabItem value="bedrock" label="Bedrock Guardrails">
+<TabItem value="bedrock" label="Bedrock 가드레일">
 
 ```yaml showLineNumbers title="config.yaml"
 model_list:
@@ -79,7 +79,7 @@ guardrails:
 
 </TabItem>
 
-<TabItem value="custom" label="Custom Guardrails">
+<TabItem value="custom" label="Custom 가드레일">
 
 ```yaml showLineNumbers title="config.yaml"
 model_list:
@@ -104,7 +104,7 @@ guardrails:
 
 </TabItem>
 
-<TabItem value="aporia" label="Aporia Guardrails">
+<TabItem value="aporia" label="Aporia 가드레일">
 
 ```yaml showLineNumbers title="config.yaml"
 model_list:
@@ -134,15 +134,15 @@ guardrails:
 </TabItem>
 </Tabs>
 
-### 2. Start LiteLLM Gateway
+### 2. LiteLLM Gateway 시작
 
 ```bash showLineNumbers title="Start proxy"
 litellm --config config.yaml --detailed_debug
 ```
 
-### 3. Make Requests
+### 3. 요청 보내기
 
-Requests using the guardrail will be automatically load balanced:
+가드레일을 사용하는 요청은 자동으로 로드 밸런싱됩니다.
 
 ```bash showLineNumbers title="Test request"
 curl -X POST http://localhost:4000/v1/chat/completions \
@@ -155,9 +155,9 @@ curl -X POST http://localhost:4000/v1/chat/completions \
   }'
 ```
 
-## Weighted Load Balancing
+## 가중치 기반 로드 밸런싱
 
-Assign weights to distribute traffic unevenly across guardrail instances:
+가중치를 지정해 가드레일 인스턴스 간에 트래픽을 불균등하게 분산합니다.
 
 ```yaml showLineNumbers title="config.yaml - Weighted distribution"
 guardrails:
@@ -180,11 +180,11 @@ guardrails:
       weight: 2  # Lower weight = less traffic
 ```
 
-## Bedrock Guardrails - Multi-Account Setup
+## Bedrock 가드레일 - 멀티 계정 설정
 
-AWS Bedrock Guardrails have rate limits per account. Here's how to set up load balancing across multiple AWS accounts:
+AWS Bedrock 가드레일에는 계정별 속도 제한이 있습니다. 여러 AWS 계정에 걸쳐 로드 밸런싱을 설정하는 방법은 다음과 같습니다.
 
-### Architecture
+### 아키텍처
 
 ```mermaid
 flowchart TB
@@ -210,7 +210,7 @@ flowchart TB
     LB --> BG3
 ```
 
-### Configuration
+### 설정
 
 ```yaml showLineNumbers title="config.yaml - Multi-account Bedrock"
 model_list:
@@ -253,7 +253,7 @@ guardrails:
       aws_region_name: "eu-west-1"
 ```
 
-### Test Multi-Account Setup
+### 멀티 계정 설정 테스트
 
 ```bash showLineNumbers title="Run multiple requests to verify load balancing"
 # Run 10 requests - they will be distributed across accounts
@@ -270,11 +270,11 @@ done
 wait
 ```
 
-Check proxy logs to verify requests are distributed across different AWS accounts.
+요청이 서로 다른 AWS 계정으로 분산되는지 확인하려면 Proxy 로그를 확인하세요.
 
-## Custom Guardrails Example
+## Custom 가드레일 예제
 
-Create two custom guardrail classes for load balancing:
+로드 밸런싱을 위해 두 개의 custom 가드레일 클래스를 만듭니다.
 
 ```python showLineNumbers title="custom_guardrail.py"
 from litellm.integrations.custom_guardrail import CustomGuardrail
@@ -325,15 +325,15 @@ guardrails:
       mode: "pre_call"
 ```
 
-## Verifying Load Balancing
+## 로드 밸런싱 확인
 
-Enable detailed debug logging to verify load balancing is working:
+로드 밸런싱이 작동하는지 확인하려면 상세 디버그 로깅을 활성화합니다.
 
 ```bash showLineNumbers title="Start with debug logging"
 litellm --config config.yaml --detailed_debug
 ```
 
-You should see logs indicating which guardrail instance is selected:
+어떤 가드레일 인스턴스가 선택되었는지 나타내는 로그가 표시되어야 합니다.
 
 ```
 Selected guardrail deployment: bedrock/guardrail (guard-us-east)
@@ -342,10 +342,9 @@ Selected guardrail deployment: bedrock/guardrail (guard-eu-west)
 ...
 ```
 
-## Related
+## 관련 항목
 
-- [Guardrails Quick Start](./quick_start.md)
-- [Bedrock Guardrails](./bedrock.md)
-- [Custom Guardrails](./custom_guardrail.md)
-- [Load Balancing for LLM Calls](../load_balancing.md)
-
+- [가드레일 빠른 시작](./quick_start.md)
+- [Bedrock 가드레일](./bedrock.md)
+- [Custom 가드레일](./custom_guardrail.md)
+- [LLM 호출 로드 밸런싱](../load_balancing.md)

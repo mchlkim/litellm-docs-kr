@@ -1,13 +1,13 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Provider specific Wildcard routing 
+# 제공자별 Wildcard routing {#provider-specific-wildcard-routing}
 
-**Proxy all models from a provider**
+**제공자의 모든 모델을 Proxy로 전달**
 
-Use this if you want to **proxy all models from a specific provider without defining them on the config.yaml**
+특정 제공자의 모든 모델을 `config.yaml`에 정의하지 않고 **Proxy로 전달**하려면 이 방법을 사용하세요.
 
-## Step 1. Define provider specific routing 
+## 1단계. 제공자별 routing 정의 {#step-1-define-provider-specific-routing}
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -45,7 +45,7 @@ router = Router(
 </TabItem>
 <TabItem value="proxy" label="PROXY">
 
-**Step 1** - define provider specific routing on config.yaml
+**1단계** - `config.yaml`에서 제공자별 routing을 정의합니다.
 ```yaml
 model_list:
   # provider specific wildcard routing
@@ -65,13 +65,13 @@ model_list:
 </TabItem>
 </Tabs>
 
-## [PROXY-Only] Step 2 - Run litellm proxy 
+## [PROXY-Only] 2단계 - litellm proxy 실행 {#proxy-only-step-2---run-litellm-proxy}
 
 ```shell
 $ litellm --config /path/to/config.yaml
 ```
 
-## Step 3 - Test it 
+## 3단계 - 테스트 {#step-3---test-it}
 
 <Tabs>  
 <TabItem value="sdk" label="SDK">
@@ -97,7 +97,7 @@ print(resp)
 </TabItem>
 <TabItem value="proxy" label="PROXY">
 
-Test with `anthropic/` - all models with `anthropic/` prefix will get routed to `anthropic/*`
+`anthropic/`로 테스트합니다. `anthropic/` prefix가 있는 모든 모델은 `anthropic/*`로 routing됩니다.
 ```bash
 curl http://localhost:4000/v1/chat/completions \
   -H "Content-Type: application/json" \
@@ -110,7 +110,7 @@ curl http://localhost:4000/v1/chat/completions \
   }'
 ```
 
-Test with `groq/` - all models with `groq/` prefix will get routed to `groq/*`
+`groq/`로 테스트합니다. `groq/` prefix가 있는 모든 모델은 `groq/*`로 routing됩니다.
 ```shell
 curl http://localhost:4000/v1/chat/completions \
   -H "Content-Type: application/json" \
@@ -123,7 +123,7 @@ curl http://localhost:4000/v1/chat/completions \
   }'
 ```
 
-Test with `fo::*::static::*` - all requests matching this pattern will be routed to `openai/fo::*:static::*`
+`fo::*::static::*`로 테스트합니다. 이 패턴과 일치하는 모든 요청은 `openai/fo::*:static::*`로 routing됩니다.
 ```shell
 curl http://localhost:4000/v1/chat/completions \
   -H "Content-Type: application/json" \
@@ -140,4 +140,4 @@ curl http://localhost:4000/v1/chat/completions \
 </Tabs>
 
 
-## [[PROXY-Only] Control Wildcard Model Access](./proxy/model_access#-control-access-on-wildcard-models)
+## [[PROXY-Only] Wildcard Model Access 제어](./proxy/model_access) {#proxy-only-control-wildcard-model-access}

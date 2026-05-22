@@ -42,11 +42,11 @@ function WorkerColumn({
           <span className={`${styles.badge} ${badgeClass}`}>{region}</span>
         </div>
         <div className={styles.nodeSubtitle}>{subtitle}</div>
-        <div className={styles.nodeCaption}>Handles LLM requests</div>
+        <div className={styles.nodeCaption}>LLM 요청 처리</div>
       </div>
       <div className={styles.infraStack}>
-        <InfraBox icon="🗄" label="Own Database" color="green" />
-        <InfraBox icon="⚡" label="Own Redis" color="orange" />
+        <InfraBox icon="🗄" label="전용 Database" color="green" />
+        <InfraBox icon="⚡" label="전용 Redis" color="orange" />
       </div>
     </div>
   );
@@ -69,19 +69,19 @@ function ArchitectureView() {
       <div className={`${styles.node} ${styles.nodeControlPlane}`}>
         <div className={styles.nodeHeader}>
           <span className={styles.nodeTitle}>Control Plane</span>
-          <span className={`${styles.badge} ${styles.badgeBlue}`}>ADMIN UI ONLY</span>
+          <span className={`${styles.badge} ${styles.badgeBlue}`}>ADMIN UI 전용</span>
         </div>
         <div className={styles.nodeSubtitle}>cp.example.com</div>
         <div className={styles.nodeCaption}>
-          Not a router — does not proxy LLM requests.
+          라우터가 아니며 LLM 요청을 proxy하지 않습니다.
           <br />
-          Lets admins switch between workers to manage them.
+          관리자가 worker를 전환하며 관리할 수 있게 합니다.
         </div>
       </div>
 
       {/* Branch connector with label */}
       <div className={styles.connectorBranchLabeled}>
-        <span className={styles.connectorLabel}>UI management only</span>
+        <span className={styles.connectorLabel}>UI 관리 전용</span>
         <div className={styles.connectorBranch}>
           <div className={`${styles.branchLeg} ${styles.branchLegLeft}`} />
           <div className={`${styles.branchLeg} ${styles.branchLegRight}`} />
@@ -92,14 +92,14 @@ function ArchitectureView() {
       <div className={styles.workersRow}>
         <WorkerColumn
           name="Worker A"
-          region="US East"
+          region="미국 동부"
           subtitle="worker-a.example.com"
           nodeClass={styles.nodeWorkerA}
           badgeClass={styles.badgeGreen}
         />
         <WorkerColumn
           name="Worker B"
-          region="EU West"
+          region="EU 서부"
           subtitle="worker-b.example.com"
           nodeClass={styles.nodeWorkerB}
           badgeClass={styles.badgePurple}

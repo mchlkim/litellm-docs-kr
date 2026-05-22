@@ -3,21 +3,21 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
 
-# Google AI Studio SDK
+# `Google AI Studio SDK`
 
-Pass-through endpoints for Google AI Studio - call provider-specific endpoint, in native format (no translation).
+Google AI Studio용 패스스루 엔드포인트입니다. 공급자별 엔드포인트를 네이티브 형식으로 호출합니다(변환 없음).
 
-| Feature | Supported | Notes | 
+| 기능 | 지원 여부 | 참고 | 
 |-------|-------|-------|
-| Cost Tracking | ✅ | supports all models on `/generateContent` endpoint |
-| Logging | ✅ | works across all integrations |
-| End-user Tracking | ❌ | [Tell us if you need this](https://github.com/BerriAI/litellm/issues/new) |
-| Streaming | ✅ | |
+| 비용 추적 | ✅ | `/generateContent` 엔드포인트의 모든 모델 지원 |
+| 로깅 | ✅ | 모든 통합에서 작동 |
+| 최종 사용자 추적 | ❌ | [필요한 경우 알려주세요](https://github.com/BerriAI/litellm/issues/new) |
+| 스트리밍 | ✅ | |
 
 
-Just replace `https://generativelanguage.googleapis.com` with `LITELLM_PROXY_BASE_URL/gemini`
+`https://generativelanguage.googleapis.com`를 `LITELLM_PROXY_BASE_URL/gemini`로 바꾸기만 하면 됩니다.
 
-#### **Example Usage**
+#### **예제 사용법**
 
 <Tabs>
 <TabItem value="curl" label="curl">
@@ -81,21 +81,21 @@ main();
 </TabItem>
 </Tabs>
 
-Supports **ALL** Google AI Studio Endpoints (including streaming).
+Google AI Studio의 **모든** 엔드포인트를 지원합니다(스트리밍 포함).
 
-[**See All Google AI Studio Endpoints**](https://ai.google.dev/api)
+[**모든 Google AI Studio 엔드포인트 보기**](https://ai.google.dev/api)
 
-## Quick Start
+## 빠른 시작
 
-Let's call the Gemini [`/countTokens` endpoint](https://ai.google.dev/api/tokens#method:-models.counttokens)
+Gemini [`/countTokens` 엔드포인트](https://ai.google.dev/api/tokens#method:-models.counttokens)를 호출해 보겠습니다.
 
-1. Add Gemini API Key to your environment 
+1. 환경에 Gemini API 키 추가
 
 ```bash
 export GEMINI_API_KEY=""
 ```
 
-2. Start LiteLLM Proxy 
+2. LiteLLM Proxy 시작
 
 ```bash
 litellm
@@ -103,9 +103,9 @@ litellm
 # RUNNING on http://0.0.0.0:4000
 ```
 
-3. Test it! 
+3. 테스트
 
-Let's call the Google AI Studio token counting endpoint
+Google AI Studio 토큰 계산 엔드포인트를 호출해 보겠습니다.
 
 ```bash
 http://0.0.0.0:4000/gemini/v1beta/models/gemini-1.5-flash:countTokens?key=anything' \
@@ -120,21 +120,21 @@ http://0.0.0.0:4000/gemini/v1beta/models/gemini-1.5-flash:countTokens?key=anythi
 ```
 
 
-## Examples
+## 예제
 
-Anything after `http://0.0.0.0:4000/gemini` is treated as a provider-specific route, and handled accordingly.
+`http://0.0.0.0:4000/gemini` 뒤의 모든 경로는 공급자별 라우트로 처리됩니다.
 
-Key Changes: 
+주요 변경 사항:
 
-| **Original Endpoint**                                | **Replace With**                  |
+| **원래 엔드포인트**                                | **교체 대상**                  |
 |------------------------------------------------------|-----------------------------------|
 | `https://generativelanguage.googleapis.com`          | `http://0.0.0.0:4000/gemini` (LITELLM_PROXY_BASE_URL="http://0.0.0.0:4000")      |
-| `key=$GOOGLE_API_KEY`                                 | `key=anything` (use `key=LITELLM_VIRTUAL_KEY` if Virtual Keys are setup on proxy)                    |
+| `key=$GOOGLE_API_KEY`                                 | `key=anything` (프록시에 가상 키가 설정되어 있으면 `key=LITELLM_VIRTUAL_KEY` 사용)                    |
 
 
-### **Example 1: Counting tokens**
+### **예제 1: 토큰 계산** {#example-1-counting-tokens}
 
-#### LiteLLM Proxy Call 
+#### LiteLLM Proxy 호출 {#litellm-proxy-call}
 
 ```bash
 curl http://0.0.0.0:4000/gemini/v1beta/models/gemini-1.5-flash:countTokens?key=anything \
@@ -149,7 +149,7 @@ curl http://0.0.0.0:4000/gemini/v1beta/models/gemini-1.5-flash:countTokens?key=a
       }'
 ```
 
-#### Direct Google AI Studio Call 
+#### 직접 Google AI Studio 호출 {#direct-google-ai-studio-call}
 
 ```bash
 curl https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:countTokens?key=$GOOGLE_API_KEY \
@@ -164,9 +164,9 @@ curl https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:co
       }'
 ```
 
-### **Example 2: Generate content**
+### **예제 2: 콘텐츠 생성** {#example-2-generate-content}
 
-#### LiteLLM Proxy Call 
+#### LiteLLM Proxy 호출 {#litellm-proxy-call-1}
 
 ```bash
 curl "http://0.0.0.0:4000/gemini/v1beta/models/gemini-1.5-flash:generateContent?key=anything" \
@@ -179,7 +179,7 @@ curl "http://0.0.0.0:4000/gemini/v1beta/models/gemini-1.5-flash:generateContent?
        }' 2> /dev/null
 ```
 
-#### Direct Google AI Studio Call 
+#### 직접 Google AI Studio 호출 {#direct-google-ai-studio-call-1}
 
 ```bash
 curl "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=$GOOGLE_API_KEY" \
@@ -192,7 +192,7 @@ curl "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:g
        }' 2> /dev/null
 ```
 
-### **Example 3: Caching**
+### **예제 3: 캐싱**
 
 
 ```bash
@@ -211,7 +211,7 @@ curl -X POST "http://0.0.0.0:4000/gemini/v1beta/models/gemini-1.5-flash-001:gene
     }'
 ```
 
-#### Direct Google AI Studio Call 
+#### 직접 Google AI Studio 호출 {#direct-google-ai-studio-call-2}
 
 ```bash
 curl -X POST "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-001:generateContent?key=$GOOGLE_API_KEY" \
@@ -230,23 +230,23 @@ curl -X POST "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5
 ```
 
 
-## **Example 4: Video Generation with Veo**
+## **예제 4: Veo로 동영상 생성** {#example-4-video-generation-with-veo}
 
-Generate videos using Google's Veo model through LiteLLM pass-through routes.
+LiteLLM 패스스루 라우트를 통해 Google의 Veo 모델로 동영상을 생성합니다.
 
-[**→ Complete Veo Video Generation Guide**](../proxy/veo_video_generation.md)
+[**→ 전체 Veo 동영상 생성 가이드**](../proxy/veo_video_generation.md)
 
 
-## Advanced 
+## 고급 {#advanced}
 
-Pre-requisites
-- [Setup proxy with DB](../proxy/virtual_keys.md#setup)
+사전 요구 사항
+- [DB로 프록시 설정](../proxy/virtual_keys.md#setup)
 
-Use this, to avoid giving developers the raw Google AI Studio key, but still letting them use Google AI Studio endpoints.
+개발자에게 원본 Google AI Studio 키를 제공하지 않으면서 Google AI Studio 엔드포인트를 계속 사용할 수 있게 하려면 이 방법을 사용하세요.
 
-### Use with Virtual Keys
+### 가상 키와 함께 사용 {#use-with-virtual-keys}
 
-1. Setup environment
+1. 환경 설정
 
 ```bash
 export DATABASE_URL=""
@@ -260,7 +260,7 @@ litellm
 # RUNNING on http://0.0.0.0:4000
 ```
 
-2. Generate virtual key 
+2. 가상 키 생성
 
 ```bash
 curl -X POST 'http://0.0.0.0:4000/key/generate' \
@@ -269,7 +269,7 @@ curl -X POST 'http://0.0.0.0:4000/key/generate' \
 -d '{}'
 ```
 
-Expected Response 
+예상 응답
 
 ```bash
 {
@@ -278,7 +278,7 @@ Expected Response
 }
 ```
 
-3. Test it! 
+3. 테스트
 
 
 ```bash
@@ -294,11 +294,11 @@ http://0.0.0.0:4000/gemini/v1beta/models/gemini-1.5-flash:countTokens?key=sk-123
 ```
 
 
-### Send `tags` in request headers
+### 요청 헤더로 `tags` 보내기 {#send-tags-in-request-headers}
 
-Use this if you want `tags` to be tracked in the LiteLLM DB and on logging callbacks.
+`tags`를 LiteLLM DB와 로깅 콜백에서 추적하려면 이 방법을 사용하세요.
 
-Pass tags in request headers as a comma separated list. In the example below the following tags will be tracked
+요청 헤더에 태그를 쉼표로 구분된 목록으로 전달합니다. 아래 예제에서는 다음 태그가 추적됩니다.
 
 ```
 tags: ["gemini-js-sdk", "pass-through-endpoint"]

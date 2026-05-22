@@ -7,26 +7,26 @@ https://lmstudio.ai/docs/basics/server
 
 :::tip
 
-**We support ALL LM Studio models, just set `model=lm_studio/<any-model-on-lmstudio>` as a prefix when sending litellm requests**
+**모든 LM Studio 모델을 지원합니다. litellm 요청을 보낼 때 `model=lm_studio/<any-model-on-lmstudio>`를 접두사로 설정하기만 하면 됩니다.**
 
 :::
 
 
-| Property | Details |
+| 속성 | 세부 정보 |
 |-------|-------|
-| Description | Discover, download, and run local LLMs. |
-| Provider Route on LiteLLM | `lm_studio/` |
-| Provider Doc | [LM Studio ↗](https://lmstudio.ai/docs/api/openai-api) |
-| Supported OpenAI Endpoints | `/chat/completions`, `/embeddings`, `/completions` |
+| 설명 | 로컬 LLM을 검색, 다운로드, 실행합니다. |
+| LiteLLM의 Provider Route | `lm_studio/` |
+| Provider 문서 | [LM Studio ↗](https://lmstudio.ai/docs/api/openai-api) |
+| 지원되는 OpenAI 엔드포인트 | `/chat/completions`, `/embeddings`, `/completions` |
 
-## API Key
+## API 키 {#api-key}
 ```python
 # env variable
 os.environ['LM_STUDIO_API_BASE']
 os.environ['LM_STUDIO_API_KEY'] # optional, default is empty
 ```
 
-## Sample Usage
+## 샘플 사용법 {#sample-usage}
 ```python
 from litellm import completion
 import os
@@ -45,7 +45,7 @@ response = completion(
 print(response)
 ```
 
-## Sample Usage - Streaming
+## 샘플 사용법 - 스트리밍 {#sample-usage---streaming}
 ```python
 from litellm import completion
 import os
@@ -67,11 +67,11 @@ for chunk in response:
 ```
 
 
-## Usage with LiteLLM Proxy Server
+## LiteLLM Proxy Server 사용법 {#usage-with-litellm-proxy-server}
 
-Here's how to call a LM Studio model with the LiteLLM Proxy Server
+LiteLLM Proxy Server로 LM Studio 모델을 호출하는 방법은 다음과 같습니다.
 
-1. Modify the config.yaml 
+1. config.yaml을 수정합니다.
 
   ```yaml
   model_list:
@@ -82,13 +82,13 @@ Here's how to call a LM Studio model with the LiteLLM Proxy Server
   ```
 
 
-2. Start the proxy 
+2. 프록시를 시작합니다.
 
   ```bash
   $ litellm --config /path/to/config.yaml
   ```
 
-3. Send Request to LiteLLM Proxy Server
+3. LiteLLM Proxy Server로 요청을 보냅니다.
 
   <Tabs>
 
@@ -136,11 +136,11 @@ Here's how to call a LM Studio model with the LiteLLM Proxy Server
   </Tabs>
 
 
-## Supported Parameters
+## 지원 파라미터
 
-See [Supported Parameters](../completion/input.md#translated-openai-params) for supported parameters.
+지원되는 파라미터는 [지원 파라미터](../completion/input.md#translated-openai-params)를 참고하세요.
 
-## Embedding
+## 임베딩 {#embedding}
 
 ```python
 from litellm import embedding
@@ -155,10 +155,10 @@ print(response)
 ```
 
 
-## Structured Output
+## 구조화된 출력 {#structured-output}
 
-LM Studio supports structured outputs via JSON Schema. You can pass a pydantic model or a raw schema using `response_format`.
-LiteLLM sends the schema as `{ "type": "json_schema", "json_schema": {"schema": <your schema>} }`.
+LM Studio는 JSON Schema를 통한 구조화된 출력을 지원합니다. `response_format`으로 pydantic 모델이나 원시 스키마를 전달할 수 있습니다.
+LiteLLM은 스키마를 `{ "type": "json_schema", "json_schema": {"schema": <your schema>} }` 형식으로 보냅니다.
 
 ```python
 from pydantic import BaseModel

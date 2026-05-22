@@ -1,6 +1,6 @@
 # Firecrawl Search
 
-**Get API Key:** [https://firecrawl.dev](https://firecrawl.dev)
+**API Key 받기:** [https://firecrawl.dev](https://firecrawl.dev)
 
 ## LiteLLM Python SDK
 
@@ -19,7 +19,7 @@ response = search(
 
 ## LiteLLM AI Gateway
 
-### 1. Setup config.yaml
+### 1. config.yaml 설정
 
 ```yaml showLineNumbers title="config.yaml"
 model_list:
@@ -35,7 +35,7 @@ search_tools:
       api_key: os.environ/FIRECRAWL_API_KEY
 ```
 
-### 2. Start the proxy
+### 2. 프록시 시작
 
 ```bash
 litellm --config /path/to/config.yaml
@@ -43,7 +43,7 @@ litellm --config /path/to/config.yaml
 # RUNNING on http://0.0.0.0:4000
 ```
 
-### 3. Test the search endpoint
+### 3. search endpoint 테스트
 
 ```bash showLineNumbers title="Test Request"
 curl http://0.0.0.0:4000/v1/search/firecrawl-search \
@@ -55,7 +55,7 @@ curl http://0.0.0.0:4000/v1/search/firecrawl-search \
   }'
 ```
 
-## Provider-specific Parameters
+## Provider별 파라미터
 
 ```python showLineNumbers title="Firecrawl Search with Provider-specific Parameters"
 import os
@@ -82,35 +82,35 @@ response = search(
 )
 ```
 
-## Features
+## 기능
 
-Firecrawl combines web search with powerful scraping capabilities:
+Firecrawl은 웹 검색과 강력한 scraping 기능을 결합합니다.
 
-### Multiple Sources
-Search across different sources simultaneously:
-- `web` - Web search results (default)
-- `images` - Image search results
-- `news` - News search results with dates
+### 여러 소스
+서로 다른 소스를 동시에 검색합니다.
+- `web` - 웹 검색 결과(기본값)
+- `images` - 이미지 검색 결과
+- `news` - 날짜가 포함된 뉴스 검색 결과
 
-### Category Filtering
-Filter results by specific categories:
-- `github` - Search within GitHub repositories, code, issues, and documentation
-- `research` - Search academic and research websites (arXiv, Nature, IEEE, PubMed, etc.)
-- `pdf` - Search for PDFs
+### 카테고리 필터링
+특정 카테고리로 결과를 필터링합니다.
+- `github` - GitHub repository, code, issue, documentation 안에서 검색합니다
+- `research` - 학술 및 연구 웹사이트(arXiv, Nature, IEEE, PubMed 등)를 검색합니다
+- `pdf` - PDF를 검색합니다
 
-### Time-Based Search
-Use the `tbs` parameter to filter by time periods:
-- `qdr:h` - Past hour
-- `qdr:d` - Past day
-- `qdr:w` - Past week
-- `qdr:m` - Past month
-- `qdr:y` - Past year
+### 시간 기반 검색
+`tbs` 파라미터를 사용해 기간별로 필터링합니다.
+- `qdr:h` - 지난 1시간
+- `qdr:d` - 지난 1일
+- `qdr:w` - 지난 1주
+- `qdr:m` - 지난 1개월
+- `qdr:y` - 지난 1년
 
-### Content Scraping
-Firecrawl automatically scrapes full page content for search results when `scrapeOptions` is specified. By default, LiteLLM requests markdown format with main content only.
+### 콘텐츠 scraping
+`scrapeOptions`가 지정되면 Firecrawl은 검색 결과의 전체 페이지 콘텐츠를 자동으로 scrape합니다. 기본적으로 LiteLLM은 주요 콘텐츠만 포함한 markdown 형식을 요청합니다.
 
-### Geo-Targeting
-Combine `location` and `country` parameters for geo-targeted results:
+### 지리적 타기팅
+`location`과 `country` 파라미터를 조합해 지리적으로 타기팅된 결과를 가져옵니다.
 ```python
 response = search(
     query="restaurants",
@@ -120,18 +120,17 @@ response = search(
 )
 ```
 
-## Supported Query Operators
+## 지원되는 쿼리 연산자
 
-Firecrawl supports advanced search operators:
+Firecrawl은 고급 검색 연산자를 지원합니다.
 
-| Operator    | Functionality                                             | Example                         |
+| 연산자 | 기능 | 예제 |
 | ----------- | --------------------------------------------------------- | ------------------------------- |
-| ""          | Non-fuzzy matches a string of text                        | "Firecrawl"                     |
-| \-          | Excludes certain keywords                                 | \-bad, \-site:example.com       |
-| site:       | Only returns results from a specified website             | site:firecrawl.dev              |
-| inurl:      | Only returns results that include a word in the URL       | inurl:firecrawl                 |
-| allinurl:   | Only returns results that include multiple words in URL   | allinurl:git firecrawl          |
-| intitle:    | Only returns results with a word in the title             | intitle:Firecrawl               |
-| allintitle: | Only returns results with multiple words in the title     | allintitle:firecrawl playground |
-| related:    | Only returns results related to a specific domain         | related:firecrawl.dev           |
-
+| `""` | 텍스트 문자열을 fuzzy 처리 없이 매칭합니다 | `"Firecrawl"` |
+| `-` | 특정 키워드를 제외합니다 | `-bad`, `-site:example.com` |
+| `site:` | 지정한 웹사이트의 결과만 반환합니다 | `site:firecrawl.dev` |
+| `inurl:` | URL에 특정 단어가 포함된 결과만 반환합니다 | `inurl:firecrawl` |
+| `allinurl:` | URL에 여러 단어가 포함된 결과만 반환합니다 | `allinurl:git firecrawl` |
+| `intitle:` | 제목에 특정 단어가 있는 결과만 반환합니다 | `intitle:Firecrawl` |
+| `allintitle:` | 제목에 여러 단어가 있는 결과만 반환합니다 | `allintitle:firecrawl playground` |
+| `related:` | 특정 domain과 관련된 결과만 반환합니다 | `related:firecrawl.dev` |

@@ -1,8 +1,8 @@
 
 # Scaleway 
-LiteLLM supports all [models available on Scaleway Generative APIs ↗](https://www.scaleway.com/en/docs/generative-apis/reference-content/supported-models/). 
+LiteLLM은 [Scaleway Generative APIs에서 사용 가능한 모든 모델 ↗](https://www.scaleway.com/en/docs/generative-apis/reference-content/supported-models/)을 지원합니다. 
 
-## Usage with LiteLLM Python SDK
+## LiteLLM Python SDK 사용법 {#usage-with-litellm-python-sdk}
 
 ```python
 import os
@@ -15,9 +15,9 @@ response = completion(model="scaleway/qwen3-235b-a22b-instruct-2507", messages=m
 print(response)
 ```
 
-## Usage with LiteLLM Proxy 
+## LiteLLM Proxy 사용법 {#usage-with-litellm-proxy}
 
-### 1. Set Scaleway models in config.yaml
+### 1. config.yaml에서 Scaleway 모델 설정 {#1-set-scaleway-models-in-configyaml}
 
 ```yaml
 model_list:
@@ -27,15 +27,15 @@ model_list:
       api_key: "os.environ/SCW_SECRET_KEY" # ensure you have `SCW_SECRET_KEY` in your .env
 ```
 
-### 2. Start proxy 
+### 2. proxy 시작 {#2-start-proxy}
 
 ```bash
 litellm --config config.yaml
 ```
 
-### 3. Query proxy 
+### 3. proxy 쿼리 {#3-query-proxy}
 
-Assuming the proxy is running on [http://localhost:4000](http://localhost:4000):
+proxy가 [http://localhost:4000](http://localhost:4000)에서 실행 중이라고 가정합니다.
 ```bash
 curl http://localhost:4000/chat/completions \
   -H "Content-Type: application/json" \
@@ -54,16 +54,16 @@ curl http://localhost:4000/chat/completions \
     ]
   }'
 ```
-`-H "Authorization: Bearer YOUR_LITELLM_MASTER_KEY" ` is only required if you have set a LiteLLM master key
+`-H "Authorization: Bearer YOUR_LITELLM_MASTER_KEY" `는 LiteLLM master key를 설정한 경우에만 필요합니다.
 
 
-## Supported features
+## 지원 기능 {#supported-features}
 
-Scaleway provider supports all features in [Generative APIs reference documentation ↗](https://www.scaleway.com/en/developers/api/generative-apis/), such as streaming, structured outputs and tool calling.
+Scaleway provider는 streaming, structured outputs, tool calling 등 [Generative APIs reference documentation ↗](https://www.scaleway.com/en/developers/api/generative-apis/)의 모든 기능을 지원합니다.
 
-## Audio transcription
+## 오디오 전사 {#audio-transcription}
 
-Scaleway's `/audio/transcriptions` endpoint is OpenAI-compatible and works with Whisper models.
+Scaleway의 `/audio/transcriptions` 엔드포인트는 OpenAI 호환이며 Whisper 모델과 함께 작동합니다.
 
 ### Python SDK
 
@@ -81,7 +81,7 @@ with open("speech.mp3", "rb") as audio_file:
 print(response.text)
 ```
 
-### Proxy config
+### Proxy 설정 {#proxy-config}
 
 ```yaml
 model_list:
@@ -91,7 +91,7 @@ model_list:
       api_key: "os.environ/SCW_SECRET_KEY"
 ```
 
-### Proxy request
+### Proxy 요청 {#proxy-request}
 
 ```bash
 curl http://localhost:4000/v1/audio/transcriptions \
@@ -100,4 +100,4 @@ curl http://localhost:4000/v1/audio/transcriptions \
   -F file="@speech.mp3"
 ```
 
-Supported optional params: `language`, `prompt`, `response_format`, `temperature`, `timestamp_granularities`.
+지원되는 선택적 매개변수: `language`, `prompt`, `response_format`, `temperature`, `timestamp_granularities`.

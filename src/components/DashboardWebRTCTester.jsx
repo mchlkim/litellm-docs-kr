@@ -239,7 +239,7 @@ export default function WebRTCTester() {
   const [sdpAnswer, setSdpAnswer] = useState('');
   const [offerActive, setOfferActive] = useState(false);
   const [answerActive, setAnswerActive] = useState(false);
-  const [audioStatus, setAudioStatus] = useState('Start a session first');
+  const [audioStatus, setAudioStatus] = useState('먼저 세션을 시작하세요');
   const [micActive, setMicActive] = useState(false);
   const [bars, setBars] = useState(Array(28).fill(2));
   const [connected, setConnected] = useState(false);
@@ -300,20 +300,20 @@ export default function WebRTCTester() {
       const raw = await r.text();
       if (!r.ok) { log('error', 'ERR', raw); stopSession(); return; }
       tokenResp = JSON.parse(raw);
-      log('success', 'TOKEN', 'Received encrypted ephemeral token');
+      log('success', 'TOKEN', '암호화된 ephemeral token을 받았습니다');
     } catch (e) {
-      log('error', 'ERR', `client_secrets failed: ${e.message}`);
+      log('error', 'ERR', `client_secrets 실패: ${e.message}`);
       stopSession(); return;
     }
 
     const token = tokenResp?.client_secret?.value ?? tokenResp?.value;
-    if (!token) { log('error', 'ERR', `Cannot extract token: ${JSON.stringify(tokenResp)}`); stopSession(); return; }
+    if (!token) { log('error', 'ERR', `token을 추출할 수 없습니다: ${JSON.stringify(tokenResp)}`); stopSession(); return; }
     tokenRef.current = token;
     setTokenPreview(token.slice(0, 10) + '…');
-    log('info', 'TOKEN', `Preview: ${token.slice(0, 10)}…`);
+    log('info', 'TOKEN', `미리보기: ${token.slice(0, 10)}…`);
 
     // Step 2: PeerConnection
-    log('step', 'STEP 2', 'Creating RTCPeerConnection');
+    log('step', 'STEP 2', 'RTCPeerConnection 생성');
     const pc = new RTCPeerConnection();
     pcRef.current = pc;
 
@@ -334,16 +334,16 @@ export default function WebRTCTester() {
     };
 
     pc.ontrack = (e) => {
-      log('success', 'AUDIO', 'Remote audio track received from OpenAI');
+      log('success', 'AUDIO', 'OpenAI에서 remote audio track을 받았습니다');
       if (remoteAudioRef.current) remoteAudioRef.current.srcObject = e.streams[0];
       setupAnalyser(e.streams[0]);
-      setAudioStatus('Receiving audio from OpenAI ✓');
+      setAudioStatus('OpenAI 오디오 수신 중 ✓');
     };
 
     const dc = pc.createDataChannel('oai-events');
     dcRef.current = dc;
-    dc.onopen = () => { setDcState('open'); log('success', 'DC', 'Data channel open — ready!'); setStatus('connected'); };
-    dc.onclose = () => { setDcState('closed'); log('warn', 'DC', 'Closed'); };
+    dc.onopen = () => { setDcState('open'); log('success', 'DC', 'Data channel 열림 - 준비 완료'); setStatus('connected'); };
+    dc.onclose = () => { setDcState('closed'); log('warn', 'DC', '닫힘'); };
     dc.onmessage = (e) => {
       try { log('info', 'EVENT', JSON.parse(e.data).type ?? 'unknown'); }
       catch { log('info', 'EVENT', e.data.slice(0, 100)); }
@@ -354,24 +354,24 @@ export default function WebRTCTester() {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       streamRef.current = stream;
       stream.getTracks().forEach(t => pc.addTrack(t, stream));
-      log('success', 'MIC', 'Microphone access granted');
-      setAudioStatus('Mic active — waiting for remote audio');
+      log('success', 'MIC', '마이크 접근이 허용되었습니다');
+      setAudioStatus('마이크 활성화 - remote audio 대기 중');
       micRef.current = true;
       setMicActive(true);
     } catch (e) {
-      log('warn', 'MIC', `Mic denied: ${e.message}`);
+      log('warn', 'MIC', `마이크 거부됨: ${e.message}`);
       const ctx = new AudioContext();
       const dest = ctx.createMediaStreamDestination();
       dest.stream.getTracks().forEach(t => pc.addTrack(t, dest.stream));
     }
 
     // Step 3: SDP offer
-    log('step', 'STEP 3', 'Creating SDP offer');
+    log('step', 'STEP 3', 'SDP offer 생성');
     const offer = await pc.createOffer();
     await pc.setLocalDescription(offer);
     setSdpOffer(offer.sdp);
     setOfferActive(true);
-    log('info', 'SDP', `Offer created (${offer.sdp.split('\n').length} lines)`);
+    log('info', 'SDP', `Offer 생성됨 (${offer.sdp.split('\n').length}줄)`);
 
     // Step 4: SDP exchange
     setFlowStep(2);
@@ -385,16 +385,16 @@ export default function WebRTCTester() {
       log('info', 'HTTP', `${r.status} ${r.statusText}`);
       if (!r.ok) { log('error', 'ERR', await r.text()); stopSession(); return; }
       const ans = await r.text();
-      log('success', 'SDP', `Answer received (${ans.split('\n').length} lines)`);
+      log('success', 'SDP', `Answer 수신됨 (${ans.split('\n').length}줄)`);
 
       // Step 5: remote description
-      log('step', 'STEP 5', 'Setting remote description');
+      log('step', 'STEP 5', 'remote description 설정');
       await pc.setRemoteDescription({ type: 'answer', sdp: ans });
       setSdpAnswer(ans);
       setAnswerActive(true);
-      log('success', 'CONN', '✓ Session established — Browser ↔ LiteLLM ↔ OpenAI');
+      log('success', 'CONN', '✓ 세션 연결됨 - Browser ↔ LiteLLM ↔ OpenAI');
     } catch (e) {
-      log('error', 'ERR', `calls failed: ${e.message}`);
+      log('error', 'ERR', `calls 실패: ${e.message}`);
       stopSession();
     }
   }
@@ -416,17 +416,17 @@ export default function WebRTCTester() {
     setOfferActive(false);
     setAnswerActive(false);
     setBars(Array(28).fill(2));
-    setAudioStatus('Start a session first');
-    log('warn', 'SESSION', 'Session stopped');
+    setAudioStatus('먼저 세션을 시작하세요');
+    log('warn', 'SESSION', '세션이 중지되었습니다');
   }
 
   function toggleMic() {
-    if (!streamRef.current) { log('warn', 'MIC', 'No active session'); return; }
+    if (!streamRef.current) { log('warn', 'MIC', '활성 세션이 없습니다'); return; }
     const next = !micRef.current;
     micRef.current = next;
     streamRef.current.getAudioTracks().forEach(t => { t.enabled = next; });
     setMicActive(next);
-    log('info', 'MIC', next ? 'Unmuted' : 'Muted');
+    log('info', 'MIC', next ? '음소거 해제' : '음소거');
   }
 
   const f = (n) => flowStep >= n;
@@ -440,7 +440,7 @@ export default function WebRTCTester() {
           <div className="wrt-toggle-left">
             <div className="wrt-live-dot" />
             <div>
-              <div className="wrt-toggle-title">INTERACTIVE TESTER</div>
+              <div className="wrt-toggle-title">인터랙티브 테스터</div>
               <div className="wrt-toggle-sub">Browser → LiteLLM → OpenAI · WebRTC</div>
             </div>
           </div>
@@ -452,7 +452,7 @@ export default function WebRTCTester() {
             {/* Sidebar */}
             <div className="wrt-sidebar">
               <div>
-                <div className="wrt-label">Proxy Config</div>
+                <div className="wrt-label">Proxy 설정</div>
                 <div className="wrt-field">
                   <label>Proxy URL</label>
                   <input value={proxyUrl} onChange={e => setProxyUrl(e.target.value)} placeholder="http://localhost:4000" />
@@ -470,7 +470,7 @@ export default function WebRTCTester() {
               <div className="wrt-divider" />
 
               <div>
-                <div className="wrt-label">Flow</div>
+                <div className="wrt-label">흐름</div>
                 <div className="wrt-flow">
                   <div className={`wrt-flow-box${f(1) ? ' active' : ''}`}>Browser</div>
                   <div className={`wrt-flow-arrow${f(1) ? ' active' : ''}`}>→</div>
@@ -483,16 +483,16 @@ export default function WebRTCTester() {
               <div className="wrt-divider" />
 
               <div>
-                <div className="wrt-label">Controls</div>
-                <button className="wrt-btn wrt-btn-primary" onClick={startSession} disabled={connected}>▶ Start Session</button>
-                <button className="wrt-btn wrt-btn-danger" onClick={stopSession} disabled={!connected}>■ Stop</button>
-                <button className="wrt-btn wrt-btn-ghost" onClick={clearLogs} style={{marginTop: 5}}>✕ Clear Logs</button>
+                <div className="wrt-label">제어</div>
+                <button className="wrt-btn wrt-btn-primary" onClick={startSession} disabled={connected}>▶ 세션 시작</button>
+                <button className="wrt-btn wrt-btn-danger" onClick={stopSession} disabled={!connected}>■ 중지</button>
+                <button className="wrt-btn wrt-btn-ghost" onClick={clearLogs} style={{marginTop: 5}}>✕ 로그 지우기</button>
               </div>
 
               <div className="wrt-divider" />
 
               <div>
-                <div className="wrt-label">Session Info</div>
+                <div className="wrt-label">세션 정보</div>
                 <div className="wrt-meta">
                   {[['token', tokenPreview], ['ice', iceState], ['conn', connState], ['data ch.', dcState]].map(([k, v]) => (
                     <div className="wrt-meta-row" key={k}><span>{k}</span><span>{v}</span></div>
@@ -504,7 +504,7 @@ export default function WebRTCTester() {
             {/* Right panel */}
             <div className="wrt-main">
               <div className="wrt-header">
-                <span className="wrt-header-title">WEBRTC REALTIME TESTER</span>
+                <span className="wrt-header-title">WebRTC Realtime 테스터</span>
                 <div className="wrt-status-pill">
                   <div className={`wrt-status-dot${status !== 'idle' ? ` ${status}` : ''}`} />
                   <span style={{fontSize:10, color:'#4a5568'}}>{status}</span>
@@ -523,7 +523,7 @@ export default function WebRTCTester() {
               <div className={`wrt-tab-content${activeTab==='logs'?' active':''}`}>
                 <div className="wrt-log" ref={logRef}>
                   {entries.length === 0
-                    ? <div className="wrt-empty"><div style={{fontSize:22,opacity:0.3}}>📡</div><div>Hit "Start Session" to begin</div></div>
+                    ? <div className="wrt-empty"><div style={{fontSize:22,opacity:0.3}}>📡</div><div>"세션 시작"을 눌러 시작하세요</div></div>
                     : entries.map(e => (
                         <div key={e.id} className={`wrt-entry ${e.level}`}>
                           <span className="we-time">{e.time}</span>
@@ -540,11 +540,11 @@ export default function WebRTCTester() {
                 <div className="wrt-sdp-pane">
                   <div className="wrt-sdp-box">
                     <div className="wrt-sdp-hdr"><div className={`wrt-sdp-dot${offerActive?' active':''}`}/>SDP OFFER</div>
-                    <textarea readOnly value={sdpOffer} placeholder="SDP offer appears here..." />
+                    <textarea readOnly value={sdpOffer} placeholder="SDP offer가 여기에 표시됩니다..." />
                   </div>
                   <div className="wrt-sdp-box">
                     <div className="wrt-sdp-hdr"><div className={`wrt-sdp-dot${answerActive?' active':''}`}/>SDP ANSWER</div>
-                    <textarea readOnly value={sdpAnswer} placeholder="SDP answer appears here..." />
+                    <textarea readOnly value={sdpAnswer} placeholder="SDP answer가 여기에 표시됩니다..." />
                   </div>
                 </div>
               </div>

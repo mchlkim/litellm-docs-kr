@@ -1,12 +1,12 @@
-# Azure AI Search - Vector Store (Passthrough API)
+# Azure AI Search - 벡터 스토어 (Passthrough API) {#azure-ai-search---vector-store-passthrough-api}
 
-Use this to allow developers to **create** and **search** vector stores using the Azure AI Search API in the **native** Azure AI Search API format, without giving them the Azure AI credentials.
+개발자에게 Azure AI 자격 증명을 제공하지 않고도, **네이티브** Azure AI Search API 형식으로 Azure AI Search API를 사용해 벡터 스토어를 **생성**하고 **검색**할 수 있게 하려면 이 방식을 사용하세요.
 
-This is for the proxy only. 
+이 기능은 프록시 전용입니다.
 
-## Admin Flow
+## 관리자 플로우 {#admin-flow}
 
-### 1. Add the vector store to LiteLLM 
+### 1. LiteLLM에 벡터 스토어 추가 {#1-add-the-vector-store-to-litellm}
 
 ```yaml
 model_list:  
@@ -33,9 +33,9 @@ general_settings:
     master_key: "sk-1234"
 ```
 
-Add your vector store credentials to LiteLLM. 
+LiteLLM에 벡터 스토어 자격 증명을 추가합니다.
 
-### 2. Start the proxy. 
+### 2. 프록시 시작. 
 
 ```bash
 litellm --config /path/to/config.yaml
@@ -43,7 +43,7 @@ litellm --config /path/to/config.yaml
 # RUNNING on http://0.0.0.0:4000
 ```
 
-### 3. Create a virtual index. 
+### 3. 가상 인덱스 생성 {#3-create-a-virtual-index}
 
 ```bash
 curl -L -X POST 'http://0.0.0.0:4000/v1/indexes' \
@@ -59,9 +59,9 @@ curl -L -X POST 'http://0.0.0.0:4000/v1/indexes' \
 }'
 ```
 
-This is a virtual index, which the developer can use to create and search vector stores.
+이것은 개발자가 벡터 스토어를 생성하고 검색하는 데 사용할 수 있는 가상 인덱스입니다.
 
-### 4. Create a key with the vector store permissions. 
+### 4. 벡터 스토어 권한이 있는 키 생성 {#4-create-a-key-with-the-vector-store-permissions}
 
 ```bash
 curl -L -X POST 'http://0.0.0.0:4000/key/generate' \
@@ -73,9 +73,9 @@ curl -L -X POST 'http://0.0.0.0:4000/key/generate' \
 }'
 ```
 
-Give the key access to the virtual index and the embedding model.
+키에 가상 인덱스와 임베딩 모델에 대한 접근 권한을 부여합니다.
 
-**Expected response**
+**예상 응답**
 
 ```json
 {
@@ -83,11 +83,11 @@ Give the key access to the virtual index and the embedding model.
 }
 ```
 
-## Developer Flow
+## 개발자 플로우 {#developer-flow}
 
-### 1. Create a vector store with some documents. 
+### 1. 일부 문서로 벡터 스토어 생성 {#1-create-a-vector-store-with-some-documents}
 
-Note: Use the '/azure_ai' endpoint for the passthrough api that uses the `azure_ai` provider in your `_new_secret_config.yaml` file. 
+참고: `_new_secret_config.yaml` 파일의 `azure_ai` 프로바이더를 사용하는 Passthrough API에는 '/azure_ai' 엔드포인트를 사용하세요.
 
 ```python
 import requests
@@ -256,7 +256,7 @@ else:
 ```
 
 
-### 2. Search the vector store. 
+### 2. 벡터 스토어 검색 {#2-search-the-vector-store}
 
 
 ```python

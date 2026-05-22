@@ -29,7 +29,7 @@ function CopyMarkdownButton({rawMarkdownB64}) {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {
-      // clipboard write failed silently
+      // 클립보드 쓰기 실패는 조용히 무시합니다.
     }
   }
 
@@ -37,11 +37,11 @@ function CopyMarkdownButton({rawMarkdownB64}) {
     <button
       className={clsx(styles.copyBtn, copied && styles.success)}
       onClick={handleClick}
-      title="Copy page as Markdown"
+      title="페이지를 Markdown으로 복사"
     >
       <span className={styles.copyBtnInner}>
         {copied ? <CheckIcon /> : <CopyIcon />}
-        <span>{copied ? 'Copied' : 'Copy as Markdown'}</span>
+        <span>{copied ? '복사됨' : 'Markdown으로 복사'}</span>
       </span>
     </button>
   );

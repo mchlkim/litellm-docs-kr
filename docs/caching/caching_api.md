@@ -1,8 +1,8 @@
-# Hosted Cache - api.litellm.ai
+# 호스팅 캐시 - api.litellm.ai {#hosted-cache---apilitellmai}
 
-Use api.litellm.ai for caching `completion()` and `embedding()` responses
+`completion()` 및 `embedding()` 응답 캐싱에 api.litellm.ai를 사용하세요.
 
-## Quick Start Usage - Completion
+## 빠른 시작 사용법 - 컴플리션 {#quick-start-usage---completion}
 ```python
 import litellm
 from litellm import completion
@@ -25,7 +25,7 @@ response2 = completion(
 ```
 
 
-## Usage - Embedding()
+## 사용법 - Embedding()
 
 ```python
 import time
@@ -45,10 +45,10 @@ end_time = time.time()
 print(f"Embedding 2 response time: {end_time - start_time} seconds")
 ```
 
-## Caching with Streaming 
-LiteLLM can cache your streamed responses for you
+## 스트리밍 캐싱 {#caching-with-streaming}
+LiteLLM은 스트리밍 응답을 대신 캐시할 수 있습니다.
 
-### Usage
+### 사용법
 ```python
 import litellm
 import time

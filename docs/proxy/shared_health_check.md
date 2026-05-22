@@ -1,47 +1,47 @@
-# Shared Health Check State Across Pods
+# Pod 간 공유 Health Check 상태
 
-This feature enables coordination of health checks across multiple LiteLLM proxy pods to avoid duplicate health checks and reduce costs.
+이 기능은 여러 LiteLLM 프록시 Pod 사이에서 health check를 조율해 중복 health check를 피하고 비용을 줄입니다.
 
-## Overview
+## 개요
 
-When running multiple LiteLLM proxy pods (e.g., in Kubernetes), each pod typically runs its own independent health checks on every model. This can result in:
+여러 LiteLLM 프록시 Pod를 실행할 때(예: Kubernetes), 각 Pod는 보통 모든 모델에 대해 독립적인 health check를 수행합니다. 이 방식은 다음 문제를 만들 수 있습니다.
 
-- **Duplicate health checks** across pods
-- **Increased costs** for expensive models (e.g., Gemini 2.5-pro)
-- **Redundant monitoring/logging noise**
-- **Inefficient resource usage**
+- Pod 간 **중복 health check**
+- 비싼 모델(예: Gemini 2.5-pro)에 대한 **비용 증가**
+- **불필요한 모니터링/로그 노이즈**
+- **비효율적인 리소스 사용**
 
-The shared health check state feature solves this by:
+공유 health check 상태 기능은 다음 방식으로 이를 해결합니다.
 
-- **Coordinating health checks** across pods using Redis
-- **Caching results** with configurable TTL
-- **Using distributed locks** to ensure only one pod runs health checks at a time
-- **Allowing other pods** to read cached results instead of running redundant checks
+- Redis를 사용해 Pod 간 **health check 조율**
+- 구성 가능한 TTL로 **결과 캐싱**
+- 한 번에 하나의 Pod만 health check를 실행하도록 **분산 락 사용**
+- 다른 Pod는 중복 검사를 실행하는 대신 **캐시된 결과 읽기**
 
-## How It Works
+## 동작 방식
 
-### 1. Lock Acquisition
-When a pod needs to run health checks:
-- It attempts to acquire a Redis lock
-- If successful, it runs the health checks
-- If failed, it waits briefly and checks for cached results
+### 1. 락 획득
+Pod가 health check를 실행해야 할 때:
+- Redis 락 획득을 시도합니다.
+- 성공하면 health check를 실행합니다.
+- 실패하면 잠시 기다린 뒤 캐시된 결과를 확인합니다.
 
-### 2. Result Caching
-After running health checks:
-- Results are cached in Redis with a configurable TTL
-- Other pods can read these cached results
-- Cache includes timestamp and pod ID for tracking
+### 2. 결과 캐싱
+health check 실행 후:
+- 결과는 구성 가능한 TTL과 함께 Redis에 캐시됩니다.
+- 다른 Pod는 이 캐시된 결과를 읽을 수 있습니다.
+- 캐시에는 추적을 위한 타임스탬프와 Pod ID가 포함됩니다.
 
-### 3. Fallback Behavior
-If Redis is unavailable or cache is expired:
-- Pods fall back to running health checks locally
-- System continues to function normally
+### 3. Fallback 동작
+Redis를 사용할 수 없거나 캐시가 만료된 경우:
+- Pod는 로컬 health check 실행으로 fallback합니다.
+- 시스템은 정상 동작을 계속합니다.
 
-## Configuration
+## 설정
 
-### Enable Shared Health Check
+### 공유 Health Check 활성화
 
-Add to your `proxy_config.yaml`:
+`proxy_config.yaml`에 다음을 추가합니다.
 
 ```yaml
 general_settings:
@@ -64,9 +64,9 @@ litellm_settings:
     password: your-redis-password
 ```
 
-### Environment Variables
+### 환경 변수
 
-You can also configure using environment variables:
+환경 변수로도 구성할 수 있습니다.
 
 ```bash
 # Enable shared health check
@@ -79,21 +79,21 @@ export DEFAULT_SHARED_HEALTH_CHECK_TTL=300
 export DEFAULT_SHARED_HEALTH_CHECK_LOCK_TTL=60
 ```
 
-## Requirements
+## 요구 사항
 
-- **Redis**: Required for shared state coordination
-- **Background Health Checks**: Must be enabled (`background_health_checks: true`)
-- **Multiple Pods**: Most beneficial with 2+ proxy instances
+- **Redis**: 공유 상태 조율에 필요합니다.
+- **백그라운드 health check**: 반드시 활성화해야 합니다(`background_health_checks: true`).
+- **Multiple Pods**: 프록시 인스턴스가 2개 이상일 때 가장 효과적입니다.
 
-## API Endpoints
+## API 엔드포인트
 
-### Check Shared Health Check Status
+### 공유 Health Check 상태 확인
 
 ```bash
 GET /health/shared-status
 ```
 
-Returns information about the shared health check coordination:
+공유 health check 조율 상태 정보를 반환합니다.
 
 ```json
 {
@@ -112,20 +112,20 @@ Returns information about the shared health check coordination:
 }
 ```
 
-## Monitoring
+## 모니터링
 
-### Health Check Status
+### Health Check 상태
 
-Monitor the shared health check status to ensure proper coordination:
+공유 health check 상태를 모니터링해 조율이 정상적으로 이뤄지는지 확인합니다.
 
 ```bash
 curl -H "Authorization: Bearer your-api-key" \
   http://your-proxy-host/health/shared-status
 ```
 
-### Logs
+### 로그
 
-Look for these log messages:
+다음 로그 메시지를 확인합니다.
 
 ```
 INFO: Initialized shared health check manager
@@ -135,91 +135,91 @@ INFO: Cached health check results for 5 healthy and 0 unhealthy endpoints
 DEBUG: Using cached health check results
 ```
 
-## Troubleshooting
+## 문제 해결
 
-### Common Issues
+### 자주 발생하는 문제
 
-#### 1. Shared Health Check Not Working
+#### 1. 공유 Health Check가 동작하지 않음
 
-**Symptoms**: Each pod still runs independent health checks
+**증상**: 각 Pod가 여전히 독립적인 health check를 실행합니다.
 
-**Solutions**:
-- Verify Redis is configured and accessible
-- Check that `use_shared_health_check: true` is set
-- Ensure `background_health_checks: true` is enabled
-- Check Redis connectivity in logs
+**해결 방법**:
+- Redis가 구성되어 있고 접근 가능한지 확인합니다.
+- `use_shared_health_check: true`가 설정되어 있는지 확인합니다.
+- `background_health_checks: true`가 활성화되어 있는지 확인합니다.
+- 로그에서 Redis 연결 상태를 확인합니다.
 
-#### 2. Redis Connection Issues
+#### 2. Redis 연결 문제
 
-**Symptoms**: Health checks fall back to local execution
+**증상**: Health check가 로컬 실행으로 fallback합니다.
 
-**Solutions**:
-- Verify Redis host, port, and credentials
-- Check network connectivity between pods and Redis
-- Monitor Redis server logs for errors
+**해결 방법**:
+- Redis 호스트, 포트, 자격 증명을 확인합니다.
+- Pod와 Redis 사이의 네트워크 연결을 확인합니다.
+- Redis 서버 로그에서 오류를 모니터링합니다.
 
-#### 3. Lock Not Released
+#### 3. 락이 해제되지 않음
 
-**Symptoms**: One pod holds the lock indefinitely
+**증상**: 하나의 Pod가 락을 계속 보유합니다.
 
-**Solutions**:
-- Lock has automatic TTL (default 60 seconds)
-- Check pod logs for lock release messages
-- Verify Redis TTL settings
+**해결 방법**:
+- 락에는 자동 TTL이 있습니다(기본 60초).
+- Pod 로그에서 락 해제 메시지를 확인합니다.
+- Redis TTL 설정을 확인합니다.
 
-### Debug Mode
+### 디버그 모드
 
-Enable debug logging to see detailed coordination:
+상세 조율 과정을 보려면 디버그 로깅을 활성화합니다.
 
 ```yaml
 general_settings:
   set_verbose: true
 ```
 
-## Performance Impact
+## 성능 영향
 
-### Benefits
+### 이점
 
-- **Reduced API calls**: Only one pod runs health checks per interval
-- **Lower costs**: Especially significant for expensive models
-- **Better resource utilization**: Less redundant work across pods
-- **Cleaner monitoring**: Reduced noise in logs and metrics
+- **API 호출 감소**: 각 interval마다 하나의 Pod만 health check를 실행합니다.
+- **비용 절감**: 비싼 모델에서 특히 효과가 큽니다.
+- **리소스 활용 개선**: Pod 간 중복 작업이 줄어듭니다.
+- **모니터링 정리**: 로그와 메트릭의 노이즈가 줄어듭니다.
 
-### Overhead
+### 오버헤드
 
-- **Redis operations**: Minimal overhead for lock/cache operations
-- **Network latency**: Small delay for Redis communication
-- **Memory usage**: Negligible additional memory usage
+- **Redis 작업**: 락/캐시 작업에 대한 오버헤드는 작습니다.
+- **네트워크 지연**: Redis 통신에 따른 짧은 지연이 있습니다.
+- **메모리 사용량**: 추가 메모리 사용량은 무시할 수 있는 수준입니다.
 
-## Best Practices
+## 권장 사항
 
-### 1. Redis Configuration
+### 1. Redis 설정
 
-- Use Redis with persistence enabled
-- Configure appropriate memory limits
-- Set up Redis monitoring and alerts
+- persistence를 활성화한 Redis를 사용합니다.
+- 적절한 메모리 제한을 구성합니다.
+- Redis 모니터링과 알림을 설정합니다.
 
-### 2. TTL Settings
+### 2. TTL 설정
 
-- Set `health_check_interval` to your desired check frequency
-- Use default TTL values unless you have specific requirements
-- Consider model-specific timeouts for expensive models
+- 원하는 확인 주기에 맞게 `health_check_interval`을 설정합니다.
+- 특별한 요구사항이 없다면 기본 TTL 값을 사용합니다.
+- 비싼 모델에는 모델별 timeout을 고려합니다.
 
-### 3. Monitoring
+### 3. 모니터링
 
-- Monitor shared health check status endpoint
-- Set up alerts for Redis connectivity issues
-- Track health check costs and frequency
+- 공유 health check 상태 엔드포인트를 모니터링합니다.
+- Redis 연결 문제에 대한 알림을 설정합니다.
+- Health check 비용과 빈도를 추적합니다.
 
-### 4. Scaling
+### 4. 확장
 
-- Feature works with any number of pods
-- More pods = better coordination benefits
-- Consider Redis cluster for high availability
+- 이 기능은 Pod 수와 관계없이 동작합니다.
+- Pod가 많을수록 조율 효과가 커집니다.
+- 고가용성이 필요하면 Redis cluster를 고려합니다.
 
-## Example Configuration
+## 예제 설정
 
-### Complete Example
+### 전체 예제
 
 ```yaml
 # proxy_config.yaml
@@ -255,7 +255,7 @@ litellm_settings:
     ssl: true
 ```
 
-### Kubernetes Example
+### Kubernetes 예제
 
 ```yaml
 # deployment.yaml
@@ -282,19 +282,19 @@ spec:
               key: password
 ```
 
-## Migration
+## 마이그레이션
 
-### From Independent Health Checks
+### 독립 Health Check에서 전환
 
-1. **Enable Redis**: Ensure Redis is configured and accessible
-2. **Enable Background Health Checks**: Set `background_health_checks: true`
-3. **Enable Shared Health Check**: Set `use_shared_health_check: true`
-4. **Deploy**: Update your proxy configuration
-5. **Monitor**: Check `/health/shared-status` endpoint
+1. **Redis 활성화**: Redis가 구성되어 있고 접근 가능한지 확인합니다.
+2. **백그라운드 health check 활성화**: `background_health_checks: true`를 설정합니다.
+3. **Shared Health Check 활성화**: `use_shared_health_check: true`를 설정합니다.
+4. **배포**: 프록시 구성을 업데이트합니다.
+5. **모니터링**: `/health/shared-status` 엔드포인트를 확인합니다.
 
-### Rollback
+### 롤백
 
-To disable shared health check:
+공유 health check를 비활성화하려면:
 
 ```yaml
 general_settings:
@@ -302,9 +302,9 @@ general_settings:
   # background_health_checks can remain true for independent checks
 ```
 
-## Related Features
+## 관련 기능
 
-- [Background Health Checks](./health.md#background-health-checks)
-- [Redis Caching](./caching.md)
-- [High Availability Setup](./db_deadlocks.md)
-- [Health Check Endpoints](./health.md#health-endpoints)
+- [백그라운드 Health Check](./health.md#background-health-checks)
+- [Redis 캐싱](./caching.md)
+- [High Availability 설정](./db_deadlocks.md)
+- [Health Check 엔드포인트](./health.md#health-endpoints)

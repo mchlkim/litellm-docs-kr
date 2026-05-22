@@ -1,6 +1,6 @@
-# Using Text Completion Format - with Completion()
+# Text Completion 형식 사용 - Completion()과 함께 {#using-text-completion-format-with-completion}
 
-If your prefer interfacing with the OpenAI Text Completion format this tutorial covers how to use LiteLLM in this format
+OpenAI Text Completion 형식으로 연동하려는 경우, 이 tutorial은 해당 형식으로 LiteLLM을 사용하는 방법을 설명합니다.
 ```python
 response = openai.Completion.create(
     model="text-davinci-003",
@@ -9,8 +9,8 @@ response = openai.Completion.create(
     max_tokens=100)
 ```
 
-## Using LiteLLM in the Text Completion format
-### With gpt-3.5-turbo
+## Text Completion 형식에서 LiteLLM 사용 {#using-litellm-in-the-text-completion-format}
+### gpt-3.5-turbo 사용 {#with-gpt-35-turbo}
 ```python
 from litellm import text_completion
 response = text_completion(
@@ -20,7 +20,7 @@ response = text_completion(
     max_tokens=100)
 ```
 
-### With text-davinci-003
+### text-davinci-003 사용 {#with-text-davinci-003}
 ```python
 response = text_completion(
     model="text-davinci-003",
@@ -29,7 +29,7 @@ response = text_completion(
     max_tokens=100)
 ```
 
-### With llama2
+### llama2 사용 {#with-llama2}
 ```python
 response = text_completion(
     model="togethercomputer/llama-2-70b-chat",

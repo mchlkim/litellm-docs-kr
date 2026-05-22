@@ -6,17 +6,17 @@ import TabItem from '@theme/TabItem';
 
 :::tip
 
-**We support ALL Sambanova models, just set `model=sambanova/<any-model-on-sambanova>` as a prefix when sending litellm requests. For the complete supported model list, visit https://docs.sambanova.ai/cloud/docs/get-started/supported-models **
+**모든 SambaNova 모델을 지원합니다. `litellm` 요청을 보낼 때 `model=sambanova/<any-model-on-sambanova>`를 접두사로 설정하기만 하면 됩니다. 지원되는 전체 모델 목록은 https://docs.sambanova.ai/cloud/docs/get-started/supported-models 에서 확인하세요.**
 
 :::
 
-## API Key
+## API 키 {#api-key}
 ```python
 # env variable
 os.environ['SAMBANOVA_API_KEY']
 ```
 
-## Sample Usage
+## 샘플 사용법 {#sample-usage}
 ```python
 from litellm import completion
 import os
@@ -39,7 +39,7 @@ response = completion(
 print(response)
 ```
 
-## Sample Usage - Streaming
+## 샘플 사용법 - Streaming {#sample-usage---streaming}
 ```python
 from litellm import completion
 import os
@@ -69,11 +69,11 @@ for chunk in response:
 ```
 
 
-## Usage with LiteLLM Proxy Server
+## LiteLLM Proxy Server 사용법 {#usage-with-litellm-proxy-server}
 
-Here's how to call a Sambanova model with the LiteLLM Proxy Server
+`LiteLLM Proxy Server`로 SambaNova 모델을 호출하는 방법은 다음과 같습니다.
 
-1. Modify the config.yaml 
+1. `config.yaml`을 수정합니다.
 
   ```yaml
   model_list:
@@ -84,13 +84,13 @@ Here's how to call a Sambanova model with the LiteLLM Proxy Server
   ```
 
 
-2. Start the proxy 
+2. 프록시를 시작합니다.
 
   ```bash
   $ litellm --config /path/to/config.yaml
   ```
 
-3. Send Request to LiteLLM Proxy Server
+3. `LiteLLM Proxy Server`로 요청을 보냅니다.
 
   <Tabs>
 
@@ -137,7 +137,7 @@ Here's how to call a Sambanova model with the LiteLLM Proxy Server
 
   </Tabs>
 
-## SambaNova - Tool Calling
+## SambaNova - 도구 호출
 
 ```python
 import litellm
@@ -220,7 +220,7 @@ if tool_calls:
     print("second response\n", second_response)
 ```
 
-## SambaNova - Vision Example
+## SambaNova - Vision 예제 {#sambanova---vision-example}
 
 ```python
 import litellm
@@ -264,7 +264,7 @@ print(response.choices[0].message.content)
 ```
 
 
-## SambaNova - Structured Output
+## SambaNova - 구조화된 출력 {#sambanova---structured-output}
 
 ```python
 import litellm
@@ -308,7 +308,7 @@ response = litellm.completion(
 print(response.choices[0].message.content))
 ```
 
-## SambaNova - Embeddings
+## SambaNova - 임베딩 {#sambanova---embeddings}
 
 ```python
 import litellm

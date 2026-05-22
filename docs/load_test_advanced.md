@@ -1,36 +1,36 @@
 import Image from '@theme/IdealImage';
 
 
-# LiteLLM Proxy - 1K RPS Load test on locust 
+# LiteLLM Proxy - Locust에서 1K RPS 부하 테스트 {#litellm-proxy-load-test}
 
-Tutorial on how to get to 1K+ RPS with LiteLLM Proxy on locust
+Locust에서 LiteLLM Proxy로 1K+ RPS를 달성하는 방법을 안내합니다.
 
 
-## Pre-Testing Checklist
-- [ ] Ensure you're using the **latest `-stable` version** of litellm
-    - [Github releases](https://github.com/BerriAI/litellm/releases)
-    - [litellm docker containers](https://github.com/BerriAI/litellm/pkgs/container/litellm)
-    - [litellm database docker container](https://github.com/BerriAI/litellm/pkgs/container/litellm-database)
-- [ ] Ensure you're following **ALL** [best practices for production](./proxy/prod.md)
-- [ ] Locust - Ensure you're Locust instance can create 1K+ requests per second
-    - 👉 You can use our **[maintained locust instance here](https://locust-load-tester-production.up.railway.app/)**
-    - If you're self hosting locust
-        - [here's the spec used for our locust machine](#machine-specifications-for-running-locust)
-        - [here  is the locustfile.py used for our tests](#locust-file-used-for-testing)
-- [ ] Use this [**machine specification for running litellm proxy**](#machine-specifications-for-running-litellm-proxy)
-- [ ] **Enterprise LiteLLM** - Use `prometheus` as a callback in your `proxy_config.yaml` to get metrics on your load test
-    Set `litellm_settings.callbacks` to monitor success/failures/all types of errors
+## 테스트 전 체크리스트 {#pre-testing-checklist}
+- [ ] litellm의 **최신 `-stable` 버전**을 사용 중인지 확인하세요.
+    - [GitHub 릴리스](https://github.com/BerriAI/litellm/releases)
+    - [litellm Docker 컨테이너](https://github.com/BerriAI/litellm/pkgs/container/litellm)
+    - [litellm 데이터베이스 Docker 컨테이너](https://github.com/BerriAI/litellm/pkgs/container/litellm-database)
+- [ ] [프로덕션 모범 사례](./proxy/prod.md)를 **모두** 따르고 있는지 확인하세요.
+- [ ] Locust - Locust 인스턴스가 초당 1K+ 요청을 생성할 수 있는지 확인하세요.
+    - 👉 **[여기에서 제공되는 관리형 locust 인스턴스](https://locust-load-tester-production.up.railway.app/)**를 사용할 수 있습니다.
+    - locust를 직접 호스팅하는 경우
+        - [locust 머신에 사용한 사양은 여기](#locust-machine-specs)에서 확인할 수 있습니다.
+        - [테스트에 사용한 locustfile.py는 여기](#locust-file)에서 확인할 수 있습니다.
+- [ ] [**litellm proxy 실행용 머신 사양**](#proxy-machine-specs)을 사용하세요.
+- [ ] **엔터프라이즈 LiteLLM** - 부하 테스트 메트릭을 얻으려면 `proxy_config.yaml`에서 `prometheus`를 콜백으로 사용하세요.
+    성공/실패 및 모든 오류 유형을 모니터링하려면 `litellm_settings.callbacks`를 설정하세요.
     ```yaml
     litellm_settings:
         callbacks: ["prometheus"] # Enterprise LiteLLM Only - use prometheus to get metrics on your load test
     ```
 
-**Use this config for testing:**
+**테스트에는 이 설정을 사용하세요.**
 
-**Note:**  we're currently migrating to aiohttp which has 10x higher throughput. We recommend using the `openai/` provider for load testing.
+**참고:** 현재 처리량이 10배 더 높은 `aiohttp`로 마이그레이션 중입니다. 부하 테스트에는 `openai/` 프로바이더를 사용하는 것을 권장합니다.
 
-:::tip Setting Up a Fake OpenAI Endpoint
-You can use our hosted fake endpoint or self-host your own using [github.com/BerriAI/example_openai_endpoint](https://github.com/BerriAI/example_openai_endpoint).
+:::tip Fake OpenAI Endpoint 설정
+[github.com/BerriAI/example_openai_endpoint](https://github.com/BerriAI/example_openai_endpoint)를 사용해 직접 호스팅하거나, 제공되는 호스팅 테스트 엔드포인트를 사용할 수 있습니다.
 :::
 
 ```yaml
@@ -43,20 +43,20 @@ model_list:
 ```
 
 
-## Load Test - Fake OpenAI Endpoint
+## 부하 테스트 - Fake OpenAI Endpoint {#load-test---fake-openai-endpoint}
 
-### Expected Performance
+### 예상 성능 {#expected-performance}
 
-| Metric | Value |
+| 메트릭 | 값 |
 |--------|-------|
-| Requests per Second | 1174+ |
-| Median Response Time | `96ms` |
-| Average Response Time | `142.18ms` |
+| 초당 요청 수 | 1174+ |
+| 중앙값 응답 시간 | `96ms` |
+| 평균 응답 시간 | `142.18ms` |
 
-### Run Test
+### 테스트 실행 {#run-test}
 
-1. Add `fake-openai-endpoint` to your proxy config.yaml and start your litellm proxy
-litellm provides a hosted `fake-openai-endpoint` you can load test against
+1. Proxy `config.yaml`에 `fake-openai-endpoint`를 추가하고 LiteLLM Proxy를 시작합니다.
+LiteLLM은 부하 테스트에 사용할 수 있는 호스팅 `fake-openai-endpoint`를 제공합니다.
 
 ```yaml
 model_list:
@@ -72,48 +72,48 @@ litellm_settings:
 
 2. `uv add locust`
 
-3. Create a file called `locustfile.py` on your local machine. Copy the contents from the litellm load test located [here](https://github.com/BerriAI/litellm/blob/main/.github/workflows/locustfile.py)
+3. 로컬 머신에 `locustfile.py`라는 파일을 만듭니다. [여기](https://github.com/BerriAI/litellm/blob/main/.github/workflows/locustfile.py)에 있는 litellm 부하 테스트 내용을 복사하세요.
 
-4. Start locust
-  Run `locust` in the same directory as your `locustfile.py` from step 2
+4. Locust를 시작합니다.
+  2단계의 `locustfile.py`와 같은 디렉터리에서 `locust`를 실행하세요.
 
   ```shell
   locust -f locustfile.py --processes 4
   ```
 
-5. Run Load test on locust
+5. Locust에서 부하 테스트를 실행합니다.
 
-  Head to the locust UI on http://0.0.0.0:8089
+  `http://0.0.0.0:8089`의 Locust UI로 이동합니다.
 
-  Set **Users=1000, Ramp Up Users=1000**, Host=Base URL of your LiteLLM Proxy
+  **사용자 수=1000, 증가 사용자 수=1000**으로 설정하고, Host에는 LiteLLM Proxy의 기본 URL을 입력합니다.
 
-6. Expected results 
+6. 예상 결과
 
   <Image img={require('../img/locust_load_test1.png')} />
 
-## Load test - Endpoints with Rate Limits
+## 부하 테스트 - 속도 제한이 있는 엔드포인트 {#rate-limited-load-test}
 
-Run a load test on 2 LLM deployments each with 10K RPM Quota. Expect to see ~20K RPM
+각각 10K RPM 할당량이 있는 LLM `deployment` 2개에 대해 부하 테스트를 실행합니다. 약 20K RPM이 표시될 것으로 예상합니다.
 
-### Expected Performance
+### 예상 성능 {#expected-performance-1}
 
-- We expect to see 20,000+ successful responses in 1 minute
-- The remaining requests **fail because the endpoint exceeds it's 10K RPM quota limit - from the LLM API provider**
+- 1분 동안 20,000+개의 성공 응답이 표시될 것으로 예상합니다.
+- 나머지 요청은 **엔드포인트가 LLM API 프로바이더의 10K RPM 할당량 제한을 초과하기 때문에 실패합니다.**
 
-| Metric | Value |
+| 메트릭 | 값 |
 |--------|-------|
-| Successful Responses in 1 minute | 20,000+ |
-| Requests per Second | ~1170+ |
-| Median Response Time | `70ms` |
-| Average Response Time | `640.18ms` |
+| 1분 동안의 성공 응답 | 20,000+ |
+| 초당 요청 수 | ~1170+ |
+| 중앙값 응답 시간 | `70ms` |
+| 평균 응답 시간 | `640.18ms` |
 
-### Run Test
+### 테스트 실행 {#run-test-1}
 
-1. Add 2 `gemini-vision` deployments on your config.yaml. Each deployment can handle 10K RPM. (We setup a fake endpoint with a rate limit of 1000 RPM on the `/v1/projects/bad-adroit-crow` route below )
+1. `config.yaml`에 `gemini-vision` `deployment` 2개를 추가합니다. 각 `deployment`는 10K RPM을 처리할 수 있습니다. (아래 `/v1/projects/bad-adroit-crow` 경로에 1000 RPM 속도 제한이 있는 테스트 엔드포인트를 설정했습니다.)
 
 :::info
 
-All requests with `model="gemini-vision"` will be load balanced equally across the 2 deployments.
+`model="gemini-vision"`이 포함된 모든 요청은 2개 `deployment`에 균등하게 부하 분산됩니다.
 
 :::
 
@@ -140,60 +140,60 @@ litellm_settings:
 
 2. `uv add locust`
 
-3. Create a file called `locustfile.py` on your local machine. Copy the contents from the litellm load test located [here](https://github.com/BerriAI/litellm/blob/main/.github/workflows/locustfile.py)
+3. 로컬 머신에 `locustfile.py`라는 파일을 만듭니다. [여기](https://github.com/BerriAI/litellm/blob/main/.github/workflows/locustfile.py)에 있는 litellm 부하 테스트 내용을 복사하세요.
 
-4. Start locust
-  Run `locust` in the same directory as your `locustfile.py` from step 2
+4. Locust를 시작합니다.
+  2단계의 `locustfile.py`와 같은 디렉터리에서 `locust`를 실행하세요.
 
   ```shell
   locust -f locustfile.py --processes 4 -t 60
   ```
 
-5. Run Load test on locust
+5. Locust에서 부하 테스트를 실행합니다.
 
-  Head to the locust UI on http://0.0.0.0:8089 and use the following settings
+  `http://0.0.0.0:8089`의 Locust UI로 이동하고 다음 설정을 사용합니다.
 
   <Image img={require('../img/locust_load_test2_setup.png')} />
 
-6. Expected results
-    - Successful responses in 1 minute = 19,800 = (69415 - 49615)
-    - Requests per second = 1170
-    - Median response time = 70ms
-    - Average response time = 640ms
+6. 예상 결과
+    - 1분 동안의 성공 응답 = 19,800 = (69415 - 49615)
+    - 초당 요청 수 = 1170
+    - 중앙값 응답 시간 = 70ms
+    - 평균 응답 시간 = 640ms
 
   <Image img={require('../img/locust_load_test2.png')} />
 
 
-## Prometheus Metrics for debugging load tests
+## 부하 테스트 디버깅용 Prometheus 메트릭 {#prometheus-debug-metrics}
 
-Use the following [prometheus metrics to debug your load tests / failures](./proxy/prometheus)
+부하 테스트와 실패를 디버깅하려면 다음 [Prometheus 메트릭](./proxy/prometheus)을 사용하세요.
 
-| Metric Name          | Description                          |
+| 메트릭 이름          | 설명                          |
 |----------------------|--------------------------------------|
-| `litellm_deployment_failure_responses`              | Total number of failed LLM API calls for a specific LLM deployment. Labels: `"requested_model", "litellm_model_name", "model_id", "api_base", "api_provider", "hashed_api_key", "api_key_alias", "team", "team_alias", "exception_status", "exception_class"` |
-| `litellm_deployment_cooled_down`             | Number of times a deployment has been cooled down by LiteLLM load balancing logic. Labels: `"litellm_model_name", "model_id", "api_base", "api_provider", "exception_status"` |
+| `litellm_deployment_failure_responses`              | 특정 LLM `deployment`에서 실패한 LLM API 호출의 총 개수입니다. 레이블: `"requested_model", "litellm_model_name", "model_id", "api_base", "api_provider", "hashed_api_key", "api_key_alias", "team", "team_alias", "exception_status", "exception_class"` |
+| `litellm_deployment_cooled_down`             | LiteLLM 부하 분산 로직에 의해 `deployment`가 대기 상태로 전환된 횟수입니다. 레이블: `"litellm_model_name", "model_id", "api_base", "api_provider", "exception_status"` |
 
 
 
-## Machine Specifications for Running Locust
+## Locust 실행용 머신 사양 {#locust-machine-specs}
 
-| Metric | Value |
+| 메트릭 | 값 |
 |--------|-------|
 | `locust --processes 4`  | 4|
-| `vCPUs` on Load Testing Machine | 2.0 vCPUs |
-| `Memory` on Load Testing Machine | 450 MB |
-| `Replicas` of Load Testing Machine | 1 |
+| 부하 테스트 머신의 `vCPUs` | 2.0 vCPUs |
+| 부하 테스트 머신의 `Memory` | 450 MB |
+| 부하 테스트 머신의 `Replicas` | 1 |
 
-## Machine Specifications for Running LiteLLM Proxy
+## LiteLLM Proxy 실행용 머신 사양 {#proxy-machine-specs}
 
-👉 **Number of Replicas of LiteLLM Proxy=4** for getting 1K+ RPS
+👉 1K+ RPS를 달성하려면 **LiteLLM Proxy의 Replicas 수=4**로 설정하세요.
 
-| Service | Spec | CPUs | Memory | Architecture | Version|
+| 서비스 | 사양 | CPU | 메모리 | 아키텍처 | 버전 |
 | --- | --- | --- | --- | --- | --- | 
-| Server | `t2.large`. | `2vCPUs` | `8GB` | `x86` |
+| 서버 | `t2.large`. | `2vCPUs` | `8GB` | `x86` |
 
 
-## Locust file used for testing 
+## 테스트에 사용한 Locust 파일 {#locust-file}
 
 ```python
 import os

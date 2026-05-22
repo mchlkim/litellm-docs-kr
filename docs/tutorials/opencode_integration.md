@@ -2,35 +2,35 @@ import Image from '@theme/IdealImage';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# OpenCode Quickstart
+# OpenCode 빠른 시작
 
-This tutorial shows how to connect OpenCode to your existing LiteLLM instance and switch between models.
+이 튜토리얼에서는 OpenCode를 기존 LiteLLM 인스턴스에 연결하고 모델을 전환하는 방법을 설명합니다.
 
 :::info 
 
-This integration allows you to use any LiteLLM supported model through OpenCode with centralized authentication, usage tracking, and cost controls.
+이 연동을 사용하면 중앙 집중식 인증, 사용량 추적, 비용 제어를 유지하면서 OpenCode에서 LiteLLM이 지원하는 모든 모델을 사용할 수 있습니다.
 
 :::
 
 <br />
 
-### Video Walkthrough
+### 동영상 가이드 {#video-walkthrough}
 
 <iframe width="840" height="500" src="https://www.loom.com/embed/00791498f1d84e4ba6d7476bd2e1442f" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
 
-## Prerequisites
+## 사전 준비
 
-- LiteLLM already configured and running (e.g., http://localhost:4000)
-- LiteLLM API key
+- LiteLLM이 이미 설정되어 실행 중이어야 합니다(예: http://localhost:4000).
+- LiteLLM API 키
 
-## Installation
+## 설치
 
-### Step 1: Install OpenCode
+### 1단계: OpenCode 설치 {#step-1-install-opencode}
 
-Choose your preferred installation method:
+원하는 설치 방법을 선택하세요.
 
 <Tabs>
-<TabItem value="curl" label="One-line install (recommended)">
+<TabItem value="curl" label="한 줄 설치(권장)">
 
 ```bash
 curl -fsSL https://opencode.ai/install | bash
@@ -53,22 +53,22 @@ brew install sst/tap/opencode
 </TabItem>
 </Tabs>
 
-Verify installation:
+설치를 확인합니다.
 
 ```bash
 opencode --version
 ```
 
-### Step 2: Configure LiteLLM Provider
+### 2단계: LiteLLM 프로바이더 설정 {#step-2-configure-litellm-provider}
 
-Create your OpenCode configuration file. You can place this in different locations depending on your needs:
+OpenCode 설정 파일을 만듭니다. 필요에 따라 여러 위치에 둘 수 있습니다.
 
-**Configuration locations:**
-- **Global**: `~/.config/opencode/opencode.json` (applies to all projects)
-- **Project**: `opencode.json` in your project root (project-specific settings)
-- **Custom**: Set `OPENCODE_CONFIG` environment variable
+**설정 위치:**
+- **전역**: `~/.config/opencode/opencode.json`(모든 프로젝트에 적용)
+- **프로젝트**: 프로젝트 루트의 `opencode.json`(프로젝트별 설정)
+- **사용자 지정**: `OPENCODE_CONFIG` 환경 변수 설정
 
-Create `~/.config/opencode/opencode.json` (global config):
+`~/.config/opencode/opencode.json`(전역 설정)을 만듭니다.
 
 ```json
 {
@@ -97,42 +97,42 @@ Create `~/.config/opencode/opencode.json` (global config):
 ```
 
 :::tip
-The keys in the "models" object (e.g., "gpt-4", "claude-3-5-sonnet-20241022") should match the `model_name` values from your LiteLLM configuration. The "name" field provides a friendly display name that will appear as an alias in OpenCode.
+"models" 객체의 키(예: "gpt-4", "claude-3-5-sonnet-20241022")는 LiteLLM 설정의 `model_name` 값과 일치해야 합니다. "name" 필드는 OpenCode에서 별칭으로 표시될 읽기 쉬운 표시 이름을 제공합니다.
 :::
 
-### Step 3: Connect to LiteLLM Provider
+### 3단계: LiteLLM 프로바이더에 연결 {#step-3-connect-to-litellm-provider}
 
-Launch OpenCode:
+OpenCode를 실행합니다.
 
 ```bash
 opencode
 ```
 
-Add your API key:
+API 키를 추가합니다.
 
 ```bash
 /connect
 ```
 
-Then:
-- **Enter provider name**: `LiteLLM` (must match the "name" field in your config)
-- **Enter your LiteLLM API key**: Your LiteLLM master key or virtual key
+그런 다음 아래 값을 입력합니다.
+- **프로바이더 이름 입력**: `LiteLLM`(설정의 "name" 필드와 일치해야 함)
+- **LiteLLM API 키 입력**: LiteLLM 마스터 키 또는 가상 키
 
-### Step 4: Switch Between Models
+### 4단계: 모델 전환 {#step-4-switch-between-models}
 
-In OpenCode, run:
+OpenCode에서 다음을 실행합니다.
 
 ```bash
 /models
 ```
 
-Select any model from your LiteLLM configuration. OpenCode will route all requests through your LiteLLM instance.
+LiteLLM 설정에 있는 모델을 선택합니다. OpenCode는 모든 요청을 LiteLLM 인스턴스를 통해 라우팅합니다.
 
-## Advanced Configuration
+## 고급 설정 {#advanced-settings}
 
-### Model Parameters
+### 모델 파라미터 {#model-parameters}
 
-You can customize model parameters like context limits:
+컨텍스트 제한 같은 모델 파라미터를 사용자 지정할 수 있습니다.
 
 ```json
 {
@@ -165,12 +165,12 @@ You can customize model parameters like context limits:
 }
 ```
 
-### Multi-Provider Setup
+### 다중 프로바이더 설정 {#multi-provider-configuration}
 
-You can configure multiple LiteLLM instances or mix with other providers:
+여러 LiteLLM 인스턴스를 설정하거나 다른 프로바이더와 함께 사용할 수 있습니다.
 
 <Tabs>
-<TabItem value="multi-litellm" label="Multiple LiteLLM Instances">
+<TabItem value="multi-litellm" label="여러 LiteLLM 인스턴스">
 
 ```json
 {
@@ -205,7 +205,7 @@ You can configure multiple LiteLLM instances or mix with other providers:
 ```
 
 </TabItem>
-<TabItem value="mixed-providers" label="Mixed Providers">
+<TabItem value="mixed-providers" label="혼합 프로바이더">
 
 ```json
 {
@@ -242,9 +242,9 @@ You can configure multiple LiteLLM instances or mix with other providers:
 </TabItem>
 </Tabs>
 
-## Example LiteLLM Configuration
+## 예제 LiteLLM 설정
 
-Here's an example LiteLLM `config.yaml` that works well with OpenCode:
+다음은 OpenCode와 잘 동작하는 LiteLLM `config.yaml` 예시입니다.
 
 ```yaml
 model_list:
@@ -272,9 +272,9 @@ model_list:
       api_key: os.environ/DEEPSEEK_API_KEY
 ```
 
-### Dropping OpenCode-specific parameters
+### OpenCode 전용 파라미터 제거 {#dropping-opencode-specific-parameters}
 
-OpenCode sends a `reasoningSummary` parameter with reasoning-capable models such as `gpt-5`. This parameter is not supported by the Chat Completions API and will cause errors. Add `additional_drop_params` to every model entry in your `model_list` that will receive requests from OpenCode with reasoning enabled:
+OpenCode는 `gpt-5` 같은 추론 지원 모델에 `reasoningSummary` 파라미터를 함께 전송합니다. 이 파라미터는 Chat Completions API에서 지원되지 않으므로 오류가 발생합니다. 추론이 활성화된 OpenCode 요청을 받을 `model_list`의 모든 모델 항목에 `additional_drop_params`를 추가하세요.
 
 ```yaml
 model_list:
@@ -285,30 +285,30 @@ model_list:
       additional_drop_params: ["reasoningSummary"]
 ```
 
-## Troubleshooting
+## 문제 해결
 
-**OpenCode not connecting:**
-- Verify your LiteLLM proxy is running: `curl http://localhost:4000/health`
-- Check that the `baseURL` in your OpenCode config matches your LiteLLM instance
-- Ensure the provider name in `/connect` matches exactly with your config
+**OpenCode가 연결되지 않음:**
+- LiteLLM 프록시가 실행 중인지 확인합니다: `curl http://localhost:4000/health`
+- OpenCode 설정의 `baseURL`이 LiteLLM 인스턴스와 일치하는지 확인합니다.
+- `/connect`의 프로바이더 이름이 설정과 정확히 일치하는지 확인합니다.
 
-**Authentication errors:**
-- Verify your LiteLLM API key is correct
-- Check that your LiteLLM instance has authentication properly configured
-- Ensure your API key has access to the models you're trying to use
+**인증 오류:**
+- LiteLLM API 키가 올바른지 확인합니다.
+- LiteLLM 인스턴스에 인증이 올바르게 설정되어 있는지 확인합니다.
+- API 키가 사용하려는 모델에 접근할 수 있는지 확인합니다.
 
-**Model not found:**
-- Ensure the model names in OpenCode config match your LiteLLM `model_name` values
-- Check LiteLLM logs for detailed error messages
-- Verify the models are properly configured in your LiteLLM instance
+**모델을 찾을 수 없음:**
+- OpenCode 설정의 모델 이름이 LiteLLM `model_name` 값과 일치하는지 확인합니다.
+- 자세한 오류 메시지는 LiteLLM 로그에서 확인합니다.
+- LiteLLM 인스턴스에 모델이 올바르게 설정되어 있는지 확인합니다.
 
-**Configuration not loading:**
-- Check the config file path and permissions
-- Validate JSON syntax using a JSON validator
-- Ensure the `$schema` URL is accessible
+**설정을 불러오지 못함:**
+- 설정 파일 경로와 권한을 확인합니다.
+- JSON 검증기를 사용해 JSON 문법을 검증합니다.
+- `$schema` URL에 접근할 수 있는지 확인합니다.
 
-**`Unknown parameter: 'reasoningSummary'` error:**
-- OpenCode sends a `reasoningSummary` parameter that is not supported by the Chat Completions API. Add `additional_drop_params: ["reasoningSummary"]` to each affected model entry in your `litellm_params`:
+**`Unknown parameter: 'reasoningSummary'` 오류:**
+- OpenCode는 Chat Completions API에서 지원되지 않는 `reasoningSummary` 파라미터를 전송합니다. 영향을 받는 각 모델 항목의 `litellm_params`에 `additional_drop_params: ["reasoningSummary"]`를 추가하세요.
   ```yaml
   - model_name: gpt-5
     litellm_params:
@@ -317,8 +317,8 @@ model_list:
       additional_drop_params: ["reasoningSummary"]
   ```
 
-## Tips
+## 팁 {#tips}
 
-- Add more models to the config as needed - they'll appear in `/models`
-- Use project-specific configs for different codebases with different model requirements
-- Monitor your LiteLLM proxy logs to see OpenCode requests in real-time
+- 필요에 따라 설정에 모델을 더 추가하세요. 추가한 모델은 `/models`에 표시됩니다.
+- 모델 요구사항이 서로 다른 코드베이스에는 프로젝트별 설정을 사용하세요.
+- LiteLLM 프록시 로그를 모니터링하면 OpenCode 요청을 실시간으로 확인할 수 있습니다.

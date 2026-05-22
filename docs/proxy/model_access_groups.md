@@ -2,19 +2,19 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Model Access Groups
+# 모델 액세스 그룹
 
-### Overview
+### 개요
 
-Group multiple models under a single name, then grant keys or teams access to the entire group. Add or remove models from a group without updating individual keys.
+여러 모델을 하나의 이름으로 묶은 다음, 키 또는 팀에 전체 그룹 접근 권한을 부여합니다. 개별 키를 업데이트하지 않고도 그룹에서 모델을 추가하거나 제거할 수 있습니다.
 
-Use cases:
-- Separate production and development models
-- Restrict expensive models to specific teams
-- Organize models by provider or capability
-- Control access to model families with wildcards (e.g., `openai/*`)
+사용 사례:
+- 프로덕션 모델과 개발 모델 분리
+- 비용이 높은 모델을 특정 팀으로 제한
+- 공급자 또는 기능별로 모델 구성
+- 와일드카드로 모델 제품군 접근 제어(예: `openai/*`)
 
-### How It Works
+### 작동 방식
 
 ```mermaid
 graph LR
@@ -35,9 +35,9 @@ graph LR
     style AG2 fill:#fff8e1
 ```
 
-**Key Concept:** Group models together → Attach group to key → Key gets access to all models in group
+**핵심 개념:** 모델을 그룹으로 묶기 → 그룹을 키에 연결하기 → 키가 그룹 내 모든 모델에 접근
 
-**Step 1. Assign model, access group in config.yaml**
+**1단계. config.yaml에서 모델과 액세스 그룹 할당**
 
 ```yaml showLineNumbers title="config.yaml"
 model_list:
@@ -58,9 +58,9 @@ model_list:
 
 <Tabs>
 
-<TabItem value="key" label="Key Access Groups">
+<TabItem value="key" label="키 액세스 그룹">
 
-**Create key with access group**
+**액세스 그룹이 포함된 키 생성**
 
 ```bash showLineNumbers title="Create Key with Access Group"
 curl --location 'http://localhost:4000/key/generate' \
@@ -70,10 +70,10 @@ curl --location 'http://localhost:4000/key/generate' \
 			"max_budget": 0,}'
 ```
 
-Test Key 
+키 테스트
 
 <Tabs>
-<TabItem label="Allowed Access" value = "allowed">
+<TabItem label="허용된 접근" value = "allowed">
 
 ```bash showLineNumbers title="Test Key - Allowed Access"
 curl -i http://localhost:4000/v1/chat/completions \
@@ -89,11 +89,11 @@ curl -i http://localhost:4000/v1/chat/completions \
 
 </TabItem>
 
-<TabItem label="Disallowed Access" value = "not-allowed">
+<TabItem label="허용되지 않는 접근" value = "not-allowed">
 
 :::info
 
-Expect this to fail since gpt-4o is not in the `beta-models` access group
+gpt-4o는 `beta-models` 액세스 그룹에 없으므로 실패해야 합니다.
 
 :::
 
@@ -115,9 +115,9 @@ curl -i http://localhost:4000/v1/chat/completions \
 
 </TabItem>
 
-<TabItem value="team" label="Team Access Groups">
+<TabItem value="team" label="팀 액세스 그룹">
 
-Create Team
+팀 생성
 
 ```bash showLineNumbers title="Create Team"
 curl --location 'http://localhost:4000/team/new' \
@@ -126,7 +126,7 @@ curl --location 'http://localhost:4000/team/new' \
 -d '{"models": ["beta-models"]}'
 ```
 
-Create Key for Team 
+팀용 키 생성
 
 ```bash showLineNumbers title="Create Key for Team"
 curl --location 'http://0.0.0.0:4000/key/generate' \
@@ -136,10 +136,10 @@ curl --location 'http://0.0.0.0:4000/key/generate' \
 ```
 
 
-Test Key
+키 테스트
 
 <Tabs>
-<TabItem label="Allowed Access" value = "allowed">
+<TabItem label="허용된 접근" value = "allowed">
 
 ```bash showLineNumbers title="Test Team Key - Allowed Access"
 curl -i http://localhost:4000/v1/chat/completions \
@@ -155,11 +155,11 @@ curl -i http://localhost:4000/v1/chat/completions \
 
 </TabItem>
 
-<TabItem label="Disallowed Access" value = "not-allowed">
+<TabItem label="허용되지 않는 접근" value = "not-allowed">
 
 :::info
 
-Expect this to fail since gpt-4o is not in the `beta-models` access group
+gpt-4o는 `beta-models` 액세스 그룹에 없으므로 실패해야 합니다.
 
 :::
 
@@ -184,23 +184,23 @@ curl -i http://localhost:4000/v1/chat/completions \
 </Tabs>
 
 
-### ✨ Control Access on Wildcard Models
+### ✨ 와일드카드 모델 접근 제어
 
-Control access to all models with a specific prefix (e.g. `openai/*`). 
+특정 접두사를 가진 모든 모델의 접근을 제어합니다(예: `openai/*`).
 
-Use this to also give users access to all models, except for a few that you don't want them to use (e.g. `openai/o1-*`). 
+사용자가 대부분의 모델에 접근할 수 있게 하되, 사용하지 못하게 하려는 일부 모델만 제외할 때도 사용할 수 있습니다(예: `openai/o1-*`).
 
 :::info
 
-Setting model access groups on wildcard models is an Enterprise feature. 
+와일드카드 모델에 모델 액세스 그룹을 설정하는 기능은 엔터프라이즈 기능입니다.
 
-See pricing [here](https://litellm.ai/#pricing)
+가격 정보는 [여기](https://litellm.ai/#pricing)를 참고하세요.
 
-Get a trial key [here](https://litellm.ai/#trial)
+평가판 키는 [여기](https://litellm.ai/#trial)에서 받을 수 있습니다.
 :::
 
 
-1. Setup config.yaml
+1. config.yaml 설정
 
 
 ```yaml showLineNumbers title="config.yaml - Wildcard Models"
@@ -219,7 +219,7 @@ model_list:
       access_groups: ["restricted-models"]
 ```
 
-2. Generate a key with access to `default-models`
+2. `default-models` 접근 권한이 있는 키 생성
 
 ```bash showLineNumbers title="Generate Key for Wildcard Access Group"
 curl -L -X POST 'http://0.0.0.0:4000/key/generate' \
@@ -230,10 +230,10 @@ curl -L -X POST 'http://0.0.0.0:4000/key/generate' \
 }'
 ``` 
 
-3. Test the key
+3. 키 테스트
 
 <Tabs>
-<TabItem label="Successful Request" value = "success">
+<TabItem label="성공한 요청" value = "success">
 
 ```bash showLineNumbers title="Test Wildcard Access - Allowed"
 curl -i http://localhost:4000/v1/chat/completions \
@@ -247,7 +247,7 @@ curl -i http://localhost:4000/v1/chat/completions \
   }'
 ```
 </TabItem>
-<TabItem value="bad-request" label="Rejected Request">
+<TabItem value="bad-request" label="거부된 요청">
 
 ```bash showLineNumbers title="Test Wildcard Access - Rejected"
 curl -i http://localhost:4000/v1/chat/completions \
@@ -264,27 +264,27 @@ curl -i http://localhost:4000/v1/chat/completions \
 </TabItem>
 </Tabs>
 
-## Managing Access Groups via API
+## API로 액세스 그룹 관리
 
-:::warning Database Models Only
-Access group management APIs only work with models stored in the database (added via `/model/new`). 
+:::warning 데이터베이스 모델만 지원
+액세스 그룹 관리 API는 데이터베이스에 저장된 모델(`/model/new`로 추가된 모델)에서만 작동합니다.
 
-Models defined in `config.yaml` cannot be managed through these APIs and must be configured directly in the config file.
+`config.yaml`에 정의된 모델은 이 API로 관리할 수 없으며, 설정 파일에서 직접 구성해야 합니다.
 :::
 
-Use the access group management endpoints to dynamically create, update, and delete access groups without restarting the proxy.
+프록시를 다시 시작하지 않고 액세스 그룹 관리 엔드포인트를 사용해 액세스 그룹을 동적으로 생성, 업데이트, 삭제할 수 있습니다.
 
-### Tutorial: Complete Access Group Workflow
+### 튜토리얼: 전체 액세스 그룹 워크플로
 
-This tutorial shows how to create an access group, view its details, attach it to a key, and update the models in the group.
+이 튜토리얼에서는 액세스 그룹을 만들고, 세부 정보를 확인하고, 키에 연결한 뒤, 그룹 내 모델을 업데이트하는 방법을 보여줍니다.
 
-**Prerequisites:**
-- Models must be added to the database first (not just in config.yaml)
-- You need your master key for authorization
+**사전 준비:**
+- 모델은 먼저 데이터베이스에 추가되어야 합니다(`config.yaml`에만 있으면 안 됨).
+- 권한 부여를 위해 마스터 키가 필요합니다.
 
-#### Step 1: Add Models to Database
+#### 1단계: 데이터베이스에 모델 추가
 
-First, add some models to the database:
+먼저 몇 가지 모델을 데이터베이스에 추가합니다.
 
 ```bash showLineNumbers title="Add Models to Database"
 # Add GPT-4 to database
@@ -312,9 +312,9 @@ curl -X POST 'http://localhost:4000/model/new' \
   }'
 ```
 
-#### Step 2: Create Access Group
+#### 2단계: 액세스 그룹 생성
 
-Create an access group containing multiple models:
+여러 모델을 포함하는 액세스 그룹을 생성합니다.
 
 ```bash showLineNumbers title="Create Access Group"
 curl -X POST 'http://localhost:4000/access_group/new' \
@@ -326,7 +326,7 @@ curl -X POST 'http://localhost:4000/access_group/new' \
   }'
 ```
 
-**Response:**
+**응답:**
 ```json showLineNumbers title="Response"
 {
   "access_group": "production-models",
@@ -335,16 +335,16 @@ curl -X POST 'http://localhost:4000/access_group/new' \
 }
 ```
 
-#### Step 3: View Access Group Info
+#### 3단계: 액세스 그룹 정보 보기
 
-Check the access group details:
+액세스 그룹 세부 정보를 확인합니다.
 
 ```bash showLineNumbers title="Get Access Group Info"
 curl -X GET 'http://localhost:4000/access_group/production-models/info' \
   -H 'Authorization: Bearer sk-1234'
 ```
 
-**Response:**
+**응답:**
 ```json showLineNumbers title="Response"
 {
   "access_group": "production-models",
@@ -353,9 +353,9 @@ curl -X GET 'http://localhost:4000/access_group/production-models/info' \
 }
 ```
 
-#### Step 4: Create Key with Access Group
+#### 4단계: 액세스 그룹이 포함된 키 생성
 
-Create an API key that can access all models in the group:
+그룹 내 모든 모델에 접근할 수 있는 API 키를 생성합니다.
 
 ```bash showLineNumbers title="Create Key with Access Group"
 curl -X POST 'http://localhost:4000/key/generate' \
@@ -367,7 +367,7 @@ curl -X POST 'http://localhost:4000/key/generate' \
   }'
 ```
 
-**Response:**
+**응답:**
 ```json showLineNumbers title="Response"
 {
   "key": "sk-...",
@@ -375,7 +375,7 @@ curl -X POST 'http://localhost:4000/key/generate' \
 }
 ```
 
-**Test the key:**
+**키 테스트:**
 ```bash showLineNumbers title="Test Key Access"
 # This succeeds - gpt-4 is in production-models
 curl -X POST 'http://localhost:4000/v1/chat/completions' \
@@ -396,9 +396,9 @@ curl -X POST 'http://localhost:4000/v1/chat/completions' \
   }'
 ```
 
-#### Step 5: Update Access Group
+#### 5단계: 액세스 그룹 업데이트
 
-Add or remove models from the access group:
+액세스 그룹에서 모델을 추가하거나 제거합니다.
 
 ```bash showLineNumbers title="Update Access Group"
 curl -X PUT 'http://localhost:4000/access_group/production-models/update' \
@@ -409,7 +409,7 @@ curl -X PUT 'http://localhost:4000/access_group/production-models/update' \
   }'
 ```
 
-**Response:**
+**응답:**
 ```json showLineNumbers title="Response"
 {
   "access_group": "production-models",
@@ -418,34 +418,34 @@ curl -X PUT 'http://localhost:4000/access_group/production-models/update' \
 }
 ```
 
-The API key from Step 4 now automatically has access to `gemini-pro` without any changes to the key itself.
-### API Reference - Access Group Management
+이제 4단계의 API 키는 키 자체를 변경하지 않아도 `gemini-pro`에 자동으로 접근할 수 있습니다.
+### API 레퍼런스 - 액세스 그룹 관리
 
-For complete API documentation including all endpoints, parameters, and response schemas, see the [Access Group Management API Reference](https://litellm-api.up.railway.app/#/model%20management/create_model_group_access_group_new_post).
+모든 엔드포인트, 파라미터, 응답 스키마를 포함한 전체 API 문서는 [액세스 그룹 관리 API 레퍼런스](https://litellm-api.up.railway.app/#/model%20management/create_model_group_access_group_new_post)를 참고하세요.
 
-## Managing Access Groups via UI
+## UI로 액세스 그룹 관리
 
-You can also manage access groups through the LiteLLM Admin UI.
+LiteLLM 관리자 UI에서도 액세스 그룹을 관리할 수 있습니다.
 
-### Step 1: Add Model to Access Group
+### 1단계: 액세스 그룹에 모델 추가
 
-When adding a model to the database, assign it to an access group using the "Model Access Group" field:
+데이터베이스에 모델을 추가할 때 "Model Access Group" 필드를 사용해 액세스 그룹에 할당합니다.
 
-![Add Model with Access Group](../../img/add_model_access.png)
+![액세스 그룹이 포함된 모델 추가](../../img/add_model_access.png)
 
-In this example, `gpt-4` is added to the `production-models` access group.
+이 예시에서는 `gpt-4`가 `production-models` 액세스 그룹에 추가됩니다.
 
-### Step 2: Create Key with Access Group
+### 2단계: 액세스 그룹이 포함된 키 생성
 
-When creating an API key, specify the access group in the "Models" field:
+API 키를 생성할 때 "모델" 필드에 액세스 그룹을 지정합니다.
 
-![Create Key with Access Group](../../img/add_model_key.png)
+![액세스 그룹이 포함된 키 생성](../../img/add_model_key.png)
 
-The key will have access to all models in the `production-models` group.
+이 키는 `production-models` 그룹의 모든 모델에 접근할 수 있습니다.
 
-### Step 3: Test the Key
+### 3단계: 키 테스트
 
-Use the generated key to make requests:
+생성된 키로 요청을 보냅니다.
 
 ```bash showLineNumbers title="Test Key with Access Group"
 # This succeeds - gpt-4 is in production-models
@@ -458,7 +458,7 @@ curl -X POST 'http://localhost:4000/v1/chat/completions' \
   }'
 ```
 
-**Response:**
+**응답:**
 ```json showLineNumbers title="Success Response"
 {
   "id": "chatcmpl-...",
@@ -478,7 +478,7 @@ curl -X POST 'http://localhost:4000/v1/chat/completions' \
 }
 ```
 
-If you try to access a model not in the access group, the request will be rejected:
+액세스 그룹에 없는 모델에 접근하려고 하면 요청이 거부됩니다.
 
 ```bash showLineNumbers title="Test Rejected Request"
 # This fails - gpt-4o is not in production-models
@@ -491,7 +491,7 @@ curl -X POST 'http://localhost:4000/v1/chat/completions' \
   }'
 ```
 
-**Response:**
+**응답:**
 ```json showLineNumbers title="Error Response"
 {
   "error": {
@@ -500,4 +500,3 @@ curl -X POST 'http://localhost:4000/v1/chat/completions' \
   }
 }
 ```
-

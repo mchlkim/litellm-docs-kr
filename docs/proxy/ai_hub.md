@@ -4,60 +4,60 @@ import TabItem from '@theme/TabItem';
 
 # AI Hub
 
-Share models and agents with your organization. Show developers what's available without needing to rebuild them.
+조직 안에서 모델과 에이전트를 공유하세요. 개발자가 다시 만들 필요 없이 사용할 수 있는 항목을 확인할 수 있습니다.
 
-This feature is **available in v1.74.3-stable and above**.
+이 기능은 **v1.74.3-stable 이상**에서 사용할 수 있습니다.
 
-## Overview
+## 개요
 
-Admin can select models/agents to expose on public AI hub → Users go to the public url and see what's available. 
+관리자는 공개 AI Hub에 노출할 모델/에이전트를 선택할 수 있습니다. 사용자는 공개 URL로 이동해 사용 가능한 항목을 확인합니다.
 
 <Image img={require('../../img/final_public_model_hub_view.png')} />  
 
-## Models
+## 모델
 
-### How to use
+### 사용 방법
 
-#### 1. Go to the Admin UI
+#### 1. 관리자 UI로 이동 {#1-go-to-the-admin-ui}
 
-Navigate to the Model Hub page in the Admin UI (`PROXY_BASE_URL/ui/?login=success&page=model-hub-table`)
+관리자 UI에서 Model Hub 페이지(`PROXY_BASE_URL/ui/?login=success&page=model-hub-table`)로 이동합니다.
 
 <Image img={require('../../img/model_hub_admin_view.png')} />  
 
-#### 2. Select the models you want to expose
+#### 2. 노출할 모델 선택 {#2-select-the-models-you-want-to-expose}
 
-Click on `Select Models to Make Public` and select the models you want to expose.
+`Select Model to Make Public`을 클릭하고 노출할 모델을 선택합니다.
 
 <Image img={require('../../img/make_public_modal.png')} />  
 
-#### 3. Confirm the changes
+#### 3. 변경 사항 확인 {#3-confirm-the-changes}
 
 <Image img={require('../../img/make_public_modal_confirmation.png')} />  
 
-#### 4. Success! 
+#### 4. 완료 {#4-success}
 
-Go to the public url (`PROXY_BASE_URL/ui/model_hub_table`) and see available models. 
+공개 URL(`PROXY_BASE_URL/ui/model_hub_table`)로 이동해 사용 가능한 모델을 확인합니다.
 
 <Image img={require('../../img/final_public_model_hub_view.png')} />  
 
-### API Endpoints
+### API 엔드포인트 {#api-endpoints}
 
-- `GET /public/model_hub` – returns the list of public model groups. Requires a valid user API key.
-- `GET /public/model_hub/info` – returns metadata (docs title, version, useful links) for the public model hub.
+- `GET /public/model_hub` - 공개 모델 그룹 목록을 반환합니다. 유효한 사용자 API 키가 필요합니다.
+- `GET /public/model_hub/info` - 공개 Model Hub의 메타데이터(문서 제목, 버전, 유용한 링크)를 반환합니다.
 
-## Agents
+## 에이전트 {#agents}
 
 :::info
-Agents are only available in v1.79.4-stable and above.
+에이전트는 v1.79.4-stable 이상에서만 사용할 수 있습니다.
 :::
 
-Share pre-built agents (A2A spec) across your organization. Users can discover and use agents without rebuilding them.
+미리 빌드한 에이전트(A2A spec)를 조직 전체에 공유하세요. 사용자는 에이전트를 다시 만들 필요 없이 찾아서 사용할 수 있습니다.
 
-[**Demo Video**](https://drive.google.com/file/d/1r-_Rtiu04RW5Fwwu3_eshtA1oZtC3_DH/view?usp=sharing)
+[**데모 영상**](https://drive.google.com/file/d/1r-_Rtiu04RW5Fwwu3_eshtA1oZtC3_DH/view?usp=sharing)
 
-### 1. Create an agent
+### 1. 에이전트 생성 {#1-create-an-agent}
 
-Create an agent that follows the [A2A spec](https://a2a.dev/).
+[A2A spec](https://a2a.dev/)을 따르는 에이전트를 생성합니다.
 
 <Tabs>
 <TabItem value="ui" label="UI">
@@ -96,7 +96,7 @@ curl -X POST 'http://0.0.0.0:4000/v1/agents' \
 }'
 ```
 
-**Expected Response**
+**예상 응답**
 
 ```json
 {
@@ -131,25 +131,25 @@ curl -X POST 'http://0.0.0.0:4000/v1/agents' \
 </TabItem>
 </Tabs>
 
-### 2. Make agent public
+### 2. 에이전트 공개 설정 {#2-make-agent-public}
 
-Make the agent discoverable on the AI Hub.
+AI Hub에서 에이전트를 찾을 수 있도록 공개 상태로 설정합니다.
 
 <Tabs>
 <TabItem value="ui" label="UI">
 
-Navigate to the Agents Tab on the AI Hub page 
+AI Hub 페이지의 Agents 탭으로 이동합니다.
 
 <Image img={require('../../img/ai_hub_with_agents.png')} />  
 
-Select the agents you want to make public and click on `Make Public` button.
+공개할 에이전트를 선택하고 `Make Public` 버튼을 클릭합니다.
 
 <Image img={require('../../img/make_agents_public.png')} />  
 
 </TabItem>
 <TabItem value="api" label="API">
 
-**Option 1: Make single agent public**
+**옵션 1: 단일 에이전트 공개**
 
 ```bash
 curl -X POST 'http://0.0.0.0:4000/v1/agents/123e4567-e89b-12d3-a456-426614174000/make_public' \
@@ -157,7 +157,7 @@ curl -X POST 'http://0.0.0.0:4000/v1/agents/123e4567-e89b-12d3-a456-426614174000
 --header 'Content-Type: application/json'
 ```
 
-**Option 2: Make multiple agents public**
+**옵션 2: 여러 에이전트 공개**
 
 
 ```bash
@@ -172,7 +172,7 @@ curl -X POST 'http://0.0.0.0:4000/v1/agents/make_public' \
 }'
 ```
 
-**Expected Response**
+**예상 응답**
 
 ```json
 {
@@ -190,9 +190,9 @@ curl -X POST 'http://0.0.0.0:4000/v1/agents/make_public' \
 
 
 
-### 3. View public agents
+### 3. 공개 에이전트 보기 {#3-view-public-agents}
 
-Users can now discover the agent via the public endpoint.
+이제 사용자는 공개 엔드포인트를 통해 에이전트를 찾을 수 있습니다.
 
 <Tabs>
 <TabItem value="ui" label="UI">
@@ -207,7 +207,7 @@ curl -X GET 'http://0.0.0.0:4000/public/agent_hub' \
 --header 'Authorization: Bearer <user-api-key>'
 ```
 
-**Expected Response**
+**예상 응답**
 
 ```json
 [
@@ -239,21 +239,21 @@ curl -X GET 'http://0.0.0.0:4000/public/agent_hub' \
 </Tabs>
 
 
-## MCP Servers
+## MCP 서버 {#mcp-servers}
 
-### How to use
+### 사용 방법
 
-#### 1. Add MCP Server
+#### 1. MCP 서버 추가 {#1-add-mcp-server}
 
-Go here for instructions: [MCP Overview](../mcp#adding-your-mcp)
+설정 방법은 [MCP 개요](../mcp#adding-your-mcp)를 참고하세요.
 
 
-#### 2. Make MCP server public
+#### 2. MCP 서버 공개 설정 {#2-make-mcp-server-public}
 
 <Tabs>
 <TabItem value="ui" label="UI">
 
-Navigate to AI Hub page, and select the MCP tab (`PROXY_BASE_URL/ui/?login=success&page=mcp-server-table`)
+AI Hub 페이지로 이동한 뒤 MCP 탭(`PROXY_BASE_URL/ui/?login=success&page=mcp-server-table`)을 선택합니다.
 
 <Image img={require('../../img/mcp_server_on_ai_hub.png')} />  
 
@@ -271,9 +271,9 @@ curl -L -X POST 'http://localhost:4000/v1/mcp/make_public' \
 </Tabs>
 
 
-#### 3. View public MCP servers
+#### 3. 공개 MCP 서버 보기 {#3-view-public-mcp-servers}
 
-Users can now discover the MCP server via the public endpoint (`PROXY_BASE_URL/ui/model_hub_table`)
+이제 사용자는 공개 엔드포인트(`PROXY_BASE_URL/ui/model_hub_table`)를 통해 MCP 서버를 찾을 수 있습니다.
 
 <Tabs>
 <TabItem value="ui" label="UI">
@@ -288,7 +288,7 @@ curl -L -X GET 'http://0.0.0.0:4000/public/mcp_hub' \
 -H 'Authorization: Bearer sk-1234'
 ```
 
-**Expected Response**
+**예상 응답**
 
 ```json
 [

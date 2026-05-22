@@ -3,24 +3,24 @@ import TabItem from '@theme/TabItem';
 
 # Vercel AI Gateway
 
-## Overview
+## 개요
 
-| Property | Details |
+| 속성 | 세부 정보 |
 |-------|-------|
-| Description | Vercel AI Gateway provides a unified interface to access multiple AI providers through a single endpoint, with built-in caching, rate limiting, and analytics. |
-| Provider Route on LiteLLM | `vercel_ai_gateway/` |
-| Link to Provider Doc | [Vercel AI Gateway Documentation ↗](https://vercel.com/docs/ai-gateway) |
+| 설명 | Vercel AI Gateway는 단일 엔드포인트를 통해 여러 AI 공급자에 접근할 수 있는 통합 인터페이스를 제공하며, 캐싱, 속도 제한, 분석 기능을 기본으로 포함합니다. |
+| LiteLLM의 공급자 라우트 | `vercel_ai_gateway/` |
+| 공급자 문서 링크 | [Vercel AI Gateway Documentation ↗](https://vercel.com/docs/ai-gateway) |
 | Base URL | `https://ai-gateway.vercel.sh/v1` |
-| Supported Operations | `/chat/completions`, `/embeddings`, `/models` |
+| 지원되는 작업 | `/chat/completions`, `/embeddings`, `/models` |
 
 <br />
 <br />
 
 https://vercel.com/docs/ai-gateway
 
-**We support ALL models available through Vercel AI Gateway, just set `vercel_ai_gateway/` as a prefix when sending completion requests**
+**Vercel AI Gateway를 통해 제공되는 모든 모델을 지원합니다. completion 요청을 보낼 때 `vercel_ai_gateway/`를 접두사로 설정하기만 하면 됩니다.**
 
-## Required Variables
+## 필수 변수 {#required-variables}
 
 ```python showLineNumbers title="Environment Variables"
 os.environ["VERCEL_AI_GATEWAY_API_KEY"] = ""  # your Vercel AI Gateway API key
@@ -28,7 +28,7 @@ os.environ["VERCEL_AI_GATEWAY_API_KEY"] = ""  # your Vercel AI Gateway API key
 os.environ["VERCEL_OIDC_TOKEN"] = ""  # your Vercel OIDC token for authentication
 ```
 
-## Optional Variables
+## 선택 변수 {#optional-variables}
 
 ```python showLineNumbers title="Environment Variables"
 os.environ["VERCEL_SITE_URL"] = ""  # your site url
@@ -36,11 +36,11 @@ os.environ["VERCEL_SITE_URL"] = ""  # your site url
 os.environ["VERCEL_APP_NAME"] = ""  # your app name
 ```
 
-Note: see the [Vercel AI Gateway docs](https://vercel.com/docs/ai-gateway#using-the-ai-gateway-with-an-api-key) for instructions on obtaining a key.
+참고: 키를 발급받는 방법은 [Vercel AI Gateway docs](https://vercel.com/docs/ai-gateway#using-the-ai-gateway-with-an-api-key)를 확인하세요.
 
-## Usage - LiteLLM Python SDK
+## 사용법 - LiteLLM Python SDK
 
-### Non-streaming
+### 비스트리밍 {#non-streaming}
 
 ```python showLineNumbers title="Vercel AI Gateway Non-streaming Completion"
 import os
@@ -60,7 +60,7 @@ response = completion(
 print(response)
 ```
 
-### Streaming
+### 스트리밍 {#streaming}
 
 ```python showLineNumbers title="Vercel AI Gateway Streaming Completion"
 import os
@@ -82,7 +82,7 @@ for chunk in response:
     print(chunk)
 ```
 
-### Embeddings
+### 임베딩 {#embeddings}
 
 ```python showLineNumbers title="Vercel AI Gateway Embeddings"
 import os
@@ -99,7 +99,7 @@ response = embedding(
 print(response.data[0]["embedding"][:5])  # Print first 5 dimensions
 ```
 
-You can also specify the `dimensions` parameter:
+`dimensions` 매개변수도 지정할 수 있습니다.
 
 ```python showLineNumbers title="Vercel AI Gateway Embeddings with Dimensions"
 response = embedding(
@@ -109,9 +109,9 @@ response = embedding(
 )
 ```
 
-## Usage - LiteLLM Proxy
+## 사용법 - LiteLLM Proxy
 
-Add the following to your LiteLLM Proxy configuration file:
+LiteLLM Proxy 구성 파일에 다음 내용을 추가하세요.
 
 ```yaml showLineNumbers title="config.yaml"
 model_list:
@@ -131,7 +131,7 @@ model_list:
       api_key: os.environ/VERCEL_AI_GATEWAY_API_KEY
 ```
 
-Start your LiteLLM Proxy server:
+LiteLLM Proxy 서버를 시작하세요.
 
 ```bash showLineNumbers title="Start LiteLLM Proxy"
 litellm --config config.yaml
@@ -244,8 +244,8 @@ curl http://localhost:4000/v1/chat/completions \
 </TabItem>
 </Tabs>
 
-For more detailed information on using the LiteLLM Proxy, see the [LiteLLM Proxy documentation](../providers/litellm_proxy).
+LiteLLM Proxy 사용에 관한 자세한 내용은 [LiteLLM Proxy documentation](../providers/litellm_proxy)을 참조하세요.
 
-## Additional Resources
+## 추가 리소스 {#additional-resources}
 
 - [Vercel AI Gateway Documentation](https://vercel.com/docs/ai-gateway)

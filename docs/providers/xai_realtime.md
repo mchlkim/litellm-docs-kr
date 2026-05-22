@@ -1,28 +1,28 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# xAI Voice Agent (Realtime API)
+# `xAI Voice Agent`(`Realtime API`) {#xai-voice-agent-realtime-api}
 
-xAI's Grok Voice Agent provides real-time voice conversation capabilities through WebSocket connections, enabling natural bidirectional audio interactions.
+xAI의 Grok Voice Agent는 WebSocket 연결을 통해 실시간 음성 대화 기능을 제공하며, 자연스러운 양방향 오디오 상호작용을 지원합니다.
 
-| Feature | Description | Comments |
+| 기능 | 설명 | 비고 |
 | --- | --- | --- |
-| LiteLLM AI Gateway | ✅ |  |
-| LiteLLM Python SDK | ✅ | Full support via `litellm.realtime()` |
+| `LiteLLM AI Gateway` | ✅ |  |
+| LiteLLM Python SDK | ✅ | `litellm.realtime()`를 통해 완전히 지원 |
 
-## Quick Start
+## 빠른 시작
 
-### Supported Model
+### 지원 모델 {#supported-model}
 
-| Model | Context | Features |
+| 모델 | 컨텍스트 | 기능 |
 |-------|---------|----------|
-| `xai/grok-4-1-fast-non-reasoning` | 2M tokens | Voice conversation, Function calling, Vision, Audio, Web search, Caching |
+| `xai/grok-4-1-fast-non-reasoning` | 2M 토큰 | 음성 대화, 함수 호출, 비전, 오디오, 웹 검색, 캐싱 |
 
-**Note:** xAI Realtime API uses the non-reasoning variant for optimal real-time performance.
+**참고:** xAI Realtime API는 최적의 실시간 성능을 위해 non-reasoning 변형을 사용합니다.
 
-## Python SDK Usage
+## Python SDK 사용법
 
-### Basic Realtime Connection
+### 기본 Realtime 연결 {#basic-realtime-connection}
 
 ```python
 import asyncio
@@ -73,7 +73,7 @@ async def test_xai_realtime():
 asyncio.run(test_xai_realtime())
 ```
 
-### With Audio Input/Output
+### 오디오 입력/출력 사용 {#with-audio-inputoutput}
 
 ```python
 import asyncio
@@ -128,11 +128,11 @@ async def xai_voice_conversation():
 asyncio.run(xai_voice_conversation())
 ```
 
-## LiteLLM Proxy (AI Gateway) Usage
+## LiteLLM Proxy (AI Gateway) 사용법
 
-Load balance across multiple xAI deployments or combine with other providers.
+여러 xAI 배포 간에 로드 밸런싱하거나 다른 provider와 함께 사용할 수 있습니다.
 
-### 1. Add Model to Config
+### 1. 설정에 모델 추가 {#1-add-model-to-config}
 
 ```yaml
 model_list:
@@ -152,7 +152,7 @@ model_list:
       mode: realtime
 ```
 
-### 2. Start Proxy
+### 2. Proxy 시작 {#2-start-proxy}
 
 ```bash
 litellm --config /path/to/config.yaml 
@@ -160,9 +160,9 @@ litellm --config /path/to/config.yaml
 # RUNNING on http://0.0.0.0:4000
 ```
 
-### 3. Test Connection
+### 3. 연결 테스트 {#3-test-connection}
 
-#### Python Client
+#### Python 클라이언트 {#python-client}
 
 ```python
 import asyncio
@@ -212,7 +212,7 @@ async def test_proxy():
 asyncio.run(test_proxy())
 ```
 
-#### Node.js Client
+#### Node.js 클라이언트 {#nodejs-client}
 
 ```javascript
 // test.js - Run with: node test.js
@@ -267,42 +267,42 @@ ws.on("error", function handleError(error) {
 });
 ```
 
-## Key Differences from OpenAI
+## OpenAI와의 주요 차이점 {#key-differences-from-openai}
 
-xAI's Grok Voice Agent has some differences from OpenAI's Realtime API:
+xAI의 Grok Voice Agent는 OpenAI의 Realtime API와 몇 가지 차이가 있습니다.
 
-| Feature | xAI | OpenAI | LiteLLM Handling |
+| 기능 | xAI | OpenAI | LiteLLM 처리 |
 |---------|-----|--------|------------------|
-| Initial Event | `conversation.created` | `session.created` | ⚠️ Passed through as-is |
-| WebSocket URL | `wss://api.x.ai/v1/realtime` | `wss://api.openai.com/v1/realtime` | ✅ Auto-configured |
-| Model | `grok-4-1-fast-non-reasoning` | `gpt-4o-realtime-preview` | ✅ Via model prefix |
-| Audio Format | PCM16 24kHz mono | PCM16 24kHz mono | ✅ Compatible |
-| Context Window | 2M tokens | 128K tokens | N/A |
+| 초기 이벤트 | `conversation.created` | `session.created` | ⚠️ 그대로 전달 |
+| WebSocket URL | `wss://api.x.ai/v1/realtime` | `wss://api.openai.com/v1/realtime` | ✅ 자동 설정 |
+| 모델 | `grok-4-1-fast-non-reasoning` | `gpt-4o-realtime-preview` | ✅ 모델 접두사를 통해 처리 |
+| 오디오 형식 | PCM16 24kHz mono | PCM16 24kHz mono | ✅ 호환 |
+| 컨텍스트 윈도우 | 2M 토큰 | 128K 토큰 | N/A |
 
-**What LiteLLM Handles:**
-- ✅ Automatic URL routing to correct provider
-- ✅ Authentication headers (no `OpenAI-Beta` header for xAI)
-- ✅ WebSocket connection management
-- ✅ All other event types are compatible
+**LiteLLM이 처리하는 항목:**
+- ✅ 올바른 provider로 자동 URL 라우팅
+- ✅ 인증 headers(xAI에는 `OpenAI-Beta` header 없음)
+- ✅ WebSocket 연결 관리
+- ✅ 기타 모든 이벤트 타입 호환
 
-**What You Need to Handle:**
-- ⚠️ Initial event type difference (`conversation.created` vs `session.created`)
+**직접 처리해야 하는 항목:**
+- ⚠️ 초기 이벤트 타입 차이(`conversation.created` vs `session.created`)
 
-**Tip:** Make your client compatible with both event types:
+**팁:** 클라이언트가 두 이벤트 타입을 모두 처리할 수 있게 만드세요.
 ```python
 # Handle both providers
 if event['type'] in ['session.created', 'conversation.created']:
     print("Connection established")
 ```
 
-## Related Documentation
+## 관련 문서
 
-- [xAI Chat/Text Models](/docs/providers/xai)
-- [LiteLLM Realtime API Overview](/docs/realtime)
-- [xAI Official Documentation](https://docs.x.ai/docs)
+- [xAI Chat/Text 모델](/docs/providers/xai)
+- [LiteLLM Realtime API 개요](/docs/realtime)
+- [xAI 공식 문서](https://docs.x.ai/docs)
 
-## Support
+## 지원 {#support}
 
-For issues or questions:
+이슈 또는 질문:
 - [LiteLLM GitHub Issues](https://github.com/BerriAI/litellm/issues)
-- [xAI Documentation](https://docs.x.ai/docs)
+- [xAI 문서](https://docs.x.ai/docs)

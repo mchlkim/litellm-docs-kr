@@ -1,17 +1,17 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# [OLD PROXY 👉 [NEW proxy here](./simple_proxy)] Local LiteLLM Proxy Server
+# [이전 PROXY 👉 [새 proxy 문서](./simple_proxy)] 로컬 LiteLLM Proxy Server
 
-A fast, and lightweight OpenAI-compatible server to call 100+ LLM APIs. 
+100개 이상의 LLM API를 호출할 수 있는 빠르고 가벼운 OpenAI 호환 서버입니다.
 
 :::info
 
-Docs outdated. New docs 👉 [here](./simple_proxy)
+이 문서는 오래되었습니다. 새 문서는 [여기](./simple_proxy)를 참조하세요.
 
 :::
 
-## Usage 
+## 사용법 
 ```shell
 uv tool install 'litellm[proxy]'
 ```
@@ -21,13 +21,13 @@ $ litellm --model ollama/codellama
 #INFO: Ollama running on http://0.0.0.0:8000
 ```
 
-### Test
-In a new shell, run: 
+### 테스트
+새 셸에서 다음을 실행합니다.
 ```shell
 $ litellm --test
 ``` 
 
-### Replace openai base
+### OpenAI base 교체
 
 ```python
 import openai 
@@ -37,10 +37,10 @@ openai.api_base = "http://0.0.0.0:8000"
 print(openai.ChatCompletion.create(model="test", messages=[{"role":"user", "content":"Hey!"}]))
 ```
 
-#### Other supported models:
+#### 지원되는 다른 모델
 <Tabs>
 <TabItem value="vllm-local" label="VLLM">
-Assuming you're running vllm locally
+vLLM을 로컬에서 실행 중이라고 가정합니다.
 
 ```shell
 $ litellm --model vllm/facebook/opt-125m
@@ -136,11 +136,11 @@ $ litellm --model command-nightly
 
 </Tabs>
 
-### Tutorial: Use with Multiple LLMs + LibreChat/Chatbot-UI/Auto-Gen/ChatDev/Langroid,etc. 
+### 튜토리얼: 여러 LLM 및 LibreChat/Chatbot-UI/Auto-Gen/ChatDev/Langroid 등과 함께 사용
 <Tabs>
 <TabItem value="multiple-LLMs" label="Multiple LLMs">
 
-Replace openai base: 
+OpenAI base를 교체합니다.
 ```python
 import openai 
 
@@ -160,52 +160,52 @@ print(response)
 </TabItem>
 <TabItem value="librechat" label="LibreChat">
 
-#### 1. Clone the repo
+#### 1. repo 클론
 
 ```shell
 git clone https://github.com/danny-avila/LibreChat.git
 ```
 
 
-#### 2. Modify `docker-compose.yml`
+#### 2. `docker-compose.yml` 수정
 ```yaml
 OPENAI_REVERSE_PROXY=http://host.docker.internal:8000/v1/chat/completions
 ```
 
-#### 3. Save fake OpenAI key in `.env`
+#### 3. `.env`에 가짜 OpenAI 키 저장
 ```env
 OPENAI_API_KEY=sk-1234
 ```
 
-#### 4. Run LibreChat: 
+#### 4. LibreChat 실행
 ```shell
 docker compose up
 ```
 </TabItem>
 <TabItem value="smart-chatbot-ui" label="SmartChatbotUI">
 
-#### 1. Clone the repo
+#### 1. repo 클론
 ```shell
 git clone https://github.com/dotneet/smart-chatbot-ui.git
 ```
 
-#### 2. Install Dependencies
+#### 2. 의존성 설치
 ```shell
 npm i
 ```
 
-#### 3. Create your env
+#### 3. env 파일 생성
 ```shell
 cp .env.local.example .env.local
 ```
 
-#### 4. Set the API Key and Base
+#### 4. API 키와 Base 설정
 ```env
 OPENAI_API_KEY="my-fake-key"
 OPENAI_API_HOST="http://0.0.0.0:8000
 ```
 
-#### 5. Run with docker compose
+#### 5. docker compose로 실행
 ```shell
 docker compose up -d
 ```
@@ -239,7 +239,7 @@ user_proxy = UserProxyAgent("user_proxy")
 user_proxy.initiate_chat(assistant, message="Plot a chart of META and TESLA stock price change YTD.", config_list=config_list)
 ```
 
-Credits [@victordibia](https://github.com/microsoft/autogen/issues/45#issuecomment-1749921972) for this tutorial.
+이 튜토리얼의 출처: [@victordibia](https://github.com/microsoft/autogen/issues/45#issuecomment-1749921972).
 </TabItem>
 <TabItem value="multi-LLM AutoGen" label="AutoGen Multi-LLM">
 
@@ -319,11 +319,11 @@ admin.initiate_chat(
 )
 ```
 
-Credits [@Nathan](https://gist.github.com/CUexter) for this tutorial.
+이 튜토리얼의 출처: [@Nathan](https://gist.github.com/CUexter).
 </TabItem>
 <TabItem value="chatDev" label="ChatDev">
 
-### Setup ChatDev ([Docs](https://github.com/OpenBMB/ChatDev#%EF%B8%8F-quickstart))
+### ChatDev 설정 ([문서](https://github.com/OpenBMB/ChatDev#%EF%B8%8F-quickstart))
 ```shell
 git clone https://github.com/OpenBMB/ChatDev.git
 cd ChatDev
@@ -331,7 +331,7 @@ conda create -n ChatDev_conda_env python=3.9 -y
 conda activate ChatDev_conda_env
 uv add -r requirements.txt
 ```
-### Run ChatDev w/ Proxy
+### Proxy로 ChatDev 실행
 ```shell 
 export OPENAI_API_KEY="sk-1234"
 ```
@@ -374,13 +374,13 @@ task = Task(agent, name="my-llm-task")
 task.run() 
 ```
 
-Credits [@pchalasani](https://github.com/pchalasani) and [Langroid](https://github.com/langroid/langroid) for this tutorial.
+이 튜토리얼의 출처: [@pchalasani](https://github.com/pchalasani), [Langroid](https://github.com/langroid/langroid).
 </TabItem>
 </Tabs>
 
-## Local Proxy
+## 로컬 Proxy
 
-Here's how to use the local proxy to test codellama/mistral/etc. models for different github repos 
+여러 GitHub repo에서 codellama, mistral 등의 모델을 테스트할 때 로컬 Proxy를 사용하는 방법입니다.
 
 ```shell
 uv add litellm
@@ -392,7 +392,7 @@ $ ollama pull codellama # OUR Local CodeLlama
 $ litellm --model ollama/codellama --temperature 0.3 --max_tokens 2048
 ```
 
-### Tutorial: Use with Multiple LLMs + Aider/AutoGen/Langroid/etc.
+### 튜토리얼: 여러 LLM 및 Aider/AutoGen/Langroid 등과 함께 사용
 <Tabs>
 <TabItem value="multiple-LLMs" label="Multiple LLMs">
 
@@ -402,7 +402,7 @@ $ litellm
 #INFO: litellm proxy running on http://0.0.0.0:8000
 ```
 
-#### Send a request to your proxy
+#### Proxy로 요청 보내기
 ```python
 import openai 
 
@@ -423,9 +423,9 @@ print(response)
 </TabItem>
 <TabItem value="continue-dev" label="ContinueDev">
 
-Continue-Dev brings ChatGPT to VSCode. See how to [install it here](https://continue.dev/docs/quickstart).
+Continue-Dev는 ChatGPT를 VSCode로 가져옵니다. 설치 방법은 [여기](https://continue.dev/docs/quickstart)를 참조하세요.
 
-In the [config.py](https://continue.dev/docs/reference/Models/openai) set this as your default model.
+[config.py](https://continue.dev/docs/reference/모델/openai)에서 이를 기본 모델로 설정합니다.
 ```python
   default=OpenAI(
       api_key="IGNORED",
@@ -435,7 +435,7 @@ In the [config.py](https://continue.dev/docs/reference/Models/openai) set this a
   ),
 ```
 
-Credits [@vividfog](https://github.com/ollama/ollama/issues/305#issuecomment-1751848077) for this tutorial. 
+이 튜토리얼의 출처: [@vividfog](https://github.com/ollama/ollama/issues/305#issuecomment-1751848077).
 </TabItem>
 <TabItem value="aider" label="Aider">
 
@@ -474,7 +474,7 @@ user_proxy = UserProxyAgent("user_proxy")
 user_proxy.initiate_chat(assistant, message="Plot a chart of META and TESLA stock price change YTD.", config_list=config_list)
 ```
 
-Credits [@victordibia](https://github.com/microsoft/autogen/issues/45#issuecomment-1749921972) for this tutorial.
+이 튜토리얼의 출처: [@victordibia](https://github.com/microsoft/autogen/issues/45#issuecomment-1749921972).
 </TabItem>
 <TabItem value="multi-LLM AutoGen" label="AutoGen Multi-LLM">
 
@@ -554,11 +554,11 @@ admin.initiate_chat(
 )
 ```
 
-Credits [@Nathan](https://gist.github.com/CUexter) for this tutorial.
+이 튜토리얼의 출처: [@Nathan](https://gist.github.com/CUexter).
 </TabItem>
 <TabItem value="chatDev" label="ChatDev">
 
-### Setup ChatDev ([Docs](https://github.com/OpenBMB/ChatDev#%EF%B8%8F-quickstart))
+### ChatDev 설정 ([문서](https://github.com/OpenBMB/ChatDev#%EF%B8%8F-quickstart))
 ```shell
 git clone https://github.com/OpenBMB/ChatDev.git
 cd ChatDev
@@ -566,7 +566,7 @@ conda create -n ChatDev_conda_env python=3.9 -y
 conda activate ChatDev_conda_env
 uv add -r requirements.txt
 ```
-### Run ChatDev w/ Proxy
+### Proxy로 ChatDev 실행
 ```shell 
 export OPENAI_API_KEY="sk-1234"
 ```
@@ -610,12 +610,12 @@ task = Task(agent, name="my-llm-task")
 task.run() 
 ```
 
-Credits [@pchalasani](https://github.com/pchalasani) and [Langroid](https://github.com/langroid/langroid) for this tutorial.
+이 튜토리얼의 출처: [@pchalasani](https://github.com/pchalasani), [Langroid](https://github.com/langroid/langroid).
 </TabItem>
 <TabItem value="gpt-pilot" label="GPT-Pilot">
-GPT-Pilot helps you build apps with AI Agents. [For more](https://github.com/Pythagora-io/gpt-pilot)
+GPT-Pilot은 AI Agent로 앱을 빌드할 수 있게 도와줍니다. 자세한 내용은 [여기](https://github.com/Pythagora-io/gpt-pilot)를 참조하세요.
 
-In your .env set the openai endpoint to your local server. 
+`.env`에서 OpenAI 엔드포인트를 로컬 서버로 설정합니다.
 
 ```
 OPENAI_ENDPOINT=http://0.0.0.0:8000
@@ -623,12 +623,12 @@ OPENAI_API_KEY=my-fake-key
 ```
 </TabItem>
 <TabItem value="guidance" label="guidance">
-A guidance language for controlling large language models.
+대형 언어 모델을 제어하기 위한 guidance 언어입니다.
 https://github.com/guidance-ai/guidance
 
-**NOTE:** Guidance sends additional params like `stop_sequences` which can cause some models to fail if they don't support it. 
+**참고:** Guidance는 `stop_sequences` 같은 추가 파라미터를 보냅니다. 일부 모델이 이를 지원하지 않으면 실패할 수 있습니다.
 
-**Fix**: Start your proxy using the `--drop_params` flag
+**해결:** `--drop_params` 플래그로 Proxy를 시작합니다.
 
 ```shell
 litellm --model ollama/codellama --temperature 0.3 --max_tokens 2048 --drop_params
@@ -669,34 +669,34 @@ print(result)
 
 ::: 
 
-## Advanced
+## 고급
 
-### Logs
+### 로그
 
 ```shell
 $ litellm --logs
 ```
 
-This will return the most recent log (the call that went to the LLM API + the received response).
+가장 최근 로그를 반환합니다. 여기에는 LLM API로 전달된 호출과 수신한 응답이 포함됩니다.
 
-All logs are saved to a file called `api_logs.json` in the current directory. 
+모든 로그는 현재 디렉터리의 `api_logs.json` 파일에 저장됩니다.
 
-### Configure Proxy
+### Proxy 구성
 
-If you need to: 
-* save API keys 
-* set litellm params (e.g. drop unmapped params, set fallback models, etc.)
-* set model-specific params (max tokens, temperature, api base, prompt template)
+다음이 필요하다면:
+* API 키 저장
+* LiteLLM 파라미터 설정(예: 매핑되지 않은 파라미터 제거, fallback 모델 설정 등)
+* 모델별 파라미터 설정(max tokens, temperature, api base, prompt template)
 
-You can do set these just for that session (via cli), or persist these across restarts (via config file).
+해당 세션에만 CLI로 설정하거나, config 파일을 통해 재시작 후에도 유지할 수 있습니다.
 
-#### Save API Keys 
+#### API 키 저장
 ```shell 
 $ litellm --api_key OPENAI_API_KEY=sk-...
 ```
-LiteLLM will save this to a locally stored config file, and persist this across sessions. 
+LiteLLM은 이를 로컬 config 파일에 저장하고 세션이 바뀌어도 유지합니다.
 
-LiteLLM Proxy supports all litellm supported api keys. To add keys for a specific provider, check this list:
+LiteLLM Proxy는 LiteLLM이 지원하는 모든 API 키를 지원합니다. 특정 프로바이더 키를 추가하려면 아래 목록을 확인하세요.
 
 <Tabs>
 <TabItem value="huggingface" label="Huggingface">
@@ -782,9 +782,9 @@ $ litellm --add_key COHERE_API_KEY=my-api-key
 
 </Tabs>
 
-E.g.: Set api base, max tokens and temperature. 
+예: api base, max tokens, temperature 설정.
 
-**For that session**: 
+**해당 세션에만 적용:**
 ```shell
 litellm --model ollama/llama2 \
   --api_base http://localhost:11434 \
@@ -796,9 +796,9 @@ litellm --model ollama/llama2 \
 
 ### Performance
 
-We load-tested 500,000 HTTP connections on the FastAPI server for 1 minute, using [wrk](https://github.com/wg/wrk).
+FastAPI 서버에서 [wrk](https://github.com/wg/wrk)를 사용해 1분 동안 HTTP 연결 500,000개를 부하 테스트했습니다.
 
-There are our results: 
+결과는 다음과 같습니다.
 
 ```shell
 Thread Stats   Avg      Stdev     Max   +/- Stdev
@@ -809,8 +809,8 @@ Thread Stats   Avg      Stdev     Max   +/- Stdev
 ```
 
 
-## Support/ talk with founders
+## 지원 / 창업자와 대화
 
 - [Schedule Demo 👋](https://calendly.com/d/4mp-gd3-k5k/berriai-1-1-onboarding-litellm-hosted-version)
-- [Community Discord 💭](https://discord.gg/wuPM9dRgDw)
-- Our emails ✉️ ishaan@berri.ai / krrish@berri.ai
+- [커뮤니티 Discord 💭](https://discord.gg/wuPM9dRgDw)
+- 이메일 ✉️ ishaan@berri.ai / krrish@berri.ai

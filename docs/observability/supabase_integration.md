@@ -1,25 +1,25 @@
-# Supabase Tutorial 
+# Supabase 튜토리얼 {#supabase-tutorial}
 
 :::tip
 
-This is community maintained, Please make an issue if you run into a bug
+이 문서는 커뮤니티에서 관리합니다. 버그를 발견하면 이슈를 생성해 주세요.
 https://github.com/BerriAI/litellm
 
 :::
 
-[Supabase](https://supabase.com/) is an open source Firebase alternative.
-Start your project with a Postgres database, Authentication, instant APIs, Edge Functions, Realtime subscriptions, Storage, and Vector embeddings.
+[Supabase](https://supabase.com/)는 오픈 소스 Firebase 대안입니다.
+Postgres 데이터베이스, 인증, instant APIs, Edge Functions, Realtime subscriptions, Storage, Vector embeddings로 프로젝트를 시작할 수 있습니다.
 
-## Use Supabase to log requests and see total spend across all LLM Providers (OpenAI, Azure, Anthropic, Cohere, Replicate, PaLM)
-liteLLM provides `success_callbacks` and `failure_callbacks`, making it easy for you to send data to a particular provider depending on the status of your responses. 
+## Supabase로 요청을 기록하고 모든 LLM Providers(OpenAI, Azure, Anthropic, Cohere, Replicate, PaLM)의 총 지출 확인하기 {#use-supabase-to-log-requests-and-see-total-spend-across-all-llm-providers-openai-azure-anthropic-cohere-replicate-palm}
+liteLLM은 `success_callbacks`와 `failure_callbacks`를 제공하므로 응답 상태에 따라 특정 provider로 데이터를 쉽게 보낼 수 있습니다.
 
-In this case, we want to log requests to Supabase in both scenarios - when it succeeds and fails. 
+이 경우에는 성공과 실패 두 상황 모두에서 Supabase에 요청을 기록하려고 합니다.
 
-### Create a supabase table 
+### supabase 테이블 생성하기 {#create-a-supabase-table}
 
-Go to your Supabase project > go to the [Supabase SQL Editor](https://supabase.com/dashboard/projects) and create a new table with this configuration.
+Supabase 프로젝트로 이동한 뒤 [Supabase SQL Editor](https://supabase.com/dashboard/projects)로 이동하여 이 구성으로 새 테이블을 생성합니다.
 
-Note: You can change the table name. Just don't change the column names. 
+참고: 테이블 이름은 변경할 수 있습니다. 단, 컬럼 이름은 변경하지 마세요.
 
 ```sql
 create table
@@ -40,15 +40,15 @@ create table
   ) tablespace pg_default;
 ```
 
-### Use Callbacks 
-Use just 2 lines of code, to instantly see costs and log your responses **across all providers** with Supabase: 
+### Callbacks 사용하기 {#use-callbacks}
+두 줄의 코드만으로 Supabase에서 **모든 providers**의 비용을 즉시 확인하고 응답을 기록할 수 있습니다.
 
 ```python
 litellm.success_callback=["supabase"]
 litellm.failure_callback=["supabase"]
 ```
 
-Complete code
+전체 코드
 ```python
 from litellm import completion
 
@@ -79,11 +79,11 @@ response = completion(
  
 ```
 
-### Additional Controls 
+### 추가 제어 옵션 {#additional-controls}
 
-**Identify end-user**
+**최종 사용자 식별**
 
-Pass `user` to `litellm.completion` to map your llm call to an end-user 
+`litellm.completion`에 `user`를 전달하여 llm 호출을 최종 사용자에 매핑합니다.
 
 ```python
 response = completion(
@@ -93,16 +93,16 @@ response = completion(
 ) 
 ```
 
-**Different Table name**
+**다른 테이블 이름**
 
-If you modified your table name, here's how to pass the new name.
+테이블 이름을 수정했다면 다음과 같이 새 이름을 전달합니다.
 
 ```python 
 litellm.modify_integration("supabase",{"table_name": "litellm_logs"})
 ```
 
-## Support & Talk to Founders
+## 지원 및 창립자에게 문의하기 {#support--talk-to-founders}
 
-- [Schedule Demo 👋](https://calendly.com/d/4mp-gd3-k5k/berriai-1-1-onboarding-litellm-hosted-version)
-- [Community Discord 💭](https://discord.gg/wuPM9dRgDw)
-- Our emails ✉️ ishaan@berri.ai / krrish@berri.ai
+- [데모 예약 👋](https://calendly.com/d/4mp-gd3-k5k/berriai-1-1-onboarding-litellm-hosted-version)
+- [커뮤니티 Discord 💭](https://discord.gg/wuPM9dRgDw)
+- 이메일 ✉️ ishaan@berri.ai / krrish@berri.ai

@@ -1,20 +1,20 @@
 
-# ✨ IP Address Filtering
+# ✨ IP 주소 필터링
 
 :::info
 
-You need a LiteLLM License to unlock this feature. [Grab time](https://enterprise.litellm.ai/demo), to get one today!
+이 기능을 사용하려면 LiteLLM License가 필요합니다. [일정을 예약](https://enterprise.litellm.ai/demo)해 License를 받으세요.
 
 :::
 
-Restrict which IP's can call the proxy endpoints.
+프록시 엔드포인트를 호출할 수 있는 IP를 제한합니다.
 
 ```yaml
 general_settings:
   allowed_ips: ["192.168.1.1"]
 ```
 
-**Expected Response** (if IP not listed)
+**예상 응답**(IP가 목록에 없는 경우)
 
 ```bash
 {

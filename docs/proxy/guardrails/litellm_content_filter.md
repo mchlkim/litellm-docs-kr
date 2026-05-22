@@ -3,63 +3,63 @@ import TabItem from '@theme/TabItem';
 import Image from '@theme/IdealImage';
 
 
-# LiteLLM Content Filter (Built-in Guardrails)
+# LiteLLM Content Filter(내장 Guardrail) {#litellm-content-filter-built-in-guardrail}
 
-**Built-in guardrail** for detecting and filtering sensitive information using regex patterns and keyword matching. No external dependencies required.
+regex pattern과 keyword matching으로 민감 정보를 감지하고 필터링하는 **내장 guardrail**입니다. 외부 dependency가 필요하지 않습니다.
 
-**When to use?** Good for cases which do not require an ML model to detect sensitive information.
+**언제 사용하나요?** 민감 정보 감지에 ML model이 필요하지 않은 경우에 적합합니다.
 
-## Overview
+## 개요
 
-| Property | Details |
+| 속성 | 세부 정보 |
 |----------|---------|
-| Description | On-device guardrail for detecting and filtering sensitive information using regex patterns and keyword matching. Built into LiteLLM with no external dependencies. |
-| Guardrail Name | `litellm_content_filter` |
-| Detection Methods | Prebuilt regex patterns, custom regex, keyword matching |
-| Actions | `BLOCK` (reject request), `MASK` (redact content) |
-| Supported Modes | `pre_call`, `post_call`, `during_call` (streaming) |
-| Performance | Fast - runs locally, no external API calls |
+| 설명 | regex pattern과 keyword matching으로 민감 정보를 감지하고 필터링하는 기기 내 guardrail입니다. LiteLLM에 내장되어 있으며 외부 dependency가 없습니다. |
+| Guardrail 이름 | `litellm_content_filter` |
+| 감지 방법 | Prebuilt regex pattern, custom regex, keyword matching |
+| 작업 | `BLOCK`(요청 거부), `MASK`(content redaction) |
+| 지원 Mode | `pre_call`, `post_call`, `during_call`(streaming) |
+| 성능 | 빠름 - 로컬에서 실행되며 외부 API call이 없습니다. |
 
-## Quick Start
+## 빠른 시작
 
 ## LiteLLM UI
 
-### Step 1: Select LiteLLM Content Filter
+### Step 1: LiteLLM Content Filter 선택 {#step-1-select-litellm-content-filter}
 
-Click "Add New Guardrail" and select "LiteLLM Content Filter" as your guardrail provider.
+"Add New Guardrail"을 클릭하고 guardrail provider로 "LiteLLM Content Filter"를 선택합니다.
 
-<Image img={require('../../../img/create_guard.gif')} alt="Select LiteLLM Content Filter" />
+<Image img={require('../../../img/create_guard.gif')} alt="LiteLLM Content Filter 선택" />
 
-### Step 2: Configure Pattern Detection
+### Step 2: Pattern Detection 설정 {#step-2-configure-pattern-detection}
 
-Select the prebuilt entities you want to block or mask. In this example, we select "Email" to detect and block email addresses.
+차단하거나 mask할 prebuilt entity를 선택합니다. 이 예제에서는 email address를 감지하고 차단하기 위해 "Email"을 선택합니다.
 
-If you need to block a custom entity, you can add a custom regex pattern by clicking "Add custom regex".
+custom entity를 차단해야 한다면 "Add custom regex"를 클릭해 custom regex pattern을 추가할 수 있습니다.
 
-<Image img={require('../../../img/add_Guard2.gif')} alt="Select prebuilt entities or add custom regex" />
+<Image img={require('../../../img/add_Guard2.gif')} alt="prebuilt entity 선택 또는 custom regex 추가" />
 
-### Step 3: Add Blocked Keywords
+### Step 3: 차단 Keyword 추가 {#step-3-add-blocked-keywords}
 
-Enter specific keywords you want to block. This is useful if you have policies to block certain words or phrases.
+차단할 특정 keyword를 입력합니다. 특정 단어나 문구를 차단해야 하는 policy가 있을 때 유용합니다.
 
-<Image img={require('../../../img/create_guard3.gif')} alt="Add blocked keywords" />
+<Image img={require('../../../img/create_guard3.gif')} alt="차단 keyword 추가" />
 
-### Step 4: Test Your Guardrail
+### Step 4: Guardrail 테스트 {#step-4-test-guardrail}
 
-After creating the guardrail, navigate to "Test Playground" to test it. Select the guardrail you just created.
+Guardrail을 만든 뒤 "Test Playground"로 이동해 테스트합니다. 방금 만든 guardrail을 선택하세요.
 
-Test examples:
-- **Blocked keyword test**: Entering "hi blue" will trigger the block since we set "blue" as a blocked keyword
-- **Pattern detection test**: Entering "Hi ishaan@berri.ai" will trigger the email pattern detector
+테스트 예시:
+- **차단 keyword test**: "blue"를 blocked keyword로 설정했으므로 "hi blue"를 입력하면 block이 trigger됩니다.
+- **Pattern detection test**: "Hi ishaan@berri.ai"를 입력하면 email pattern detector가 trigger됩니다.
 
-<Image img={require('../../../img/add_guard5.gif')} alt="Test guardrail in playground" />
+<Image img={require('../../../img/add_guard5.gif')} alt="playground에서 guardrail 테스트" />
 
-## LiteLLM Config.yaml Setup
+## LiteLLM Config.yaml 설정
 
-### Step 1: Define Guardrails in config.yaml
+### Step 1: config.yaml에 Guardrail 정의 {#step-1-define-guardrail-in-configyaml}
 
 <Tabs>
-<TabItem label="Harmful Content Detection" value="harmful">
+<TabItem label="유해 콘텐츠 감지" value="harmful">
 
 ```yaml showLineNumbers title="config.yaml"
 model_list:
@@ -94,7 +94,7 @@ guardrails:
 
 </TabItem>
 
-<TabItem label="PII Protection" value="pii">
+<TabItem label="PII 보호" value="pii">
 
 ```yaml showLineNumbers title="config.yaml"
 model_list:
@@ -128,7 +128,7 @@ guardrails:
 
 </TabItem>
 
-<TabItem label="Combined" value="combined">
+<TabItem label="조합 예시" value="combined">
 
 ```yaml showLineNumbers title="config.yaml"
 model_list:
@@ -168,16 +168,16 @@ guardrails:
 </TabItem>
 </Tabs>
 
-### Step 2: Start LiteLLM Gateway
+### Step 2: LiteLLM Gateway 시작 {#step-2-start-litellm-gateway}
 
 ```shell
 litellm --config config.yaml
 ```
 
-### Step 3: Test Request
+### Step 3: 요청 테스트 {#step-3-test-requests}
 
 <Tabs>
-<TabItem label="SSN Blocked" value="ssn-blocked">
+<TabItem label="SSN 차단" value="ssn-blocked">
 
 ```shell
 curl -i http://localhost:4000/v1/chat/completions \
@@ -192,7 +192,7 @@ curl -i http://localhost:4000/v1/chat/completions \
   }'
 ```
 
-**Response: HTTP 400 Error**
+**응답: HTTP 400 Error**
 ```json
 {
   "error": {
@@ -207,7 +207,7 @@ curl -i http://localhost:4000/v1/chat/completions \
 
 </TabItem>
 
-<TabItem label="Email Masked" value="email-masked">
+<TabItem label="Email Masking" value="email-masked">
 
 ```shell
 curl -i http://localhost:4000/v1/chat/completions \
@@ -222,7 +222,7 @@ curl -i http://localhost:4000/v1/chat/completions \
   }'
 ```
 
-The request is sent to the LLM with the email masked:
+Email이 mask된 상태로 요청이 LLM에 전송됩니다.
 ```
 Contact me at [EMAIL_REDACTED]
 ```
@@ -230,36 +230,36 @@ Contact me at [EMAIL_REDACTED]
 </TabItem>
 </Tabs>
 
-## Configuration
+## 설정
 
-### Supported Modes
+### 지원 Mode
 
-- **`pre_call`** - Run before LLM call, filters input messages
-- **`post_call`** - Run after LLM call, filters output responses
-- **`during_call`** - Run during streaming, filters each chunk in real-time
+- **`pre_call`** - LLM 호출 전에 실행되어 input message를 필터링합니다.
+- **`post_call`** - LLM 호출 후에 실행되어 output response를 필터링합니다.
+- **`during_call`** - streaming 중 실행되어 각 chunk를 real-time으로 필터링합니다.
 
-### Actions
+### 작업 {#actions}
 
-- **`BLOCK`** - Reject the request with HTTP 400 error
-- **`MASK`** - Replace sensitive content with redaction tags (e.g., `[EMAIL_REDACTED]`)
+- **`BLOCK`** - HTTP 400 error로 요청을 거부합니다.
+- **`MASK`** - 민감 content를 redaction tag로 교체합니다. 예: `[EMAIL_REDACTED]`
 
-## Prebuilt Patterns
+## 사전 제공 Pattern {#prebuilt-pattern}
 
-### Available Patterns
+### 사용 가능한 Pattern {#available-patterns}
 
-| Pattern Name | Description | Example |
+| Pattern 이름 | 설명 | 예제 |
 |-------------|-------------|---------|
-| `us_ssn` | US Social Security Numbers | `123-45-6789` |
-| `email` | Email addresses | `user@example.com` |
-| `phone` | Phone numbers | `+1-555-123-4567` |
-| `visa` | Visa credit cards | `4532-1234-5678-9010` |
-| `mastercard` | Mastercard credit cards | `5425-2334-3010-9903` |
-| `amex` | American Express cards | `3782-822463-10005` |
-| `aws_access_key` | AWS access keys | `AKIAIOSFODNN7EXAMPLE` |
-| `aws_secret_key` | AWS secret keys | `wJalrXUtnFEMI/K7MDENG/bPxRfi...` |
-| `github_token` | GitHub tokens | `example-github-token-123` |
+| `us_ssn` | 미국 Social Security Number | `123-45-6789` |
+| `email` | Email address | `user@example.com` |
+| `phone` | 전화번호 | `+1-555-123-4567` |
+| `visa` | Visa 신용카드 | `4532-1234-5678-9010` |
+| `mastercard` | Mastercard 신용카드 | `5425-2334-3010-9903` |
+| `amex` | American Express 카드 | `3782-822463-10005` |
+| `aws_access_key` | AWS access key | `AKIAIOSFODNN7EXAMPLE` |
+| `aws_secret_key` | AWS secret key | `wJalrXUtnFEMI/K7MDENG/bPxRfi...` |
+| `github_token` | GitHub token | `example-github-token-123` |
 
-### Using Prebuilt Patterns
+### 사전 제공 Pattern 사용 {#using-prebuilt-patterns}
 
 ```yaml showLineNumbers title="config.yaml"
 guardrails:
@@ -281,9 +281,9 @@ guardrails:
           action: "BLOCK"
 ```
 
-## Custom Regex Patterns
+## 사용자 정의 Regex Pattern {#custom-regex-pattern}
 
-Define your own regex patterns for domain-specific sensitive data:
+domain-specific 민감 데이터를 위한 자체 regex pattern을 정의합니다.
 
 ```yaml showLineNumbers title="config.yaml"
 guardrails:
@@ -305,9 +305,9 @@ guardrails:
           action: "BLOCK"
 ```
 
-## Keyword Filtering
+## Keyword 필터링 {#keyword-filtering}
 
-Block or mask specific keywords:
+특정 keyword를 차단하거나 mask합니다.
 
 ```yaml showLineNumbers title="config.yaml"
 guardrails:
@@ -328,9 +328,9 @@ guardrails:
           action: "BLOCK"
 ```
 
-### Loading Keywords from File
+### File에서 Keyword 로드 {#load-keywords-from-file}
 
-For large keyword lists, use a YAML file:
+keyword 목록이 큰 경우 YAML file을 사용합니다.
 
 ```yaml showLineNumbers title="config.yaml"
 guardrails:
@@ -356,9 +356,9 @@ blocked_words:
     description: "Protected database name"
 ```
 
-## Streaming Support
+## Streaming 지원 {#streaming-support}
 
-Content filter works with streaming responses by checking each chunk:
+Content filter는 각 chunk를 확인하여 streaming response에서도 동작합니다.
 
 ```yaml showLineNumbers title="config.yaml"
 guardrails:
@@ -392,19 +392,19 @@ for chunk in response:
     # Emails automatically masked in real-time
 ```
 
-## Image Content Filtering
+## Image 콘텐츠 필터링 {#image-content-filtering}
 
-Content filter can analyze images by generating descriptions and applying filters to the text descriptions.
+Content filter는 image description을 생성한 뒤 text description에 filter를 적용해 image를 분석할 수 있습니다.
 
 :::warning
 
-This can introduce significant latency to the request - depending on the speed of the vision-capable model.
+vision-capable model의 속도에 따라 요청에 상당한 latency가 추가될 수 있습니다.
 
-This is because, each request containing images will be sent to the vision-capable model to generate a description.
+image가 포함된 각 요청이 description 생성을 위해 vision-capable model로 전송되기 때문입니다.
 
 :::
 
-### Configuration
+### 설정
 
 
 ```yaml showLineNumbers title="config.yaml"
@@ -434,13 +434,13 @@ guardrails:
           action: "MASK"
 ```
 
-### How It Works
+### 동작 방식
 
-1. Image is sent to the vision model to generate a text description
-2. Content filters are applied to the description
-3. If harmful content is detected, request is blocked with context about the image
+1. Image가 text description 생성을 위해 vision model로 전송됩니다.
+2. Content filter가 description에 적용됩니다.
+3. harmful content가 감지되면 image에 대한 context와 함께 요청이 차단됩니다.
 
-**Example:**
+**예제:**
 
 ```python
 import openai
@@ -463,7 +463,7 @@ response = client.chat.completions.create(
 )
 ```
 
-If the image description contains filtered content, you'll get:
+Image description에 filtered content가 포함되어 있으면 다음 응답을 받습니다.
 
 ```json
 {
@@ -471,27 +471,27 @@ If the image description contains filtered content, you'll get:
 }
 ```
 
-## Customizing Redaction Tags
+## Redaction Tag 사용자 지정 {#redaction-tag-customizing}
 
-When using the `MASK` action, sensitive content is replaced with redaction tags. You can customize how these tags appear.
+`MASK` action을 사용하면 민감 content가 redaction tag로 교체됩니다. 이 tag의 표시 방식을 custom할 수 있습니다.
 
-### Default Behavior
+### 기본 동작
 
-**Patterns:** Each pattern type gets its own tag based on the pattern name
+**Pattern:** 각 pattern type은 pattern name에 따라 자체 tag를 받습니다.
 ```
 Input:  "My email is john@example.com and SSN is 123-45-6789"
 Output: "My email is [EMAIL_REDACTED] and SSN is [US_SSN_REDACTED]"
 ```
 
-**Keywords:** All keywords use the same generic tag
+**Keyword:** 모든 keyword는 동일한 generic tag를 사용합니다.
 ```
 Input:  "This is confidential and proprietary information"
 Output: "This is [KEYWORD_REDACTED] and [KEYWORD_REDACTED] information"
 ```
 
-### Customizing Tags
+### Tag 사용자 지정 {#tag-customizing}
 
-Use `pattern_redaction_format` and `keyword_redaction_tag` to change the redaction format:
+`pattern_redaction_format`과 `keyword_redaction_tag`를 사용해 redaction format을 변경합니다.
 
 ```yaml showLineNumbers title="config.yaml"
 guardrails:
@@ -513,46 +513,46 @@ guardrails:
           action: "MASK"
 ```
 
-**Output:**
+**출력:**
 ```
 Input:  "Email john@example.com, SSN 123-45-6789, confidential data"
 Output: "Email ***EMAIL***, SSN ***US_SSN***, ***REDACTED*** data"
 ```
 
-**Key Points:**
-- `pattern_redaction_format` must include `{pattern_name}` placeholder
-- Pattern names are automatically uppercased (e.g., `email` → `EMAIL`)
-- `keyword_redaction_tag` is a fixed string (no placeholders)
+**핵심 사항:**
+- `pattern_redaction_format`에는 `{pattern_name}` placeholder가 반드시 포함되어야 합니다.
+- Pattern name은 자동으로 uppercase 처리됩니다. 예: `email` → `EMAIL`
+- `keyword_redaction_tag`는 fixed string입니다(placeholder 없음).
 
-## Content Categories
+## Content Category {#content-category}
 
-Prebuilt categories use **keyword matching** to detect harmful content, bias, and inappropriate advice. Keywords are matched with word boundaries (single words) or as substrings (multi-word phrases), case-insensitive.
+Prebuilt category는 harmful content, bias, inappropriate advice를 감지하기 위해 **keyword matching**을 사용합니다. keyword는 word boundary(단일 단어) 또는 substring(여러 단어 문구)으로 matching되며 대소문자를 구분하지 않습니다.
 
-### Available Categories
+### 사용 가능한 Category {#available-categories}
 
-| Category | Description |
+| Category | 설명 |
 |----------|-------------|
-| **Harmful Content** | |
-| `harmful_self_harm` | Self-harm, suicide, eating disorders |
-| `harmful_violence` | Violence, criminal planning, attacks |
-| `harmful_illegal_weapons` | Illegal weapons, explosives, dangerous materials |
-| **Bias Detection** | |
-| `bias_gender` | Gender-based discrimination, stereotypes |
-| `bias_sexual_orientation` | LGBTQ+ discrimination, homophobia, transphobia |
-| `bias_racial` | Racial/ethnic discrimination, stereotypes |
-| `bias_religious` | Religious discrimination, stereotypes |
-| **Denied Advice** | |
-| `denied_financial_advice` | Personalized financial advice, investment recommendations |
-| `denied_medical_advice` | Medical advice, diagnosis, treatment recommendations |
-| `denied_legal_advice` | Legal advice, representation, legal strategy |
+| **유해 콘텐츠** | |
+| `harmful_self_harm` | 자해, suicide, eating disorder |
+| `harmful_violence` | 폭력, criminal planning, attack |
+| `harmful_illegal_weapons` | 불법 무기, explosive, dangerous material |
+| **Bias 감지** | |
+| `bias_gender` | gender 기반 차별, stereotype |
+| `bias_sexual_orientation` | LGBTQ+ 차별, homophobia, transphobia |
+| `bias_racial` | racial/ethnic 차별, stereotype |
+| `bias_religious` | 종교 차별, stereotype |
+| **거부된 조언** | |
+| `denied_financial_advice` | 개인화된 금융 조언, 투자 추천 |
+| `denied_medical_advice` | 의료 조언, 진단, 치료 추천 |
+| `denied_legal_advice` | 법률 조언, 대리, 법률 전략 |
 
-:::info Bias Detection Considerations
+:::info Bias Detection 고려 사항
 
-Bias detection is **complex and context-dependent**. Rule-based systems catch explicit discriminatory language but may generate false positives on legitimate discussions. Start with **high severity thresholds** and test thoroughly. For mission-critical bias detection, consider combining with AI-based guardrails (e.g., HiddenLayer, Lakera).
+Bias detection은 **복잡하고 context-dependent**합니다. Rule-based system은 명시적인 discriminatory language를 잡아내지만 legitimate discussion에서 false positive를 만들 수 있습니다. **high severity threshold**로 시작해 충분히 테스트하세요. mission-critical bias detection에는 AI-based guardrail(예: HiddenLayer, Lakera)과의 조합을 고려하세요.
 
 :::
 
-### Configuration
+### 설정
 
 ```yaml showLineNumbers title="config.yaml"
 guardrails:
@@ -578,14 +578,14 @@ guardrails:
           severity_threshold: "medium"
 ```
 
-**Severity Thresholds:**
-- `"high"` - Only blocks high severity items
-- `"medium"` - Blocks medium and high severity (default)
-- `"low"` - Blocks all severity levels
+**Severity Threshold:**
+- `"high"` - high severity item만 차단합니다.
+- `"medium"` - medium 및 high severity를 차단합니다(기본값).
+- `"low"` - 모든 severity level을 차단합니다.
 
-### Custom Category Files
+### 사용자 정의 Category File {#custom-category-file}
 
-Override default categories with custom keyword lists:
+custom keyword list로 기본 category를 override합니다.
 
 ```yaml showLineNumbers title="config.yaml"
 categories:
@@ -612,11 +612,11 @@ exceptions:
   - "mental health"
 ```
 
-## Use Cases
+## 사용 사례 {#use-case}
 
-### 1. Harmful Content Detection
+### 1. Harmful Content 감지 {#1-harmful-content-detection}
 
-Block or detect requests containing harmful, illegal, or dangerous content:
+harmful, illegal, dangerous content가 포함된 요청을 차단하거나 감지합니다.
 
 ```yaml
 categories:
@@ -634,9 +634,9 @@ categories:
     severity_threshold: "medium"
 ```
 
-### 2. Bias and Discrimination Detection
+### 2. Bias 및 차별 감지 {#2-bias-and-discrimination-detection}
 
-Detect and block biased, discriminatory, or hateful content across multiple dimensions:
+여러 차원에서 biased, discriminatory, hateful content를 감지하고 차단합니다.
 
 ```yaml
 categories:
@@ -667,7 +667,7 @@ categories:
 
 **Sensitivity Tuning:**
 
-For bias detection, severity thresholds are critical to balance safety and legitimate discourse:
+bias detection에서는 safety와 legitimate discourse의 균형을 맞추기 위해 severity threshold가 중요합니다.
 
 ```yaml
 # Conservative (low false positives, may miss subtle bias)
@@ -688,8 +688,8 @@ categories:
 
 
 
-### 3. PII Protection
-Block or mask personally identifiable information before sending to LLMs:
+### 3. PII 보호 {#3-pii-protection}
+LLM으로 전송하기 전에 personally identifiable information을 차단하거나 mask합니다.
 
 ```yaml
 patterns:
@@ -701,8 +701,8 @@ patterns:
     action: "MASK"
 ```
 
-### 2. Credential Detection
-Prevent API keys and secrets from being exposed:
+### 2. Credential 감지 {#2-credential-detection}
+API key와 secret이 노출되지 않도록 방지합니다.
 
 ```yaml
 patterns:
@@ -714,8 +714,8 @@ patterns:
     action: "BLOCK"
 ```
 
-### 3. Sensitive Internal Data Protection
-Block or mask references to confidential internal projects, codenames, or proprietary information:
+### 3. 민감한 내부 데이터 보호 {#3-sensitive-internal-data-protection}
+confidential internal project, codename, proprietary information에 대한 reference를 차단하거나 mask합니다.
 
 ```yaml
 blocked_words:
@@ -727,14 +727,14 @@ blocked_words:
     description: "Internal system references"
 ```
 
-For large lists of sensitive terms, use a file:
+민감 용어 목록이 큰 경우 file을 사용합니다.
 ```yaml
 blocked_words_file: "/path/to/sensitive_terms.yaml"
 ```
 
-### 4. Safe AI for Consumer Applications
+### 4. Consumer Application을 위한 안전한 AI {#4-safe-ai-for-consumer-applications}
 
-Combining harmful content and bias detection for consumer-facing AI:
+consumer-facing AI에는 harmful content와 bias detection을 결합합니다.
 
 ```yaml
 guardrails:
@@ -772,15 +772,15 @@ guardrails:
           severity_threshold: "high"  # Education and news may discuss race
 ```
 
-**Perfect for:**
-- Chatbots and virtual assistants
-- Educational AI tools
-- Customer service AI
-- Content generation platforms
-- Public-facing AI applications
+**적합한 용도:**
+- Chatbot 및 virtual assistant
+- 교육용 AI 도구
+- 고객 서비스 AI
+- 콘텐츠 생성 플랫폼
+- 공개 사용자 대상 AI application
 
-### 5. Compliance
-Ensure regulatory compliance by filtering sensitive data types:
+### 5. Compliance {#5-compliance}
+민감한 data type을 필터링해 regulatory compliance를 보장합니다.
 
 ```yaml
 # Categories checked first (high priority)
@@ -798,5 +798,3 @@ patterns:
     pattern_name: "us_ssn"
     action: "BLOCK"
 ```
-
-

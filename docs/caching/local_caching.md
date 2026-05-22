@@ -1,15 +1,15 @@
-# LiteLLM - Local Caching
+# LiteLLM - 로컬 캐싱 {#litellm---local-caching}
 
-## Caching `completion()` and `embedding()` calls when switched on
+## 활성화된 경우 `completion()` 및 `embedding()` 호출 캐싱 {#caching-completion-and-embedding-calls-when-switched-on}
 
-liteLLM implements exact match caching and supports the following Caching:
-* In-Memory Caching [Default]
-* Redis Caching Local
-* Redis Caching Hosted
+liteLLM은 정확히 일치하는 캐싱을 구현하며 다음 캐싱을 지원합니다.
+* 인메모리 캐싱 [기본값]
+* 로컬 Redis 캐싱
+* 호스팅 Redis 캐싱
 
-## Quick Start Usage - Completion
-Caching - cache
-Keys in the cache are `model`, the following example will lead to a cache hit
+## 빠른 시작 사용법 - Completion {#quick-start-usage---completion}
+캐싱 - 캐시
+캐시의 키는 `model`이며, 다음 예시는 캐시 적중으로 이어집니다.
 ```python
 import litellm
 from litellm import completion
@@ -31,8 +31,8 @@ response2 = completion(
 # response1 == response2, response 1 is cached
 ```
 
-## Custom Key-Value Pairs 
-Add custom key-value pairs to your cache. 
+## 사용자 지정 키-값 쌍 {#custom-key-value-pairs}
+캐시에 사용자 지정 키-값 쌍을 추가합니다.
 
 ```python 
 from litellm.caching.caching import Cache
@@ -43,10 +43,10 @@ cache.add_cache(cache_key="test-key", result="1234")
 cache.get_cache(cache_key="test-key")
 ```
 
-## Caching with Streaming 
-LiteLLM can cache your streamed responses for you
+## 스트리밍 캐싱 {#caching-with-streaming}
+LiteLLM은 스트리밍 응답을 캐시할 수 있습니다.
 
-### Usage
+### 사용법
 ```python
 import litellm
 from litellm import completion
@@ -70,9 +70,9 @@ for chunk in response2:
     print(chunk)
 ```
 
-## Usage - Embedding()
-1. Caching - cache
-Keys in the cache are `model`, the following example will lead to a cache hit
+## 사용법 - Embedding()
+1. 캐싱 - 캐시
+캐시의 키는 `model`이며, 다음 예시는 캐시 적중으로 이어집니다.
 ```python
 import time
 import litellm

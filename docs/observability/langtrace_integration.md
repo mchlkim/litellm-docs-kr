@@ -2,15 +2,15 @@ import Image from '@theme/IdealImage';
 
 # Langtrace AI
 
-Monitor, evaluate & improve your LLM apps
+LLM 앱을 모니터링, 평가, 개선하세요
 
-## Pre-Requisites
+## 사전 준비 {#pre-requisites}
 
-Make an account on [Langtrace AI](https://langtrace.ai/login)
+[Langtrace AI](https://langtrace.ai/login) 계정을 만드세요
 
-## Quick Start
+## 빠른 시작
 
-Use just 2 lines of code, to instantly log your responses **across all providers** with langtrace
+코드 2줄만으로 langtrace를 통해 **모든 제공업체**의 응답을 즉시 로깅할 수 있습니다
 
 ```python
 litellm.callbacks = ["langtrace"]
@@ -45,7 +45,7 @@ response = completion(
 print(response)
 ```
 
-### Using with LiteLLM Proxy
+### LiteLLM Proxy와 함께 사용하기 {#using-with-litellm-proxy}
 
 ```yaml
 model_list:

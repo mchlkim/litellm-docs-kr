@@ -1,5 +1,5 @@
 ---
-title: "v1.78.0-stable - MCP Gateway: Control Tool Access by Team, Key"
+title: "v1.78.0-stable - MCP Gateway: 팀 및 키별 도구 액세스 제어"
 slug: "v1-78-0"
 date: 2025-10-11T10:00:00
 authors:
@@ -19,7 +19,7 @@ import Image from '@theme/IdealImage';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-## Deploy this version
+## 이 버전 배포하기 {#deploy-this-version}
 
 <Tabs>
 <TabItem value="docker" label="Docker">
@@ -44,17 +44,17 @@ pip install litellm==1.78.0.post1
 
 ---
 
-## Key Highlights
+## 주요 내용 {#key-highlights}
 
-- **MCP Gateway - Control Tool Access by Team, Key** - Control MCP tool access by team/key. 
-- **Performance Improvements** - 70% Lower p99 Latency
-- **GPT-5 Pro & GPT-Image-1-Mini** - Day 0 support for OpenAI's GPT-5 Pro (400K context) and gpt-image-1-mini image generation
-- **EnkryptAI Guardrails** - New guardrail integration for content moderation
-- **Tag-Based Budgets** - Support for setting budgets based on request tags
+- **MCP Gateway - 팀 및 키별 도구 액세스 제어** - 팀/키 단위로 MCP 도구 액세스를 제어합니다.
+- **성능 개선** - p99 지연 시간이 70% 감소했습니다.
+- **GPT-5 Pro 및 GPT-Image-1-Mini** - OpenAI GPT-5 Pro(400K 컨텍스트)와 gpt-image-1-mini 이미지 생성을 출시 당일부터 지원합니다.
+- **EnkryptAI 가드레일** - 콘텐츠 모더레이션을 위한 새 가드레일 통합을 추가했습니다.
+- **태그 기반 예산** - 요청 태그를 기준으로 예산을 설정할 수 있습니다.
 
 ---
 
-### MCP Gateway - Control Tool Access by Team, Key
+### MCP Gateway - 팀 및 키별 도구 액세스 제어 {#mcp-gateway-control-tool-access-by-team-key}
 
 <Image 
   img={require('../../img/release_notes/tool_control.png')}
@@ -63,320 +63,319 @@ pip install litellm==1.78.0.post1
 
 <br/>
 
-Proxy admins can now control MCP tool access by team or key. This makes it easy to grant different teams selective access to tools from the same MCP server.
+Proxy 관리자는 이제 팀 또는 키별로 MCP 도구 액세스를 제어할 수 있습니다. 같은 MCP 서버의 도구라도 팀마다 선택적으로 권한을 부여하기 쉬워졌습니다.
 
-For example, you can now give your Engineering team access to `list_repositories`, `create_issue`, and `search_code` tools, while Sales only gets `search_code` and `close_issue` tools. 
+예를 들어 Engineering 팀에는 `list_repositories`, `create_issue`, `search_code` 도구 액세스를 부여하고, Sales 팀에는 `search_code`와 `close_issue` 도구만 부여할 수 있습니다.
 
-This makes it easier for Proxy Admins to govern MCP Tool Access.
+이를 통해 Proxy Admin이 MCP Tool Access를 더 쉽게 관리할 수 있습니다.
 
-[Get Started](../../docs/mcp_control#set-allowed-tools-for-a-key-team-or-organization)
+[시작하기](../../docs/mcp_control#set-allowed-tools-for-a-key-team-or-organization)
 
 ---
 
-## Performance - 70% Lower p99 Latency
+## 성능 - p99 지연 시간 70% 감소 {#performance-70-lower-p99-latency}
 
 <Image img={require('../../img/release_notes/1_78_0_perf.png')}  style={{ width: '800px', height: 'auto' }} />
 
 <br/>
 
-This release cuts p99 latency by 70% on LiteLLM AI Gateway, making it even better for low-latency use cases.
+이번 릴리스는 LiteLLM AI Gateway의 p99 지연 시간을 70% 줄여, 낮은 지연 시간이 중요한 사용 사례에 더 적합해졌습니다.
 
-These gains come from two key enhancements:
+이 개선은 두 가지 핵심 변경에서 나왔습니다.
 
-**Reliable Sessions**
+**안정적인 세션**
 
-Added support for shared sessions with aiohttp. The shared_session parameter is now consistently used across all calls, enabling connection pooling.
+aiohttp의 공유 세션 지원을 추가했습니다. 이제 모든 호출에서 shared_session 파라미터를 일관되게 사용해 연결 풀링을 활성화합니다.
 
-**Faster Routing**
+**더 빠른 라우팅**
 
-A new `model_name_to_deployment_indices` hash map replaces O(n) list scans in `_get_all_deployments()` with O(1) hash lookups, boosting routing performance and scalability.
+새 `model_name_to_deployment_indices` 해시 맵이 `_get_all_deployments()`의 O(n) 리스트 스캔을 O(1) 해시 조회로 대체해 라우팅 성능과 확장성을 높입니다.
 
-As a result, performance improved across all latency percentiles:
+그 결과 모든 지연 시간 백분위에서 성능이 개선되었습니다.
 
-- **Median latency:** 110 ms → **100 ms** (−9.1%)
-- **p95 latency:** 440 ms → **150 ms** (−65.9%)
-- **p99 latency:** 810 ms → **240 ms** (−70.4%)
-- **Average latency:** 310 ms → **111.73 ms** (−64.0%)
+- **중앙값 지연 시간:** 110 ms → **100 ms** (−9.1%)
+- **p95 지연 시간:** 440 ms → **150 ms** (−65.9%)
+- **p99 지연 시간:** 810 ms → **240 ms** (−70.4%)
+- **평균 지연 시간:** 310 ms → **111.73 ms** (−64.0%)
 
-### **Test Setup**
+### **테스트 설정** {#test-setup}
 
 **Locust**
 
-- **Concurrent users:** 1,000
+- **동시 사용자:** 1,000
 - **Ramp-up:** 500
 
-**System Specs**
+**시스템 사양**
 
-- **Database was used**
+- **데이터베이스 사용**
 - **CPU:** 4 vCPUs
-- **Memory:** 8 GB RAM
+- **메모리:** 8 GB RAM
 - **LiteLLM Workers:** 4
-- **Instances**: 4
+- **인스턴스**: 4
 
-**Configuration (config.yaml)**
+**설정 (config.yaml)**
 
-View the complete configuration: [gist.github.com/AlexsanderHamir/config.yaml](https://gist.github.com/AlexsanderHamir/53f7d554a5d2afcf2c4edb5b6be68ff4)
+전체 설정 보기: [gist.github.com/AlexsanderHamir/config.yaml](https://gist.github.com/AlexsanderHamir/53f7d554a5d2afcf2c4edb5b6be68ff4)
 
-**Load Script (no_cache_hits.py)**
+**부하 스크립트 (no_cache_hits.py)**
 
-View the complete load testing script: [gist.github.com/AlexsanderHamir/no_cache_hits.py](https://gist.github.com/AlexsanderHamir/42c33d7a4dc7a57f56a78b560dee3a42)
+전체 부하 테스트 스크립트 보기: [gist.github.com/AlexsanderHamir/no_cache_hits.py](https://gist.github.com/AlexsanderHamir/42c33d7a4dc7a57f56a78b560dee3a42)
 
 ---
 
-## New Models / Updated Models
+## 신규 모델 / 업데이트된 모델 {#new-models--updated-models}
 
-#### New Model Support
+#### 신규 모델 지원 {#new-model-support}
 
-| Provider | Model | Context Window | Input ($/1M tokens) | Output ($/1M tokens) | Features |
+| Provider | Model | 컨텍스트 윈도우 | 입력 ($/1M tokens) | 출력 ($/1M tokens) | 기능 |
 | -------- | ----- | -------------- | ------------------- | -------------------- | -------- |
-| OpenAI | `gpt-5-pro` | 400K | $15.00 | $120.00 | Responses API, reasoning, vision, function calling, prompt caching, web search |
-| OpenAI | `gpt-5-pro-2025-10-06` | 400K | $15.00 | $120.00 | Responses API, reasoning, vision, function calling, prompt caching, web search |
-| OpenAI | `gpt-image-1-mini` | - | $2.00/img | - | Image generation and editing |
-| OpenAI | `gpt-realtime-mini` | 128K | $0.60 | $2.40 | Realtime audio, function calling |
-| Azure AI | `azure_ai/Phi-4-mini-reasoning` | 131K | $0.08 | $0.32 | Function calling |
-| Azure AI | `azure_ai/Phi-4-reasoning` | 32K | $0.125 | $0.50 | Function calling, reasoning |
-| Azure AI | `azure_ai/MAI-DS-R1` | 128K | $1.35 | $5.40 | Reasoning, function calling |
-| Bedrock | `au.anthropic.claude-sonnet-4-5-20250929-v1:0` | 200K | $3.30 | $16.50 | Chat, reasoning, vision, function calling, prompt caching |
-| Bedrock | `global.anthropic.claude-sonnet-4-5-20250929-v1:0` | 200K | $3.00 | $15.00 | Chat, reasoning, vision, function calling, prompt caching |
-| Bedrock | `global.anthropic.claude-sonnet-4-20250514-v1:0` | 1M | $3.00 | $15.00 | Chat, reasoning, vision, function calling, prompt caching |
-| Bedrock | `cohere.embed-v4:0` | 128K | $0.12 | - | Embeddings, image input support |
-| OCI | `oci/cohere.command-latest` | 128K | $1.56 | $1.56 | Function calling |
-| OCI | `oci/cohere.command-a-03-2025` | 256K | $1.56 | $1.56 | Function calling |
-| OCI | `oci/cohere.command-plus-latest` | 128K | $1.56 | $1.56 | Function calling |
-| Together AI | `together_ai/moonshotai/Kimi-K2-Instruct-0905` | 262K | $1.00 | $3.00 | Function calling |
-| Together AI | `together_ai/Qwen/Qwen3-Next-80B-A3B-Instruct` | 262K | $0.15 | $1.50 | Function calling |
-| Together AI | `together_ai/Qwen/Qwen3-Next-80B-A3B-Thinking` | 262K | $0.15 | $1.50 | Function calling |
-| Vertex AI | MedGemma models | Varies | Varies | Varies | Medical-focused Gemma models on custom endpoints |
-| Watson X | 27 new foundation models | Varies | Varies | Varies | Granite, Llama, Mistral families |
+| OpenAI | `gpt-5-pro` | 400K | $15.00 | $120.00 | Responses API, 추론, 비전, 함수 호출, 프롬프트 캐싱, 웹 검색 |
+| OpenAI | `gpt-5-pro-2025-10-06` | 400K | $15.00 | $120.00 | Responses API, 추론, 비전, 함수 호출, 프롬프트 캐싱, 웹 검색 |
+| OpenAI | `gpt-image-1-mini` | - | $2.00/img | - | 이미지 생성 및 편집 |
+| OpenAI | `gpt-realtime-mini` | 128K | $0.60 | $2.40 | 실시간 오디오, 함수 호출 |
+| Azure AI | `azure_ai/Phi-4-mini-reasoning` | 131K | $0.08 | $0.32 | 함수 호출 |
+| Azure AI | `azure_ai/Phi-4-reasoning` | 32K | $0.125 | $0.50 | 함수 호출, 추론 |
+| Azure AI | `azure_ai/MAI-DS-R1` | 128K | $1.35 | $5.40 | 추론, 함수 호출 |
+| Bedrock | `au.anthropic.claude-sonnet-4-5-20250929-v1:0` | 200K | $3.30 | $16.50 | 채팅, 추론, 비전, 함수 호출, 프롬프트 캐싱 |
+| Bedrock | `global.anthropic.claude-sonnet-4-5-20250929-v1:0` | 200K | $3.00 | $15.00 | 채팅, 추론, 비전, 함수 호출, 프롬프트 캐싱 |
+| Bedrock | `global.anthropic.claude-sonnet-4-20250514-v1:0` | 1M | $3.00 | $15.00 | 채팅, 추론, 비전, 함수 호출, 프롬프트 캐싱 |
+| Bedrock | `cohere.embed-v4:0` | 128K | $0.12 | - | 임베딩, 이미지 입력 지원 |
+| OCI | `oci/cohere.command-latest` | 128K | $1.56 | $1.56 | 함수 호출 |
+| OCI | `oci/cohere.command-a-03-2025` | 256K | $1.56 | $1.56 | 함수 호출 |
+| OCI | `oci/cohere.command-plus-latest` | 128K | $1.56 | $1.56 | 함수 호출 |
+| Together AI | `together_ai/moonshotai/Kimi-K2-Instruct-0905` | 262K | $1.00 | $3.00 | 함수 호출 |
+| Together AI | `together_ai/Qwen/Qwen3-Next-80B-A3B-Instruct` | 262K | $0.15 | $1.50 | 함수 호출 |
+| Together AI | `together_ai/Qwen/Qwen3-Next-80B-A3B-Thinking` | 262K | $0.15 | $1.50 | 함수 호출 |
+| Vertex AI | MedGemma models | 다양함 | 다양함 | 다양함 | 커스텀 엔드포인트의 의료 특화 Gemma 모델 |
+| Watson X | 신규 foundation model 27개 | 다양함 | 다양함 | 다양함 | Granite, Llama, Mistral 계열 |
 
-#### Features
+#### 기능 {#features}
 
 - **[OpenAI](../../docs/providers/openai)**
-    - Add GPT-5 Pro model configuration and documentation - [PR #15258](https://github.com/BerriAI/litellm/pull/15258)
-    - Add stop parameter to non-supported params for GPT-5 - [PR #15244](https://github.com/BerriAI/litellm/pull/15244)
-    - Day 0 Support, Add gpt-image-1-mini - [PR #15259](https://github.com/BerriAI/litellm/pull/15259)
-    - Add gpt-realtime-mini support - [PR #15283](https://github.com/BerriAI/litellm/pull/15283)
-    - Add gpt-5-pro-2025-10-06 to model costs - [PR #15344](https://github.com/BerriAI/litellm/pull/15344)
-    - Minimal fix: gpt5 models should not go on cooldown when called with temperature!=1 - [PR #15330](https://github.com/BerriAI/litellm/pull/15330)
+    - GPT-5 Pro 모델 설정과 문서를 추가했습니다 - [PR #15258](https://github.com/BerriAI/litellm/pull/15258)
+    - GPT-5의 미지원 파라미터에 stop 파라미터를 추가했습니다 - [PR #15244](https://github.com/BerriAI/litellm/pull/15244)
+    - gpt-image-1-mini를 출시 당일부터 지원하도록 추가했습니다 - [PR #15259](https://github.com/BerriAI/litellm/pull/15259)
+    - gpt-realtime-mini 지원을 추가했습니다 - [PR #15283](https://github.com/BerriAI/litellm/pull/15283)
+    - model costs에 gpt-5-pro-2025-10-06을 추가했습니다 - [PR #15344](https://github.com/BerriAI/litellm/pull/15344)
+    - 최소 수정: temperature!=1로 호출한 gpt5 모델이 cooldown에 들어가지 않도록 했습니다 - [PR #15330](https://github.com/BerriAI/litellm/pull/15330)
 
 - **[Snowflake Cortex](../../docs/providers/snowflake)**
-    - Add function calling support for Snowflake Cortex REST API - [PR #15221](https://github.com/BerriAI/litellm/pull/15221)
+    - Snowflake Cortex REST API에 함수 호출 지원을 추가했습니다 - [PR #15221](https://github.com/BerriAI/litellm/pull/15221)
 
 - **[Gemini](../../docs/providers/gemini)**
-    - Fix header forwarding for Gemini/Vertex AI providers in proxy mode - [PR #15231](https://github.com/BerriAI/litellm/pull/15231)
+    - proxy mode에서 Gemini/Vertex AI provider의 헤더 전달을 수정했습니다 - [PR #15231](https://github.com/BerriAI/litellm/pull/15231)
 
 - **[Azure](../../docs/providers/azure)**
-    - Removed stop param from unsupported azure models - [PR #15229](https://github.com/BerriAI/litellm/pull/15229)
-    - Fix(azure/responses): remove invalid status param from azure call - [PR #15253](https://github.com/BerriAI/litellm/pull/15253)
-    - Add new Azure AI models with pricing details - [PR #15387](https://github.com/BerriAI/litellm/pull/15387)
-    - AzureAD Default credentials - select credential type based on environment - [PR #14470](https://github.com/BerriAI/litellm/pull/14470)
+    - 지원되지 않는 azure 모델에서 stop param을 제거했습니다 - [PR #15229](https://github.com/BerriAI/litellm/pull/15229)
+    - Fix(azure/responses): azure call에서 잘못된 status param을 제거했습니다 - [PR #15253](https://github.com/BerriAI/litellm/pull/15253)
+    - 가격 세부 정보와 함께 새 Azure AI 모델을 추가했습니다 - [PR #15387](https://github.com/BerriAI/litellm/pull/15387)
+    - AzureAD Default credentials - 환경에 따라 credential type을 선택합니다 - [PR #14470](https://github.com/BerriAI/litellm/pull/14470)
 
 - **[Bedrock](../../docs/providers/bedrock)**
-    - Add Global Cross-Region Inference - [PR #15210](https://github.com/BerriAI/litellm/pull/15210)
-    - Add Cohere Embed v4 support for AWS Bedrock - [PR #15298](https://github.com/BerriAI/litellm/pull/15298)
-    - Fix(bedrock): include cacheWriteInputTokens in prompt_tokens calculation - [PR #15292](https://github.com/BerriAI/litellm/pull/15292)
-    - Add Bedrock AU Cross-Region Inference for Claude Sonnet 4.5 - [PR #15402](https://github.com/BerriAI/litellm/pull/15402)
-    - Converse → /v1/messages streaming doesn't handle parallel tool calls with Claude models - [PR #15315](https://github.com/BerriAI/litellm/pull/15315)
+    - Global Cross-Region Inference를 추가했습니다 - [PR #15210](https://github.com/BerriAI/litellm/pull/15210)
+    - AWS Bedrock에 Cohere Embed v4 지원을 추가했습니다 - [PR #15298](https://github.com/BerriAI/litellm/pull/15298)
+    - Fix(bedrock): prompt_tokens 계산에 cacheWriteInputTokens를 포함했습니다 - [PR #15292](https://github.com/BerriAI/litellm/pull/15292)
+    - Claude Sonnet 4.5용 Bedrock AU Cross-Region Inference를 추가했습니다 - [PR #15402](https://github.com/BerriAI/litellm/pull/15402)
+    - Claude 모델에서 Converse → /v1/messages 스트리밍이 병렬 도구 호출을 처리하지 못하던 문제를 수정했습니다 - [PR #15315](https://github.com/BerriAI/litellm/pull/15315)
 
 - **[Vertex AI](../../docs/providers/vertex)**
-    - Implement Context Caching for Vertex AI provider - [PR #15226](https://github.com/BerriAI/litellm/pull/15226)
-    - Support for Vertex AI Gemma Models on Custom Endpoints - [PR #15397](https://github.com/BerriAI/litellm/pull/15397)
-    - VertexAI - gemma model family support (custom endpoints) - [PR #15419](https://github.com/BerriAI/litellm/pull/15419)
-    - VertexAI Gemma model family streaming support + Added MedGemma - [PR #15427](https://github.com/BerriAI/litellm/pull/15427)
+    - Vertex AI provider에 Context 캐싱을 구현했습니다 - [PR #15226](https://github.com/BerriAI/litellm/pull/15226)
+    - Custom Endpoints의 Vertex AI Gemma 모델을 지원합니다 - [PR #15397](https://github.com/BerriAI/litellm/pull/15397)
+    - VertexAI - gemma model family 지원(custom endpoints)을 추가했습니다 - [PR #15419](https://github.com/BerriAI/litellm/pull/15419)
+    - VertexAI Gemma model family 스트리밍 지원과 MedGemma를 추가했습니다 - [PR #15427](https://github.com/BerriAI/litellm/pull/15427)
 
 - **[OCI](../../docs/providers/oci)**
-    - Add OCI Cohere support with tool calling and streaming capabilities - [PR #15365](https://github.com/BerriAI/litellm/pull/15365)
+    - tool calling 및 스트리밍 기능과 함께 OCI Cohere 지원을 추가했습니다 - [PR #15365](https://github.com/BerriAI/litellm/pull/15365)
 
 - **[Watson X](../../docs/providers/watsonx)**
-    - Add Watson X foundation model definitions to model_prices_and_context_window.json - [PR #15219](https://github.com/BerriAI/litellm/pull/15219)
-    - Watsonx - Apply correct prompt templates for openai/gpt-oss model family - [PR #15341](https://github.com/BerriAI/litellm/pull/15341)
+    - Watson X foundation model 정의를 model_prices_and_context_window.json에 추가했습니다 - [PR #15219](https://github.com/BerriAI/litellm/pull/15219)
+    - Watsonx - openai/gpt-oss model family에 올바른 prompt template을 적용했습니다 - [PR #15341](https://github.com/BerriAI/litellm/pull/15341)
 
 - **[OpenRouter](../../docs/providers/openrouter)**
-    - Fix - (openrouter): move cache_control to content blocks for claude/gemini - [PR #15345](https://github.com/BerriAI/litellm/pull/15345)
-    - Fix - OpenRouter cache_control to only apply to last content block - [PR #15395](https://github.com/BerriAI/litellm/pull/15395)
+    - Fix - (openrouter): claude/gemini에서 cache_control을 content block으로 이동했습니다 - [PR #15345](https://github.com/BerriAI/litellm/pull/15345)
+    - Fix - OpenRouter cache_control이 마지막 content block에만 적용되도록 했습니다 - [PR #15395](https://github.com/BerriAI/litellm/pull/15395)
 
 - **[Together AI](../../docs/providers/togetherai)**
-    - Add new together models - [PR #15383](https://github.com/BerriAI/litellm/pull/15383)
+    - 새 together 모델을 추가했습니다 - [PR #15383](https://github.com/BerriAI/litellm/pull/15383)
 
-### Bug Fixes
+### 버그 수정 {#bug-fixes}
 
 - **General**
-    - Bug fix: gpt-5-chat-latest has incorrect max_input_tokens value - [PR #15116](https://github.com/BerriAI/litellm/pull/15116)
-    - Fix reasoning response ID - [PR #15265](https://github.com/BerriAI/litellm/pull/15265)
-    - Fix issue with parsing assistant messages - [PR #15320](https://github.com/BerriAI/litellm/pull/15320)
-    - Fix litellm_param based costing - [PR #15336](https://github.com/BerriAI/litellm/pull/15336)
-    - Fix lint errors - [PR #15406](https://github.com/BerriAI/litellm/pull/15406)
+    - 버그 수정: gpt-5-chat-latest의 max_input_tokens 값이 잘못된 문제를 수정했습니다 - [PR #15116](https://github.com/BerriAI/litellm/pull/15116)
+    - reasoning response ID를 수정했습니다 - [PR #15265](https://github.com/BerriAI/litellm/pull/15265)
+    - assistant messages 파싱 문제를 수정했습니다 - [PR #15320](https://github.com/BerriAI/litellm/pull/15320)
+    - litellm_param 기반 비용 계산을 수정했습니다 - [PR #15336](https://github.com/BerriAI/litellm/pull/15336)
+    - lint 오류를 수정했습니다 - [PR #15406](https://github.com/BerriAI/litellm/pull/15406)
 
 ---
 
-## LLM API Endpoints
+## LLM API 엔드포인트 {#llm-api-endpoints}
 
-#### Features
+#### 기능 {#features-1}
 
 - **[Responses API](../../docs/response_api)**
-    - Added streaming support for response api streaming image generation - [PR #15269](https://github.com/BerriAI/litellm/pull/15269)
-    - Add native Responses API support for litellm_proxy provider - [PR #15347](https://github.com/BerriAI/litellm/pull/15347)
-    - Temporarily relax ResponsesAPIResponse parsing to support custom backends (e.g., vLLM) - [PR #15362](https://github.com/BerriAI/litellm/pull/15362)
+    - response api 스트리밍 이미지 생성에 스트리밍 지원을 추가했습니다 - [PR #15269](https://github.com/BerriAI/litellm/pull/15269)
+    - litellm_proxy provider에 네이티브 Responses API 지원을 추가했습니다 - [PR #15347](https://github.com/BerriAI/litellm/pull/15347)
+    - 커스텀 백엔드(예: vLLM)를 지원하도록 ResponsesAPIResponse 파싱을 일시적으로 완화했습니다 - [PR #15362](https://github.com/BerriAI/litellm/pull/15362)
 
 - **[Files API](../../docs/files_api)**
-    - Feat(files): add @client decorator to file operations - [PR #15339](https://github.com/BerriAI/litellm/pull/15339)
+    - Feat(files): file operations에 @client decorator를 추가했습니다 - [PR #15339](https://github.com/BerriAI/litellm/pull/15339)
 
 - **[/generateContent](../../docs/providers/gemini)**
-    - Fix gemini cli by actually streaming the response - [PR #15264](https://github.com/BerriAI/litellm/pull/15264)
+    - 실제로 응답을 스트리밍하도록 gemini cli를 수정했습니다 - [PR #15264](https://github.com/BerriAI/litellm/pull/15264)
 
 - **[Azure Passthrough](../../docs/pass_through/azure)**
-    - Azure - passthrough support with router models - [PR #15240](https://github.com/BerriAI/litellm/pull/15240)
+    - Azure - router models와 함께 passthrough를 지원합니다 - [PR #15240](https://github.com/BerriAI/litellm/pull/15240)
 
-#### Bugs
+#### 버그 {#bugs}
 
 - **General**
-    - Fix x-litellm-cache-key header not being returned on cache hit - [PR #15348](https://github.com/BerriAI/litellm/pull/15348)
+    - cache hit 시 x-litellm-cache-key 헤더가 반환되지 않는 문제를 수정했습니다 - [PR #15348](https://github.com/BerriAI/litellm/pull/15348)
 
 ---
 
-## Management Endpoints / UI
+## 관리 엔드포인트 / UI {#management-endpoints--ui}
 
-#### Features
+#### 기능 {#features-2}
 
-- **Proxy CLI Auth**
-    - Proxy CLI - dont store existing key in the URL, store it in the state param - [PR #15290](https://github.com/BerriAI/litellm/pull/15290)
+- **Proxy CLI 인증**
+    - Proxy CLI - 기존 키를 URL에 저장하지 않고 state param에 저장합니다 - [PR #15290](https://github.com/BerriAI/litellm/pull/15290)
 
-- **Models + Endpoints**
-    - Make PATCH `/model/{model_id}/update` handle `team_id` consistently with POST `/model/new` - [PR #15297](https://github.com/BerriAI/litellm/pull/15297)
-    - Feature: adds Infinity as a provider in the UI - [PR #15285](https://github.com/BerriAI/litellm/pull/15285)
-    - Fix: model + endpoints page crash when config file contains router_settings.model_group_alias - [PR #15308](https://github.com/BerriAI/litellm/pull/15308)
-    - Models & Endpoints Initial Refactor - [PR #15435](https://github.com/BerriAI/litellm/pull/15435)
-    - Litellm UI API Reference page updates - [PR #15438](https://github.com/BerriAI/litellm/pull/15438)
+- **모델 + Endpoints**
+    - PATCH `/model/{model_id}/update`가 POST `/model/new`와 일관되게 `team_id`를 처리하도록 했습니다 - [PR #15297](https://github.com/BerriAI/litellm/pull/15297)
+    - 기능: UI에 Infinity를 provider로 추가했습니다 - [PR #15285](https://github.com/BerriAI/litellm/pull/15285)
+    - 수정: 설정 파일에 router_settings.model_group_alias가 있을 때 model + endpoints 페이지가 크래시 나는 문제를 수정했습니다 - [PR #15308](https://github.com/BerriAI/litellm/pull/15308)
+    - 모델 & Endpoints 초기 리팩터링 - [PR #15435](https://github.com/BerriAI/litellm/pull/15435)
+    - Litellm UI API Reference 페이지를 업데이트했습니다 - [PR #15438](https://github.com/BerriAI/litellm/pull/15438)
 
 - **Teams**
-    - Teams page: new column "Your Role" on the teams table - [PR #15384](https://github.com/BerriAI/litellm/pull/15384)
-    - LiteLLM Dashboard Teams UI refactor - [PR #15418](https://github.com/BerriAI/litellm/pull/15418)
+    - Teams 페이지: teams 테이블에 새 "Your Role" 열을 추가했습니다 - [PR #15384](https://github.com/BerriAI/litellm/pull/15384)
+    - LiteLLM Dashboard Teams UI를 리팩터링했습니다 - [PR #15418](https://github.com/BerriAI/litellm/pull/15418)
 
-- **UI Infrastructure**
-    - Added prettier to autoformat frontend - [PR #15215](https://github.com/BerriAI/litellm/pull/15215)
-    - Adds turbopack to the npm run dev command in UI to build faster during development - [PR #15250](https://github.com/BerriAI/litellm/pull/15250)
-    - (perf) fix: Replaces bloated key list calls with lean key aliases endpoint - [PR #15252](https://github.com/BerriAI/litellm/pull/15252)
-    - Potentially fixes a UI spasm issue with an expired cookie - [PR #15309](https://github.com/BerriAI/litellm/pull/15309)
-    - LiteLLM UI Refactor Infrastructure - [PR #15236](https://github.com/BerriAI/litellm/pull/15236)
-    - Enforces removal of unused imports from UI - [PR #15416](https://github.com/BerriAI/litellm/pull/15416)
-    - Fix: usage page >> Model Activity >> spend per day graph: y-axis clipping on large spend values - [PR #15389](https://github.com/BerriAI/litellm/pull/15389)
-    - Updates guardrail provider logos - [PR #15421](https://github.com/BerriAI/litellm/pull/15421)
+- **UI 인프라**
+    - frontend 자동 포매팅을 위해 prettier를 추가했습니다 - [PR #15215](https://github.com/BerriAI/litellm/pull/15215)
+    - 개발 중 더 빠르게 빌드하도록 UI의 npm run dev 명령에 turbopack을 추가했습니다 - [PR #15250](https://github.com/BerriAI/litellm/pull/15250)
+    - (perf) 수정: 비대한 key list 호출을 더 가벼운 key aliases endpoint로 교체했습니다 - [PR #15252](https://github.com/BerriAI/litellm/pull/15252)
+    - 만료된 쿠키로 인한 UI spasm 문제를 완화할 수 있는 수정입니다 - [PR #15309](https://github.com/BerriAI/litellm/pull/15309)
+    - LiteLLM UI 리팩터링 인프라를 정리했습니다 - [PR #15236](https://github.com/BerriAI/litellm/pull/15236)
+    - UI에서 사용하지 않는 imports 제거를 강제합니다 - [PR #15416](https://github.com/BerriAI/litellm/pull/15416)
+    - 수정: usage 페이지 >> Model Activity >> spend per day 그래프에서 큰 spend 값의 y-axis가 잘리는 문제를 수정했습니다 - [PR #15389](https://github.com/BerriAI/litellm/pull/15389)
+    - guardrail provider 로고를 업데이트했습니다 - [PR #15421](https://github.com/BerriAI/litellm/pull/15421)
 
-- **Admin Settings**
-    - Fix: Router settings do not update despite success message - [PR #15249](https://github.com/BerriAI/litellm/pull/15249)
-    - Fix: Prevents DB from accidentally overriding config file values if they are empty in DB - [PR #15340](https://github.com/BerriAI/litellm/pull/15340)
+- **관리자 설정**
+    - 수정: 성공 메시지가 표시되어도 Router settings가 업데이트되지 않는 문제를 수정했습니다 - [PR #15249](https://github.com/BerriAI/litellm/pull/15249)
+    - 수정: DB 값이 비어 있을 때 DB가 config file 값을 실수로 덮어쓰지 않도록 했습니다 - [PR #15340](https://github.com/BerriAI/litellm/pull/15340)
 
 - **SSO**
-    - SSO - support EntraID app roles - [PR #15351](https://github.com/BerriAI/litellm/pull/15351)
+    - SSO - EntraID app roles를 지원합니다 - [PR #15351](https://github.com/BerriAI/litellm/pull/15351)
 
 ---
 
-## Logging / Guardrail / Prompt Management Integrations
+## 로깅 / 가드레일 / 프롬프트 관리 통합 {#logging--guardrail--prompt-management-integrations}
 
-#### Features
+#### 기능 {#features-3}
 
 - **[PostHog](../../docs/observability/posthog)**
-    - Feat: posthog per request api key - [PR #15379](https://github.com/BerriAI/litellm/pull/15379)
+    - Feat: 요청별 posthog api key를 추가했습니다 - [PR #15379](https://github.com/BerriAI/litellm/pull/15379)
 
-#### Guardrails
+#### 가드레일
 
 - **[EnkryptAI](../../docs/proxy/guardrails)**
-    - Add EnkryptAI Guardrails on LiteLLM - [PR #15390](https://github.com/BerriAI/litellm/pull/15390)
+    - LiteLLM에 EnkryptAI 가드레일을 추가했습니다 - [PR #15390](https://github.com/BerriAI/litellm/pull/15390)
 
 ---
 
-## Spend Tracking, Budgets and Rate Limiting
+## 비용 추적, 예산 및 속도 제한 {#cost-tracking-budgets-and-rate-limiting}
 
-- **Tag Management**
-    - Tag Management - Add support for setting tag based budgets - [PR #15433](https://github.com/BerriAI/litellm/pull/15433)
+- **태그 관리**
+    - Tag Management - 태그 기반 예산 설정 지원을 추가했습니다 - [PR #15433](https://github.com/BerriAI/litellm/pull/15433)
 
-- **Dynamic Rate Limiter v3**
-    - QA/Fixes - Dynamic Rate Limiter v3 - final QA - [PR #15311](https://github.com/BerriAI/litellm/pull/15311)
-    - Fix dynamic Rate limiter v3 - inserting litellm_model_saturation - [PR #15394](https://github.com/BerriAI/litellm/pull/15394)
+- **Dynamic Rate Limiter v3 개선**
+    - QA/Fixes - Dynamic Rate Limiter v3 - 최종 QA - [PR #15311](https://github.com/BerriAI/litellm/pull/15311)
+    - Dynamic Rate limiter v3 수정 - litellm_model_saturation 삽입 - [PR #15394](https://github.com/BerriAI/litellm/pull/15394)
 
-- **Shared Health Check**
-    - Implement Shared Health Check State Across Pods - [PR #15380](https://github.com/BerriAI/litellm/pull/15380)
+- **Shared Health Check 상태**
+    - Pod 간 Shared Health Check State를 구현했습니다 - [PR #15380](https://github.com/BerriAI/litellm/pull/15380)
 
 ---
 
 ## MCP Gateway
 
-- **Tool Control**
-    - MCP Gateway - UI - Select allowed tools for Key, Teams - [PR #15241](https://github.com/BerriAI/litellm/pull/15241)
-    - MCP Gateway - Backend - Allow storing allowed tools by team/key - [PR #15243](https://github.com/BerriAI/litellm/pull/15243)
-    - MCP Gateway - Fine-grained Database Object Storage Control - [PR #15255](https://github.com/BerriAI/litellm/pull/15255)
-    - MCP Gateway - Litellm mcp fixes team control - [PR #15304](https://github.com/BerriAI/litellm/pull/15304)
-    - MCP Gateway - QA/Fixes - Ensure Team/Key level enforcement works for MCPs - [PR #15305](https://github.com/BerriAI/litellm/pull/15305)
-    - Feature: Include server_name in /v1/mcp/server/health endpoint response - [PR #15431](https://github.com/BerriAI/litellm/pull/15431)
+- **도구 제어**
+    - MCP Gateway - UI - Key, Teams에 허용된 도구를 선택할 수 있습니다 - [PR #15241](https://github.com/BerriAI/litellm/pull/15241)
+    - MCP Gateway - Backend - 팀/키별 허용 도구 저장을 지원합니다 - [PR #15243](https://github.com/BerriAI/litellm/pull/15243)
+    - MCP Gateway - 세분화된 Database Object Storage 제어를 추가했습니다 - [PR #15255](https://github.com/BerriAI/litellm/pull/15255)
+    - MCP Gateway - Litellm mcp 팀 제어 수정 - [PR #15304](https://github.com/BerriAI/litellm/pull/15304)
+    - MCP Gateway - QA/Fixes - Team/Key 수준 적용이 MCP에서 동작하는지 보장했습니다 - [PR #15305](https://github.com/BerriAI/litellm/pull/15305)
+    - 기능: /v1/mcp/server/health endpoint 응답에 server_name을 포함했습니다 - [PR #15431](https://github.com/BerriAI/litellm/pull/15431)
 
-- **OpenAPI Integration**
-    - MCP - support converting OpenAPI specs to MCP servers - [PR #15343](https://github.com/BerriAI/litellm/pull/15343)
-    - MCP - specify allowed params per tool - [PR #15346](https://github.com/BerriAI/litellm/pull/15346)
+- **OpenAPI 통합**
+    - MCP - OpenAPI specs를 MCP servers로 변환하는 기능을 지원합니다 - [PR #15343](https://github.com/BerriAI/litellm/pull/15343)
+    - MCP - 도구별 allowed params 지정을 지원합니다 - [PR #15346](https://github.com/BerriAI/litellm/pull/15346)
 
-- **Configuration**
-    - MCP - support setting CA_BUNDLE_PATH - [PR #15253](https://github.com/BerriAI/litellm/pull/15253)
-    - Fix: Ensure MCP client stays open during tool call - [PR #15391](https://github.com/BerriAI/litellm/pull/15391)
-    - Remove hardcoded "public" schema in migration.sql - [PR #15363](https://github.com/BerriAI/litellm/pull/15363)
-
----
-
-## Performance / Loadbalancing / Reliability improvements
-
-- **Router Optimizations**
-    - Fix - Router: add model_name index for O(1) deployment lookups - [PR #15113](https://github.com/BerriAI/litellm/pull/15113)
-    - Refactor Utils: extract inner function from client - [PR #15234](https://github.com/BerriAI/litellm/pull/15234)
-    - Fix Networking: remove limitations - [PR #15302](https://github.com/BerriAI/litellm/pull/15302)
-
-- **Session Management**
-    - Fix - Sessions not being shared - [PR #15388](https://github.com/BerriAI/litellm/pull/15388)
-    - Fix: remove panic from hot path - [PR #15396](https://github.com/BerriAI/litellm/pull/15396)
-    - Fix - shared session parsing and usage issue - [PR #15440](https://github.com/BerriAI/litellm/pull/15440)
-    - Fix: handle closed aiohttp sessions - [PR #15442](https://github.com/BerriAI/litellm/pull/15442)
-    - Fix: prevent session leaks when recreating aiohttp sessions - [PR #15443](https://github.com/BerriAI/litellm/pull/15443)
-
-- **SSL/TLS Performance**
-    - Perf: optimize SSL/TLS handshake performance with prioritized cipher - [PR #15398](https://github.com/BerriAI/litellm/pull/15398)
-
-- **Dependencies**
-    - Upgrades tenacity version to 8.5.0 - [PR #15303](https://github.com/BerriAI/litellm/pull/15303)
-
-- **Data Masking**
-    - Fix - SensitiveDataMasker converts lists to string - [PR #15420](https://github.com/BerriAI/litellm/pull/15420)
+- **설정**
+    - MCP - CA_BUNDLE_PATH 설정을 지원합니다 - [PR #15253](https://github.com/BerriAI/litellm/pull/15253)
+    - 수정: 도구 호출 중 MCP client가 열린 상태를 유지하도록 보장했습니다 - [PR #15391](https://github.com/BerriAI/litellm/pull/15391)
+    - migration.sql의 하드코딩된 "public" schema를 제거했습니다 - [PR #15363](https://github.com/BerriAI/litellm/pull/15363)
 
 ---
 
+## 성능 / 부하 분산 / 안정성 개선 {#performance--loadbalancing--reliability-improvements}
 
-## General AI Gateway Improvements
+- **Router 최적화**
+    - Fix - Router: O(1) deployment 조회를 위해 model_name index를 추가했습니다 - [PR #15113](https://github.com/BerriAI/litellm/pull/15113)
+    - Refactor Utils: client에서 내부 함수를 추출했습니다 - [PR #15234](https://github.com/BerriAI/litellm/pull/15234)
+    - Fix Networking: 제한 사항을 제거했습니다 - [PR #15302](https://github.com/BerriAI/litellm/pull/15302)
 
-#### Security
+- **세션 관리**
+    - Fix - Sessions가 공유되지 않던 문제를 수정했습니다 - [PR #15388](https://github.com/BerriAI/litellm/pull/15388)
+    - Fix: hot path에서 panic을 제거했습니다 - [PR #15396](https://github.com/BerriAI/litellm/pull/15396)
+    - Fix - shared session 파싱 및 사용 문제를 수정했습니다 - [PR #15440](https://github.com/BerriAI/litellm/pull/15440)
+    - Fix: 닫힌 aiohttp sessions를 처리합니다 - [PR #15442](https://github.com/BerriAI/litellm/pull/15442)
+    - Fix: aiohttp sessions를 재생성할 때 session leak을 방지합니다 - [PR #15443](https://github.com/BerriAI/litellm/pull/15443)
 
-- **General**
-    - Fix: redact AWS credentials when redact_user_api_key_info enabled - [PR #15321](https://github.com/BerriAI/litellm/pull/15321)
+- **SSL/TLS 성능**
+    - Perf: 우선순위가 지정된 cipher로 SSL/TLS handshake 성능을 최적화했습니다 - [PR #15398](https://github.com/BerriAI/litellm/pull/15398)
 
----
+- **의존성**
+    - tenacity 버전을 8.5.0으로 업그레이드했습니다 - [PR #15303](https://github.com/BerriAI/litellm/pull/15303)
 
-## Documentation Updates
-
-- **Provider Documentation**
-    - Update doc: perf update - [PR #15211](https://github.com/BerriAI/litellm/pull/15211)
-    - Add W&B Inference documentation - [PR #15278](https://github.com/BerriAI/litellm/pull/15278)
-
-- **Deployment**
-    - Deletion of docker-compose buggy comment that cause `config.yaml` based startup fail - [PR #15425](https://github.com/BerriAI/litellm/pull/15425)
-
----
-
-## New Contributors
-
-* @Gal-bloch made their first contribution in [PR #15219](https://github.com/BerriAI/litellm/pull/15219)
-* @lcfyi made their first contribution in [PR #15315](https://github.com/BerriAI/litellm/pull/15315)
-* @ashengstd made their first contribution in [PR #15362](https://github.com/BerriAI/litellm/pull/15362)
-* @vkolehmainen made their first contribution in [PR #15363](https://github.com/BerriAI/litellm/pull/15363)
-* @jlan-nl made their first contribution in [PR #15330](https://github.com/BerriAI/litellm/pull/15330)
-* @BCook98 made their first contribution in [PR #15402](https://github.com/BerriAI/litellm/pull/15402)
-* @PabloGmz96 made their first contribution in [PR #15425](https://github.com/BerriAI/litellm/pull/15425)
+- **데이터 마스킹**
+    - Fix - SensitiveDataMasker가 list를 string으로 변환하던 문제를 수정했습니다 - [PR #15420](https://github.com/BerriAI/litellm/pull/15420)
 
 ---
 
-## **[Full Changelog](https://github.com/BerriAI/litellm/compare/v1.77.7.rc.1...v1.78.0.rc.1)**
 
+## 일반 AI Gateway 개선 {#general-ai-gateway-improvements}
+
+#### 보안 {#security}
+
+- **일반**
+    - Fix: redact_user_api_key_info가 활성화된 경우 AWS credentials를 redact 처리합니다 - [PR #15321](https://github.com/BerriAI/litellm/pull/15321)
+
+---
+
+## 문서 업데이트 {#documentation-updates}
+
+- **Provider 문서**
+    - 문서 업데이트: 성능 업데이트 - [PR #15211](https://github.com/BerriAI/litellm/pull/15211)
+    - W&B Inference 문서를 추가했습니다 - [PR #15278](https://github.com/BerriAI/litellm/pull/15278)
+
+- **배포**
+    - `config.yaml` 기반 시작 실패를 유발하던 docker-compose의 잘못된 주석을 삭제했습니다 - [PR #15425](https://github.com/BerriAI/litellm/pull/15425)
+
+---
+
+## 신규 기여자 {#new-contributors}
+
+* @Gal-bloch 님이 [PR #15219](https://github.com/BerriAI/litellm/pull/15219)에서 첫 기여를 했습니다.
+* @lcfyi 님이 [PR #15315](https://github.com/BerriAI/litellm/pull/15315)에서 첫 기여를 했습니다.
+* @ashengstd 님이 [PR #15362](https://github.com/BerriAI/litellm/pull/15362)에서 첫 기여를 했습니다.
+* @vkolehmainen 님이 [PR #15363](https://github.com/BerriAI/litellm/pull/15363)에서 첫 기여를 했습니다.
+* @jlan-nl 님이 [PR #15330](https://github.com/BerriAI/litellm/pull/15330)에서 첫 기여를 했습니다.
+* @BCook98 님이 [PR #15402](https://github.com/BerriAI/litellm/pull/15402)에서 첫 기여를 했습니다.
+* @PabloGmz96 님이 [PR #15425](https://github.com/BerriAI/litellm/pull/15425)에서 첫 기여를 했습니다.
+
+---
+
+## **[전체 변경 이력](https://github.com/BerriAI/litellm/compare/v1.77.7.rc.1...v1.78.0.rc.1)** {#full-changelog}

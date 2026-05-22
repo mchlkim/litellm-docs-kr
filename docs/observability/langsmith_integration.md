@@ -2,27 +2,27 @@ import Image from '@theme/IdealImage';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Langsmith - Logging LLM Input/Output
+# Langsmith - LLM 입력/출력 로깅
 
 
 
-An all-in-one developer platform for every step of the application lifecycle
+애플리케이션 lifecycle의 모든 단계를 위한 올인원 개발자 플랫폼입니다.
 https://smith.langchain.com/
 
 <Image img={require('../../img/langsmith_new.png')} />
 
 :::info
-We want to learn how we can make the callbacks better! Meet the LiteLLM [founders](https://calendly.com/d/4mp-gd3-k5k/berriai-1-1-onboarding-litellm-hosted-version) or
-join our [discord](https://discord.gg/wuPM9dRgDw)
+callback을 더 좋게 만들 수 있는 방법을 듣고 싶습니다. LiteLLM [founders](https://calendly.com/d/4mp-gd3-k5k/berriai-1-1-onboarding-litellm-hosted-version)를 만나거나
+[discord](https://discord.gg/wuPM9dRgDw)에 참여해 주세요.
 ::: 
 
-## Pre-Requisites
+## 사전 요구 사항
 ```shell
 uv add litellm
 ```
 
-## Quick Start
-Use just 2 lines of code, to instantly log your responses **across all providers** with Langsmith
+## 빠른 시작
+단 2줄의 코드로 **모든 provider**의 응답을 Langsmith에 즉시 기록할 수 있습니다.
 
 <Tabs>
 <TabItem value="python" label="SDK">
@@ -55,7 +55,7 @@ response = litellm.completion(
 </TabItem>
 <TabItem value="proxy" label="LiteLLM Proxy">
 
-1. Setup config.yaml
+1. `config.yaml`을 설정합니다.
 ```yaml
 model_list:
   - model_name: gpt-3.5-turbo
@@ -67,12 +67,12 @@ litellm_settings:
   callbacks: ["langsmith"]
 ```
 
-2. Start LiteLLM Proxy
+2. LiteLLM Proxy를 시작합니다.
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-3. Test it!
+3. 테스트합니다.
 ```bash
 curl -L -X POST 'http://0.0.0.0:4000/v1/chat/completions' \
 -H 'Content-Type: application/json' \
@@ -93,13 +93,13 @@ curl -L -X POST 'http://0.0.0.0:4000/v1/chat/completions' \
 
 
 
-## Advanced
+## 고급
 
-### Local Testing - Control Batch Size
+### 로컬 테스트 - batch size 제어
 
-Set the size of the batch that Langsmith will process at a time, default is 512. 
+Langsmith가 한 번에 처리할 batch 크기를 설정합니다. 기본값은 512입니다.
 
-Set `langsmith_batch_size=1` when testing locally, to see logs land quickly.
+로컬 테스트에서 로그가 빠르게 도착하는지 보려면 `langsmith_batch_size=1`로 설정하세요.
 
 <Tabs>
 <TabItem value="python" label="SDK">
@@ -127,7 +127,7 @@ print(response)
 </TabItem>
 <TabItem value="proxy" label="LiteLLM Proxy">
 
-1. Setup config.yaml
+1. `config.yaml`을 설정합니다.
 ```yaml
 model_list:
   - model_name: gpt-3.5-turbo
@@ -140,12 +140,12 @@ litellm_settings:
   callbacks: ["langsmith"]
 ```
 
-2. Start LiteLLM Proxy
+2. LiteLLM Proxy를 시작합니다.
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-3. Test it!
+3. 테스트합니다.
 ```bash
 curl -L -X POST 'http://0.0.0.0:4000/v1/chat/completions' \
 -H 'Content-Type: application/json' \
@@ -170,7 +170,7 @@ curl -L -X POST 'http://0.0.0.0:4000/v1/chat/completions' \
 
 
 
-### Set Langsmith fields
+### Langsmith 필드 설정
 
 ```python
 import litellm
@@ -205,12 +205,10 @@ response = litellm.completion(
 print(response)
 ```
 
-### Make LiteLLM Proxy use Custom `LANGSMITH_BASE_URL`
+### LiteLLM Proxy에서 custom `LANGSMITH_BASE_URL` 사용
 
-If you're using a custom LangSmith instance, you can set the
-`LANGSMITH_BASE_URL` environment variable to point to your instance.
-For example, you can make LiteLLM Proxy log to a local LangSmith instance with
-this config:
+custom LangSmith instance를 사용 중이라면 `LANGSMITH_BASE_URL` 환경 변수를 해당 instance로 지정할 수 있습니다.
+예를 들어 다음 설정으로 LiteLLM Proxy가 로컬 LangSmith instance에 로그를 남기도록 만들 수 있습니다.
 
 ```yaml
 litellm_settings:
@@ -221,8 +219,8 @@ environment_variables:
   LANGSMITH_PROJECT: "litellm-proxy"
 ```
 
-## Support & Talk to Founders
+## 지원 및 founders와 대화
 
 - [Schedule Demo 👋](https://calendly.com/d/4mp-gd3-k5k/berriai-1-1-onboarding-litellm-hosted-version)
-- [Community Discord 💭](https://discord.gg/wuPM9dRgDw)
-- Our emails ✉️ ishaan@berri.ai / krrish@berri.ai
+- [커뮤니티 Discord 💭](https://discord.gg/wuPM9dRgDw)
+- 이메일 ✉️ ishaan@berri.ai / krrish@berri.ai

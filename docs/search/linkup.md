@@ -1,8 +1,8 @@
-# Linkup Search
+# Linkup Search {#linkup-search}
 
-**Get API Key:** [https://linkup.so](https://linkup.so)
+**API 키 받기:** [https://linkup.so](https://linkup.so)
 
-## LiteLLM Python SDK
+## LiteLLM Python SDK 사용법 {#litellm-python-sdk}
 
 ```python showLineNumbers title="Linkup Search"
 import os
@@ -17,9 +17,9 @@ response = search(
 )
 ```
 
-## LiteLLM AI Gateway
+## LiteLLM AI Gateway 사용법 {#litellm-ai-gateway}
 
-### 1. Setup config.yaml
+### 1. config.yaml 설정 {#1-setup-configyaml}
 
 ```yaml showLineNumbers title="config.yaml"
 model_list:
@@ -35,7 +35,7 @@ search_tools:
       api_key: os.environ/LINKUP_API_KEY
 ```
 
-### 2. Start the proxy
+### 2. 프록시 시작
 
 ```bash
 litellm --config /path/to/config.yaml
@@ -43,9 +43,9 @@ litellm --config /path/to/config.yaml
 # RUNNING on http://0.0.0.0:4000
 ```
 
-### 3. Test the search endpoint
+### 3. 검색 엔드포인트 테스트 {#3-test-the-search-endpoint}
 
-```bash showLineNumbers title="Test Request"
+```bash showLineNumbers title="테스트 요청"
 curl http://0.0.0.0:4000/v1/search/linkup-search \
   -H "Authorization: Bearer sk-1234" \
   -H "Content-Type: application/json" \
@@ -55,9 +55,9 @@ curl http://0.0.0.0:4000/v1/search/linkup-search \
   }'
 ```
 
-## Provider-specific Parameters
+## 제공자별 파라미터 {#provider-specific-parameters}
 
-```python showLineNumbers title="Linkup Search with Provider-specific Parameters"
+```python showLineNumbers title="제공자별 파라미터를 사용한 Linkup Search"
 import os
 from litellm import search
 
@@ -80,23 +80,23 @@ response = search(
 )
 ```
 
-## Features
+## 기능 {#features}
 
-Linkup provides powerful web search with context retrieval capabilities:
+Linkup은 컨텍스트 검색 기능을 갖춘 강력한 웹 검색을 제공합니다.
 
-### Search Depth
-Control the precision and speed of your search:
-- `standard` - Returns results faster
-- `deep` - Takes longer but yields more comprehensive results
+### 검색 깊이 {#search-depth}
+검색의 정밀도와 속도를 제어합니다.
+- `standard` - 결과를 더 빠르게 반환합니다
+- `deep` - 시간이 더 오래 걸리지만 더 포괄적인 결과를 제공합니다
 
-### Output Types
-Choose how results are formatted:
-- `searchResults` - Returns a list of search results with URLs and content
-- `sourcedAnswer` - Returns an AI-generated answer with sources
-- `structured` - Returns results in a custom JSON schema format
+### 출력 유형 {#output-types}
+결과 형식을 선택합니다.
+- `searchResults` - URL과 콘텐츠가 포함된 검색 결과 목록을 반환합니다
+- `sourcedAnswer` - 출처가 포함된 AI 생성 답변을 반환합니다
+- `structured` - 사용자 지정 JSON 스키마 형식으로 결과를 반환합니다
 
-### Date Filtering
-Filter results by date range:
+### 날짜 필터링 {#date-filtering}
+날짜 범위로 결과를 필터링합니다.
 ```python
 response = search(
     query="AI developments",
@@ -106,8 +106,8 @@ response = search(
 )
 ```
 
-### Domain Filtering
-Include or exclude specific domains:
+### 도메인 필터링 {#domain-filtering}
+특정 도메인을 포함하거나 제외합니다.
 ```python
 response = search(
     query="research papers",
@@ -117,8 +117,8 @@ response = search(
 )
 ```
 
-### Structured Output
-Get results in a custom JSON schema format:
+### 구조화된 출력 {#structured-output}
+사용자 지정 JSON 스키마 형식으로 결과를 가져옵니다.
 ```python
 response = search(
     query="Microsoft 2024 revenue",
@@ -128,9 +128,9 @@ response = search(
 )
 ```
 
-## Response Format
+## 응답 형식
 
-Linkup returns results in the following format:
+Linkup은 다음 형식으로 결과를 반환합니다.
 
 ```json
 {
@@ -145,8 +145,7 @@ Linkup returns results in the following format:
 }
 ```
 
-LiteLLM transforms this to the standard `SearchResponse` format:
+LiteLLM은 이를 표준 `SearchResponse` 형식으로 변환합니다.
 - `results[].name` → `SearchResult.title`
 - `results[].url` → `SearchResult.url`
 - `results[].content` → `SearchResult.snippet`
-

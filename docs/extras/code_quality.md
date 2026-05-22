@@ -9,4 +9,4 @@ We run:
 - isort for [import sorting](https://github.com/BerriAI/litellm/blob/e19bb55e3b4c6a858b6e364302ebbf6633a51de5/.pre-commit-config.yaml#L10)
 
 
-If you have suggestions on how to improve the code quality feel free to open an issue or a PR.
+코드 품질을 개선할 제안이 있다면 issue나 PR을 열어 주세요.

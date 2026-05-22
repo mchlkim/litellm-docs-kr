@@ -21,38 +21,38 @@ import Image from '@theme/IdealImage';
 
 :::info
 
-Get a 7 day free trial for LiteLLM Enterprise [here](https://litellm.ai/#trial).
+LiteLLM 엔터프라이즈 7일 무료 체험은 [여기](https://litellm.ai/#trial)에서 시작할 수 있습니다.
 
-**no call needed**
+**통화는 필요하지 않습니다**
 
 :::
 
-## New Features
+## 새로운 기능 {#new-features}
 
-### ✨ Log Guardrail Traces 
+### ✨ 가드레일 추적 로그 {#log-guardrail-traces}
 
-Track guardrail failure rate and if a guardrail is going rogue and failing requests. [Start here](https://docs.litellm.ai/docs/proxy/guardrails/quick_start)
+가드레일 실패율과 가드레일이 오작동하여 요청을 실패시키는지 추적합니다. [여기에서 시작하세요](https://docs.litellm.ai/docs/proxy/guardrails/quick_start)
 
 
-#### Traced Guardrail Success
+#### 추적된 가드레일 성공 {#traced-guardrail-success}
 
 <Image img={require('../../img/gd_success.png')} />
 
-#### Traced Guardrail Failure
+#### 추적된 가드레일 실패 {#traced-guardrail-failure}
 
 <Image img={require('../../img/gd_fail.png')} />
 
 
 ### `/guardrails/list` 
 
-`/guardrails/list` allows clients to view available guardrails + supported guardrail params
+`/guardrails/list`를 사용하면 클라이언트가 사용 가능한 가드레일과 지원되는 가드레일 파라미터를 확인할 수 있습니다.
 
 
 ```shell
 curl -X GET 'http://0.0.0.0:4000/guardrails/list'
 ```
 
-Expected response
+예상 응답
 
 ```json
 {
@@ -78,10 +78,10 @@ Expected response
 ```
 
 
-### ✨ Guardrails with Mock LLM 
+### ✨ `Mock LLM`으로 가드레일 테스트 {#guardrails-with-mock-llm}
 
 
-Send `mock_response` to test guardrails without making an LLM call. More info on `mock_response` [here](https://docs.litellm.ai/docs/proxy/guardrails/quick_start)
+LLM 호출 없이 가드레일을 테스트하려면 `mock_response`를 전송하세요. `mock_response`에 대한 자세한 정보는 [여기](https://docs.litellm.ai/docs/proxy/guardrails/quick_start)에서 확인할 수 있습니다.
 
 ```shell
 curl -i http://localhost:4000/v1/chat/completions \
@@ -99,19 +99,19 @@ curl -i http://localhost:4000/v1/chat/completions \
 
 
 
-### Assign Keys to Users
+### 사용자에게 키 할당 {#assign-keys-to-users}
 
-You can now assign keys to users via Proxy UI
+이제 Proxy UI를 통해 사용자에게 키를 할당할 수 있습니다.
 
 
 <Image img={require('../../img/ui_key.png')} />
 
-## New Models
+## 새로운 모델 {#new-models}
 
 - `openrouter/openai/o1`
 - `vertex_ai/mistral-large@2411`
 
-## Fixes 
+## 수정 사항 {#fixes}
 
-- Fix `vertex_ai/` mistral model pricing: https://github.com/BerriAI/litellm/pull/7345
-- Missing model_group field in logs for aspeech call types https://github.com/BerriAI/litellm/pull/7392
+- `vertex_ai/` mistral 모델 가격 수정: https://github.com/BerriAI/litellm/pull/7345
+- aspeech 호출 유형 로그에 누락된 `model_group` 필드 추가 https://github.com/BerriAI/litellm/pull/7392

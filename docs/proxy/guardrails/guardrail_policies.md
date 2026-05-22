@@ -4,15 +4,15 @@ import TabItem from '@theme/TabItem';
 
 # [Beta] Guardrail Policies
 
-Use policies to group guardrails and control which ones run for specific teams, keys, or models.
+정책을 사용하면 가드레일을 그룹화하고, 특정 팀, 키, 모델에서 어떤 가드레일을 실행할지 제어할 수 있습니다.
 
-## Why use policies?
+## 정책을 사용하는 이유
 
-- Enable/disable specific guardrails for teams, keys, or models
-- Group guardrails into a single policy
-- Inherit from existing policies and override what you need
+- 팀, 키, 모델별로 특정 가드레일을 활성화하거나 비활성화할 수 있습니다.
+- 여러 가드레일을 하나의 정책으로 묶을 수 있습니다.
+- 기존 정책을 상속하고 필요한 부분만 재정의할 수 있습니다.
 
-## Quick Start
+## 빠른 시작
 
 <Tabs>
 <TabItem value="config" label="config.yaml">
@@ -53,37 +53,37 @@ policy_attachments:
 </TabItem>
 <TabItem value="ui" label="UI (LiteLLM Dashboard)">
 
-**Step 1: Create a Policy**
+**1단계: 정책 생성**
 
-Go to **Policies** tab and click **+ Create New Policy**. Fill in the policy name, description, and select guardrails to add.
+**Policies** 탭으로 이동한 뒤 **+ Create New Policy**를 클릭합니다. 정책 이름과 설명을 입력하고 추가할 가드레일을 선택합니다.
 
-![Enter policy name](https://colony-recorder.s3.amazonaws.com/files/2026-02-11/4ba62cc8-d2c4-4af1-a526-686295466928/ascreenshot_401eab3e2081466e8f4d4ffa3bf7bff4_text_export.jpeg)
+![정책 이름 입력](https://colony-recorder.s3.amazonaws.com/files/2026-02-11/4ba62cc8-d2c4-4af1-a526-686295466928/ascreenshot_401eab3e2081466e8f4d4ffa3bf7bff4_text_export.jpeg)
 
-![Add a description for the policy](https://colony-recorder.s3.amazonaws.com/files/2026-02-11/51685e47-1d94-4d9c-acb0-3c88dce9f938/ascreenshot_a5cd40066ff34afbb1e4089a3c93d889_text_export.jpeg)
+![정책 설명 추가](https://colony-recorder.s3.amazonaws.com/files/2026-02-11/51685e47-1d94-4d9c-acb0-3c88dce9f938/ascreenshot_a5cd40066ff34afbb1e4089a3c93d889_text_export.jpeg)
 
-![Select a parent policy to inherit from](https://colony-recorder.s3.amazonaws.com/files/2026-02-11/1d96c3d3-187a-4f7c-97d2-6ac1f093d51e/ascreenshot_8a3af3b2210547dca3d4709df920d005_text_export.jpeg)
+![상속할 상위 정책 선택](https://colony-recorder.s3.amazonaws.com/files/2026-02-11/1d96c3d3-187a-4f7c-97d2-6ac1f093d51e/ascreenshot_8a3af3b2210547dca3d4709df920d005_text_export.jpeg)
 
-![Select guardrails to add to the policy](https://colony-recorder.s3.amazonaws.com/files/2026-02-11/23781274-e600-4d5f-a8a6-4a2a977a166c/ascreenshot_a2a45d2c5d064c77ab7cb47b569ad9e9_text_export.jpeg)
+![정책에 추가할 가드레일 선택](https://colony-recorder.s3.amazonaws.com/files/2026-02-11/23781274-e600-4d5f-a8a6-4a2a977a166c/ascreenshot_a2a45d2c5d064c77ab7cb47b569ad9e9_text_export.jpeg)
 
-![Click Create Policy to save](https://colony-recorder.s3.amazonaws.com/files/2026-02-11/1d1ae8a8-daa5-451b-9fa2-c5b607ff6220/ascreenshot_218c2dd259714be4aa3c4e1894c96878_text_export.jpeg)
+![Create Policy를 클릭해 저장](https://colony-recorder.s3.amazonaws.com/files/2026-02-11/1d1ae8a8-daa5-451b-9fa2-c5b607ff6220/ascreenshot_218c2dd259714be4aa3c4e1894c96878_text_export.jpeg)
 
 </TabItem>
 </Tabs>
 
-Response headers show what ran:
+응답 헤더에서 실제로 실행된 항목을 확인할 수 있습니다.
 
 ```
 x-litellm-applied-policies: my-policy
 x-litellm-applied-guardrails: pii_masking,prompt_injection
 ```
 
-## Add guardrails for a specific team
+## 특정 팀에 가드레일 추가
 
 :::info
-✨ Enterprise only feature for team/key-based policy attachments. [Get a free trial](https://www.litellm.ai/enterprise#trial)
+✨ 팀/키 기반 정책 연결은 엔터프라이즈 전용 기능입니다. [무료 평가판 받기](https://www.litellm.ai/enterprise#trial)
 :::
 
-You have a global baseline, but want to add extra guardrails for a specific team.
+전역 기본 정책은 유지하면서 특정 팀에만 추가 가드레일을 적용하려는 경우입니다.
 
 <Tabs>
 <TabItem value="config" label="config.yaml">
@@ -114,36 +114,36 @@ policy_attachments:
 </TabItem>
 <TabItem value="ui" label="UI (LiteLLM Dashboard)">
 
-**Option 1: Create a team-scoped attachment**
+**옵션 1: 팀 범위 attachment 생성**
 
-Go to **Policies** > **Attachments** tab and click **+ Create New Attachment**. Select the policy and the teams to scope it to.
+**Policies** > **Attachments** 탭으로 이동한 뒤 **+ Create New Attachment**를 클릭합니다. 정책과 적용 범위에 포함할 팀을 선택합니다.
 
-![Select teams for the attachment](https://colony-recorder.s3.amazonaws.com/files/2026-02-11/50e58f54-3bc3-477e-a106-e58cb65fde7e/ascreenshot_85d2e3d9d8d24842baced92fea170427_text_export.jpeg)
+![attachment에 사용할 팀 선택](https://colony-recorder.s3.amazonaws.com/files/2026-02-11/50e58f54-3bc3-477e-a106-e58cb65fde7e/ascreenshot_85d2e3d9d8d24842baced92fea170427_text_export.jpeg)
 
-![Select the teams to attach the policy to](https://colony-recorder.s3.amazonaws.com/files/2026-02-11/f24066bb-0a73-49fb-87b6-c65ad3ca5b2f/ascreenshot_242476fbdac447309f65de78b0ed9fdd_text_export.jpeg)
+![정책을 연결할 팀 선택](https://colony-recorder.s3.amazonaws.com/files/2026-02-11/f24066bb-0a73-49fb-87b6-c65ad3ca5b2f/ascreenshot_242476fbdac447309f65de78b0ed9fdd_text_export.jpeg)
 
-**Option 2: Attach from team settings**
+**옵션 2: 팀 설정에서 연결**
 
-Go to **Teams** > click on a team > **Settings** tab > under **Policies**, select the policies to attach.
+**Teams**로 이동해 팀을 클릭한 뒤 **Settings** 탭의 **Policies** 섹션에서 연결할 정책을 선택합니다.
 
-![Open team settings and click Edit Settings](https://colony-recorder.s3.amazonaws.com/files/2026-02-11/c31c3735-4f9d-4c6a-896b-186e97296940/ascreenshot_4749bb24ce5942cca462acc958fd3822_text_export.jpeg)
+![팀 설정을 열고 Edit Settings 클릭](https://colony-recorder.s3.amazonaws.com/files/2026-02-11/c31c3735-4f9d-4c6a-896b-186e97296940/ascreenshot_4749bb24ce5942cca462acc958fd3822_text_export.jpeg)
 
-![Select policies to attach to this team](https://colony-recorder.s3.amazonaws.com/files/2026-02-11/da8d5d7a-d975-4bfe-acd2-f41dcea29520/ascreenshot_835a33b6cec545cbb2987f017fbaff90_text_export.jpeg)
+![이 팀에 연결할 정책 선택](https://colony-recorder.s3.amazonaws.com/files/2026-02-11/da8d5d7a-d975-4bfe-acd2-f41dcea29520/ascreenshot_835a33b6cec545cbb2987f017fbaff90_text_export.jpeg)
 
 <Image img={require('../../../img/policy_team_attach.png')} />
 
 </TabItem>
 </Tabs>
 
-Now the `finance` team gets `pii_masking` + `strict_compliance_check` + `audit_logger`, while everyone else just gets `pii_masking`.
+이제 `finance` 팀에는 `pii_masking` + `strict_compliance_check` + `audit_logger`가 적용되고, 나머지 요청에는 `pii_masking`만 적용됩니다.
 
-## Remove guardrails for a specific team
+## 특정 팀에서 가드레일 제거
 
 :::info
-✨ Enterprise only feature for team/key-based policy attachments. [Get a free trial](https://www.litellm.ai/enterprise#trial)
+✨ 팀/키 기반 정책 연결은 엔터프라이즈 전용 기능입니다. [무료 평가판 받기](https://www.litellm.ai/enterprise#trial)
 :::
 
-You have guardrails running globally, but want to disable some for a specific team (e.g., internal testing).
+전역으로 실행 중인 가드레일 중 일부를 특정 팀에서만 비활성화하려는 경우입니다. 예를 들어 내부 테스트 팀에 적용할 수 있습니다.
 
 ```yaml showLineNumbers title="config.yaml"
 policies:
@@ -168,11 +168,11 @@ policy_attachments:
       - internal-testing  # team alias from /team/new
 ```
 
-Now the `internal-testing` team only gets `prompt_injection`, while everyone else gets both guardrails.
+이제 `internal-testing` 팀에는 `prompt_injection`만 적용되고, 나머지 요청에는 두 가드레일이 모두 적용됩니다.
 
-## Inheritance
+## 상속
 
-Start with a base policy and build on it:
+기본 정책에서 시작해 그 위에 필요한 항목을 추가할 수 있습니다.
 
 ```yaml showLineNumbers title="config.yaml"
 policies:
@@ -195,14 +195,14 @@ policies:
         - toxicity_filter
 ```
 
-What you get:
+결과는 다음과 같습니다.
 - `base` → `[pii_masking, toxicity_filter]`
 - `strict` → `[pii_masking, toxicity_filter, prompt_injection]`
 - `relaxed` → `[pii_masking]`
 
-## Model Conditions
+## 모델 조건
 
-Run guardrails only for specific models:
+특정 모델에서만 가드레일을 실행합니다.
 
 ```yaml showLineNumbers title="config.yaml"
 policies:
@@ -225,9 +225,9 @@ policies:
 
 ## Attachments
 
-Policies don't do anything until you attach them. Attachments tell LiteLLM *where* to apply each policy.
+정책은 연결되기 전까지 아무 동작도 하지 않습니다. Attachment는 LiteLLM에 각 정책을 *어디에* 적용할지 알려줍니다.
 
-**Global** - runs on every request:
+**Global** - 모든 요청에서 실행됩니다.
 
 ```yaml showLineNumbers title="config.yaml"
 policy_attachments:
@@ -235,7 +235,7 @@ policy_attachments:
     scope: "*"
 ```
 
-**Team-specific** (uses team alias from `/team/new`):
+**Team-specific** (`/team/new`의 팀 alias 사용):
 
 ```yaml showLineNumbers title="config.yaml"
 policy_attachments:
@@ -245,7 +245,7 @@ policy_attachments:
       - medical-research  # team alias
 ```
 
-**Key-specific** (uses key alias from `/key/generate`, wildcards supported):
+**Key-specific** (`/key/generate`의 키 alias 사용, 와일드카드 지원):
 
 ```yaml showLineNumbers title="config.yaml"
 policy_attachments:
@@ -255,7 +255,7 @@ policy_attachments:
       - "test-*"  # key alias pattern
 ```
 
-**Tag-based** (matches keys/teams by metadata tags, wildcards supported):
+**Tag-based** (metadata 태그로 키/팀 매칭, 와일드카드 지원):
 
 ```yaml showLineNumbers title="config.yaml"
 policy_attachments:
@@ -265,16 +265,16 @@ policy_attachments:
       - "health-*"  # wildcard - matches health-team, health-dev, etc.
 ```
 
-Tags are read from key and team `metadata.tags`. For example, a key created with `metadata: {"tags": ["healthcare"]}` would match the attachment above.
+태그는 키와 팀의 `metadata.tags`에서 읽습니다. 예를 들어 `metadata: {"tags": ["healthcare"]}`로 생성된 키는 위 attachment와 매칭됩니다.
 
-## Test Policy Matching
+## 정책 매칭 테스트
 
-Debug which policies and guardrails apply for a given context. Use this to verify your policy configuration before deploying.
+주어진 컨텍스트에 어떤 정책과 가드레일이 적용되는지 디버그합니다. 배포 전에 정책 구성을 검증할 때 사용합니다.
 
 <Tabs>
 <TabItem value="ui" label="UI (LiteLLM Dashboard)">
 
-Go to **Policies** > **Test** tab. Enter a team alias, key alias, model, or tags and click **Test** to see which policies match and what guardrails would be applied.
+**Policies** > **Test** 탭으로 이동합니다. 팀 alias, 키 alias, 모델 또는 태그를 입력하고 **Test**를 클릭하면 어떤 정책이 매칭되는지와 어떤 가드레일이 적용될지 확인할 수 있습니다.
 
 <Image img={require('../../../img/policy_test_matching.png')} />
 
@@ -291,7 +291,7 @@ curl -X POST "http://localhost:4000/policies/resolve" \
     }'
 ```
 
-Response:
+응답:
 
 ```json
 {
@@ -309,11 +309,11 @@ Response:
 </TabItem>
 </Tabs>
 
-## Policy Flow Builder
+## 정책 흐름 빌더 {#policy-flow-builder}
 
-For conditional execution (e.g., run a second guardrail only if the first fails), use the [Policy Flow Builder](./policy_flow_builder) to define pipelines with per-step **pass**, **fail**, and optional **error** actions (`on_pass`, `on_fail`, `on_error`).
+조건부 실행이 필요한 경우, 예를 들어 첫 번째 가드레일이 실패할 때만 두 번째 가드레일을 실행하려면 [정책 흐름 빌더](./policy_flow_builder)를 사용해 단계별 **pass**, **fail**, 선택적 **error** 액션(`on_pass`, `on_fail`, `on_error`)이 있는 파이프라인을 정의합니다.
 
-## Config Reference
+## Config 참조
 
 ### `policies`
 
@@ -330,14 +330,14 @@ policies:
     pipeline: ...  # optional; see Policy Flow Builder
 ```
 
-| Field | Type | Description |
+| Field | Type | 설명 |
 |-------|------|-------------|
-| `description` | `string` | Optional. What this policy does. |
-| `inherit` | `string` | Optional. Parent policy to inherit guardrails from. |
-| `guardrails.add` | `list[string]` | Guardrails to enable. |
-| `guardrails.remove` | `list[string]` | Guardrails to disable (useful with inheritance). |
-| `condition.model` | `string` or `list[string]` | Optional. Only apply when model matches. Supports regex. |
-| `pipeline` | `object` | Optional. Ordered guardrail execution with per-step actions (`on_pass`, `on_fail`, optional `on_error`). See [Policy Flow Builder](./policy_flow_builder). |
+| `description` | `string` | 선택 사항. 이 정책이 수행하는 작업입니다. |
+| `inherit` | `string` | 선택 사항. 가드레일을 상속할 상위 정책입니다. |
+| `guardrails.add` | `list[string]` | 활성화할 가드레일입니다. |
+| `guardrails.remove` | `list[string]` | 비활성화할 가드레일입니다. 상속과 함께 사용할 때 유용합니다. |
+| `condition.model` | `string` or `list[string]` | 선택 사항. 모델이 매칭될 때만 적용합니다. regex를 지원합니다. |
+| `pipeline` | `object` | 선택 사항. 단계별 액션(`on_pass`, `on_fail`, 선택적 `on_error`)이 있는 순차 가드레일 실행입니다. [Policy Flow Builder](./policy_flow_builder)를 참고하세요. |
 
 ### `policy_attachments`
 
@@ -351,26 +351,26 @@ policy_attachments:
     tags: [...]
 ```
 
-| Field | Type | Description |
+| Field | Type | 설명 |
 |-------|------|-------------|
-| `policy` | `string` | **Required.** Name of the policy to attach. |
-| `scope` | `string` | Use `"*"` to apply globally. |
-| `teams` | `list[string]` | Team aliases (from `/team/new`). Supports `*` wildcard. |
-| `keys` | `list[string]` | Key aliases (from `/key/generate`). Supports `*` wildcard. |
-| `models` | `list[string]` | Model names. Supports `*` wildcard. |
-| `tags` | `list[string]` | Tag patterns (from key/team `metadata.tags`). Supports `*` wildcard. |
+| `policy` | `string` | **필수.** 연결할 정책 이름입니다. |
+| `scope` | `string` | 전역으로 적용하려면 `"*"`를 사용합니다. |
+| `teams` | `list[string]` | `/team/new`의 팀 alias입니다. `*` 와일드카드를 지원합니다. |
+| `keys` | `list[string]` | `/key/generate`의 키 alias입니다. `*` 와일드카드를 지원합니다. |
+| `models` | `list[string]` | 모델 이름입니다. `*` 와일드카드를 지원합니다. |
+| `tags` | `list[string]` | 키/팀 `metadata.tags`의 태그 패턴입니다. `*` 와일드카드를 지원합니다. |
 
-### Response Headers
+### 응답 헤더
 
-| Header | Description |
+| Header | 설명 |
 |--------|-------------|
-| `x-litellm-applied-policies` | Policies that matched this request |
-| `x-litellm-applied-guardrails` | Guardrails that actually ran |
-| `x-litellm-policy-sources` | Why each policy matched (e.g., `hipaa=tag:healthcare; baseline=scope:*`) |
+| `x-litellm-applied-policies` | 이 요청에 매칭된 정책입니다. |
+| `x-litellm-applied-guardrails` | 실제로 실행된 가드레일입니다. |
+| `x-litellm-policy-sources` | 각 정책이 매칭된 이유입니다. 예: `hipaa=tag:healthcare; baseline=scope:*` |
 
-## How it works
+## 동작 방식
 
-Example config:
+예제 config:
 
 ```yaml showLineNumbers title="config.yaml"
 policies:
@@ -396,7 +396,7 @@ flowchart TD
     B --> C["Resolves guardrails: pii_masking, audit_logger"]
 ```
 
-1. Request comes in with `team_alias='finance'`
-2. Matches `base` (via `scope: "*"`) and `finance-policy` (via `teams: [finance]`)
-3. Resolves guardrails: `base` adds `pii_masking`, `finance-policy` inherits and adds `audit_logger`
-4. Final guardrails: `pii_masking`, `audit_logger`
+1. `team_alias='finance'`가 포함된 요청이 들어옵니다.
+2. `base`(`scope: "*"` 기준)와 `finance-policy`(`teams: [finance]` 기준)가 매칭됩니다.
+3. 가드레일을 해석합니다. `base`는 `pii_masking`을 추가하고, `finance-policy`는 이를 상속한 뒤 `audit_logger`를 추가합니다.
+4. 최종 가드레일은 `pii_masking`, `audit_logger`입니다.

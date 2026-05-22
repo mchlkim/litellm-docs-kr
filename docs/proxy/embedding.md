@@ -2,25 +2,25 @@ import Image from '@theme/IdealImage';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Embeddings - `/embeddings`
+# 임베딩 - `/embeddings` {#embeddings---embeddings}
 
-See supported Embedding Providers & Models [here](https://docs.litellm.ai/docs/embedding/supported_embedding)
+지원되는 Embedding Providers 및 모델은 [여기](https://docs.litellm.ai/docs/embedding/supported_embedding)에서 확인하세요.
 
-## Supported Input Formats
+## 지원되는 입력 형식 {#supported-input-formats}
 
-The `/v1/embeddings` endpoint follows the [OpenAI embeddings API specification](https://platform.openai.com/docs/api-reference/embeddings/create). The following input formats are supported:
+`/v1/embeddings` 엔드포인트는 [OpenAI embeddings API specification](https://platform.openai.com/docs/api-reference/embeddings/create)을 따릅니다. 다음 입력 형식을 지원합니다.
 
-| Format | Example |
+| 형식 | 예제 |
 |--------|---------|
-| String | `"input": "Hello"` |
-| Array of strings | `"input": ["Hello", "World"]` |
-| Array of tokens (integers) | `"input": [1234, 5678, 9012]` |
-| Array of token arrays | `"input": [[1234, 5678], [9012, 3456]]` |
+| 문자열 | `"input": "Hello"` |
+| 문자열 배열 | `"input": ["Hello", "World"]` |
+| 토큰 배열(정수) | `"input": [1234, 5678, 9012]` |
+| 토큰 배열의 배열 | `"input": [[1234, 5678], [9012, 3456]]` |
 
-## Quick start
-Here's how to route between GPT-J embedding (sagemaker endpoint), Amazon Titan embedding (Bedrock) and Azure OpenAI embedding on the proxy server: 
+## 빠른 시작 {#quick-start}
+프록시 서버에서 GPT-J embedding(sagemaker endpoint), Amazon Titan embedding(Bedrock), Azure OpenAI embedding 간에 라우팅하는 방법은 다음과 같습니다.
 
-1. Set models in your config.yaml
+1. config.yaml에서 모델 설정
 ```yaml
 model_list:
   - model_name: sagemaker-embeddings
@@ -40,12 +40,12 @@ general_settings:
   master_key: sk-1234 # [OPTIONAL] if set all calls to proxy will require either this key or a valid generated token
 ```
 
-2. Start the proxy
+2. 프록시 시작
 ```shell
 $ litellm --config /path/to/config.yaml
 ```
 
-3. Test the embedding call
+3. embedding 호출 테스트
 
 ```shell
 curl --location 'http://0.0.0.0:4000/v1/embeddings' \
@@ -56,18 +56,18 @@ curl --location 'http://0.0.0.0:4000/v1/embeddings' \
     "model": "sagemaker-embeddings",
 }'
 ```
-## Default `encoding_format` {#embedding-encoding-format}
+## 기본 `encoding_format` {#embedding-encoding-format}
 
-For embeddings routed through LiteLLM’s **OpenAI-compatible embedding path** (for example OpenAI models, `openai/...` with a custom `api_base`, or the proxy `/v1/embeddings` route that forwards to that path), LiteLLM sends an explicit `encoding_format` when the caller omits it.
+LiteLLM의 **OpenAI 호환 embedding 경로**를 통해 라우팅되는 embedding의 경우(예: OpenAI 모델, 사용자 지정 `api_base`를 사용하는 `openai/...`, 또는 해당 경로로 전달하는 프록시 `/v1/embeddings` 라우트), 호출자가 이를 생략하면 LiteLLM이 명시적인 `encoding_format`을 전송합니다.
 
-**Resolution order** (first match wins):
+**해결 순서**(처음 일치하는 값 사용):
 
-1. Value in the embedding request body (`encoding_format` in JSON).
-2. Per-model default from `litellm_params.encoding_format` in `config.yaml`.
-3. Process environment variable **`LITELLM_DEFAULT_EMBEDDING_ENCODING_FORMAT`** (e.g. `float` or `base64`).
-4. Fallback **`float`**.
+1. embedding 요청 본문의 값(JSON의 `encoding_format`).
+2. `config.yaml`의 `litellm_params.encoding_format`에서 가져온 모델별 기본값.
+3. 프로세스 환경 변수 **`LITELLM_DEFAULT_EMBEDDING_ENCODING_FORMAT`**(예: `float` 또는 `base64`).
+4. fallback **`float`**.
 
-You can still override per request from any OpenAI-compatible client:
+OpenAI 호환 클라이언트에서는 요청별로 계속 재정의할 수 있습니다.
 
 ```bash
 curl --location 'http://0.0.0.0:4000/v1/embeddings' \
@@ -76,5 +76,4 @@ curl --location 'http://0.0.0.0:4000/v1/embeddings' \
   --data '{"model": "my-embedding-model", "input": "hello", "encoding_format": "base64"}'
 ```
 
-See also: [Config settings](./config_settings.md) (`LITELLM_DEFAULT_EMBEDDING_ENCODING_FORMAT`).
-
+함께 보기: [Config settings](./config_settings.md)(`LITELLM_DEFAULT_EMBEDDING_ENCODING_FORMAT`).

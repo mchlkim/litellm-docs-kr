@@ -2,39 +2,39 @@ import Image from '@theme/IdealImage';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Using Claude Code Max Subscription
+# Claude Code Max Subscription 사용하기
 
 <div style={{ textAlign: 'center' }}>
 <Image img={require('../../img/claude_code_max.png')} style={{ width: '100%', maxWidth: '800px', height: 'auto' }} />
 
-Route Claude Code Max subscription traffic through LiteLLM AI Gateway.
+Claude Code Max subscription traffic을 LiteLLM AI Gateway를 통해 routing합니다.
 </div>
 
-**Why Claude Code Max over direct API?**
-- **Lower costs** — Claude Code Max subscriptions are cheaper for Claude Code power users than per-token API pricing
+**direct API 대신 Claude Code Max를 사용하는 이유**
+- **비용 절감** - Claude Code를 많이 사용하는 user에게는 Claude Code Max subscription이 token 단위 API pricing보다 저렴합니다.
 
-**Why route through LiteLLM?**
-- **Cost attribution** — Track spend per user, team, or key
-- **Budgets & rate limits** — Set spending caps and request limits
-- **Guardrails** — Apply content filtering and safety controls to all requests
+**LiteLLM을 통해 routing하는 이유**
+- **Cost attribution** - user, team, key별 spend를 추적합니다.
+- **Budgets & rate limits** - spending cap과 request limit을 설정합니다.
+- **가드레일** - 모든 request에 content filtering과 safety control을 적용합니다.
 
 
 
-## Quick Start Video
+## 빠른 시작 Video
 
-Watch the end-to-end walkthrough of setting up Claude Code with LiteLLM Gateway:
+LiteLLM Gateway로 Claude Code를 설정하는 전체 walkthrough를 확인하세요.
 
 <iframe width="840" height="500" src="https://www.loom.com/embed/2d069b9e3bcc4cecaa5eb27a72ba7b3c" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
 
-## Prerequisites
+## 사전 준비
 
-- [Claude Code](https://docs.anthropic.com/en/docs/claude-code/overview) installed
-- Claude Max subscription
-- LiteLLM Gateway running
+- [Claude Code](https://docs.anthropic.com/en/docs/claude-code/overview) 설치
+- Claude Max 구독
+- LiteLLM Gateway 실행 중
 
-## Step 1: Configure LiteLLM Proxy
+## Step 1: LiteLLM Proxy 설정
 
-Create a `config.yaml` with the critical `forward_client_headers_to_llm_api: true` setting:
+핵심 설정인 `forward_client_headers_to_llm_api: true`가 포함된 `config.yaml`을 만듭니다.
 
 ```yaml showLineNumbers title="config.yaml"
 model_list:
@@ -57,15 +57,15 @@ litellm_settings:
   master_key: os.environ/LITELLM_MASTER_KEY
 ```
 
-:::info Why `forward_client_headers_to_llm_api`?
+:::info `forward_client_headers_to_llm_api`가 필요한 이유
 
-This setting forwards the user's OAuth token (in the `Authorization` header) through LiteLLM to the Anthropic API, enabling per-user authentication with their Max subscription while LiteLLM handles tracking and controls.
+이 설정은 user의 OAuth token(`Authorization` header)을 LiteLLM을 거쳐 Anthropic API로 전달합니다. 그래서 LiteLLM이 tracking과 control을 처리하면서도 각 user가 자신의 Max subscription으로 인증할 수 있습니다.
 
 :::
 
-## Step 2: Start LiteLLM Proxy
+## Step 2: LiteLLM Proxy 시작
 
-```bash showLineNumbers title="Start LiteLLM Proxy"
+```bash showLineNumbers title="LiteLLM Proxy 시작"
 litellm --config /path/to/config.yaml
 
 # RUNNING on http://0.0.0.0:4000
@@ -73,53 +73,53 @@ litellm --config /path/to/config.yaml
 
 ## Walkthrough
 
-### Part 1: Create a Virtual Key in LiteLLM
+### Part 1: LiteLLM에서 Virtual Key 생성
 
-Navigate to the LiteLLM Dashboard and create a new virtual key for Claude Code usage.
+LiteLLM Dashboard로 이동해 Claude Code 사용을 위한 새 virtual key를 만듭니다.
 
-#### 1.1 Open Virtual Keys Page
+#### 1.1 가상 키 Page 열기
 
-Navigate to the Virtual Keys section in the LiteLLM Dashboard.
+LiteLLM Dashboard의 가상 키 section으로 이동합니다.
 
 <Image img={require('../../img/claude_code_max/step1.jpeg')} style={{ width: '800px', height: 'auto' }} />
 
-#### 1.2 Click "Create New Key"
+#### 1.2 "Create New Key" 클릭
 
 <Image img={require('../../img/claude_code_max/step2.jpeg')} style={{ width: '800px', height: 'auto' }} />
 
-#### 1.3 Configure Key Details
+#### 1.3 Key 세부 정보 설정
 
-Enter a key name (e.g., `claude-code-test`) and select the models you want to allow access to.
+key name(예: `claude-code-test`)을 입력하고 접근을 허용할 model을 선택합니다.
 
 <Image img={require('../../img/claude_code_max/step3.jpeg')} style={{ width: '800px', height: 'auto' }} />
 
-#### 1.4 Select Models
+#### 1.4 모델 선택
 
-Choose the Anthropic models that should be accessible via this key (e.g., `anthropic-claude`, `claude-4.5-haiku`).
+이 key로 접근할 수 있어야 하는 Anthropic model을 선택합니다(예: `anthropic-claude`, `claude-4.5-haiku`).
 
 <Image img={require('../../img/claude_code_max/step5.jpeg')} style={{ width: '800px', height: 'auto' }} />
 
-#### 1.5 Confirm Model Selection
+#### 1.5 Model 선택 확인
 
 <Image img={require('../../img/claude_code_max/step7.jpeg')} style={{ width: '800px', height: 'auto' }} />
 
-#### 1.6 Create the Key
+#### 1.6 Key 생성
 
-Click "Create Key" to generate your virtual key. Copy the generated key value (e.g., `sk-otsclFlEblQ-6D60ua2IZg`).
+"Create Key"를 클릭해 virtual key를 생성합니다. 생성된 key value(예: `sk-otsclFlEblQ-6D60ua2IZg`)를 복사합니다.
 
 <Image img={require('../../img/claude_code_max/step8.jpeg')} style={{ width: '800px', height: 'auto' }} />
 
 ---
 
-### Part 2: Sign into Claude Code Max Plan (Client Side)
+### Part 2: Claude Code Max Plan에 로그인(Client Side)
 
-Set up Claude Code environment variables and authenticate with your Max subscription.
+Claude Code environment variable을 설정하고 Max subscription으로 인증합니다.
 
-#### 2.1 Set Environment Variables
+#### 2.1 Environment Variable 설정
 
-Configure Claude Code to use LiteLLM Gateway with your virtual key:
+Claude Code가 virtual key로 LiteLLM Gateway를 사용하도록 설정합니다.
 
-```bash showLineNumbers title="Configure Claude Code Environment Variables"
+```bash showLineNumbers title="Claude Code Environment Variable 설정"
 export ANTHROPIC_BASE_URL=http://localhost:4000
 export ANTHROPIC_MODEL="anthropic-claude"
 export ANTHROPIC_CUSTOM_HEADERS="x-litellm-api-key: Bearer sk-otsclFlEblQ-6D60ua2IZg"
@@ -127,76 +127,76 @@ export ANTHROPIC_CUSTOM_HEADERS="x-litellm-api-key: Bearer sk-otsclFlEblQ-6D60ua
 
 <Image img={require('../../img/claude_code_max/step15.jpeg')} style={{ width: '800px', height: 'auto' }} />
 
-#### Environment Variables Explained
+#### Environment Variable 설명
 
-| Variable | Description |
+| Variable | 설명 |
 |----------|-------------|
-| `ANTHROPIC_BASE_URL` | Points Claude Code to your LiteLLM Gateway endpoint |
-| `ANTHROPIC_MODEL` | The model name configured in your LiteLLM `config.yaml` |
-| `ANTHROPIC_CUSTOM_HEADERS` | The `x-litellm-api-key` header for LiteLLM authentication |
+| `ANTHROPIC_BASE_URL` | Claude Code가 사용할 LiteLLM Gateway endpoint |
+| `ANTHROPIC_MODEL` | LiteLLM `config.yaml`에 설정된 model name |
+| `ANTHROPIC_CUSTOM_HEADERS` | LiteLLM 인증용 `x-litellm-api-key` header |
 
-#### 2.2 Launch Claude Code
+#### 2.2 Claude Code 실행
 
-Start Claude Code:
+Claude Code를 시작합니다.
 
-```bash showLineNumbers title="Launch Claude Code"
+```bash showLineNumbers title="Claude Code 실행"
 claude
 ```
 
 <Image img={require('../../img/claude_code_max/step16.jpeg')} style={{ width: '800px', height: 'auto' }} />
 
-#### 2.3 Select Login Method
+#### 2.3 Login Method 선택
 
-Choose "Claude account with subscription" (Pro, Max, Team, or Enterprise).
+"구독이 있는 Claude account"(Pro, Max, Team 또는 엔터프라이즈)을 선택합니다.
 
 <Image img={require('../../img/claude_code_max/step17.jpeg')} style={{ width: '800px', height: 'auto' }} />
 
-#### 2.4 Authorize in Browser
+#### 2.4 Browser에서 승인
 
-Claude Code opens your browser to authenticate. Click "Authorize" to connect your Claude Max account.
+Claude Code가 인증을 위해 browser를 엽니다. Claude Max account를 연결하려면 "Authorize"를 클릭합니다.
 
 <Image img={require('../../img/claude_code_max/step19.jpeg')} style={{ width: '800px', height: 'auto' }} />
 
-#### 2.5 Login Successful
+#### 2.5 Login 성공
 
-After authorization, you'll see the login success confirmation.
+승인 후 login success confirmation이 표시됩니다.
 
 <Image img={require('../../img/claude_code_max/step20.jpeg')} style={{ width: '800px', height: 'auto' }} />
 
-#### 2.6 Complete Setup
+#### 2.6 Setup 완료
 
-Press Enter to continue past the security notes and complete the setup.
+Enter를 눌러 security notes를 지나가고 setup을 완료합니다.
 
 <Image img={require('../../img/claude_code_max/step21.jpeg')} style={{ width: '800px', height: 'auto' }} />
 
 ---
 
-### Part 3: Use Claude Code with LiteLLM
+### Part 3: LiteLLM과 함께 Claude Code 사용
 
-Now you can use Claude Code normally, and all requests will be tracked in LiteLLM.
+이제 Claude Code를 평소처럼 사용할 수 있으며, 모든 request가 LiteLLM에서 추적됩니다.
 
-#### 3.1 Make a Request in Claude Code
+#### 3.1 Claude Code에서 Request 보내기
 
-Start using Claude Code - requests will flow through LiteLLM Gateway.
+Claude Code를 사용하기 시작하면 request가 LiteLLM Gateway를 통해 흐릅니다.
 
 <Image img={require('../../img/claude_code_max/step24.jpeg')} style={{ width: '800px', height: 'auto' }} />
 
-#### 3.2 View Logs in LiteLLM Dashboard
+#### 3.2 LiteLLM Dashboard에서 로그 보기
 
-Navigate to the Logs page in LiteLLM Dashboard to see all Claude Code requests.
+모든 Claude Code request를 보려면 LiteLLM Dashboard의 로그 page로 이동합니다.
 
 <Image img={require('../../img/claude_code_max/step25.jpeg')} style={{ width: '800px', height: 'auto' }} />
 
-#### 3.3 View Request Details
+#### 3.3 Request 세부 정보 보기
 
-Click on a request to see detailed information including tokens, cost, duration, and model used.
+request를 클릭하면 token, cost, duration, 사용 model 등 세부 정보를 볼 수 있습니다.
 
 <Image img={require('../../img/claude_code_max/step27.jpeg')} style={{ width: '800px', height: 'auto' }} />
 
-The logs show:
-- **Key Name**: `claude-code-test` (the virtual key you created)
+로그에는 다음 항목이 표시됩니다.
+- **Key Name**: `claude-code-test` (생성한 virtual key)
 - **Model**: `anthropic/claude-sonnet-4-20250514`
-- **Tokens**: 65012 (64679 prompt + 333 completion)
+- **Tokens**: 65012 (입력 prompt 64679 + 출력 completion 333)
 - **Cost**: $0.249754
 - **Status**: Success
 
@@ -204,11 +204,11 @@ The logs show:
 
 ---
 
-## How It Works
+## 동작 방식
 
-LiteLLM Gateway handles two types of authentication:
-1. **`x-litellm-api-key`**: Authenticates the request with LiteLLM (usage tracking, budgets, rate limits)
-2. **OAuth Token (via `Authorization` header)**: Forwarded to Anthropic API for Claude Max authentication
+LiteLLM Gateway는 두 가지 authentication을 처리합니다.
+1. **`x-litellm-api-key`**: LiteLLM에서 request를 인증합니다(usage tracking, budget, rate limit).
+2. **OAuth Token(`Authorization` header 경유)**: Claude Max authentication을 위해 Anthropic API로 전달됩니다.
 
 ```mermaid
 sequenceDiagram
@@ -233,16 +233,16 @@ sequenceDiagram
 
 ### Header Flow
 
-| Header | Purpose | Handled By |
+| Header | 목적 | 처리 주체 |
 |--------|---------|------------|
-| `x-litellm-api-key` | LiteLLM Gateway authentication, budget tracking, rate limits | LiteLLM |
-| `Authorization: Bearer {oauth_token}` | Claude Max subscription authentication | Anthropic API |
+| `x-litellm-api-key` | LiteLLM Gateway 인증, budget tracking, rate limit | LiteLLM |
+| `Authorization: Bearer {oauth_token}` | Claude Max 구독 authentication | Anthropic API |
 
-### Complete Request Flow Example
+### Complete Request Flow 예제
 
-Here's what a typical request looks like when Claude Code makes a call through LiteLLM:
+Claude Code가 LiteLLM을 통해 call할 때 일반적인 request는 다음과 같습니다.
 
-```bash showLineNumbers title="Example Request from Claude Code to LiteLLM"
+```bash showLineNumbers title="Claude Code에서 LiteLLM으로 보내는 예제 request"
 curl -X POST "http://localhost:4000/v1/messages" \
   -H "x-litellm-api-key: Bearer sk-otsclFlEblQ-6D60ua2IZg" \
   -H "Authorization: Bearer oauth_token_from_max_plan" \
@@ -254,18 +254,18 @@ curl -X POST "http://localhost:4000/v1/messages" \
   }'
 ```
 
-LiteLLM then:
-1. Validates `x-litellm-api-key` for gateway access
-2. Logs the request for usage tracking
-3. Forwards the request to Anthropic with the OAuth `Authorization` header (because of `forward_client_headers_to_llm_api: true`)
+그 다음 LiteLLM은 다음을 수행합니다.
+1. gateway access를 위해 `x-litellm-api-key`를 검증합니다.
+2. usage tracking을 위해 request를 logging합니다.
+3. `forward_client_headers_to_llm_api: true` 때문에 OAuth `Authorization` header와 함께 request를 Anthropic으로 전달합니다.
 
-## Advanced Configuration
+## Advanced 설정
 
-### Per-Model Header Forwarding
+### Model별 Header Forwarding
 
-For more granular control, you can enable header forwarding only for specific models:
+더 세밀하게 제어하려면 특정 model에만 header forwarding을 활성화할 수 있습니다.
 
-```yaml showLineNumbers title="config.yaml - Per-Model Header Forwarding"
+```yaml showLineNumbers title="config.yaml - model별 header forwarding"
 model_list:
   - model_name: anthropic-claude
     litellm_params:
@@ -283,11 +283,11 @@ litellm_settings:
       - claude-3-5-haiku-20241022
 ```
 
-### Budget Controls
+### Budget Control
 
-Set up per-user budgets while using Max subscriptions:
+Max subscription을 사용하면서 user별 budget을 설정합니다.
 
-```yaml showLineNumbers title="config.yaml - With Database for Budget Tracking"
+```yaml showLineNumbers title="config.yaml - budget tracking용 database 포함"
 model_list:
   - model_name: anthropic-claude
     litellm_params:
@@ -301,9 +301,9 @@ litellm_settings:
   master_key: os.environ/LITELLM_MASTER_KEY
 ```
 
-Then create virtual keys with budgets:
+그 다음 budget이 설정된 virtual key를 만듭니다.
 
-```bash showLineNumbers title="Create Virtual Key with Budget"
+```bash showLineNumbers title="budget이 있는 virtual key 생성"
 curl -X POST "http://localhost:4000/key/generate" \
   -H "Authorization: Bearer $LITELLM_MASTER_KEY" \
   -H "Content-Type: application/json" \
@@ -314,44 +314,44 @@ curl -X POST "http://localhost:4000/key/generate" \
   }'
 ```
 
-## Troubleshooting
+## 문제 해결
 
-### OAuth Token Not Being Forwarded
+### OAuth Token이 전달되지 않음
 
-**Symptom**: Authentication errors from Anthropic API
+**증상**: Anthropic API에서 인증 error 발생
 
-**Solution**: Ensure `forward_client_headers_to_llm_api: true` is set in your config:
+**해결 방법**: config에 `forward_client_headers_to_llm_api: true`가 설정되어 있는지 확인합니다.
 
-```yaml showLineNumbers title="config.yaml - Enable Header Forwarding"
+```yaml showLineNumbers title="config.yaml - header forwarding 활성화"
 general_settings:
   forward_client_headers_to_llm_api: true
 ```
 
-### LiteLLM Authentication Failing
+### LiteLLM 인증 실패
 
-**Symptom**: 401 errors from LiteLLM Gateway
+**증상**: LiteLLM Gateway에서 401 error 발생
 
-**Solution**: Verify `x-litellm-api-key` header is set correctly in `ANTHROPIC_CUSTOM_HEADERS`:
+**해결 방법**: `ANTHROPIC_CUSTOM_HEADERS`에 `x-litellm-api-key` header가 올바르게 설정되어 있는지 확인합니다.
 
-```bash showLineNumbers title="Verify Key Info"
+```bash showLineNumbers title="key info 확인"
 curl -X GET "http://localhost:4000/key/info" \
   -H "Authorization: Bearer sk-otsclFlEblQ-6D60ua2IZg"
 ```
 
 ### Model Not Found
 
-**Symptom**: Model not found errors
+**증상**: model not found error 발생
 
-**Solution**: Ensure the `ANTHROPIC_MODEL` matches a model name in your config:
+**해결 방법**: `ANTHROPIC_MODEL`이 config의 model name과 일치하는지 확인합니다.
 
-```bash showLineNumbers title="List Available Models"
+```bash showLineNumbers title="사용 가능한 model 목록"
 curl "http://localhost:4000/v1/models" \
   -H "Authorization: Bearer sk-otsclFlEblQ-6D60ua2IZg"
 ```
 
-## Related Documentation
+## 관련 문서
 
-- [Forward Client Headers](/docs/proxy/forward_client_headers) - Detailed header forwarding configuration
-- [Claude Code Quickstart](/docs/tutorials/claude_responses_api) - Basic Claude Code + LiteLLM setup
-- [Virtual Keys](/docs/proxy/virtual_keys) - Creating and managing API keys
-- [Budgets & Rate Limits](/docs/proxy/users) - Setting up usage controls
+- [Forward Client Headers](/docs/proxy/forward_client_headers) - 자세한 header forwarding 설정
+- [Claude Code 빠른 시작](/docs/tutorials/claude_responses_api) - 기본 Claude Code + LiteLLM setup
+- [가상 키](/docs/proxy/virtual_keys) - API key 생성 및 관리
+- [Budgets & Rate Limits](/docs/proxy/users) - usage control 설정

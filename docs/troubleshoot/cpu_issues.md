@@ -1,31 +1,31 @@
-# CPU Issue Classification & Reproduction
+# CPU 문제 분류 및 재현
 
-## 1. Classify the CPU Issue
+## 1. CPU 문제 분류
 
-Select the options that best describes the CPU behavior observed.
+관찰된 CPU 동작을 가장 잘 설명하는 옵션을 선택하세요.
 
-- [ ] CPU scales with traffic (RPS-driven)
-- [ ] CPU increases without a traffic increase
-- [ ] CPU increases after a LiteLLM upgrade
+- [ ] CPU가 트래픽에 따라 증가함(RPS 기반)
+- [ ] 트래픽 증가 없이 CPU가 증가함
+- [ ] LiteLLM 업그레이드 후 CPU가 증가함
 
-## 2. Can you reproduce the issue?
+## 2. 문제를 재현할 수 있나요?
 
-Before escalating, verify whether the CPU issue can be reproduced in a test environment that mirrors your production setup.  
+에스컬레이션하기 전에, 프로덕션 설정과 유사한 테스트 환경에서 CPU 문제를 재현할 수 있는지 확인하세요.  
 
-If reproducible, provide **detailed reproduction steps** along with any relevant requests or configuration used.  
-For guidance on the type of information we're looking for, see the [LiteLLM Troubleshooting Guide](../troubleshoot).
+재현 가능하다면 사용한 관련 요청이나 설정과 함께 **자세한 재현 단계**를 제공하세요.  
+필요한 정보 유형에 대한 안내는 [LiteLLM 문제 해결 가이드](../troubleshoot)를 참고하세요.
 
-## 3. Issue Cannot Be Reproduced
+## 3. 문제를 재현할 수 없는 경우
 
-If the CPU issue cannot be reproduced in a test environment that mirrors your production setup, please provide:
+프로덕션 설정과 유사한 테스트 환경에서 CPU 문제를 재현할 수 없다면 다음 정보를 제공하세요.
 
-1. **Information from Section 1 and 2**  
-   - CPU classification (Section 1)  
-   - Reproduction attempts and environment details (Section 2)  
+1. **섹션 1 및 2의 정보**  
+   - CPU 분류(섹션 1)  
+   - 재현 시도 및 환경 세부 정보(섹션 2)  
 
-2. **Additional context** to help investigate:  
-   - **Workload:** A realistic sample of requests processed before and during the spike, including any recent configuration changes.  
-   - **Metrics:** CPU usage, P50/P99 latency, memory usage. Please include **screenshots** of the metrics whenever possible.  
-   - **Logs / Alerts:** Any relevant logs or alerts captured **before and during the spike**.
+2. 조사에 도움이 되는 **추가 맥락**:  
+   - **워크로드:** 최근 설정 변경을 포함하여 스파이크 전과 스파이크 중에 처리된 요청의 현실적인 샘플.  
+   - **메트릭:** CPU 사용량, P50/P99 지연 시간, 메모리 사용량. 가능하면 메트릭의 **스크린샷**을 포함하세요.  
+   - **로그 / 알림:** **스파이크 전과 스파이크 중**에 캡처된 관련 로그 또는 알림.
 
-> Providing this information allows the team to analyze patterns, correlate spikes with traffic or configuration, and attempt to reproduce the issue internally. Without it, our engineers won't have enough information to look into the problem.
+> 이 정보를 제공하면 팀이 패턴을 분석하고, 스파이크를 트래픽 또는 설정과 연관 지어 확인하며, 내부에서 문제 재현을 시도할 수 있습니다. 이 정보가 없으면 엔지니어가 문제를 조사하기에 충분한 정보가 없습니다.

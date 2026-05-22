@@ -1,4 +1,4 @@
-# Parallel AI Search
+# Parallel AI 검색
 
 **Get API Key:** [https://www.parallel.ai](https://www.parallel.ai)
 
@@ -35,7 +35,7 @@ search_tools:
       api_key: os.environ/PARALLEL_AI_API_KEY
 ```
 
-### 2. Start the proxy
+### 2. 프록시 시작
 
 ```bash
 litellm --config /path/to/config.yaml
@@ -43,7 +43,7 @@ litellm --config /path/to/config.yaml
 # RUNNING on http://0.0.0.0:4000
 ```
 
-### 3. Test the search endpoint
+### 3. 검색 엔드포인트 테스트
 
 ```bash showLineNumbers title="Test Request"
 curl http://0.0.0.0:4000/v1/search/parallel-search \
@@ -55,7 +55,7 @@ curl http://0.0.0.0:4000/v1/search/parallel-search \
   }'
 ```
 
-## Provider-specific Parameters
+## Provider별 파라미터
 
 ```python showLineNumbers title="Parallel AI Search with Provider-specific Parameters"
 import os
@@ -72,4 +72,3 @@ response = search(
     max_chars_per_result=500         # Max characters per result
 )
 ```
-

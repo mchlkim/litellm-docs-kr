@@ -1,10 +1,10 @@
-# SearchAPI.io (Google Search)
+# `SearchAPI.io` (`Google Search`)
 
-Get started by creating a free API key via https://www.searchapi.io/.
+https://www.searchapi.io/에서 무료 API 키를 생성해 시작하세요.
 
-SearchAPI.io provides access to Google Search results with a simple API. It supports all Google Search parameters including location, language, time filters, and more.
+SearchAPI.io는 간단한 API로 Google Search 결과에 접근할 수 있게 해줍니다. 위치, 언어, 시간 필터 등 모든 Google Search 파라미터를 지원합니다.
 
-For complete documentation on all supported parameters, visit https://www.searchapi.io/docs/google.
+지원되는 모든 파라미터의 전체 문서는 https://www.searchapi.io/docs/google 에서 확인하세요.
 
 ## LiteLLM Python SDK
 
@@ -26,9 +26,9 @@ for result in response.results:
     print(f"Snippet: {result.snippet}\n")
 ```
 
-### Advanced Usage with SearchAPI.io Parameters
+### SearchAPI.io 파라미터를 사용한 고급 사용법
 
-SearchAPI.io supports many Google Search-specific parameters:
+SearchAPI.io는 Google Search 전용 파라미터를 다양하게 지원합니다.
 
 ```python showLineNumbers title="Advanced SearchAPI.io Parameters"
 import os
@@ -71,7 +71,7 @@ search_tools:
       api_key: os.environ/SEARCHAPI_API_KEY
 ```
 
-### 2. Start the proxy
+### 2. 프록시 시작
 
 ```bash
 litellm --config /path/to/config.yaml
@@ -79,7 +79,7 @@ litellm --config /path/to/config.yaml
 # RUNNING on http://0.0.0.0:4000
 ```
 
-### 3. Test the search endpoint
+### 3. 검색 엔드포인트 테스트
 
 ```bash showLineNumbers title="Test Request"
 curl http://0.0.0.0:4000/v1/search/google-search \
@@ -92,25 +92,25 @@ curl http://0.0.0.0:4000/v1/search/google-search \
   }'
 ```
 
-## SearchAPI.io Specific Parameters
+## SearchAPI.io 전용 파라미터
 
-SearchAPI.io supports many Google Search parameters. Here are some commonly used ones:
+SearchAPI.io는 다양한 Google Search 파라미터를 지원합니다. 자주 사용하는 항목은 다음과 같습니다.
 
-| Parameter | Type | Description |
+| Parameter | Type | 설명 |
 |-----------|------|-------------|
-| `gl` | string | Country code (e.g., 'us', 'uk', 'de') |
-| `hl` | string | Interface language (e.g., 'en', 'es', 'fr') |
-| `location` | string | Geographic location (e.g., 'New York', 'London') |
-| `device` | string | Device type: 'desktop', 'mobile', 'tablet' |
-| `time_period` | string | Time filter: 'last_hour', 'last_day', 'last_week', 'last_month', 'last_year' |
-| `time_period_min` | string | Start date (MM/DD/YYYY) |
-| `time_period_max` | string | End date (MM/DD/YYYY) |
-| `safe` | string | SafeSearch: 'active' or 'off' |
-| `lr` | string | Language restriction (e.g., 'lang_en', 'lang_es') |
-| `cr` | string | Country restriction |
-| `page` | integer | Page number for pagination |
+| `gl` | string | 국가 코드(예: 'us', 'uk', 'de') |
+| `hl` | string | 인터페이스 언어(예: 'en', 'es', 'fr') |
+| `location` | string | 지리적 위치(예: 'New York', 'London') |
+| `device` | string | 기기 유형: 'desktop', 'mobile', 'tablet' |
+| `time_period` | string | 시간 필터: 'last_hour', 'last_day', 'last_week', 'last_month', 'last_year' |
+| `time_period_min` | string | 시작 날짜(MM/DD/YYYY) |
+| `time_period_max` | string | 종료 날짜(MM/DD/YYYY) |
+| `safe` | string | SafeSearch: 'active' 또는 'off' |
+| `lr` | string | 언어 제한(예: 'lang_en', 'lang_es') |
+| `cr` | string | 국가 제한 |
+| `page` | integer | 페이지네이션용 페이지 번호 |
 
-### Example with Time Filters
+### 시간 필터 예제
 
 ```python showLineNumbers title="Search with Time Filter"
 response = search(
@@ -121,7 +121,7 @@ response = search(
 )
 ```
 
-### Example with Custom Date Range
+### 사용자 지정 날짜 범위 예제
 
 ```python showLineNumbers title="Search with Custom Date Range"
 response = search(
@@ -133,7 +133,7 @@ response = search(
 )
 ```
 
-### Example with Location
+### 위치 지정 예제
 
 ```python showLineNumbers title="Search with Location"
 response = search(
@@ -145,9 +145,9 @@ response = search(
 )
 ```
 
-## Response Format
+## 응답 형식
 
-SearchAPI.io returns results in the standard LiteLLM search format:
+SearchAPI.io는 표준 LiteLLM 검색 형식으로 결과를 반환합니다.
 
 ```json
 {
@@ -165,13 +165,13 @@ SearchAPI.io returns results in the standard LiteLLM search format:
 
 ## Rate Limits
 
-SearchAPI.io has different rate limits based on your plan:
-- Free tier: 100 requests/month
-- Paid plans: Higher limits available
+SearchAPI.io는 사용 중인 플랜에 따라 다른 rate limit을 적용합니다.
+- 무료 티어: 월 100개 요청
+- 유료 플랜: 더 높은 한도 제공
 
-Check your current usage at https://www.searchapi.io/dashboard.
+현재 사용량은 https://www.searchapi.io/dashboard 에서 확인하세요.
 
-## Error Handling
+## 오류 처리
 
 ```python showLineNumbers title="Error Handling"
 from litellm import search
@@ -190,8 +190,8 @@ except Exception as e:
     print(f"Search failed: {str(e)}")
 ```
 
-## Additional Resources
+## 추가 자료
 
-- SearchAPI.io Documentation: https://www.searchapi.io/docs
+- SearchAPI.io 문서: https://www.searchapi.io/docs
 - API Dashboard: https://www.searchapi.io/dashboard
-- Pricing: https://www.searchapi.io/pricing
+- 요금: https://www.searchapi.io/pricing

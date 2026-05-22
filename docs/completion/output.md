@@ -1,7 +1,7 @@
-# Output 
+# 출력 {#output}
 
-## Format
-Here's the exact json output and type you can expect from all litellm `completion` calls for all models
+## 형식 {#format}
+모든 모델에서 모든 litellm `completion` 호출이 반환하는 정확한 json 출력과 예상 타입은 다음과 같습니다.
 
 ```python 
 {
@@ -26,13 +26,13 @@ Here's the exact json output and type you can expect from all litellm `completio
 
 ```
 
-You can access the response as a dictionary or as a class object, just as OpenAI allows you
+OpenAI에서 허용하는 것처럼 응답을 dictionary 또는 class object로 접근할 수 있습니다.
 ```python
 print(response.choices[0].message.content)
 print(response['choices'][0]['message']['content'])
 ```
 
-Here's what an example response looks like 
+예시 응답은 다음과 같습니다.
 ```python
 {
   'choices': [
@@ -51,11 +51,11 @@ Here's what an example response looks like
 }
 ```
 
-## Native Finish Reason
+## 원본 종료 사유 {#native-finish-reason}
 
-LiteLLM maps all provider-specific `finish_reason` values to OpenAI-compatible values (`stop`, `length`, `tool_calls`, `function_call`, `content_filter`). When the original provider value differs from the mapped value, it is preserved in `provider_specific_fields["native_finish_reason"]`.
+LiteLLM은 모든 provider별 `finish_reason` 값을 OpenAI 호환 값(`stop`, `length`, `tool_calls`, `function_call`, `content_filter`)으로 매핑합니다. 원래 provider 값이 매핑된 값과 다르면 `provider_specific_fields["native_finish_reason"]`에 보존됩니다.
 
-This is useful for agent loops that need to distinguish between different stop conditions (e.g., Gemini's `MALFORMED_FUNCTION_CALL` vs a normal `stop`).
+이는 서로 다른 중지 조건을 구분해야 하는 agent loop에 유용합니다. 예를 들어 Gemini의 `MALFORMED_FUNCTION_CALL`과 일반 `stop`을 구분할 수 있습니다.
 
 ```python
 response = completion(model="gemini/gemini-2.0-flash", messages=messages)
@@ -71,11 +71,11 @@ if hasattr(choice, "provider_specific_fields") and choice.provider_specific_fiel
         pass
 ```
 
-When the provider already returns an OpenAI-compatible value (e.g., `stop`), `native_finish_reason` is not set.
+provider가 이미 OpenAI 호환 값(예: `stop`)을 반환하면 `native_finish_reason`은 설정되지 않습니다.
 
-## Additional Attributes
+## 추가 속성 {#additional-attributes}
 
-You can also access information like latency. 
+latency 같은 정보에도 접근할 수 있습니다.
 
 ```python
 from litellm import completion

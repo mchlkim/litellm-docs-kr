@@ -4,16 +4,16 @@ import TabItem from '@theme/TabItem';
 
 # Onyx Security
 
-## Quick Start
+## 빠른 시작
 
-### 1. Create a new Onyx Guard policy
+### 1. 새 Onyx Guard 정책 만들기 {#1-create-a-new-onyx-guard-policy}
 
-Go to [Onyx's platform](https://app.onyx.security) and create a new AI Guard policy.
-After creating the policy, copy the generated API key.
+[Onyx 플랫폼](https://app.onyx.security)으로 이동하여 새 AI Guard 정책을 만듭니다.
+정책을 만든 후 생성된 API 키를 복사합니다.
 
-### 2. Define Guardrails on your LiteLLM config.yaml
+### 2. LiteLLM config.yaml에 가드레일 정의하기 {#2-define-guardrails-on-your-litellm-configyaml}
 
-Define your guardrails under the `guardrails` section:
+`guardrails` 섹션 아래에 가드레일을 정의합니다.
 
 ```yaml showLineNumbers title="litellm config.yaml"
 model_list:
@@ -32,25 +32,25 @@ guardrails:
       api_key: os.environ/ONYX_API_KEY
 ```
 
-#### Supported values for `mode`
+#### `mode`에서 지원되는 값 {#supported-values-for-mode}
 
-- `pre_call` Run **before** LLM call, on **input**
-- `post_call` Run **after** LLM call, on **input & output**
-- `during_call` Run **during** LLM call, on **input**. Same as `pre_call` but runs in parallel with the LLM call. Response not returned until guardrail check completes
+- `pre_call` LLM 호출 **전**에 **입력**에 대해 실행합니다.
+- `post_call` LLM 호출 **후**에 **입력 및 출력**에 대해 실행합니다.
+- `during_call` LLM 호출 **중**에 **입력**에 대해 실행합니다. `pre_call`과 같지만 LLM 호출과 병렬로 실행됩니다. 가드레일 검사가 완료될 때까지 응답이 반환되지 않습니다.
 
-### 3. Start LiteLLM Gateway
+### 3. LiteLLM Gateway 시작하기 {#3-start-litellm-gateway}
 
 ```shell
 litellm --config config.yaml --detailed_debug
 ```
 
-### 4. Test request
+### 4. 요청 테스트하기 {#4-test-request}
 
 <Tabs>
-<TabItem label="Blocked request" value="not-allowed">
-This request should be blocked since it contains prompt injection
+<TabItem label="차단되는 요청" value="not-allowed">
+이 요청에는 프롬프트 인젝션이 포함되어 있으므로 차단되어야 합니다.
 
-```shell showLineNumbers title="Curl Request"
+```shell showLineNumbers title="Curl 요청"
 curl -i http://0.0.0.0:4000/v1/chat/completions \
   -H "Content-Type: application/json" \
   -d '{
@@ -61,7 +61,7 @@ curl -i http://0.0.0.0:4000/v1/chat/completions \
   }'
 ```
 
-Expected response on failure
+실패 시 예상 응답
 
 ```json
 {
@@ -76,9 +76,9 @@ Expected response on failure
 
 </TabItem>
 
-<TabItem label="Allowed request" value="allowed">
+<TabItem label="허용되는 요청" value="allowed">
 
-```shell showLineNumbers title="Curl Request"
+```shell showLineNumbers title="Curl 요청"
 curl -i http://0.0.0.0:4000/v1/chat/completions \
   -H "Content-Type: application/json" \
   -d '{
@@ -89,7 +89,7 @@ curl -i http://0.0.0.0:4000/v1/chat/completions \
   }'
 ```
 
-Expected response
+예상 응답
 
 ```json
 {
@@ -118,7 +118,7 @@ Expected response
 </TabItem>
 </Tabs>
 
-## Supported Params
+## 지원되는 매개변수 {#supported-params}
 
 ```yaml
 guardrails:
@@ -131,18 +131,18 @@ guardrails:
       timeout: 10.0 # Optional, defaults to 10 seconds
 ```
 
-### Required Parameters
+### 필수 매개변수 {#required-parameters}
 
-- **`api_key`**: Your Onyx Security API key (set as `os.environ/ONYX_API_KEY` in YAML config)
+- **`api_key`**: Onyx Security API 키입니다(YAML 설정에서 `os.environ/ONYX_API_KEY`로 설정).
 
-### Optional Parameters
+### 선택 매개변수 {#optional-parameters}
 
-- **`api_base`**: Onyx API base URL (defaults to `https://ai-guard.onyx.security`)
-- **`timeout`**: Request timeout in seconds (defaults to `10.0`)
+- **`api_base`**: Onyx API 기본 URL입니다(기본값: `https://ai-guard.onyx.security`).
+- **`timeout`**: 요청 제한 시간(초)입니다(기본값: `10.0`).
 
-## Environment Variables
+## 환경 변수 {#environment-variables}
 
-You can set these environment variables instead of hardcoding values in your config:
+설정에 값을 하드코딩하는 대신 다음 환경 변수를 설정할 수 있습니다.
 
 ```shell
 export ONYX_API_KEY="your-api-key-here"

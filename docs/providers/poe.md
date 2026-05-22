@@ -1,35 +1,36 @@
 # Poe
 
-## Overview
+## 개요
 
 | Property | Details |
 |-------|-------|
-| Description | Poe is Quora's AI platform that provides access to more than 100 models across text, image, video, and voice modalities through a developer-friendly API. |
-| Provider Route on LiteLLM | `poe/` |
-| Link to Provider Doc | [Poe Website ↗](https://poe.com) |
+| 설명 | Poe는 Quora의 AI platform으로, developer-friendly API를 통해 text, image, video, voice modality 전반의 100개 이상 모델에 접근할 수 있습니다. |
+| LiteLLM 경로 | `poe/` |
+| Provider 문서 링크 | [Poe Website ↗](https://poe.com) |
 | Base URL | `https://api.poe.com/v1` |
-| Supported Operations | [`/chat/completions`](#sample-usage) |
+| 지원 작업 | [`/chat/completions`](#sample-usage) |
 
 <br />
 
-## What is Poe?
+## Poe란?
 
-Poe is Quora's comprehensive AI platform that offers:
-- **100+ Models**: Access to a wide variety of AI models
-- **Multiple Modalities**: Text, image, video, and voice AI
-- **Popular Models**: Including OpenAI's GPT series and Anthropic's Claude
-- **Developer API**: Easy integration for applications
-- **Extensive Reach**: Benefits from Quora's 400M monthly unique visitors
+Poe는 Quora의 종합 AI platform이며 다음을 제공합니다.
 
-## Required Variables
+- **100개 이상 모델**: 다양한 AI 모델에 접근할 수 있습니다.
+- **여러 modality**: Text, image, video, voice AI를 지원합니다.
+- **인기 모델**: OpenAI GPT series와 Anthropic Claude 등을 포함합니다.
+- **Developer API**: Application에 쉽게 통합할 수 있습니다.
+- **넓은 도달 범위**: Quora의 월간 4억 unique visitor 기반을 활용할 수 있습니다.
+
+## 필수 변수
 
 ```python showLineNumbers title="Environment Variables"
 os.environ["POE_API_KEY"] = ""  # your Poe API key
 ```
 
-Get your Poe API key from the [Poe platform](https://poe.com).
+[Poe platform](https://poe.com)에서 Poe API key를 가져옵니다.
 
-## Usage - LiteLLM Python SDK
+## 사용법 - LiteLLM Python SDK
 
 ### Non-streaming
 
@@ -73,15 +74,15 @@ for chunk in response:
     print(chunk)
 ```
 
-## Usage - LiteLLM Proxy Server
+## 사용법 - LiteLLM Proxy Server
 
-### 1. Save key in your environment
+### 1. 환경에 key 저장
 
 ```bash
 export POE_API_KEY=""
 ```
 
-### 2. Start the proxy
+### 2. 프록시 시작
 
 ```yaml
 model_list:
@@ -91,49 +92,51 @@ model_list:
       api_key: os.environ/POE_API_KEY
 ```
 
-## Supported OpenAI Parameters
+## 지원 OpenAI 파라미터
 
-Poe supports all standard OpenAI-compatible parameters:
+Poe는 모든 표준 OpenAI-compatible parameter를 지원합니다.
 
-| Parameter | Type | Description |
+| 파라미터 | 타입 | 설명 |
 |-----------|------|-------------|
-| `messages` | array | **Required**. Array of message objects with 'role' and 'content' |
-| `model` | string | **Required**. Model ID from 100+ available models |
-| `stream` | boolean | Optional. Enable streaming responses |
-| `temperature` | float | Optional. Sampling temperature |
-| `top_p` | float | Optional. Nucleus sampling parameter |
-| `max_tokens` | integer | Optional. Maximum tokens to generate |
-| `frequency_penalty` | float | Optional. Penalize frequent tokens |
-| `presence_penalty` | float | Optional. Penalize tokens based on presence |
-| `stop` | string/array | Optional. Stop sequences |
-| `tools` | array | Optional. List of available tools/functions |
-| `tool_choice` | string/object | Optional. Control tool/function calling |
-| `response_format` | object | Optional. Response format specification |
-| `user` | string | Optional. User identifier |
+| `messages` | array | **필수**. `role`과 `content`가 있는 message object 배열입니다. |
+| `model` | string | **필수**. 사용 가능한 100개 이상 모델 중 하나의 model ID입니다. |
+| `stream` | boolean | 선택 사항. Streaming response를 활성화합니다. |
+| `temperature` | float | 선택 사항. Sampling temperature입니다. |
+| `top_p` | float | 선택 사항. Nucleus sampling parameter입니다. |
+| `max_tokens` | integer | 선택 사항. 생성할 최대 token 수입니다. |
+| `frequency_penalty` | float | 선택 사항. 자주 등장하는 token에 penalty를 적용합니다. |
+| `presence_penalty` | float | 선택 사항. 존재 여부 기준으로 token에 penalty를 적용합니다. |
+| `stop` | string/array | 선택 사항. Stop sequence입니다. |
+| `tools` | array | 선택 사항. 사용 가능한 tools/functions 목록입니다. |
+| `tool_choice` | string/object | 선택 사항. Tool/function calling을 제어합니다. |
+| `response_format` | object | 선택 사항. Response format specification입니다. |
+| `user` | string | 선택 사항. User identifier입니다. |
 
-## Available Model Categories
+## 사용 가능한 모델 범주
 
-Poe provides access to models across multiple providers:
-- **OpenAI Models**: Including GPT-4, GPT-4 Turbo, GPT-3.5 Turbo
-- **Anthropic Models**: Including Claude 3 Opus, Sonnet, Haiku
-- **Other Popular Models**: Various provider models available
-- **Multi-Modal**: Text, image, video, and voice models
+Poe는 여러 provider의 모델에 접근할 수 있게 합니다.
 
-## Platform Benefits
+- **OpenAI 모델**: GPT-4, GPT-4 Turbo, GPT-3.5 Turbo 등을 포함합니다.
+- **Anthropic 모델**: Claude 3 Opus, Sonnet, Haiku 등을 포함합니다.
+- **기타 인기 모델**: 여러 provider 모델을 사용할 수 있습니다.
+- **Multi-Modal**: Text, image, video, voice 모델을 지원합니다.
 
-Using Poe through LiteLLM offers several advantages:
-- **Unified Access**: Single API for many different models
-- **Quora Integration**: Access to large user base and content ecosystem
-- **Content Sharing**: Capabilities to share model outputs with followers
-- **Content Distribution**: Best AI content distributed to all users
-- **Model Discovery**: Efficient way to explore new AI models
+## Platform 장점
 
-## Developer Resources
+LiteLLM을 통해 Poe를 사용하면 다음 장점이 있습니다.
 
-Poe is actively building developer features and welcomes early access requests for API integration.
+- **Unified Access**: 여러 모델을 단일 API로 사용할 수 있습니다.
+- **Quora Integration**: 대규모 사용자 기반과 content ecosystem에 접근할 수 있습니다.
+- **Content Sharing**: Model output을 follower와 공유할 수 있습니다.
+- **Content Distribution**: 우수한 AI content를 전체 사용자에게 배포할 수 있습니다.
+- **Model Discovery**: 새 AI 모델을 효율적으로 탐색할 수 있습니다.
 
-## Additional Resources
+## Developer 리소스
+
+Poe는 developer feature를 활발히 구축하고 있으며 API 통합을 위한 early access request를 받고 있습니다.
+
+## 추가 리소스
 
 - [Poe Website](https://poe.com)
 - [Poe AI Quora Space](https://poeai.quora.com)
-- [Quora Blog Post about Poe](https://quorablog.quora.com/Poe)
+- [Quora 블로그 Post about Poe](https://quorablog.quora.com/Poe)

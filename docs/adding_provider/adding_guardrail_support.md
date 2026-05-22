@@ -1,17 +1,17 @@
-# Adding Guardrail Support to Endpoints
+# 엔드포인트에 Guardrail 지원 추가
 
-This guide explains how to add guardrail translation support to new LiteLLM endpoints (e.g., Chat Completions, Responses API, etc.).
+이 가이드는 새 LiteLLM 엔드포인트(예: Chat Completions, Responses API 등)에 guardrail 변환 지원을 추가하는 방법을 설명합니다.
 
-## When to Add Guardrail Support
+## Guardrail 지원을 추가해야 하는 경우
 
-Add guardrail support when:
-- You're creating a new LiteLLM endpoint (e.g., a new API format)
-- You want to enable guardrails for an existing endpoint that doesn't support them
-- You need custom text extraction logic for a specific message format
+다음 경우에 guardrail 지원을 추가합니다.
+- 새 LiteLLM 엔드포인트(예: 새 API 형식)를 만드는 경우
+- 아직 guardrail을 지원하지 않는 기존 엔드포인트에 guardrail을 활성화하려는 경우
+- 특정 메시지 형식에 맞는 사용자 지정 텍스트 추출 로직이 필요한 경우
 
-## Directory Structure
+## 디렉터리 구조
 
-Guardrail handlers follow this structure:
+Guardrail handler는 다음 구조를 따릅니다.
 
 ```
 litellm/llms/{provider}/{endpoint}/guardrail_translation/
@@ -20,7 +20,7 @@ litellm/llms/{provider}/{endpoint}/guardrail_translation/
 └── README.md            # Documentation (optional but recommended)
 ```
 
-### Example Structures
+### 예제 구조
 
 **OpenAI Chat Completions:**
 ```
@@ -45,11 +45,11 @@ litellm/llms/anthropic/chat/guardrail_translation/
 └── handler.py
 ```
 
-## Step-by-Step Implementation
+## 단계별 구현
 
-### Step 1: Create the Handler Class
+### 1단계: Handler 클래스 생성
 
-Create `handler.py` that inherits from `BaseTranslation`:
+`BaseTranslation`을 상속하는 `handler.py`를 생성합니다.
 
 ```python
 """
@@ -115,11 +115,11 @@ class MyEndpointHandler(BaseTranslation):
         pass
 ```
 
-### Step 2: Implement Core Methods
+### 2단계: 핵심 메서드 구현
 
-#### A. Process Input Messages
+#### A. 입력 메시지 처리
 
-Extract text from input, apply guardrails, and map back:
+입력에서 텍스트를 추출하고, guardrail을 적용한 뒤, 원래 구조로 다시 매핑합니다.
 
 ```python
 async def process_input_messages(
@@ -160,9 +160,9 @@ async def process_input_messages(
     return data
 ```
 
-#### B. Process Output Response
+#### B. 출력 응답 처리
 
-Extract text from response, apply guardrails, and update:
+응답에서 텍스트를 추출하고, guardrail을 적용한 뒤, 응답을 업데이트합니다.
 
 ```python
 async def process_output_response(
@@ -202,9 +202,9 @@ async def process_output_response(
     return response
 ```
 
-### Step 3: Create Helper Methods
+### 3단계: Helper 메서드 생성
 
-Implement helper methods for text extraction and mapping:
+텍스트 추출과 매핑을 위한 helper 메서드를 구현합니다.
 
 ```python
 async def _extract_input_text_and_create_tasks(
@@ -256,9 +256,9 @@ def _has_text_content(self, response: Any) -> bool:
     return True  # or appropriate logic
 ```
 
-### Step 4: Register the Handler
+### 4단계: Handler 등록
 
-Create `__init__.py` to register the handler with call types:
+call type에 handler를 등록하기 위해 `__init__.py`를 생성합니다.
 
 ```python
 """My Endpoint handler for Unified Guardrails."""
@@ -276,11 +276,11 @@ guardrail_translation_mappings = {
 __all__ = ["guardrail_translation_mappings"]
 ```
 
-**Important:** Make sure your `CallTypes` are defined in `litellm/types/utils.py`.
+**중요:** `CallTypes`가 `litellm/types/utils.py`에 정의되어 있는지 확인하세요.
 
-### Step 5: Add Documentation
+### 5단계: 문서 추가
 
-Create `README.md` with usage examples and format details:
+사용 예제와 형식 세부 정보를 포함한 `README.md`를 생성합니다.
 
 ```markdown
 # {Provider} {Endpoint} Guardrail Translation Handler
@@ -335,9 +335,9 @@ Override these methods to customize behavior:
 - `_has_text_content()`: Custom content detection
 ```
 
-### Step 6: Add Unit Tests
+### 6단계: 단위 테스트 추가
 
-Create comprehensive tests in `tests/test_litellm/llms/{provider}/{endpoint}/`:
+`tests/test_litellm/llms/{provider}/{endpoint}/`에 포괄적인 테스트를 생성합니다.
 
 ```python
 """
@@ -403,10 +403,9 @@ class TestOutputProcessing:
         assert "GUARDRAILED" in get_response_text(result)
 ```
 
-## Support
+## 지원
 
-For questions or issues:
-- Check existing handler implementations for examples
-- Review the base translation class documentation
-- Create an issue on GitHub with the `guardrails` label
-
+질문이나 문제가 있으면 다음을 확인하세요.
+- 예제로 기존 handler 구현 확인
+- 기본 translation class 문서 검토
+- GitHub에 `guardrails` label을 붙여 issue 생성

@@ -4,15 +4,15 @@ import TabItem from '@theme/TabItem';
 
 # Guardrails AI
 
-Use Guardrails AI ([guardrailsai.com](https://www.guardrailsai.com/)) to add checks to LLM output.
+Guardrails AI([guardrailsai.com](https://www.guardrailsai.com/))를 사용해 LLM 출력에 검사를 추가합니다.
 
-## Pre-requisites
+## 사전 준비
 
-- Setup Guardrails AI Server. [quick start](https://www.guardrailsai.com/docs/getting_started/guardrails_server)
+- Guardrails AI Server를 설정합니다. [빠른 시작](https://www.guardrailsai.com/docs/getting_started/guardrails_server)
 
-## Usage
+## 사용법
 
-1. Setup config.yaml 
+1. config.yaml 설정
 
 ```yaml
 model_list:
@@ -31,15 +31,15 @@ guardrails:
       api_base: os.environ/GUARDRAILS_AI_API_BASE   # 👈 Guardrails AI API Base. Defaults to "http://0.0.0.0:8000"
 ```
 
-2. Start LiteLLM Gateway 
+2. LiteLLM Gateway 시작
 
 ```shell
 litellm --config config.yaml --detailed_debug
 ```
 
-3. Test request 
+3. 요청 테스트
 
-**[Langchain, OpenAI SDK Usage Examples](../proxy/user_keys#request-format)**
+**[Langchain, OpenAI SDK 사용법 예제](../proxy/user_keys#request-format)**
 
 ```shell
 curl -i http://localhost:4000/v1/chat/completions \
@@ -55,18 +55,18 @@ curl -i http://localhost:4000/v1/chat/completions \
 ```
 
 
-## ✨ Control Guardrails per Project (API Key)
+## ✨ 프로젝트별 가드레일 제어(API Key)
 
 :::info
 
-✨ This is an Enterprise only feature [Contact us to get a free trial](https://enterprise.litellm.ai/demo)
+✨ 엔터프라이즈 전용 기능입니다. [무료 체험판을 받으려면 문의하세요](https://enterprise.litellm.ai/demo)
 
 :::
 
-Use this to control what guardrails run per project. In this tutorial we only want the following guardrails to run for 1 project (API Key)
+프로젝트별로 실행할 가드레일을 제어할 때 사용합니다. 이 튜토리얼에서는 하나의 프로젝트(API Key)에 대해 다음 가드레일만 실행되도록 설정합니다.
 - `guardrails`: ["aporia-pre-guard", "aporia-post-guard"]
 
-**Step 1** Create Key with guardrail settings
+**1단계** 가드레일 설정이 포함된 Key 생성
 
 <Tabs>
 <TabItem value="/key/generate" label="/key/generate">
@@ -98,7 +98,7 @@ curl --location 'http://0.0.0.0:4000/key/update' \
 </TabItem>
 </Tabs>
 
-**Step 2** Test it with new key
+**2단계** 새 key로 테스트
 
 ```shell
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -114,6 +114,5 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
     ]
 }'
 ```
-
 
 

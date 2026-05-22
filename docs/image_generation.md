@@ -3,23 +3,23 @@ import Image from '@theme/IdealImage';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Image Generations
+# 이미지 생성
 
-## Overview
+## 개요
 
-| Feature | Supported | Notes |
+| 기능 | 지원 여부 | 참고 |
 |---------|-----------|-------|
-| Cost Tracking | ✅ | Works with all supported models |
-| Logging | ✅ | Works across all integrations |
-| End-user Tracking | ✅ | |
-| Fallbacks | ✅ | Works between supported models |
-| Loadbalancing | ✅ | Works between supported models |
-| Guardrails | ✅ | Applies to input prompts (non-streaming only) |
-| Supported Providers | OpenAI, Azure, Google AI Studio, Vertex AI, AWS Bedrock, Black Forest Labs, Recraft, OpenRouter, Xinference, Nscale | |
+| 비용 추적 | ✅ | 지원되는 모든 모델에서 작동 |
+| 로깅 | ✅ | 모든 연동에서 작동 |
+| 최종 사용자 추적 | ✅ | |
+| 폴백 | ✅ | 지원되는 모델 간 작동 |
+| 로드 밸런싱 | ✅ | 지원되는 모델 간 작동 |
+| 가드레일 | ✅ | 입력 프롬프트에 적용(비스트리밍만 해당) |
+| 지원 프로바이더 | OpenAI, Azure, Google AI Studio, Vertex AI, AWS Bedrock, Black Forest Labs, Recraft, OpenRouter, Xinference, Nscale | |
 
-## Quick Start
+## 빠른 시작
 
-### LiteLLM Python SDK
+### `LiteLLM Python SDK`
 
 ```python showLineNumbers
 from litellm import image_generation
@@ -35,7 +35,7 @@ print(f"response: {response}")
 
 ### LiteLLM Proxy
 
-### Setup config.yaml 
+### config.yaml 설정
 
 ```yaml showLineNumbers
 model_list:
@@ -47,7 +47,7 @@ model_list:
 
 ```
 
-### Start proxy 
+### 프록시 시작
 
 ```bash showLineNumbers
 litellm --config /path/to/config.yaml 
@@ -55,7 +55,7 @@ litellm --config /path/to/config.yaml
 # RUNNING on http://0.0.0.0:4000
 ```
 
-### Test 
+### 테스트
 
 <Tabs>
 <TabItem value="curl" label="Curl">
@@ -93,20 +93,20 @@ print(image)
 </TabItem>
 </Tabs>
 
-## Input Params for `litellm.image_generation()`
+## `litellm.image_generation()` 입력 파라미터
 
 :::info
 
-Any non-openai params, will be treated as provider-specific params, and sent in the request body as kwargs to the provider.
+OpenAI가 아닌 파라미터는 프로바이더별 파라미터로 처리되며, 요청 본문에서 `kwargs`로 프로바이더에 전송됩니다.
 
-[**See Reserved Params**](https://github.com/BerriAI/litellm/blob/2f5f85cb52f36448d1f8bbfbd3b8af8167d0c4c8/litellm/main.py#L4082)
+[**예약 파라미터 보기**](https://github.com/BerriAI/litellm/blob/2f5f85cb52f36448d1f8bbfbd3b8af8167d0c4c8/litellm/main.py#L4082)
 :::
 
-### Required Fields
+### 필수 필드
 
-- `prompt`: *string* - A text description of the desired image(s).  
+- `prompt`: *string* - 원하는 이미지에 대한 텍스트 설명입니다.  
 
-### Optional LiteLLM Fields
+### 선택적 LiteLLM 필드
 
     model: Optional[str] = None,
     n: Optional[int] = None,
@@ -115,40 +115,40 @@ Any non-openai params, will be treated as provider-specific params, and sent in 
     size: Optional[str] = None,
     style: Optional[str] = None,
     user: Optional[str] = None,
-    timeout=600,  # default to 10 minutes
+    timeout=600,  # 기본값은 10분
     api_key: Optional[str] = None,
     api_base: Optional[str] = None,
     api_version: Optional[str] = None,
     litellm_logging_obj=None,
     custom_llm_provider=None,
 
-- `model`: *string (optional)* The model to use for image generation. Defaults to openai/gpt-image-1
+- `model`: *string (optional)* 이미지 생성에 사용할 모델입니다. 기본값은 `openai/gpt-image-1`입니다.
 
-- `n`: *int (optional)* The number of images to generate. Must be between 1 and 10. For dall-e-3, only n=1 is supported.
+- `n`: *int (optional)* 생성할 이미지 수입니다. 1부터 10 사이여야 합니다. `dall-e-3`에서는 `n=1`만 지원됩니다.
 
-- `quality`: *string (optional)* The quality of the image that will be generated.
-  *   `auto` (default value) will automatically select the best quality for the given model.
-  *   `high`, `medium` and `low` are supported for `gpt-image-1`.
-  *   `hd` and `standard` are supported for `dall-e-3`.
-  *   `standard` is the only option for `dall-e-2`.
+- `quality`: *string (optional)* 생성될 이미지의 품질입니다.
+  *   `auto`(기본값)는 지정된 모델에 가장 적합한 품질을 자동으로 선택합니다.
+  *   `gpt-image-1`에서는 `high`, `medium`, `low`가 지원됩니다.
+  *   `dall-e-3`에서는 `hd`와 `standard`가 지원됩니다.
+  *   `dall-e-2`에서는 `standard`만 사용할 수 있습니다.
   
-- `response_format`: *string (optional)* The format in which the generated images are returned. Must be one of url or b64_json.
+- `response_format`: *string (optional)* 생성된 이미지가 반환되는 형식입니다. `url` 또는 `b64_json` 중 하나여야 합니다.
 
-- `size`: *string (optional)* The size of the generated images. Must be one of `1024x1024`, `1536x1024` (landscape), `1024x1536` (portrait), or `auto` (default value) for `gpt-image-1`, one of `256x256`, `512x512`, or `1024x1024` for `dall-e-2`, and one of `1024x1024`, `1792x1024`, or `1024x1792` for `dall-e-3`.
+- `size`: *string (optional)* 생성된 이미지의 크기입니다. `gpt-image-1`에서는 `1024x1024`, `1536x1024`(가로), `1024x1536`(세로), 또는 `auto`(기본값) 중 하나여야 하고, `dall-e-2`에서는 `256x256`, `512x512`, `1024x1024` 중 하나여야 하며, `dall-e-3`에서는 `1024x1024`, `1792x1024`, `1024x1792` 중 하나여야 합니다.
 
-- `timeout`: *integer* - The maximum time, in seconds, to wait for the API to respond. Defaults to 600 seconds (10 minutes).
+- `timeout`: *integer* - API 응답을 기다릴 최대 시간(초)입니다. 기본값은 600초(10분)입니다.
 
-- `user`: *string (optional)* A unique identifier representing your end-user, 
+- `user`: *string (optional)* 최종 사용자를 나타내는 고유 식별자입니다.
 
-- `api_base`: *string (optional)* - The api endpoint you want to call the model with
+- `api_base`: *string (optional)* - 모델 호출에 사용할 API 엔드포인트입니다.
 
-- `api_version`: *string (optional)* - (Azure-specific) the api version for the call; required for dall-e-3 on Azure
+- `api_version`: *string (optional)* - (Azure 전용) 호출에 사용할 API 버전입니다. Azure에서 `dall-e-3`를 사용할 때 필요합니다.
 
-- `api_key`: *string (optional)* - The API key to authenticate and authorize requests. If not provided, the default API key is used.
+- `api_key`: *string (optional)* - 요청 인증 및 권한 부여에 사용할 API 키입니다. 제공하지 않으면 기본 API 키가 사용됩니다.
 
-- `api_type`: *string (optional)* - The type of API to use.
+- `api_type`: *string (optional)* - 사용할 API 유형입니다.
 
-### Output from `litellm.image_generation()`
+### `litellm.image_generation()` 출력
 
 ```json
 
@@ -163,9 +163,9 @@ Any non-openai params, will be treated as provider-specific params, and sent in 
 }
 ```
 
-## OpenAI Image Generation Models
+## OpenAI 이미지 생성 모델
 
-### Usage
+### 사용법
 ```python showLineNumbers
 from litellm import image_generation
 import os
@@ -173,16 +173,16 @@ os.environ['OPENAI_API_KEY'] = ""
 response = image_generation(model='gpt-image-1', prompt="cute baby otter")
 ```
 
-| Model Name           | Function Call                               | Required OS Variables                |
+| 모델 이름           | 함수 호출                               | 필수 OS 변수                |
 |----------------------|---------------------------------------------|--------------------------------------|
 | gpt-image-1 | `image_generation(model='gpt-image-1', prompt="cute baby otter")` | `os.environ['OPENAI_API_KEY']`       |
 | dall-e-3 | `image_generation(model='dall-e-3', prompt="cute baby otter")` | `os.environ['OPENAI_API_KEY']`       |
 | dall-e-2 | `image_generation(model='dall-e-2', prompt="cute baby otter")` | `os.environ['OPENAI_API_KEY']`       |
 
-## Azure OpenAI Image Generation Models
+## Azure OpenAI 이미지 생성 모델
 
-### API keys
-This can be set as env variables or passed as **params to litellm.image_generation()**
+### API 키
+환경 변수로 설정하거나 **`litellm.image_generation()`의 파라미터로 전달**할 수 있습니다.
 ```python showLineNumbers
 import os
 os.environ['AZURE_API_KEY'] = 
@@ -190,7 +190,7 @@ os.environ['AZURE_API_BASE'] =
 os.environ['AZURE_API_VERSION'] = 
 ```
 
-### Usage
+### 사용법
 ```python showLineNumbers
 from litellm import embedding
 response = embedding(
@@ -203,25 +203,25 @@ response = embedding(
 print(response)
 ```
 
-| Model Name           | Function Call                               |
+| 모델 이름           | 함수 호출                               |
 |----------------------|---------------------------------------------|
 | gpt-image-1 | `image_generation(model="azure/<your deployment name>", prompt="cute baby otter")` |
 | dall-e-3 | `image_generation(model="azure/<your deployment name>", prompt="cute baby otter")` |
 | dall-e-2 | `image_generation(model="azure/<your deployment name>", prompt="cute baby otter")` |
 
-## Xinference Image Generation Models
+## Xinference 이미지 생성 모델
 
-Use this for Stable Diffusion models hosted on Xinference
+Xinference에서 호스팅되는 Stable Diffusion 모델에 사용합니다.
 
-#### Usage
+#### 사용법
 
-See Xinference usage with LiteLLM [here](./providers/xinference.md#image-generation)
+LiteLLM에서 Xinference를 사용하는 방법은 [여기](./providers/xinference.md#image-generation)를 참고하세요.
 
-## Recraft Image Generation Models
+## Recraft 이미지 생성 모델
 
-Use this for AI-powered design and image generation with Recraft
+Recraft의 AI 기반 디자인 및 이미지 생성에 사용합니다.
 
-#### Usage
+#### 사용법
 
 ```python showLineNumbers
 from litellm import image_generation
@@ -236,13 +236,13 @@ response = image_generation(
 print(response)
 ```
 
-See Recraft usage with LiteLLM [here](./providers/recraft.md#image-generation)
+LiteLLM에서 Recraft를 사용하는 방법은 [여기](./providers/recraft.md#image-generation)를 참고하세요.
 
-## OpenRouter Image Generation Models
+## OpenRouter 이미지 생성 모델
 
-Use this for image generation models available through OpenRouter (e.g., Google Gemini image generation models)
+OpenRouter를 통해 사용할 수 있는 이미지 생성 모델에 사용합니다(예: Google Gemini 이미지 생성 모델).
 
-#### Usage
+#### 사용법
 
 ```python showLineNumbers
 from litellm import image_generation
@@ -259,12 +259,12 @@ response = image_generation(
 print(response)
 ```
 
-## OpenAI Compatible Image Generation Models
-Use this for calling `/image_generation` endpoints on OpenAI Compatible Servers, example https://github.com/xorbitsai/inference
+## OpenAI 호환 이미지 생성 모델
+OpenAI 호환 서버의 `/image_generation` 엔드포인트를 호출할 때 사용합니다. 예: https://github.com/xorbitsai/inference
 
-**Note add `openai/` prefix to model so litellm knows to route to OpenAI**
+**참고: LiteLLM이 OpenAI로 라우팅해야 함을 알 수 있도록 모델에 `openai/` 접두사를 추가하세요.**
 
-### Usage
+### 사용법
 ```python showLineNumbers
 from litellm import image_generation
 response = image_generation(
@@ -274,11 +274,11 @@ response = image_generation(
 )
 ```
 
-## Bedrock - Stable Diffusion
-Use this for stable diffusion on bedrock
+## Bedrock - `Stable Diffusion`
+Bedrock에서 Stable Diffusion을 사용할 때 사용합니다.
 
 
-### Usage
+### 사용법
 ```python showLineNumbers
 import os
 from litellm import image_generation
@@ -294,11 +294,11 @@ response = image_generation(
 print(f"response: {response}")
 ```
 
-## VertexAI - Image Generation Models
+## VertexAI - 이미지 생성 모델
 
-### Usage 
+### 사용법 
 
-Use this for image generation models on VertexAI
+VertexAI의 이미지 생성 모델에 사용합니다.
 
 ```python showLineNumbers
 response = litellm.image_generation(
@@ -310,18 +310,18 @@ response = litellm.image_generation(
 print(f"response: {response}")
 ```
 
-## Supported Providers
+## 지원 프로바이더
 
-#### ⚡️See all supported models and providers at [models.litellm.ai](https://models.litellm.ai/)
+#### ⚡️지원되는 모든 모델과 프로바이더는 [models.litellm.ai](https://models.litellm.ai/)에서 확인하세요.
 
-| Provider | Documentation Link |
+| 프로바이더 | 문서 링크 |
 |----------|-------------------|
-| OpenAI | [OpenAI Image Generation →](./providers/openai) |
-| Azure OpenAI | [Azure OpenAI Image Generation →](./providers/azure/azure) |
-| Google AI Studio | [Google AI Studio Image Generation →](./providers/google_ai_studio/image_gen) |
-| Vertex AI | [Vertex AI Image Generation →](./providers/vertex_image) |
-| AWS Bedrock | [Bedrock Image Generation →](./providers/bedrock) |
-| Recraft | [Recraft Image Generation →](./providers/recraft#image-generation) |
-| OpenRouter | [OpenRouter Image Generation →](./providers/openrouter#image-generation) |
-| Xinference | [Xinference Image Generation →](./providers/xinference#image-generation) |
-| Nscale | [Nscale Image Generation →](./providers/nscale#image-generation) | 
+| OpenAI | [OpenAI 이미지 생성 →](./providers/openai) |
+| Azure OpenAI | [Azure OpenAI 이미지 생성 →](./providers/azure/azure) |
+| Google AI Studio | [Google AI Studio 이미지 생성 →](./providers/google_ai_studio/image_gen) |
+| Vertex AI | [Vertex AI 이미지 생성 →](./providers/vertex_image) |
+| AWS Bedrock | [Bedrock 이미지 생성 →](./providers/bedrock) |
+| Recraft | [Recraft 이미지 생성 →](./providers/recraft#image-generation) |
+| OpenRouter | [OpenRouter 이미지 생성 →](./providers/openrouter#image-generation) |
+| Xinference | [Xinference 이미지 생성 →](./providers/xinference#image-generation) |
+| Nscale | [Nscale 이미지 생성 →](./providers/nscale#image-generation) | 

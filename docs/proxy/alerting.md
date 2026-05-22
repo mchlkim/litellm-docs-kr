@@ -2,42 +2,42 @@ import Image from '@theme/IdealImage';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Alerting / Webhooks
+# 알림 / Webhooks {#alerting--webhooks}
 
-Get alerts for:
+다음 항목에 대한 알림을 받을 수 있습니다.
 
-| Category | Alert Type |
+| 범주 | 알림 유형 |
 |----------|------------|
-| **LLM Performance** | Hanging API calls, Slow API calls, Failed API calls, Model outage alerting |
-| **Budget & Spend** | Budget tracking per key/user, Soft budget alerts, Weekly & Monthly spend reports per Team/Tag |
-| **System Health** | Failed database read/writes |
-| **Daily Reports** | Top 5 slowest LLM deployments, Top 5 LLM deployments with most failed requests, Weekly & Monthly spend per Team/Tag |
+| **LLM 성능** | 멈춘 API 호출, 느린 API 호출, 실패한 API 호출, 모델 장애 알림 |
+| **예산 및 지출** | key/user별 budget 추적, soft budget 알림, Team/Tag별 주간 및 월간 spend report |
+| **시스템 상태** | 실패한 database read/write |
+| **일일 보고서** | 가장 느린 LLM deployment 상위 5개, 실패 요청이 가장 많은 LLM deployment 상위 5개, Team/Tag별 주간 및 월간 spend |
 
 
 
-Works across: 
+다음 채널에서 동작합니다.
 - [Slack](#quick-start)
-- [Discord](#advanced---using-discord-webhooks)
-- [Microsoft Teams](#advanced---using-ms-teams-webhooks)
+- Discord
+- Microsoft Teams
 
-## Quick Start
+## 빠른 시작
 
-Set up a slack alert channel to receive alerts from proxy.
+proxy에서 알림을 받을 Slack 알림 channel을 설정합니다.
 
-### Step 1: Add a Slack Webhook URL to env
+### 1단계: env에 Slack Webhook URL 추가 {#step-1-add-slack-webhook-url-to-env}
 
-Get a slack webhook url from https://api.slack.com/messaging/webhooks
+https://api.slack.com/messaging/webhooks 에서 Slack webhook URL을 가져옵니다.
 
-You can also use Discord Webhooks, see [here](#using-discord-webhooks)
+Discord Webhooks도 사용할 수 있습니다. 자세한 내용은 [여기](#using-discord-webhooks)를 참고하세요.
 
 
-Set `SLACK_WEBHOOK_URL` in your proxy env to enable Slack alerts.
+Slack 알림을 활성화하려면 proxy env에 `SLACK_WEBHOOK_URL`을 설정합니다.
 
 ```bash
 export SLACK_WEBHOOK_URL="https://hooks.slack.com/services/<>/<>/<>"
 ```
 
-### Step 2: Setup Proxy
+### 2단계: Proxy 설정 {#step-2-proxy-configuration}
 
 ```yaml
 general_settings: 
@@ -59,13 +59,13 @@ general_settings:
     
 ```
 
-Start proxy 
+proxy를 시작합니다.
 ```bash
 $ litellm --config /path/to/config.yaml
 ```
 
 
-### Step 3: Test it!
+### 3단계: 테스트 {#step-3-test}
 
 
 ```bash
@@ -73,11 +73,11 @@ curl -X GET 'http://0.0.0.0:4000/health/services?service=slack' \
 -H 'Authorization: Bearer sk-1234'
 ```
 
-## Advanced
+## 고급 설정
 
-### Redacting Messages from Alerts
+### 알림에서 메시지 제거
 
-By default alerts show the `messages/input` passed to the LLM. If you want to redact this from slack alerting set the following setting on your config
+기본적으로 알림에는 LLM에 전달된 `messages/input`이 표시됩니다. Slack 알림에서 이를 제거하려면 설정에 다음 값을 지정합니다.
 
 
 ```shell
@@ -89,13 +89,13 @@ litellm_settings:
   redact_messages_in_exceptions: True
 ```
 
-### Soft Budget Alerts for Virtual Keys
+### 가상 키용 Soft Budget 알림 {#soft-budget-alerts-for-virtual-keys}
 
-Use this to send an alert when a key/team is close to it's budget running out
+key/team의 budget 소진이 가까워졌을 때 알림을 보내려면 이 기능을 사용합니다.
 
-Step 1. Create a virtual key with a soft budget
+Step 1. soft budget이 있는 virtual key를 생성합니다.
 
-Set the `soft_budget` to 0.001
+`soft_budget`을 0.001로 설정합니다.
 
 ```shell
 curl -X 'POST' \
@@ -110,7 +110,7 @@ curl -X 'POST' \
 }'
 ```
 
-Step 2. Send a request to the proxy with the virtual key
+Step 2. virtual key로 proxy에 요청을 전송합니다.
 
 ```shell
 curl http://0.0.0.0:4000/chat/completions \
@@ -128,16 +128,16 @@ curl http://0.0.0.0:4000/chat/completions \
 
 ```
 
-Step 3. Check slack for Expected Alert
+Step 3. Slack에서 예상 알림을 확인합니다.
 
 <Image img={require('../../img/soft_budget_alert.png')}/>
 
 
 
 
-### Add Metadata to alerts 
+### 알림에 Metadata 추가
 
-Add alerting metadata to proxy calls for debugging. 
+디버깅을 위해 proxy 호출에 alerting metadata를 추가합니다.
 
 ```python
 import openai
@@ -160,15 +160,15 @@ response = client.chat.completions.create(
 )
 ```
 
-**Expected Response**
+**예상 응답**
 
 <Image img={require('../../img/alerting_metadata.png')}/>
 
-### Select specific alert types
+### 특정 알림 유형 선택 {#opting-into-specific-alert-types}
 
-Set `alert_types` if you want to Opt into only specific alert types. When alert_types is not set, all Default Alert Types are enabled.
+특정 알림 유형만 선택하려면 `alert_types`를 설정합니다. `alert_types`가 설정되지 않으면 모든 기본 알림 유형이 활성화됩니다.
 
-👉 [**See all alert types here**](#all-possible-alert-types)
+👉 [**모든 알림 유형 보기**](#all-possible-alert-types)
 
 ```shell
 general_settings:
@@ -186,21 +186,21 @@ general_settings:
   ] 
 ```
 
-### Map slack channels to alert type
+### 알림 유형별 Slack channel 매핑
 
-Use this if you want to set specific channels per alert type
+알림 유형마다 별도 channel을 지정하려면 이 설정을 사용합니다.
 
-**This allows you to do the following**
+**예를 들면 다음처럼 라우팅할 수 있습니다.**
 ```
 llm_exceptions -> go to slack channel #llm-exceptions
 spend_reports -> go to slack channel #llm-spend-reports
 ```
 
-Set `alert_to_webhook_url` on your config.yaml
+`config.yaml`에 `alert_to_webhook_url`을 설정합니다.
 
 <Tabs>
 
-<TabItem label="1 channel per alert" value="1">
+<TabItem label="알림별 channel 1개" value="1">
 
 ```yaml
 model_list:
@@ -232,9 +232,9 @@ litellm_settings:
 ```
 </TabItem>
 
-<TabItem label="multiple channels per alert" value="2">
+<TabItem label="알림별 channel 여러 개" value="2">
 
-Provide multiple slack channels for a given alert type
+특정 알림 유형에 여러 Slack channel을 제공합니다.
 
 ```yaml
 model_list:
@@ -269,7 +269,7 @@ litellm_settings:
 
 </Tabs>
 
-Test it - send a valid llm request - expect to see a `llm_too_slow` alert in it's own slack channel
+테스트하려면 유효한 LLM 요청을 보냅니다. 전용 Slack channel에 `llm_too_slow` 알림이 표시되어야 합니다.
 
 ```shell
 curl -i http://localhost:4000/v1/chat/completions \
@@ -284,21 +284,21 @@ curl -i http://localhost:4000/v1/chat/completions \
 ```
 
 
-### MS Teams Webhooks
+### MS Teams Webhooks {#using-ms-teams-webhooks}
 
-MS Teams provides a slack compatible webhook url that you can use for alerting
+MS Teams는 알림에 사용할 수 있는 Slack 호환 webhook URL을 제공합니다.
 
-##### Quick Start
+##### 빠른 시작
 
-1. [Get a webhook url](https://learn.microsoft.com/en-us/microsoftteams/platform/webhooks-and-connectors/how-to/add-incoming-webhook?tabs=newteams%2Cdotnet#create-an-incoming-webhook) for your Microsoft Teams channel 
+1. Microsoft Teams channel용 [webhook URL을 가져옵니다](https://learn.microsoft.com/en-us/microsoftteams/platform/webhooks-and-connectors/how-to/add-incoming-webhook?tabs=newteams%2Cdotnet#create-an-incoming-webhook).
 
-2. Add it to your .env
+2. `.env`에 추가합니다.
 
 ```bash
 SLACK_WEBHOOK_URL="https://berriai.webhook.office.com/webhookb2/...6901/IncomingWebhook/b55fa0c2a48647be8e6effedcd540266/e04b1092-4a3e-44a2-ab6b-29a0a4854d1d"
 ```
 
-3. Add it to your litellm config 
+3. LiteLLM 설정에 추가합니다.
 
 ```yaml
 model_list: 
@@ -312,9 +312,9 @@ general_settings:
     alerting_threshold: 300 # sends alerts if requests hang for 5min+ and responses take 5min+ 
 ```
 
-4. Run health check!
+4. health check를 실행합니다.
 
-Call the proxy `/health/services` endpoint to test if your alerting connection is correctly setup.
+알림 연결이 올바르게 설정되었는지 테스트하려면 proxy의 `/health/services` endpoint를 호출합니다.
 
 ```bash
 curl --location 'http://0.0.0.0:4000/health/services?service=slack' \
@@ -322,25 +322,25 @@ curl --location 'http://0.0.0.0:4000/health/services?service=slack' \
 ```
 
 
-**Expected Response**
+**예상 응답**
 
 <Image img={require('../../img/ms_teams_alerting.png')}/>
 
-### Discord Webhooks
+### Discord Webhooks {#using-discord-webhooks}
 
-Discord provides a slack compatible webhook url that you can use for alerting
+Discord는 알림에 사용할 수 있는 Slack 호환 webhook URL을 제공합니다.
 
-##### Quick Start
+##### 빠른 시작
 
-1. Get a webhook url for your discord channel 
+1. Discord channel용 webhook URL을 가져옵니다.
 
-2. Append `/slack` to your discord webhook - it should look like
+2. Discord webhook에 `/slack`을 붙입니다. 다음과 같은 형태가 됩니다.
 
 ```
 "https://discord.com/api/webhooks/1240030362193760286/cTLWt5ATn1gKmcy_982rl5xmYHsrM1IWJdmCL1AyOmU9JdQXazrp8L1_PYgUtgxj8x4f/slack"
 ```
 
-3. Add it to your litellm config 
+3. LiteLLM 설정에 추가합니다.
 
 ```yaml
 model_list: 
@@ -358,27 +358,27 @@ environment_variables:
 ```
 
 
-##  [BETA] Webhooks for Budget Alerts
+## [BETA] Budget Alert용 Webhook {#beta-budget-alert-webhook}
 
-**Note**: This is a beta feature, so the spec might change.
+**참고**: 이 기능은 beta이므로 spec이 변경될 수 있습니다.
 
-Set a webhook to get notified for budget alerts. 
+budget alert 알림을 받도록 webhook을 설정합니다.
 
-1. Setup config.yaml
+1. `config.yaml` 설정
 
-Add url to your environment, for testing you can use a link from [here](https://webhook.site/)
+환경에 URL을 추가합니다. 테스트에는 [webhook.site](https://webhook.site/) 링크를 사용할 수 있습니다.
 
 ```bash
 export WEBHOOK_URL="https://webhook.site/6ab090e8-c55f-4a23-b075-3209f5c57906"
 ```
 
-Add 'webhook' to config.yaml
+`config.yaml`에 `webhook`을 추가합니다.
 ```yaml
 general_settings: 
   alerting: ["webhook"] # 👈 KEY CHANGE
 ```
 
-2. Start proxy
+2. proxy 시작
 
 ```bash
 litellm --config /path/to/config.yaml
@@ -386,14 +386,14 @@ litellm --config /path/to/config.yaml
 # RUNNING on http://0.0.0.0:4000
 ```
 
-3. Test it!
+3. 테스트
 
 ```bash
 curl -X GET --location 'http://0.0.0.0:4000/health/services?service=webhook' \
 --header 'Authorization: Bearer sk-1234'
 ```
 
-**Expected Response**
+**예상 응답**
 
 ```bash
 {
@@ -412,41 +412,41 @@ curl -X GET --location 'http://0.0.0.0:4000/health/services?service=webhook' \
 }
 ```
 
-### API Spec for Webhook Event
+### Webhook 이벤트 API 사양 {#webhook-event-api-spec}
 
-- `spend` *float*: The current spend amount for the 'event_group'.
-- `max_budget` *float or null*: The maximum allowed budget for the 'event_group'. null if not set. 
-- `token` *str*: A hashed value of the key, used for authentication or identification purposes.
-- `customer_id` *str or null*: The ID of the customer associated with the event (optional).
-- `internal_user_id` *str or null*: The ID of the internal user associated with the event (optional).
-- `team_id` *str or null*: The ID of the team associated with the event (optional).
-- `user_email` *str or null*: The email of the internal user associated with the event (optional).
-- `key_alias` *str or null*: An alias for the key associated with the event (optional).
-- `projected_exceeded_date` *str or null*: The date when the budget is projected to be exceeded, returned when 'soft_budget' is set for key (optional).
-- `projected_spend` *float or null*: The projected spend amount, returned when 'soft_budget' is set for key (optional).
-- `event` *Literal["budget_crossed", "threshold_crossed", "projected_limit_exceeded"]*: The type of event that triggered the webhook. Possible values are:
-    * "spend_tracked": Emitted whenever spend is tracked for a customer id. 
-    * "budget_crossed": Indicates that the spend has exceeded the max budget.
-    * "threshold_crossed": Indicates that spend has crossed a threshold (currently sent when 85% and 95% of budget is reached).
-    * "projected_limit_exceeded": For "key" only - Indicates that the projected spend is expected to exceed the soft budget threshold.
-- `event_group` *Literal["customer", "internal_user", "key", "team", "proxy"]*: The group associated with the event. Possible values are:
-    * "customer": The event is related to a specific customer
-    * "internal_user": The event is related to a specific internal user.
-    * "key": The event is related to a specific key.
-    * "team": The event is related to a team.
-    * "proxy": The event is related to a proxy.
+- `spend` *float*: `event_group`의 현재 spend 금액입니다.
+- `max_budget` *float or null*: `event_group`에 허용된 최대 budget입니다. 설정되지 않았으면 null입니다.
+- `token` *str*: 인증 또는 식별 목적으로 사용되는 key의 hash 값입니다.
+- `customer_id` *str or null*: event와 연결된 customer ID입니다(선택 사항).
+- `internal_user_id` *str or null*: event와 연결된 internal user ID입니다(선택 사항).
+- `team_id` *str or null*: event와 연결된 team ID입니다(선택 사항).
+- `user_email` *str or null*: event와 연결된 internal user email입니다(선택 사항).
+- `key_alias` *str or null*: event와 연결된 key alias입니다(선택 사항).
+- `projected_exceeded_date` *str or null*: key에 `soft_budget`이 설정된 경우 budget 초과가 예상되는 날짜입니다(선택 사항).
+- `projected_spend` *float or null*: key에 `soft_budget`이 설정된 경우 예상 spend 금액입니다(선택 사항).
+- `event` *Literal["budget_crossed", "threshold_crossed", "projected_limit_exceeded"]*: webhook을 발생시킨 event 유형입니다. 가능한 값:
+    * "spend_tracked": customer id의 spend가 추적될 때마다 발생합니다.
+    * "budget_crossed": spend가 max budget을 초과했음을 나타냅니다.
+    * "threshold_crossed": spend가 threshold를 넘었음을 나타냅니다. 현재 budget의 85% 및 95% 도달 시 전송됩니다.
+    * "projected_limit_exceeded": "key" 전용입니다. 예상 spend가 soft budget threshold를 초과할 것으로 예상됨을 나타냅니다.
+- `event_group` *Literal["customer", "internal_user", "key", "team", "proxy"]*: event와 연결된 group입니다. 가능한 값:
+    * "customer": 특정 customer와 관련된 event입니다.
+    * "internal_user": 특정 internal user와 관련된 event입니다.
+    * "key": 특정 key와 관련된 event입니다.
+    * "team": team과 관련된 event입니다.
+    * "proxy": proxy와 관련된 event입니다.
 
-- `event_message` *str*: A human-readable description of the event.
+- `event_message` *str*: event에 대한 사람이 읽을 수 있는 설명입니다.
 
-### Digest Mode (Reducing Alert Noise)
+### Digest Mode(알림 노이즈 줄이기) {#digest-mode}
 
-By default, LiteLLM sends a separate Slack message for **every** alert event. For high-frequency alert types like `llm_requests_hanging` or `llm_too_slow`, this can produce hundreds of duplicate messages per day.
+기본적으로 LiteLLM은 **모든** alert event마다 별도의 Slack 메시지를 보냅니다. `llm_requests_hanging` 또는 `llm_too_slow`처럼 빈도가 높은 알림 유형에서는 하루에 수백 개의 중복 메시지가 발생할 수 있습니다.
 
-**Digest mode** aggregates duplicate alerts within a configurable time window and emits a single summary message with the total count and time range.
+**Digest mode**는 설정 가능한 시간 창 내의 중복 알림을 집계하고, 전체 횟수와 시간 범위를 포함한 단일 summary message를 전송합니다.
 
-#### Configuration
+#### 설정
 
-Use `alert_type_config` in `general_settings` to enable digest mode per alert type:
+알림 유형별 digest mode를 활성화하려면 `general_settings`에서 `alert_type_config`를 사용합니다.
 
 ```yaml
 general_settings:
@@ -463,16 +463,16 @@ general_settings:
       # uses default interval (86400 seconds / 24 hours)
 ```
 
-| Parameter | Type | Default | Description |
+| 매개변수 | 유형 | 기본값 | 설명 |
 |-----------|------|---------|-------------|
-| `digest` | bool | `false` | Enable digest mode for this alert type |
-| `digest_interval` | int | `86400` (24h) | Time window in seconds. Alerts are aggregated within this interval. |
+| `digest` | bool | `false` | 이 알림 유형에 digest mode를 활성화합니다. |
+| `digest_interval` | int | `86400` (24h) | 초 단위 시간 창입니다. 이 구간 내의 알림이 집계됩니다. |
 
-#### How It Works
+#### 동작 방식
 
-1. When an alert fires for a digest-enabled type, it is **grouped** by `(alert_type, request_model, api_base)` instead of being sent immediately
-2. A counter tracks how many times the alert fires within the interval
-3. When the interval expires, a **single summary message** is sent:
+1. digest가 활성화된 유형의 alert가 발생하면 즉시 전송하지 않고 `(alert_type, request_model, api_base)` 기준으로 **그룹화**합니다.
+2. 카운터가 interval 내 alert 발생 횟수를 추적합니다.
+3. interval이 끝나면 **단일 summary message**가 전송됩니다.
 
 ```
 Alert type: `llm_requests_hanging` (Digest)
@@ -486,18 +486,18 @@ Request Model: `gemini-2.5-flash`
 API Base: `None`
 ```
 
-#### Limitations
+#### 제한 사항
 
-- **Per-instance**: Digest state is held in memory per proxy instance. If you run multiple instances (e.g., Cloud Run with autoscaling), each instance maintains its own digest and emits its own summary.
-- **Not durable**: If an instance is terminated before the digest interval expires, the aggregated alerts for that instance are lost.
+- **Instance별 동작**: Digest state는 proxy instance별 memory에 저장됩니다. 여러 instance를 실행하면(예: autoscaling이 적용된 Cloud Run) 각 instance가 자체 digest를 유지하고 자체 summary를 발행합니다.
+- **영속성 없음**: digest interval이 만료되기 전에 instance가 종료되면 해당 instance에 집계된 alert는 손실됩니다.
 
-## Region-outage alerting (✨ Enterprise feature)
+## Region 장애 알림(엔터프라이즈 기능) {#region-outage-alerting--enterprise-feature}
 
 :::info
-[Get a free 2-week license](https://forms.gle/P518LXsAZ7PhXpDn8)
+[무료 2주 license 받기](https://forms.gle/P518LXsAZ7PhXpDn8)
 :::
 
-Setup alerts if a provider region is having an outage. 
+provider region에 장애가 발생했을 때 알림을 받도록 설정합니다.
 
 ```yaml
 general_settings:
@@ -505,9 +505,9 @@ general_settings:
     alert_types: ["region_outage_alerts"] 
 ```
 
-By default this will trigger if multiple models in a region fail 5+ requests in 1 minute. '400' status code errors are not counted (i.e. BadRequestErrors).
+기본적으로 한 region의 여러 모델에서 1분 동안 요청 실패가 5회 이상 발생하면 알림이 트리거됩니다. `400` status code 오류는 집계하지 않습니다. 예: BadRequestErrors.
 
-Control thresholds with: 
+threshold는 다음 설정으로 제어합니다.
 
 ```yaml
 general_settings:
@@ -519,63 +519,63 @@ general_settings:
         major_outage_alert_threshold: 10 # number of errors to trigger a major alert
 ```
 
-## **All Possible Alert Types**
+## **가능한 모든 알림 유형** {#all-possible-alert-types}
 
-👉 [**Here is how you can set specific alert types**](#opting-into-specific-alert-types)
+👉 [**특정 알림 유형 설정 방법**](#opting-into-specific-alert-types)
 
-LLM-related Alerts
+LLM 관련 알림
 
-| Alert Type | Description | Default On |
+| 알림 유형 | 설명 | 기본 활성화 |
 |------------|-------------|---------|
-| `llm_exceptions` | Alerts for LLM API exceptions | ✅ |
-| `llm_too_slow` | Notifications for LLM responses slower than the set threshold | ✅ |
-| `llm_requests_hanging` | Alerts for LLM requests that are not completing | ✅ |
-| `cooldown_deployment` | Alerts when a deployment is put into cooldown | ✅ |
-| `new_model_added` | Notifications when a new model is added to litellm proxy through /model/new| ✅ |
-| `outage_alerts` | Alerts when a specific LLM deployment is facing an outage | ✅ |
-| `region_outage_alerts` | Alerts when a specific LLM region is facing an outage. Example us-east-1 | ✅ |
+| `llm_exceptions` | LLM API exception 알림 | ✅ |
+| `llm_too_slow` | 설정된 threshold보다 느린 LLM response 알림 | ✅ |
+| `llm_requests_hanging` | 완료되지 않는 LLM request 알림 | ✅ |
+| `cooldown_deployment` | deployment가 cooldown 상태가 될 때 알림 | ✅ |
+| `new_model_added` | `/model/new`를 통해 litellm proxy에 새 모델이 추가될 때 알림 | ✅ |
+| `outage_alerts` | 특정 LLM deployment에 장애가 발생할 때 알림 | ✅ |
+| `region_outage_alerts` | 특정 LLM region에 장애가 발생할 때 알림. 예: us-east-1 | ✅ |
 
-Budget and Spend Alerts
+Budget 및 Spend 알림
 
-| Alert Type | Description | Default On|
+| 알림 유형 | 설명 | 기본 활성화 |
 |------------|-------------|---------|
-| `budget_alerts` | Notifications related to budget limits or thresholds | ✅ |
-| `spend_reports` | Periodic reports on spending across teams or tags | ✅ |
-| `failed_tracking_spend` | Alerts when spend tracking fails | ✅ |
-| `daily_reports` | Daily Spend reports | ✅ |
-| `fallback_reports` | Weekly Reports on LLM fallback occurrences | ✅ |
+| `budget_alerts` | budget limit 또는 threshold 관련 알림 | ✅ |
+| `spend_reports` | team 또는 tag별 spend에 대한 주기적 report | ✅ |
+| `failed_tracking_spend` | spend tracking 실패 알림 | ✅ |
+| `daily_reports` | 일일 spend report | ✅ |
+| `fallback_reports` | LLM fallback 발생에 대한 주간 report | ✅ |
 
-Database Alerts
+Database 알림
 
-| Alert Type | Description | Default On |
+| 알림 유형 | 설명 | 기본 활성화 |
 |------------|-------------|---------|
-| `db_exceptions` | Notifications for database-related exceptions | ✅ |
+| `db_exceptions` | database 관련 exception 알림 | ✅ |
 
-Management Endpoint Alerts - Virtual Key, Team, Internal User
+Management Endpoint 알림 - Virtual Key, Team, Internal User
 
-| Alert Type | Description | Default On |
+| 알림 유형 | 설명 | 기본 활성화 |
 |------------|-------------|---------|
-| `new_virtual_key_created` | Notifications when a new virtual key is created | ❌ |
-| `virtual_key_updated` | Alerts when a virtual key is modified | ❌ |
-| `virtual_key_deleted` | Notifications when a virtual key is removed | ❌ |
-| `new_team_created` | Alerts for the creation of a new team | ❌ |
-| `team_updated` | Notifications when team details are modified | ❌ |
-| `team_deleted` | Alerts when a team is deleted | ❌ |
-| `new_internal_user_created` | Notifications for new internal user accounts | ❌ |
-| `internal_user_updated` | Alerts when an internal user's details are changed | ❌ |
-| `internal_user_deleted` | Notifications when an internal user account is removed | ❌ |
+| `new_virtual_key_created` | 새 virtual key가 생성될 때 알림 | ❌ |
+| `virtual_key_updated` | virtual key가 수정될 때 알림 | ❌ |
+| `virtual_key_deleted` | virtual key가 제거될 때 알림 | ❌ |
+| `new_team_created` | 새 team 생성 알림 | ❌ |
+| `team_updated` | team 세부 정보가 수정될 때 알림 | ❌ |
+| `team_deleted` | team 삭제 알림 | ❌ |
+| `new_internal_user_created` | 새 internal user account 생성 알림 | ❌ |
+| `internal_user_updated` | internal user 세부 정보가 변경될 때 알림 | ❌ |
+| `internal_user_deleted` | internal user account 제거 알림 | ❌ |
 
 
-## `alerting_args` Specification
+## `alerting_args` 사양 {#alerting-args-specification}
 
-| Parameter | Default | Description |
+| 매개변수 | 기본값 | 설명 |
 |-----------|---------|-------------|
-| `daily_report_frequency` | 43200 (12 hours) | Frequency of receiving deployment latency/failure reports in seconds |
-| `report_check_interval` | 3600 (1 hour) | How often to check if a report should be sent (background process) in seconds |
-| `budget_alert_ttl` | 86400 (24 hours) | Cache TTL for budget alerts to prevent spam when budget is crossed |
-| `outage_alert_ttl` | 60 (1 minute) | Time window for collecting model outage errors in seconds |
-| `region_outage_alert_ttl` | 60 (1 minute) | Time window for collecting region-based outage errors in seconds |
-| `minor_outage_alert_threshold` | 5 | Number of errors that trigger a minor outage alert (400 errors not counted) |
-| `major_outage_alert_threshold` | 10 | Number of errors that trigger a major outage alert (400 errors not counted) |
-| `max_outage_alert_list_size` | 1000 | Maximum number of errors to store in cache per model/region |
-| `log_to_console` | false | If true, prints alerting payload to console as a `.warning` log. |
+| `daily_report_frequency` | 43200 (12 hours) | deployment latency/failure report를 받는 주기(초) |
+| `report_check_interval` | 3600 (1 hour) | report 전송 여부를 확인하는 주기(초, background process) |
+| `budget_alert_ttl` | 86400 (24 hours) | budget 초과 시 spam 방지를 위한 budget alert cache TTL |
+| `outage_alert_ttl` | 60 (1 minute) | model outage error를 수집하는 시간 창(초) |
+| `region_outage_alert_ttl` | 60 (1 minute) | region 기반 outage error를 수집하는 시간 창(초) |
+| `minor_outage_alert_threshold` | 5 | minor outage alert를 트리거하는 error 개수(`400` error 제외) |
+| `major_outage_alert_threshold` | 10 | major outage alert를 트리거하는 error 개수(`400` error 제외) |
+| `max_outage_alert_list_size` | 1000 | model/region별 cache에 저장할 최대 error 수 |
+| `log_to_console` | false | true이면 alerting payload를 `.warning` log로 console에 출력합니다. |

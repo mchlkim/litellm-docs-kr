@@ -1,31 +1,31 @@
-# Azure Passthrough
+# Azure 패스스루
 
-Pass-through endpoints for `/azure`
+`/azure`용 패스스루 엔드포인트입니다.
 
-## Overview
+## 개요
 
-| Feature | Supported | Notes |
+| 기능 | 지원 여부 | 참고 |
 |-------|-------|-------|
-| Cost Tracking | ❌ | Not supported |
-| Logging | ✅ | Works across all integrations |
-| Streaming | ✅ | Fully supported |
+| 비용 추적 | ❌ | 지원되지 않음 |
+| 로깅 | ✅ | 모든 연동에서 작동 |
+| 스트리밍 | ✅ | 완전 지원 |
 
-### When to use this?
+### 언제 사용하나요?
 
-- For most use cases, you should use the [native LiteLLM Azure OpenAI Integration](../providers/azure/azure) (`/chat/completions`, `/embeddings`, `/completions`, `/images`, etc.)
-- Use this passthrough to call newer or less common Azure OpenAI endpoints that LiteLLM doesn't fully support yet, such as `/assistants`, `/threads`, `/vector_stores`
+- 대부분의 사용 사례에서는 [네이티브 LiteLLM Azure OpenAI 연동](../providers/azure/azure)(`/chat/completions`, `/embeddings`, `/completions`, `/images` 등)을 사용하는 것이 좋습니다.
+- LiteLLM이 아직 완전히 지원하지 않는 최신 또는 덜 일반적인 Azure OpenAI 엔드포인트(예: `/assistants`, `/threads`, `/vector_stores`)를 호출할 때 이 패스스루를 사용하세요.
 
-Simply replace your Azure endpoint (e.g. `https://<your-resource-name>.openai.azure.com`) with `LITELLM_PROXY_BASE_URL/azure`
+Azure 엔드포인트(예: `https://<your-resource-name>.openai.azure.com`)를 `LITELLM_PROXY_BASE_URL/azure`로 바꾸기만 하면 됩니다.
 
-## Usage Examples
+## 사용법 예제
 
 ### Assistants API
 
-#### Create Azure OpenAI Client
+#### Azure OpenAI 클라이언트 생성
 
-Make sure you do the following:
-- Point `azure_endpoint` to your `LITELLM_PROXY_BASE_URL/azure`
-- Use your `LITELLM_API_KEY` as the `api_key`
+다음을 확인하세요.
+- `azure_endpoint`가 `LITELLM_PROXY_BASE_URL/azure`를 가리키도록 설정합니다.
+- `LITELLM_API_KEY`를 `api_key`로 사용합니다.
 
 ```python
 import openai
@@ -37,7 +37,7 @@ client = openai.AzureOpenAI(
 )
 ```
 
-#### Create an Assistant
+#### Assistant 생성
 
 ```python
 assistant = client.beta.assistants.create(
@@ -47,12 +47,12 @@ assistant = client.beta.assistants.create(
 )
 ```
 
-#### Create a Thread
+#### Thread 생성
 ```python
 thread = client.beta.threads.create()
 ```
 
-#### Add a Message to the Thread
+#### Thread에 메시지 추가
 ```python
 message = client.beta.threads.messages.create(
     thread_id=thread.id,
@@ -61,7 +61,7 @@ message = client.beta.threads.messages.create(
 )
 ```
 
-#### Run the Assistant
+#### Assistant 실행
 ```python
 run = client.beta.threads.runs.create(
     thread_id=thread.id,
@@ -75,14 +75,14 @@ run_status = client.beta.threads.runs.retrieve(
 )
 ```
 
-#### Retrieve Messages
+#### 메시지 조회
 ```python
 messages = client.beta.threads.messages.list(
     thread_id=thread.id
 )
 ```
 
-#### Delete the Assistant
+#### Assistant 삭제
 
 ```python
 client.beta.assistants.delete(assistant.id)

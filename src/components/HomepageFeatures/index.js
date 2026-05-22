@@ -4,32 +4,29 @@ import styles from './styles.module.css';
 
 const FeatureList = [
   {
-    title: 'Easy to Use',
+    title: '빠른 시작',
     Svg: require('@site/static/img/undraw_docusaurus_mountain.svg').default,
     description: (
       <>
-        Docusaurus was designed from the ground up to be easily installed and
-        used to get your website up and running quickly.
+        LiteLLM SDK와 프록시를 빠르게 설치하고 여러 LLM 제공자를 같은 인터페이스로 호출할 수 있습니다.
       </>
     ),
   },
   {
-    title: 'Focus on What Matters',
+    title: '운영에 필요한 기능',
     Svg: require('@site/static/img/undraw_docusaurus_tree.svg').default,
     description: (
       <>
-        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
-        ahead and move your docs into the <code>docs</code> directory.
+        라우팅, 예산, 키 관리, 로깅, 관측성 문서를 한국어 흐름으로 정리했습니다.
       </>
     ),
   },
   {
-    title: 'Powered by React',
+    title: '원본 구조 유지',
     Svg: require('@site/static/img/undraw_docusaurus_react.svg').default,
     description: (
       <>
-        Extend or customize your website layout by reusing React. Docusaurus can
-        be extended while reusing the same header and footer.
+        Docusaurus 3 테마, 사이드바, 정적 자산, 예제 코드는 원본 문서 사이트 구조를 따릅니다.
       </>
     ),
   },

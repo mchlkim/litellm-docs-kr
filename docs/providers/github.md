@@ -6,18 +6,18 @@ https://github.com/marketplace/models
 
 :::tip
 
-**We support ALL Github models, just set `model=github/<any-model-on-github>` as a prefix when sending litellm requests**
-Ignore company prefix: meta/Llama-3.2-11B-Vision-Instruct becomes model=github/Llama-3.2-11B-Vision-Instruct
+**모든 Github 모델을 지원합니다. litellm 요청을 보낼 때 `model=github/<any-model-on-github>` 접두사만 설정하세요.**
+회사 접두사는 무시하세요. meta/Llama-3.2-11B-Vision-Instruct는 model=github/Llama-3.2-11B-Vision-Instruct가 됩니다.
 
 :::
 
-## API Key
+## API 키 {#api-key}
 ```python
 # env variable
 os.environ['GITHUB_API_KEY']
 ```
 
-## Sample Usage
+## 사용 예제 {#sample-사용법}
 ```python
 from litellm import completion
 import os
@@ -32,7 +32,7 @@ response = completion(
 print(response)
 ```
 
-## Sample Usage - Streaming
+## 사용 예제 - Streaming {#sample-사용법---streaming}
 ```python
 from litellm import completion
 import os
@@ -52,9 +52,9 @@ for chunk in response:
 
 
 
-## Usage with LiteLLM Proxy 
+## LiteLLM Proxy 사용법 {#사용법-with-litellm-proxy}
 
-### 1. Set Github Models on config.yaml
+### 1. config.yaml에서 Github 모델 설정 {#1-set-github-모델-on-configyaml}
 
 ```yaml
 model_list:
@@ -64,15 +64,15 @@ model_list:
       api_key: "os.environ/GITHUB_API_KEY" # ensure you have `GITHUB_API_KEY` in your .env
 ```
 
-### 2. Start Proxy 
+### 2. Proxy 시작 {#2-start-proxy}
 
 ```
 litellm --config config.yaml
 ```
 
-### 3. Test it
+### 3. 테스트 {#3-test-it}
 
-Make request to litellm proxy
+litellm proxy로 요청을 보냅니다.
 
 <Tabs>
 <TabItem value="Curl" label="Curl Request">
@@ -146,20 +146,20 @@ print(response)
 
 
 
-## Supported Models - ALL Github Models Supported!
-We support ALL Github models, just set `github/` as a prefix when sending completion requests
+## 지원 모델 - 모든 Github 모델 지원 {#supported-모델---all-github-모델-supported}
+모든 Github 모델을 지원합니다. completion 요청을 보낼 때 `github/` 접두사만 설정하세요.
 
-| Model Name         | Usage                                           |
+| 모델 이름         | 사용법                                           |
 |--------------------|---------------------------------------------------------|
-| llama-3.1-8b-Instant     | `completion(model="github/Llama-3.1-8b-Instant", messages)`     | 
-| Llama-3.1-70b-Versatile    | `completion(model="github/Llama-3.1-70b-Versatile", messages)`    | 
-| Llama-3.2-11B-Vision-Instruct     | `completion(model="github/Llama-3.2-11B-Vision-Instruct", messages)`     | 
-| Llama3-70b-8192    | `completion(model="github/Llama3-70b-8192", messages)`    | 
-| Llama2-70b-4096    | `completion(model="github/Llama2-70b-4096", messages)`    | 
-| Mixtral-8x7b-32768 | `completion(model="github/Mixtral-8x7b-32768", messages)` |
-| Phi-4 | `completion(model="github/Phi-4", messages)` |
+| `llama-3.1-8b-Instant`     | `completion(model="github/Llama-3.1-8b-Instant", messages)`     | 
+| `Llama-3.1-70b-Versatile`    | `completion(model="github/Llama-3.1-70b-Versatile", messages)`    | 
+| `Llama-3.2-11B-Vision-Instruct`     | `completion(model="github/Llama-3.2-11B-Vision-Instruct", messages)`     | 
+| `Llama3-70b-8192`    | `completion(model="github/Llama3-70b-8192", messages)`    | 
+| `Llama2-70b-4096`    | `completion(model="github/Llama2-70b-4096", messages)`    | 
+| `Mixtral-8x7b-32768` | `completion(model="github/Mixtral-8x7b-32768", messages)` |
+| `Phi-4` | `completion(model="github/Phi-4", messages)` |
 
-## Github - Tool / Function Calling Example
+## Github - Tool / Function Calling 예제 {#github---tool--function-calling-예제}
 
 ```python
 # Example dummy function hard coded to return the current weather

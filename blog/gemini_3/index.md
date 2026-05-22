@@ -1,12 +1,12 @@
 ---
 slug: gemini_3
-title: "DAY 0 Support: Gemini 3 on LiteLLM"
+title: "DAY 0 지원: LiteLLM에서 Gemini 3 사용"
 date: 2025-11-19T10:00:00
 authors:
   - sameer
   - krrish
   - ishaan-alt
-description: "Common questions and best practices for using gemini-3-pro-preview with LiteLLM Proxy and SDK."
+description: "LiteLLM Proxy와 SDK에서 gemini-3-pro-preview를 사용할 때 자주 묻는 질문과 권장 사항."
 tags: [gemini, day 0 support, llms]
 hide_table_of_contents: false
 ---
@@ -16,13 +16,13 @@ import TabItem from '@theme/TabItem';
 
 :::info
 
-This guide covers common questions and best practices for using `gemini-3-pro-preview` with LiteLLM Proxy and SDK.
+이 가이드는 LiteLLM Proxy와 SDK에서 `gemini-3-pro-preview`를 사용할 때 자주 묻는 질문과 권장 사항을 다룹니다.
 
 :::
 
 {/* truncate */}
 
-## Quick Start
+## 빠른 시작
 
 <Tabs>
 <TabItem value="sdk" label="Python SDK">
@@ -45,7 +45,7 @@ print(response.choices[0].message.content)
 </TabItem>
 <TabItem value="proxy" label="LiteLLM Proxy">
 
-**1. Add to config.yaml:**
+**1. config.yaml에 추가:**
 
 ```yaml
 model_list:
@@ -55,13 +55,13 @@ model_list:
       api_key: os.environ/GEMINI_API_KEY
 ```
 
-**2. Start proxy:**
+**2. proxy 시작:**
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-**3. Make request:**
+**3. 요청 보내기:**
 
 ```bash
 curl http://0.0.0.0:4000/v1/chat/completions \
@@ -77,38 +77,38 @@ curl http://0.0.0.0:4000/v1/chat/completions \
 </TabItem>
 </Tabs>
 
-## Supported Endpoints
+## 지원 엔드포인트
 
-LiteLLM provides **full end-to-end support** for Gemini 3 Pro Preview on:
+LiteLLM은 Gemini 3 Pro Preview에 대해 다음 엔드포인트에서 **엔드투엔드 전체 지원**을 제공합니다.
 
-- ✅ `/v1/chat/completions` - OpenAI-compatible chat completions endpoint
-- ✅ `/v1/responses` - OpenAI Responses API endpoint (streaming and non-streaming)
-- ✅ [`/v1/messages`](../../docs/anthropic_unified) - Anthropic-compatible messages endpoint
-- ✅ `/v1/generateContent` – [Google Gemini API](https://cloud.google.com/vertex-ai/docs/generative-ai/model-reference/gemini#rest) compatible endpoint (for code, see: `client.models.generate_content(...)`)
+- ✅ `/v1/chat/completions` - OpenAI 호환 chat completions 엔드포인트
+- ✅ `/v1/responses` - OpenAI Responses API 엔드포인트(스트리밍 및 비스트리밍)
+- ✅ [`/v1/messages`](../../docs/anthropic_unified) - Anthropic 호환 messages 엔드포인트
+- ✅ `/v1/generateContent` - [Google Gemini API](https://cloud.google.com/vertex-ai/docs/generative-ai/model-reference/gemini#rest) 호환 엔드포인트(code는 `client.models.generate_content(...)` 참고)
 
-All endpoints support:
-- Streaming and non-streaming responses
-- Function calling with thought signatures
-- Multi-turn conversations
-- All Gemini 3-specific features
+모든 엔드포인트는 다음을 지원합니다.
+- 스트리밍 및 비스트리밍 응답
+- thought signature를 포함한 함수 호출
+- 멀티턴 대화
+- Gemini 3 전용 기능 전체
 
 ## Thought Signatures
 
-#### What are Thought Signatures?
+#### Thought Signature란?
 
-Thought signatures are encrypted representations of the model's internal reasoning process. They're essential for maintaining context across multi-turn conversations, especially with function calling.
+Thought signature는 모델 내부 추론 과정의 암호화된 표현입니다. 특히 함수 호출을 사용하는 멀티턴 대화에서 context를 유지하는 데 필요합니다.
 
-#### How Thought Signatures Work
+#### Thought Signature 동작 방식
 
-1. **Automatic Extraction**: When Gemini 3 returns a function call, LiteLLM automatically extracts the `thought_signature` from the response
-2. **Storage**: Thought signatures are stored in `provider_specific_fields.thought_signature` of tool calls
-3. **Automatic Preservation**: When you include the assistant's message in conversation history, LiteLLM automatically preserves and returns thought signatures to Gemini
+1. **자동 추출**: Gemini 3가 함수 호출을 반환하면 LiteLLM이 응답에서 `thought_signature`를 자동 추출합니다.
+2. **저장**: Thought signature는 도구 호출의 `provider_specific_fields.thought_signature`에 저장됩니다.
+3. **자동 보존**: 대화 기록에 assistant message를 포함하면 LiteLLM이 thought signature를 자동으로 보존해 Gemini에 다시 전달합니다.
 
-## Example: Multi-Turn Function Calling
+## 예제: 멀티턴 함수 호출
 
-#### Streaming with Thought Signatures
+#### Thought Signature와 스트리밍
 
-When using streaming mode with `stream_chunk_builder()`, thought signatures are now automatically preserved:
+`stream_chunk_builder()`와 스트리밍 모드를 함께 사용할 때 thought signature가 자동 보존됩니다.
 
 <Tabs>
 <TabItem value="streaming" label="Streaming SDK">
@@ -191,10 +191,10 @@ for part in response_2:
 print()  # New line
 ```
 
-**Key Points:**
-- ✅ `stream_chunk_builder()` now preserves `provider_specific_fields` including thought signatures
-- ✅ Thought signatures are automatically included when appending `assistant_msg` to conversation history
-- ✅ Multi-turn conversations work seamlessly with streaming
+**핵심 포인트:**
+- ✅ `stream_chunk_builder()`는 thought signature를 포함한 `provider_specific_fields`를 보존합니다.
+- ✅ `assistant_msg`를 대화 기록에 추가하면 thought signature가 자동으로 포함됩니다.
+- ✅ 멀티턴 대화가 스트리밍에서도 자연스럽게 동작합니다.
 
 </TabItem>
 <TabItem value="sdk" label="Non-Streaming SDK">
@@ -257,10 +257,10 @@ response2 = client.chat.completions.create(
 print(response2.choices[0].message.content)
 ```
 
-**Key Points:**
-- ✅ Thought signatures are automatically extracted from `response.choices[0].message.tool_calls[].provider_specific_fields.thought_signature`
-- ✅ When you append `response.choices[0].message` to your conversation history, thought signatures are automatically preserved
-- ✅ You don't need to manually extract or manage thought signatures
+**핵심 포인트:**
+- ✅ Thought signature는 `response.choices[0].message.tool_calls[].provider_specific_fields.thought_signature`에서 자동 추출됩니다.
+- ✅ `response.choices[0].message`를 대화 기록에 추가하면 thought signature가 자동 보존됩니다.
+- ✅ Thought signature를 수동으로 추출하거나 관리할 필요가 없습니다.
 
 </TabItem>
 <TabItem value="proxy" label="cURL">
@@ -295,7 +295,7 @@ curl http://localhost:4000/v1/chat/completions \
   }'
 ```
 
-**Response includes thought signature:**
+**Response에는 thought signature가 포함됩니다.**
 
 ```json
 {
@@ -356,31 +356,31 @@ curl http://localhost:4000/v1/chat/completions \
 </TabItem>
 </Tabs>
 
-#### Important Notes on Thought Signatures
+#### Thought Signature 관련 중요 참고
 
-1. **Automatic Handling**: LiteLLM automatically extracts and preserves thought signatures. You don't need to manually manage them.
+1. **자동 처리**: LiteLLM이 thought signature를 자동으로 추출하고 보존합니다. 직접 관리할 필요가 없습니다.
 
-2. **Parallel Function Calls**: When the model makes parallel function calls, only the **first function call** has a thought signature.
+2. **병렬 함수 호출**: 모델이 병렬 함수 호출을 수행하면 **첫 번째 함수 호출**에만 thought signature가 있습니다.
 
-3. **Sequential Function Calls**: In multi-step function calling, each step's first function call has its own thought signature that must be preserved.
+3. **순차 함수 호출**: 다단계 함수 호출에서는 각 단계의 첫 번째 함수 호출이 보존해야 할 자체 thought signature를 가집니다.
 
-4. **Required for Context**: Thought signatures are essential for maintaining reasoning context. Without them, the model may lose context of its previous reasoning.
+4. **Context 유지에 필요**: Thought signature는 reasoning context 유지에 필수입니다. 없으면 모델이 이전 추론 context를 잃을 수 있습니다.
 
-## Conversation History: Switching from Non-Gemini-3 Models
+## 대화 기록: Non-Gemini-3 모델에서 전환
 
-#### Common Question: Will switching from a non-Gemini-3 model to Gemini-3 break conversation history?
+#### 자주 묻는 질문: non-Gemini-3 모델에서 Gemini 3로 전환하면 대화 기록이 깨지나요?
 
-**Answer: No!** LiteLLM automatically handles this by adding dummy thought signatures when needed.
+**답변: 아니요.** LiteLLM은 필요할 때 dummy thought signature를 추가해 이를 자동 처리합니다.
 
-#### How It Works
+#### 동작 방식
 
-When you switch from a model that doesn't use thought signatures (e.g., `gemini-2.5-flash`) to Gemini 3, LiteLLM:
+Thought signature를 사용하지 않는 모델(예: `gemini-2.5-flash`)에서 Gemini 3로 전환하면 LiteLLM은 다음을 수행합니다.
 
-1. **Detects missing signatures**: Identifies assistant messages with tool calls that lack thought signatures
-2. **Adds dummy signature**: Automatically injects a dummy thought signature (`skip_thought_signature_validator`) for compatibility
-3. **Maintains conversation flow**: Your conversation history continues to work seamlessly
+1. **누락 signature 감지**: thought signature가 없는 tool call 포함 assistant message를 식별합니다.
+2. **dummy signature 추가**: 호환성을 위해 dummy thought signature(`skip_thought_signature_validator`)를 자동 삽입합니다.
+3. **대화 흐름 유지**: 기존 대화 기록이 계속 자연스럽게 동작합니다.
 
-#### Example: Switching Models Mid-Conversation
+#### 예제: 대화 중간에 모델 전환
 
 <Tabs>
 <TabItem value="sdk" label="Python SDK">
@@ -454,35 +454,35 @@ curl http://localhost:4000/v1/chat/completions \
 </TabItem>
 </Tabs>
 
-#### Dummy Signature Details
+#### Dummy Signature 세부 정보
 
-The dummy signature used is: `base64("skip_thought_signature_validator")`
+사용되는 dummy signature는 `base64("skip_thought_signature_validator")`입니다.
 
-This is the recommended approach by Google for handling conversation history from models that don't support thought signatures. It allows Gemini 3 to:
-- Accept the conversation history without validation errors
-- Continue the conversation seamlessly
-- Maintain context across model switches
+이는 thought signature를 지원하지 않는 모델의 대화 기록을 처리하기 위해 Google이 권장하는 방식입니다. 이를 통해 Gemini 3는 다음을 수행할 수 있습니다.
+- validation error 없이 대화 기록 수락
+- 대화를 자연스럽게 이어가기
+- 모델 전환 시에도 context 유지
 
-## Thinking Level Parameter
+## Thinking Level 파라미터
 
-#### How `reasoning_effort` Maps to `thinking_level`
+#### `reasoning_effort`가 `thinking_level`로 매핑되는 방식
 
-For Gemini 3 Pro Preview, LiteLLM automatically maps `reasoning_effort` to the new `thinking_level` parameter:
+Gemini 3 Pro Preview에서 LiteLLM은 `reasoning_effort`를 새 `thinking_level` 파라미터로 자동 매핑합니다.
 
-| `reasoning_effort` | `thinking_level` | Notes |
+| `reasoning_effort` | `thinking_level` | 참고 |
 |-------------------|------------------|-------|
-| `"minimal"` | `"low"` | Maps to low thinking level |
-| `"low"` | `"low"` | Default for most use cases |
-| `"medium"` | `"high"` | Medium not available yet, maps to high |
-| `"high"` | `"high"` | Maximum reasoning depth |
-| `"disable"` | `"low"` | Gemini 3 cannot fully disable thinking |
-| `"none"` | `"low"` | Gemini 3 cannot fully disable thinking |
+| `"minimal"` | `"low"` | low thinking level로 매핑 |
+| `"low"` | `"low"` | 대부분의 사용 사례에 대한 기본 선택 |
+| `"medium"` | `"high"` | medium은 아직 제공되지 않아 high로 매핑 |
+| `"high"` | `"high"` | 최대 추론 깊이 |
+| `"disable"` | `"low"` | Gemini 3는 thinking을 완전히 끌 수 없음 |
+| `"none"` | `"low"` | Gemini 3는 thinking을 완전히 끌 수 없음 |
 
-#### Default Behavior
-LiteLLM **does not** set `thinking_level` when you omit `reasoning_effort`. The Gemini API applies its **native defaults**, matching a direct call to Google.
+#### 기본 동작
+`reasoning_effort`를 생략하면 LiteLLM은 `thinking_level`을 설정하지 않습니다. Gemini API가 **기본값**을 적용하므로 Google에 직접 호출할 때와 동일합니다.
 
 
-### Example Usage
+### 예제 사용법
 
 <Tabs>
 <TabItem value="sdk" label="Python SDK">
@@ -533,32 +533,32 @@ curl http://localhost:4000/v1/chat/completions \
 </TabItem>
 </Tabs>
 
-## Important Notes
+## 중요 참고
 
-1. **Gemini 3 Cannot Disable Thinking**: Unlike Gemini 2.5 models, Gemini 3 cannot fully disable thinking. Even when you set `reasoning_effort="none"` or `"disable"`, it maps to `thinking_level="low"`.
+1. **Gemini 3는 thinking을 완전히 끌 수 없음**: Gemini 2.5 모델과 달리 Gemini 3는 thinking을 완전히 비활성화할 수 없습니다. `reasoning_effort="none"` 또는 `"disable"`을 설정해도 `thinking_level="low"`로 매핑됩니다.
 
-2. **Temperature Recommendation**: For Gemini 3 models, LiteLLM defaults `temperature` to `1.0` and strongly recommends keeping it at this default. Setting `temperature < 1.0` can cause:
-   - Infinite loops
-   - Degraded reasoning performance
-   - Failure on complex tasks
+2. **Temperature 권장값**: Gemini 3 모델에서 LiteLLM은 `temperature` 기본값을 `1.0`으로 설정하며 이 값을 유지하는 것을 강하게 권장합니다. `temperature < 1.0`은 다음 문제를 일으킬 수 있습니다.
+   - 무한 루프
+   - reasoning 성능 저하
+   - 복잡한 작업 실패
 
-3. **Thinking defaults come from the API**: If you omit `reasoning_effort`, LiteLLM does **not** override `thinking_level`. Set `reasoning_effort` or native thinking parameters when you want a predictable cost or latency profile (for example `reasoning_effort="low"` for lighter reasoning).
+3. **Thinking 기본값은 API에서 결정됨**: `reasoning_effort`를 생략하면 LiteLLM은 `thinking_level`을 덮어쓰지 않습니다. 비용이나 지연 시간을 예측 가능하게 만들고 싶을 때만 `reasoning_effort` 또는 native thinking 파라미터를 설정하세요. 예를 들어 가벼운 추론에는 `reasoning_effort="low"`를 사용합니다.
 
-## Cost Tracking: Prompt Caching & Context Window
+## 비용 추적: Prompt 캐싱 및 Context Window
 
-LiteLLM provides comprehensive cost tracking for Gemini 3 Pro Preview, including support for prompt caching and tiered pricing based on context window size.
+LiteLLM은 Gemini 3 Pro Preview에 대해 포괄적인 비용 추적을 제공합니다. 여기에는 prompt caching과 context window 크기 기반 tiered pricing 지원이 포함됩니다.
 
-### Prompt Caching Cost Tracking
+### Prompt 캐싱 비용 추적
 
-Gemini 3 supports prompt caching, which allows you to cache frequently used prompt prefixes to reduce costs. LiteLLM automatically tracks and calculates costs for:
+Gemini 3는 자주 쓰는 prompt prefix를 cache해 비용을 줄일 수 있는 prompt caching을 지원합니다. LiteLLM은 다음 비용을 자동으로 추적하고 계산합니다.
 
-- **Cache Hit Tokens**: Tokens that are read from cache (charged at a lower rate)
-- **Cache Creation Tokens**: Tokens that are written to cache (one-time cost)
-- **Text Tokens**: Regular prompt tokens that are processed normally
+- **Cache Hit Tokens**: cache에서 읽은 token(더 낮은 요율 적용)
+- **Cache Creation Tokens**: cache에 기록한 token(1회성 비용)
+- **Text Tokens**: 일반적으로 처리되는 regular prompt token
 
-#### How It Works
+#### 동작 방식
 
-LiteLLM extracts caching information from the `prompt_tokens_details` field in the usage object:
+LiteLLM은 usage object의 `prompt_tokens_details` field에서 caching 정보를 추출합니다.
 
 ```python
 {
@@ -575,13 +575,13 @@ LiteLLM extracts caching information from the `prompt_tokens_details` field in t
 }
 ```
 
-### Context Window Tiered Pricing
+### Context Window 계층형 가격
 
-Gemini 3 Pro Preview supports up to 1M tokens of context, with tiered pricing that automatically applies when your prompt exceeds 200k tokens.
+Gemini 3 Pro Preview는 최대 1M token context를 지원하며, prompt가 200k token을 넘으면 tiered pricing이 자동 적용됩니다.
 
-#### Automatic Tier Detection
+#### 자동 tier 감지
 
-LiteLLM automatically detects when your prompt exceeds the 200k token threshold and applies the appropriate tiered pricing:
+LiteLLM은 prompt가 200k token threshold를 넘는지 자동 감지하고 적절한 tiered pricing을 적용합니다.
 
 ```python
 from litellm import completion_cost
@@ -601,18 +601,18 @@ response_large = completion(
 # Automatically uses tiered pricing: $0.000004/input token, $0.000018/output token
 ```
 
-#### Cost Breakdown
+#### 비용 구성
 
-The cost calculation includes:
+비용 계산에는 다음 항목이 포함됩니다.
 
-1. **Text Processing Cost**: Regular tokens processed at base or tiered rate
-2. **Cache Read Cost**: Cached tokens read at discounted rate
-3. **Cache Creation Cost**: One-time cost for writing tokens to cache (applies tiered rate if above 200k)
-4. **Output Cost**: Generated tokens at base or tiered rate
+1. **Text Processing Cost**: base 또는 tiered rate로 처리되는 regular token
+2. **Cache Read Cost**: discounted rate로 읽는 cached token
+3. **Cache Creation Cost**: token을 cache에 기록할 때의 1회성 비용(200k 초과 시 tiered rate 적용)
+4. **Output Cost**: base 또는 tiered rate로 계산되는 generated token
 
-### Example: Viewing Cost Breakdown
+### 예제: 비용 구성 확인
 
-You can view the detailed cost breakdown using LiteLLM's cost tracking:
+LiteLLM 비용 추적으로 상세 비용 구성을 확인할 수 있습니다.
 
 ```python
 from litellm import completion, completion_cost
@@ -639,20 +639,20 @@ if usage.prompt_tokens_details:
     print(f"Text tokens: {usage.prompt_tokens_details.text_tokens}")
 ```
 
-### Cost Optimization Tips
+### 비용 최적화 팁
 
-1. **Use Prompt Caching**: For repeated prompt prefixes, enable caching to reduce costs by up to 90% for cached portions
-2. **Monitor Context Size**: Be aware that prompts above 200k tokens use tiered pricing (2x for input, 1.5x for output)
-3. **Cache Management**: Cache creation tokens are charged once when writing to cache, then subsequent reads are much cheaper
-4. **Track Usage**: Use LiteLLM's built-in cost tracking to monitor spending across different token types
+1. **Prompt 캐싱 사용**: 반복되는 prompt prefix에는 caching을 켜서 cached portion 비용을 최대 90%까지 줄일 수 있습니다.
+2. **Context Size 모니터링**: 200k token을 넘는 prompt에는 tiered pricing이 적용됩니다(input 2x, output 1.5x).
+3. **Cache Management**: cache creation token은 cache에 쓸 때 한 번만 과금되고, 이후 읽기는 훨씬 저렴합니다.
+4. **사용량 추적**: LiteLLM 내장 비용 추적으로 token type별 지출을 모니터링합니다.
 
-### Integration with LiteLLM Proxy
+### LiteLLM Proxy와 통합
 
-When using LiteLLM Proxy, all cost tracking is automatically logged and available through:
+LiteLLM Proxy를 사용하면 모든 비용 추적이 자동으로 기록되며 다음 경로에서 확인할 수 있습니다.
 
-- **Usage Logs**: Detailed token and cost breakdowns in proxy logs
-- **Budget Management**: Set budgets and alerts based on actual usage
-- **Analytics Dashboard**: View cost trends and breakdowns by token type
+- **사용 로그**: proxy log의 상세 token 및 cost breakdown
+- **Budget Management**: 실제 사용량 기반 budget 및 alert 설정
+- **Analytics Dashboard**: token type별 비용 추세와 breakdown 확인
 
 ```yaml
 # config.yaml
@@ -667,13 +667,13 @@ litellm_settings:
   success_callback: ["langfuse"]  # or your preferred logging service
 ```
 
-## Using with Claude Code CLI
+## Claude Code CLI와 함께 사용
 
-You can use `gemini-3-pro-preview` with **Claude Code CLI** - Anthropic's command-line interface. This allows you to use Gemini 3 Pro Preview with Claude Code's native syntax and workflows.
+Anthropic의 command-line interface인 **Claude Code CLI**와 함께 `gemini-3-pro-preview`를 사용할 수 있습니다. 이를 통해 Claude Code의 native syntax와 workflow로 Gemini 3 Pro Preview를 사용할 수 있습니다.
 
-### Setup
+### 설정
 
-**1. Add Gemini 3 Pro Preview to your `config.yaml`:**
+**1. `config.yaml`에 Gemini 3 Pro Preview 추가:**
 
 ```yaml
 model_list:
@@ -686,14 +686,14 @@ litellm_settings:
   master_key: os.environ/LITELLM_MASTER_KEY
 ```
 
-**2. Set environment variables:**
+**2. 환경 변수 설정:**
 
 ```bash
 export GEMINI_API_KEY="your-gemini-api-key"
 export LITELLM_MASTER_KEY="sk-1234567890"  # Generate a secure key
 ```
 
-**3. Start LiteLLM Proxy:**
+**3. LiteLLM Proxy 시작:**
 
 ```bash
 litellm --config /path/to/config.yaml
@@ -701,14 +701,14 @@ litellm --config /path/to/config.yaml
 # RUNNING on http://0.0.0.0:4000
 ```
 
-**4. Configure Claude Code to use LiteLLM Proxy:**
+**4. Claude Code가 LiteLLM Proxy를 사용하도록 설정:**
 
 ```bash
 export ANTHROPIC_BASE_URL="http://0.0.0.0:4000"
 export ANTHROPIC_AUTH_TOKEN="$LITELLM_MASTER_KEY"
 ```
 
-**5. Use Gemini 3 Pro Preview with Claude Code:**
+**5. Claude Code에서 Gemini 3 Pro Preview 사용:**
 
 ```bash
 # Claude Code will use gemini-3-pro-preview from your LiteLLM proxy
@@ -716,9 +716,9 @@ claude --model gemini-3-pro-preview
 
 ```
 
-### Example Usage
+### 예제 사용법
 
-Once configured, you can interact with Gemini 3 Pro Preview using Claude Code's native interface:
+설정이 끝나면 Claude Code의 native interface로 Gemini 3 Pro Preview와 상호작용할 수 있습니다.
 
 ```bash
 $ claude --model gemini-3-pro-preview
@@ -727,31 +727,31 @@ $ claude --model gemini-3-pro-preview
 # Gemini 3 Pro Preview responds through Claude Code interface
 ```
 
-### Benefits
+### 장점
 
-- ✅ **Native Claude Code Experience**: Use Gemini 3 Pro Preview with Claude Code's familiar CLI interface
-- ✅ **Unified Authentication**: Single API key for all models through LiteLLM proxy
-- ✅ **Cost Tracking**: All usage tracked through LiteLLM's centralized logging
-- ✅ **Seamless Model Switching**: Easily switch between Claude and Gemini models
-- ✅ **Full Feature Support**: All Gemini 3 features (thought signatures, function calling, etc.) work through Claude Code
+- ✅ **Native Claude Code Experience**: Claude Code의 익숙한 CLI interface로 Gemini 3 Pro Preview 사용
+- ✅ **통합 인증**: LiteLLM proxy를 통해 모든 모델에 단일 API key 사용
+- ✅ **비용 추적**: 모든 사용량을 LiteLLM 중앙 logging으로 추적
+- ✅ **간편한 모델 전환**: Claude와 Gemini 모델 간 손쉬운 전환
+- ✅ **전체 기능 지원**: thought signature, function calling 등 모든 Gemini 3 기능이 Claude Code에서 동작
 
-### Troubleshooting
+### 문제 해결
 
-**Claude Code not finding the model:**
-- Ensure the model name in Claude Code matches exactly: `gemini-3-pro-preview`
-- Verify your proxy is running: `curl http://0.0.0.0:4000/health`
-- Check that `ANTHROPIC_BASE_URL` points to your LiteLLM proxy
+**Claude Code가 모델을 찾지 못하는 경우:**
+- Claude Code의 모델명이 정확히 `gemini-3-pro-preview`인지 확인하세요.
+- proxy가 실행 중인지 확인하세요: `curl http://0.0.0.0:4000/health`
+- `ANTHROPIC_BASE_URL`이 LiteLLM proxy를 가리키는지 확인하세요.
 
-**Authentication errors:**
-- Verify `ANTHROPIC_AUTH_TOKEN` matches your LiteLLM master key
-- Ensure `GEMINI_API_KEY` is set correctly
-- Check LiteLLM proxy logs for detailed error messages
+**인증 오류:**
+- `ANTHROPIC_AUTH_TOKEN`이 LiteLLM master key와 일치하는지 확인하세요.
+- `GEMINI_API_KEY`가 올바르게 설정되어 있는지 확인하세요.
+- 상세 error message는 LiteLLM proxy log에서 확인하세요.
 
-## Responses API Support
+## Responses API 지원
 
-LiteLLM fully supports the OpenAI Responses API for Gemini 3 Pro Preview, including both streaming and non-streaming modes. The Responses API provides a structured way to handle multi-turn conversations with function calling, and LiteLLM automatically preserves thought signatures throughout the conversation.
+LiteLLM은 Gemini 3 Pro Preview에 대해 streaming 및 non-streaming mode를 포함한 OpenAI Responses API를 완전히 지원합니다. Responses API는 function calling이 포함된 multi-turn conversation을 구조적으로 처리하는 방법을 제공하며, LiteLLM은 대화 전체에서 thought signature를 자동 보존합니다.
 
-### Example: Using Responses API with Gemini 3
+### 예제: Gemini 3에서 Responses API 사용
 
 <Tabs>
 <TabItem value="sdk" label="Non-Streaming">
@@ -830,10 +830,10 @@ print(response.model_dump_json(indent=2))
 print("\n" + response.output_text)
 ```
 
-**Key Points:**
-- ✅ Thought signatures are automatically preserved in function calls
-- ✅ Works seamlessly with multi-turn conversations
-- ✅ All Gemini 3-specific features are fully supported
+**핵심 포인트:**
+- ✅ function call에서 thought signature가 자동 보존됩니다.
+- ✅ 멀티턴 대화와 자연스럽게 동작합니다.
+- ✅ 모든 Gemini 3 전용 기능을 완전히 지원합니다.
 
 </TabItem>
 <TabItem value="streaming" label="Streaming">
@@ -887,35 +887,35 @@ for chunk in response:
 # Thought signatures are automatically preserved in streaming mode
 ```
 
-**Key Points:**
-- ✅ Streaming mode fully supported
-- ✅ Thought signatures preserved across streaming chunks
-- ✅ Real-time processing of function calls and responses
+**핵심 포인트:**
+- ✅ 스트리밍 모드 완전 지원
+- ✅ 스트리밍 chunk 전반에서 thought signature 보존
+- ✅ 함수 호출과 응답을 실시간 처리
 
 </TabItem>
 </Tabs>
 
-### Responses API Benefits
+### Responses API 장점
 
-- ✅ **Structured Output**: Responses API provides a clear structure for handling function calls and multi-turn conversations
-- ✅ **Thought Signature Preservation**: LiteLLM automatically preserves thought signatures in both streaming and non-streaming modes
-- ✅ **Seamless Integration**: Works with existing OpenAI SDK patterns
-- ✅ **Full Feature Support**: All Gemini 3 features (thought signatures, function calling, reasoning) are fully supported
+- ✅ **구조화된 출력**: Responses API는 함수 호출과 멀티턴 대화를 처리하기 위한 명확한 구조를 제공합니다.
+- ✅ **Thought Signature 보존**: LiteLLM은 스트리밍 및 비스트리밍 모드 모두에서 thought signature를 자동 보존합니다.
+- ✅ **매끄러운 통합**: 기존 OpenAI SDK pattern과 함께 동작합니다.
+- ✅ **전체 기능 지원**: thought signature, function calling, reasoning 등 모든 Gemini 3 기능을 완전히 지원합니다.
 
 
-## Best Practices
+## 권장 사항
 
-#### 1. Always Include Thought Signatures in Conversation History
+#### 1. 대화 기록에 Thought Signature를 항상 포함
 
-When building multi-turn conversations with function calling:
+함수 호출을 사용하는 멀티턴 대화를 만들 때는 다음을 따르세요.
 
-✅ **Do:**
+✅ **권장:**
 ```python
 # Append the full assistant message (includes thought signatures)
 messages.append(response.choices[0].message)
 ```
 
-❌ **Don't:**
+❌ **비권장:**
 ```python
 # Don't manually construct assistant messages without thought signatures
 messages.append({
@@ -924,52 +924,52 @@ messages.append({
 })
 ```
 
-#### 2. Use Appropriate Thinking Levels
+#### 2. 적절한 Thinking Level 사용
 
-- **`reasoning_effort="low"`**: For simple queries, quick responses, cost optimization
-- **`reasoning_effort="high"`**: For complex problems requiring deep reasoning
+- **`reasoning_effort="low"`**: 단순 query, 빠른 response, 비용 최적화
+- **`reasoning_effort="high"`**: 깊은 reasoning이 필요한 복잡한 문제
 
-#### 3. Keep Temperature at Default
+#### 3. Temperature는 기본값 유지
 
-For Gemini 3 models, always use `temperature=1.0` (default). Lower temperatures can cause issues.
+Gemini 3 모델에는 항상 `temperature=1.0`(기본값)을 사용하세요. 더 낮은 temperature는 문제를 일으킬 수 있습니다.
 
-#### 4. Handle Model Switches Gracefully
+#### 4. 모델 전환을 안정적으로 처리
 
-When switching from non-Gemini-3 to Gemini-3:
-- ✅ LiteLLM automatically handles missing thought signatures
-- ✅ No manual intervention needed
-- ✅ Conversation history continues seamlessly
+non-Gemini-3에서 Gemini 3로 전환할 때:
+- ✅ LiteLLM이 누락된 thought signature를 자동 처리합니다.
+- ✅ 수동 개입이 필요 없습니다.
+- ✅ conversation history가 자연스럽게 이어집니다.
 
 
-## Troubleshooting
+## 문제 해결
 
-#### Issue: Missing Thought Signatures
+#### 문제: Thought Signatures 누락
 
-**Symptom**: Error when including assistant messages in conversation history
+**증상**: 대화 기록에 assistant message를 포함할 때 error 발생
 
-**Solution**: Ensure you're appending the full assistant message from the response:
+**해결**: response에서 받은 전체 assistant message를 추가하는지 확인하세요.
 ```python
 messages.append(response.choices[0].message)  # ✅ Includes thought signatures
 ```
 
-#### Issue: Conversation Breaks When Switching Models
+#### 문제: 모델 전환 시 대화가 깨짐
 
-**Symptom**: Errors when switching from gemini-2.5-flash to gemini-3-pro-preview
+**증상**: gemini-2.5-flash에서 gemini-3-pro-preview로 전환할 때 error 발생
 
-**Solution**: This should work automatically! LiteLLM adds dummy signatures. If you see errors, ensure you're using the latest LiteLLM version.
+**해결**: 이 흐름은 자동으로 동작해야 합니다. LiteLLM이 dummy signature를 추가합니다. error가 보이면 최신 LiteLLM version을 사용하는지 확인하세요.
 
-#### Issue: Infinite Loops or Poor Performance
+#### 문제: 무한 루프 또는 성능 저하
 
-**Symptom**: Model gets stuck or produces poor results
+**증상**: 모델이 멈추거나 낮은 품질의 결과를 생성
 
-**Solution**: 
-- Ensure `temperature=1.0` (default for Gemini 3)
-- Check that `reasoning_effort` is set appropriately
-- Verify you're using the correct model name: `gemini/gemini-3-pro-preview`
+**해결**:
+- `temperature=1.0`인지 확인하세요(Gemini 3 기본값).
+- `reasoning_effort`가 적절히 설정되어 있는지 확인하세요.
+- 올바른 모델명 `gemini/gemini-3-pro-preview`를 사용하는지 확인하세요.
 
-## Additional Resources
+## 추가 리소스
 
-- [Gemini Provider Documentation](../../docs/providers/gemini)
-- [Thought Signatures Guide](../../docs/providers/gemini#thought-signatures)
-- [Reasoning Content Documentation](../../docs/reasoning_content)
-- [Function Calling Guide](../../docs/completion/function_call)
+- [Gemini Provider 문서](../../docs/providers/gemini)
+- [Thought Signatures 가이드](../../docs/providers/gemini#thought-signatures)
+- [Reasoning Content 문서](../../docs/reasoning_content)
+- [Function Calling 가이드](../../docs/completion/function_call)

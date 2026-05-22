@@ -1,17 +1,17 @@
 # Vertex AI OCR
 
-## Overview
+## 개요
 
-| Property | Details |
+| 속성 | 세부 정보 |
 |-------|-------|
-| Description | Vertex AI OCR provides document intelligence capabilities powered by Mistral, enabling text extraction from PDFs and images |
-| Provider Route on LiteLLM | `vertex_ai/` |
-| Supported Operations | `/ocr` |
-| Link to Provider Doc | [Vertex AI ↗](https://cloud.google.com/vertex-ai)
+| 설명 | Vertex AI OCR은 Mistral 기반 문서 인텔리전스 기능을 제공하며, PDF와 이미지에서 텍스트를 추출할 수 있습니다 |
+| LiteLLM의 제공자 라우트 | `vertex_ai/` |
+| 지원 작업 | `/ocr` |
+| 제공자 문서 링크 | [Vertex AI ↗](https://cloud.google.com/vertex-ai)
 
-Extract text from documents and images using Vertex AI's OCR models, powered by Mistral.
+Mistral 기반 Vertex AI OCR 모델을 사용해 문서와 이미지에서 텍스트를 추출합니다.
 
-## Quick Start
+## 빠른 시작
 
 ### **LiteLLM SDK**
 
@@ -51,12 +51,12 @@ model_list:
       mode: ocr
 ```
 
-**Start Proxy**
+**Proxy 시작**
 ```bash
 litellm --config proxy_config.yaml
 ```
 
-**Call OCR via Proxy**
+**Proxy를 통해 OCR 호출**
 ```bash showLineNumbers title="cURL Request"
 curl -X POST http://localhost:4000/ocr \
   -H "Content-Type: application/json" \
@@ -70,11 +70,11 @@ curl -X POST http://localhost:4000/ocr \
   }'
 ```
 
-## Authentication
+## 인증
 
-Vertex AI OCR supports multiple authentication methods:
+Vertex AI OCR은 여러 인증 방식을 지원합니다.
 
-### Service Account JSON
+### 서비스 계정 JSON {#service-account-json}
 
 ```python showLineNumbers title="Service Account Auth"
 response = litellm.ocr(
@@ -86,7 +86,7 @@ response = litellm.ocr(
 )
 ```
 
-### Application Default Credentials
+### 애플리케이션 기본 사용자 인증 정보 {#application-default-credentials}
 
 ```python showLineNumbers title="Default Credentials"
 # Relies on GOOGLE_APPLICATION_CREDENTIALS environment variable
@@ -98,11 +98,11 @@ response = litellm.ocr(
 )
 ```
 
-## Document Types
+## 문서 유형 {#document-types}
 
-Vertex AI OCR supports both PDFs and images.
+Vertex AI OCR은 PDF와 이미지를 모두 지원합니다.
 
-### PDF Documents
+### PDF 문서 {#pdf-documents}
 
 ```python showLineNumbers title="PDF OCR"
 response = litellm.ocr(
@@ -116,7 +116,7 @@ response = litellm.ocr(
 )
 ```
 
-### Image Documents
+### 이미지 문서 {#image-documents}
 
 ```python showLineNumbers title="Image OCR"
 response = litellm.ocr(
@@ -130,7 +130,7 @@ response = litellm.ocr(
 )
 ```
 
-### Base64 Encoded Documents
+### Base64 인코딩 문서 {#base64-encoded-documents}
 
 ```python showLineNumbers title="Base64 PDF"
 import base64
@@ -150,7 +150,7 @@ response = litellm.ocr(
 )
 ```
 
-## Supported Parameters
+## 지원 파라미터
 
 ```python showLineNumbers title="All Parameters"
 response = litellm.ocr(
@@ -168,7 +168,7 @@ response = litellm.ocr(
 )
 ```
 
-## Response Format
+## 응답 형식
 
 ```python showLineNumbers title="Response Structure"
 # Response has the following structure
@@ -183,7 +183,7 @@ for page in response.pages:
     print(page.text)
 ```
 
-## Async Support
+## 비동기 지원 {#async-support}
 
 ```python showLineNumbers title="Async Usage"
 import litellm
@@ -199,11 +199,11 @@ response = await litellm.aocr(
 )
 ```
 
-## Cost Tracking
+## 비용 추적 {#cost-tracking}
 
-LiteLLM automatically tracks costs for Vertex AI OCR:
+LiteLLM은 Vertex AI OCR의 비용을 자동으로 추적합니다.
 
-- **Cost per page**: $0.0005 (based on $1.50 per 1,000 pages)
+- **페이지당 비용**: $0.0005(1,000페이지당 $1.50 기준)
 
 ```python showLineNumbers title="View Cost"
 response = litellm.ocr(
@@ -216,25 +216,24 @@ response = litellm.ocr(
 print(f"Cost: ${response._hidden_params.get('response_cost', 0)}")
 ```
 
-## Important Notes
+## 중요 참고 {#important-참고}
 
-:::info URL Conversion
-Vertex AI Mistral OCR endpoints don't have internet access. LiteLLM automatically converts public URLs to base64 data URIs before sending requests to Vertex AI.
+:::info URL 변환
+Vertex AI Mistral OCR 엔드포인트는 인터넷에 액세스할 수 없습니다. LiteLLM은 Vertex AI로 요청을 보내기 전에 공개 URL을 base64 data URI로 자동 변환합니다.
 :::
 
-:::tip Regional Availability
-Mistral OCR is available in multiple regions. Specify `vertex_location` to use a region closer to your data:
-- `us-central1` (default)
+:::tip 리전 가용성
+Mistral OCR은 여러 리전에서 사용할 수 있습니다. 데이터와 더 가까운 리전을 사용하려면 `vertex_location`을 지정하세요.
+- `us-central1`(기본값)
 - `europe-west1`
 - `asia-southeast1`
 
-Deepseek OCR is only available in global region.
+Deepseek OCR은 global 리전에서만 사용할 수 있습니다.
 :::
 
-## Supported Models
+## 지원 모델 {#supported-모델}
 
-- `mistral-ocr-2505` - Latest Mistral OCR model on Vertex AI
-- `deepseek-ocr-maas` - Lates Deepseek OCR model on Vertex AI
+- `mistral-ocr-2505` - Vertex AI의 최신 Mistral OCR 모델
+- `deepseek-ocr-maas` - Vertex AI의 최신 Deepseek OCR 모델
 
-Use the Vertex AI provider prefix: `vertex_ai/<model-name>`
-
+Vertex AI 제공자 prefix를 사용하세요: `vertex_ai/<model-name>`

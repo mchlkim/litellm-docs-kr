@@ -1,19 +1,19 @@
-# User Onboarding Guide
+# 사용자 온보딩 가이드 {#user-onboarding-guide}
 
-A step-by-step guide to help admins onboard users to your LiteLLM proxy instance and help users get started with their API key.
+관리자가 LiteLLM proxy 인스턴스에 사용자를 온보딩하고, 사용자가 API key로 시작할 수 있도록 돕는 단계별 가이드입니다.
 
 ---
 
-## For Administrators
+## 관리자용 {#for-administrators}
 
-### Step 1: Create a User Account
+### 1단계: 사용자 계정 생성 {#step-1-create-a-user-account}
 
-You can create a user account via the Admin UI or using the API.
+관리자 UI 또는 API를 사용해 사용자 계정을 생성할 수 있습니다.
 
-#### Admin UI
-- Go to the (`/ui` endpoint)
-- Navigate to the Internal Users section
-- Click "Add User" and fill in the required details
+#### 관리자 UI
+- (`/ui` endpoint)로 이동합니다.
+- Internal Users 섹션으로 이동합니다.
+- "Add User"를 클릭하고 필수 정보를 입력합니다.
 
 #### API
 ```bash
@@ -25,13 +25,13 @@ curl -X POST http://localhost:4000/user/new \
 
 ---
 
-### Step 2: Grant Access & Permissions
+### 2단계: 액세스 및 권한 부여 {#step-2-grant-access--permissions}
 
-- Assign the user to a team (optional)
-- Set budgets, rate limits, and allowed models as needed
-- Generate an API key for the user (via UI or API)
+- 사용자를 팀에 배정합니다(선택 사항).
+- 필요에 따라 예산, 속도 제한, 허용 모델을 설정합니다.
+- 사용자용 API key를 생성합니다(UI 또는 API 사용).
 
-#### **Generate API Key (API Example)**
+#### **API key 생성(API 예제)** {#generate-api-key-api-example}
 ```bash
 curl -X POST http://localhost:4000/key/generate \
   -H "Authorization: Bearer <admin-key>" \
@@ -41,22 +41,22 @@ curl -X POST http://localhost:4000/key/generate \
 
 ---
 
-## For End Users
+## 최종 사용자용 {#for-end-users}
 
-### Step 3: Validate Your API Key
+### 3단계: API key 검증 {#step-3-validate-your-api-key}
 
-Before making LLM calls, validate your key works by calling the `/v1/models` endpoint:
+LLM 호출을 수행하기 전에 `/v1/models` endpoint를 호출해 key가 정상 작동하는지 검증합니다.
 
 ```bash
 curl -X GET http://localhost:4000/v1/models \
   -H "Authorization: Bearer <your-api-key>"
 ```
-- If your key is valid, you'll get a list of available models.
-- If invalid, you'll get a 401 error.
+- key가 유효하면 사용 가능한 모델 목록이 반환됩니다.
+- 유효하지 않으면 401 오류가 반환됩니다.
 
 ---
 
-### Step 4: Hello World - Make Your First LLM Call
+### 4단계: Hello World - 첫 LLM 호출 수행 {#step-4-hello-world---make-your-first-llm-call}
 
 ```bash
 curl -X POST http://localhost:4000/v1/chat/completions \
@@ -70,13 +70,13 @@ curl -X POST http://localhost:4000/v1/chat/completions \
 
 ---
 
-## Troubleshooting
-- If you get a 401 error, check with your admin that your key is active and you have access to the requested model.
-- Use the `/v1/models` endpoint to quickly check if your key is valid without consuming LLM tokens.
+## 문제 해결
+- 401 오류가 발생하면 key가 활성 상태이고 요청한 모델에 액세스할 수 있는지 관리자에게 확인하세요.
+- LLM token을 소비하지 않고 key가 유효한지 빠르게 확인하려면 `/v1/models` endpoint를 사용하세요.
 
 ---
 
-## See Also
-- [Proxy Quick Start](./quick_start.md)
-- [User Management](./users.md)
-- [Key Management](./virtual_keys.md)
+## 함께 보기 {#see-also}
+- [Proxy 빠른 시작](./quick_start.md)
+- [사용자 관리](./users.md)
+- [Key 관리](./virtual_keys.md)

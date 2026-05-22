@@ -1,10 +1,10 @@
-# Callbacks
+# 콜백
 
-## Use Callbacks to send Output Data to Posthog, Sentry etc
+## 콜백을 사용해 출력 데이터를 Posthog, Sentry 등으로 보내기
 
-liteLLM provides `success_callbacks` and `failure_callbacks`, making it easy for you to send data to a particular provider depending on the status of your responses.
+liteLLM은 `success_callbacks`와 `failure_callbacks`를 제공하므로 응답 상태에 따라 특정 제공업체로 데이터를 쉽게 보낼 수 있습니다.
 
-liteLLM supports:
+liteLLM은 다음을 지원합니다.
 
 - [Lunary](https://lunary.ai/docs)
 - [Helicone](https://docs.helicone.ai/introduction)
@@ -12,7 +12,7 @@ liteLLM supports:
 - [PostHog](https://posthog.com/docs/libraries/python)
 - [Slack](https://slack.dev/bolt-python/concepts)
 
-### Quick Start
+### 빠른 시작
 
 ```python
 from litellm import completion

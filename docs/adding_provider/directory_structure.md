@@ -1,6 +1,6 @@
-# Directory Structure
+# 디렉터리 구조
 
-When adding a new provider, you need to create a directory for the provider that follows the following structure:
+새 provider를 추가할 때는 해당 provider를 위한 디렉터리를 다음 구조로 생성해야 합니다.
 
 ```
 litellm/llms/
@@ -21,4 +21,3 @@ litellm/llms/
         ├── handler.py
         └── transformation.py
 ```
-

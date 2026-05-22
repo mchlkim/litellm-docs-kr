@@ -1,14 +1,14 @@
-**A private and secure ChatGPT alternative that knows your business.**
+**비즈니스를 이해하는 비공개 보안 ChatGPT 대안입니다.**
 
-Upload docs, ask questions --> get answers.
+문서를 업로드하고 질문하면 --> 답변을 받을 수 있습니다.
 
-Leverage GenAI with your confidential documents to increase efficiency and collaboration.
+기밀 문서에 GenAI를 활용해 효율성과 협업을 높일 수 있습니다.
 
-OSS core, everything can run in your environment. An extensible platform you can build your GenAI strategy on. Support a variety of popular LLMs including embedded for air gap use cases.
+OSS 코어 기반이며 모든 구성 요소를 사용자 환경에서 실행할 수 있습니다. GenAI 전략을 구축할 수 있는 확장 가능한 플랫폼입니다. 에어 갭 사용 사례를 위한 임베디드 모델을 포함해 다양한 인기 LLM을 지원합니다.
 
-[![Static Badge][docs-shield]][docs-url]
-[![Static Badge][github-shield]][github-url]
-[![X (formerly Twitter) Follow][twitter-shield]][twitter-url]
+[![정적 배지][docs-shield]][docs-url]
+[![정적 배지][github-shield]][github-url]
+[![X(Twitter) 팔로우][twitter-shield]][twitter-url]
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->

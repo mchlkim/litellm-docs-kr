@@ -2,17 +2,17 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Image from '@theme/IdealImage';
 
-# Bedrock Knowledge Bases
+# `Bedrock Knowledge Bases` {#bedrock-knowledge-bases}
 
-AWS Bedrock Knowledge Bases allows you to connect your LLM's to your organization's data, letting your models retrieve and reference information specific to your business.
+AWS Bedrock Knowledge Bases를 사용하면 LLM을 조직의 데이터에 연결하여, 모델이 비즈니스에 특화된 정보를 검색하고 참조할 수 있습니다.
 
-| Property | Details |
+| 속성 | 세부 정보 |
 |----------|---------|
-| Description | Bedrock Knowledge Bases connects your data to LLM's, enabling them to retrieve and reference your organization's information in their responses. |
-| Provider Route on LiteLLM | `bedrock` in the litellm vector_store_registry |
-| Provider Doc | [AWS Bedrock Knowledge Bases ↗](https://aws.amazon.com/bedrock/knowledge-bases/) |
+| 설명 | Bedrock Knowledge Bases는 데이터를 LLM에 연결하여, 응답에서 조직의 정보를 검색하고 참조할 수 있게 합니다. |
+| LiteLLM의 Provider Route | litellm vector_store_registry의 `bedrock` |
+| Provider 문서 | [AWS Bedrock Knowledge Bases ↗](https://aws.amazon.com/bedrock/knowledge-bases/) |
 
-## Quick Start
+## 빠른 시작
 
 ### LiteLLM Python SDK
 
@@ -49,7 +49,7 @@ print(response.choices[0].message.content)
 
 ### LiteLLM Proxy
 
-#### 1. Configure your vector_store_registry
+#### 1. vector_store_registry 구성 {#1-configure-your-vector_store_registry}
 
 <Tabs>
 <TabItem value="config-yaml" label="config.yaml">
@@ -75,7 +75,7 @@ vector_store_registry:
 
 <TabItem value="litellm-ui" label="LiteLLM UI">
 
-On the LiteLLM UI, Navigate to Experimental > Vector Stores > Create Vector Store. On this page you can create a vector store with a name, vector store id and credentials.
+LiteLLM UI에서 Experimental > Vector Stores > Create Vector Store로 이동합니다. 이 페이지에서 이름, vector store id, 인증 정보를 입력해 vector store를 생성할 수 있습니다.
 
 <Image 
   img={require('../../img/kb_2.png')}
@@ -85,7 +85,7 @@ On the LiteLLM UI, Navigate to Experimental > Vector Stores > Create Vector Stor
 </TabItem>
 </Tabs>
 
-#### 2. Make a request with vector_store_ids parameter
+#### 2. vector_store_ids 파라미터로 요청 보내기 {#2-make-a-request-with-vector_store_ids-parameter}
 
 <Tabs>
 <TabItem value="curl" label="Curl">
@@ -138,14 +138,14 @@ print(response.choices[0].message.content)
 </Tabs>
 
 
-## Filter Results
+## 결과 필터링 {#filter-results}
 
-Filter by metadata attributes.
+메타데이터 속성으로 필터링합니다.
 
-**Operators** (OpenAI-style, auto-translated):
+**Operators** (OpenAI-style, 자동 변환):
 - `eq`, `ne`, `gt`, `gte`, `lt`, `lte`, `in`, `nin`
 
-**AWS operators** (use directly):
+**AWS operators** (직접 사용):
 - `equals`, `notEquals`, `greaterThan`, `greaterThanOrEquals`, `lessThan`, `lessThanOrEquals`, `in`, `notIn`, `startsWith`, `listContains`, `stringContains`
 
 <Tabs>
@@ -257,14 +257,14 @@ curl http://localhost:4000/v1/chat/completions \
 </TabItem>
 </Tabs>
 
-## Accessing Search Results
+## 검색 결과 접근 {#accessing-search-results}
 
-See how to access vector store search results in your response:
-- [Accessing Search Results (Non-Streaming & Streaming)](../completion/knowledgebase#accessing-search-results-citations)
+응답에서 vector store 검색 결과에 접근하는 방법은 다음을 참고하세요.
+- [검색 결과 접근 (Non-Streaming 및 Streaming)](../completion/knowledgebase#accessing-search-results-citations)
 
-## Further Reading
+## 추가 자료 {#further-reading}
 
 Vector Stores:
-- [Always on Vector Stores](https://docs.litellm.ai/docs/completion/knowledgebase#always-on-for-a-model)
-- [Listing available vector stores on litellm proxy](https://docs.litellm.ai/docs/completion/knowledgebase#listing-available-vector-stores)
-- [How LiteLLM Vector Stores Work](https://docs.litellm.ai/docs/completion/knowledgebase#how-it-works)
+- [항상 활성화되는 Vector Stores](https://docs.litellm.ai/docs/completion/knowledgebase#always-on-for-a-model)
+- [litellm proxy에서 사용 가능한 vector stores 목록 조회](https://docs.litellm.ai/docs/completion/knowledgebase#listing-available-vector-stores)
+- [LiteLLM Vector Stores 작동 방식](https://docs.litellm.ai/docs/completion/knowledgebase#how-it-works)

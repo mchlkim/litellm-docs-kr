@@ -1,21 +1,21 @@
 # /rag/ingest
 
-All-in-one document ingestion pipeline: **Upload → Chunk → Embed → Vector Store**
+문서 ingestion을 위한 올인원 파이프라인: **Upload → Chunk → Embed → Vector Store**
 
-| Feature | Supported |
+| 기능 | 지원 여부 |
 |---------|-----------|
-| Logging | Yes |
-| Supported Providers | `openai`, `bedrock`, `vertex_ai`, `gemini`, `s3_vectors` |
+| Logging | 예 |
+| 지원 프로바이더 | `openai`, `bedrock`, `vertex_ai`, `gemini`, `s3_vectors` |
 
 :::tip
-After ingesting documents, use [/rag/query](./rag_query.md) to search and generate responses with your ingested content.
+문서를 ingest한 뒤 [/rag/query](./rag_query.md)를 사용해 ingest된 콘텐츠를 검색하고 응답을 생성하세요.
 :::
 
-## Quick Start
+## 빠른 시작
 
 ### OpenAI
 
-```bash showLineNumbers title="Ingest to OpenAI vector store"
+```bash showLineNumbers title="OpenAI vector store로 Ingest"
 curl -X POST "http://localhost:4000/v1/rag/ingest" \
     -H "Authorization: Bearer sk-1234" \
     -H "Content-Type: application/json" \
@@ -35,7 +35,7 @@ curl -X POST "http://localhost:4000/v1/rag/ingest" \
 
 ### Bedrock
 
-```bash showLineNumbers title="Ingest to Bedrock Knowledge Base"
+```bash showLineNumbers title="Bedrock Knowledge Base로 Ingest"
 curl -X POST "http://localhost:4000/v1/rag/ingest" \
     -H "Authorization: Bearer sk-1234" \
     -H "Content-Type: application/json" \
@@ -53,9 +53,9 @@ curl -X POST "http://localhost:4000/v1/rag/ingest" \
     }"
 ```
 
-### Vertex AI RAG Engine
+### `Vertex AI RAG Engine`
 
-```bash showLineNumbers title="Ingest to Vertex AI RAG Corpus"
+```bash showLineNumbers title="Vertex AI RAG Corpus로 Ingest"
 curl -X POST "http://localhost:4000/v1/rag/ingest" \
     -H "Authorization: Bearer sk-1234" \
     -H "Content-Type: application/json" \
@@ -77,7 +77,7 @@ curl -X POST "http://localhost:4000/v1/rag/ingest" \
 
 ### AWS S3 Vectors
 
-```bash showLineNumbers title="Ingest to S3 Vectors"
+```bash showLineNumbers title="S3 Vectors로 Ingest"
 curl -X POST "http://localhost:4000/v1/rag/ingest" \
     -H "Authorization: Bearer sk-1234" \
     -H "Content-Type: application/json" \
@@ -100,7 +100,7 @@ curl -X POST "http://localhost:4000/v1/rag/ingest" \
     }"
 ```
 
-## Response
+## 응답
 
 ```json
 {
@@ -111,9 +111,9 @@ curl -X POST "http://localhost:4000/v1/rag/ingest" \
 }
 ```
 
-## Query with RAG
+## RAG로 Query
 
-After ingestion, use the [/rag/query](./rag_query.md) endpoint to search and generate LLM responses:
+ingestion 이후 [/rag/query](./rag_query.md) 엔드포인트를 사용해 검색하고 LLM 응답을 생성합니다.
 
 ```bash showLineNumbers title="RAG Query"
 curl -X POST "http://localhost:4000/v1/rag/query" \
@@ -130,16 +130,16 @@ curl -X POST "http://localhost:4000/v1/rag/query" \
     }'
 ```
 
-This will:
-1. Search the vector store for relevant context
-2. Prepend the context to your messages
-3. Generate an LLM response
+이 요청은 다음을 수행합니다.
+1. 관련 context를 찾기 위해 vector store를 검색합니다.
+2. 검색된 context를 messages 앞에 추가합니다.
+3. LLM 응답을 생성합니다.
 
-### Direct Vector Store Search
+### 직접 Vector Store 검색
 
-Alternatively, search the vector store directly with `/vector_stores/{vector_store_id}/search`:
+또는 `/vector_stores/{vector_store_id}/search`로 vector store를 직접 검색할 수 있습니다.
 
-```bash showLineNumbers title="Search the vector store"
+```bash showLineNumbers title="vector store 검색"
 curl -X POST "http://localhost:4000/v1/vector_stores/vs_xyz789/search" \
     -H "Authorization: Bearer sk-1234" \
     -H "Content-Type: application/json" \
@@ -149,13 +149,13 @@ curl -X POST "http://localhost:4000/v1/vector_stores/vs_xyz789/search" \
     }'
 ```
 
-## End-to-End Example
+## End-to-End 예제
 
 ### OpenAI
 
-#### 1. Ingest Document
+#### 1. 문서 Ingest
 
-```bash showLineNumbers title="Step 1: Ingest"
+```bash showLineNumbers title="1단계: Ingest"
 curl -X POST "http://localhost:4000/v1/rag/ingest" \
     -H "Authorization: Bearer sk-1234" \
     -H "Content-Type: application/json" \
@@ -174,7 +174,7 @@ curl -X POST "http://localhost:4000/v1/rag/ingest" \
     }"
 ```
 
-Response:
+응답:
 ```json
 {
   "id": "ingest_d834f544-fc5e-4751-902d-fb0bcc183b85",
@@ -186,7 +186,7 @@ Response:
 
 #### 2. Query
 
-```bash showLineNumbers title="Step 2: Query"
+```bash showLineNumbers title="2단계: Query"
 curl -X POST "http://localhost:4000/v1/vector_stores/vs_692658d337c4819183f2ad8488d12fc9/search" \
     -H "Authorization: Bearer sk-1234" \
     -H "Content-Type: application/json" \
@@ -196,7 +196,7 @@ curl -X POST "http://localhost:4000/v1/vector_stores/vs_692658d337c4819183f2ad84
     }'
 ```
 
-Response:
+응답:
 ```json
 {
   "object": "vector_store.search_results.page",
@@ -220,101 +220,101 @@ Response:
 }
 ```
 
-## Request Parameters
+## 요청 파라미터
 
-### Top-Level
+### 최상위
 
-| Parameter | Type | Required | Description |
+| 파라미터 | 타입 | 필수 여부 | 설명 |
 |-----------|------|----------|-------------|
-| `file` | object | One of file/file_url/file_id required | Base64-encoded file |
-| `file.filename` | string | Yes | Filename with extension |
-| `file.content` | string | Yes | Base64-encoded content |
-| `file.content_type` | string | Yes | MIME type (e.g., `text/plain`) |
-| `file_url` | string | One of file/file_url/file_id required | URL to fetch file from |
-| `file_id` | string | One of file/file_url/file_id required | Existing file ID |
-| `ingest_options` | object | Yes | Pipeline configuration |
+| `file` | object | file/file_url/file_id 중 하나 필수 | Base64로 인코딩된 파일 |
+| `file.filename` | string | 예 | 확장자가 포함된 파일명 |
+| `file.content` | string | 예 | Base64로 인코딩된 콘텐츠 |
+| `file.content_type` | string | 예 | MIME 타입(예: `text/plain`) |
+| `file_url` | string | file/file_url/file_id 중 하나 필수 | 파일을 가져올 URL |
+| `file_id` | string | file/file_url/file_id 중 하나 필수 | 기존 file ID |
+| `ingest_options` | object | 예 | 파이프라인 구성 |
 
 ### ingest_options
 
-| Parameter | Type | Required | Description |
+| 파라미터 | 타입 | 필수 여부 | 설명 |
 |-----------|------|----------|-------------|
-| `vector_store` | object | Yes | Vector store configuration |
-| `name` | string | No | Pipeline name for logging |
+| `vector_store` | object | 예 | Vector store 구성 |
+| `name` | string | 아니요 | logging용 파이프라인 이름 |
 
 ### vector_store (OpenAI)
 
-| Parameter | Type | Default | Description |
+| 파라미터 | 타입 | 기본값 | 설명 |
 |-----------|------|---------|-------------|
 | `custom_llm_provider` | string | - | `"openai"` |
-| `vector_store_id` | string | auto-create | Existing vector store ID |
+| `vector_store_id` | string | auto-create | 기존 vector store ID |
 
 ### vector_store (Bedrock)
 
-| Parameter | Type | Default | Description |
+| 파라미터 | 타입 | 기본값 | 설명 |
 |-----------|------|---------|-------------|
 | `custom_llm_provider` | string | - | `"bedrock"` |
-| `vector_store_id` | string | auto-create | Existing Knowledge Base ID |
-| `wait_for_ingestion` | boolean | `false` | Wait for indexing to complete |
-| `ingestion_timeout` | integer | `300` | Timeout in seconds (if waiting) |
-| `s3_bucket` | string | auto-create | S3 bucket for documents |
+| `vector_store_id` | string | auto-create | 기존 Knowledge Base ID |
+| `wait_for_ingestion` | boolean | `false` | indexing 완료까지 대기 |
+| `ingestion_timeout` | integer | `300` | timeout 초 단위(대기하는 경우) |
+| `s3_bucket` | string | auto-create | 문서용 S3 bucket |
 | `s3_prefix` | string | `"data/"` | S3 key prefix |
-| `embedding_model` | string | `amazon.titan-embed-text-v2:0` | Bedrock embedding model |
+| `embedding_model` | string | `amazon.titan-embed-text-v2:0` | Bedrock embedding 모델 |
 | `aws_region_name` | string | `us-west-2` | AWS region |
 
-:::info Bedrock Auto-Creation
-When `vector_store_id` is omitted, LiteLLM automatically creates:
-- S3 bucket for document storage
-- OpenSearch Serverless collection
-- IAM role with required permissions
-- Bedrock Knowledge Base
+:::info Bedrock 자동 생성
+`vector_store_id`를 생략하면 LiteLLM이 다음 리소스를 자동으로 생성합니다.
+- 문서 저장용 S3 bucket
+- `OpenSearch Serverless` collection
+- 필요한 권한이 포함된 IAM role
+- `Bedrock Knowledge Base`
 - Data Source
 :::
 
 ### vector_store (Vertex AI)
 
-| Parameter | Type | Default | Description |
+| 파라미터 | 타입 | 기본값 | 설명 |
 |-----------|------|---------|-------------|
 | `custom_llm_provider` | string | - | `"vertex_ai"` |
 | `vector_store_id` | string | **required** | RAG corpus ID |
-| `gcs_bucket` | string | **required** | GCS bucket for file uploads |
+| `gcs_bucket` | string | **required** | 파일 업로드용 GCS bucket |
 | `vertex_project` | string | env `VERTEXAI_PROJECT` | GCP project ID |
 | `vertex_location` | string | `us-central1` | GCP region |
-| `vertex_credentials` | string | ADC | Path to credentials JSON |
-| `wait_for_import` | boolean | `true` | Wait for import to complete |
-| `import_timeout` | integer | `600` | Timeout in seconds (if waiting) |
+| `vertex_credentials` | string | ADC | credentials JSON 경로 |
+| `wait_for_import` | boolean | `true` | import 완료까지 대기 |
+| `import_timeout` | integer | `600` | timeout 초 단위(대기하는 경우) |
 
-:::info Vertex AI Prerequisites
-1. Create a RAG corpus in Vertex AI console or via API
-2. Create a GCS bucket for file uploads
-3. Authenticate via `gcloud auth application-default login`
-4. Install: `uv add 'google-cloud-aiplatform>=1.60.0'`
+:::info Vertex AI 사전 준비
+1. Vertex AI console 또는 API로 RAG corpus를 생성합니다.
+2. 파일 업로드용 GCS bucket을 생성합니다.
+3. `gcloud auth application-default login`으로 인증합니다.
+4. 설치: `uv add 'google-cloud-aiplatform>=1.60.0'`
 :::
 
-### vector_store (AWS S3 Vectors)
+### vector_store (`AWS S3 Vectors`)
 
-| Parameter | Type | Default | Description |
+| 파라미터 | 타입 | 기본값 | 설명 |
 |-----------|------|---------|-------------|
 | `custom_llm_provider` | string | - | `"s3_vectors"` |
-| `vector_bucket_name` | string | **required** | S3 vector bucket name |
-| `index_name` | string | auto-create | Vector index name |
-| `dimension` | integer | auto-detect | Vector dimension (auto-detected from embedding model) |
-| `distance_metric` | string | `cosine` | Distance metric: `cosine` or `euclidean` |
-| `non_filterable_metadata_keys` | array | `["source_text"]` | Metadata keys excluded from filtering |
+| `vector_bucket_name` | string | **required** | S3 vector bucket 이름 |
+| `index_name` | string | auto-create | Vector index 이름 |
+| `dimension` | integer | auto-detect | vector dimension(embedding model에서 자동 감지) |
+| `distance_metric` | string | `cosine` | distance metric: `cosine` 또는 `euclidean` |
+| `non_filterable_metadata_keys` | array | `["source_text"]` | filtering에서 제외할 metadata key |
 | `aws_region_name` | string | `us-west-2` | AWS region |
 | `aws_access_key_id` | string | env | AWS access key |
 | `aws_secret_access_key` | string | env | AWS secret key |
 
-:::info S3 Vectors Auto-Creation
-When `index_name` is omitted, LiteLLM automatically creates:
-- S3 vector bucket (if it doesn't exist)
-- Vector index with auto-detected dimensions from your embedding model
+:::info S3 Vectors 자동 생성
+`index_name`을 생략하면 LiteLLM이 다음을 자동으로 생성합니다.
+- S3 vector bucket(존재하지 않는 경우)
+- embedding model에서 자동 감지된 dimension으로 구성된 vector index
 
-**Dimension Auto-Detection**: The vector dimension is automatically detected by making a test embedding request to your specified model. No need to manually specify dimensions!
+**Dimension 자동 감지**: 지정한 모델에 test embedding 요청을 보내 vector dimension을 자동으로 감지합니다. dimension을 수동으로 지정할 필요가 없습니다.
 
-**Supported Embedding Models**: Works with any LiteLLM-supported embedding model (OpenAI, Cohere, Bedrock, Azure, etc.)
+**지원 Embedding 모델**: LiteLLM이 지원하는 모든 embedding model(OpenAI, Cohere, Bedrock, Azure 등)과 함께 작동합니다.
 :::
 
-**Example with auto-detection:**
+**자동 감지 예제:**
 ```json
 {
   "embedding": {
@@ -327,7 +327,7 @@ When `index_name` is omitted, LiteLLM automatically creates:
 }
 ```
 
-**Example with custom embedding provider:**
+**사용자 지정 embedding provider 예제:**
 ```json
 {
   "embedding": {
@@ -341,11 +341,11 @@ When `index_name` is omitted, LiteLLM automatically creates:
 }
 ```
 
-## Input Examples
+## 입력 예제
 
 ### File (Base64)
 
-```json title="Request body"
+```json title="요청 body"
 {
   "file": {
     "filename": "document.txt",
@@ -360,7 +360,7 @@ When `index_name` is omitted, LiteLLM automatically creates:
 
 ### File URL
 
-```bash showLineNumbers title="Ingest from URL"
+```bash showLineNumbers title="URL에서 Ingest"
 curl -X POST "http://localhost:4000/v1/rag/ingest" \
     -H "Authorization: Bearer sk-1234" \
     -H "Content-Type: application/json" \
@@ -370,20 +370,20 @@ curl -X POST "http://localhost:4000/v1/rag/ingest" \
     }'
 ```
 
-## Chunking Strategy
+## Chunking 전략
 
-Control how documents are split into chunks before embedding. Specify `chunking_strategy` in `ingest_options`.
+embedding 전에 문서를 chunk로 나누는 방식을 제어합니다. `ingest_options`에 `chunking_strategy`를 지정하세요.
 
-| Parameter | Type | Default | Description |
+| 파라미터 | 타입 | 기본값 | 설명 |
 |-----------|------|---------|-------------|
-| `chunk_size` | integer | `1000` | Maximum size of each chunk |
-| `chunk_overlap` | integer | `200` | Overlap between consecutive chunks |
+| `chunk_size` | integer | `1000` | 각 chunk의 최대 크기 |
+| `chunk_overlap` | integer | `200` | 연속 chunk 사이의 overlap |
 
-### Vertex AI RAG Engine
+### `Vertex AI RAG Engine`
 
-Vertex AI RAG Engine supports custom chunking via the `chunking_strategy` parameter. Chunks are processed server-side during import.
+Vertex AI RAG Engine은 `chunking_strategy` 파라미터를 통해 사용자 지정 chunking을 지원합니다. chunk는 import 중 server-side에서 처리됩니다.
 
-```bash showLineNumbers title="Vertex AI with custom chunking"
+```bash showLineNumbers title="사용자 지정 chunking을 적용한 Vertex AI"
 curl -X POST "http://localhost:4000/v1/rag/ingest" \
     -H "Authorization: Bearer sk-1234" \
     -H "Content-Type: application/json" \
@@ -406,4 +406,3 @@ curl -X POST "http://localhost:4000/v1/rag/ingest" \
         }
     }"
 ```
-

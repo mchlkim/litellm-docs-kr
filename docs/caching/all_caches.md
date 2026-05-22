@@ -1,34 +1,34 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Caching - In-Memory, Redis, s3, gcs, Redis Semantic Cache, Disk
+# 캐싱 - 인메모리, Redis, s3, gcs, Redis Semantic 캐시, Disk
 
-[**See Code**](https://github.com/BerriAI/litellm/blob/main/litellm/caching/caching.py)
+[**코드 보기**](https://github.com/BerriAI/litellm/blob/main/litellm/caching/caching.py)
 
 :::info
 
-- For Proxy Server? Doc here: [Caching Proxy Server](https://docs.litellm.ai/docs/proxy/caching)
+- Proxy Server용 문서는 여기에서 확인하세요: [캐싱 Proxy Server](https://docs.litellm.ai/docs/proxy/caching)
 
-- For OpenAI/Anthropic Prompt Caching, go [here](../completion/prompt_caching.md)
+- OpenAI/Anthropic Prompt 캐싱은 [여기](../completion/prompt_caching.md)에서 확인하세요.
 
 
 :::
 
-## Initialize Cache - In Memory, Redis, s3 Bucket, gcs Bucket, Redis Semantic, Disk Cache, Qdrant Semantic
+## 캐시 초기화 - 인메모리, Redis, s3 버킷, gcs 버킷, Redis Semantic, Disk 캐시, Qdrant Semantic {#initialize-cache---in-memory-redis-s3-bucket-gcs-bucket-redis-semantic-disk-cache-qdrant-semantic}
 
 
 <Tabs>
 
-<TabItem value="redis" label="redis-cache">
+<TabItem value="redis" label="Redis 캐시">
 
-Install redis
+redis를 설치합니다.
 ```shell
 uv add redis
 ```
 
-For the hosted version you can setup your own Redis DB here: https://redis.io/try-free/
+호스팅 버전의 경우 여기에서 직접 Redis DB를 설정할 수 있습니다: https://redis.io/try-free/
 
-**Basic Redis Cache**
+**기본 Redis 캐시**
 
 ```python
 import litellm
@@ -50,9 +50,9 @@ response2 = completion(
 # response1 == response2, response 1 is cached
 ```
 
-**GCP IAM Redis Authentication**
+**GCP IAM Redis 인증**
 
-For GCP Memorystore Redis with IAM authentication:
+IAM 인증을 사용하는 GCP Memorystore Redis의 경우:
 
 ```shell
 uv add google-cloud-iam
@@ -88,9 +88,9 @@ response2 = completion(
 # response1 == response2, response 1 is cached
 ```
 
-**Environment Variables for GCP IAM Redis**
+**GCP IAM Redis용 환경 변수**
 
-You can also set these as environment variables:
+다음 값을 환경 변수로도 설정할 수 있습니다.
 
 ```shell
 export REDIS_HOST="10.128.0.2"
@@ -99,25 +99,25 @@ export REDIS_GCP_SERVICE_ACCOUNT="projects/-/serviceAccounts/your-sa@project.iam
 export REDIS_SSL="False"
 ```
 
-Then simply initialize:
+그런 다음 간단히 초기화합니다.
 
 ```python
 litellm.cache = Cache(type="redis")
 ```
 
 :::info
-Use `REDIS_*` environment variables as the primary mechanism for configuring all Redis client library parameters. This approach automatically maps environment variables to Redis client kwargs and is the suggested way to toggle Redis settings.
+모든 Redis 클라이언트 라이브러리 매개변수를 구성하는 기본 방식으로 `REDIS_*` 환경 변수를 사용하세요. 이 방식은 환경 변수를 Redis 클라이언트 kwargs에 자동으로 매핑하며, Redis 설정을 전환할 때 권장되는 방법입니다.
 :::
 
 :::warning
-If you need to pass non-string Redis parameters (integers, booleans, complex objects), avoid `REDIS_*` environment variables as they may fail during Redis client initialization. Instead, pass them directly as kwargs to the `Cache()` constructor.
+문자열이 아닌 Redis 매개변수(정수, 불리언, 복합 객체)를 전달해야 하는 경우 Redis 클라이언트 초기화 중 실패할 수 있으므로 `REDIS_*` 환경 변수 사용을 피하세요. 대신 `Cache()` 생성자에 kwargs로 직접 전달하세요.
 :::
 
 </TabItem>
 
-<TabItem value="gcs" label="gcs-cache">
+<TabItem value="gcs" label="GCS 캐시">
 
-Set environment variables
+환경 변수를 설정합니다.
 
 ```shell
 GCS_BUCKET_NAME="my-cache-bucket"
@@ -146,14 +146,14 @@ response2 = completion(
 </TabItem>
 
 
-<TabItem value="s3" label="s3-cache">
+<TabItem value="s3" label="S3 캐시">
 
-Install boto3
+boto3를 설치합니다.
 ```shell
 uv add boto3
 ```
 
-Set AWS environment variables
+AWS 환경 변수를 설정합니다.
 
 ```shell
 AWS_ACCESS_KEY_ID = "AKI*******"
@@ -183,9 +183,9 @@ response2 = completion(
 
 </TabItem>
 
-<TabItem value="azureblob" label="azure-blob-cache">
+<TabItem value="azureblob" label="Azure Blob 캐시">
 
-Install azure-storage-blob and azure-identity
+azure-storage-blob 및 azure-identity를 설치합니다.
 ```shell
 uv add azure-storage-blob azure-identity
 ```
@@ -215,14 +215,14 @@ response2 = completion(
 </TabItem>
 
 
-<TabItem value="redis-sem" label="redis-semantic cache">
+<TabItem value="redis-sem" label="Redis Semantic 캐시">
 
-Install redisvl client
+redisvl 클라이언트를 설치합니다.
 ```shell
 uv add redisvl==0.4.1
 ```
 
-For the hosted version you can setup your own Redis DB here: https://redis.io/try-free/
+호스팅 버전의 경우 여기에서 직접 Redis DB를 설정할 수 있습니다: https://redis.io/try-free/
 
 ```python
 import litellm
@@ -274,11 +274,11 @@ assert response1.id == response2.id
 
 </TabItem>
 
-<TabItem value="qdrant-sem" label="qdrant-semantic cache">
+<TabItem value="qdrant-sem" label="Qdrant Semantic 캐시">
 
-You can set up your own cloud Qdrant cluster by following this: https://qdrant.tech/documentation/quickstart-cloud/
+다음 문서를 따라 자체 클라우드 Qdrant 클러스터를 설정할 수 있습니다: https://qdrant.tech/documentation/quickstart-cloud/
 
-To set up a Qdrant cluster locally follow: https://qdrant.tech/documentation/quickstart/
+로컬에서 Qdrant 클러스터를 설정하려면 다음 문서를 따르세요: https://qdrant.tech/documentation/quickstart/
 ```python
 import litellm
 from litellm import completion
@@ -331,9 +331,9 @@ assert response1.id == response2.id
 
 </TabItem>
 
-<TabItem value="in-mem" label="in memory cache">
+<TabItem value="in-mem" label="인메모리 캐시">
 
-### Quick Start
+### 빠른 시작
 
 ```python
 import litellm
@@ -359,17 +359,17 @@ response2 = completion(
 
 </TabItem>
 
-<TabItem value="disk" label="disk cache">
+<TabItem value="disk" label="디스크 캐시">
 
-### Quick Start
+### 빠른 시작
 
-Install the disk caching extra:
+디스크 캐싱 extra를 설치합니다.
 
 ```shell
 uv add "litellm[caching]"
 ```
 
-Then you can use the disk cache as follows.
+그런 다음 다음과 같이 디스크 캐시를 사용할 수 있습니다.
 
 ```python
 import litellm
@@ -393,26 +393,26 @@ response2 = completion(
 
 ```
 
-If you run the code two times, response1 will use the cache from the first run that was stored in a cache file.
+코드를 두 번 실행하면 `response1`은 첫 번째 실행에서 캐시 파일에 저장된 캐시를 사용합니다.
 
 </TabItem>
 
 </Tabs>
 
-## Switch Cache On / Off Per LiteLLM Call 
+## LiteLLM 호출별 캐시 켜기/끄기 {#switch-cache-on--off-per-litellm-call}
 
-LiteLLM supports 4 cache-controls:
+LiteLLM은 4가지 cache-control을 지원합니다.
 
-- `no-cache`: *Optional(bool)* When `True`, Will not return a cached response, but instead call the actual endpoint. 
-- `no-store`: *Optional(bool)* When `True`, Will not cache the response. 
-- `ttl`: *Optional(int)* - Will cache the response for the user-defined amount of time (in seconds).
-- `s-maxage`: *Optional(int)* Will only accept cached responses that are within user-defined range (in seconds).
+- `no-cache`: *Optional(bool)* `True`이면 캐시된 응답을 반환하지 않고 실제 엔드포인트를 호출합니다.
+- `no-store`: *Optional(bool)* `True`이면 응답을 캐시하지 않습니다.
+- `ttl`: *Optional(int)* 사용자가 정의한 시간(초) 동안 응답을 캐시합니다.
+- `s-maxage`: *Optional(int)* 사용자가 정의한 범위(초) 안에 있는 캐시된 응답만 허용합니다.
 
-[Let us know if you need more](https://github.com/BerriAI/litellm/issues/1218)
+[더 필요한 항목이 있으면 알려주세요](https://github.com/BerriAI/litellm/issues/1218)
 <Tabs>
 <TabItem value="no-cache" label="No-Cache">
 
-Example usage `no-cache` - When `True`, Will not return a cached response
+`no-cache` 사용 예시 - `True`이면 캐시된 응답을 반환하지 않습니다.
 
 ```python
 response = litellm.completion(
@@ -431,7 +431,7 @@ response = litellm.completion(
 
 <TabItem value="no-store" label="No-Store">
 
-Example usage `no-store` - When `True`, Will not cache the response. 
+`no-store` 사용 예시 - `True`이면 응답을 캐시하지 않습니다.
 
 ```python
 response = litellm.completion(
@@ -449,7 +449,7 @@ response = litellm.completion(
 </TabItem>
 
 <TabItem value="ttl" label="ttl">
-Example usage `ttl` - cache the response for 10 seconds
+`ttl` 사용 예시 - 응답을 10초 동안 캐시합니다.
 
 ```python
 response = litellm.completion(
@@ -467,7 +467,7 @@ response = litellm.completion(
 </TabItem>
 
 <TabItem value="s-maxage" label="s-maxage">
-Example usage `s-maxage` - Will only accept cached responses for 60 seconds
+`s-maxage` 사용 예시 - 60초 동안만 캐시된 응답을 허용합니다.
 
 ```python
 response = litellm.completion(
@@ -487,17 +487,17 @@ response = litellm.completion(
 
 </Tabs>
 
-## Cache Context Manager - Enable, Disable, Update Cache
-Use the context manager for easily enabling, disabling & updating the litellm cache 
+## 캐시 컨텍스트 매니저 - 캐시 활성화, 비활성화, 업데이트 {#cache-context-manager---enable-disable-update-cache}
+컨텍스트 매니저를 사용하면 litellm 캐시를 쉽게 활성화, 비활성화, 업데이트할 수 있습니다.
 
-### Enabling Cache
+### 캐시 활성화 {#enabling-cache}
 
-Quick Start Enable
+빠른 시작 활성화
 ```python
 litellm.enable_cache()
 ```
 
-Advanced Params
+고급 매개변수
 
 ```python
 litellm.enable_cache(
@@ -512,16 +512,16 @@ litellm.enable_cache(
 )
 ```
 
-### Disabling Cache
+### 캐시 비활성화 {#disabling-cache}
 
-Switch caching off 
+캐싱을 끕니다.
 ```python
 litellm.disable_cache()
 ```
 
-### Updating Cache Params (Redis Host, Port etc)
+### 캐시 매개변수 업데이트(Redis Host, Port 등) {#updating-cache-params-redis-host-port-etc}
 
-Update the Cache params
+Cache 매개변수를 업데이트합니다.
 
 ```python
 litellm.update_cache(
@@ -536,8 +536,8 @@ litellm.update_cache(
 )
 ```
 
-## Custom Cache Keys:
-Define function to return cache key
+## 사용자 지정 캐시 키 {#custom-cache-keys}
+캐시 키를 반환하는 함수를 정의합니다.
 ```python
 # this function takes in *args, **kwargs and returns the key you want to use for caching
 def custom_get_cache_key(*args, **kwargs):
@@ -548,7 +548,7 @@ def custom_get_cache_key(*args, **kwargs):
 
 ```
 
-Set your function as litellm.cache.get_cache_key
+함수를 `litellm.cache.get_cache_key`로 설정합니다.
 ```python
 from litellm.caching.caching import Cache
 
@@ -559,14 +559,14 @@ cache.get_cache_key = custom_get_cache_key # set get_cache_key function for your
 litellm.cache = cache # set litellm.cache to your cache 
 
 ```
-## How to write custom add/get cache functions 
-### 1. Init Cache 
+## 사용자 지정 add/get 캐시 함수 작성 방법 {#how-to-write-custom-addget-cache-functions}
+### 1. Cache 초기화 {#1-init-cache}
 ```python
 from litellm.caching.caching import Cache
 cache = Cache()
 ``` 
 
-### 2. Define custom add/get cache functions 
+### 2. 사용자 지정 add/get 캐시 함수 정의 {#2-define-custom-addget-cache-functions}
 ```python
 def add_cache(self, result, *args, **kwargs):
   your logic
@@ -575,13 +575,13 @@ def get_cache(self, *args, **kwargs):
   your logic
 ```
 
-### 3. Point cache add/get functions to your add/get functions 
+### 3. 캐시 add/get 함수를 사용자 지정 add/get 함수에 연결 {#3-point-cache-addget-functions-to-your-addget-functions}
 ```python
 cache.add_cache = add_cache
 cache.get_cache = get_cache
 ```
 
-## Cache Initialization Parameters
+## 캐시 초기화 매개변수 {#cache-initialization-parameters}
 
 ```python
 def __init__(
@@ -641,11 +641,11 @@ def __init__(
 ):
 ```
 
-## Logging 
+## 로깅 {#logging}
 
-Cache hits are logged in success events as `kwarg["cache_hit"]`. 
+캐시 히트는 success 이벤트에 `kwarg["cache_hit"]`로 기록됩니다.
 
-Here's an example of accessing it: 
+다음은 이 값에 접근하는 예시입니다.
 
   ```python
   import litellm

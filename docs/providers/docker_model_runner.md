@@ -1,63 +1,63 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Docker Model Runner
+# `Docker Model Runner`
 
-## Overview
+## 개요
 
-| Property | Details |
+| 속성 | 세부 정보 |
 |-------|-------|
-| Description | Docker Model Runner allows you to run large language models locally using Docker Desktop. |
-| Provider Route on LiteLLM | `docker_model_runner/` |
-| Link to Provider Doc | [Docker Model Runner ↗](https://docs.docker.com/ai/model-runner/) |
+| 설명 | Docker Model Runner를 사용하면 Docker Desktop으로 대규모 언어 모델을 로컬에서 실행할 수 있습니다. |
+| LiteLLM의 Provider Route | `docker_model_runner/` |
+| Provider 문서 링크 | [Docker Model Runner ↗](https://docs.docker.com/ai/model-runner/) |
 | Base URL | `http://localhost:22088` |
-| Supported Operations | [`/chat/completions`](#sample-usage) |
+| 지원 작업 | [`/chat/completions`](#sample-usage) |
 
 <br />
 <br />
 
 https://docs.docker.com/ai/model-runner/
 
-**We support ALL Docker Model Runner models, just set `docker_model_runner/` as a prefix when sending completion requests**
+**모든 Docker Model Runner 모델을 지원합니다. completion 요청을 보낼 때 `docker_model_runner/`를 접두사로 설정하기만 하면 됩니다.**
 
-## Quick Start
+## 빠른 시작
 
-Docker Model Runner is a Docker Desktop feature that lets you run AI models locally. It provides better performance than other local solutions while maintaining OpenAI compatibility.
+Docker Model Runner는 AI 모델을 로컬에서 실행할 수 있게 해 주는 Docker Desktop 기능입니다. OpenAI 호환성을 유지하면서 다른 로컬 솔루션보다 더 나은 성능을 제공합니다.
 
-### Installation
+### 설치
 
-1. Install [Docker Desktop](https://www.docker.com/products/docker-desktop/)
-2. Enable Docker Model Runner in Docker Desktop settings
-3. Download your preferred model through Docker Desktop
+1. [Docker Desktop](https://www.docker.com/products/docker-desktop/)을 설치합니다.
+2. Docker Desktop 설정에서 Docker Model Runner를 활성화합니다.
+3. Docker Desktop을 통해 원하는 모델을 다운로드합니다.
 
-## Environment Variables
+## 환경 변수 {#environment-variables}
 
 ```python showLineNumbers title="Environment Variables"
 os.environ["DOCKER_MODEL_RUNNER_API_BASE"] = "http://localhost:22088/engines/llama.cpp"  # Optional - defaults to this
 os.environ["DOCKER_MODEL_RUNNER_API_KEY"] = "dummy-key"  # Optional - Docker Model Runner may not require auth for local instances
 ```
 
-**Note:** 
-- Docker Model Runner typically runs locally and may not require authentication. LiteLLM will use a dummy key by default if no key is provided.
-- The API base should include the engine path (e.g., `/engines/llama.cpp`)
+**참고:** 
+- Docker Model Runner는 일반적으로 로컬에서 실행되며 인증이 필요하지 않을 수 있습니다. 키를 제공하지 않으면 LiteLLM은 기본적으로 더미 키를 사용합니다.
+- API base에는 엔진 경로가 포함되어야 합니다(예: `/engines/llama.cpp`).
 
-## API Base Structure
+## API Base 구조 {#api-base-structure}
 
-Docker Model Runner uses a unique URL structure:
+Docker Model Runner는 고유한 URL 구조를 사용합니다.
 
 ```
 http://model-runner.docker.internal/engines/{engine}/v1/chat/completions
 ```
 
-Where `{engine}` is the engine you want to use (typically `llama.cpp`). 
+여기서 `{engine}`은 사용하려는 엔진입니다(일반적으로 `llama.cpp`). 
 
-**Important:** Specify the engine in your `api_base` URL, not in the model name:
-- ✅ Correct: `api_base="http://localhost:22088/engines/llama.cpp"`, `model="docker_model_runner/llama-3.1"`
-- ❌ Incorrect: `api_base="http://localhost:22088"`, `model="docker_model_runner/llama.cpp/llama-3.1"`
+**중요:** 엔진은 모델 이름이 아니라 `api_base` URL에 지정하세요.
+- ✅ 올바른 예: `api_base="http://localhost:22088/engines/llama.cpp"`, `model="docker_model_runner/llama-3.1"`
+- ❌ 잘못된 예: `api_base="http://localhost:22088"`, `model="docker_model_runner/llama.cpp/llama-3.1"`
 
-## Usage - LiteLLM Python SDK
+## 사용법 - LiteLLM Python SDK
 
-### Non-streaming
+### Non-streaming {#non-streaming}
 
 ```python showLineNumbers title="Docker Model Runner Non-streaming Completion"
 import os
@@ -78,7 +78,7 @@ response = completion(
 print(response)
 ```
 
-### Streaming
+### Streaming {#streaming}
 
 ```python showLineNumbers title="Docker Model Runner Streaming Completion"
 import os
@@ -101,7 +101,7 @@ for chunk in response:
     print(chunk)
 ```
 
-### Custom API Base and Engine
+### 사용자 지정 API Base와 엔진 {#custom-api-base-and-engine}
 
 ```python showLineNumbers title="Custom API Base with Different Engine"
 import litellm
@@ -120,7 +120,7 @@ response = completion(
 print(response)
 ```
 
-### Using Different Engines
+### 다른 엔진 사용 {#using-different-engines}
 
 ```python showLineNumbers title="Using a Different Engine"
 import litellm
@@ -139,9 +139,9 @@ response = completion(
 print(response)
 ```
 
-## Usage - LiteLLM Proxy
+## 사용법 - LiteLLM Proxy
 
-Add the following to your LiteLLM Proxy configuration file:
+LiteLLM Proxy 설정 파일에 다음 내용을 추가합니다.
 
 ```yaml showLineNumbers title="config.yaml"
 model_list:
@@ -156,7 +156,7 @@ model_list:
       api_base: http://localhost:22088/engines/llama.cpp
 ```
 
-Start your LiteLLM Proxy server:
+LiteLLM Proxy 서버를 시작합니다.
 
 ```bash showLineNumbers title="Start LiteLLM Proxy"
 litellm --config config.yaml
@@ -269,9 +269,8 @@ curl http://localhost:4000/v1/chat/completions \
 </TabItem>
 </Tabs>
 
-For more detailed information on using the LiteLLM Proxy, see the [LiteLLM Proxy documentation](../providers/litellm_proxy).
+LiteLLM Proxy 사용에 대한 자세한 내용은 [LiteLLM Proxy 문서](../providers/litellm_proxy)를 참조하세요.
 
-## API Reference
+## API Reference {#api-reference}
 
-For detailed API information, see the [Docker Model Runner API Reference](https://docs.docker.com/ai/model-runner/api-reference/).
-
+자세한 API 정보는 [Docker Model Runner API Reference](https://docs.docker.com/ai/model-runner/api-reference/)를 참조하세요.

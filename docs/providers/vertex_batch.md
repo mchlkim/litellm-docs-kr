@@ -1,9 +1,9 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Vertex Batch APIs
+# Vertex Batch APIs {#vertex-batch-apis}
 
-Just add the following Vertex env vars to your environment. 
+다음 Vertex env vars를 환경에 추가하면 됩니다.
 
 ```bash
 # GCS Bucket settings, used to store batch prediction files in
@@ -16,25 +16,25 @@ export VERTEXAI_LOCATION="us-central1" # can be any vertex location
 export VERTEXAI_PROJECT="my-project" 
 ```
 
-### Usage
+### 사용법
 
-Follow this complete workflow: create JSONL file → upload file → create batch → retrieve batch status → get file content
+전체 workflow는 JSONL 파일 생성 → 파일 업로드 → batch 생성 → batch 상태 조회 → 파일 콘텐츠 가져오기 순서입니다.
 
-#### 1. Create a JSONL file of batch requests
+#### 1. batch requests용 JSONL 파일 생성 {#1-create-a-jsonl-file-of-batch-requests}
 
-LiteLLM expects the file to follow the **[OpenAI batches files format](https://platform.openai.com/docs/guides/batch)**.
+LiteLLM은 파일이 **[OpenAI batches files format](https://platform.openai.com/docs/guides/batch)**을 따를 것으로 예상합니다.
 
-Each `body` in the file should be an **OpenAI API request**.
+파일의 각 `body`는 **OpenAI API request**여야 합니다.
 
-Create a file called `batch_requests.jsonl` with your requests:
+요청을 담은 `batch_requests.jsonl` 파일을 생성합니다.
 ```jsonl
 {"custom_id": "request-1", "method": "POST", "url": "/v1/chat/completions", "body": {"model": "gemini-2.5-flash-lite", "messages": [{"role": "system", "content": "You are a helpful assistant."},{"role": "user", "content": "Hello world!"}],"max_tokens": 10}}
 {"custom_id": "request-2", "method": "POST", "url": "/v1/chat/completions", "body": {"model": "gemini-2.5-flash-lite", "messages": [{"role": "system", "content": "You are an unhelpful assistant."},{"role": "user", "content": "Hello world!"}],"max_tokens": 10}}
 ```
 
-#### 2. Upload the file
+#### 2. 파일 업로드 {#2-upload-the-file}
 
-Upload your JSONL file. For `vertex_ai`, the file will be stored in your configured GCS bucket provided by `GCS_BUCKET_NAME`.
+JSONL 파일을 업로드합니다. `vertex_ai`의 경우 파일은 `GCS_BUCKET_NAME`으로 제공한, 구성된 GCS bucket에 저장됩니다.
 
 <Tabs>
 <TabItem value="python" label="Python">
@@ -71,7 +71,7 @@ curl --request POST \
 </TabItem>
 </Tabs>
 
-**Expected Response:**
+**예상 응답:**
 
 ```json
 {
@@ -87,9 +87,9 @@ curl --request POST \
 }
 ```
 
-#### 3. Create a batch
+#### 3. batch 생성 {#3-create-a-batch}
 
-Create a batch job using the uploaded file ID.
+업로드한 file ID를 사용해 batch job을 생성합니다.
 
 <Tabs>
 <TabItem value="python" label="Python">
@@ -124,7 +124,7 @@ curl --request POST \
 </TabItem>
 </Tabs>
 
-**Expected Response:**
+**예상 응답:**
 
 ```json
 {
@@ -152,9 +152,9 @@ curl --request POST \
 }
 ```
 
-#### 4. Retrieve batch status
+#### 4. batch 상태 조회 {#4-retrieve-batch-status}
 
-Check the status of your batch job. The batch will progress through states: `validating` → `in_progress` → `completed`.
+batch job의 상태를 확인합니다. batch는 `validating` → `in_progress` → `completed` 상태로 진행됩니다.
 
 <Tabs>
 <TabItem value="python" label="Python">
@@ -182,7 +182,7 @@ curl --request GET \
 </TabItem>
 </Tabs>
 
-**Expected Response (when completed):**
+**예상 응답(`completed` 상태일 때):**
 
 ```json
 {
@@ -210,11 +210,11 @@ curl --request GET \
 }
 ```
 
-#### 5. Get file content
+#### 5. 파일 콘텐츠 가져오기 {#5-get-file-content}
 
-Once the batch is completed, retrieve the results using the `output_file_id` from the batch response.
+batch가 완료되면 batch 응답의 `output_file_id`를 사용해 결과를 가져옵니다.
 
-**Important:** The `output_file_id` must be URL encoded when used in the request path.
+**중요:** request path에서 사용할 때는 `output_file_id`를 URL encoded 형식으로 변환해야 합니다.
 
 <Tabs>
 <TabItem value="python" label="Python">
@@ -254,9 +254,9 @@ curl --request GET \
 </TabItem>
 </Tabs>
 
-**Expected Response:**
+**예상 응답:**
 
-The response contains JSONL format with one result per line:
+응답은 한 줄에 하나의 결과가 있는 JSONL format입니다.
 
 ```jsonl
 {"status":"","processed_time":"2025-09-19T21:29:47.352+00:00","request":{"contents":[{"parts":[{"text":"Hello world!"}],"role":"user"}],"generationConfig":{"max_output_tokens":10},"system_instruction":{"parts":[{"text":"You are a helpful assistant."}]}},"response":{"candidates":[{"avgLogprobs":-0.48079710006713866,"content":{"parts":[{"text":"Hello there! It's nice to meet you"}],"role":"model"},"finishReason":"MAX_TOKENS"}],"createTime":"2025-09-19T21:29:47.484619Z","modelVersion":"gemini-2.5-flash-lite","responseId":"S8vNaIvKHdvshMIP_aOtuAg","usageMetadata":{"candidatesTokenCount":10,"candidatesTokensDetails":[{"modality":"TEXT","tokenCount":10}],"promptTokenCount":9,"promptTokensDetails":[{"modality":"TEXT","tokenCount":9}],"totalTokenCount":19,"trafficType":"ON_DEMAND"}}}

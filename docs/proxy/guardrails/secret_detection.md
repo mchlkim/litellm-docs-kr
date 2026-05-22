@@ -1,9 +1,9 @@
-# ✨ Secret Detection/Redaction (Enterprise-only)
-❓ Use this to REDACT API Keys, Secrets sent in requests to an LLM. 
+# ✨ 시크릿 감지/마스킹 (엔터프라이즈-only) {#secret-detectionredaction-엔터프라이즈-only}
+❓ LLM으로 전송되는 요청의 API Keys와 Secrets를 마스킹하려면 이 기능을 사용하세요.
 
-Example if you want to redact the value of `OPENAI_API_KEY` in the following request
+다음 요청에서 `OPENAI_API_KEY` 값을 마스킹하려는 경우의 예시입니다.
 
-#### Incoming Request 
+#### 수신 요청 {#incoming-request}
 
 ```json
 {
@@ -16,7 +16,7 @@ Example if you want to redact the value of `OPENAI_API_KEY` in the following req
 }
 ```
 
-#### Request after Moderation
+#### Moderation 후 요청 {#request-after-moderation}
 
 ```json
 {
@@ -29,9 +29,9 @@ Example if you want to redact the value of `OPENAI_API_KEY` in the following req
 }
 ```
 
-**Usage**
+**사용법**
 
-**Step 1** Add this to your config.yaml 
+**Step 1** 다음 내용을 config.yaml에 추가합니다.
 
 ```yaml
 guardrails:
@@ -41,15 +41,15 @@ guardrails:
       mode: "pre_call"
 ```
 
-**Step 2** Run litellm proxy with `--detailed_debug` to see the server logs
+**Step 2** 서버 로그를 확인하려면 `--detailed_debug`와 함께 litellm proxy를 실행합니다.
 
 ```
 litellm --config config.yaml --detailed_debug
 ```
 
-**Step 3** Test it with request
+**Step 3** 요청으로 테스트합니다.
 
-Send this request
+다음 요청을 전송합니다.
 ```shell
 curl -L -X POST 'http://0.0.0.0:4000/v1/chat/completions' \
 -H 'Content-Type: application/json' \
@@ -67,14 +67,14 @@ curl -L -X POST 'http://0.0.0.0:4000/v1/chat/completions' \
 ```
 
 
-Expect to see the following warning on your litellm server logs
+litellm 서버 로그에서 다음 경고가 표시되어야 합니다.
 
 ```shell
 LiteLLM Proxy:WARNING: secret_detection.py:88 - Detected and redacted secrets in message: ['Secret Keyword']
 ```
 
 
-You can also see the raw request sent from litellm to the API Provider with (`--detailed_debug`).
+`--detailed_debug`를 사용하면 litellm에서 API Provider로 전송한 원본 요청도 확인할 수 있습니다.
 ```json
 POST Request Sent from LiteLLM:
 curl -X POST \
@@ -93,20 +93,20 @@ https://api.groq.com/openai/v1/ \
 }
 ```
 
-## Turn on/off per project (API KEY/Team)
+## 프로젝트별 켜기/끄기 (API KEY/Team) {#turn-onoff-per-project-api-keyteam}
 
-[**See Here**](./quick_start.md#-control-guardrails-per-project-api-key)
+[**여기를 참고하세요**](./quick_start.md#-control-guardrails-per-project-api-key)
 
-## Control secret detectors
+## secret detector 제어 {#control-secret-detectors}
 
-LiteLLM uses the [`detect-secrets`](https://github.com/Yelp/detect-secrets) library for secret detection. See [all plugins run by default](#default-config-used)
+LiteLLM은 secret 감지에 [`detect-secrets`](https://github.com/Yelp/detect-secrets) 라이브러리를 사용합니다. [기본으로 실행되는 모든 plugins](#default-config-used)를 참고하세요.
 
 
-### Usage
+### 사용법
 
-Here's how to control which plugins are run per request. This is useful if developers complain about secret detection impacting response quality.
+요청별로 실행할 plugins를 제어하는 방법입니다. 개발자가 secret 감지가 응답 품질에 영향을 준다고 보고할 때 유용합니다.
 
-**1. Set-up config.yaml**
+**1. config.yaml 설정**
 
 ```yaml
 guardrails:
@@ -123,15 +123,15 @@ guardrails:
       }
 ```
 
-**2. Start proxy**
+**2. proxy 시작**
 
-Run with `--detailed_debug` for more detailed logs. Use in dev only. 
+더 자세한 로그가 필요하면 `--detailed_debug`와 함께 실행합니다. 개발 환경에서만 사용하세요.
 
 ```bash
 litellm --config /path/to/config.yaml --detailed_debug
 ```
 
-**3. Test it!**
+**3. 테스트**
 
 ```bash
 curl -L -X POST 'http://0.0.0.0:4000/v1/chat/completions' \
@@ -149,15 +149,15 @@ curl -L -X POST 'http://0.0.0.0:4000/v1/chat/completions' \
 }'
 ```
 
-**Expected Logs**
+**Expected 로그**
 
-Look for this in your logs, to confirm your changes worked as expected.
+변경 사항이 예상대로 동작하는지 확인하려면 로그에서 다음 내용을 찾습니다.
 
 ```
 No secrets detected on input.
 ```
 
-### Default Config Used 
+### 사용되는 기본 Config {#default-config-used}
 
 ```
 _default_detect_secrets_config = {

@@ -1,37 +1,37 @@
 
 import Image from '@theme/IdealImage';
 
-# Benchmarks
+# 벤치마크
 
-Benchmarks for LiteLLM Gateway (Proxy Server) tested against a fake OpenAI endpoint.
+가짜 OpenAI 엔드포인트를 대상으로 테스트한 LiteLLM Gateway(Proxy Server) 벤치마크입니다.
 
 
-LiteLLM Gateway has **8ms P95 latency** at 1k RPS (See benchmarks [here](#4-instances))
+LiteLLM Gateway는 1k RPS에서 **8ms P95 지연 시간**을 기록했습니다. (벤치마크는 [여기](#4-instances)에서 확인하세요.)
 
-## Machine Spec used for testing
+## 테스트에 사용한 머신 사양 {#machine-spec-used-for-testing}
 
-Each machine deploying LiteLLM had the following specs:
+LiteLLM을 배포한 각 머신의 사양은 다음과 같습니다.
 
 - 4 CPU
 - 8GB RAM
 
-## Configuration
+## 설정
 
-- Database: PostgreSQL
-- Redis: Not used
+- 데이터베이스: PostgreSQL
+- Redis: 사용하지 않음
 
 
-### 2 Instance LiteLLM Proxy
+### LiteLLM Proxy 인스턴스 2개 {#2-instance-litellm-proxy}
 
-In these tests the baseline latency characteristics are measured against a fake-openai-endpoint.
+이 테스트에서는 fake-openai-endpoint를 기준으로 기본 지연 시간 특성을 측정했습니다.
 
-#### Performance Metrics
+#### 성능 지표 {#performance-metrics}
 
-| **Type** | **Name** | **Median (ms)** | **95%ile (ms)** | **99%ile (ms)** | **Average (ms)** | **Current RPS** |
+| **유형** | **이름** | **중앙값(ms)** | **95%ile(ms)** | **99%ile(ms)** | **평균(ms)** | **현재 RPS** |
 | --- | --- | --- | --- | --- | --- | --- |
 | POST | /chat/completions | 200 | 630 | 1200 | 262.46 | 1035.7 |
-| Custom | LiteLLM Overhead Duration (ms) | 12 | 29 | 43 | 14.74 | 1035.7 |
-|  | Aggregated | 100 | 430 | 930 | 138.6 | 2071.4 |
+| Custom | LiteLLM 오버헤드 지속 시간(ms) | 12 | 29 | 43 | 14.74 | 1035.7 |
+|  | 집계 | 100 | 430 | 930 | 138.6 | 2071.4 |
 
 <!-- <Image img={require('../img/1_instance_proxy.png')} /> -->
 
@@ -40,25 +40,25 @@ In these tests the baseline latency characteristics are measured against a fake-
 <Image img={require('../img/instances_vs_rps.png')} /> -->
 
 
-### 4 Instances
+### 인스턴스 4개 {#4-instances}
 
-| **Type** | **Name** | **Median (ms)** | **95%ile (ms)** | **99%ile (ms)** | **Average (ms)** | **Current RPS** |
+| **유형** | **이름** | **중앙값(ms)** | **95%ile(ms)** | **99%ile(ms)** | **평균(ms)** | **현재 RPS** |
 | --- | --- | --- | --- | --- | --- | --- |
 | POST | /chat/completions | 100 | 150 | 240 | 111.73 | 1170 |
-| Custom | LiteLLM Overhead Duration (ms) | 2 | 8 | 13 | 3.32 | 1170 |
-|  | Aggregated | 77 | 130 | 180 | 57.53 | 2340 |
+| Custom | LiteLLM 오버헤드 지속 시간(ms) | 2 | 8 | 13 | 3.32 | 1170 |
+|  | 집계 | 77 | 130 | 180 | 57.53 | 2340 |
 
-#### Key Findings
-- Doubling from 2 to 4 LiteLLM instances halves median latency: 200 ms → 100 ms.
-- High-percentile latencies drop significantly: P95 630 ms → 150 ms, P99 1,200 ms → 240 ms.
-- Setting workers equal to CPU count gives optimal performance.
+#### 핵심 결과 {#key-findings}
+- LiteLLM 인스턴스를 2개에서 4개로 늘리면 중앙값 지연 시간이 절반으로 줄어듭니다: 200ms -> 100ms.
+- 상위 백분위 지연 시간이 크게 감소합니다: P95 630ms -> 150ms, P99 1,200ms -> 240ms.
+- worker 수를 CPU 수와 동일하게 설정하면 최적의 성능을 얻을 수 있습니다.
 
 
-## Setting Up Benchmarking with Network Mock
+## Network Mock으로 벤치마크 설정 {#setting-up-benchmarking-with-network-mock}
 
-The fastest way to benchmark proxy overhead is using `network_mock` mode. This intercepts outbound requests at the httpx transport layer and returns canned responses, no need for setting up a mock provider. 
+프록시 오버헤드를 벤치마크하는 가장 빠른 방법은 `network_mock` 모드를 사용하는 것입니다. 이 모드는 httpx 전송 계층에서 아웃바운드 요청을 가로채고 준비된 응답을 반환하므로, mock provider를 별도로 설정할 필요가 없습니다.
 
-**1. Create a proxy config:**
+**1. 프록시 설정 생성:**
 
 ```yaml
 model_list:
@@ -78,30 +78,30 @@ general_settings:
   master_key: "sk-1234"
 ```
 
-**2. Start the proxy:**
+**2. 프록시 시작:**
 
 ```bash
 litellm --config benchmark_config.yaml --port 4000 --num_workers 8
 ```
 
-**3. Run the benchmark script:**
+**3. 벤치마크 스크립트 실행:**
 
 ```bash
 python scripts/benchmark_mock.py --requests 2000 --max-concurrent 200 --runs 3
 ```
 
-Get the benchmarking script [here](https://github.com/BerriAI/litellm/blob/main/scripts/benchmark_mock.py)
+벤치마크 스크립트는 [여기](https://github.com/BerriAI/litellm/blob/main/scripts/benchmark_mock.py)에서 확인할 수 있습니다.
 
-This measures pure proxy overhead on the hot path without any network latency to a real or fake provider.
+이는 실제 또는 가짜 provider로 향하는 네트워크 지연 시간 없이 hot path에서 순수 프록시 오버헤드만 측정합니다.
 
-## Setting Up a Fake OpenAI Endpoint
+## 가짜 OpenAI 엔드포인트 설정 {#setting-up-a-fake-openai-endpoint}
 
-For load testing and benchmarking, you can use a fake OpenAI proxy server. LiteLLM provides:
+부하 테스트와 벤치마크에는 가짜 OpenAI 프록시 서버를 사용할 수 있습니다. LiteLLM은 다음을 제공합니다.
 
-1. **Hosted endpoint**: Use our free hosted fake endpoint at `https://exampleopenaiendpoint-production.up.railway.app/`
-2. **Self-hosted**: Set up your own fake OpenAI proxy server using [github.com/BerriAI/example_openai_endpoint](https://github.com/BerriAI/example_openai_endpoint)
+1. **호스팅 엔드포인트**: `https://exampleopenaiendpoint-production.up.railway.app/`에서 무료 호스팅 가짜 엔드포인트를 사용합니다.
+2. **자체 호스팅**: [github.com/BerriAI/example_openai_endpoint](https://github.com/BerriAI/example_openai_endpoint)를 사용해 직접 가짜 OpenAI 프록시 서버를 설정합니다.
 
-Use this config for testing:
+테스트에는 다음 설정을 사용합니다.
 
 ```yaml
 model_list:
@@ -112,58 +112,58 @@ model_list:
       api_key: "test"
 ```
 
-## `/realtime` API Benchmarks
+## `/realtime` API 벤치마크
 
-End-to-end latency benchmarks for the `/realtime` endpoint tested against a fake realtime endpoint.
+가짜 realtime 엔드포인트를 대상으로 테스트한 `/realtime` 엔드포인트의 종단 간 지연 시간 벤치마크입니다.
 
-### Performance Metrics
+### 성능 지표 {#performance-metrics-1}
 
-| Metric          | Value      |
+| 지표            | 값         |
 | --------------- | ---------- |
-| Median latency  | 59 ms      |
-| p95 latency     | 67 ms      |
-| p99 latency     | 99 ms      |
-| Average latency | 63 ms      |
+| 중앙값 지연 시간 | 59 ms      |
+| p95 지연 시간   | 67 ms      |
+| p99 지연 시간   | 99 ms      |
+| 평균 지연 시간  | 63 ms      |
 | RPS             | 1,207      |
 
-### Test Setup
+### 테스트 설정 {#test-setup}
 
-| Category | Specification |
+| 범주 | 사양 |
 |----------|---------------|
-| **Load Testing** | Locust: 1,000 concurrent users, 500 ramp-up |
-| **System** | 4 vCPUs, 8 GB RAM, 4 workers, 4 instances |
-| **Database** | PostgreSQL (Redis unused) |
+| **부하 테스트** | Locust: 동시 사용자 1,000명, ramp-up 500 |
+| **시스템** | vCPU 4개, RAM 8GB, worker 4개, 인스턴스 4개 |
+| **데이터베이스** | PostgreSQL(Redis 사용 안 함) |
 
 
-## Infrastructure Recommendations
+## 인프라 권장 사항 {#infrastructure-recommendations}
 
-Recommended specifications based on benchmark results and industry standards for API gateway deployments.
+벤치마크 결과와 API gateway 배포에 대한 업계 표준을 바탕으로 한 권장 사양입니다.
 
 ### PostgreSQL
 
-Required for authentication, key management, and usage tracking.
+인증, 키 관리, 사용량 추적에 필요합니다.
 
-| Workload | CPU | RAM | Storage | Connections |
+| 워크로드 | CPU | RAM | 스토리지 | 연결 수 |
 |----------|-----|-----|---------|-------------|
-| 1-2K RPS | 4-8 cores | 16GB | 200GB SSD (3000+ IOPS) | 100-200 |
-| 2-5K RPS | 8 cores | 16-32GB | 500GB SSD (5000+ IOPS) | 200-500 |
-| 5K+ RPS | 16+ cores | 32-64GB | 1TB+ SSD (10000+ IOPS) | 500+ |
+| 1-2K RPS | 4-8 cores | 16GB | `200GB SSD (3000+ IOPS)` | 100-200 |
+| 2-5K RPS | 8 cores | 16-32GB | `500GB SSD (5000+ IOPS)` | 200-500 |
+| 5K+ RPS | 16+ cores | 32-64GB | `1TB+ SSD (10000+ IOPS)` | 500+ |
 
-**Configuration:** Set `proxy_batch_write_at: 60` to batch writes and reduce DB load. Total connections = pool limit × instances.
+**설정:** 쓰기를 배치 처리하고 DB 부하를 줄이려면 `proxy_batch_write_at: 60`을 설정합니다. 총 연결 수 = pool limit x 인스턴스 수입니다.
 
-### Redis (Recommended)
+### Redis(권장) {#redis-recommended}
 
-Redis was not used in these benchmarks but provides significant production benefits: 60-80% reduced DB load.
+이 벤치마크에서는 Redis를 사용하지 않았지만, 프로덕션에서는 DB 부하를 60-80% 줄이는 큰 이점을 제공합니다.
 
-| Workload | CPU | RAM |
+| 워크로드 | CPU | RAM |
 |----------|-----|-----|
 | 1-2K RPS | 2-4 cores | 8GB |
 | 2-5K RPS | 4 cores | 16GB |
 | 5K+ RPS | 8+ cores | 32GB+ |
 
-**Requirements:** Redis 7.0+, AOF persistence enabled, `allkeys-lru` eviction policy.
+**요구 사항:** Redis 7.0 이상, AOF persistence 활성화, `allkeys-lru` eviction policy.
 
-**Configuration:**
+**설정:**
 ```yaml
 router_settings:
   redis_host: os.environ/REDIS_HOST
@@ -180,24 +180,24 @@ litellm_settings:
 ```
 
 :::tip
-Use `redis_host`, `redis_port`, and `redis_password` instead of `redis_url` for ~80 RPS better performance.
+성능을 약 80 RPS 높이려면 `redis_url` 대신 `redis_host`, `redis_port`, `redis_password`를 사용하세요.
 :::
 
-**Scaling:** DB connections scale linearly with instances. Consider PostgreSQL read replicas beyond 5K RPS.
+**스케일링:** DB 연결 수는 인스턴스 수에 비례해 증가합니다. 5K RPS를 초과하면 PostgreSQL read replica를 고려하세요.
 
-See [Production Configuration](./proxy/prod) for detailed best practices.
+자세한 모범 사례는 [프로덕션 설정](./proxy/prod)을 참고하세요.
 
-## Locust Settings
+## Locust 설정 {#locust-settings}
 
-- 1000 Users
-- 500 user Ramp Up
+- 사용자 1000명
+- 사용자 ramp-up 500
 
-## How to measure LiteLLM Overhead
+## LiteLLM 오버헤드 측정 방법 {#how-to-measure-litellm-overhead}
 
-All responses from litellm will include the `x-litellm-overhead-duration-ms` header, this is the latency overhead in milliseconds added by LiteLLM Proxy.
+litellm의 모든 응답에는 `x-litellm-overhead-duration-ms` 헤더가 포함됩니다. 이 값은 LiteLLM Proxy가 추가한 지연 시간 오버헤드를 밀리초 단위로 나타냅니다.
 
 
-If you want to measure this on locust you can use the following code:
+locust에서 이를 측정하려면 다음 코드를 사용할 수 있습니다.
 
 ```python showLineNumbers title="Locust Code for measuring LiteLLM Overhead"
 import os
@@ -249,71 +249,71 @@ class MyUser(HttpUser):
 ```
 
 
-## LiteLLM vs Portkey Performance Comparison
+## LiteLLM과 Portkey 성능 비교 {#litellm-vs-portkey-performance-comparison}
 
-**Test Configuration**: 4 CPUs, 8 GB RAM per instance | Load: 1k concurrent users, 500 ramp-up
-**Versions:** Portkey **v1.14.0** | LiteLLM **v1.79.1-stable**  
-**Test Duration:** 5 minutes  
+**테스트 설정**: 인스턴스당 CPU 4개, RAM 8GB | 부하: 동시 사용자 1k명, ramp-up 500
+**버전:** Portkey **v1.14.0** | LiteLLM **v1.79.1-stable**  
+**테스트 시간:** 5분  
 
-### Multi-Instance (4×) Performance
+### 다중 인스턴스(4x) 성능 {#multi-instance-4-performance}
 
-| Metric              | Portkey (no DB) | LiteLLM (with DB) | Comment        |
+| 지표                | Portkey(DB 없음) | LiteLLM(DB 사용) | 설명           |
 | ------------------- | --------------- | ----------------- | -------------- |
-| **Total Requests**  | 293,796         | 312,405           | LiteLLM higher |
-| **Failed Requests** | 0               | 0                 | Same           |
-| **Median Latency**  | 100 ms          | 100 ms            | Same           |
-| **p95 Latency**     | 230 ms          | 150 ms            | LiteLLM lower  |
-| **p99 Latency**     | 500 ms          | 240 ms            | LiteLLM lower  |
-| **Average Latency** | 123 ms          | 111 ms            | LiteLLM lower  |
-| **Current RPS**     | 1,170.9         | 1,170             | Same           |
+| **총 요청 수**      | 293,796         | 312,405           | LiteLLM이 더 높음 |
+| **실패한 요청 수**  | 0               | 0                 | 동일           |
+| **중앙값 지연 시간** | 100 ms          | 100 ms            | 동일           |
+| **p95 지연 시간**   | 230 ms          | 150 ms            | LiteLLM이 더 낮음 |
+| **p99 지연 시간**   | 500 ms          | 240 ms            | LiteLLM이 더 낮음 |
+| **평균 지연 시간**  | 123 ms          | 111 ms            | LiteLLM이 더 낮음 |
+| **현재 RPS**        | 1,170.9         | 1,170             | 동일           |
 
 
-*Lower is better for latency metrics; higher is better for requests and RPS.*
+*지연 시간 지표는 낮을수록 좋고, 요청 수와 RPS는 높을수록 좋습니다.*
 
-### Technical Insights
+### 기술적 인사이트 {#technical-insights}
 
 **Portkey**
 
-**Pros**
+**장점**
 
-* Low memory footprint
-* Stable latency with minimal spikes
+* 메모리 사용량이 낮음
+* 스파이크가 적고 지연 시간이 안정적임
 
-**Cons**
+**단점**
 
-* CPU utilization capped around ~40%, indicating underutilization of available compute resources
-* Experienced three I/O timeout outages
+* CPU 사용률이 약 40%에서 제한되어, 사용 가능한 컴퓨팅 리소스를 충분히 활용하지 못하는 것으로 보임
+* I/O timeout 장애가 세 번 발생함
 
 **LiteLLM**
 
-**Pros**
+**장점**
 
-* Fully utilizes available CPU capacity
-* Strong connection handling and low latency after initial warm-up spikes
+* 사용 가능한 CPU 용량을 충분히 활용함
+* 초기 warm-up 스파이크 이후 연결 처리 성능이 좋고 지연 시간이 낮음
 
-**Cons**
+**단점**
 
-* High memory usage during initialization and per request
+* 초기화 중 및 요청당 메모리 사용량이 높음
 
 
 
-## Logging Callbacks
+## 로깅 콜백 {#logging-callbacks}
 
-### [GCS Bucket Logging](https://docs.litellm.ai/docs/observability/gcs_bucket_integration)
+### [GCS Bucket 로깅](https://docs.litellm.ai/docs/observability/gcs_bucket_integration) {#gcs-bucket-logging}
 
-Using GCS Bucket has **no impact on latency, RPS compared to Basic Litellm Proxy**
+GCS Bucket을 사용해도 기본 LiteLLM Proxy와 비교해 **지연 시간과 RPS에 영향이 없습니다**.
 
-| Metric | Basic Litellm Proxy | LiteLLM Proxy with GCS Bucket Logging |
+| 지표 | 기본 LiteLLM Proxy | GCS Bucket 로깅을 사용하는 LiteLLM Proxy |
 |--------|------------------------|---------------------|
 | RPS | 1133.2 | 1137.3 |
-| Median Latency (ms) | 140 | 138 |
+| 중앙값 지연 시간(ms) | 140 | 138 |
 
 
-### [LangSmith logging](https://docs.litellm.ai/docs/proxy/logging)
+### [LangSmith 로깅](https://docs.litellm.ai/docs/proxy/logging) {#langsmith-logging}
 
-Using LangSmith has **no impact on latency, RPS compared to Basic Litellm Proxy**
+LangSmith를 사용해도 기본 LiteLLM Proxy와 비교해 **지연 시간과 RPS에 영향이 없습니다**.
 
-| Metric | Basic Litellm Proxy | LiteLLM Proxy with LangSmith |
+| 지표 | 기본 LiteLLM Proxy | LangSmith를 사용하는 LiteLLM Proxy |
 |--------|------------------------|---------------------|
 | RPS | 1133.2 | 1135 |
-| Median Latency (ms) | 140 | 132 |
+| 중앙값 지연 시간(ms) | 140 | 132 |

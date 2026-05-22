@@ -2,17 +2,17 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Image from '@theme/IdealImage';
 
-# Custom API Server (Custom Format)
+# 사용자 지정 API 서버(`Custom Format`)
 
-Call your custom torch-serve / internal LLM APIs via LiteLLM
+LiteLLM을 통해 커스텀 torch-serve 또는 내부 LLM API를 호출합니다.
 
 :::info
 
-- For calling an openai-compatible endpoint, [go here](./openai_compatible.md)
-- For modifying incoming/outgoing calls on proxy, [go here](../proxy/call_hooks.md)
+- openai-compatible 엔드포인트 호출은 [여기](./openai_compatible.md)를 확인하세요.
+- 프록시에서 들어오는/나가는 호출을 수정하려면 [여기](../proxy/call_hooks.md)를 확인하세요.
 :::
 
-Supported Routes:
+지원 라우트:
 - `/v1/chat/completions` -> `litellm.acompletion`
 - `/v1/completions` -> `litellm.atext_completion`
 - `/v1/embeddings` -> `litellm.aembedding`
@@ -21,7 +21,7 @@ Supported Routes:
 
 - `/v1/messages` -> `litellm.acompletion`
 
-## Quick Start 
+## 빠른 시작 
 
 ```python showLineNumbers
 import litellm
@@ -50,9 +50,9 @@ resp = completion(
 assert resp.choices[0].message.content == "Hi!"
 ```
 
-## OpenAI Proxy Usage
+## OpenAI Proxy 사용법
 
-1. Setup your `custom_handler.py` file 
+1. `custom_handler.py` 파일을 설정합니다.
 
 ```python
 import litellm
@@ -78,12 +78,12 @@ class MyCustomLLM(CustomLLM):
 my_custom_llm = MyCustomLLM()
 ```
 
-2. Add to `config.yaml` 
+2. `config.yaml`에 추가합니다.
 
-In the config below, we pass
+아래 설정에서는 다음 값을 전달합니다.
 
 python_filename: `custom_handler.py`
-custom_handler_instance_name: `my_custom_llm`. This is defined in Step 1
+custom_handler_instance_name: `my_custom_llm`. 이 값은 1단계에서 정의했습니다.
 
 custom_handler: `custom_handler.my_custom_llm`
 
@@ -105,7 +105,7 @@ litellm_settings:
 litellm --config /path/to/config.yaml
 ```
 
-3. Test it! 
+3. 테스트합니다.
 
 ```bash
 curl -X POST 'http://0.0.0.0:4000/chat/completions' \
@@ -117,7 +117,7 @@ curl -X POST 'http://0.0.0.0:4000/chat/completions' \
 }'
 ```
 
-Expected Response
+예상 응답
 
 ```
 {
@@ -146,11 +146,11 @@ Expected Response
 }
 ```
 
-## Add Streaming Support 
+## 스트리밍 지원 추가
 
-Here's a simple example of returning unix epoch seconds for both completion + streaming use-cases. 
+completion과 streaming 사용 사례 모두에서 Unix epoch seconds를 반환하는 간단한 예시입니다.
 
-s/o [@Eloy Lafuente](https://github.com/stronk7) for this code example.
+이 코드 예시는 [@Eloy Lafuente](https://github.com/stronk7)에게 감사를 전합니다.
 
 ```python
 import time
@@ -196,9 +196,9 @@ class UnixTimeLLM(CustomLLM):
 unixtime = UnixTimeLLM()
 ```
 
-## Image Generation
+## 이미지 생성
 
-1. Setup your `custom_handler.py` file 
+1. `custom_handler.py` 파일을 설정합니다.
 ```python
 import litellm
 from litellm import CustomLLM
@@ -216,12 +216,12 @@ my_custom_llm = MyCustomLLM()
 ```
 
 
-2. Add to `config.yaml` 
+2. `config.yaml`에 추가합니다.
 
-In the config below, we pass
+아래 설정에서는 다음 값을 전달합니다.
 
 python_filename: `custom_handler.py`
-custom_handler_instance_name: `my_custom_llm`. This is defined in Step 1
+custom_handler_instance_name: `my_custom_llm`. 이 값은 1단계에서 정의했습니다.
 
 custom_handler: `custom_handler.my_custom_llm`
 
@@ -243,7 +243,7 @@ litellm_settings:
 litellm --config /path/to/config.yaml
 ```
 
-3. Test it! 
+3. 테스트합니다.
 
 ```bash
 curl -X POST 'http://0.0.0.0:4000/v1/images/generations' \
@@ -255,7 +255,7 @@ curl -X POST 'http://0.0.0.0:4000/v1/images/generations' \
 }'
 ```
 
-Expected Response
+예상 응답
 
 ```
 {
@@ -264,9 +264,9 @@ Expected Response
 }
 ```
 
-## Image Edit
+## 이미지 편집
 
-1. Setup your `custom_handler.py` file
+1. `custom_handler.py` 파일을 설정합니다.
 ```python
 import litellm
 from litellm import CustomLLM
@@ -298,12 +298,12 @@ my_custom_llm = MyCustomLLM()
 ```
 
 
-2. Add to `config.yaml`
+2. `config.yaml`에 추가합니다.
 
-In the config below, we pass
+아래 설정에서는 다음 값을 전달합니다.
 
 python_filename: `custom_handler.py`
-custom_handler_instance_name: `my_custom_llm`. This is defined in Step 1
+custom_handler_instance_name: `my_custom_llm`. 이 값은 1단계에서 정의했습니다.
 
 custom_handler: `custom_handler.my_custom_llm`
 
@@ -322,7 +322,7 @@ litellm_settings:
 litellm --config /path/to/config.yaml
 ```
 
-3. Test it!
+3. 테스트합니다.
 
 ```bash
 curl -X POST 'http://0.0.0.0:4000/v1/images/edits' \
@@ -332,7 +332,7 @@ curl -X POST 'http://0.0.0.0:4000/v1/images/edits' \
 -F 'prompt=Make the sky blue'
 ```
 
-Expected Response
+예상 응답
 
 ```
 {
@@ -343,10 +343,10 @@ Expected Response
 
 ## Anthropic `/v1/messages`
 
-- Write the integration for .acompletion
-- litellm will transform it to /v1/messages
+- `.acompletion`용 통합을 작성합니다.
+- litellm이 이를 `/v1/messages`로 변환합니다.
 
-1. Setup your `custom_handler.py` file 
+1. `custom_handler.py` 파일을 설정합니다.
 
 ```python
 import litellm
@@ -365,12 +365,12 @@ class MyCustomLLM(CustomLLM):
 my_custom_llm = MyCustomLLM()
 ```
 
-2. Add to `config.yaml` 
+2. `config.yaml`에 추가합니다.
 
-In the config below, we pass
+아래 설정에서는 다음 값을 전달합니다.
 
 python_filename: `custom_handler.py`
-custom_handler_instance_name: `my_custom_llm`. This is defined in Step 1
+custom_handler_instance_name: `my_custom_llm`. 이 값은 1단계에서 정의했습니다.
 
 custom_handler: `custom_handler.my_custom_llm`
 
@@ -392,7 +392,7 @@ litellm_settings:
 litellm --config /path/to/config.yaml
 ```
 
-3. Test it! 
+3. 테스트합니다.
 
 ```bash
 curl -L -X POST 'http://0.0.0.0:4000/v1/messages' \
@@ -413,7 +413,7 @@ curl -L -X POST 'http://0.0.0.0:4000/v1/messages' \
 }'
 ```
 
-Expected Response
+예상 응답
 
 ```json
 {
@@ -437,11 +437,11 @@ Expected Response
 ```
 
 
-## Additional Parameters
+## 추가 파라미터
 
-Additional parameters are passed inside `optional_params` key in the `completion` or `image_generation` function.
+추가 파라미터는 `completion` 또는 `image_generation` 함수의 `optional_params` 키 안에 전달됩니다.
 
-Here's how to set this: 
+설정 방법은 다음과 같습니다.
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -473,7 +473,7 @@ resp = completion(model="my-custom-llm/my-model", my_custom_param="my-custom-par
 <TabItem value="proxy" label="Proxy">
 
 
-1. Setup your `custom_handler.py` file 
+1. `custom_handler.py` 파일을 설정합니다.
 ```python
 import litellm
 from litellm import CustomLLM
@@ -492,12 +492,12 @@ my_custom_llm = MyCustomLLM()
 ```
 
 
-2. Add to `config.yaml` 
+2. `config.yaml`에 추가합니다.
 
-In the config below, we pass
+아래 설정에서는 다음 값을 전달합니다.
 
 python_filename: `custom_handler.py`
-custom_handler_instance_name: `my_custom_llm`. This is defined in Step 1
+custom_handler_instance_name: `my_custom_llm`. 이 값은 1단계에서 정의했습니다.
 
 custom_handler: `custom_handler.my_custom_llm`
 
@@ -520,7 +520,7 @@ litellm_settings:
 litellm --config /path/to/config.yaml
 ```
 
-3. Test it! 
+3. 테스트합니다.
 
 ```bash
 curl -X POST 'http://0.0.0.0:4000/v1/images/generations' \
@@ -537,7 +537,7 @@ curl -X POST 'http://0.0.0.0:4000/v1/images/generations' \
 
 
 
-## Custom Handler Spec
+## Custom Handler 사양
 
 ```python
 from litellm.types.utils import GenericStreamingChunk, ModelResponse, ImageResponse

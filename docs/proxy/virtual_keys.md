@@ -2,41 +2,41 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Image from '@theme/IdealImage';
 
-# Virtual Keys
-Track Spend, and control model access via virtual keys for the proxy
+# 가상 키
+프록시의 가상 키로 지출을 추적하고 모델 접근을 제어합니다.
 
 :::info
 
-- 🔑 [UI to Generate, Edit, Delete Keys (with SSO)](https://docs.litellm.ai/docs/proxy/ui)
-- [Deploy LiteLLM Proxy with Key Management](https://docs.litellm.ai/docs/proxy/deploy#deploy-with-database)
-- [Dockerfile.database for LiteLLM Proxy + Key Management](https://github.com/BerriAI/litellm/blob/main/docker/Dockerfile.database)
+- 🔑 [키 생성, 편집, 삭제 UI(SSO 포함)](https://docs.litellm.ai/docs/proxy/ui)
+- [키 관리를 포함해 LiteLLM Proxy 배포](https://docs.litellm.ai/docs/proxy/deploy#deploy-with-database)
+- [LiteLLM Proxy + 키 관리용 Dockerfile.database](https://github.com/BerriAI/litellm/blob/main/docker/Dockerfile.database)
 
 
 :::
 
-## Setup
+## 설정 {#setup}
 
-Requirements: 
+요구 사항:
 
-- Need a postgres database (e.g. [Supabase](https://supabase.com/), [Neon](https://neon.tech/), etc)
-- Set `DATABASE_URL=postgresql://<user>:<password>@<host>:<port>/<dbname>` in your env 
-- Set a `master key`, this is your Proxy Admin key - you can use this to create other keys (🚨 must start with `sk-`).
-  - ** Set on config.yaml** set your master key under `general_settings:master_key`, example below
-  - ** Set env variable** set `LITELLM_MASTER_KEY`
+- postgres 데이터베이스가 필요합니다(예: [Supabase](https://supabase.com/), [Neon](https://neon.tech/) 등).
+- 환경 변수에 `DATABASE_URL=postgresql://<user>:<password>@<host>:<port>/<dbname>`을 설정합니다.
+- `master key`를 설정합니다. 이 키는 Proxy Admin 키이며 다른 키를 생성할 때 사용할 수 있습니다(🚨 반드시 `sk-`로 시작해야 함).
+  - **config.yaml에서 설정** 아래 예시처럼 `general_settings:master_key` 아래에 master key를 설정합니다.
+  - **환경 변수로 설정** `LITELLM_MASTER_KEY`를 설정합니다.
 
-(the proxy Dockerfile checks if the `DATABASE_URL` is set and then initializes the DB connection)
+(프록시 Dockerfile은 `DATABASE_URL` 설정 여부를 확인한 뒤 DB 연결을 초기화합니다.)
 
 ```shell
 export DATABASE_URL=postgresql://<user>:<password>@<host>:<port>/<dbname>
 ```
 
 
-You can then generate keys by hitting the `/key/generate` endpoint.
+그 다음 `/key/generate` 엔드포인트를 호출해 키를 생성할 수 있습니다.
 
 [**See code**](https://github.com/BerriAI/litellm/blob/7a669a36d2689c7f7890bc9c93e04ff3c2641299/litellm/proxy/proxy_server.py#L672)
 
-## **Quick Start - Generate a Key**
-**Step 1: Save postgres db url**
+## **빠른 시작 - 키 생성**
+**1단계: postgres DB URL 저장**
 
 ```yaml
 model_list:
@@ -52,13 +52,13 @@ general_settings:
   database_url: "postgresql://<user>:<password>@<host>:<port>/<dbname>" # 👈 KEY CHANGE
 ```
 
-**Step 2: Start litellm**
+**2단계: litellm 시작**
 
 ```shell
 litellm --config /path/to/config.yaml
 ```
 
-**Step 3: Generate keys**
+**3단계: 키 생성**
 
 ```shell 
 curl 'http://0.0.0.0:4000/key/generate' \
@@ -67,26 +67,26 @@ curl 'http://0.0.0.0:4000/key/generate' \
 --data-raw '{"models": ["gpt-3.5-turbo", "gpt-4"], "metadata": {"user": "ishaan@berri.ai"}}'
 ```
 
-## Spend Tracking 
+## 비용 추적 
 
-Get spend per:
-- key - via `/key/info` [Swagger](https://litellm-api.up.railway.app/#/key%20management/info_key_fn_key_info_get)
-- user - via `/user/info` [Swagger](https://litellm-api.up.railway.app/#/user%20management/user_info_user_info_get)
-- team - via `/team/info` [Swagger](https://litellm-api.up.railway.app/#/team%20management/team_info_team_info_get)  
-- ⏳ end-users - via `/end_user/info` - [Comment on this issue for end-user cost tracking](https://github.com/BerriAI/litellm/issues/2633)
+다음 단위별 지출을 조회할 수 있습니다.
+- key - `/key/info` 사용 [Swagger](https://litellm-api.up.railway.app/#/key%20management/info_key_fn_key_info_get)
+- user - `/user/info` 사용 [Swagger](https://litellm-api.up.railway.app/#/user%20management/user_info_user_info_get)
+- team - `/team/info` 사용 [Swagger](https://litellm-api.up.railway.app/#/team%20management/team_info_team_info_get)
+- ⏳ end-users - `/end_user/info` 사용 - [end-user 비용 추적은 이 이슈에 댓글](https://github.com/BerriAI/litellm/issues/2633)
 
-**How is it calculated?**
+**어떻게 계산되나요?**
 
-The cost per model is stored [here](https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json) and calculated by the [`completion_cost`](https://github.com/BerriAI/litellm/blob/db7974f9f216ee50b53c53120d1e3fc064173b60/litellm/utils.py#L3771) function.
+모델별 비용은 [여기](https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json)에 저장되며 [`completion_cost`](https://github.com/BerriAI/litellm/blob/db7974f9f216ee50b53c53120d1e3fc064173b60/litellm/utils.py#L3771) 함수로 계산됩니다.
 
-**How is it tracking?**
+**어떻게 추적되나요?**
 
-Spend is automatically tracked for the key in the "LiteLLM_VerificationTokenTable". If the key has an attached 'user_id' or 'team_id', the spend for that user is tracked in the "LiteLLM_UserTable", and team in the "LiteLLM_TeamTable".
+키의 지출은 `LiteLLM_VerificationTokenTable`에서 자동으로 추적됩니다. 키에 `user_id` 또는 `team_id`가 연결되어 있으면 해당 사용자의 지출은 `LiteLLM_UserTable`에서, 팀 지출은 `LiteLLM_TeamTable`에서 추적됩니다.
 
 <Tabs>
 <TabItem value="key-info" label="Key Spend">
 
-You can get spend for a key by using the `/key/info` endpoint. 
+`/key/info` 엔드포인트를 사용해 키의 지출을 가져올 수 있습니다.
 
 ```bash
 curl 'http://0.0.0.0:4000/key/info?key=<user-key>' \
@@ -94,9 +94,9 @@ curl 'http://0.0.0.0:4000/key/info?key=<user-key>' \
      -H 'Authorization: Bearer <your-master-key>'
 ```
 
-This is automatically updated (in USD) when calls are made to /completions, /chat/completions, /embeddings using litellm's completion_cost() function. [**See Code**](https://github.com/BerriAI/litellm/blob/1a6ea20a0bb66491968907c2bfaabb7fe45fc064/litellm/utils.py#L1654). 
+LiteLLM의 completion_cost() 함수를 사용해 /completions, /chat/completions, /embeddings 호출이 발생하면 이 값은 USD 기준으로 자동 업데이트됩니다. [**코드 보기**](https://github.com/BerriAI/litellm/blob/1a6ea20a0bb66491968907c2bfaabb7fe45fc064/litellm/utils.py#L1654).
 
-**Sample response**
+**샘플 응답**
 
 ```python
 {
@@ -121,7 +121,7 @@ This is automatically updated (in USD) when calls are made to /completions, /cha
 </TabItem>
 <TabItem value="user-info" label="User Spend">
 
-**1. Create a user**
+**1. 사용자 생성**
 
 ```bash
 curl --location 'http://localhost:4000/user/new' \
@@ -130,7 +130,7 @@ curl --location 'http://localhost:4000/user/new' \
 --data-raw '{user_email: "krrish@berri.ai"}' 
 ```
 
-**Expected Response**
+**예상 응답**
 
 ```bash
 {
@@ -141,7 +141,7 @@ curl --location 'http://localhost:4000/user/new' \
 }
 ```
 
-**2. Create a key for that user**
+**2. 해당 사용자용 키 생성**
 
 ```bash
 curl 'http://0.0.0.0:4000/key/generate' \
@@ -150,9 +150,9 @@ curl 'http://0.0.0.0:4000/key/generate' \
 --data-raw '{"models": ["gpt-3.5-turbo", "gpt-4"], "user_id": "my-unique-id"}'
 ```
 
-Returns a key - `sk-...`.
+키 `sk-...`를 반환합니다.
 
-**3. See spend for user**
+**3. 사용자 지출 확인**
 
 ```bash
 curl 'http://0.0.0.0:4000/user/info?user_id=my-unique-id' \
@@ -160,7 +160,7 @@ curl 'http://0.0.0.0:4000/user/info?user_id=my-unique-id' \
      -H 'Authorization: Bearer <your-master-key>'
 ```
 
-Expected Response
+예상 응답
 
 ```bash
 {
@@ -172,9 +172,9 @@ Expected Response
 </TabItem>
 <TabItem value="team-info" label="Team Spend">
 
-Use teams, if you want keys to be owned by multiple people (e.g. for a production app).
+여러 사람이 키를 소유해야 한다면(예: 프로덕션 앱) team을 사용하세요.
 
-**1. Create a team**
+**1. 팀 생성**
 
 ```bash
 curl --location 'http://localhost:4000/team/new' \
@@ -183,7 +183,7 @@ curl --location 'http://localhost:4000/team/new' \
 --data-raw '{"team_alias": "my-awesome-team"}' 
 ```
 
-**Expected Response**
+**예상 응답**
 
 ```bash
 {
@@ -194,7 +194,7 @@ curl --location 'http://localhost:4000/team/new' \
 }
 ```
 
-**2. Create a key for that team**
+**2. 해당 팀용 키 생성**
 
 ```bash
 curl 'http://0.0.0.0:4000/key/generate' \
@@ -203,9 +203,9 @@ curl 'http://0.0.0.0:4000/key/generate' \
 --data-raw '{"models": ["gpt-3.5-turbo", "gpt-4"], "team_id": "my-unique-id"}'
 ```
 
-Returns a key - `sk-...`.
+키 `sk-...`를 반환합니다.
 
-**3. See spend for team**
+**3. 팀 지출 확인**
 
 ```bash
 curl 'http://0.0.0.0:4000/team/info?team_id=my-unique-id' \
@@ -213,7 +213,7 @@ curl 'http://0.0.0.0:4000/team/info?team_id=my-unique-id' \
      -H 'Authorization: Bearer <your-master-key>'
 ```
 
-Expected Response
+예상 응답
 
 ```bash
 {
@@ -226,16 +226,16 @@ Expected Response
 </Tabs>
 
 
-## Model Aliases
+## 모델 alias {#model-aliases}
 
-If a user is expected to use a given model (i.e. gpt3-5), and you want to:
+사용자가 특정 모델(예: gpt3-5)을 사용할 것으로 예상되고 다음을 원한다면:
 
-- try to upgrade the request (i.e. GPT4)
-- or downgrade it (i.e. Mistral)
+- 요청을 업그레이드(예: GPT4)
+- 또는 다운그레이드(예: Mistral)
 
-Here's how you can do that: 
+다음과 같이 설정할 수 있습니다.
 
-**Step 1: Create a model group in config.yaml (save model name, api keys, etc.)**
+**1단계: config.yaml에 모델 그룹 생성(모델 이름, API 키 등 저장)**
 
 ```yaml
 model_list:
@@ -257,7 +257,7 @@ model_list:
         api_key: my-api-key
 ```
 
-**Step 2: Generate a key**
+**2단계: 키 생성**
 
 ```bash
 curl -X POST "https://0.0.0.0:4000/key/generate" \
@@ -270,9 +270,9 @@ curl -X POST "https://0.0.0.0:4000/key/generate" \
 }'
 ```
 
-- **How to upgrade / downgrade request?** Change the alias mapping
+- **요청을 업그레이드/다운그레이드하려면?** alias 매핑을 변경합니다.
 
-**Step 3: Test the key**
+**3단계: 키 테스트**
 
 ```bash
 curl -X POST "https://0.0.0.0:4000/key/generate" \
@@ -290,13 +290,13 @@ curl -X POST "https://0.0.0.0:4000/key/generate" \
 ```
 
 
-## Advanced
+## 고급
 
-### Pass LiteLLM Key in custom header
+### custom header로 LiteLLM 키 전달 {#pass-litellm-key-in-custom-header}
 
-Use this to make LiteLLM proxy look for the virtual key in a custom header instead of the default `"Authorization"` header
+LiteLLM 프록시가 기본 `"Authorization"` 헤더 대신 custom header에서 가상 키를 찾도록 하려면 이 기능을 사용합니다.
 
-**Step 1** Define `litellm_key_header_name` name on litellm config.yaml
+**1단계** LiteLLM config.yaml에서 `litellm_key_header_name` 이름을 정의합니다.
 
 ```yaml
 model_list:
@@ -312,9 +312,9 @@ general_settings:
 
 ```
 
-**Step 2** Test it
+**2단계** 테스트
 
-In this request, litellm will use the Virtual key in the `X-Litellm-Key` header
+이 요청에서 LiteLLM은 `X-Litellm-Key` 헤더의 가상 키를 사용합니다.
 
 <Tabs>
 <TabItem value="curl" label="curl">
@@ -332,9 +332,9 @@ curl http://localhost:4000/v1/chat/completions \
   }'
 ```
 
-**Expected Response**
+**예상 응답**
 
-Expect to see a successful response from the litellm proxy since the key passed in `X-Litellm-Key` is valid
+`X-Litellm-Key`로 전달된 키가 유효하므로 LiteLLM 프록시에서 성공 응답을 볼 수 있어야 합니다.
 ```shell
 {"id":"chatcmpl-f9b2b79a7c30477ab93cd0e717d1773e","choices":[{"finish_reason":"stop","index":0,"message":{"content":"\n\nHello there, how may I assist you today?","role":"assistant","tool_calls":null,"function_call":null}}],"created":1677652288,"model":"gpt-3.5-turbo-0125","object":"chat.completion","system_fingerprint":"fp_44709d6fcb","usage":{"completion_tokens":12,"prompt_tokens":9,"total_tokens":21}
 ```
@@ -356,9 +356,9 @@ client = openai.OpenAI(
 </TabItem>
 </Tabs>
 
-### Enable/Disable Virtual Keys
+### Enable/Disable 가상 키
 
-**Disable Keys**
+**키 비활성화**
 
 ```bash
 curl -L -X POST 'http://0.0.0.0:4000/key/block' \
@@ -367,7 +367,7 @@ curl -L -X POST 'http://0.0.0.0:4000/key/block' \
 -d '{"key": "KEY-TO-BLOCK"}'
 ```
 
-Expected Response: 
+예상 응답:
 
 ```bash
 {
@@ -376,7 +376,7 @@ Expected Response:
 }
 ```
 
-**Enable Keys**
+**키 활성화**
 
 ```bash
 curl -L -X POST 'http://0.0.0.0:4000/key/unblock' \
@@ -394,16 +394,16 @@ curl -L -X POST 'http://0.0.0.0:4000/key/unblock' \
 ```
 
 
-### Custom /key/generate
+### Custom 키 생성 {#custom-keygenerate}
 
-If you need to add custom logic before generating a Proxy API Key (Example Validating `team_id`)
+Proxy API Key를 생성하기 전에 custom logic을 추가해야 한다면 사용합니다(예: `team_id` 검증).
 
-#### 1. Write a custom `custom_generate_key_fn`
+#### 1. custom `custom_generate_key_fn` 작성
 
 
-The input to the custom_generate_key_fn function is a single parameter: `data` [(Type: GenerateKeyRequest)](https://github.com/BerriAI/litellm/blob/main/litellm/proxy/_types.py#L125)
+custom_generate_key_fn 함수의 입력은 단일 파라미터 `data`입니다. [(Type: GenerateKeyRequest)](https://github.com/BerriAI/litellm/blob/main/litellm/proxy/_types.py#L125)
 
-The output of your `custom_generate_key_fn` should be a dictionary with the following structure
+`custom_generate_key_fn`의 출력은 다음 구조의 딕셔너리여야 합니다.
 ```python
 {
     "decision": False,
@@ -412,9 +412,9 @@ The output of your `custom_generate_key_fn` should be a dictionary with the foll
 
 ```
 
-- decision (Type: bool): A boolean value indicating whether the key generation is allowed (True) or not (False).
+- `decision` (Type: bool): 키 생성을 허용할지(True) 여부(False)를 나타내는 boolean 값입니다.
 
-- message (Type: str, Optional): An optional message providing additional information about the decision. This field is included when the decision is False.
+- `message` (타입: str, 선택 사항): 결정에 대한 추가 정보를 제공하는 선택적 메시지입니다. `decision`이 False일 때 이 필드가 포함됩니다.
 
 
 ```python
@@ -464,11 +464,11 @@ async def custom_generate_key_fn(data: GenerateKeyRequest)-> dict:
 ```
 
 
-#### 2. Pass the filepath (relative to the config.yaml)
+#### 2. 파일 경로 전달(config.yaml 기준 상대 경로)
 
-Pass the filepath to the config.yaml 
+파일 경로를 config.yaml에 전달합니다.
 
-e.g. if they're both in the same dir - `./config.yaml` and `./custom_auth.py`, this is what it looks like:
+예를 들어 `./config.yaml`과 `./custom_auth.py`가 같은 디렉터리에 있다면 다음과 같습니다.
 ```yaml 
 model_list: 
   - model_name: "openai-model"
@@ -484,8 +484,8 @@ general_settings:
 ```
 
 
-### Upperbound /key/generate params
-Use this, if you need to set default upperbounds for `max_budget`, `budget_duration` or any `key/generate` param per key. 
+### /key/generate 파라미터 상한
+키별로 `max_budget`, `budget_duration` 또는 임의의 `key/generate` 파라미터에 기본 상한을 설정해야 한다면 사용합니다.
 
 Set `litellm_settings:upperbound_key_generate_params`:
 ```yaml
@@ -499,15 +499,15 @@ litellm_settings:
     rpm_limit: 1000 #(Optional[int], optional): Rpm limit. Defaults to None.
 ```
 
-** Expected Behavior **
+**예상 동작**
 
-- Send a `/key/generate` request with `max_budget=200`
-- Key will be created with `max_budget=100` since 100 is the upper bound
+- `max_budget=200`으로 `/key/generate` 요청을 보냅니다.
+- 100이 상한이므로 키는 `max_budget=100`으로 생성됩니다.
 
-### Default /key/generate params
-Use this, if you need to control the default `max_budget` or any `key/generate` param per key. 
+### 기본 /key/generate 파라미터
+키별 기본 `max_budget` 또는 임의의 `key/generate` 파라미터를 제어해야 한다면 사용합니다.
 
-When a `/key/generate` request does not specify `max_budget`, it will use the `max_budget` specified in `default_key_generate_params`
+`/key/generate` 요청이 `max_budget`을 지정하지 않으면 `default_key_generate_params`에 지정된 `max_budget`을 사용합니다.
 
 Set `litellm_settings:default_key_generate_params`:
 ```yaml
@@ -520,20 +520,20 @@ litellm_settings:
     team_id: "core-infra"
 ```
 
-### ✨ Key Rotations 
+### ✨ 키 회전
 
 :::info
 
-This is an Enterprise feature.
+엔터프라이즈 기능입니다.
 
-[Enterprise Pricing](https://www.litellm.ai/#pricing)
+[엔터프라이즈 Pricing](https://www.litellm.ai/#pricing)
 
 [Get free 7-day trial key](https://www.litellm.ai/enterprise#trial)
 
 
 :::
 
-Rotate an existing API Key, while optionally updating its parameters.
+기존 API 키를 회전하면서 선택적으로 파라미터를 업데이트합니다.
 
 ```bash
 
@@ -555,34 +555,34 @@ curl 'http://localhost:4000/key/sk-1234/regenerate' \
 
 ```
 
-**Grace period (optional)**: Set `grace_period` (e.g. `"24h"`, `"2d"`, `"1w"`) to keep the old key valid for a transitional period. Both old and new keys work until the grace period elapses, enabling seamless cutover without production downtime. Omitted or empty = immediate revoke. Can also be set via `LITELLM_KEY_ROTATION_GRACE_PERIOD` env var for scheduled rotations.
+**Grace period(선택 사항)**: `grace_period`(예: `"24h"`, `"2d"`, `"1w"`)를 설정하면 전환 기간 동안 이전 키를 유효하게 유지할 수 있습니다. grace period가 끝날 때까지 이전 키와 새 키가 모두 동작하므로 프로덕션 중단 없이 전환할 수 있습니다. 생략하거나 비워두면 즉시 revoke됩니다. 예약 회전에서는 `LITELLM_KEY_ROTATION_GRACE_PERIOD` 환경 변수로도 설정할 수 있습니다.
 
-**Read More**
+**더 읽기**
 
-- [Write rotated keys to secrets manager](https://docs.litellm.ai/docs/secret#aws-secret-manager)
+- [회전된 키를 secrets manager에 쓰기](https://docs.litellm.ai/docs/secret#aws-secret-manager)
 
 [**👉 API REFERENCE DOCS**](https://litellm-api.up.railway.app/#/key%20management/regenerate_key_fn_key__key__regenerate_post)
 
 
-### Scheduled Key Rotations
+### 예약 키 회전 {#scheduled-key-rotations}
 
-LiteLLM can rotate **virtual keys automatically** based on time intervals you define.
+LiteLLM은 사용자가 정의한 시간 간격에 따라 **가상 키를 자동으로** 회전할 수 있습니다.
 
-#### Prerequisites
+#### 사전 준비
 
-1. **Database connection required** - Key rotation requires a connected database to track rotation schedules
-2. **Enable the rotation worker** - Set environment variable `LITELLM_KEY_ROTATION_ENABLED=true`
-3. **Configure check interval** - Optionally set `LITELLM_KEY_ROTATION_CHECK_INTERVAL_SECONDS` (default: 86400 seconds / 24 hours)
+1. **데이터베이스 연결 필요** - 키 회전 일정을 추적하려면 연결된 데이터베이스가 필요합니다.
+2. **회전 worker 활성화** - 환경 변수 `LITELLM_KEY_ROTATION_ENABLED=true`를 설정합니다.
+3. **검사 간격 설정** - 선택적으로 `LITELLM_KEY_ROTATION_CHECK_INTERVAL_SECONDS`를 설정합니다(기본값: 86400초 / 24시간).
 
-#### How it works
+#### 동작 방식
 
-1. When creating a virtual key, set `auto_rotate: true` and `rotation_interval` (duration string)
-2. LiteLLM calculates the next rotation time as `now + rotation_interval` and stores it in the database
-3. A background job periodically checks for keys where the rotation time has passed
-4. When a key is due for rotation, LiteLLM automatically regenerates it and invalidates the old key string
-5. The new rotation time is calculated and the cycle continues
+1. 가상 키를 생성할 때 `auto_rotate: true`와 `rotation_interval`(duration string)을 설정합니다.
+2. LiteLLM은 다음 회전 시간을 `now + rotation_interval`로 계산해 데이터베이스에 저장합니다.
+3. 백그라운드 작업이 회전 시간이 지난 키를 주기적으로 확인합니다.
+4. 키 회전 시점이 되면 LiteLLM이 자동으로 키를 다시 생성하고 이전 키 문자열을 무효화합니다.
+5. 새 회전 시간이 계산되고 이 주기가 계속됩니다.
 
-#### Create a key with auto rotation
+#### 자동 회전 키 생성
 
 **API**
 ```bash
@@ -598,20 +598,20 @@ curl 'http://0.0.0.0:4000/key/generate' \
 
 **LiteLLM UI**
 
-On the LiteLLM UI, Navigate to the Keys page and click on `Generate Key` > `Key Lifecycle` > `Enable Auto Rotation`
+LiteLLM UI에서 Keys 페이지로 이동한 뒤 `Generate Key` > `Key Lifecycle` > `Enable Auto Rotation`을 클릭합니다.
 <Image 
   img={require('../../img/key_r.png')}
   style={{width: '30%', display: 'block', margin: '0'}}
 />
 
-**Valid rotation_interval formats:**
-- `"30s"` - 30 seconds
-- `"30m"` - 30 minutes
-- `"30h"` - 30 hours
-- `"30d"` - 30 days
-- `"90d"` - 90 days
+**유효한 rotation_interval 형식:**
+- `"30s"` - 30초
+- `"30m"` - 30분
+- `"30h"` - 30시간
+- `"30d"` - 30일
+- `"90d"` - 90일
 
-#### Update existing key to enable rotation
+#### 기존 키에 회전 활성화
 
 **API**
 
@@ -628,24 +628,24 @@ curl 'http://0.0.0.0:4000/key/update' \
 
 **LiteLLM UI**
 
-On the LiteLLM UI, Navigate to the Keys page. Select the key you want to update and click on `Edit Settings` > `Auto-Rotation Settings`
+LiteLLM UI에서 Keys 페이지로 이동합니다. 업데이트할 키를 선택하고 `Edit Settings` > `Auto-Rotation Settings`를 클릭합니다.
 
 <Image 
   img={require('../../img/key_u.png')}
   style={{width: '30%', display: 'block', margin: '0'}}
 />
 
-#### Environment variables
+#### 환경 변수
 
-Set these environment variables when starting the proxy:
+프록시를 시작할 때 다음 환경 변수를 설정합니다.
 
-| Variable | Description | Default |
+| 변수 | 설명 | 기본값 |
 |----------|-------------|---------|
-| `LITELLM_KEY_ROTATION_ENABLED` | Enable the rotation worker | `false` |
-| `LITELLM_KEY_ROTATION_CHECK_INTERVAL_SECONDS` | How often to scan for keys to rotate (in seconds) | `86400` (24 hours) |
-| `LITELLM_KEY_ROTATION_GRACE_PERIOD` | Duration to keep old key valid after rotation (e.g. `24h`, `2d`) | `""` (immediate revoke) |
+| `LITELLM_KEY_ROTATION_ENABLED` | 회전 worker 활성화 | `false` |
+| `LITELLM_KEY_ROTATION_CHECK_INTERVAL_SECONDS` | 회전할 키를 스캔하는 주기(초) | `86400` (24시간) |
+| `LITELLM_KEY_ROTATION_GRACE_PERIOD` | 회전 후 이전 키를 유효하게 유지할 기간(예: `24h`, `2d`) | `""` (즉시 revoke) |
 
-**Example:**
+**예제:**
 ```bash
 export LITELLM_KEY_ROTATION_ENABLED=true
 export LITELLM_KEY_ROTATION_CHECK_INTERVAL_SECONDS=3600  # Check every hour
@@ -654,9 +654,9 @@ export LITELLM_KEY_ROTATION_GRACE_PERIOD=48h  # Keep old key valid for 48h durin
 litellm --config config.yaml
 ```
 
-### Temporary Budget Increase
+### 임시 예산 증액 {#temporary-budget-increase}
 
-Use the `/key/update` endpoint to increase the budget of an existing key. 
+기존 키의 예산을 늘리려면 `/key/update` 엔드포인트를 사용합니다.
 
 ```bash
 curl -L -X POST 'http://localhost:4000/key/update' \
@@ -665,12 +665,12 @@ curl -L -X POST 'http://localhost:4000/key/update' \
 -d '{"key": "sk-b3Z3Lqdb_detHXSUp4ol4Q", "temp_budget_increase": 100, "temp_budget_expiry": "10d"}'
 ```
 
-[API Reference](https://litellm-api.up.railway.app/#/key%20management/update_key_fn_key_update_post)
+[API 레퍼런스](https://litellm-api.up.railway.app/#/key%20management/update_key_fn_key_update_post)
 
 
-### Restricting Key Generation
+### 키 생성 제한 {#restricting-key-generation}
 
-Use this to control who can generate keys. Useful when letting others create keys on the UI. 
+누가 키를 생성할 수 있는지 제어할 때 사용합니다. 다른 사용자가 UI에서 키를 만들 수 있도록 허용할 때 유용합니다.
 
 ```yaml
 litellm_settings:
@@ -682,13 +682,13 @@ litellm_settings:
       allowed_user_roles: ["proxy_admin"]
 ```
 
-#### Spec 
+#### 스펙
 
 ```python
 key_generation_settings: Optional[StandardKeyGenerationConfig] = None
 ```
 
-#### Types
+#### 타입
 
 ```python
 class StandardKeyGenerationConfig(TypedDict, total=False):
@@ -745,11 +745,11 @@ class LitellmUserRoles(str, enum.Enum):
 ```
 
 
-## **Next Steps - Set Budgets, Rate Limits per Virtual Key**
+## **다음 단계 - 가상 키별 예산 및 Rate Limit 설정**
 
-[Follow this doc to set budgets, rate limiters per virtual key with LiteLLM](users)
+[LiteLLM에서 가상 키별 예산과 rate limiter를 설정하려면 이 문서를 따르세요](users)
 
-## Endpoint Reference (Spec)
+## 엔드포인트 레퍼런스(스펙)
 
 ### Keys 
 
@@ -763,7 +763,3 @@ class LitellmUserRoles(str, enum.Enum):
 ### Teams
 
 #### [**👉 API REFERENCE DOCS**](https://litellm-api.up.railway.app/#/team%20management)
-
-
-
-

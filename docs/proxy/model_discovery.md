@@ -1,8 +1,8 @@
-# Model Discovery
+# 모델 검색
 
-Use this to give users an accurate list of models available behind provider endpoint, when calling `/v1/models` for wildcard models.
+wildcard 모델에서 `/v1/models`를 호출할 때 provider endpoint 뒤에서 사용할 수 있는 정확한 모델 목록을 사용자에게 제공하려면 이 기능을 사용하세요.
 
-## Supported Models
+## Supported 모델
 
 - Fireworks AI
 - OpenAI
@@ -14,9 +14,9 @@ Use this to give users an accurate list of models available behind provider endp
 - VLLM
 - Vertex AI
 
-### Usage
+### 사용법
 
-**1. Setup config.yaml**
+**1. config.yaml 설정**
 
 ```yaml
 model_list:
@@ -29,7 +29,7 @@ litellm_settings:
     check_provider_endpoint: true # 👈 Enable checking provider endpoint for wildcard models
 ```
 
-**2. Start proxy**
+**2. proxy 시작**
 
 ```bash
 litellm --config /path/to/config.yaml
@@ -37,13 +37,13 @@ litellm --config /path/to/config.yaml
 # RUNNING on http://0.0.0.0:4000
 ```
 
-**3. Call `/v1/models`**
+**3. `/v1/models` 호출**
 
 ```bash
 curl -X GET "http://localhost:4000/v1/models" -H "Authorization: Bearer $LITELLM_KEY"
 ```
 
-Expected response
+예상 응답
 
 ```json
 {

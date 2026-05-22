@@ -2,21 +2,21 @@ import Image from '@theme/IdealImage';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Fallbacks
+# 폴백
 
-If a call fails after num_retries, fallback to another model group. 
+호출이 num_retries 이후에도 실패하면 다른 모델 그룹으로 폴백합니다. 
 
-- Quick Start [load balancing](./load_balancing.md)
-- Quick Start [client side fallbacks](#client-side-fallbacks)
+- 빠른 시작 [부하 분산](./load_balancing.md)
+- 빠른 시작 [클라이언트 측 폴백](#client-side-fallbacks)
 
 
-Fallbacks are typically done from one `model_name` to another `model_name`. 
+폴백은 일반적으로 한 `model_name`에서 다른 `model_name`으로 수행됩니다. 
 
-## Quick Start 
+## 빠른 시작 
 
-### 1. Setup fallbacks
+### 1. 폴백 설정
 
-Key change: 
+핵심 변경 사항: 
 
 ```python
 fallbacks=[{"gpt-3.5-turbo": ["gpt-4"]}]
@@ -54,7 +54,7 @@ router = Router(
 ```
 
 </TabItem>
-<TabItem value="proxy" label="PROXY">
+<TabItem value="proxy" label="Proxy">
 
 
 ```yaml
@@ -81,15 +81,15 @@ router_settings:
 </Tabs>
 
 
-### 2. Start Proxy
+### 2. Proxy 시작
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-### 3. Test Fallbacks
+### 3. 폴백 테스트
 
-Pass `mock_testing_fallbacks=true` in request body, to trigger fallbacks.
+폴백을 트리거하려면 요청 본문에 `mock_testing_fallbacks=true`를 전달합니다.
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -111,7 +111,7 @@ response = router.completion(
 ```
 
 </TabItem>
-<TabItem value="proxy" label="PROXY">
+<TabItem value="proxy" label="Proxy">
 
 ```bash
 curl -X POST 'http://0.0.0.0:4000/chat/completions' \
@@ -136,28 +136,28 @@ curl -X POST 'http://0.0.0.0:4000/chat/completions' \
 
 
 
-### Explanation
+### 설명
 
-Fallbacks are done in-order - ["gpt-3.5-turbo, "gpt-4", "gpt-4-32k"], will do 'gpt-3.5-turbo' first, then 'gpt-4', etc.
+폴백은 순서대로 수행됩니다. ["gpt-3.5-turbo, "gpt-4", "gpt-4-32k"]는 먼저 'gpt-3.5-turbo'를 시도한 다음 'gpt-4'를 시도하는 방식입니다.
 
-You can also set [`default_fallbacks`](#default-fallbacks), in case a specific model group is misconfigured / bad.
+특정 모델 그룹이 잘못 설정되었거나 문제가 있는 경우를 대비해 [`default_fallbacks`](#default-fallbacks)도 설정할 수 있습니다.
 
-There are 3 types of fallbacks: 
-- `content_policy_fallbacks`: For litellm.ContentPolicyViolationError - LiteLLM maps content policy violation errors across providers [**See Code**](https://github.com/BerriAI/litellm/blob/89a43c872a1e3084519fb9de159bf52f5447c6c4/litellm/utils.py#L8495C27-L8495C54)
-- `context_window_fallbacks`: For litellm.ContextWindowExceededErrors - LiteLLM maps context window error messages across providers [**See Code**](https://github.com/BerriAI/litellm/blob/89a43c872a1e3084519fb9de159bf52f5447c6c4/litellm/utils.py#L8469)
-- `fallbacks`: For all remaining errors - e.g. litellm.RateLimitError
+폴백에는 3가지 유형이 있습니다. 
+- `content_policy_fallbacks`: litellm.ContentPolicyViolationError용입니다. LiteLLM은 프로바이더 전반의 콘텐츠 정책 위반 오류를 매핑합니다. [**코드 보기**](https://github.com/BerriAI/litellm/blob/89a43c872a1e3084519fb9de159bf52f5447c6c4/litellm/utils.py#L8495C27-L8495C54)
+- `context_window_fallbacks`: litellm.ContextWindowExceededErrors용입니다. LiteLLM은 프로바이더 전반의 컨텍스트 창 오류 메시지를 매핑합니다. [**코드 보기**](https://github.com/BerriAI/litellm/blob/89a43c872a1e3084519fb9de159bf52f5447c6c4/litellm/utils.py#L8469)
+- `fallbacks`: 나머지 모든 오류용입니다. 예: litellm.RateLimitError
 
 
-## Client Side Fallbacks
+## 클라이언트 측 폴백 {#client-side-fallbacks}
 
-Set fallbacks in the `.completion()` call for SDK and client-side for proxy. 
+SDK에서는 `.completion()` 호출에, Proxy에서는 클라이언트 측 요청에 폴백을 설정합니다. 
 
-In this request the following will occur:
-1. The request to `model="zephyr-beta"` will fail
-2. litellm proxy will loop through all the model_groups specified in `fallbacks=["gpt-3.5-turbo"]`
-3. The request to `model="gpt-3.5-turbo"` will succeed and the client making the request will get a response from gpt-3.5-turbo 
+이 요청에서는 다음이 발생합니다.
+1. `model="zephyr-beta"` 요청이 실패합니다.
+2. litellm proxy가 `fallbacks=["gpt-3.5-turbo"]`에 지정된 모든 model_groups를 순회합니다.
+3. `model="gpt-3.5-turbo"` 요청이 성공하고, 요청한 클라이언트는 gpt-3.5-turbo의 응답을 받습니다. 
 
-👉 Key Change: `"fallbacks": ["gpt-3.5-turbo"]`
+👉 핵심 변경 사항: `"fallbacks": ["gpt-3.5-turbo"]`
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -183,7 +183,7 @@ print(resp)
 ```
 
 </TabItem>
-<TabItem value="proxy" label="PROXY">
+<TabItem value="proxy" label="Proxy">
 
 <Tabs>
 <TabItem value="openai" label="OpenAI Python v1.0.0+">
@@ -212,7 +212,7 @@ print(response)
 ```
 </TabItem>
 
-<TabItem value="Curl" label="Curl Request">
+<TabItem value="Curl" label="Curl 요청">
 
 ```shell
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -271,11 +271,11 @@ print(response)
 
 </Tabs>
 
-### Control Fallback Prompts  
+### 폴백 프롬프트 제어  
 
-Pass in messages/temperature/etc. per model in fallback (works for embedding/image generation/etc. as well).
+폴백의 모델별로 messages/temperature 등을 전달합니다(embedding/image generation 등에서도 작동).
 
-Key Change:
+핵심 변경 사항:
 
 ```
 fallbacks = [
@@ -311,7 +311,7 @@ print(resp)
 ```
 
 </TabItem>
-<TabItem value="proxy" label="PROXY">
+<TabItem value="proxy" label="Proxy">
 
 <Tabs>
 <TabItem value="openai" label="OpenAI Python v1.0.0+">
@@ -343,7 +343,7 @@ print(response)
 ```
 </TabItem>
 
-<TabItem value="Curl" label="Curl Request">
+<TabItem value="Curl" label="Curl 요청">
 
 ```bash
 curl -L -X POST 'http://0.0.0.0:4000/v1/chat/completions' \
@@ -416,9 +416,9 @@ print(response)
 </TabItem>
 </Tabs>
 
-## Content Policy Violation Fallback
+## 콘텐츠 정책 위반 폴백
 
-Key change: 
+핵심 변경 사항: 
 
 ```python
 content_policy_fallbacks=[{"claude-2": ["my-fallback-model"]}]
@@ -460,16 +460,16 @@ response = router.completion(
 )
 ```
 </TabItem>
-<TabItem value="proxy" label="PROXY">
+<TabItem value="proxy" label="Proxy">
 
-In your proxy config.yaml just add this line 👇
+proxy config.yaml에 다음 줄만 추가합니다. 👇
 
 ```yaml
 router_settings:
   content_policy_fallbacks=[{"claude-2": ["my-fallback-model"]}]
 ```
 
-Start proxy 
+proxy 시작 
 
 ```bash
 litellm --config /path/to/config.yaml
@@ -480,9 +480,9 @@ litellm --config /path/to/config.yaml
 </TabItem>
 </Tabs>
 
-## Context Window Exceeded Fallback
+## 컨텍스트 창 초과 폴백
 
-Key change: 
+핵심 변경 사항: 
 
 ```python
 context_window_fallbacks=[{"claude-2": ["my-fallback-model"]}]
@@ -524,16 +524,16 @@ response = router.completion(
 )
 ```
 </TabItem>
-<TabItem value="proxy" label="PROXY">
+<TabItem value="proxy" label="Proxy">
 
-In your proxy config.yaml just add this line 👇
+proxy config.yaml에 다음 줄만 추가합니다. 👇
 
 ```yaml
 router_settings:
   context_window_fallbacks=[{"claude-2": ["my-fallback-model"]}]
 ```
 
-Start proxy 
+proxy 시작 
 
 ```bash
 litellm --config /path/to/config.yaml
@@ -544,19 +544,19 @@ litellm --config /path/to/config.yaml
 </TabItem>
 </Tabs>
 
-## Advanced
-### Fallbacks + Retries + Timeouts + Cooldowns
+## 고급
+### 폴백 + 재시도 + 타임아웃 + 쿨다운
 
-To set fallbacks, just do: 
+폴백을 설정하려면 다음처럼 지정하면 됩니다. 
 
 ```
 litellm_settings:
   fallbacks: [{"zephyr-beta": ["gpt-3.5-turbo"]}] 
 ```
 
-**Covers all errors (429, 500, etc.)**
+**모든 오류(429, 500 등)에 적용됩니다.**
 
-**Set via config**
+**config로 설정**
 ```yaml
 model_list:
   - model_name: zephyr-beta
@@ -588,13 +588,13 @@ litellm_settings:
   cooldown_time: 30 # how long to cooldown model if fails/min > allowed_fails
 ```
 
-### Fallback to Specific Model ID
+### 특정 모델 ID로 폴백
 
-If all models in a group are in cooldown (e.g. rate limited), LiteLLM will fallback to the model with the specific model ID.
+그룹의 모든 모델이 쿨다운 상태(예: 속도 제한)인 경우 LiteLLM은 특정 모델 ID가 있는 모델로 폴백합니다.
 
-This skips any cooldown check for the fallback model.
+이 경우 폴백 모델에 대한 쿨다운 검사를 건너뜁니다.
 
-1. Specify the model ID in `model_info`
+1. `model_info`에 모델 ID 지정
 ```yaml
 model_list:
   - model_name: gpt-4
@@ -613,16 +613,16 @@ model_list:
       api_key: os.environ/ANTHROPIC_API_KEY
 ```
 
-**Note:** This will only fallback to the model with the specific model ID. If you want to fallback to another model group, you can set `fallbacks=[{"gpt-4": ["anthropic-claude"]}]`
+**참고:** 이 설정은 특정 모델 ID가 있는 모델로만 폴백합니다. 다른 모델 그룹으로 폴백하려면 `fallbacks=[{"gpt-4": ["anthropic-claude"]}]`를 설정할 수 있습니다.
 
-2. Set fallbacks in config
+2. config에 폴백 설정
 
 ```yaml
 litellm_settings:
   fallbacks: [{"gpt-4": ["my-specific-model-id"]}]
 ```
 
-3. Test it!
+3. 테스트합니다.
 
 ```bash
 curl -X POST 'http://0.0.0.0:4000/chat/completions' \
@@ -640,17 +640,17 @@ curl -X POST 'http://0.0.0.0:4000/chat/completions' \
 }'
 ```
 
-Validate it works, by checking the response header `x-litellm-model-id`
+응답 헤더 `x-litellm-model-id`를 확인해 정상 동작을 검증합니다.
 
 ```bash
 x-litellm-model-id: my-specific-model-id
 ```
 
-### Test Fallbacks! 
+### 폴백 테스트 
 
-Check if your fallbacks are working as expected. 
+폴백이 예상대로 작동하는지 확인합니다. 
 
-#### **Regular Fallbacks**
+#### **일반 폴백**
 ```bash
 curl -X POST 'http://0.0.0.0:4000/chat/completions' \
 -H 'Content-Type: application/json' \
@@ -669,7 +669,7 @@ curl -X POST 'http://0.0.0.0:4000/chat/completions' \
 ```
 
 
-#### **Content Policy Fallbacks**
+#### **콘텐츠 정책 폴백**
 ```bash
 curl -X POST 'http://0.0.0.0:4000/chat/completions' \
 -H 'Content-Type: application/json' \
@@ -687,7 +687,7 @@ curl -X POST 'http://0.0.0.0:4000/chat/completions' \
 '
 ```
 
-#### **Context Window Fallbacks**
+#### **컨텍스트 창 폴백**
 
 ```bash
 curl -X POST 'http://0.0.0.0:4000/chat/completions' \
@@ -707,24 +707,24 @@ curl -X POST 'http://0.0.0.0:4000/chat/completions' \
 ```
 
 
-### Context Window Fallbacks (Pre-Call Checks + Fallbacks)
+### 컨텍스트 창 폴백(사전 호출 검사 + 폴백) {#advanced---context-window-fallbacks}
 
-**Before call is made** check if a call is within model context window with  **`enable_pre_call_checks: true`**.
+**호출이 이루어지기 전에** **`enable_pre_call_checks: true`**로 호출이 모델 컨텍스트 창 안에 있는지 확인합니다.
 
-[**See Code**](https://github.com/BerriAI/litellm/blob/c9e6b05cfb20dfb17272218e2555d6b496c47f6f/litellm/router.py#L2163)
+[**코드 보기**](https://github.com/BerriAI/litellm/blob/c9e6b05cfb20dfb17272218e2555d6b496c47f6f/litellm/router.py#L2163)
 
 :::important
-**`enable_pre_call_checks` is required** for context-window enforcement. Without it, requests are sent to the provider regardless of input token count. Set `enable_pre_call_checks: true` in `router_settings` in your config.
+컨텍스트 창을 강제하려면 **`enable_pre_call_checks`가 필요합니다**. 이 설정이 없으면 입력 토큰 수와 관계없이 요청이 프로바이더로 전송됩니다. config의 `router_settings`에 `enable_pre_call_checks: true`를 설정하세요.
 :::
 
-#### Custom max_input_tokens per deployment
+#### 배포별 사용자 지정 max_input_tokens
 
-You can override the default context limit for a deployment by setting `max_input_tokens` in `model_info`. This is useful for testing, rate-limiting long prompts, or enforcing stricter limits than the provider's default.
+`model_info`에 `max_input_tokens`를 설정해 배포의 기본 컨텍스트 제한을 재정의할 수 있습니다. 테스트, 긴 프롬프트의 속도 제한, 또는 프로바이더 기본값보다 더 엄격한 제한을 강제할 때 유용합니다.
 
-**Both** of the following are required:
+다음 **두 가지가 모두** 필요합니다.
 
-1. **`router_settings.enable_pre_call_checks: true`** — enables pre-call checks
-2. **`model_info.max_input_tokens`** on the deployment — overrides the limit for that model
+1. **`router_settings.enable_pre_call_checks: true`** - 사전 호출 검사를 활성화합니다.
+2. 배포의 **`model_info.max_input_tokens`** - 해당 모델의 제한을 재정의합니다.
 
 ```yaml
 router_settings:
@@ -739,17 +739,17 @@ model_list:
       max_input_tokens: 10  # Override: reject prompts > 10 tokens
 ```
 
-If a request exceeds the limit, LiteLLM raises `ContextWindowExceededError` with details like `Model=gpt-4o, Max Input Tokens=10, Got=306`.
+요청이 제한을 초과하면 LiteLLM은 `Model=gpt-4o, Max Input Tokens=10, Got=306` 같은 세부 정보와 함께 `ContextWindowExceededError`를 발생시킵니다.
 
-**1. Setup config**
+**1. config 설정**
 
-For azure deployments, set the base model. Pick the base model from [this list](https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json), all the azure models start with azure/.
+azure 배포에서는 기본 모델을 설정합니다. [이 목록](https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json)에서 기본 모델을 선택하세요. 모든 azure 모델은 azure/로 시작합니다.
 
 
 <Tabs>
-<TabItem value="same-group" label="Same Group">
+<TabItem value="same-group" label="같은 그룹">
 
-Filter older instances of a model (e.g. gpt-3.5-turbo) with smaller context windows
+컨텍스트 창이 더 작은 모델의 이전 인스턴스(예: gpt-3.5-turbo)를 필터링합니다.
 
 ```yaml
 router_settings:
@@ -771,7 +771,7 @@ model_list:
     api_key: os.environ/OPENAI_API_KEY
 ```
 
-**2. Start proxy**
+**2. proxy 시작**
 
 ```bash
 litellm --config /path/to/config.yaml
@@ -779,7 +779,7 @@ litellm --config /path/to/config.yaml
 # RUNNING on http://0.0.0.0:4000
 ```
 
-**3. Test it!**
+**3. 테스트합니다.**
 
 ```python
 import openai
@@ -804,9 +804,9 @@ print(response)
 
 </TabItem>
 
-<TabItem value="different-group" label="Context Window Fallbacks (Different Groups)">
+<TabItem value="different-group" label="컨텍스트 창 폴백(다른 그룹)">
 
-Fallback to larger models if current model is too small.
+현재 모델이 너무 작으면 더 큰 모델로 폴백합니다.
 
 ```yaml
 router_settings:
@@ -836,7 +836,7 @@ litellm_settings:
   context_window_fallbacks: [{"gpt-3.5-turbo-small": ["gpt-3.5-turbo-large", "claude-opus"]}]
 ```
 
-**2. Start proxy**
+**2. proxy 시작**
 
 ```bash
 litellm --config /path/to/config.yaml
@@ -844,7 +844,7 @@ litellm --config /path/to/config.yaml
 # RUNNING on http://0.0.0.0:4000
 ```
 
-**3. Test it!**
+**3. 테스트합니다.**
 
 ```python
 import openai
@@ -871,9 +871,9 @@ print(response)
 </Tabs>
 
 
-### Content Policy Fallbacks
+### 콘텐츠 정책 폴백
 
-Fallback across providers (e.g. from Azure OpenAI to Anthropic) if you hit content policy violation errors. 
+콘텐츠 정책 위반 오류가 발생하면 프로바이더 간(예: Azure OpenAI에서 Anthropic으로) 폴백합니다. 
 
 ```yaml
 model_list:
@@ -895,9 +895,9 @@ litellm_settings:
 
 
 
-### Default Fallbacks 
+### 기본 폴백 {#default-fallbacks}
 
-You can also set default_fallbacks, in case a specific model group is misconfigured / bad.
+특정 모델 그룹이 잘못 설정되었거나 문제가 있는 경우를 대비해 default_fallbacks도 설정할 수 있습니다.
 
 
 ```yaml
@@ -918,19 +918,19 @@ litellm_settings:
   default_fallbacks: ["claude-opus"]
 ```
 
-This will default to claude-opus in case any model fails.
+이렇게 하면 어떤 모델이든 실패할 때 기본적으로 claude-opus를 사용합니다.
 
-A model-specific fallbacks (e.g. `{"gpt-3.5-turbo-small": ["claude-opus"]}`) overrides default fallback.
+모델별 폴백(예: `{"gpt-3.5-turbo-small": ["claude-opus"]}`)은 기본 폴백보다 우선합니다.
 
-### EU-Region Filtering (Pre-Call Checks)
+### EU 리전 필터링(사전 호출 검사)
 
-**Before call is made** check if a call is within model context window with  **`enable_pre_call_checks: true`**.
+**호출이 이루어지기 전에** **`enable_pre_call_checks: true`**로 호출이 모델 컨텍스트 창 안에 있는지 확인합니다.
 
-Set 'region_name' of deployment. 
+배포의 'region_name'을 설정합니다. 
 
-**Note:** LiteLLM can automatically infer region_name for Vertex AI, Bedrock, and IBM WatsonxAI based on your litellm params. For Azure, set `litellm.enable_preview = True`.
+**참고:** LiteLLM은 litellm params를 기반으로 Vertex AI, Bedrock, IBM WatsonxAI의 region_name을 자동 추론할 수 있습니다. Azure의 경우 `litellm.enable_preview = True`를 설정하세요.
 
-**1. Set Config**
+**1. config 설정**
 
 ```yaml
 router_settings:
@@ -957,7 +957,7 @@ model_list:
     vertex_location: us-east1 # 👈 AUTOMATICALLY INFERS 'region_name'
 ```
 
-**2. Start proxy**
+**2. proxy 시작**
 
 ```bash
 litellm --config /path/to/config.yaml
@@ -965,7 +965,7 @@ litellm --config /path/to/config.yaml
 # RUNNING on http://0.0.0.0:4000
 ```
 
-**3. Test it!**
+**3. 테스트합니다.**
 
 ```python
 import openai
@@ -985,11 +985,11 @@ print(response)
 print(f"response.headers.get('x-litellm-model-api-base')")
 ```
 
-### Setting Fallbacks for Wildcard Models
+### 와일드카드 모델에 폴백 설정
 
-You can set fallbacks for wildcard models (e.g. `azure/*`) in your config file.
+config 파일에서 와일드카드 모델(예: `azure/*`)에 대한 폴백을 설정할 수 있습니다.
 
-1. Setup config
+1. config 설정
 ```yaml
 model_list:
   - model_name: "gpt-4o"
@@ -1006,12 +1006,12 @@ litellm_settings:
   fallbacks: [{"gpt-4o": ["azure/gpt-4o"]}]
 ```
 
-2. Start Proxy
+2. Proxy 시작
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-3. Test it!
+3. 테스트합니다.
 
 ```bash
 curl -L -X POST 'http://0.0.0.0:4000/v1/chat/completions' \
@@ -1035,14 +1035,14 @@ curl -L -X POST 'http://0.0.0.0:4000/v1/chat/completions' \
 }'
 ```
 
-### Disable Fallbacks (Per Request/Key)
+### 폴백 비활성화(요청/키별)
 
 
 <Tabs>
 
-<TabItem value="request" label="Per Request">
+<TabItem value="request" label="요청별">
 
-You can disable fallbacks per key by setting `disable_fallbacks: true` in your request body.
+요청 본문에 `disable_fallbacks: true`를 설정해 요청별로 폴백을 비활성화할 수 있습니다.
 
 ```bash
 curl -L -X POST 'http://0.0.0.0:4000/v1/chat/completions' \
@@ -1062,9 +1062,9 @@ curl -L -X POST 'http://0.0.0.0:4000/v1/chat/completions' \
 
 </TabItem>
 
-<TabItem value="key" label="Per Key">
+<TabItem value="key" label="키별">
 
-You can disable fallbacks per key by setting `disable_fallbacks: true` in your key metadata.
+키 metadata에 `disable_fallbacks: true`를 설정해 키별로 폴백을 비활성화할 수 있습니다.
 
 ```bash
 curl -L -X POST 'http://0.0.0.0:4000/key/generate' \

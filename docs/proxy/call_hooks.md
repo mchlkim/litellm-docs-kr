@@ -1,33 +1,33 @@
 import Image from '@theme/IdealImage';
 
-# Modify / Reject Incoming Requests
+# 들어오는 요청 수정 / 거부
 
-- Modify data before making llm api calls on proxy
-- Reject data before making llm api calls / before returning the response 
-- Enforce 'user' param for all openai endpoint calls
+- 프록시에서 LLM API 호출을 만들기 전에 데이터 수정
+- LLM API 호출 전 또는 응답을 반환하기 전에 데이터 거부
+- 모든 OpenAI 엔드포인트 호출에 'user' 매개변수 적용
 
 :::tip
-**Understanding Callback Hooks?** Check out our [Callback Guide](../observability/callbacks.md) to understand the differences between proxy-specific hooks like `async_pre_call_hook` and general logging hooks like `async_log_success_event`.
+**Callback Hook이 궁금하신가요?** `async_pre_call_hook` 같은 프록시 전용 훅과 `async_log_success_event` 같은 일반 로깅 훅의 차이는 [Callback 가이드](../observability/callbacks.md)에서 확인하세요.
 :::
 
-## Which Hook Should I Use?
+## 어떤 훅을 사용해야 하나요?
 
-| Hook | Use Case | When It Runs |
+| 훅 | 사용 사례 | 실행 시점 |
 |------|----------|--------------|
-| `async_pre_call_hook` | Modify incoming request before it's sent to model | Before the LLM API call is made |
-| `async_moderation_hook` | Run checks on input in parallel to LLM API call | In parallel with the LLM API call |
-| `async_post_call_success_hook` | Modify outgoing response (non-streaming) | After successful LLM API call, for non-streaming responses |
-| `async_post_call_failure_hook` | Transform error responses sent to clients | After failed LLM API call |
-| `async_post_call_streaming_hook` | Modify outgoing response (streaming) | After successful LLM API call, for streaming responses |
-| `async_post_call_response_headers_hook` | Inject custom HTTP response headers | After LLM API call (both success and failure) |
+| `async_pre_call_hook` | 모델로 보내기 전에 들어오는 요청 수정 | LLM API 호출이 생성되기 전 |
+| `async_moderation_hook` | 입력 검사를 LLM API 호출과 병렬로 실행 | LLM API 호출과 병렬 |
+| `async_post_call_success_hook` | 나가는 응답 수정(비스트리밍) | LLM API 호출 성공 후, 비스트리밍 응답 대상 |
+| `async_post_call_failure_hook` | 클라이언트에 전송되는 오류 응답 변환 | LLM API 호출 실패 후 |
+| `async_post_call_streaming_hook` | 나가는 응답 수정(스트리밍) | LLM API 호출 성공 후, 스트리밍 응답 대상 |
+| `async_post_call_response_headers_hook` | 사용자 지정 HTTP 응답 헤더 삽입 | LLM API 호출 후(성공 및 실패 모두) |
 
-See a complete example with our [parallel request rate limiter](https://github.com/BerriAI/litellm/blob/main/litellm/proxy/hooks/parallel_request_limiter.py)
+[parallel request rate limiter](https://github.com/BerriAI/litellm/blob/main/litellm/proxy/hooks/parallel_request_limiter.py)에서 전체 예제를 확인하세요.
 
-## Quick Start
+## 빠른 시작
 
-1. In your Custom Handler add a new `async_pre_call_hook` function
+1. Custom Handler에 새 `async_pre_call_hook` 함수를 추가합니다.
 
-This function is called just before a litellm completion call is made, and allows you to modify the data going into the litellm call [**See Code**](https://github.com/BerriAI/litellm/blob/589a6ca863000ba8e92c897ba0f776796e7a5904/litellm/proxy/proxy_server.py#L1000)
+이 함수는 litellm completion 호출이 생성되기 직전에 호출되며, litellm 호출로 들어가는 데이터를 수정할 수 있습니다. [**코드 보기**](https://github.com/BerriAI/litellm/blob/589a6ca863000ba8e92c897ba0f776796e7a5904/litellm/proxy/proxy_server.py#L1000)
 
 ```python
 from litellm.integrations.custom_logger import CustomLogger
@@ -131,7 +131,7 @@ class MyCustomHandler(CustomLogger): # https://docs.litellm.ai/docs/observabilit
 proxy_handler_instance = MyCustomHandler()
 ```
 
-2. Add this file to your proxy config
+2. 이 파일을 프록시 config에 추가합니다.
 
 ```yaml
 model_list:
@@ -143,7 +143,7 @@ litellm_settings:
   callbacks: custom_callbacks.proxy_handler_instance # sets litellm.callbacks = [proxy_handler_instance]
 ```
 
-3. Start the server + test the request
+3. 서버를 시작하고 요청을 테스트합니다.
 
 ```shell
 $ litellm /path/to/config.yaml
@@ -164,24 +164,24 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 ```
 
 
-## [BETA] *NEW* async_moderation_hook 
+## [베타] *신규* async_moderation_hook 
 
-Run a moderation check in parallel to the actual LLM API call. 
+실제 LLM API 호출과 병렬로 moderation 검사를 실행합니다.
 
-In your Custom Handler add a new `async_moderation_hook` function
+Custom Handler에 새 `async_moderation_hook` 함수를 추가합니다.
 
-- This is currently only supported for `/chat/completion` calls. 
-- This function runs in parallel to the actual LLM API call. 
-- If your `async_moderation_hook` raises an Exception, we will return that to the user. 
+- 현재 `/chat/completion` 호출에서만 지원됩니다.
+- 이 함수는 실제 LLM API 호출과 병렬로 실행됩니다.
+- `async_moderation_hook`에서 Exception이 발생하면 해당 Exception을 사용자에게 반환합니다.
 
 
 :::info
 
-We might need to update the function schema in the future, to support multiple endpoints (e.g. accept a call_type). Please keep that in mind, while trying this feature
+향후 여러 엔드포인트를 지원하기 위해 함수 스키마를 업데이트해야 할 수 있습니다(예: call_type 수락). 이 기능을 사용해 볼 때 이 점을 염두에 두세요.
 
 :::
 
-See a complete example with our [Llama Guard content moderation hook](https://github.com/BerriAI/litellm/blob/main/enterprise/enterprise_hooks/llm_guard.py)
+[Llama Guard content moderation hook](https://github.com/BerriAI/litellm/blob/main/enterprise/enterprise_hooks/llm_guard.py)에서 전체 예제를 확인하세요.
 
 ```python
 from litellm.integrations.custom_logger import CustomLogger
@@ -227,7 +227,7 @@ proxy_handler_instance = MyCustomHandler()
 ```
 
 
-2. Add this file to your proxy config
+2. 이 파일을 프록시 config에 추가합니다.
 
 ```yaml
 model_list:
@@ -239,7 +239,7 @@ litellm_settings:
   callbacks: custom_callbacks.proxy_handler_instance # sets litellm.callbacks = [proxy_handler_instance]
 ```
 
-3. Start the server + test the request
+3. 서버를 시작하고 요청을 테스트합니다.
 
 ```shell
 $ litellm /path/to/config.yaml
@@ -257,31 +257,31 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
     }'
 ```
 
-## Advanced - Enforce 'user' param 
+## 고급 - 'user' 매개변수 적용
 
-Set `enforce_user_param` to true, to require all calls to the openai endpoints to have the 'user' param. 
+OpenAI 엔드포인트에 대한 모든 호출에 'user' 매개변수가 포함되도록 하려면 `enforce_user_param`을 true로 설정합니다.
 
-[**See Code**](https://github.com/BerriAI/litellm/blob/4777921a31c4c70e4d87b927cb233b6a09cd8b51/litellm/proxy/auth/auth_checks.py#L72)
+[**코드 보기**](https://github.com/BerriAI/litellm/blob/4777921a31c4c70e4d87b927cb233b6a09cd8b51/litellm/proxy/auth/auth_checks.py#L72)
 
 ```yaml
 general_settings:
   enforce_user_param: True
 ```
 
-**Result**
+**결과**
 
 <Image img={require('../../img/end_user_enforcement.png')}/>
 
-## Advanced - Return rejected message as response 
+## 고급 - 거부된 메시지를 응답으로 반환
 
-For chat completions and text completion calls, you can return a rejected message as a user response. 
+chat completions 및 text completion 호출에서는 거부된 메시지를 사용자 응답으로 반환할 수 있습니다.
 
-Do this by returning a string. LiteLLM takes care of returning the response in the correct format depending on the endpoint and if it's streaming/non-streaming.
+문자열을 반환하면 됩니다. LiteLLM은 엔드포인트와 스트리밍/비스트리밍 여부에 따라 올바른 형식으로 응답을 반환합니다.
 
-For non-chat/text completion endpoints, this response is returned as a 400 status code exception. 
+chat/text completion이 아닌 엔드포인트에서는 이 응답이 400 상태 코드 예외로 반환됩니다.
 
 
-### 1. Create Custom Handler 
+### 1. Custom Handler 생성
 
 ```python
 from litellm.integrations.custom_logger import CustomLogger
@@ -314,7 +314,7 @@ class MyCustomHandler(CustomLogger):
 proxy_handler_instance = MyCustomHandler()
 ```
 
-### 2. Update config.yaml 
+### 2. config.yaml 업데이트
 
 ```yaml
 model_list:
@@ -327,7 +327,7 @@ litellm_settings:
 ```
 
 
-### 3. Test it!
+### 3. 테스트
 
 ```shell
 $ litellm /path/to/config.yaml
@@ -345,7 +345,7 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
     }'
 ```
 
-**Expected Response**
+**예상 응답**
 
 ```
 {
@@ -368,9 +368,9 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 }
 ```
 
-## Advanced - Transform Error Responses
+## 고급 - 오류 응답 변환
 
-Transform technical API errors into user-friendly messages using `async_post_call_failure_hook`. Return an `HTTPException` to replace the original error, or `None` to use the original exception.
+`async_post_call_failure_hook`을 사용해 기술적인 API 오류를 사용자 친화적인 메시지로 변환합니다. 원래 오류를 대체하려면 `HTTPException`을 반환하고, 원래 예외를 사용하려면 `None`을 반환합니다.
 
 ```python
 from litellm.integrations.custom_logger import CustomLogger
@@ -401,11 +401,11 @@ class MyErrorTransformer(CustomLogger):
 proxy_handler_instance = MyErrorTransformer()
 ```
 
-**Result:** Clients receive `"Your prompt is too long..."` instead of `"ContextWindowExceededError: Prompt exceeds context window"`.
+**결과:** 클라이언트는 `"ContextWindowExceededError: Prompt exceeds context window"` 대신 `"Your prompt is too long..."`를 받습니다.
 
-## Advanced - Inject Custom HTTP Response Headers
+## 고급 - 사용자 지정 HTTP 응답 헤더 삽입
 
-Use `async_post_call_response_headers_hook` to inject custom HTTP headers into responses. This hook runs for **both successful and failed** LLM API calls.
+`async_post_call_response_headers_hook`을 사용해 응답에 사용자 지정 HTTP 헤더를 삽입합니다. 이 훅은 LLM API 호출 **성공 및 실패 모두**에서 실행됩니다.
 
 ```python
 from litellm.integrations.custom_logger import CustomLogger

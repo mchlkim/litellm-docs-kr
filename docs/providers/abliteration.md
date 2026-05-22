@@ -1,24 +1,24 @@
 # Abliteration
 
-## Overview
+## 개요 {#overview}
 
-| Property | Details |
+| 속성 | 세부 정보 |
 |-------|-------|
-| Description | Abliteration provides an OpenAI-compatible `/chat/completions` endpoint. |
-| Provider Route on LiteLLM | `abliteration/` |
-| Link to Provider Doc | [Abliteration](https://abliteration.ai) |
-| Base URL | `https://api.abliteration.ai/v1` |
-| Supported Operations | [`/chat/completions`](#sample-usage) |
+| 설명 | Abliteration은 OpenAI 호환 `/chat/completions` 엔드포인트를 제공합니다. |
+| LiteLLM의 제공자 경로 | `abliteration/` |
+| 제공자 문서 링크 | [Abliteration](https://abliteration.ai) |
+| 기본 URL | `https://api.abliteration.ai/v1` |
+| 지원 작업 | [`/chat/completions`](#sample-usage) |
 
 <br />
 
-## Required Variables
+## 필수 변수 {#required-variables}
 
 ```python showLineNumbers title="Environment Variables"
 os.environ["ABLITERATION_API_KEY"] = ""  # your Abliteration API key
 ```
 
-## Sample Usage
+## 샘플 사용법 {#sample-usage}
 
 ```python showLineNumbers title="Abliteration Completion"
 import os
@@ -34,7 +34,7 @@ response = completion(
 print(response)
 ```
 
-## Sample Usage - Streaming
+## 샘플 사용법 - Streaming {#sample-usage-streaming}
 
 ```python showLineNumbers title="Abliteration Streaming Completion"
 import os
@@ -52,9 +52,9 @@ for chunk in response:
     print(chunk)
 ```
 
-## Usage with LiteLLM Proxy Server
+## LiteLLM Proxy Server 사용법 {#usage-with-litellm-proxy-server}
 
-1. Add the model to your proxy config:
+1. 프록시 설정에 모델을 추가합니다.
 
 ```yaml showLineNumbers title="config.yaml"
 model_list:
@@ -64,15 +64,15 @@ model_list:
       api_key: os.environ/ABLITERATION_API_KEY
 ```
 
-2. Start the proxy:
+2. 프록시를 시작합니다.
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-## Direct API Usage (Bearer Token)
+## Direct API 사용법 (Bearer Token) {#direct-api-usage-bearer-token}
 
-Use the environment variable as a Bearer token against the OpenAI-compatible endpoint:
+OpenAI 호환 엔드포인트에 대해 환경 변수를 Bearer token으로 사용합니다.
 `https://api.abliteration.ai/v1/chat/completions`.
 
 ```bash showLineNumbers title="cURL"

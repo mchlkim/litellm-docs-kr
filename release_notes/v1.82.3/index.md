@@ -1,5 +1,5 @@
 ---
-title: "v1.82.3 - Nebius AI, gpt-5.4, Gemini 3.x, FLUX Kontext, and 116 New Models"
+title: "v1.82.3 - Nebius AI, gpt-5.4, Gemini 3.x, FLUX Kontext, 신규 모델 116개"
 slug: "v1-82-3"
 date: 2026-03-16T00:00:00
 authors:
@@ -14,7 +14,7 @@ authors:
 hide_table_of_contents: false
 ---
 
-## Deploy this version
+## 이 버전 배포
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -39,495 +39,495 @@ pip install litellm==1.82.3
 </TabItem>
 </Tabs>
 
-## Key Highlights
+## 주요 하이라이트
 
-- **Nebius AI — new provider** — [30 models across DeepSeek, Qwen, Llama, Mistral, NVIDIA, and BAAI available via Nebius AI cloud](../../docs/providers/nebius) - [PR #22614](https://github.com/BerriAI/litellm/pull/22614)
-- **OpenAI gpt-5.4 / gpt-5.4-pro — day 0** — Full pricing and routing support for `gpt-5.4` (1M context, $2.50/$15.00) and `gpt-5.4-pro` ($30.00/$180.00) on OpenAI and Azure
-- **Gemini 3.x models** — `gemini-3-flash-preview`, `gemini-3.1-pro-preview`, `gemini-3.1-flash-image-preview`, and `gemini-embedding-2-preview` added to cost map for Google AI and Vertex AI
-- **FLUX Kontext image editing** — `flux-kontext-pro` and `flux-kontext-max` added to Black Forest Labs, alongside `flux-pro-1.0-fill` and `flux-pro-1.0-expand` for inpainting and outpainting
-- **116 new models, 132 deprecated models cleaned up** — Major model map refresh including Mistral Magistral, Dashscope Qwen3 VL, xAI Grok via Azure AI, ZAI GLM-5, Serper Search; removal of OpenAI GPT-3.5/GPT-4 legacy variants, Gemini 1.5, and Vertex AI PaLM2
-- **SageMaker Nova provider** — [New `sagemaker_nova` provider for Amazon Nova models on SageMaker](../../docs/providers/aws_sagemaker) - [PR #21542](https://github.com/BerriAI/litellm/pull/21542)
-- **Hashicorp Vault secret manager** — Config override backend powered by Hashicorp Vault, with full UI for managing vault-sourced credentials - [PR #22939](https://github.com/BerriAI/litellm/pull/22939), [PR #23036](https://github.com/BerriAI/litellm/pull/23036)
-- **Responses API WebSocket streaming** — Real-time WebSocket streaming for the Responses API, including support across all providers - [PR #22559](https://github.com/BerriAI/litellm/pull/22559), [PR #22771](https://github.com/BerriAI/litellm/pull/22771)
-- **Org Admin RBAC expansion** — Org Admins can now access team management endpoints, view and invite internal users, and manage team membership without requiring a global admin role - [PR #23085](https://github.com/BerriAI/litellm/pull/23085), [PR #23080](https://github.com/BerriAI/litellm/pull/23080)
-- **Guardrail mode defaults and tag-based modes** — Set a default guardrail mode list globally, and specify a list of modes in tag-based guardrail configs - [PR #22676](https://github.com/BerriAI/litellm/pull/22676), [PR #23020](https://github.com/BerriAI/litellm/pull/23020)
-- **Secret redaction in logs** — API keys, tokens, and credentials automatically scrubbed from all proxy log output. Enabled by default; opt out with `LITELLM_DISABLE_REDACT_SECRETS=true` - [PR #23668](https://github.com/BerriAI/litellm/pull/23668)
-- **Streaming stability fix** — Critical fix for `RuntimeError: Cannot send a request, as the client has been closed.` crashes after ~1 hour in production - [PR #22926](https://github.com/BerriAI/litellm/pull/22926)
+- **Nebius AI — 신규 제공자** — [Nebius AI 클라우드에서 DeepSeek, Qwen, Llama, Mistral, NVIDIA, BAAI 계열 30개 모델 사용 가능](../../docs/providers/nebius) - [PR #22614](https://github.com/BerriAI/litellm/pull/22614)
+- **OpenAI gpt-5.4 / gpt-5.4-pro — 출시 당일 지원** — OpenAI와 Azure에서 `gpt-5.4`(1M 컨텍스트, $2.50/$15.00) 및 `gpt-5.4-pro`($30.00/$180.00)의 가격과 라우팅을 완전 지원합니다.
+- **Gemini 3.x 모델** — Google AI와 Vertex AI 비용 맵에 `gemini-3-flash-preview`, `gemini-3.1-pro-preview`, `gemini-3.1-flash-image-preview`, `gemini-embedding-2-preview`를 추가했습니다.
+- **FLUX Kontext 이미지 편집** — Black Forest Labs에 `flux-kontext-pro`, `flux-kontext-max`를 추가하고, 인페인팅/아웃페인팅용 `flux-pro-1.0-fill`, `flux-pro-1.0-expand`도 함께 추가했습니다.
+- **신규 모델 116개, 지원 중단 모델 132개 정리** — Mistral Magistral, Dashscope Qwen3 VL, Azure AI 기반 xAI Grok, ZAI GLM-5, Serper Search 등을 포함해 모델 맵을 대폭 갱신했습니다. OpenAI GPT-3.5/GPT-4 레거시 변형, Gemini 1.5, Vertex AI PaLM2는 제거했습니다.
+- **SageMaker Nova 제공자** — [SageMaker의 Amazon Nova 모델용 신규 `sagemaker_nova` 제공자](../../docs/providers/aws_sagemaker) - [PR #21542](https://github.com/BerriAI/litellm/pull/21542)
+- **Hashicorp Vault 시크릿 관리자** — Hashicorp Vault 기반 구성 재정의 백엔드와 Vault에서 가져온 자격 증명 관리를 위한 전체 UI를 추가했습니다. - [PR #22939](https://github.com/BerriAI/litellm/pull/22939), [PR #23036](https://github.com/BerriAI/litellm/pull/23036)
+- **Responses API WebSocket 스트리밍** — 모든 제공자 지원을 포함해 Responses API용 실시간 WebSocket 스트리밍을 추가했습니다. - [PR #22559](https://github.com/BerriAI/litellm/pull/22559), [PR #22771](https://github.com/BerriAI/litellm/pull/22771)
+- **Org Admin RBAC 확장** — Org Admin이 전역 관리자 역할 없이 팀 관리 엔드포인트 접근, 내부 사용자 조회/초대, 팀 멤버십 관리를 수행할 수 있습니다. - [PR #23085](https://github.com/BerriAI/litellm/pull/23085), [PR #23080](https://github.com/BerriAI/litellm/pull/23080)
+- **가드레일 모드 기본값 및 태그 기반 모드** — 전역 기본 가드레일 모드 목록을 설정하고, 태그 기반 가드레일 구성에서 모드 목록을 지정할 수 있습니다. - [PR #22676](https://github.com/BerriAI/litellm/pull/22676), [PR #23020](https://github.com/BerriAI/litellm/pull/23020)
+- **로그 시크릿 마스킹** — 모든 프록시 로그 출력에서 API 키, 토큰, 자격 증명을 자동 제거합니다. 기본으로 활성화되며, `LITELLM_DISABLE_REDACT_SECRETS=true`로 해제할 수 있습니다. - [PR #23668](https://github.com/BerriAI/litellm/pull/23668)
+- **스트리밍 안정성 수정** — 운영 환경에서 약 1시간 후 `RuntimeError: Cannot send a request, as the client has been closed.` 충돌이 발생하던 문제를 수정했습니다. - [PR #22926](https://github.com/BerriAI/litellm/pull/22926)
 
 ---
 
-## New Providers and Endpoints
+## 신규 제공자 및 엔드포인트 {#new-providers-and-endpoints}
 
-### New Providers (7 new providers)
+### 신규 제공자(7개) {#new-providers}
 
-| Provider | Supported LiteLLM Endpoints | Description |
+| 제공자 | 지원 LiteLLM 엔드포인트 | 설명 |
 | -------- | --------------------------- | ----------- |
-| [Nebius AI](../../docs/providers/nebius) (`nebius/`) | `/chat/completions`, `/embeddings` | EU-based AI cloud with 30+ open models — DeepSeek, Qwen3, Llama 3.1/3.3, NVIDIA Nemotron, BAAI embeddings |
-| [ZAI](../../docs/providers/zai) (`zai/`) | `/chat/completions` | ZhipuAI GLM-5 models via ZAI cloud |
-| [Black Forest Labs](../../docs/providers/black_forest_labs) (`black_forest_labs/`) | `/images/generations`, `/images/edits` | FLUX image generation and editing — Kontext Pro/Max, Pro 1.0 Fill/Expand |
-| [Serper](../../docs/providers/serper) (`serper/`) | `/search` | Web search via Serper API |
-| [SageMaker Nova](../../docs/providers/aws_sagemaker) (`sagemaker_nova/`) | `/chat/completions` | Amazon Nova models via SageMaker endpoint |
-| [Google Search API](../../docs/providers/google_search) (`google_search/`) | `/search` | Google Search API integration - [PR #22752](https://github.com/BerriAI/litellm/pull/22752) |
-| [Bedrock Mantle](../../docs/providers/bedrock) (`bedrock_mantle/`) | `/chat/completions` | Amazon Bedrock via Mantle — alternative auth and routing path for Bedrock models - [PR #22866](https://github.com/BerriAI/litellm/pull/22866) |
+| [Nebius AI](../../docs/providers/nebius) (`nebius/`) | `/chat/completions`, `/embeddings` | DeepSeek, Qwen3, Llama 3.1/3.3, NVIDIA Nemotron, BAAI 임베딩 등 30개 이상의 오픈 모델을 제공하는 EU 기반 AI 클라우드 |
+| [ZAI](../../docs/providers/zai) (`zai/`) | `/chat/completions` | ZAI 클라우드를 통한 ZhipuAI GLM-5 모델 |
+| [Black Forest Labs](../../docs/providers/black_forest_labs) (`black_forest_labs/`) | `/images/generations`, `/images/edits` | FLUX 이미지 생성 및 편집 — Kontext Pro/Max, Pro 1.0 Fill/Expand |
+| [Serper](../../docs/providers/serper) (`serper/`) | `/search` | Serper API를 통한 웹 검색 |
+| [SageMaker Nova](../../docs/providers/aws_sagemaker) (`sagemaker_nova/`) | `/chat/completions` | SageMaker 엔드포인트를 통한 Amazon Nova 모델 |
+| [Google Search API](../../docs/providers/google_search) (`google_search/`) | `/search` | Google Search API 통합 - [PR #22752](https://github.com/BerriAI/litellm/pull/22752) |
+| [Bedrock Mantle](../../docs/providers/bedrock) (`bedrock_mantle/`) | `/chat/completions` | Mantle을 통한 Amazon Bedrock — Bedrock 모델용 대체 인증 및 라우팅 경로 - [PR #22866](https://github.com/BerriAI/litellm/pull/22866) |
 
 ---
 
-## New Models / Updated Models
+## 신규 모델 / 업데이트된 모델 {#new-models--updated-models}
 
-#### New Model Support (116 new models)
+#### 신규 모델 지원(116개) {#new-model-support}
 
-| Provider | Model | Context Window | Input ($/1M tokens) | Output ($/1M tokens) | Features |
+| 제공자 | 모델 | 컨텍스트 창 | 입력($/1M 토큰) | 출력($/1M 토큰) | 기능 |
 | -------- | ----- | -------------- | ------------------- | -------------------- | -------- |
-| OpenAI | `gpt-5.4` | 1.05M | $2.50 | $15.00 | chat, vision, tools, reasoning |
-| OpenAI | `gpt-5.4-pro` | 1.05M | $30.00 | $180.00 | responses, vision, tools, reasoning |
-| OpenAI | `gpt-5.3-chat-latest` | 128K | $1.75 | $14.00 | chat, vision, tools, reasoning |
-| Azure OpenAI | `azure/gpt-5.4` | 1.05M | $2.50 | $15.00 | chat, vision, tools, reasoning |
-| Azure OpenAI | `azure/gpt-5.4-pro` | 1.05M | $30.00 | $180.00 | responses, vision, tools, reasoning |
-| Azure OpenAI | `azure/gpt-5.3-chat` | 128K | $1.75 | $14.00 | chat, vision, tools, reasoning |
-| Google Gemini | `gemini/gemini-3-flash-preview` | 1M | $0.50 | $3.00 | chat, vision, tools, reasoning |
-| Google Gemini | `gemini/gemini-3.1-pro-preview` | 1M | $2.00 | $12.00 | chat, vision, tools, reasoning |
-| Google Gemini | `gemini/gemini-3.1-flash-image-preview` | 65K | $0.25 | $1.50 | image generation, vision |
-| Google Gemini | `gemini/gemini-3.1-flash-lite-preview` | - | - | - | chat |
-| Google Gemini | `gemini/gemini-3-pro-image-preview` | - | - | - | image generation |
-| Google Gemini | `gemini/gemini-embedding-2-preview` | 8K | $0.20 | - | embeddings |
-| Google Vertex AI | `vertex_ai/gemini-3-flash-preview` | - | - | - | chat |
-| Google Vertex AI | `vertex_ai/gemini-3.1-pro-preview` | - | - | - | chat |
-| Google Vertex AI | `vertex_ai/gemini-3.1-flash-lite-preview` | - | - | - | chat |
-| Google Vertex AI | `vertex_ai/gemini-embedding-2-preview` | - | $0.20 | - | embeddings |
-| Mistral | `mistral/magistral-medium-1-2-2509` | 40K | $2.00 | $5.00 | chat, tools, reasoning |
-| Mistral | `mistral/magistral-small-1-2-2509` | 40K | $0.50 | $1.50 | chat, tools, reasoning |
-| Mistral | `mistral/mistral-large-2512` | 262K | $0.50 | $1.50 | chat, vision, tools |
-| Mistral | `mistral/mistral-medium-3-1-2508` | - | - | - | chat |
-| Mistral | `mistral/mistral-small-3-2-2506` | - | - | - | chat |
-| Mistral | `mistral/ministral-3-3b-2512` | - | - | - | chat |
-| Mistral | `mistral/ministral-3-8b-2512` | - | - | - | chat |
-| Mistral | `mistral/ministral-3-14b-2512` | - | - | - | chat |
-| Black Forest Labs | `black_forest_labs/flux-kontext-pro` | - | - | - | image editing |
-| Black Forest Labs | `black_forest_labs/flux-kontext-max` | - | - | - | image editing |
-| Black Forest Labs | `black_forest_labs/flux-pro-1.0-fill` | - | - | - | image editing (inpaint) |
-| Black Forest Labs | `black_forest_labs/flux-pro-1.0-expand` | - | - | - | image editing (outpaint) |
-| Black Forest Labs | `black_forest_labs/flux-pro-1.1` | - | - | - | image generation |
-| Black Forest Labs | `black_forest_labs/flux-pro-1.1-ultra` | - | - | - | image generation |
-| Black Forest Labs | `black_forest_labs/flux-dev` | - | - | - | image generation |
-| Black Forest Labs | `black_forest_labs/flux-pro` | - | - | - | image generation |
-| Azure AI | `azure_ai/grok-4-1-fast-non-reasoning` | 131K | $0.20 | $0.50 | chat, tools |
-| Azure AI | `azure_ai/grok-4-1-fast-reasoning` | 131K | $0.20 | $0.50 | chat, tools, reasoning |
+| OpenAI | `gpt-5.4` | 1.05M | $2.50 | $15.00 | 채팅, 비전, 도구, 추론 |
+| OpenAI | `gpt-5.4-pro` | 1.05M | $30.00 | $180.00 | 응답, 비전, 도구, 추론 |
+| OpenAI | `gpt-5.3-chat-latest` | 128K | $1.75 | $14.00 | 채팅, 비전, 도구, 추론 |
+| Azure OpenAI | `azure/gpt-5.4` | 1.05M | $2.50 | $15.00 | 채팅, 비전, 도구, 추론 |
+| Azure OpenAI | `azure/gpt-5.4-pro` | 1.05M | $30.00 | $180.00 | 응답, 비전, 도구, 추론 |
+| Azure OpenAI | `azure/gpt-5.3-chat` | 128K | $1.75 | $14.00 | 채팅, 비전, 도구, 추론 |
+| Google Gemini | `gemini/gemini-3-flash-preview` | 1M | $0.50 | $3.00 | 채팅, 비전, 도구, 추론 |
+| Google Gemini | `gemini/gemini-3.1-pro-preview` | 1M | $2.00 | $12.00 | 채팅, 비전, 도구, 추론 |
+| Google Gemini | `gemini/gemini-3.1-flash-image-preview` | 65K | $0.25 | $1.50 | 이미지 생성, 비전 |
+| Google Gemini | `gemini/gemini-3.1-flash-lite-preview` | - | - | - | 채팅 |
+| Google Gemini | `gemini/gemini-3-pro-image-preview` | - | - | - | 이미지 생성 |
+| Google Gemini | `gemini/gemini-embedding-2-preview` | 8K | $0.20 | - | 임베딩 |
+| Google Vertex AI | `vertex_ai/gemini-3-flash-preview` | - | - | - | 채팅 |
+| Google Vertex AI | `vertex_ai/gemini-3.1-pro-preview` | - | - | - | 채팅 |
+| Google Vertex AI | `vertex_ai/gemini-3.1-flash-lite-preview` | - | - | - | 채팅 |
+| Google Vertex AI | `vertex_ai/gemini-embedding-2-preview` | - | $0.20 | - | 임베딩 |
+| Mistral | `mistral/magistral-medium-1-2-2509` | 40K | $2.00 | $5.00 | 채팅, 도구, 추론 |
+| Mistral | `mistral/magistral-small-1-2-2509` | 40K | $0.50 | $1.50 | 채팅, 도구, 추론 |
+| Mistral | `mistral/mistral-large-2512` | 262K | $0.50 | $1.50 | 채팅, 비전, 도구 |
+| Mistral | `mistral/mistral-medium-3-1-2508` | - | - | - | 채팅 |
+| Mistral | `mistral/mistral-small-3-2-2506` | - | - | - | 채팅 |
+| Mistral | `mistral/ministral-3-3b-2512` | - | - | - | 채팅 |
+| Mistral | `mistral/ministral-3-8b-2512` | - | - | - | 채팅 |
+| Mistral | `mistral/ministral-3-14b-2512` | - | - | - | 채팅 |
+| Black Forest Labs | `black_forest_labs/flux-kontext-pro` | - | - | - | 이미지 편집 |
+| Black Forest Labs | `black_forest_labs/flux-kontext-max` | - | - | - | 이미지 편집 |
+| Black Forest Labs | `black_forest_labs/flux-pro-1.0-fill` | - | - | - | 이미지 편집(인페인트) |
+| Black Forest Labs | `black_forest_labs/flux-pro-1.0-expand` | - | - | - | 이미지 편집(아웃페인트) |
+| Black Forest Labs | `black_forest_labs/flux-pro-1.1` | - | - | - | 이미지 생성 |
+| Black Forest Labs | `black_forest_labs/flux-pro-1.1-ultra` | - | - | - | 이미지 생성 |
+| Black Forest Labs | `black_forest_labs/flux-dev` | - | - | - | 이미지 생성 |
+| Black Forest Labs | `black_forest_labs/flux-pro` | - | - | - | 이미지 생성 |
+| Azure AI | `azure_ai/grok-4-1-fast-non-reasoning` | 131K | $0.20 | $0.50 | 채팅, 도구 |
+| Azure AI | `azure_ai/grok-4-1-fast-reasoning` | 131K | $0.20 | $0.50 | 채팅, 도구, 추론 |
 | Azure AI | `azure_ai/mistral-document-ai-2512` | - | - | - | OCR |
-| Dashscope | `dashscope/qwen3-next-80b-a3b-instruct` | 262K | $0.15 | $1.20 | chat |
-| Dashscope | `dashscope/qwen3-next-80b-a3b-thinking` | 262K | $0.15 | $1.20 | chat, reasoning |
-| Dashscope | `dashscope/qwen3-vl-235b-a22b-instruct` | 131K | $0.40 | $1.60 | chat, vision |
-| Dashscope | `dashscope/qwen3-vl-235b-a22b-thinking` | 131K | $0.40 | $4.00 | chat, vision, reasoning |
-| Dashscope | `dashscope/qwen3-vl-32b-instruct` | 131K | $0.16 | $0.64 | chat, vision |
-| Dashscope | `dashscope/qwen3-vl-32b-thinking` | 131K | $0.16 | $2.87 | chat, vision, reasoning |
-| Dashscope | `dashscope/qwen3-vl-plus` | 260K | - | - | chat, vision |
-| Dashscope | `dashscope/qwen3.5-plus` | 992K | - | - | chat |
-| Dashscope | `dashscope/qwen3-max-2026-01-23` | 258K | - | - | chat |
-| Nebius AI | `nebius/deepseek-ai/DeepSeek-R1` | 128K | $0.80 | $2.40 | chat, reasoning |
-| Nebius AI | `nebius/deepseek-ai/DeepSeek-R1-0528` | 164K | $0.80 | $2.40 | chat, reasoning |
-| Nebius AI | `nebius/deepseek-ai/DeepSeek-V3` | 128K | $0.50 | $1.50 | chat |
-| Nebius AI | `nebius/deepseek-ai/DeepSeek-V3-0324` | 128K | $0.50 | $1.50 | chat |
-| Nebius AI | `nebius/deepseek-ai/DeepSeek-R1-Distill-Llama-70B` | 128K | $0.25 | $0.75 | chat |
-| Nebius AI | `nebius/Qwen/Qwen3-235B-A22B` | 262K | $0.20 | $0.60 | chat |
-| Nebius AI | `nebius/Qwen/Qwen3-32B` | 32K | $0.10 | $0.30 | chat |
-| Nebius AI | `nebius/Qwen/Qwen3-30B-A3B` | 32K | $0.10 | $0.30 | chat |
-| Nebius AI | `nebius/Qwen/Qwen3-14B` | 32K | $0.08 | $0.24 | chat |
-| Nebius AI | `nebius/Qwen/Qwen3-4B` | 32K | $0.08 | $0.24 | chat |
-| Nebius AI | `nebius/Qwen/QwQ-32B` | 32K | $0.15 | $0.45 | chat |
-| Nebius AI | `nebius/Qwen/Qwen2.5-72B-Instruct` | 128K | $0.13 | $0.40 | chat |
-| Nebius AI | `nebius/Qwen/Qwen2.5-32B-Instruct` | 128K | $0.06 | $0.20 | chat |
-| Nebius AI | `nebius/Qwen/Qwen2.5-VL-72B-Instruct` | 131K | $0.13 | $0.40 | chat, vision |
-| Nebius AI | `nebius/Qwen/Qwen2-VL-72B-Instruct` | 131K | $0.13 | $0.40 | chat, vision |
-| Nebius AI | `nebius/Qwen/Qwen2-VL-7B-Instruct` | 131K | $0.02 | $0.06 | chat, vision |
-| Nebius AI | `nebius/meta-llama/Meta-Llama-3.1-405B-Instruct` | 128K | $1.00 | $3.00 | chat |
-| Nebius AI | `nebius/meta-llama/Meta-Llama-3.1-70B-Instruct` | 128K | $0.13 | $0.40 | chat |
-| Nebius AI | `nebius/meta-llama/Meta-Llama-3.1-8B-Instruct` | 128K | $0.02 | $0.06 | chat |
-| Nebius AI | `nebius/meta-llama/Llama-3.3-70B-Instruct` | 128K | $0.13 | $0.40 | chat |
-| Nebius AI | `nebius/meta-llama/Llama-Guard-3-8B` | 128K | $0.02 | $0.06 | chat |
-| Nebius AI | `nebius/nvidia/Llama-3.1-Nemotron-Ultra-253B-v1` | 128K | $0.60 | $1.80 | chat |
-| Nebius AI | `nebius/nvidia/Llama-3.3-Nemotron-Super-49B-v1` | 131K | $0.10 | $0.40 | chat |
-| Nebius AI | `nebius/NousResearch/Hermes-3-Llama-3.1-405B` | 128K | $1.00 | $3.00 | chat |
-| Nebius AI | `nebius/google/gemma-3-27b-it` | 128K | $0.06 | $0.20 | chat |
-| Nebius AI | `nebius/mistralai/Mistral-Nemo-Instruct-2407` | 128K | $0.04 | $0.12 | chat |
-| Nebius AI | `nebius/Qwen/Qwen2.5-Coder-7B` | 32K | $0.01 | $0.03 | chat |
-| Nebius AI | `nebius/BAAI/bge-en-icl` | 32K | $0.01 | - | embeddings |
-| Nebius AI | `nebius/BAAI/bge-multilingual-gemma2` | 8K | $0.01 | - | embeddings |
-| Nebius AI | `nebius/intfloat/e5-mistral-7b-instruct` | 32K | $0.01 | - | embeddings |
-| AWS Bedrock | `mistral.devstral-2-123b` | 256K | $0.40 | $2.00 | chat, tools |
-| AWS Bedrock | `zai.glm-4.7-flash` | 200K | $0.07 | $0.40 | chat, tools, reasoning |
-| ZAI | `zai/glm-5` | 200K | $1.00 | $3.20 | chat, tools, reasoning |
-| ZAI | `zai/glm-5-code` | 200K | $1.20 | $5.00 | chat, tools, reasoning |
-| OpenRouter | `openrouter/anthropic/claude-sonnet-4.6` | - | - | - | chat |
-| OpenRouter | `openrouter/google/gemini-3.1-pro-preview` | - | - | - | chat |
-| OpenRouter | `openrouter/openai/gpt-5.1-codex-max` | - | - | - | chat |
-| OpenRouter | `openrouter/qwen/qwen3-coder-plus` | - | - | - | chat |
-| OpenRouter | `openrouter/qwen/qwen3.5-*` (5 models) | - | - | - | chat |
-| OpenRouter | `openrouter/z-ai/glm-5` | - | - | - | chat |
-| Together AI | `together_ai/Qwen/Qwen3.5-397B-A17B` | - | - | - | chat |
-| Perplexity | `perplexity/pplx-embed-v1-0.6b` | 32K | $0.00 | - | embeddings |
-| Perplexity | `perplexity/pplx-embed-v1-4b` | 32K | $0.03 | - | embeddings |
-| Serper | `serper/search` | - | - | - | search |
+| Dashscope | `dashscope/qwen3-next-80b-a3b-instruct` | 262K | $0.15 | $1.20 | 채팅 |
+| Dashscope | `dashscope/qwen3-next-80b-a3b-thinking` | 262K | $0.15 | $1.20 | 채팅, 추론 |
+| Dashscope | `dashscope/qwen3-vl-235b-a22b-instruct` | 131K | $0.40 | $1.60 | 채팅, 비전 |
+| Dashscope | `dashscope/qwen3-vl-235b-a22b-thinking` | 131K | $0.40 | $4.00 | 채팅, 비전, 추론 |
+| Dashscope | `dashscope/qwen3-vl-32b-instruct` | 131K | $0.16 | $0.64 | 채팅, 비전 |
+| Dashscope | `dashscope/qwen3-vl-32b-thinking` | 131K | $0.16 | $2.87 | 채팅, 비전, 추론 |
+| Dashscope | `dashscope/qwen3-vl-plus` | 260K | - | - | 채팅, 비전 |
+| Dashscope | `dashscope/qwen3.5-plus` | 992K | - | - | 채팅 |
+| Dashscope | `dashscope/qwen3-max-2026-01-23` | 258K | - | - | 채팅 |
+| Nebius AI | `nebius/deepseek-ai/DeepSeek-R1` | 128K | $0.80 | $2.40 | 채팅, 추론 |
+| Nebius AI | `nebius/deepseek-ai/DeepSeek-R1-0528` | 164K | $0.80 | $2.40 | 채팅, 추론 |
+| Nebius AI | `nebius/deepseek-ai/DeepSeek-V3` | 128K | $0.50 | $1.50 | 채팅 |
+| Nebius AI | `nebius/deepseek-ai/DeepSeek-V3-0324` | 128K | $0.50 | $1.50 | 채팅 |
+| Nebius AI | `nebius/deepseek-ai/DeepSeek-R1-Distill-Llama-70B` | 128K | $0.25 | $0.75 | 채팅 |
+| Nebius AI | `nebius/Qwen/Qwen3-235B-A22B` | 262K | $0.20 | $0.60 | 채팅 |
+| Nebius AI | `nebius/Qwen/Qwen3-32B` | 32K | $0.10 | $0.30 | 채팅 |
+| Nebius AI | `nebius/Qwen/Qwen3-30B-A3B` | 32K | $0.10 | $0.30 | 채팅 |
+| Nebius AI | `nebius/Qwen/Qwen3-14B` | 32K | $0.08 | $0.24 | 채팅 |
+| Nebius AI | `nebius/Qwen/Qwen3-4B` | 32K | $0.08 | $0.24 | 채팅 |
+| Nebius AI | `nebius/Qwen/QwQ-32B` | 32K | $0.15 | $0.45 | 채팅 |
+| Nebius AI | `nebius/Qwen/Qwen2.5-72B-Instruct` | 128K | $0.13 | $0.40 | 채팅 |
+| Nebius AI | `nebius/Qwen/Qwen2.5-32B-Instruct` | 128K | $0.06 | $0.20 | 채팅 |
+| Nebius AI | `nebius/Qwen/Qwen2.5-VL-72B-Instruct` | 131K | $0.13 | $0.40 | 채팅, 비전 |
+| Nebius AI | `nebius/Qwen/Qwen2-VL-72B-Instruct` | 131K | $0.13 | $0.40 | 채팅, 비전 |
+| Nebius AI | `nebius/Qwen/Qwen2-VL-7B-Instruct` | 131K | $0.02 | $0.06 | 채팅, 비전 |
+| Nebius AI | `nebius/meta-llama/Meta-Llama-3.1-405B-Instruct` | 128K | $1.00 | $3.00 | 채팅 |
+| Nebius AI | `nebius/meta-llama/Meta-Llama-3.1-70B-Instruct` | 128K | $0.13 | $0.40 | 채팅 |
+| Nebius AI | `nebius/meta-llama/Meta-Llama-3.1-8B-Instruct` | 128K | $0.02 | $0.06 | 채팅 |
+| Nebius AI | `nebius/meta-llama/Llama-3.3-70B-Instruct` | 128K | $0.13 | $0.40 | 채팅 |
+| Nebius AI | `nebius/meta-llama/Llama-Guard-3-8B` | 128K | $0.02 | $0.06 | 채팅 |
+| Nebius AI | `nebius/nvidia/Llama-3.1-Nemotron-Ultra-253B-v1` | 128K | $0.60 | $1.80 | 채팅 |
+| Nebius AI | `nebius/nvidia/Llama-3.3-Nemotron-Super-49B-v1` | 131K | $0.10 | $0.40 | 채팅 |
+| Nebius AI | `nebius/NousResearch/Hermes-3-Llama-3.1-405B` | 128K | $1.00 | $3.00 | 채팅 |
+| Nebius AI | `nebius/google/gemma-3-27b-it` | 128K | $0.06 | $0.20 | 채팅 |
+| Nebius AI | `nebius/mistralai/Mistral-Nemo-Instruct-2407` | 128K | $0.04 | $0.12 | 채팅 |
+| Nebius AI | `nebius/Qwen/Qwen2.5-Coder-7B` | 32K | $0.01 | $0.03 | 채팅 |
+| Nebius AI | `nebius/BAAI/bge-en-icl` | 32K | $0.01 | - | 임베딩 |
+| Nebius AI | `nebius/BAAI/bge-multilingual-gemma2` | 8K | $0.01 | - | 임베딩 |
+| Nebius AI | `nebius/intfloat/e5-mistral-7b-instruct` | 32K | $0.01 | - | 임베딩 |
+| AWS Bedrock | `mistral.devstral-2-123b` | 256K | $0.40 | $2.00 | 채팅, 도구 |
+| AWS Bedrock | `zai.glm-4.7-flash` | 200K | $0.07 | $0.40 | 채팅, 도구, 추론 |
+| ZAI | `zai/glm-5` | 200K | $1.00 | $3.20 | 채팅, 도구, 추론 |
+| ZAI | `zai/glm-5-code` | 200K | $1.20 | $5.00 | 채팅, 도구, 추론 |
+| OpenRouter | `openrouter/anthropic/claude-sonnet-4.6` | - | - | - | 채팅 |
+| OpenRouter | `openrouter/google/gemini-3.1-pro-preview` | - | - | - | 채팅 |
+| OpenRouter | `openrouter/openai/gpt-5.1-codex-max` | - | - | - | 채팅 |
+| OpenRouter | `openrouter/qwen/qwen3-coder-plus` | - | - | - | 채팅 |
+| OpenRouter | `openrouter/qwen/qwen3.5-*` (5개 모델) | - | - | - | 채팅 |
+| OpenRouter | `openrouter/z-ai/glm-5` | - | - | - | 채팅 |
+| Together AI | `together_ai/Qwen/Qwen3.5-397B-A17B` | - | - | - | 채팅 |
+| Perplexity | `perplexity/pplx-embed-v1-0.6b` | 32K | $0.00 | - | 임베딩 |
+| Perplexity | `perplexity/pplx-embed-v1-4b` | 32K | $0.03 | - | 임베딩 |
+| Serper | `serper/search` | - | - | - | 검색 |
 
-#### Updated Models
+#### 업데이트된 모델 {#updated-models}
 
 - **[AWS Bedrock](../../docs/providers/bedrock)**
-    - Add `cache_read_input_token_cost` and `cache_creation_input_token_cost` to Bedrock-hosted Anthropic models (`claude-3-opus`, `claude-3-sonnet`, `claude-3-haiku`, and APAC/EU variants) — prompt caching is now tracked for cost estimation
-    - Rename `apac.anthropic.claude-sonnet-4-6` → `au.anthropic.claude-sonnet-4-6` to reflect correct regional identifier
+    - Bedrock 호스팅 Anthropic 모델(`claude-3-opus`, `claude-3-sonnet`, `claude-3-haiku`, APAC/EU 변형)에 `cache_read_input_token_cost`와 `cache_creation_input_token_cost`를 추가했습니다. 이제 프롬프트 캐싱이 비용 추정에 반영됩니다.
+    - 올바른 리전 식별자를 반영하도록 `apac.anthropic.claude-sonnet-4-6` → `au.anthropic.claude-sonnet-4-6`로 이름을 변경했습니다.
 
 - **[Azure OpenAI](../../docs/providers/azure)**
-    - Add `supports_none_reasoning_effort` to all `gpt-5.1-chat`, `gpt-5.1-codex`, and `gpt-5.4` variants (global, EU, standard deployments) — allows passing `reasoning_effort: null` to disable reasoning
+    - 모든 `gpt-5.1-chat`, `gpt-5.1-codex`, `gpt-5.4` 변형(global, EU, standard deployment)에 `supports_none_reasoning_effort`를 추가했습니다. `reasoning_effort: null`을 전달해 추론을 비활성화할 수 있습니다.
 
-- **[Azure OpenAI](../../docs/providers/azure)** — Removed deprecated models
-    - Remove `azure/gpt-35-turbo-0301` (deprecated 2025-02-13)
-    - Remove `azure/gpt-35-turbo-0613` (deprecated 2025-02-13)
+- **[Azure OpenAI](../../docs/providers/azure)** — 지원 중단 모델 제거
+    - `azure/gpt-35-turbo-0301` 제거(2025-02-13 지원 중단)
+    - `azure/gpt-35-turbo-0613` 제거(2025-02-13 지원 중단)
 
-#### Features
+#### 기능
 
 - **[OpenAI](../../docs/providers/openai)**
-    - Day 0 support for `gpt-5.4` and `gpt-5.4-pro` on OpenAI and Azure
+    - OpenAI와 Azure에서 `gpt-5.4`, `gpt-5.4-pro` 출시 당일 지원
 
 - **[Google Gemini](../../docs/providers/gemini)**
-    - Add Gemini 3.x model cost map entries — `gemini-3-flash-preview`, `gemini-3.1-pro-preview`, `gemini-3.1-flash-lite-preview`, `gemini-3-pro-image-preview`, `gemini-embedding-2-preview`
-    - Add Gemini 2.0 Flash and Flash Lite to cost map (re-added with updated pricing)
+    - Gemini 3.x 모델 비용 맵 항목 추가 — `gemini-3-flash-preview`, `gemini-3.1-pro-preview`, `gemini-3.1-flash-lite-preview`, `gemini-3-pro-image-preview`, `gemini-embedding-2-preview`
+    - Gemini 2.0 Flash와 Flash Lite를 비용 맵에 추가(업데이트된 가격으로 재추가)
 
 - **[Google Vertex AI](../../docs/providers/vertex)**
-    - Add `gemini-3-flash-preview`, `gemini-3.1-flash-lite-preview`, `gemini-flash-experimental`, and `gemini-embedding-2-preview` to Vertex AI model cost map
+    - Vertex AI 모델 비용 맵에 `gemini-3-flash-preview`, `gemini-3.1-flash-lite-preview`, `gemini-flash-experimental`, `gemini-embedding-2-preview` 추가
 
 - **[Mistral](../../docs/providers/mistral)**
-    - Add Magistral reasoning models (`magistral-medium-1-2-2509`, `magistral-small-1-2-2509`)
-    - Add `mistral-large-2512`, `mistral-medium-3-1-2508`, `mistral-small-3-2-2506`, `ministral-3-*` variants
+    - Magistral 추론 모델 추가(`magistral-medium-1-2-2509`, `magistral-small-1-2-2509`)
+    - `mistral-large-2512`, `mistral-medium-3-1-2508`, `mistral-small-3-2-2506`, `ministral-3-*` 변형 추가
 
 - **[Dashscope / Qwen](../../docs/providers/dashscope)**
-    - Add Qwen3 VL multimodal models (`qwen3-vl-235b`, `qwen3-vl-32b` — instruct and thinking variants)
-    - Add `qwen3-next-80b-a3b` (instruct + thinking), `qwen3.5-plus`, `qwen3-max-2026-01-23`
+    - Qwen3 VL 멀티모달 모델 추가(`qwen3-vl-235b`, `qwen3-vl-32b` — instruct 및 thinking 변형)
+    - `qwen3-next-80b-a3b`(instruct + thinking), `qwen3.5-plus`, `qwen3-max-2026-01-23` 추가
 
 - **[Black Forest Labs](../../docs/providers/black_forest_labs)**
-    - Add FLUX Kontext image editing models (`flux-kontext-pro`, `flux-kontext-max`)
-    - Add FLUX Pro 1.0 Fill (inpainting) and Expand (outpainting)
-    - Add `flux-pro-1.1`, `flux-pro-1.1-ultra`, `flux-dev`, `flux-pro`
+    - FLUX Kontext 이미지 편집 모델 추가(`flux-kontext-pro`, `flux-kontext-max`)
+    - FLUX Pro 1.0 Fill(인페인팅) 및 Expand(아웃페인팅) 추가
+    - `flux-pro-1.1`, `flux-pro-1.1-ultra`, `flux-dev`, `flux-pro` 추가
 
 - **[Azure AI](../../docs/providers/azure_ai)**
-    - Add xAI Grok models via Azure AI Foundry (`grok-4-1-fast-non-reasoning`, `grok-4-1-fast-reasoning`)
-    - Add Mistral Document AI (`mistral-document-ai-2512`) — OCR mode
+    - Azure AI Foundry를 통한 xAI Grok 모델 추가(`grok-4-1-fast-non-reasoning`, `grok-4-1-fast-reasoning`)
+    - Mistral Document AI(`mistral-document-ai-2512`) 추가 — OCR 모드
 
 - **[AWS Bedrock](../../docs/providers/bedrock)**
-    - Add `mistral.devstral-2-123b` (256K context, tools)
-    - Add `zai.glm-4.7-flash` via Bedrock Converse (200K context, tools, reasoning)
+    - `mistral.devstral-2-123b` 추가(256K 컨텍스트, 도구)
+    - Bedrock Converse를 통한 `zai.glm-4.7-flash` 추가(200K 컨텍스트, 도구, 추론)
 
 - **[SageMaker](../../docs/providers/aws_sagemaker)**
-    - Add `sagemaker_nova` provider for Amazon Nova models on SageMaker - [PR #21542](https://github.com/BerriAI/litellm/pull/21542)
+    - SageMaker의 Amazon Nova 모델용 `sagemaker_nova` 제공자 추가 - [PR #21542](https://github.com/BerriAI/litellm/pull/21542)
 
-#### Deprecated / Removed Models
+#### 지원 중단 / 제거된 모델 {#deprecated--removed-models}
 
-**OpenAI** — Legacy models removed from cost map:
+**OpenAI** — 비용 맵에서 레거시 모델 제거:
 - `gpt-3.5-turbo-0301`, `gpt-3.5-turbo-0613`, `gpt-3.5-turbo-16k-0613`
 - `gpt-4-0314`, `gpt-4-32k`, `gpt-4-32k-0314`, `gpt-4-32k-0613`, `gpt-4-1106-vision-preview`, `gpt-4-vision-preview`
 - `gpt-4.5-preview`, `gpt-4.5-preview-2025-02-27`
 - `gpt-4o-audio-preview-2024-10-01`, `gpt-4o-realtime-preview-2024-10-01`
 - `o1-mini`, `o1-mini-2024-09-12`, `o1-preview`, `o1-preview-2024-09-12`
 
-**Google Gemini** — Gemini 1.5 and legacy 2.0 variants removed:
-- All `gemini-1.5-*` variants (flash, flash-8b, pro, and dated versions)
+**Google Gemini** — Gemini 1.5 및 레거시 2.0 변형 제거:
+- 모든 `gemini-1.5-*` 변형(flash, flash-8b, pro, 날짜 버전)
 - `gemini-2.0-flash-exp`, `gemini-2.0-pro-exp-02-05`, `gemini-2.5-flash-preview-04-17`, `gemini-2.5-flash-preview-05-20`
 
-**Google Vertex AI** — PaLM 2 / legacy models removed:
-- All `chat-bison`, `text-bison`, `codechat-bison`, `code-bison`, `code-gecko` variants
-- Gemini 1.0 Pro, 1.5 Flash/Pro, 2.0 Flash experimental, and preview variants
+**Google Vertex AI** — PaLM 2 / 레거시 모델 제거:
+- 모든 `chat-bison`, `text-bison`, `codechat-bison`, `code-bison`, `code-gecko` 변형
+- Gemini 1.0 Pro, 1.5 Flash/Pro, 2.0 Flash experimental 및 preview 변형
 
-**Perplexity** — Legacy Llama-sonar models removed:
+**Perplexity** — 레거시 Llama-sonar 모델 제거:
 - `llama-3.1-sonar-huge-128k-online`, `llama-3.1-sonar-large/small-128k-chat/online`
 
 ---
 
-## LLM API Endpoints
+## LLM API 엔드포인트 {#llm-api-endpoints}
 
-#### Features
+#### 기능
 
 - **[Responses API](../../docs/response_api)**
-    - Handle `response.failed`, `response.incomplete`, and `response.cancelled` terminal event types in background streaming — previously only `response.completed` was handled - [PR #23492](https://github.com/BerriAI/litellm/pull/23492)
-    - WebSocket streaming support for Responses API — real-time streaming via WebSocket for all providers - [PR #22559](https://github.com/BerriAI/litellm/pull/22559), [PR #22771](https://github.com/BerriAI/litellm/pull/22771)
-    - WebRTC support for real-time audio/video communication - [PR #23446](https://github.com/BerriAI/litellm/pull/23446)
-    - Responses API support for OpenAI-compatible JSON providers (`openai_like`) - [PR #21398](https://github.com/BerriAI/litellm/pull/21398)
-    - Route `gpt-5.4+` calls using both tools and reasoning to the Responses API automatically - [PR #23577](https://github.com/BerriAI/litellm/pull/23577)
+    - 백그라운드 스트리밍에서 `response.failed`, `response.incomplete`, `response.cancelled` 종료 이벤트 타입 처리. 이전에는 `response.completed`만 처리했습니다. - [PR #23492](https://github.com/BerriAI/litellm/pull/23492)
+    - Responses API용 WebSocket 스트리밍 지원 — 모든 제공자에서 WebSocket 기반 실시간 스트리밍 제공 - [PR #22559](https://github.com/BerriAI/litellm/pull/22559), [PR #22771](https://github.com/BerriAI/litellm/pull/22771)
+    - 실시간 오디오/비디오 통신용 WebRTC 지원 - [PR #23446](https://github.com/BerriAI/litellm/pull/23446)
+    - OpenAI 호환 JSON 제공자(`openai_like`)용 Responses API 지원 - [PR #21398](https://github.com/BerriAI/litellm/pull/21398)
+    - 도구와 추론을 모두 사용하는 `gpt-5.4+` 호출을 Responses API로 자동 라우팅 - [PR #23577](https://github.com/BerriAI/litellm/pull/23577)
 
 - **[Anthropic Files API](../../docs/providers/anthropic)**
-    - Full Anthropic Files API support — upload, retrieve, list, and delete files; use file references in messages - [PR #16594](https://github.com/BerriAI/litellm/pull/16594)
+    - Anthropic Files API 전체 지원 — 파일 업로드, 조회, 목록, 삭제 및 메시지 내 파일 참조 사용 - [PR #16594](https://github.com/BerriAI/litellm/pull/16594)
 
 - **[Mistral](../../docs/providers/mistral)**
-    - Voxtral audio transcription support — `mistral/voxtral-mini-*` and `mistral/voxtral-*` for audio transcription via Mistral - [PR #22801](https://github.com/BerriAI/litellm/pull/22801)
+    - Voxtral 오디오 전사 지원 — Mistral을 통한 오디오 전사용 `mistral/voxtral-mini-*`, `mistral/voxtral-*` - [PR #22801](https://github.com/BerriAI/litellm/pull/22801)
 
 - **[OpenAI](../../docs/providers/openai)**
-    - `litellm.acount_tokens()` public API — async token counting with full OpenAI provider support - [PR #22809](https://github.com/BerriAI/litellm/pull/22809)
-    - Normalize `reasoning_effort` dict to string for chat completion API - [PR #22981](https://github.com/BerriAI/litellm/pull/22981)
+    - `litellm.acount_tokens()` 공개 API — 전체 OpenAI 제공자 지원이 포함된 비동기 토큰 계산 - [PR #22809](https://github.com/BerriAI/litellm/pull/22809)
+    - 채팅 완료 API용 `reasoning_effort` dict를 문자열로 정규화 - [PR #22981](https://github.com/BerriAI/litellm/pull/22981)
 
 - **[OpenRouter](../../docs/providers/openrouter)**
-    - Image edit support for OpenRouter models - [PR #22403](https://github.com/BerriAI/litellm/pull/22403)
+    - OpenRouter 모델의 이미지 편집 지원 - [PR #22403](https://github.com/BerriAI/litellm/pull/22403)
 
 - **[Google Gemini](../../docs/providers/gemini)**
-    - Gemini 3 — no injected default `thinking_level` when `reasoning_effort` is omitted (matches Gemini API; Flash may default to `high` vs old `minimal`) — [Gemini 3 blog](../../blog/gemini_3)
+    - Gemini 3 — `reasoning_effort`가 생략되면 기본 `thinking_level`을 주입하지 않습니다(Gemini API와 일치, Flash는 기존 `minimal` 대신 `high`가 기본일 수 있음). — [Gemini 3 blog](../../blog/gemini_3)
 
 - **[Google Vertex AI](../../docs/providers/vertex)**
-    - VIDEO modality token usage tracking in `completion_tokens_details` - [PR #22550](https://github.com/BerriAI/litellm/pull/22550)
+    - `completion_tokens_details`에서 VIDEO 모달리티 토큰 사용량 추적 - [PR #22550](https://github.com/BerriAI/litellm/pull/22550)
 
 - **Images API**
-    - `input_fidelity` parameter for image edit API - [PR #23201](https://github.com/BerriAI/litellm/pull/23201)
+    - 이미지 편집 API용 `input_fidelity` 파라미터 - [PR #23201](https://github.com/BerriAI/litellm/pull/23201)
 
-- **General**
-    - Per-request `enable_json_schema_validation` flag for thread-safe JSON schema validation - [PR #21233](https://github.com/BerriAI/litellm/pull/21233)
-    - Model cost aliases expansion — define aliases in the cost map that inherit pricing from a parent model - [PR #23314](https://github.com/BerriAI/litellm/pull/23314), [PR #23457](https://github.com/BerriAI/litellm/pull/23457)
-    - Wildcards model support for the Files API - [PR #22740](https://github.com/BerriAI/litellm/pull/22740)
+- **일반**
+    - 스레드 안전 JSON 스키마 검증을 위한 요청별 `enable_json_schema_validation` 플래그 - [PR #21233](https://github.com/BerriAI/litellm/pull/21233)
+    - 모델 비용 별칭 확장 — 부모 모델의 가격을 상속하는 별칭을 비용 맵에 정의 - [PR #23314](https://github.com/BerriAI/litellm/pull/23314), [PR #23457](https://github.com/BerriAI/litellm/pull/23457)
+    - Files API의 와일드카드 모델 지원 - [PR #22740](https://github.com/BerriAI/litellm/pull/22740)
 
-#### Bugs
+#### 버그 수정
 
 - **[Anthropic](../../docs/providers/anthropic)**
-    - Preserve native tool format (web_search, bash, tool_search, etc.) when guardrails convert tools for the Anthropic Messages API - [PR #23526](https://github.com/BerriAI/litellm/pull/23526)
-    - Enforce `type: "object"` on tool input schemas in `_map_tool_helper` — fixes tool call failures for strict-schema providers - [PR #23103](https://github.com/BerriAI/litellm/pull/23103)
-    - Deduplicate `tool_result` messages by `tool_call_id` — prevents duplicate tool result errors in multi-turn conversations - [PR #23104](https://github.com/BerriAI/litellm/pull/23104)
-    - Map `reasoning_effort` to `output_config` for Claude 4.6 models - [PR #22220](https://github.com/BerriAI/litellm/pull/22220)
+    - 가드레일이 Anthropic Messages API용으로 도구를 변환할 때 네이티브 도구 형식(web_search, bash, tool_search 등)을 보존합니다. - [PR #23526](https://github.com/BerriAI/litellm/pull/23526)
+    - `_map_tool_helper`의 도구 입력 스키마에 `type: "object"`를 강제해 엄격한 스키마 제공자의 도구 호출 실패를 수정했습니다. - [PR #23103](https://github.com/BerriAI/litellm/pull/23103)
+    - `tool_result` 메시지를 `tool_call_id` 기준으로 중복 제거해 멀티턴 대화에서 중복 도구 결과 오류를 방지합니다. - [PR #23104](https://github.com/BerriAI/litellm/pull/23104)
+    - Claude 4.6 모델에서 `reasoning_effort`를 `output_config`에 매핑합니다. - [PR #22220](https://github.com/BerriAI/litellm/pull/22220)
 
 - **[Google Gemini](../../docs/providers/gemini)**
-    - Correct streaming `finish_reason` for tool calls — was incorrectly returning `null` instead of `tool_calls` - [PR #21577](https://github.com/BerriAI/litellm/pull/21577)
-    - Preserve `$ref` in JSON Schema for Gemini 2.0+ — schema references were being stripped, breaking structured output - [PR #21597](https://github.com/BerriAI/litellm/pull/21597)
-    - Handle `minimal` `reasoning_effort` param for Gemini 3.1 models - [PR #22920](https://github.com/BerriAI/litellm/pull/22920)
+    - 도구 호출의 스트리밍 `finish_reason` 수정 — `tool_calls` 대신 `null`을 잘못 반환하던 문제를 고쳤습니다. - [PR #21577](https://github.com/BerriAI/litellm/pull/21577)
+    - Gemini 2.0+용 JSON Schema에서 `$ref` 보존 — 스키마 참조가 제거되어 구조화된 출력이 깨지던 문제를 수정했습니다. - [PR #21597](https://github.com/BerriAI/litellm/pull/21597)
+    - Gemini 3.1 모델의 `minimal` `reasoning_effort` 파라미터 처리 - [PR #22920](https://github.com/BerriAI/litellm/pull/22920)
 
 - **[Google Vertex AI](../../docs/providers/vertex)**
-    - Pass through native Gemini `imageConfig` params for image generation - [PR #21585](https://github.com/BerriAI/litellm/pull/21585)
-    - Prevent content truncation when `finish_reason` races ahead of content chunks in streaming - [PR #22692](https://github.com/BerriAI/litellm/pull/22692)
-    - Strip LiteLLM-internal keys from `extra_body` before merging to Gemini request body - [PR #23131](https://github.com/BerriAI/litellm/pull/23131)
-    - Drop unsupported `output_config` parameter from all Vertex AI requests - [PR #22884](https://github.com/BerriAI/litellm/pull/22884)
-    - Skip schema transforms for Gemini 2.0+ tool parameters — avoids breaking native Gemini schema handling - [PR #23265](https://github.com/BerriAI/litellm/pull/23265)
+    - 이미지 생성에서 네이티브 Gemini `imageConfig` 파라미터를 그대로 전달합니다. - [PR #21585](https://github.com/BerriAI/litellm/pull/21585)
+    - 스트리밍에서 `finish_reason`이 콘텐츠 청크보다 먼저 도착할 때 콘텐츠가 잘리는 문제를 방지합니다. - [PR #22692](https://github.com/BerriAI/litellm/pull/22692)
+    - Gemini 요청 본문으로 병합하기 전에 `extra_body`에서 LiteLLM 내부 키를 제거합니다. - [PR #23131](https://github.com/BerriAI/litellm/pull/23131)
+    - 모든 Vertex AI 요청에서 지원되지 않는 `output_config` 파라미터를 제거합니다. - [PR #22884](https://github.com/BerriAI/litellm/pull/22884)
+    - Gemini 2.0+ 도구 파라미터의 스키마 변환을 건너뛰어 네이티브 Gemini 스키마 처리가 깨지지 않도록 합니다. - [PR #23265](https://github.com/BerriAI/litellm/pull/23265)
 
 - **[OpenRouter](../../docs/providers/openrouter)**
-    - Pattern-based fix for native model double-stripping when provider prefix matches model name - [PR #22320](https://github.com/BerriAI/litellm/pull/22320)
-    - Use provider-reported usage in streaming responses when `stream_options` is not set - [PR #21592](https://github.com/BerriAI/litellm/pull/21592)
+    - 제공자 접두사가 모델 이름과 일치할 때 네이티브 모델이 두 번 제거되는 문제를 패턴 기반으로 수정했습니다. - [PR #22320](https://github.com/BerriAI/litellm/pull/22320)
+    - `stream_options`가 설정되지 않은 경우 스트리밍 응답에서 제공자가 보고한 사용량을 사용합니다. - [PR #21592](https://github.com/BerriAI/litellm/pull/21592)
 
 - **[AWS Bedrock](../../docs/providers/bedrock)**
-    - Extract region and model ID from `bedrock/{region}/{model}` path format - [PR #22546](https://github.com/BerriAI/litellm/pull/22546)
-    - Strip `scope` from `cache_control` for Anthropic messages on Bedrock and Azure AI - [PR #22867](https://github.com/BerriAI/litellm/pull/22867)
-    - Populate `completion_tokens_details` in Responses API responses - [PR #23243](https://github.com/BerriAI/litellm/pull/23243)
+    - `bedrock/{region}/{model}` 경로 형식에서 리전과 모델 ID를 추출합니다. - [PR #22546](https://github.com/BerriAI/litellm/pull/22546)
+    - Bedrock 및 Azure AI의 Anthropic 메시지에서 `cache_control`의 `scope`를 제거합니다. - [PR #22867](https://github.com/BerriAI/litellm/pull/22867)
+    - Responses API 응답에 `completion_tokens_details`를 채웁니다. - [PR #23243](https://github.com/BerriAI/litellm/pull/23243)
 
 - **[Azure AI](../../docs/providers/azure_ai)**
-    - Resolve `api_base` from environment variable in Document Intelligence OCR - [PR #21581](https://github.com/BerriAI/litellm/pull/21581)
+    - Document Intelligence OCR에서 환경 변수로부터 `api_base`를 해석합니다. - [PR #21581](https://github.com/BerriAI/litellm/pull/21581)
 
 - **[Moonshot / Kimi](../../docs/providers/openai_compatible)**
-    - Auto-fill `reasoning_content` for Moonshot Kimi reasoning models - [PR #23580](https://github.com/BerriAI/litellm/pull/23580)
-    - Preserve `image_url` blocks in multimodal messages for Moonshot - [PR #21595](https://github.com/BerriAI/litellm/pull/21595)
+    - Moonshot Kimi 추론 모델의 `reasoning_content`를 자동으로 채웁니다. - [PR #23580](https://github.com/BerriAI/litellm/pull/23580)
+    - Moonshot의 멀티모달 메시지에서 `image_url` 블록을 보존합니다. - [PR #21595](https://github.com/BerriAI/litellm/pull/21595)
 
 - **[HuggingFace](../../docs/providers/huggingface)**
-    - Forward `extra_headers` to HuggingFace embedding API - [PR #23525](https://github.com/BerriAI/litellm/pull/23525)
+    - HuggingFace 임베딩 API로 `extra_headers`를 전달합니다. - [PR #23525](https://github.com/BerriAI/litellm/pull/23525)
 
-- **Token Counting / Cost**
-    - Fix `count_tokens` to include system prompts and tools in token counting API requests - [PR #22301](https://github.com/BerriAI/litellm/pull/22301)
-    - Pass all custom pricing fields to `register_model` in `completion()` and `embedding()` - [PR #22552](https://github.com/BerriAI/litellm/pull/22552)
+- **토큰 계산 / 비용**
+    - 토큰 계산 API 요청에서 시스템 프롬프트와 도구를 포함하도록 `count_tokens`를 수정했습니다. - [PR #22301](https://github.com/BerriAI/litellm/pull/22301)
+    - `completion()`과 `embedding()`에서 모든 사용자 지정 가격 필드를 `register_model`로 전달합니다. - [PR #22552](https://github.com/BerriAI/litellm/pull/22552)
 
-- **Tools / Function Calling**
-    - Gracefully repair truncated JSON in tool call arguments — prevents crashes on malformed tool responses - [PR #22503](https://github.com/BerriAI/litellm/pull/22503)
-    - Fix `output_item.done` for function calls not emitting `finish_reason` in streaming - [PR #22553](https://github.com/BerriAI/litellm/pull/22553)
-    - Preserve thinking block order with multiple web searches - [PR #23093](https://github.com/BerriAI/litellm/pull/23093)
+- **도구 / 함수 호출**
+    - 도구 호출 인자의 잘린 JSON을 복구해 잘못된 형식의 도구 응답에서 충돌이 발생하지 않도록 합니다. - [PR #22503](https://github.com/BerriAI/litellm/pull/22503)
+    - 스트리밍에서 `finish_reason`을 내보내지 않는 함수 호출의 `output_item.done`을 수정했습니다. - [PR #22553](https://github.com/BerriAI/litellm/pull/22553)
+    - 여러 웹 검색이 있을 때 thinking 블록 순서를 보존합니다. - [PR #23093](https://github.com/BerriAI/litellm/pull/23093)
 
-- **General**
-    - Normalize `content_filtered` finish reason across providers - [PR #23564](https://github.com/BerriAI/litellm/pull/23564)
-    - Unify `finish_reason` mapping to OpenAI-compatible values across all providers - [PR #22138](https://github.com/BerriAI/litellm/pull/22138)
-    - Fix custom cost tracking on deployments for `/v1/messages` and `/v1/responses` - [PR #23647](https://github.com/BerriAI/litellm/pull/23647)
-    - Fix per-request custom pricing when `router_model_id` has no pricing data — now falls back to model name
-    - Fix batch list showing stale `validating` status after completion - [PR #22982](https://github.com/BerriAI/litellm/pull/22982)
-    - Fix batch retrieve returning raw `output_file_id` when `model_id` is missing - [PR #23194](https://github.com/BerriAI/litellm/pull/23194)
-    - Encode batch IDs when `x-litellm-model` header is used - [PR #22653](https://github.com/BerriAI/litellm/pull/22653)
-    - Map `reasoning` to `reasoning_content` in streaming Delta for gpt-oss providers - [PR #22803](https://github.com/BerriAI/litellm/pull/22803)
-
----
-
-## Management Endpoints / UI
-
-#### Features
-
-- **Virtual Keys**
-    - Add Organization dropdown to Create/Edit Key form — `organization_id` is now a first-class field in Key Ownership - [PR #23595](https://github.com/BerriAI/litellm/pull/23595)
-    - Allow setting `organization_id` on `/key/update` — keys can be assigned or moved to a different organization after creation - [PR #23557](https://github.com/BerriAI/litellm/pull/23557)
-    - Manual Spend Reset for virtual keys from the UI — admins can reset key spend to zero on demand - [PR #22715](https://github.com/BerriAI/litellm/pull/22715)
-    - BYOK (Bring Your Own Key) — client-side provider API key takes precedence over proxy key for Anthropic `/v1/messages` - [PR #22964](https://github.com/BerriAI/litellm/pull/22964)
-    - UI login session duration configurable via `LITELLM_UI_SESSION_DURATION` environment variable - [PR #22182](https://github.com/BerriAI/litellm/pull/22182)
-    - Auto-redirect UI login to SSO via `auto_redirect_ui_login_to_sso: true` in config.yaml - [PR #23367](https://github.com/BerriAI/litellm/pull/23367)
-
-- **Access Control (RBAC)**
-    - Org Admins can now access team management endpoints — `/team/new`, `/team/update`, `/team/delete`, `/team/member_add`, `/team/member_delete` - [PR #23085](https://github.com/BerriAI/litellm/pull/23085), [PR #23095](https://github.com/BerriAI/litellm/pull/23095)
-    - Org Admins can view and invite internal users — full user management without requiring global admin role - [PR #23080](https://github.com/BerriAI/litellm/pull/23080)
-    - Allow Admin Viewers to access Audit Logs — view-only admin role now includes audit log access - [PR #23419](https://github.com/BerriAI/litellm/pull/23419)
-    - RBAC for Vector Stores and Agents — key/team-level access control for vector store and agent resources - [PR #22858](https://github.com/BerriAI/litellm/pull/22858)
-    - User filter scope (`scope_user_search_to_org`) is now opt-in — previously default-on, causing unintended restriction - [PR #23057](https://github.com/BerriAI/litellm/pull/23057)
-
-- **Vector Stores**
-    - Vector Store management endpoints — retrieve, list, update, and delete vector stores via `/v1/vector_stores/*` - [PR #23435](https://github.com/BerriAI/litellm/pull/23435)
-
-- **Teams**
-    - Batch expiry setting for teams — configure a default expiry duration for all team keys - [PR #22705](https://github.com/BerriAI/litellm/pull/22705)
-    - Team Admin can reset key spend - [PR #22725](https://github.com/BerriAI/litellm/pull/22725)
-
-- **Internal Users**
-    - Add/Remove Team Membership directly from the Internal Users info page — includes searchable dropdown and role selector; no longer requires navigating to each team - [PR #23638](https://github.com/BerriAI/litellm/pull/23638)
-
-- **Models**
-    - Attach knowledge base to model via UI - [PR #22656](https://github.com/BerriAI/litellm/pull/22656)
-
-- **Default Team Settings**
-    - Modernize page to antd (consistent with rest of app) - [PR #23614](https://github.com/BerriAI/litellm/pull/23614)
-    - Fix: default team params (budget, duration, tpm, rpm, permissions) now correctly applied on `/team/new` - [PR #23614](https://github.com/BerriAI/litellm/pull/23614)
-    - Fix: settings persist across proxy restarts (`default_team_params` added to `LITELLM_SETTINGS_SAFE_DB_OVERRIDES`) - [PR #23614](https://github.com/BerriAI/litellm/pull/23614)
-    - Fix: resolved race condition in `_update_litellm_setting` where `get_config()` could overwrite freshly saved values - [PR #23614](https://github.com/BerriAI/litellm/pull/23614)
-
-- **Usage**
-    - Auto-paginate daily spend data — all entity views (teams, orgs, customers, tags, agents, users) fetch pages progressively with charts updating after each page - [PR #23622](https://github.com/BerriAI/litellm/pull/23622)
-
-- **Models / Cost**
-    - Azure Model Router cost breakdown in UI — show per-sub-model `additional_costs` from `hidden_params` in `CostBreakdownViewer` - [PR #23550](https://github.com/BerriAI/litellm/pull/23550)
-
-- **User Management**
-    - New `/user/info/v2` endpoint — scoped, paginated replacement for the existing god endpoint that caused memory and stability issues on large installs - [PR #23437](https://github.com/BerriAI/litellm/pull/23437)
-
-#### Bugs
-
-- Fix Tag list endpoint returning 500 due to invalid Prisma `group_by` kwargs - [PR #23606](https://github.com/BerriAI/litellm/pull/23606)
-- Fix Team Admin getting 403 on `/user/filter/ui` when `scope_user_search_to_org` is enabled - [PR #23671](https://github.com/BerriAI/litellm/pull/23671)
-- Fix Public Model Hub not showing config-defined models after save - [PR #23501](https://github.com/BerriAI/litellm/pull/23501)
-- Fix fallback popup model dropdown z-index issue - [PR #23516](https://github.com/BerriAI/litellm/pull/23516)
-- Fix double-counting bug in org/team key limit checks on `/key/update`
-- Fix invite link allowing multiple password resets for the same link - [PR #22462](https://github.com/BerriAI/litellm/pull/22462)
-- Fix key expiry default duration not being applied when `duration` is not set - [PR #22956](https://github.com/BerriAI/litellm/pull/22956)
-- Fix all proxy models not including model access groups in key creation - [PR #23236](https://github.com/BerriAI/litellm/pull/23236)
-- Fix admin viewers unable to see all organizations - [PR #22940](https://github.com/BerriAI/litellm/pull/22940)
-- Fix Audit Logs UI: added server-side pagination, filtering, and drawer view - [PR #22476](https://github.com/BerriAI/litellm/pull/22476)
-- Fix virtual keys in teams view not applying the team filter correctly - [PR #23065](https://github.com/BerriAI/litellm/pull/23065)
-- Fix team expiry enforcement validation - [PR #22728](https://github.com/BerriAI/litellm/pull/22728)
+- **일반**
+    - 제공자 전반에서 `content_filtered` 완료 이유를 정규화합니다. - [PR #23564](https://github.com/BerriAI/litellm/pull/23564)
+    - 모든 제공자의 `finish_reason` 매핑을 OpenAI 호환 값으로 통합합니다. - [PR #22138](https://github.com/BerriAI/litellm/pull/22138)
+    - `/v1/messages`와 `/v1/responses` 배포의 사용자 지정 비용 추적을 수정했습니다. - [PR #23647](https://github.com/BerriAI/litellm/pull/23647)
+    - `router_model_id`에 가격 데이터가 없을 때 요청별 사용자 지정 가격을 수정했습니다. 이제 모델 이름으로 대체합니다.
+    - 완료 후 배치 목록이 오래된 `validating` 상태를 표시하던 문제를 수정했습니다. - [PR #22982](https://github.com/BerriAI/litellm/pull/22982)
+    - `model_id`가 없을 때 배치 조회가 원시 `output_file_id`를 반환하던 문제를 수정했습니다. - [PR #23194](https://github.com/BerriAI/litellm/pull/23194)
+    - `x-litellm-model` 헤더가 사용될 때 배치 ID를 인코딩합니다. - [PR #22653](https://github.com/BerriAI/litellm/pull/22653)
+    - gpt-oss 제공자의 스트리밍 Delta에서 `reasoning`을 `reasoning_content`로 매핑합니다. - [PR #22803](https://github.com/BerriAI/litellm/pull/22803)
 
 ---
 
-## AI Integrations
+## 관리 엔드포인트 / UI {#management-endpoints--ui}
 
-### Logging
+#### 기능
+
+- **가상 키**
+    - 키 생성/수정 양식에 조직 드롭다운 추가 — `organization_id`가 키 소유권의 일급 필드가 되었습니다. - [PR #23595](https://github.com/BerriAI/litellm/pull/23595)
+    - `/key/update`에서 `organization_id` 설정 허용 — 생성 후 키를 다른 조직에 할당하거나 이동할 수 있습니다. - [PR #23557](https://github.com/BerriAI/litellm/pull/23557)
+    - UI에서 가상 키의 수동 사용액 재설정 지원 — 관리자가 필요할 때 키 사용액을 0으로 재설정할 수 있습니다. - [PR #22715](https://github.com/BerriAI/litellm/pull/22715)
+    - BYOK(Bring Your Own Key) — Anthropic `/v1/messages`에서 클라이언트 측 제공자 API 키가 프록시 키보다 우선합니다. - [PR #22964](https://github.com/BerriAI/litellm/pull/22964)
+    - `LITELLM_UI_SESSION_DURATION` 환경 변수로 UI 로그인 세션 기간 구성 가능 - [PR #22182](https://github.com/BerriAI/litellm/pull/22182)
+    - config.yaml의 `auto_redirect_ui_login_to_sso: true`로 UI 로그인을 SSO로 자동 리디렉션 - [PR #23367](https://github.com/BerriAI/litellm/pull/23367)
+
+- **접근 제어(RBAC)**
+    - Org Admin이 팀 관리 엔드포인트에 접근 가능 — `/team/new`, `/team/update`, `/team/delete`, `/team/member_add`, `/team/member_delete` - [PR #23085](https://github.com/BerriAI/litellm/pull/23085), [PR #23095](https://github.com/BerriAI/litellm/pull/23095)
+    - Org Admin이 내부 사용자를 조회하고 초대할 수 있습니다. 전역 관리자 역할 없이 전체 사용자 관리가 가능합니다. - [PR #23080](https://github.com/BerriAI/litellm/pull/23080)
+    - Admin Viewer의 감사 로그 접근 허용 — 보기 전용 관리자 역할에 감사 로그 접근 권한이 포함됩니다. - [PR #23419](https://github.com/BerriAI/litellm/pull/23419)
+    - Vector Store와 Agent용 RBAC — 벡터 저장소 및 에이전트 리소스에 대한 키/팀 수준 접근 제어 - [PR #22858](https://github.com/BerriAI/litellm/pull/22858)
+    - 사용자 필터 범위(`scope_user_search_to_org`)가 opt-in으로 변경되었습니다. 이전에는 기본 활성화라 의도치 않은 제한을 만들 수 있었습니다. - [PR #23057](https://github.com/BerriAI/litellm/pull/23057)
+
+- **벡터 저장소**
+    - Vector Store 관리 엔드포인트 — `/v1/vector_stores/*`를 통해 벡터 저장소 조회, 목록, 업데이트, 삭제 지원 - [PR #23435](https://github.com/BerriAI/litellm/pull/23435)
+
+- **팀**
+    - 팀용 배치 만료 설정 — 모든 팀 키의 기본 만료 기간 구성 - [PR #22705](https://github.com/BerriAI/litellm/pull/22705)
+    - Team Admin이 키 사용액을 재설정할 수 있습니다. - [PR #22725](https://github.com/BerriAI/litellm/pull/22725)
+
+- **내부 사용자**
+    - 내부 사용자 정보 페이지에서 팀 멤버십을 직접 추가/제거할 수 있습니다. 검색 가능한 드롭다운과 역할 선택기를 포함하며, 더 이상 각 팀으로 이동할 필요가 없습니다. - [PR #23638](https://github.com/BerriAI/litellm/pull/23638)
+
+- **모델**
+    - UI를 통해 모델에 지식 베이스 연결 - [PR #22656](https://github.com/BerriAI/litellm/pull/22656)
+
+- **기본 팀 설정**
+    - 페이지를 antd 기반으로 현대화했습니다(앱 나머지 부분과 일관성 유지). - [PR #23614](https://github.com/BerriAI/litellm/pull/23614)
+    - 수정: 기본 팀 파라미터(budget, duration, tpm, rpm, permissions)가 `/team/new`에 올바르게 적용됩니다. - [PR #23614](https://github.com/BerriAI/litellm/pull/23614)
+    - 수정: 프록시 재시작 후에도 설정이 유지됩니다(`default_team_params`가 `LITELLM_SETTINGS_SAFE_DB_OVERRIDES`에 추가됨). - [PR #23614](https://github.com/BerriAI/litellm/pull/23614)
+    - 수정: `_update_litellm_setting`에서 `get_config()`가 방금 저장된 값을 덮어쓸 수 있던 경쟁 상태 해결 - [PR #23614](https://github.com/BerriAI/litellm/pull/23614)
+
+- **사용법**
+    - 일일 사용액 데이터 자동 페이지네이션 — 모든 엔티티 보기(teams, orgs, customers, tags, agents, users)가 페이지를 점진적으로 가져오고 각 페이지 이후 차트를 업데이트합니다. - [PR #23622](https://github.com/BerriAI/litellm/pull/23622)
+
+- **모델 / 비용**
+    - UI의 Azure Model Router 비용 상세 — `CostBreakdownViewer`에서 `hidden_params`의 하위 모델별 `additional_costs` 표시 - [PR #23550](https://github.com/BerriAI/litellm/pull/23550)
+
+- **사용자 관리**
+    - 신규 `/user/info/v2` 엔드포인트 — 대규모 설치에서 메모리 및 안정성 문제를 만들던 기존 god 엔드포인트를 범위 지정 및 페이지네이션 방식으로 대체 - [PR #23437](https://github.com/BerriAI/litellm/pull/23437)
+
+#### 버그 수정
+
+- 잘못된 Prisma `group_by` kwargs 때문에 태그 목록 엔드포인트가 500을 반환하던 문제 수정 - [PR #23606](https://github.com/BerriAI/litellm/pull/23606)
+- `scope_user_search_to_org`가 활성화된 경우 Team Admin이 `/user/filter/ui`에서 403을 받던 문제 수정 - [PR #23671](https://github.com/BerriAI/litellm/pull/23671)
+- 저장 후 Public Model Hub가 구성에 정의된 모델을 표시하지 않던 문제 수정 - [PR #23501](https://github.com/BerriAI/litellm/pull/23501)
+- 대체 팝업 모델 드롭다운 z-index 문제 수정 - [PR #23516](https://github.com/BerriAI/litellm/pull/23516)
+- `/key/update`에서 조직/팀 키 제한 확인이 중복 계산되던 버그 수정
+- 동일한 초대 링크로 여러 번 비밀번호 재설정이 가능하던 문제 수정 - [PR #22462](https://github.com/BerriAI/litellm/pull/22462)
+- `duration`이 설정되지 않았을 때 키 만료 기본 기간이 적용되지 않던 문제 수정 - [PR #22956](https://github.com/BerriAI/litellm/pull/22956)
+- 키 생성에서 모든 프록시 모델이 모델 접근 그룹을 포함하지 않던 문제 수정 - [PR #23236](https://github.com/BerriAI/litellm/pull/23236)
+- 관리자 뷰어가 모든 조직을 볼 수 없던 문제 수정 - [PR #22940](https://github.com/BerriAI/litellm/pull/22940)
+- 감사 로그 UI 수정: 서버 측 페이지네이션, 필터링, drawer view 추가 - [PR #22476](https://github.com/BerriAI/litellm/pull/22476)
+- 팀 보기의 가상 키에 팀 필터가 올바르게 적용되지 않던 문제 수정 - [PR #23065](https://github.com/BerriAI/litellm/pull/23065)
+- 팀 만료 적용 검증 수정 - [PR #22728](https://github.com/BerriAI/litellm/pull/22728)
+
+---
+
+## AI 통합 {#ai-integrations}
+
+### 로깅 {#logging}
 
 - **[Helicone](../../docs/observability/helicone_integration)**
-    - Add Gemini and Vertex AI support to HeliconeLogger — routes Gemini and Vertex AI requests through the correct Helicone provider URL - [PR #19288](https://github.com/BerriAI/litellm/pull/19288)
-    - Fix correct provider URL for Vertex AI Gemini models - [PR #22603](https://github.com/BerriAI/litellm/pull/22603)
+    - HeliconeLogger에 Gemini 및 Vertex AI 지원 추가 — Gemini와 Vertex AI 요청을 올바른 Helicone 제공자 URL로 라우팅합니다. - [PR #19288](https://github.com/BerriAI/litellm/pull/19288)
+    - Vertex AI Gemini 모델의 올바른 제공자 URL 수정 - [PR #22603](https://github.com/BerriAI/litellm/pull/22603)
 
 - **[Langfuse](../../docs/proxy/logging#langfuse)**
-    - Fix failure path kwargs inconsistency causing dropped traces on failed requests - [PR #22390](https://github.com/BerriAI/litellm/pull/22390)
+    - 실패한 요청에서 추적이 누락되던 실패 경로 kwargs 불일치 수정 - [PR #22390](https://github.com/BerriAI/litellm/pull/22390)
 
 - **[Vantage](https://vantage.sh)**
-    - Add Vantage integration for FOCUS 1.2 CSV export — export LiteLLM proxy spend data as FinOps Open Cost & Usage Specification reports, with time-windowed filenames to prevent overwrites - [PR #23333](https://github.com/BerriAI/litellm/pull/23333)
+    - FOCUS 1.2 CSV 내보내기용 Vantage 통합 추가 — LiteLLM 프록시 사용액 데이터를 FinOps Open Cost & Usage Specification 보고서로 내보내고, 덮어쓰기 방지를 위해 시간 창 기반 파일 이름을 사용합니다. - [PR #23333](https://github.com/BerriAI/litellm/pull/23333)
 
-- **General**
-    - Fix silent metrics race condition causing metric collision across experiments - [PR #23542](https://github.com/BerriAI/litellm/pull/23542)
+- **일반**
+    - 실험 간 지표 충돌을 만들던 조용한 지표 경쟁 상태 수정 - [PR #23542](https://github.com/BerriAI/litellm/pull/23542)
 
-### Guardrails
+### 가드레일
 
-- **Guardrail mode default list** — Configure a default list of guardrail modes applied globally when no per-request mode is specified - [PR #22676](https://github.com/BerriAI/litellm/pull/22676)
-- **Tag-based guardrail mode lists** — Specify a list of modes in tag-based guardrail configs instead of a single mode - [PR #23020](https://github.com/BerriAI/litellm/pull/23020)
-- **Fix presidio PII token leak** — Edge case where Anthropic handle in Presidio caused PII data exposure in token response - [PR #22627](https://github.com/BerriAI/litellm/pull/22627)
-- **Fix OTEL orphaned guardrail traces** — Span redundancy and missing response IDs in OpenTelemetry guardrail traces - [PR #23001](https://github.com/BerriAI/litellm/pull/23001)
+- **가드레일 모드 기본 목록** — 요청별 모드가 지정되지 않았을 때 전역으로 적용되는 기본 가드레일 모드 목록 구성 - [PR #22676](https://github.com/BerriAI/litellm/pull/22676)
+- **태그 기반 가드레일 모드 목록** — 태그 기반 가드레일 구성에서 단일 모드 대신 모드 목록 지정 - [PR #23020](https://github.com/BerriAI/litellm/pull/23020)
+- **presidio PII 토큰 누출 수정** — Presidio의 Anthropic 핸들러가 토큰 응답에서 PII 데이터 노출을 만들던 예외 사례 수정 - [PR #22627](https://github.com/BerriAI/litellm/pull/22627)
+- **OTEL 고아 가드레일 추적 수정** — OpenTelemetry 가드레일 추적의 span 중복과 누락된 응답 ID 수정 - [PR #23001](https://github.com/BerriAI/litellm/pull/23001)
 
-### Prompt Management
+### 프롬프트 관리 {#prompt-management}
 
-No major prompt management changes in this release.
+이번 릴리스에는 주요 프롬프트 관리 변경이 없습니다.
 
-### Secret Managers
+### 시크릿 관리자 {#secret-managers}
 
-- **[Hashicorp Vault](../../docs/secret_managers)** — Full Hashicorp Vault integration as a config override backend — secrets defined in Vault are fetched at startup and override `config.yaml` values. UI support for managing vault-sourced credentials included - [PR #22939](https://github.com/BerriAI/litellm/pull/22939), [PR #23036](https://github.com/BerriAI/litellm/pull/23036)
-
----
-
-## MCP Gateway
-
-#### Features
-
-- **Token authentication for MCP servers** — configure `auth_type: "bearer"` per MCP server to require token-based auth on tool calls - [PR #23260](https://github.com/BerriAI/litellm/pull/23260)
-- **Team-scoped MCP server filtering** — keys created under a team only see MCP servers available to that team - [PR #23323](https://github.com/BerriAI/litellm/pull/23323)
-- **Per-server health recheck in UI** — trigger a health check for individual MCP servers without reloading all servers - [PR #23328](https://github.com/BerriAI/litellm/pull/23328)
-
-#### Bugs
-
-- Fix MCP server URL and tools management issues causing tool discovery to fail - [PR #22751](https://github.com/BerriAI/litellm/pull/22751)
-- Fix MCP server health checks triggering on server deletion - [PR #23063](https://github.com/BerriAI/litellm/pull/23063)
+- **[Hashicorp Vault](../../docs/secret_managers)** — 구성 재정의 백엔드로 Hashicorp Vault 전체 통합 지원 — Vault에 정의된 시크릿을 시작 시 가져와 `config.yaml` 값을 재정의합니다. Vault에서 가져온 자격 증명을 관리하는 UI 지원 포함 - [PR #22939](https://github.com/BerriAI/litellm/pull/22939), [PR #23036](https://github.com/BerriAI/litellm/pull/23036)
 
 ---
 
-## Spend Tracking, Budgets and Rate Limiting
+## MCP 게이트웨이 {#mcp-gateway}
 
-- **Fix budget-linked keys never having spend reset** — Keys linked to budget objects were not having their spend reset on the configured reset interval - [PR #20688](https://github.com/BerriAI/litellm/pull/20688)
-- **Flex pricing support** — Add `flex_pricing` field to cost map for providers that offer dynamic pricing tiers - [PR #22992](https://github.com/BerriAI/litellm/pull/22992)
-- **Fix spend log cleanup** — Resolved lock tracking, integer retention, and skip-log-level issues in spend log cleanup job - [PR #22687](https://github.com/BerriAI/litellm/pull/22687)
-- **Fix WebSearch spend log deduplication** — WebSearch interception was failing with thinking enabled; fixed along with spend log dedup - [PR #22679](https://github.com/BerriAI/litellm/pull/22679)
-- **Fix TypeError when request has no API key** — Spend tracking was throwing unhandled exception when API key was absent from request - [PR #23363](https://github.com/BerriAI/litellm/pull/23363)
+#### 기능
 
----
+- **MCP 서버용 토큰 인증** — MCP 서버별 `auth_type: "bearer"`를 구성해 도구 호출에 토큰 기반 인증을 요구할 수 있습니다. - [PR #23260](https://github.com/BerriAI/litellm/pull/23260)
+- **팀 범위 MCP 서버 필터링** — 팀 아래 생성된 키는 해당 팀에서 사용 가능한 MCP 서버만 볼 수 있습니다. - [PR #23323](https://github.com/BerriAI/litellm/pull/23323)
+- **UI의 서버별 상태 재확인** — 모든 서버를 다시 로드하지 않고 개별 MCP 서버의 상태 확인을 트리거할 수 있습니다. - [PR #23328](https://github.com/BerriAI/litellm/pull/23328)
 
-## Performance / Loadbalancing / Reliability improvements
+#### 버그 수정
 
-- **Fix streaming crashes after ~1 hour** — `LLMClientCache._remove_key()` no longer calls `close()`/`aclose()` on evicted HTTP/SDK clients. In-flight requests were crashing with `RuntimeError: Cannot send a request, as the client has been closed.` after the 1-hour TTL expired. Cleanup now happens only at shutdown via `close_litellm_async_clients()` - [PR #22926](https://github.com/BerriAI/litellm/pull/22926)
-- **Fix OOM / Prisma connection loss** on large installs — unbounded managed-object poll was exhausting Prisma connections after ~60–70 minutes on instances with 336K+ queued response rows - [PR #23472](https://github.com/BerriAI/litellm/pull/23472)
-- **Centralize logging kwarg updates** — root cause fix migrating all logging updates to a single function, eliminating kwarg inconsistencies across logging paths - [PR #23659](https://github.com/BerriAI/litellm/pull/23659)
-- **Fix tiktoken cache for non-root offline containers** — tiktoken cache now works correctly in offline environments running as non-root users - [PR #23498](https://github.com/BerriAI/litellm/pull/23498)
-- **Block proxy startup when Redis transaction buffer has no Redis** — prevents silent data loss when `use_redis_transaction_buffer: true` is set without a Redis connection - [PR #23019](https://github.com/BerriAI/litellm/pull/23019)
-- **Fix `InFlightRequestsMiddleware` crash** — undefined kwargs in middleware were causing request failures - [PR #22523](https://github.com/BerriAI/litellm/pull/22523)
-- **Fix `BaseModelResponseIterator` crash on non-string stream chunks** — streaming was crashing when providers returned non-string chunk data - [PR #23497](https://github.com/BerriAI/litellm/pull/23497)
-- **Fix `SERVER_ROOT_PATH` prefix handling** — strip prefix before checking mapped pass-through routes to prevent double-prefix issues - [PR #23414](https://github.com/BerriAI/litellm/pull/23414)
-- **Add CodSpeed continuous performance benchmarks** — automated performance regression tracking on CI - [PR #23676](https://github.com/BerriAI/litellm/pull/23676)
+- 도구 검색 실패를 만들던 MCP 서버 URL 및 도구 관리 문제 수정 - [PR #22751](https://github.com/BerriAI/litellm/pull/22751)
+- 서버 삭제 시 MCP 서버 상태 확인이 트리거되던 문제 수정 - [PR #23063](https://github.com/BerriAI/litellm/pull/23063)
 
 ---
 
-## Security
+## 비용 추적, 예산 및 속도 제한 {#cost-tracking-budgets-and-rate-limiting}
 
-- **Secret redaction in proxy logs** — Adds a `SecretRedactionFilter` to all LiteLLM loggers that scrubs API keys, tokens, and credentials from log messages, format args, exception tracebacks, and extra fields. Enabled by default; opt out with `LITELLM_DISABLE_REDACT_SECRETS=true` - [PR #23668](https://github.com/BerriAI/litellm/pull/23668), [PR #23667](https://github.com/BerriAI/litellm/pull/23667)
-- **Bump PyJWT to `^2.12.0`** — addresses security vulnerability in `^2.10.1` - [PR #23678](https://github.com/BerriAI/litellm/pull/23678)
-- **Bump `tar` to 7.5.11 and `tornado` to 6.5.5** — addresses CVEs in transitive dependencies - [PR #23602](https://github.com/BerriAI/litellm/pull/23602)
-
----
-
-## Database / Proxy Operations
-
-- **Fix Prisma migrate deploy on pre-existing instances** — resolved multiple bugs in migration recovery logic: missing return in the P3018 idempotent error handler and unhandled exceptions in `_roll_back_migration` that caused silent failures even after successful recovery - [PR #23655](https://github.com/BerriAI/litellm/pull/23655)
-- **Make DB migration failure exit opt-in** — proxy no longer exits on `prisma migrate deploy` failure by default; enable with `--enforce_prisma_migration_check` - [PR #23675](https://github.com/BerriAI/litellm/pull/23675)
+- **예산 연결 키의 사용액 재설정 누락 수정** — 예산 객체에 연결된 키의 사용액이 구성된 재설정 주기에 재설정되지 않던 문제 수정 - [PR #20688](https://github.com/BerriAI/litellm/pull/20688)
+- **Flex 가격 지원** — 동적 가격 계층을 제공하는 제공자용 `flex_pricing` 필드를 비용 맵에 추가 - [PR #22992](https://github.com/BerriAI/litellm/pull/22992)
+- **사용액 로그 정리 수정** — 사용액 로그 정리 작업의 잠금 추적, 정수 보존, 건너뛸 로그 레벨 문제 해결 - [PR #22687](https://github.com/BerriAI/litellm/pull/22687)
+- **WebSearch 사용액 로그 중복 제거 수정** — thinking이 활성화된 경우 WebSearch 가로채기가 실패하던 문제와 사용액 로그 중복 제거를 함께 수정 - [PR #22679](https://github.com/BerriAI/litellm/pull/22679)
+- **요청에 API 키가 없을 때 TypeError 수정** — 요청에 API 키가 없을 때 사용액 추적이 처리되지 않은 예외를 던지던 문제 수정 - [PR #23363](https://github.com/BerriAI/litellm/pull/23363)
 
 ---
 
-## Documentation Updates
+## 성능 / 로드밸런싱 / 안정성 개선 {#performance--loadbalancing--reliability}
 
-- Add Anthropic `/v1/messages` → `/responses` parameter mapping reference - [PR #22893](https://github.com/BerriAI/litellm/pull/22893)
-- Update Okta SSO docs and custom SSO handler example - [PR #22786](https://github.com/BerriAI/litellm/pull/22786)
-- Add `LITELLM_MAX_BUDGET_PER_SESSION_TTL` to environment variables reference - [PR #23186](https://github.com/BerriAI/litellm/pull/23186)
-- Add DB query performance guidelines to `CLAUDE.md` - [PR #23196](https://github.com/BerriAI/litellm/pull/23196)
-- Add Gemini Vertex AI PayGo/priority cost tracking docs - [PR #22948](https://github.com/BerriAI/litellm/pull/22948)
-
----
-
-## New Contributors
-
-* @ryanh-ai made their first contribution in [PR #21542](https://github.com/BerriAI/litellm/pull/21542)
-* @ryan-crabbe made their first contribution in [PR #23668](https://github.com/BerriAI/litellm/pull/23668)
-* @Jah-yee made their first contribution in [PR #23525](https://github.com/BerriAI/litellm/pull/23525)
-* @gambletan made their first contribution in [PR #23516](https://github.com/BerriAI/litellm/pull/23516)
-* @awais786 made their first contribution in [PR #23183](https://github.com/BerriAI/litellm/pull/23183)
-* @pradyyadav made their first contribution in [PR #23580](https://github.com/BerriAI/litellm/pull/23580)
-* @xianzongxie-stripe made their first contribution in [PR #23492](https://github.com/BerriAI/litellm/pull/23492)
-* @Harshit28j made their first contribution in [PR #23333](https://github.com/BerriAI/litellm/pull/23333)
-* @codspeed-hq[bot] made their first contribution in [PR #23676](https://github.com/BerriAI/litellm/pull/23676)
+- **약 1시간 후 스트리밍 충돌 수정** — `LLMClientCache._remove_key()`가 제거된 HTTP/SDK 클라이언트에 더 이상 `close()`/`aclose()`를 호출하지 않습니다. 1시간 TTL 만료 후 진행 중 요청이 `RuntimeError: Cannot send a request, as the client has been closed.`로 충돌하던 문제를 해결했습니다. 정리는 이제 종료 시 `close_litellm_async_clients()`를 통해서만 실행됩니다. - [PR #22926](https://github.com/BerriAI/litellm/pull/22926)
+- **대규모 설치의 OOM / Prisma 연결 손실 수정** — 336K+ 대기 중 응답 행이 있는 인스턴스에서 무제한 관리 객체 폴링이 약 60~70분 후 Prisma 연결을 소진하던 문제를 수정했습니다. - [PR #23472](https://github.com/BerriAI/litellm/pull/23472)
+- **로깅 kwargs 업데이트 중앙화** — 모든 로깅 업데이트를 단일 함수로 이관해 로깅 경로 전반의 kwargs 불일치를 제거한 근본 원인 수정입니다. - [PR #23659](https://github.com/BerriAI/litellm/pull/23659)
+- **루트가 아닌 오프라인 컨테이너의 tiktoken 캐시 수정** — 루트가 아닌 사용자로 실행되는 오프라인 환경에서 tiktoken 캐시가 올바르게 동작합니다. - [PR #23498](https://github.com/BerriAI/litellm/pull/23498)
+- **Redis 트랜잭션 버퍼에 Redis가 없으면 프록시 시작 차단** — Redis 연결 없이 `use_redis_transaction_buffer: true`가 설정된 경우 조용한 데이터 손실을 방지합니다. - [PR #23019](https://github.com/BerriAI/litellm/pull/23019)
+- **`InFlightRequestsMiddleware` 충돌 수정** — 미들웨어의 정의되지 않은 kwargs로 요청 실패가 발생하던 문제를 수정했습니다. - [PR #22523](https://github.com/BerriAI/litellm/pull/22523)
+- **문자열이 아닌 스트림 청크에서 `BaseModelResponseIterator` 충돌 수정** — 제공자가 문자열이 아닌 청크 데이터를 반환할 때 스트리밍이 충돌하던 문제를 수정했습니다. - [PR #23497](https://github.com/BerriAI/litellm/pull/23497)
+- **`SERVER_ROOT_PATH` 접두사 처리 수정** — 매핑된 패스스루 라우트를 확인하기 전에 접두사를 제거해 이중 접두사 문제를 방지합니다. - [PR #23414](https://github.com/BerriAI/litellm/pull/23414)
+- **CodSpeed 지속 성능 벤치마크 추가** — CI에서 자동 성능 회귀 추적 지원 - [PR #23676](https://github.com/BerriAI/litellm/pull/23676)
 
 ---
 
-## Diff Summary
+## 보안 {#security}
+
+- **프록시 로그의 시크릿 마스킹** — 모든 LiteLLM 로거에 `SecretRedactionFilter`를 추가해 로그 메시지, 형식 인자, 예외 추적, 추가 필드에서 API 키, 토큰, 자격 증명을 제거합니다. 기본으로 활성화되며, `LITELLM_DISABLE_REDACT_SECRETS=true`로 해제할 수 있습니다. - [PR #23668](https://github.com/BerriAI/litellm/pull/23668), [PR #23667](https://github.com/BerriAI/litellm/pull/23667)
+- **PyJWT를 `^2.12.0`으로 상향** — `^2.10.1`의 보안 취약점을 해결합니다. - [PR #23678](https://github.com/BerriAI/litellm/pull/23678)
+- **`tar`를 7.5.11, `tornado`를 6.5.5로 상향** — 전이 의존성의 CVE를 해결합니다. - [PR #23602](https://github.com/BerriAI/litellm/pull/23602)
+
+---
+
+## 데이터베이스 / 프록시 운영 {#database--proxy-operations}
+
+- **기존 인스턴스에서 Prisma migrate deploy 수정** — 마이그레이션 복구 로직의 여러 버그를 해결했습니다. P3018 멱등 오류 핸들러의 누락된 반환과, 복구 성공 후에도 조용한 실패를 만들던 `_roll_back_migration`의 처리되지 않은 예외를 수정했습니다. - [PR #23655](https://github.com/BerriAI/litellm/pull/23655)
+- **DB 마이그레이션 실패 시 종료를 opt-in으로 변경** — 프록시는 더 이상 기본적으로 `prisma migrate deploy` 실패 시 종료하지 않습니다. `--enforce_prisma_migration_check`로 활성화할 수 있습니다. - [PR #23675](https://github.com/BerriAI/litellm/pull/23675)
+
+---
+
+## 문서 업데이트 {#documentation-updates}
+
+- Anthropic `/v1/messages` → `/responses` 파라미터 매핑 참조 추가 - [PR #22893](https://github.com/BerriAI/litellm/pull/22893)
+- Okta SSO 문서 및 사용자 지정 SSO 핸들러 예제 업데이트 - [PR #22786](https://github.com/BerriAI/litellm/pull/22786)
+- 환경 변수 참조에 `LITELLM_MAX_BUDGET_PER_SESSION_TTL` 추가 - [PR #23186](https://github.com/BerriAI/litellm/pull/23186)
+- `CLAUDE.md`에 DB 쿼리 성능 가이드라인 추가 - [PR #23196](https://github.com/BerriAI/litellm/pull/23196)
+- Gemini Vertex AI PayGo/priority 비용 추적 문서 추가 - [PR #22948](https://github.com/BerriAI/litellm/pull/22948)
+
+---
+
+## 신규 기여자 {#new-contributors}
+
+* @ryanh-ai가 [PR #21542](https://github.com/BerriAI/litellm/pull/21542)에서 첫 contribution을 했습니다.
+* @ryan-crabbe가 [PR #23668](https://github.com/BerriAI/litellm/pull/23668)에서 첫 contribution을 했습니다.
+* @Jah-yee가 [PR #23525](https://github.com/BerriAI/litellm/pull/23525)에서 첫 contribution을 했습니다.
+* @gambletan이 [PR #23516](https://github.com/BerriAI/litellm/pull/23516)에서 첫 contribution을 했습니다.
+* @awais786가 [PR #23183](https://github.com/BerriAI/litellm/pull/23183)에서 첫 contribution을 했습니다.
+* @pradyyadav가 [PR #23580](https://github.com/BerriAI/litellm/pull/23580)에서 첫 contribution을 했습니다.
+* @xianzongxie-stripe가 [PR #23492](https://github.com/BerriAI/litellm/pull/23492)에서 첫 contribution을 했습니다.
+* @Harshit28j가 [PR #23333](https://github.com/BerriAI/litellm/pull/23333)에서 첫 contribution을 했습니다.
+* @codspeed-hq[bot]이 [PR #23676](https://github.com/BerriAI/litellm/pull/23676)에서 첫 contribution을 했습니다.
+
+---
+
+## 변경 요약 {#diff-summary}
 
 ## 03/16/2026
-* New Providers: 7
-* New Models / Updated Models: 116 new, 132 removed
-* LLM API Endpoints: 37
-* Management Endpoints / UI: 31
-* AI Integrations: 8
-* MCP Gateway: 5
-* Spend Tracking, Budgets and Rate Limiting: 5
-* Performance / Loadbalancing / Reliability improvements: 9
-* Security: 3
-* Database / Proxy Operations: 2
-* Documentation Updates: 5
+* 신규 제공자: 7
+* 신규 모델 / 업데이트된 모델: 신규 116개, 제거 132개
+* LLM API 엔드포인트: 37
+* 관리 엔드포인트 / UI: 31
+* AI 통합: 8
+* MCP 게이트웨이: 5
+* 비용 추적, 예산 및 속도 제한: 5
+* 성능 / 로드밸런싱 / 안정성 개선: 9
+* 보안: 3
+* 데이터베이스 / 프록시 운영: 2
+* 문서 업데이트: 5
 
 ---
 
-## Full Changelog
+## 전체 변경 이력 {#full-changelog}
 [v1.82.0-stable...v1.82.3-stable](https://github.com/BerriAI/litellm/compare/v1.82.0-stable...v1.82.3-stable)

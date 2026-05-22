@@ -1,12 +1,12 @@
-# Multiple Deployments
+# 여러 배포
 
-If you have multiple deployments of the same model, you can pass the list of deployments, and LiteLLM will return the first result. 
+동일한 모델의 배포가 여러 개 있는 경우 배포 목록을 전달할 수 있으며, LiteLLM은 첫 번째 결과를 반환합니다.
 
-## Quick Start
+## 빠른 시작
 
-Multiple providers offer Mistral-7B-Instruct. 
+여러 공급자가 Mistral-7B-Instruct를 제공합니다.
 
-Here's how you can use litellm to return the first result: 
+litellm을 사용해 첫 번째 결과를 반환하는 방법은 다음과 같습니다.
 
 ```python
 from litellm import completion

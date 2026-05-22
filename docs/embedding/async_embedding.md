@@ -1,7 +1,7 @@
-# litellm.aembedding()
+# `litellm.aembedding()`
 
-LiteLLM provides an asynchronous version of the `embedding` function called `aembedding`
-### Usage
+LiteLLM은 `embedding` 함수의 비동기 버전인 `aembedding`을 제공합니다.
+### 사용법
 ```python
 from litellm import aembedding
 import asyncio

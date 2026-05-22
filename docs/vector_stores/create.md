@@ -1,31 +1,29 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# /vector_stores - Create Vector Store
+# /vector_stores - 벡터 저장소 생성 {#vector-stores-create-vector-store}
 
-Create a vector store which can be used to store and search document chunks for retrieval-augmented generation (RAG) use cases.
+검색 증강 생성(RAG) 사용 사례에서 문서 청크를 저장하고 검색하는 데 사용할 수 있는 벡터 저장소를 생성합니다.
 
-## Overview
+## 개요
 
-| Feature | Supported | Notes |
+| 기능 | 지원 여부 | 참고 |
 |---------|-----------|-------|
-| Cost Tracking | ✅ | Tracked per vector store operation |
-| Logging | ✅ | Works across all integrations |
-| End-user Tracking | ✅ | |
-| Support LLM Providers (OpenAI `/vector_stores` API) | **OpenAI** | Full vector stores API support across providers |
-| Support LLM Providers (Passthrough API) | [**Azure AI**](/docs/providers/azure_ai/azure_ai_vector_stores_passthrough) | Full vector stores API support across providers |
-| Support LLM Providers (Dataset Management) | [**RAGFlow**](/docs/providers/ragflow_vector_store.md) | Dataset creation and management (search not supported) |
+| 비용 추적 | ✅ | 벡터 저장소 작업별로 추적됨 |
+| 로깅 | ✅ | 모든 통합에서 작동 |
+| 최종 사용자 추적 | ✅ | |
+| 지원 LLM 제공자(OpenAI `/vector_stores` API) | **OpenAI** | 제공자 전반에서 전체 벡터 저장소 API 지원 |
+| 지원 LLM 제공자(Passthrough API) | [**Azure AI**](/docs/providers/azure_ai/azure_ai_vector_stores_passthrough) | 제공자 전반에서 전체 벡터 저장소 API 지원 |
+| 지원 LLM 제공자(데이터셋 관리) | [**RAGFlow**](/docs/providers/ragflow_vector_store.md) | 데이터셋 생성 및 관리(검색은 지원되지 않음) |
 
-The proxy also supports **retrieve**, **list**, **update**, and **delete** for vector stores (OpenAI-compatible). See [Vector store management and routing on the proxy](#vector-store-management-and-routing-on-the-proxy) for `curl` examples and provider routing.
-
-## Usage
+## 사용법
 
 ### LiteLLM Python SDK
 
 <Tabs>
-<TabItem value="basic" label="Basic Usage">
+<TabItem value="basic" label="기본 사용법">
 
-#### Async example
+#### 비동기 예제 {#async-example}
 ```python showLineNumbers title="Create Vector Store - Basic"
 import litellm
 
@@ -36,7 +34,7 @@ response = await litellm.vector_stores.acreate(
 print(response)
 ```
 
-#### Sync example
+#### 동기 예제 {#sync-example}
 ```python showLineNumbers title="Create Vector Store - Sync"
 import litellm
 
@@ -49,9 +47,9 @@ print(response)
 
 </TabItem>
 
-<TabItem value="advanced" label="Advanced Configuration">
+<TabItem value="advanced" label="고급 설정">
 
-#### With expiration and chunking strategy
+#### 만료 및 청킹 전략 사용 {#with-expiration-and-chunking-strategy}
 ```python showLineNumbers title="Create Vector Store - Advanced"
 import litellm
 
@@ -79,9 +77,9 @@ print(response)
 
 </TabItem>
 
-<TabItem value="openai-provider" label="OpenAI Provider">
+<TabItem value="openai-provider" label="OpenAI 제공자">
 
-#### Using OpenAI provider explicitly
+#### OpenAI 제공자 명시적으로 사용 {#using-openai-provider-explicitly}
 ```python showLineNumbers title="Create Vector Store - OpenAI Provider"
 import litellm
 import os
@@ -100,12 +98,12 @@ print(response)
 </TabItem>
 </Tabs>
 
-### LiteLLM Proxy Server
+### LiteLLM Proxy 서버 {#litellm-proxy-server}
 
 <Tabs>
-<TabItem value="proxy-setup" label="Setup & Usage">
+<TabItem value="proxy-setup" label="설정 및 사용법">
 
-1. Setup config.yaml
+1. config.yaml 설정
 
 ```yaml
 model_list:
@@ -118,13 +116,13 @@ general_settings:
   # Vector store settings can be added here if needed
 ```
 
-2. Start proxy 
+2. proxy 시작
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-3. Test it with OpenAI SDK!
+3. OpenAI SDK로 테스트합니다.
 
 ```python showLineNumbers title="OpenAI SDK via LiteLLM Proxy"
 from openai import OpenAI
@@ -144,7 +142,7 @@ print(vector_store)
 
 </TabItem>
 
-<TabItem value="curl-proxy" label="curl (create)">
+<TabItem value="curl-proxy" label="curl">
 
 ```bash showLineNumbers title="Create Vector Store via curl"
 curl -L -X POST 'http://0.0.0.0:4000/v1/vector_stores' \
@@ -172,53 +170,12 @@ curl -L -X POST 'http://0.0.0.0:4000/v1/vector_stores' \
 ```
 
 </TabItem>
-
-<TabItem value="curl-management" label="curl (retrieve, list, update, delete)">
-
-Use the same base URL and API key as for create. Replace `vs_abc123` with your vector store id.
-
-**Retrieve**
-
-```bash
-curl -L 'http://0.0.0.0:4000/v1/vector_stores/vs_abc123' \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer sk-1234'
-```
-
-**List** (optional query params: `after`, `before`, `limit`, `order`)
-
-```bash
-curl -L 'http://0.0.0.0:4000/v1/vector_stores?limit=20&order=desc' \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer sk-1234'
-```
-
-**Update** (`POST` with JSON body)
-
-```bash
-curl -L -X POST 'http://0.0.0.0:4000/v1/vector_stores/vs_abc123' \
-  -H 'Content-Type: application/json' \
-  -H 'Authorization: Bearer sk-1234' \
-  -d '{ "name": "Renamed store", "metadata": { "env": "staging" } }'
-```
-
-**Delete**
-
-```bash
-curl -L -X DELETE 'http://0.0.0.0:4000/v1/vector_stores/vs_abc123' \
-  -H 'Accept: application/json' \
-  -H 'Authorization: Bearer sk-1234'
-```
-
-See [Vector store management and routing on the proxy](#vector-store-management-and-routing-on-the-proxy) for provider routing details and OpenAI API references.
-
-</TabItem>
 </Tabs>
 
-### OpenAI SDK (Standalone)
+### OpenAI SDK(독립 실행) {#openai-sdk-standalone}
 
 <Tabs>
-<TabItem value="openai-direct" label="Direct OpenAI Usage">
+<TabItem value="openai-direct" label="직접 OpenAI 사용법">
 
 ```python showLineNumbers title="OpenAI SDK Direct"
 from openai import OpenAI
@@ -235,42 +192,11 @@ print(vector_store)
 </TabItem>
 </Tabs>
 
-## Vector store management and routing on the proxy
+## 요청 형식
 
-Besides **create** (`POST /v1/vector_stores` or `/vector_stores`), the LiteLLM proxy exposes OpenAI-compatible **retrieve**, **list**, **update**, and **delete**. Paths work **with or without** the `/v1` prefix (for example `/v1/vector_stores/...` and `/vector_stores/...`).
+요청 본문은 OpenAI 벡터 저장소 API 형식을 따릅니다.
 
-For **search**, see [Search vector store](./search.md). For **files** on a store, see [Vector store files](../vector_store_files.md).
-
-### Authentication
-
-Use your LiteLLM proxy virtual key with either:
-
-```bash
--H 'Authorization: Bearer sk-1234'
-# or
--H 'x-litellm-api-key: sk-1234'
-```
-
-### Provider routing
-
-LiteLLM automatically selects the vector store provider from the request context — no extra query parameters needed:
-
-- **LiteLLM-managed stores** — If `vector_store_id` is a LiteLLM-managed store, the proxy resolves the provider from the registry (`litellm_params` stored in the database).
-- **Model-based routing** — If the request includes a `model` matching a configured deployment/model group, credentials come from that deployment.
-- **SDK default** — If neither applies, the LiteLLM SDK default for that call is used (e.g. `openai`).
-
-### OpenAI API reference (management operations)
-
-- [Retrieve vector store](https://platform.openai.com/docs/api-reference/vector-stores/retrieve)
-- [List vector stores](https://platform.openai.com/docs/api-reference/vector-stores/list)
-- [Modify vector store](https://platform.openai.com/docs/api-reference/vector-stores/modify) — on the LiteLLM proxy, modify is **`POST`** to `/v1/vector_stores/{vector_store_id}` with a JSON body.
-- [Delete vector store](https://platform.openai.com/docs/api-reference/vector-stores/delete)
-
-## Request Format
-
-The request body follows OpenAI's vector stores API format.
-
-#### Example request body
+#### 예제 요청 본문 {#example-request-body}
 
 ```json
 {
@@ -294,22 +220,22 @@ The request body follows OpenAI's vector stores API format.
 }
 ```
 
-#### Optional Fields
-- **name** (string): The name of the vector store.
-- **file_ids** (array of strings): A list of File IDs that the vector store should use. Useful for tools like `file_search` that can access files.
-- **expires_after** (object): The expiration policy for the vector store.
-  - **anchor** (string): Anchor timestamp after which the expiration policy applies. Supported anchors: `last_active_at`.
-  - **days** (integer): The number of days after the anchor time that the vector store will expire.
-- **chunking_strategy** (object): The chunking strategy used to chunk the file(s). If not set, will use the `auto` strategy.
-  - **type** (string): Always `static`.
-  - **static** (object): The static chunking strategy.
-    - **max_chunk_size_tokens** (integer): The maximum number of tokens in each chunk. The default value is `800`. The minimum value is `100` and the maximum value is `4096`.
-    - **chunk_overlap_tokens** (integer): The number of tokens that overlap between chunks. The default value is `400`.
-- **metadata** (object): Set of 16 key-value pairs that can be attached to an object. This can be useful for storing additional information about the object in a structured format. Keys can be a maximum of 64 characters long and values can be a maximum of 512 characters long.
+#### 선택 필드 {#optional-fields}
+- **name** (문자열): 벡터 저장소의 이름입니다.
+- **file_ids** (문자열 배열): 벡터 저장소가 사용할 파일 ID 목록입니다. 파일에 접근할 수 있는 `file_search` 같은 도구에 유용합니다.
+- **expires_after** (객체): 벡터 저장소의 만료 정책입니다.
+  - **anchor** (문자열): 만료 정책이 적용되는 기준 타임스탬프입니다. 지원되는 anchor는 `last_active_at`입니다.
+  - **days** (정수): 기준 시간 이후 벡터 저장소가 만료될 때까지의 일수입니다.
+- **chunking_strategy** (객체): 파일을 청크로 나누는 데 사용하는 청킹 전략입니다. 설정하지 않으면 `auto` 전략을 사용합니다.
+  - **type** (문자열): 항상 `static`입니다.
+  - **static** (객체): 정적 청킹 전략입니다.
+    - **max_chunk_size_tokens** (정수): 각 청크의 최대 토큰 수입니다. 기본값은 `800`입니다. 최솟값은 `100`이고 최댓값은 `4096`입니다.
+    - **chunk_overlap_tokens** (정수): 청크 간에 겹치는 토큰 수입니다. 기본값은 `400`입니다.
+- **metadata** (객체): 객체에 연결할 수 있는 16개의 key-value 쌍 집합입니다. 객체에 대한 추가 정보를 구조화된 형식으로 저장할 때 유용합니다. 키는 최대 64자, 값은 최대 512자까지 가능합니다.
 
-## Response Format
+## 응답 형식
 
-#### Example Response
+#### 예제 응답 {#example-response}
 
 ```json
 {
@@ -339,28 +265,28 @@ The request body follows OpenAI's vector stores API format.
 }
 ```
 
-#### Response Fields
+#### 응답 필드 {#response-fields}
 
-- **id** (string): The identifier, which can be referenced in API endpoints.
-- **object** (string): The object type, which is always `vector_store`.
-- **created_at** (integer): The Unix timestamp (in seconds) for when the vector store was created.
-- **name** (string): The name of the vector store.
-- **bytes** (integer): The total number of bytes used by the files in the vector store.
-- **file_counts** (object): The file counts for the vector store.
-  - **in_progress** (integer): The number of files that are currently being processed.
-  - **completed** (integer): The number of files that have been successfully processed.
-  - **failed** (integer): The number of files that failed to process.
-  - **cancelled** (integer): The number of files that were cancelled.
-  - **total** (integer): The total number of files.
-- **status** (string): The status of the vector store, which can be either `expired`, `in_progress`, or `completed`. A status of `completed` indicates that the vector store is ready for use.
-- **expires_after** (object or null): The expiration policy for the vector store.
-- **expires_at** (integer or null): The Unix timestamp (in seconds) for when the vector store will expire.
-- **last_active_at** (integer or null): The Unix timestamp (in seconds) for when the vector store was last active.
-- **metadata** (object or null): Set of 16 key-value pairs that can be attached to an object.
+- **id** (문자열): API 엔드포인트에서 참조할 수 있는 식별자입니다.
+- **object** (문자열): 객체 유형이며 항상 `vector_store`입니다.
+- **created_at** (정수): 벡터 저장소가 생성된 시점의 Unix 타임스탬프(초)입니다.
+- **name** (문자열): 벡터 저장소의 이름입니다.
+- **bytes** (정수): 벡터 저장소의 파일이 사용하는 총 바이트 수입니다.
+- **file_counts** (객체): 벡터 저장소의 파일 수입니다.
+  - **in_progress** (정수): 현재 처리 중인 파일 수입니다.
+  - **completed** (정수): 성공적으로 처리된 파일 수입니다.
+  - **failed** (정수): 처리에 실패한 파일 수입니다.
+  - **cancelled** (정수): 취소된 파일 수입니다.
+  - **total** (정수): 전체 파일 수입니다.
+- **status** (문자열): 벡터 저장소의 상태이며 `expired`, `in_progress`, `completed` 중 하나입니다. `completed` 상태는 벡터 저장소를 사용할 준비가 되었음을 나타냅니다.
+- **expires_after** (객체 또는 null): 벡터 저장소의 만료 정책입니다.
+- **expires_at** (정수 또는 null): 벡터 저장소가 만료될 시점의 Unix 타임스탬프(초)입니다.
+- **last_active_at** (정수 또는 null): 벡터 저장소가 마지막으로 활성 상태였던 시점의 Unix 타임스탬프(초)입니다.
+- **metadata** (객체 또는 null): 객체에 연결할 수 있는 16개의 key-value 쌍 집합입니다.
 
-## Mock Response Testing
+## Mock 응답 테스트 {#mock-response-testing}
 
-For testing purposes, you can use mock responses:
+테스트 목적으로 mock 응답을 사용할 수 있습니다.
 
 ```python showLineNumbers title="Mock Response Example"
 import litellm

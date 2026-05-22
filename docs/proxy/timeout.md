@@ -1,11 +1,11 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Timeouts
+# 타임아웃 {#timeouts}
 
-The timeout set in router is for the entire length of the call, and is passed down to the completion() call level as well. 
+router에 설정한 타임아웃은 전체 호출 시간에 적용되며, `completion()` 호출 수준에도 전달됩니다.
 
-### Global Timeouts
+### 전역 타임아웃 {#global-timeouts}
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -29,7 +29,7 @@ router_settings:
     timeout: 30 # sets a 30s timeout for the entire call
 ```
 
-**Start Proxy** 
+**프록시 시작**
 
 ```shell
 $ litellm --config /path/to/config.yaml
@@ -38,15 +38,15 @@ $ litellm --config /path/to/config.yaml
 </TabItem>
 </Tabs>
 
-### Custom Timeouts & Stream Timeouts (Per Model)
+### 사용자 지정 타임아웃 및 스트림 타임아웃(모델별) {#custom-timeouts--stream-timeouts-per-model}
 
-For each model, you can set `timeout` and `stream_timeout` under `litellm_params`:
+각 모델의 `litellm_params` 아래에 `timeout`과 `stream_timeout`을 설정할 수 있습니다.
 
-- **`timeout`** → maximum time for the *complete response*.  
-  Use this to cap long-running completions.
+- **`timeout`** → *전체 응답*에 허용되는 최대 시간입니다.
+  오래 실행되는 completion 시간을 제한할 때 사용합니다.
 
-- **`stream_timeout`** → maximum time to wait for the *first chunk* (i.e., first token) in a streaming response.  
-  Use this to abort “hanging” providers (e.g., Bedrock slow start) and retry another model.
+- **`stream_timeout`** → 스트리밍 응답에서 *첫 번째 청크*(즉, 첫 토큰)를 기다리는 최대 시간입니다.
+  멈춘 것처럼 보이는 프로바이더(예: Bedrock의 느린 시작)를 중단하고 다른 모델로 재시도할 때 사용합니다.
 <Tabs>
 <TabItem value="sdk" label="SDK">
 
@@ -104,7 +104,7 @@ model_list:
 ```
 
 
-**Start Proxy**
+**프록시 시작**
 
 ```shell
 $ litellm --config /path/to/config.yaml
@@ -115,11 +115,11 @@ $ litellm --config /path/to/config.yaml
 </Tabs>
 
 
-### Setting Dynamic Timeouts - Per Request
+### 동적 타임아웃 설정 - 요청별 {#setting-dynamic-timeouts-per-request}
 
-LiteLLM supports setting a `timeout` per request 
+LiteLLM은 요청별 `timeout` 설정을 지원합니다.
 
-**Example Usage**
+**예제 사용법**
 <Tabs>
 <TabItem value="sdk" label="SDK">
 
@@ -140,7 +140,7 @@ response = router.completion(
 <TabItem value="proxy" label="PROXY">
 
 <Tabs>
-<TabItem value="Curl" label="Curl Request">
+<TabItem value="Curl" label="Curl 요청">
 
 ```shell
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -184,11 +184,11 @@ print(response)
 </Tabs>
 
 
-## Testing timeout handling 
+## 타임아웃 처리 테스트 {#testing-timeout-handling}
 
-To test if your retry/fallback logic can handle timeouts, you can set `mock_timeout=True` for testing. 
+재시도/폴백 로직이 타임아웃을 처리할 수 있는지 테스트하려면 테스트용으로 `mock_timeout=True`를 설정할 수 있습니다.
 
-This is currently only supported on `/chat/completions` and `/completions` endpoints. Please [let us know](https://github.com/BerriAI/litellm/issues) if you need this for other endpoints. 
+현재는 `/chat/completions`와 `/completions` 엔드포인트에서만 지원됩니다. 다른 엔드포인트에도 필요하다면 [알려주세요](https://github.com/BerriAI/litellm/issues).
 
 ```bash
 curl -L -X POST 'http://0.0.0.0:4000/v1/chat/completions' \

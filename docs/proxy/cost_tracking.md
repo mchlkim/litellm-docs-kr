@@ -2,29 +2,29 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Image from '@theme/IdealImage';
 
-# Spend Tracking
+# 비용 추적
 
-Track spend for keys, users, and teams across 100+ LLMs.
+100개 이상의 LLM에서 키, 사용자, 팀별 지출을 추적합니다.
 
-LiteLLM automatically tracks spend for all known models. See our [model cost map](https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json)
+LiteLLM은 알려진 모든 모델의 지출을 자동으로 추적합니다. [모델 비용 맵](https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json)을 참고하세요.
 
-Provider-specific cost tracking (e.g., [Vertex AI PayGo / priority pricing](../providers/vertex.md#paygo--priority-cost-tracking), [Bedrock service tiers](../providers/bedrock.md#usage---service-tier), [Azure base model mapping](./custom_pricing.md#set-base_model-for-cost-tracking-eg-azure-deployments)) is applied automatically when the response includes tier metadata.
+응답에 티어 메타데이터가 포함되면 제공자별 비용 추적(예: [Vertex AI PayGo / priority pricing](../providers/vertex.md), [Bedrock service tiers](../providers/bedrock.md), [Azure base model mapping](./custom_pricing.md))이 자동으로 적용됩니다.
 
-:::tip Keep Pricing Data Updated
-[Sync model pricing data from GitHub](./sync_models_github.md) to ensure accurate cost tracking.
+:::tip 가격 데이터 최신 상태 유지
+정확한 비용 추적을 위해 [GitHub에서 모델 가격 데이터를 동기화](./sync_models_github.md)하세요.
 :::
 
-:::info Cost does not match your provider bill?
-Use the step-by-step workflow in [Debugging a cost discrepancy](../troubleshoot/cost_discrepancy): align time ranges, compare token categories (including cache), then decide whether the gap is ingestion, formula, or model-map pricing.
+:::info 비용이 제공자 청구서와 일치하지 않나요?
+[비용 불일치 디버깅](../troubleshoot/cost_discrepancy)의 단계별 워크플로를 사용하세요. 시간 범위를 맞추고, 캐시를 포함한 토큰 범주를 비교한 뒤, 차이가 수집, 계산식, 모델 맵 가격 중 어디에서 생겼는지 판단합니다.
 :::
 
-### How to Track Spend with LiteLLM
+### LiteLLM으로 지출 추적하기 {#how-to-track-spend}
 
-**Step 1**
+**1단계**
 
-👉 [Setup LiteLLM with a Database](https://docs.litellm.ai/docs/proxy/virtual_keys#setup)
+👉 [데이터베이스와 함께 LiteLLM 설정](https://docs.litellm.ai/docs/proxy/virtual_keys#setup)
 
-**Step2** Send `/chat/completions` request
+**2단계** `/chat/completions` 요청 보내기
 
 <Tabs>
 <TabItem value="openai" label="OpenAI Python v1.0.0+">
@@ -57,9 +57,9 @@ print(response)
 
 </TabItem>
 
-<TabItem value="Curl" label="Curl Request">
+<TabItem value="Curl" label="Curl 요청">
 
-Pass `metadata` as part of the request body
+요청 본문 일부로 `metadata`를 전달합니다.
 
 ```shell title="Curl Request with Spend Tracking" showLineNumbers
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -122,20 +122,20 @@ print(response)
 </TabItem>
 </Tabs>
 
-**Step3 - Verify Spend Tracked**
-That's IT. Now Verify your spend was tracked
+**3단계 - 지출 추적 확인**
+이제 지출이 추적되었는지 확인합니다.
 
 <Tabs>
-<TabItem value="curl" label="Response Headers">
+<TabItem value="curl" label="응답 헤더">
 
-Expect to see `x-litellm-response-cost` in the response headers with calculated cost
+응답 헤더에 계산된 비용과 함께 `x-litellm-response-cost`가 표시되어야 합니다.
 
 <Image img={require('../../img/response_cost_img.png')} />
 
 </TabItem>
 <TabItem value="db" label="DB + UI">
 
-The following spend gets tracked in Table `LiteLLM_SpendLogs`
+다음 지출 정보가 `LiteLLM_Spend로그` 테이블에 기록됩니다.
 
 ```json title="Spend Log Entry Format" showLineNumbers
 {
@@ -154,26 +154,26 @@ The following spend gets tracked in Table `LiteLLM_SpendLogs`
 }
 ```
 
-Navigate to the Usage Tab on the LiteLLM UI (found on https://your-proxy-endpoint/ui) and verify you see spend tracked under `Usage`
+LiteLLM UI(https://your-proxy-endpoint/ui)의 사용법 탭으로 이동하여 `사용법` 아래에 지출이 추적되는지 확인합니다.
 
 <Image img={require('../../img/admin_ui_spend.png')} />
 
 </TabItem>
 </Tabs>
 
-### Allowing Non-Proxy Admins to access `/spend` endpoints
+### 프록시 관리자가 아닌 사용자의 `/spend` 엔드포인트 접근 허용
 
-Use this when you want non-proxy admins to access `/spend` endpoints
+프록시 관리자가 아닌 사용자에게 `/spend` 엔드포인트 접근 권한을 주려면 이 설정을 사용합니다.
 
 :::info
 
-Schedule a [meeting with us to get your Enterprise License](https://enterprise.litellm.ai/demo)
+[엔터프라이즈 라이선스 발급 상담 일정을 예약](https://enterprise.litellm.ai/demo)하세요.
 
 :::
 
-##### Create Key
+##### 키 생성
 
-Create Key with with `permissions={"get_spend_routes": true}`
+`permissions={"get_spend_routes": true}`를 포함해 키를 생성합니다.
 
 ```shell title="Generate Key with Spend Route Permissions" showLineNumbers
 curl --location 'http://0.0.0.0:4000/key/generate' \
@@ -184,26 +184,26 @@ curl --location 'http://0.0.0.0:4000/key/generate' \
     }'
 ```
 
-##### Use generated key on `/spend` endpoints
+##### 생성된 키를 `/spend` 엔드포인트에서 사용
 
-Access spend Routes with newly generate keys
+새로 생성한 키로 지출 관련 라우트에 접근합니다.
 
 ```shell
 curl -X GET 'http://localhost:4000/global/spend/report?start_date=2024-04-01&end_date=2024-06-30' \
   -H 'Authorization: Bearer sk-H16BKvrSNConSsBYLGc_7A'
 ```
 
-#### Reset Team, API Key Spend - MASTER KEY ONLY
+#### 팀 및 API 키 지출 초기화 - MASTER KEY 전용
 
-Use `/global/spend/reset` if you want to:
+다음이 필요할 때 `/global/spend/reset`을 사용합니다.
 
-- Reset the Spend for all API Keys, Teams. The `spend` for ALL Teams and Keys in `LiteLLM_TeamTable` and `LiteLLM_VerificationToken` will be set to `spend=0`
+- 모든 API 키와 팀의 지출을 초기화합니다. `LiteLLM_TeamTable` 및 `LiteLLM_VerificationToken`의 모든 팀과 키에 대한 `spend`가 `spend=0`으로 설정됩니다.
 
-- LiteLLM will maintain all the logs in `LiteLLMSpendLogs` for Auditing Purposes
+- LiteLLM은 감사를 위해 `LiteLLMSpend로그`의 모든 로그를 유지합니다.
 
-##### Request
+##### 요청
 
-Only the `LITELLM_MASTER_KEY` you set can access this route
+설정한 `LITELLM_MASTER_KEY`만 이 라우트에 접근할 수 있습니다.
 
 ```shell
 curl -X POST \
@@ -212,15 +212,15 @@ curl -X POST \
   -H 'Content-Type: application/json'
 ```
 
-##### Expected Responses
+##### 예상 응답
 
 ```shell
 {"message":"Spend for all API Keys and Teams reset successfully","status":"success"}
 ```
 
-## Total spend per user
+## 사용자별 총 지출
 
-Assuming you have been issuing keys for end users, and setting their `user_id` on the key, you can check their usage.
+최종 사용자에게 키를 발급하고 키에 해당 사용자의 `user_id`를 설정했다면, 이 API로 사용량을 확인할 수 있습니다.
 
 ```shell title="Get User Spend - API Request" showLineNumbers
 curl -L -X GET 'http://localhost:4000/user/info?user_id=jane_smith' \
@@ -276,15 +276,15 @@ curl -L -X GET 'http://localhost:4000/user/info?user_id=jane_smith' \
 }
 ```
 
-**Warning**
-End users can provide the `user` parameter in their request bodies, doing this will increment the cost reported via `/customer/info?end_user_id=self-declared-user`, and not for the user that owns the key as reported by that API. This means users could "avoid" having their spend tracked, through their method.
-This means if you need to track user spend, and are giving end users API keys, you must always set user_id when creating their api keys, and use keys issued for that user every time you're making LLM calls on their behalf in backend services. This will track their spend.
+**경고**
+최종 사용자는 요청 본문에 `user` 파라미터를 직접 제공할 수 있습니다. 이렇게 하면 해당 API가 보고하는 키 소유 사용자가 아니라 `/customer/info?end_user_id=self-declared-user`에 보고되는 비용이 증가합니다. 따라서 사용자가 이 방식으로 지출 추적을 우회할 수 있습니다.
+사용자 지출을 추적해야 하고 최종 사용자에게 API 키를 제공한다면, API 키 생성 시 항상 `user_id`를 설정해야 합니다. 또한 백엔드 서비스에서 해당 사용자를 대신해 LLM 호출을 수행할 때마다 그 사용자에게 발급된 키를 사용해야 지출이 추적됩니다.
 
-## Daily Spend Breakdown API
+## 일별 지출 분석 API {#daily-spend-breakdown-api}
 
-Retrieve granular daily usage data for a user (by model, provider, and API key) with a single endpoint.
+단일 엔드포인트로 사용자별 일별 사용량 데이터를 모델, 제공자, API 키 단위로 상세 조회합니다.
 
-Example Request:
+예제 Request:
 
 ```shell title="Daily Spend Breakdown API" showLineNumbers
 curl -L -X GET 'http://localhost:4000/user/daily/activity?start_date=2025-03-20&end_date=2025-03-27' \
@@ -326,28 +326,30 @@ curl -L -X GET 'http://localhost:4000/user/daily/activity?start_date=2025-03-20&
 }
 ```
 
-### API Reference
+### API 참조
 
-See our [Swagger API](https://litellm-api.up.railway.app/#/Budget%20%26%20Spend%20Tracking/get_user_daily_activity_user_daily_activity_get) for more details on the `/user/daily/activity` endpoint
+`/user/daily/activity` 엔드포인트의 자세한 내용은 [Swagger API](https://litellm-api.up.railway.app/#/Budget%20%26%20Spend%20Tracking/get_user_daily_activity_user_daily_activity_get)를 참고하세요.
 
-## Custom Tags
+<a id="-custom-tags"></a>
 
-:::tip See Full Request Tags Documentation
-For comprehensive documentation on all tag options including `x-litellm-tags` header, request body `tags`, and config-based tags, see the dedicated [Request Tags](./request_tags.md) page.
+## 사용자 지정 태그 {#custom-tags}
+
+:::tip 전체 요청 태그 문서 보기
+`x-litellm-tags` 헤더, 요청 본문 `tags`, 구성 기반 태그를 포함한 모든 태그 옵션의 전체 문서는 별도 [Request Tags](./request_tags.md) 페이지를 참고하세요.
 :::
 
-Requirements:
+요구 사항:
 
-- Virtual Keys & a database should be set up, see [virtual keys](https://docs.litellm.ai/docs/proxy/virtual_keys)
+- 가상 키와 데이터베이스가 설정되어 있어야 합니다. [virtual keys](https://docs.litellm.ai/docs/proxy/virtual_keys)를 참고하세요.
 
-**Note:** By default, LiteLLM will track `User-Agent` as a custom tag for cost tracking. This enables viewing usage for tools like Claude Code, Gemini CLI, etc.
+**참고:** 기본적으로 LiteLLM은 비용 추적을 위해 `User-Agent`를 사용자 지정 태그로 기록합니다. 이를 통해 Claude Code, Gemini CLI 같은 도구의 사용량을 볼 수 있습니다.
 
 <Image img={require('../../img/claude_cli_tag_usage.png')} />
 
-### Client-side spend tag
+### 클라이언트 측 지출 태그
 
 <Tabs>
-<TabItem value="key" label="Set on Key">
+<TabItem value="key" label="키에 설정">
 
 ```bash
 curl -L -X POST 'http://0.0.0.0:4000/key/generate' \
@@ -363,7 +365,7 @@ curl -L -X POST 'http://0.0.0.0:4000/key/generate' \
 ```
 
 </TabItem>
-<TabItem value="team" label="Set on Team">
+<TabItem value="team" label="팀에 설정">
 
 ```bash
 curl -L -X POST 'http://0.0.0.0:4000/team/new' \
@@ -381,7 +383,7 @@ curl -L -X POST 'http://0.0.0.0:4000/team/new' \
 </TabItem>
 <TabItem value="openai" label="OpenAI Python v1.0.0+">
 
-Set `extra_body={"metadata": { }}` to `metadata` you want to pass
+전달하려는 `metadata`를 `extra_body={"metadata": { }}`에 설정합니다.
 
 ```python
 import openai
@@ -448,9 +450,9 @@ runOpenAI();
 
 </TabItem>
 
-<TabItem value="Curl" label="Curl Request">
+<TabItem value="Curl" label="Curl 요청">
 
-Pass `metadata` as part of the request body
+요청 본문 일부로 `metadata`를 전달합니다.
 
 ```shell
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -506,9 +508,9 @@ print(response)
 </TabItem>
 </Tabs>
 
-### Add custom headers to spend tracking
+### 지출 추적에 사용자 지정 헤더 추가
 
-You can add custom headers to the request to track spend and usage.
+요청에 사용자 지정 헤더를 추가하여 지출과 사용량을 추적할 수 있습니다.
 
 ```yaml
 litellm_settings:
@@ -516,39 +518,39 @@ litellm_settings:
     - "x-custom-header"
 ```
 
-### Disable user-agent tracking
+### user-agent 추적 비활성화
 
-You can disable user-agent tracking by setting `litellm_settings.disable_add_user_agent_to_request_tags` to `true`.
+`litellm_settings.disable_add_user_agent_to_request_tags`를 `true`로 설정하여 user-agent 추적을 비활성화할 수 있습니다.
 
 ```yaml
 litellm_settings:
   disable_add_user_agent_to_request_tags: true
 ```
 
-## ✨ (Enterprise) Generate Spend Reports
+## ✨ (엔터프라이즈) 지출 보고서 생성 {#-enterprise-generate-spend-reports}
 
-Use this to charge other teams, customers, users
+다른 팀, 고객, 사용자에게 비용을 청구할 때 사용합니다.
 
-Use the `/global/spend/report` endpoint to get spend reports
+지출 보고서를 가져오려면 `/global/spend/report` 엔드포인트를 사용합니다.
 
 <Tabs>
 
-<TabItem value="per team" label="Spend Per Team">
+<TabItem value="per team" label="팀별 지출">
 
-#### Example Request
+#### 예제 Request
 
-👉 Key Change: Specify `group_by=team`
+👉 핵심 변경: `group_by=team`을 지정합니다.
 
 ```shell
 curl -X GET 'http://localhost:4000/global/spend/report?start_date=2024-04-01&end_date=2024-06-30&group_by=team' \
   -H 'Authorization: Bearer sk-1234'
 ```
 
-#### Example Response
+#### 예제 Response
 
 <Tabs>
 
-<TabItem value="response" label="Expected Response">
+<TabItem value="response" label="예상 응답">
 
 ```shell
 [
@@ -625,7 +627,7 @@ for row in spend_report:
       print()
 ```
 
-Output from script
+스크립트 출력
 
 ```shell
 # Date: 2024-05-11T00:00:00+00:00
@@ -655,26 +657,26 @@ Output from script
 
 </TabItem>
 
-<TabItem value="per customer" label="Spend Per Customer">
+<TabItem value="per customer" label="고객별 지출">
 
 :::info
 
-Customer [this is `user` passed to `/chat/completions` request](#how-to-track-spend-with-litellm)
+고객은 `/chat/completions` 요청에 전달되는 `user`입니다.
 
 - [LiteLLM API key](virtual_keys.md)
 
 :::
 
-#### Example Request
+#### 예제 Request
 
-👉 Key Change: Specify `group_by=customer`
+👉 핵심 변경: `group_by=customer`를 지정합니다.
 
 ```shell
 curl -X GET 'http://localhost:4000/global/spend/report?start_date=2024-04-01&end_date=2024-06-30&group_by=customer' \
   -H 'Authorization: Bearer sk-1234'
 ```
 
-#### Example Response
+#### 예제 Response
 
 ```shell
 [
@@ -718,16 +720,16 @@ curl -X GET 'http://localhost:4000/global/spend/report?start_date=2024-04-01&end
 
 </TabItem>
 
-<TabItem value="per key" label="Spend for Specific API Key">
+<TabItem value="per key" label="특정 API 키의 지출">
 
-👉 Key Change: Specify `api_key=sk-1234`
+👉 핵심 변경: `api_key=sk-1234`를 지정합니다.
 
 ```shell
 curl -X GET 'http://localhost:4000/global/spend/report?start_date=2024-04-01&end_date=2024-06-30&api_key=sk-1234' \
   -H 'Authorization: Bearer sk-1234'
 ```
 
-#### Example Response
+#### 예제 Response
 
 ```shell
 [
@@ -756,22 +758,22 @@ curl -X GET 'http://localhost:4000/global/spend/report?start_date=2024-04-01&end
 
 </TabItem>
 
-<TabItem value="per user" label="Spend for Internal User (Key Owner)">
+<TabItem value="per user" label="내부 사용자(키 소유자)의 지출">
 
 :::info
 
-Internal User (Key Owner): This is the value of `user_id` passed when calling [`/key/generate`](https://litellm-api.up.railway.app/#/key%20management/generate_key_fn_key_generate_post)
+내부 사용자(키 소유자)는 [`/key/generate`](https://litellm-api.up.railway.app/#/key%20management/generate_key_fn_key_generate_post) 호출 시 전달되는 `user_id` 값입니다.
 
 :::
 
-👉 Key Change: Specify `internal_user_id=ishaan`
+👉 핵심 변경: `internal_user_id=ishaan`을 지정합니다.
 
 ```shell
 curl -X GET 'http://localhost:4000/global/spend/report?start_date=2024-04-01&end_date=2024-12-30&internal_user_id=ishaan' \
   -H 'Authorization: Bearer sk-1234'
 ```
 
-#### Example Response
+#### 예제 Response
 
 ```shell
 [
@@ -836,56 +838,58 @@ curl -X GET 'http://localhost:4000/global/spend/report?start_date=2024-04-01&end
 
 </Tabs>
 
-## 📊 Spend Logs API - Individual Transaction Logs
+## 📊 Spend 로그 API - 개별 트랜잭션 로그 {#-spend-logs-api---individual-transaction-logs}
 
-The `/spend/logs` endpoint now supports a `summarize` parameter to control data format when using date filters.
+`/spend/logs` 엔드포인트는 이제 날짜 필터 사용 시 데이터 형식을 제어하는 `summarize` 파라미터를 지원합니다.
 
-### Key Parameters
+### 주요 파라미터
 
-| Parameter   | Description                                                                                  |
+| 파라미터    | 설명                                                                                         |
 | ----------- | -------------------------------------------------------------------------------------------- |
-| `summarize` | **New parameter**: `true` (default) = aggregated data, `false` = individual transaction logs |
+| `summarize` | **새 파라미터**: `true`(기본값) = 집계 데이터, `false` = 개별 트랜잭션 로그 |
 
-### Examples
+### 예제
 
-**Get individual transaction logs:**
+**개별 트랜잭션 로그 조회:**
 
 ```bash title="Get Individual Transaction Logs" showLineNumbers
 curl -X GET "http://localhost:4000/spend/logs?start_date=2024-01-01&end_date=2024-01-02&summarize=false" \
 -H "Authorization: Bearer sk-1234"
 ```
 
-**Get summarized data (default):**
+**요약 데이터 조회(기본값):**
 
 ```bash title="Get Summarized Spend Data" showLineNumbers
 curl -X GET "http://localhost:4000/spend/logs?start_date=2024-01-01&end_date=2024-01-02" \
 -H "Authorization: Bearer sk-1234"
 ```
 
-**Use Cases:**
+**사용 사례:**
 
-- `summarize=false`: Analytics dashboards, ETL processes, detailed audit trails
-- `summarize=true`: Daily spending reports, high-level cost tracking (legacy behavior)
+- `summarize=false`: 분석 대시보드, ETL 프로세스, 상세 감사 추적
+- `summarize=true`: 일별 지출 보고서, 상위 수준 비용 추적(기존 동작)
 
-## ✨ Custom Spend Log metadata
+<a id="-custom-spend-log-metadata"></a>
 
-Log specific key,value pairs as part of the metadata for a spend log
+## ✨ 사용자 지정 Spend Log 메타데이터 {#custom-spend-log-metadata}
+
+특정 키-값 쌍을 지출 로그 메타데이터의 일부로 기록합니다.
 
 :::info
 
-Logging specific key,value pairs in spend logs metadata is an enterprise feature.
+지출 로그 메타데이터에 특정 키-값 쌍을 기록하는 기능은 엔터프라이즈 기능입니다.
 
 :::
 
-Requirements: 
+요구 사항:
 
-- Virtual Keys & a database should be set up, see [virtual keys](https://docs.litellm.ai/docs/proxy/virtual_keys)
+- 가상 키와 데이터베이스가 설정되어 있어야 합니다. [virtual keys](https://docs.litellm.ai/docs/proxy/virtual_keys)를 참고하세요.
 
-#### Usage - /chat/completions requests with special spend logs metadata 
+#### 사용법 - 특수 지출 로그 메타데이터가 포함된 /chat/completions 요청
 
 
 <Tabs>
-<TabItem value="key" label="Set on Key">
+<TabItem value="key" label="키에 설정">
 
 ```bash
 curl -L -X POST 'http://0.0.0.0:4000/key/generate' \
@@ -903,7 +907,7 @@ curl -L -X POST 'http://0.0.0.0:4000/key/generate' \
 ```
 
 </TabItem>
-<TabItem value="team" label="Set on Team">
+<TabItem value="team" label="팀에 설정">
 
 ```bash
 curl -L -X POST 'http://0.0.0.0:4000/team/new' \
@@ -924,7 +928,7 @@ curl -L -X POST 'http://0.0.0.0:4000/team/new' \
 
 <TabItem value="openai" label="OpenAI Python v1.0.0+">
 
-Set `extra_body={"metadata": { }}` to `metadata` you want to pass
+전달하려는 `metadata`를 `extra_body={"metadata": { }}`에 설정합니다.
 
 ```python
 import openai
@@ -954,7 +958,7 @@ response = client.chat.completions.create(
 print(response)
 ```
 
-**Using Headers:**
+**헤더 사용:**
 
 ```python
 import openai
@@ -1058,9 +1062,9 @@ runOpenAI();
 
 </TabItem>
 
-<TabItem value="Curl" label="Curl Request">
+<TabItem value="Curl" label="Curl 요청">
 
-Pass `metadata` as part of the request body
+요청 본문 일부로 `metadata`를 전달합니다.
 
 ```shell
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -1083,9 +1087,9 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 
 </TabItem>
 
-<TabItem value="headers" label="Using Headers">
+<TabItem value="headers" label="헤더 사용">
 
-Pass `x-litellm-spend-logs-metadata` as a request header with JSON string
+JSON 문자열을 포함한 요청 헤더로 `x-litellm-spend-logs-metadata`를 전달합니다.
 
 ```shell
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -1145,16 +1149,16 @@ print(response)
 </Tabs>
 
 
-#### Viewing Spend w/ custom metadata
+#### 사용자 지정 메타데이터가 포함된 지출 보기
 
-#### `/spend/logs` Request Format 
+#### `/spend/logs` 요청 형식 
 
 ```bash
 curl -X GET "http://0.0.0.0:4000/spend/logs?request_id=<your-call-id" \ # e.g.: chatcmpl-9ZKMURhVYSi9D6r6PJ9vLcayIK0Vm
 -H "Authorization: Bearer sk-1234"
 ```
 
-#### `/spend/logs` Response Format
+#### `/spend/logs` 응답 형식
 ```bash
 [
     {

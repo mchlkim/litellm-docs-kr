@@ -1,29 +1,29 @@
 import Image from '@theme/IdealImage';
 
-# Slack - Logging LLM Input/Output, Exceptions
+# Slack - LLM 입력/출력 및 예외 로깅 {#slack---logging-llm-inputoutput-exceptions}
 
 <Image img={require('../../img/slack.png')} />
 
 :::info
-We want to learn how we can make the callbacks better! Meet the LiteLLM [founders](https://calendly.com/d/4mp-gd3-k5k/berriai-1-1-onboarding-litellm-hosted-version) or
-join our [discord](https://discord.gg/wuPM9dRgDw)
+콜백을 더 좋게 만들 방법을 알고 싶습니다! LiteLLM [창립자](https://calendly.com/d/4mp-gd3-k5k/berriai-1-1-onboarding-litellm-hosted-version)를 만나거나
+저희 [Discord](https://discord.gg/wuPM9dRgDw)에 참여하세요.
 ::: 
 
-## Pre-Requisites
+## 사전 요구 사항 {#pre-requisites}
 
-### Step 1
+### 단계 1 {#step-1}
 ```shell
 uv add litellm
 ```
 
-### Step 2
-Get a slack webhook url from https://api.slack.com/messaging/webhooks
+### 단계 2 {#step-2}
+https://api.slack.com/messaging/webhooks 에서 Slack webhook URL을 가져옵니다.
 
 
 
-## Quick Start
-### Create a custom Callback to log to slack
-We create a custom callback, to log to slack webhooks, see [custom callbacks on litellm](https://docs.litellm.ai/docs/observability/custom_callback)
+## 빠른 시작
+### Slack에 로깅하는 사용자 지정 콜백 만들기 {#create-a-custom-callback-to-log-to-slack}
+Slack webhook에 로깅하려면 사용자 지정 콜백을 만듭니다. [LiteLLM의 사용자 지정 콜백](https://docs.litellm.ai/docs/observability/custom_callback)을 참고하세요.
 ```python
 def send_slack_alert(
         kwargs,
@@ -76,7 +76,7 @@ def send_slack_alert(
         print(response.json())
 ```
 
-### Pass callback to LiteLLM
+### LiteLLM에 콜백 전달하기 {#pass-callback-to-litellm}
 ```python
 litellm.success_callback = [send_slack_alert]
 ```
@@ -97,8 +97,8 @@ response = litellm.completion(
     ]
 )
 ```
-## Support & Talk to Founders
+## 지원 및 창립자와 대화하기 {#support--talk-to-founders}
 
-- [Schedule Demo 👋](https://calendly.com/d/4mp-gd3-k5k/berriai-1-1-onboarding-litellm-hosted-version)
-- [Community Discord 💭](https://discord.gg/wuPM9dRgDw)
-- Our emails ✉️ ishaan@berri.ai / krrish@berri.ai
+- [데모 일정 잡기 👋](https://calendly.com/d/4mp-gd3-k5k/berriai-1-1-onboarding-litellm-hosted-version)
+- [커뮤니티 Discord 💭](https://discord.gg/wuPM9dRgDw)
+- 이메일 ✉️ ishaan@berri.ai / krrish@berri.ai

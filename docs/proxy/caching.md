@@ -1,40 +1,39 @@
 import Tabs from '@theme/Tabs'; import TabItem from '@theme/TabItem';
 
-# Caching
+# 캐싱
 
 :::note
 
-For OpenAI/Anthropic Prompt Caching, go [here](../completion/prompt_caching.md)
+OpenAI/Anthropic Prompt 캐싱은 [여기](../completion/prompt_caching.md)를 참고하세요.
 
 :::
 
-Cache LLM Responses. LiteLLM's caching system stores and reuses LLM responses to save costs and
-reduce latency. When you make the same request twice, the cached response is returned instead of
-calling the LLM API again.
+LLM 응답을 cache합니다. LiteLLM의 caching system은 LLM 응답을 저장하고 재사용해 비용을 줄이고 지연 시간을 낮춥니다. 같은 요청을 두 번 보내면 LLM API를 다시 호출하지 않고 cache된 응답을 반환합니다.
 
-### Supported Caches
+### 지원되는 Cache
 
-- In Memory Cache
-- Disk Cache
-- Redis Cache
-- Qdrant Semantic Cache
-- Redis Semantic Cache
-- S3 Bucket Cache
-- GCS Bucket Cache
+- `In Memory Cache`
+- `Disk Cache`
+- `Redis Cache`
+- `Qdrant Semantic Cache`
+- `Redis Semantic Cache`
+- `S3 Bucket Cache`
+- `GCS Bucket Cache`
 
-## Virtual Key Authentication Cache (Redis)
+## Virtual Key 인증 Cache (Redis)
 
-When the proxy verifies a **virtual key** (customer API key), results are cached so the database is not queried on every request. By default that cache lives **only in each worker process**—so after a deploy, new pods or extra Uvicorn workers each warm their own cache and can trigger more DB reads until warmed.
+proxy가 **virtual key**(customer API key)를 검증하면, 매 요청마다 database를 조회하지 않도록 결과를 cache합니다. 기본적으로 이 cache는 **각 worker process 내부에만** 존재합니다. 따라서 deploy 이후 새 pod나 추가 Uvicorn worker가 각각 자체 cache를 예열하며, 예열이 끝날 때까지 DB read가 더 많이 발생할 수 있습니다.
 
-Set `litellm_settings.enable_redis_auth_cache: true` to mirror virtual-key auth data into **the same Redis instance** configured under `litellm_settings.cache` / `cache_params`. Workers and replicas then share cached auth entries across the cluster.
+`litellm_settings.enable_redis_auth_cache: true`를 설정하면 virtual-key auth data를 `litellm_settings.cache` / `cache_params` 아래에 설정된 **동일한 Redis instance**에 mirror합니다. 그러면 worker와 replica가 cluster 전체에서 cache된 auth entry를 공유합니다.
 
-**Requirements**
+**요구 사항**
 
-- `litellm_settings.cache` must be **`true`** (Redis for the proxy is initialized during cache setup). See [All settings](./config_settings).
-- `cache_params.type` must be **`redis`** (or Redis Cluster, per your cache config); the auth cache attaches to that Redis client. See [supported `cache_params`](#supported-cache_params-on-proxy-configyaml).
-- Optionally set **`general_settings.user_api_key_cache_ttl`** (seconds): TTL applies to both the in-memory and Redis tiers when Redis auth caching is enabled, so stale keys expire consistently.
+- `litellm_settings.cache`는 **`true`**여야 합니다. proxy용 Redis는 cache setup 중 초기화됩니다. [전체 설정](./config_settings)을 참고하세요.
+- `cache_params.type`은 **`redis`**여야 합니다. cache 설정에 따라 Redis Cluster도 가능합니다. auth cache는 이 Redis client에 연결됩니다.
+  <a href="#supported-cache_params-on-proxy-configyaml">지원되는 <code>cache_params</code></a>를 참고하세요.
+- 선택적으로 **`general_settings.user_api_key_cache_ttl`**(초)을 설정합니다. Redis auth caching이 활성화되면 TTL은 in-memory와 Redis tier 모두에 적용되어 stale key가 일관되게 만료됩니다.
 
-Example:
+예제:
 
 ```yaml
 litellm_settings:
@@ -51,19 +50,19 @@ general_settings:
 
 :::tip
 
-Startup logs distinguish the two modes: with `enable_redis_auth_cache: true`, you should see a message that virtual-key lookups are shared across workers.
+startup log는 두 mode를 구분합니다. `enable_redis_auth_cache: true`이면 virtual-key lookup이 worker 간 공유된다는 message가 표시됩니다.
 
 :::
 
-## Quick Start
+## 빠른 시작
 
 <Tabs>
 
 <TabItem value="redis" label="redis cache">
 
-Caching can be enabled by adding the `cache` key in the `config.yaml`
+`config.yaml`에 `cache` key를 추가하면 캐싱을 활성화할 수 있습니다.
 
-#### Step 1: Add `cache` to the config.yaml
+#### 1단계: `config.yaml`에 `cache` 추가 {#step-1-add-cache-to-configyaml}
 
 ```yaml
 model_list:
@@ -79,11 +78,11 @@ litellm_settings:
   cache: True # set cache responses to True, litellm defaults to using a redis cache
 ```
 
-#### [OPTIONAL] Step 1.5: Add redis namespaces, default ttl
+#### [선택 사항] 1.5단계: Redis namespace 및 기본 TTL 추가 {#optional-step-15-add-redis-namespace-and-default-ttl}
 
-#### Namespace
+#### Namespace {#namespace}
 
-If you want to create some folder for your keys, you can set a namespace, like this:
+key용 folder와 비슷한 구분자를 만들고 싶다면 다음처럼 namespace를 설정할 수 있습니다.
 
 ```yaml
 litellm_settings:
@@ -93,13 +92,13 @@ litellm_settings:
     namespace: "litellm.caching.caching"
 ```
 
-and keys will be stored like:
+그러면 key는 다음 형태로 저장됩니다.
 
 ```
 litellm.caching.caching:<hash>
 ```
 
-#### Redis Cluster
+#### Redis Cluster {#redis-cluster}
 
 <Tabs>
 
@@ -122,9 +121,9 @@ litellm_settings:
 
 <TabItem value="redis-env" label="Set on .env">
 
-You can configure redis cluster in your .env by setting `REDIS_CLUSTER_NODES` in your .env
+`.env`에서 `REDIS_CLUSTER_NODES`를 설정해 Redis cluster를 구성할 수 있습니다.
 
-**Example `REDIS_CLUSTER_NODES`** value
+**예제 `REDIS_CLUSTER_NODES`** 값
 
 ```
 REDIS_CLUSTER_NODES = "[{"host": "127.0.0.1", "port": "7001"}, {"host": "127.0.0.1", "port": "7003"}, {"host": "127.0.0.1", "port": "7004"}, {"host": "127.0.0.1", "port": "7005"}, {"host": "127.0.0.1", "port": "7006"}, {"host": "127.0.0.1", "port": "7007"}]"
@@ -132,7 +131,7 @@ REDIS_CLUSTER_NODES = "[{"host": "127.0.0.1", "port": "7001"}, {"host": "127.0.0
 
 :::note
 
-Example python script for setting redis cluster nodes in .env:
+`.env`에 Redis cluster node를 설정하는 Python script 예제:
 
 ```python
 # List of startup nodes
@@ -156,7 +155,7 @@ print("REDIS_CLUSTER_NODES", os.environ["REDIS_CLUSTER_NODES"])
 
 </Tabs>
 
-#### Redis Sentinel
+#### Redis Sentinel {#redis-sentinel}
 
 <Tabs>
 
@@ -181,9 +180,9 @@ litellm_settings:
 
 <TabItem value="redis-env" label="Set on .env">
 
-You can configure redis sentinel in your .env by setting `REDIS_SENTINEL_NODES` in your .env
+`.env`에서 `REDIS_SENTINEL_NODES`를 설정해 Redis sentinel을 구성할 수 있습니다.
 
-**Example `REDIS_SENTINEL_NODES`** value
+**예제 `REDIS_SENTINEL_NODES`** 값
 
 ```env
 REDIS_SENTINEL_NODES='[["localhost", 26379]]'
@@ -193,7 +192,7 @@ REDIS_SENTINEL_PASSWORD = "password"
 
 :::note
 
-Example python script for setting redis cluster nodes in .env:
+`.env`에 Redis sentinel node를 설정하는 Python script 예제:
 
 ```python
 # List of startup nodes
@@ -224,26 +223,25 @@ litellm_settings:
 
 #### SSL
 
-just set `REDIS_SSL="True"` in your .env, and LiteLLM will pick this up.
+`.env`에 `REDIS_SSL="True"`만 설정하면 LiteLLM이 이를 읽습니다.
 
 ```env
 REDIS_SSL="True"
 ```
 
-For quick testing, you can also use REDIS_URL, eg.:
+빠른 테스트에는 REDIS_URL도 사용할 수 있습니다. 예:
 
 ```
 REDIS_URL="rediss://.."
 ```
 
-but we **don't** recommend using REDIS_URL in prod. We've noticed a performance difference between
-using it vs. redis_host, port, etc.
+하지만 production에서는 REDIS_URL 사용을 **권장하지 않습니다**. REDIS_URL을 사용할 때와 redis_host, port 등을 사용할 때 성능 차이가 관찰되었습니다.
 
-#### GCP IAM Authentication
+#### GCP IAM 인증
 
-For GCP Memorystore Redis with IAM authentication, install the required dependency:
+IAM authentication을 사용하는 GCP Memorystore Redis의 경우 필요한 dependency를 설치합니다.
 
-:::info IAM authentication for redis is only supported via GCP and only on Redis Clusters for now.
+:::info Redis용 IAM authentication은 현재 GCP 및 Redis Cluster에서만 지원됩니다.
 :::
 
 ```shell
@@ -254,7 +252,7 @@ uv add google-cloud-iam
 
 <TabItem value="gcp-iam-config" label="Set on config.yaml">
 
-For Redis Cluster with GCP IAM:
+GCP IAM을 사용하는 Redis Cluster:
 
 ```yaml
 litellm_settings:
@@ -273,9 +271,9 @@ litellm_settings:
 
 <TabItem value="gcp-iam-env" label="Set on .env">
 
-You can configure GCP IAM Redis authentication in your .env:
+`.env`에서 GCP IAM Redis authentication을 설정할 수 있습니다.
 
-For Redis Cluster:
+Redis Cluster의 경우:
 
 ```env
 REDIS_CLUSTER_NODES='[{"host": "10.128.0.2", "port": 6379}, {"host": "10.128.0.2", "port": 11008}]'
@@ -286,9 +284,9 @@ REDIS_SSL_CERT_REQS="None"
 REDIS_SSL_CHECK_HOSTNAME="False"
 ```
 
-**GCP Authentication Setup**
+**GCP 인증 Setup**
 
-Make sure your GCP credentials are configured:
+GCP credential이 설정되어 있는지 확인합니다.
 
 ```shell
 # Option 1: Service account key file
@@ -301,8 +299,8 @@ export GOOGLE_APPLICATION_CREDENTIALS="/path/to/service-account-key.json"
 </TabItem>
 
 </Tabs> 
-#### Step 2: Add Redis Credentials to .env
-Set either `REDIS_URL` or the `REDIS_HOST` in your os environment, to enable caching.
+#### 2단계: `.env`에 Redis credential 추가 {#step-2-add-redis-credentials-to-env}
+캐싱을 활성화하려면 OS environment에 `REDIS_URL` 또는 `REDIS_HOST`를 설정합니다.
 
   ```shell
   REDIS_URL = ""        # REDIS_URL='redis://username:password@hostname:port/database'
@@ -314,19 +312,18 @@ Set either `REDIS_URL` or the `REDIS_HOST` in your os environment, to enable cac
   REDIS_SSL = "True"    # REDIS_SSL='True' to enable SSL by default is False
   ```
 
-**Additional kwargs**  
+**추가 kwargs**  
 :::info
-Use `REDIS_*` environment variables to configure all Redis client library parameters. This is the suggested mechanism for toggling Redis settings as it automatically maps environment variables to Redis client kwargs.
+모든 Redis client library parameter는 `REDIS_*` environment variable로 설정할 수 있습니다. environment variable을 Redis client kwargs로 자동 매핑하므로 Redis 설정을 전환할 때 권장되는 방식입니다.
 :::
 
-You can pass in any additional redis.Redis arg, by storing the variable + value in your os
-environment, like this:
+추가 `redis.Redis` argument는 다음처럼 variable과 값을 OS environment에 저장해 전달할 수 있습니다.
 
 ```shell
 REDIS_<redis-kwarg-name> = ""
 ```
 
-For example:
+예:
 ```shell
 REDIS_SSL = "True"
 REDIS_SSL_CERT_REQS = "None" 
@@ -334,12 +331,12 @@ REDIS_CONNECTION_POOL_KWARGS = '{"max_connections": 20}'
 ```
 
 :::warning
-**Note**: For non-string Redis parameters (like integers, booleans, or complex objects), avoid using `REDIS_*` environment variables as they may fail during Redis client initialization. Instead, use `cache_kwargs` in your router configuration for such parameters.
+**참고**: 정수, boolean, 복합 객체 같은 문자열이 아닌 Redis parameter에는 `REDIS_*` environment variable을 사용하지 마세요. Redis client 초기화 중 실패할 수 있습니다. 이런 parameter에는 router configuration의 `cache_kwargs`를 대신 사용하세요.
 :::
 
-[**See how it's read from the environment**](https://github.com/BerriAI/litellm/blob/4d7ff1b33b9991dcf38d821266290631d9bcd2dd/litellm/_redis.py#L40)
+[**environment에서 읽는 방식 보기**](https://github.com/BerriAI/litellm/blob/4d7ff1b33b9991dcf38d821266290631d9bcd2dd/litellm/_redis.py#L40)
 
-#### Step 3: Run proxy with config
+#### 3단계: 설정으로 proxy 실행 {#step-3-run-proxy-with-config}
 
 ```shell
 $ litellm --config /path/to/config.yaml
@@ -349,9 +346,9 @@ $ litellm --config /path/to/config.yaml
 
 <TabItem value="qdrant-semantic" label="Qdrant Semantic cache">
 
-Caching can be enabled by adding the `cache` key in the `config.yaml`
+`config.yaml`에 `cache` key를 추가하면 캐싱을 활성화할 수 있습니다.
 
-#### Step 1: Add `cache` to the config.yaml
+#### 1단계: `config.yaml`에 `cache` 추가 {#qdrant-step-1-add-cache-to-configyaml}
 
 ```yaml
 model_list:
@@ -377,20 +374,20 @@ litellm_settings:
     similarity_threshold: 0.8 # similarity threshold for semantic cache
 ```
 
-#### Step 2: Add Qdrant Credentials to your .env
+#### 2단계: `.env`에 Qdrant credential 추가 {#qdrant-step-2-add-qdrant-credentials-to-env}
 
 ```shell
 QDRANT_API_KEY = "16rJUMBRx*************"
 QDRANT_API_BASE = "https://5392d382-45*********.cloud.qdrant.io"
 ```
 
-#### Step 3: Run proxy with config
+#### 3단계: 설정으로 proxy 실행 {#qdrant-step-3-run-proxy-with-config}
 
 ```shell
 $ litellm --config /path/to/config.yaml
 ```
 
-#### Step 4. Test it
+#### 4단계. 테스트 {#qdrant-step-4-test}
 
 ```shell
 curl -i http://localhost:4000/v1/chat/completions \
@@ -404,14 +401,13 @@ curl -i http://localhost:4000/v1/chat/completions \
   }'
 ```
 
-**Expect to see `x-litellm-semantic-similarity` in the response headers when semantic caching is
-one**
+semantic caching이 켜져 있으면 response header에서 `x-litellm-semantic-similarity`를 볼 수 있어야 합니다.
 
 </TabItem>
 
 <TabItem value="s3" label="s3 cache">
 
-#### Step 1: Add `cache` to the config.yaml
+#### 1단계: `config.yaml`에 `cache` 추가 {#s3-step-1-add-cache-to-configyaml}
 
 ```yaml
 model_list:
@@ -434,7 +430,7 @@ litellm_settings:
     s3_endpoint_url: https://s3.amazonaws.com # [OPTIONAL] S3 endpoint URL, if you want to use Backblaze/cloudflare s3 buckets
 ```
 
-#### Step 2: Run proxy with config
+#### 2단계: 설정으로 proxy 실행 {#s3-step-2-run-proxy-with-config}
 
 ```shell
 $ litellm --config /path/to/config.yaml
@@ -444,7 +440,7 @@ $ litellm --config /path/to/config.yaml
 
 <TabItem value="gcs" label="gcs cache">
 
-#### Step 1: Add `cache` to the config.yaml
+#### 1단계: `config.yaml`에 `cache` 추가 {#gcs-step-1-add-cache-to-configyaml}
 
 ```yaml
 model_list:
@@ -465,16 +461,16 @@ litellm_settings:
     gcs_path: cache/ # [OPTIONAL] GCS path prefix for cache objects
 ```
 
-#### Step 2: Add GCS Credentials to .env
+#### 2단계: `.env`에 GCS credential 추가 {#gcs-step-2-add-gcs-credentials-to-env}
 
-Set the GCS environment variables in your .env file:
+`.env` 파일에 GCS environment variable을 설정합니다.
 
 ```shell
 GCS_BUCKET_NAME="your-gcs-bucket-name"
 GCS_PATH_SERVICE_ACCOUNT="/path/to/service-account.json"
 ```
 
-#### Step 3: Run proxy with config
+#### 3단계: 설정으로 proxy 실행 {#gcs-step-3-run-proxy-with-config}
 
 ```shell
 $ litellm --config /path/to/config.yaml
@@ -484,9 +480,9 @@ $ litellm --config /path/to/config.yaml
 
 <TabItem value="redis-sem" label="redis semantic cache">
 
-Caching can be enabled by adding the `cache` key in the `config.yaml`
+`config.yaml`에 `cache` key를 추가하면 캐싱을 활성화할 수 있습니다.
 
-#### Step 1: Add `cache` to the config.yaml
+#### 1단계: `config.yaml`에 `cache` 추가 {#redis-semantic-step-1-add-cache-to-configyaml}
 
 ```yaml
 model_list:
@@ -509,9 +505,9 @@ litellm_settings:
     redis_semantic_cache_embedding_model: azure-embedding-model # set this to a model_name set in model_list
 ```
 
-#### Step 2: Add Redis Credentials to .env
+#### 2단계: `.env`에 Redis credential 추가 {#redis-semantic-step-2-add-redis-credentials-to-env}
 
-Set either `REDIS_URL` or the `REDIS_HOST` in your os environment, to enable caching.
+캐싱을 활성화하려면 OS environment에 `REDIS_URL` 또는 `REDIS_HOST`를 설정합니다.
 
 ```shell
 REDIS_URL = ""        # REDIS_URL='redis://username:password@hostname:port/database'
@@ -521,15 +517,14 @@ REDIS_PORT = ""       # REDIS_PORT='18841'
 REDIS_PASSWORD = ""   # REDIS_PASSWORD='liteLlmIsAmazing'
 ```
 
-**Additional kwargs**  
-You can pass in any additional redis.Redis arg, by storing the variable + value in your os
-environment, like this:
+**추가 kwargs**  
+추가 `redis.Redis` argument는 다음처럼 variable과 값을 OS environment에 저장해 전달할 수 있습니다.
 
 ```shell
 REDIS_<redis-kwarg-name> = ""
 ```
 
-#### Step 3: Run proxy with config
+#### 3단계: 설정으로 proxy 실행 {#redis-semantic-step-3-run-proxy-with-config}
 
 ```shell
 $ litellm --config /path/to/config.yaml
@@ -539,7 +534,7 @@ $ litellm --config /path/to/config.yaml
 
 <TabItem value="local" label="In Memory Cache">
 
-#### Step 1: Add `cache` to the config.yaml
+#### 1단계: `config.yaml`에 `cache` 추가 {#local-step-1-add-cache-to-configyaml}
 
 ```yaml
 litellm_settings:
@@ -548,7 +543,7 @@ litellm_settings:
     type: local
 ```
 
-#### Step 2: Run proxy with config
+#### 2단계: 설정으로 proxy 실행 {#local-step-2-run-proxy-with-config}
 
 ```shell
 $ litellm --config /path/to/config.yaml
@@ -558,7 +553,7 @@ $ litellm --config /path/to/config.yaml
 
 <TabItem value="disk" label="Disk Cache">
 
-#### Step 1: Add `cache` to the config.yaml
+#### 1단계: `config.yaml`에 `cache` 추가 {#disk-step-1-add-cache-to-configyaml}
 
 ```yaml
 litellm_settings:
@@ -568,7 +563,7 @@ litellm_settings:
     disk_cache_dir: /tmp/litellm-cache # OPTIONAL, default to ./.litellm_cache
 ```
 
-#### Step 2: Run proxy with config
+#### 2단계: 설정으로 proxy 실행 {#disk-step-2-run-proxy-with-config}
 
 ```shell
 $ litellm --config /path/to/config.yaml
@@ -578,14 +573,14 @@ $ litellm --config /path/to/config.yaml
 
 </Tabs>
 
-## Usage
+## 사용법
 
-### Basic
+### 기본 {#basic}
 
 <Tabs>
 <TabItem value="chat_completions" label="/chat/completions">
 
-Send the same request twice:
+같은 요청을 두 번 보냅니다.
 
 ```shell
 curl http://0.0.0.0:4000/v1/chat/completions \
@@ -608,7 +603,7 @@ curl http://0.0.0.0:4000/v1/chat/completions \
 </TabItem>
 <TabItem value="embeddings" label="/embeddings">
 
-Send the same request twice:
+같은 요청을 두 번 보냅니다.
 
 ```shell
 curl --location 'http://0.0.0.0:4000/embeddings' \
@@ -629,21 +624,21 @@ curl --location 'http://0.0.0.0:4000/embeddings' \
 </TabItem>
 </Tabs>
 
-### Dynamic Cache Controls
+### 동적 Cache 제어 {#dynamic-cache-control}
 
-| Parameter   | Type             | Description                                                                       |
+| Parameter   | Type             | 설명                                                                              |
 | ----------- | ---------------- | --------------------------------------------------------------------------------- |
-| `ttl`       | _Optional(int)_  | Will cache the response for the user-defined amount of time (in seconds)          |
-| `s-maxage`  | _Optional(int)_  | Will only accept cached responses that are within user-defined range (in seconds) |
-| `no-cache`  | _Optional(bool)_ | Will not store the response in cache.                                             |
-| `no-store`  | _Optional(bool)_ | Will not cache the response                                                       |
-| `namespace` | _Optional(str)_  | Will cache the response under a user-defined namespace                            |
+| `ttl`       | _Optional(int)_  | 사용자가 지정한 시간(초) 동안 응답을 cache합니다. |
+| `s-maxage`  | _Optional(int)_  | 사용자가 지정한 범위(초) 안에 있는 cache된 응답만 허용합니다. |
+| `no-cache`  | _Optional(bool)_ | 응답을 cache에 저장하지 않습니다. |
+| `no-store`  | _Optional(bool)_ | 응답을 cache하지 않습니다. |
+| `namespace` | _Optional(str)_  | 사용자가 지정한 namespace 아래에 응답을 cache합니다. |
 
-Each cache parameter can be controlled on a per-request basis. Here are examples for each parameter:
+각 cache parameter는 요청별로 제어할 수 있습니다. 각 parameter 예시는 다음과 같습니다.
 
 ### `ttl`
 
-Set how long (in seconds) to cache a response.
+응답을 얼마나 오래 cache할지 초 단위로 설정합니다.
 
 <Tabs>
 <TabItem value="openai" label="OpenAI Python SDK">
@@ -689,7 +684,7 @@ curl http://localhost:4000/v1/chat/completions \
 
 ### `s-maxage`
 
-Only accept cached responses that are within the specified age (in seconds).
+지정된 age(초) 이내의 cache된 응답만 허용합니다.
 
 <Tabs>
 <TabItem value="openai" label="OpenAI Python SDK">
@@ -735,7 +730,7 @@ curl http://localhost:4000/v1/chat/completions \
 
 ### `no-cache`
 
-Force a fresh response, bypassing the cache.
+cache를 우회하고 fresh 응답을 강제합니다.
 
 <Tabs>
 <TabItem value="openai" label="OpenAI Python SDK">
@@ -781,7 +776,7 @@ curl http://localhost:4000/v1/chat/completions \
 
 ### `no-store`
 
-Will not store the response in cache.
+응답을 cache에 저장하지 않습니다.
 
 <Tabs>
 <TabItem value="openai" label="OpenAI Python SDK">
@@ -827,7 +822,7 @@ curl http://localhost:4000/v1/chat/completions \
 
 ### `namespace`
 
-Store the response under a specific cache namespace.
+특정 cache namespace 아래에 응답을 저장합니다.
 
 <Tabs>
 <TabItem value="openai" label="OpenAI Python SDK">
@@ -871,12 +866,11 @@ curl http://localhost:4000/v1/chat/completions \
 </TabItem>
 </Tabs>
 
-## Set cache for proxy, but not on the actual llm api call
+## 실제 LLM API call에는 적용하지 않고 proxy에만 cache 설정
 
-Use this if you just want to enable features like rate limiting, and loadbalancing across multiple
-instances.
+여러 instance 간 rate limiting 및 load balancing 같은 기능만 활성화하려는 경우 이 설정을 사용합니다.
 
-Set `supported_call_types: []` to disable caching on the actual api call.
+실제 API call에서 caching을 비활성화하려면 `supported_call_types: []`를 설정합니다.
 
 ```yaml
 litellm_settings:
@@ -886,17 +880,17 @@ litellm_settings:
     supported_call_types: []
 ```
 
-## Debugging Caching - `/cache/ping`
+## 캐싱 Debugging - `/cache/ping` {#debugging-caching-cacheping}
 
-LiteLLM Proxy exposes a `/cache/ping` endpoint to test if the cache is working as expected
+LiteLLM Proxy는 cache가 예상대로 동작하는지 테스트할 수 있는 `/cache/ping` endpoint를 제공합니다.
 
-**Usage**
+**사용법**
 
 ```shell
 curl --location 'http://0.0.0.0:4000/cache/ping'  -H "Authorization: Bearer sk-1234"
 ```
 
-**Expected Response - when cache healthy**
+**예상 응답 - cache가 정상일 때**
 
 ```shell
 {
@@ -918,14 +912,13 @@ curl --location 'http://0.0.0.0:4000/cache/ping'  -H "Authorization: Bearer sk-1
 }
 ```
 
-## Advanced
+## 고급
 
-### Control Call Types Caching is on for - (`/chat/completion`, `/embeddings`, etc.)
+### 캐싱을 켤 call type 제어 - (`/chat/completion`, `/embeddings` 등)
 
-By default, caching is on for all call types. You can control which call types caching is on for by
-setting `supported_call_types` in `cache_params`
+기본적으로 caching은 모든 call type에 대해 켜져 있습니다. `cache_params`에서 `supported_call_types`를 설정해 어떤 call type에 caching을 적용할지 제어할 수 있습니다.
 
-**Cache will only be on for the call types specified in `supported_call_types`**
+**cache는 `supported_call_types`에 지정된 call type에만 적용됩니다.**
 
 ```yaml
 litellm_settings:
@@ -937,7 +930,7 @@ litellm_settings:
       # /chat/completions, /completions, /embeddings, /audio/transcriptions
 ```
 
-### Set Cache Params on config.yaml
+### `config.yaml`에서 Cache Params 설정 {#set-cache-params-in-configyaml}
 
 ```yaml
 model_list:
@@ -963,11 +956,11 @@ litellm_settings:
       # /chat/completions, /completions, /embeddings, /audio/transcriptions
 ```
 
-### Deleting Cache Keys - `/cache/delete`
+### Cache Key 삭제 - `/cache/delete`
 
-In order to delete a cache key, send a request to `/cache/delete` with the `keys` you want to delete
+cache key를 삭제하려면 삭제할 `keys`와 함께 `/cache/delete`로 요청을 보냅니다.
 
-Example
+예제
 
 ```shell
 curl -X POST "http://0.0.0.0:4000/cache/delete" \
@@ -979,10 +972,9 @@ curl -X POST "http://0.0.0.0:4000/cache/delete" \
 # {"status":"success"}
 ```
 
-#### Viewing Cache Keys from responses
+#### 응답에서 Cache Key 보기 {#view-cache-key-in-response}
 
-You can view the cache_key in the response headers, on cache hits the cache key is sent as the
-`x-litellm-cache-key` response headers
+response header에서 `cache_key`를 확인할 수 있습니다. cache hit 시 cache key는 `x-litellm-cache-key` response header로 전송됩니다.
 
 ```shell
 curl -i --location 'http://0.0.0.0:4000/chat/completions' \
@@ -1000,7 +992,7 @@ curl -i --location 'http://0.0.0.0:4000/chat/completions' \
 }'
 ```
 
-Response from litellm proxy
+litellm proxy의 응답
 
 ```json
 date: Thu, 04 Apr 2024 17:37:21 GMT
@@ -1024,9 +1016,9 @@ x-litellm-cache-key: 586bf3f3c1bf5aecb55bd9996494d3bbc69eb58397163add6d49537762a
 
 ```
 
-### **Set Caching Default Off - Opt in only **
+### **캐싱을 Default Off로 설정 - 명시적으로 opt-in**
 
-1. **Set `mode: default_off` for caching**
+1. **caching에 `mode: default_off` 설정**
 
 ```yaml
 model_list:
@@ -1044,7 +1036,7 @@ litellm_settings:
     mode: default_off # 👈 Key change cache is default_off
 ```
 
-2. **Opting in to cache when cache is default off**
+2. **cache가 default off일 때 cache 사용 opt-in**
 
 <Tabs>
 <TabItem value="openai" label="OpenAI Python SDK">
@@ -1091,9 +1083,9 @@ curl http://localhost:4000/v1/chat/completions \
 </Tabs>
 
 
-## Redis max_connections
+## Redis `max_connections` {#redis-max_connections}
 
-You can set the `max_connections` parameter in your `cache_params` for Redis. This is passed directly to the Redis client and controls the maximum number of simultaneous connections in the pool. If you see errors like `No connection available`, try increasing this value:
+Redis용 `cache_params`에 `max_connections` parameter를 설정할 수 있습니다. 이 값은 Redis client에 직접 전달되며 pool의 최대 동시 connection 수를 제어합니다. `No connection available` 같은 error가 보이면 이 값을 늘려보세요.
 
 ```yaml
 litellm_settings:
@@ -1103,7 +1095,7 @@ litellm_settings:
     max_connections: 100
 ```
 
-## Supported `cache_params` on proxy config.yaml
+## proxy `config.yaml`에서 지원되는 `cache_params` {#supported-cache_params-on-proxy-configyaml}
 
 ```yaml
 cache_params:
@@ -1152,13 +1144,13 @@ cache_params:
   gcs_path: cache/ # [OPTIONAL] GCS path prefix for cache objects
 ```
 
-## Provider-Specific Optional Parameters Caching
+## Provider별 Optional Parameter 캐싱
 
-By default, LiteLLM only includes standard OpenAI parameters in cache keys. However, some providers (like Vertex AI) use additional parameters that affect the output but aren't included in the standard cache key generation.
+기본적으로 LiteLLM은 cache key에 표준 OpenAI parameter만 포함합니다. 하지만 Vertex AI 같은 일부 provider는 output에 영향을 주지만 표준 cache key 생성에는 포함되지 않는 추가 parameter를 사용합니다.
 
-### Enable Provider-Specific Parameter Caching
+### Provider별 Parameter 캐싱 활성화
 
-Add this setting to your `config.yaml` to include provider-specific optional parameters in cache keys:
+provider별 optional parameter를 cache key에 포함하려면 `config.yaml`에 다음 설정을 추가합니다.
 
 ```yaml
 litellm_settings:
@@ -1167,13 +1159,13 @@ litellm_settings:
     type: "redis"
   enable_caching_on_provider_specific_optional_params: True  # Include provider-specific params in cache keys
 ```
-## Advanced - user api key cache ttl 
+## 고급 - user api key cache ttl 
 
-Configure how long the in-memory cache stores the key object (prevents db requests)
+in-memory cache가 key object를 얼마나 오래 저장할지 설정합니다. DB request를 줄이는 데 사용됩니다.
 
 ```yaml
 general_settings:
   user_api_key_cache_ttl: <your-number> #time in seconds
 ```
 
-By default this value is set to 60s.
+기본값은 60초입니다.

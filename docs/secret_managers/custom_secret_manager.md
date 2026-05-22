@@ -1,15 +1,15 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Custom Secret Manager
+# 커스텀 시크릿 매니저 {#custom-secret-manager}
 
-Integrate your custom secret management system with LiteLLM.
+사용자 지정 시크릿 관리 시스템을 LiteLLM과 통합합니다.
 
-## Quick Start
+## 빠른 시작
 
-### 1. Create Your Secret Manager Class
+### 1. 시크릿 매니저 클래스 생성 {#1-create-your-secret-manager-class}
 
-Create a new file `my_secret_manager.py` with an in-memory secret store:
+인메모리 시크릿 저장소가 있는 새 파일 `my_secret_manager.py`를 생성합니다.
 
 ```python showLineNumbers title="my_secret_manager.py"
 from typing import Optional, Union
@@ -44,9 +44,9 @@ class InMemorySecretManager(CustomSecretManager):
         return self.secrets.get(secret_name)
 ```
 
-### 2. Configure Proxy
+### 2. Proxy 설정 {#2-configure-proxy}
 
-Reference your custom secret manager in `config.yaml`:
+`config.yaml`에서 커스텀 시크릿 매니저를 참조합니다.
 
 ```yaml showLineNumbers title="config.yaml"
 general_settings:
@@ -62,12 +62,12 @@ model_list:
       api_key: os.environ/OPENAI_API_KEY  # Read from custom secret manager
 ```
 
-### 3. Start LiteLLM Proxy
+### 3. LiteLLM Proxy 시작 {#3-start-litellm-proxy}
 
 <Tabs>
 <TabItem value="docker" label="Docker">
 
-Mount your custom secret manager file on the container:
+커스텀 시크릿 매니저 파일을 컨테이너에 마운트합니다.
 
 ```bash showLineNumbers
 docker run -d \
@@ -84,7 +84,7 @@ docker run -d \
 
 </TabItem>
 
-<TabItem value="pip" label="Python Package">
+<TabItem value="pip" label="Python 패키지">
 
 ```bash
 litellm --config config.yaml --detailed_debug
@@ -93,12 +93,12 @@ litellm --config config.yaml --detailed_debug
 </TabItem>
 </Tabs>
 
-## Configuration Options
+## 설정 옵션 {#configuration-options}
 
-Customize secret manager behavior in your `config.yaml`:
+`config.yaml`에서 시크릿 매니저 동작을 사용자 지정합니다.
 
 <Tabs>
-<TabItem value="read_only" label="Read Keys Only">
+<TabItem value="read_only" label="키 읽기만">
 
 ```yaml showLineNumbers title="config.yaml"
 general_settings:
@@ -110,9 +110,9 @@ general_settings:
 
 </TabItem>
 
-<TabItem value="write_only" label="Store Virtual Keys">
+<TabItem value="write_only" label="가상 키 저장">
 
-Store LiteLLM proxy virtual keys in your secret manager:
+LiteLLM Proxy 가상 키를 시크릿 매니저에 저장합니다.
 
 ```yaml showLineNumbers title="config.yaml"
 general_settings:
@@ -130,7 +130,7 @@ general_settings:
 
 </TabItem>
 
-<TabItem value="read_and_write" label="Read + Write">
+<TabItem value="read_and_write" label="읽기 + 쓰기">
 
 ```yaml showLineNumbers title="config.yaml"
 general_settings:
@@ -146,21 +146,21 @@ general_settings:
 </TabItem>
 </Tabs>
 
-### Available Settings
+### 사용 가능한 설정 {#available-settings}
 
-| Setting | Description | Default |
+| 설정 | 설명 | 기본값 |
 |---------|-------------|---------|
-| `custom_secret_manager` | Path to your custom secret manager class | Required |
-| `access_mode` | `"read_only"`, `"write_only"`, or `"read_and_write"` | `"read_only"` |
-| `hosted_keys` | List of specific keys to check in secret manager | All keys |
-| `store_virtual_keys` | Store LiteLLM virtual keys in secret manager | `false` |
-| `prefix_for_stored_virtual_keys` | Prefix for stored virtual keys | `"litellm/"` |
-| `description` | Description for stored secrets | `None` |
-| `tags` | Tags to apply to stored secrets | `None` |
+| `custom_secret_manager` | 커스텀 시크릿 매니저 클래스 경로 | 필수 |
+| `access_mode` | `"read_only"`, `"write_only"` 또는 `"read_and_write"` | `"read_only"` |
+| `hosted_keys` | 시크릿 매니저에서 확인할 특정 키 목록 | 모든 키 |
+| `store_virtual_keys` | LiteLLM 가상 키를 시크릿 매니저에 저장 | `false` |
+| `prefix_for_stored_virtual_keys` | 저장된 가상 키에 붙일 접두사 | `"litellm/"` |
+| `description` | 저장된 시크릿에 대한 설명 | `None` |
+| `tags` | 저장된 시크릿에 적용할 태그 | `None` |
 
-## Required Methods
+## 필수 메서드 {#required-methods}
 
-Your custom secret manager **must** implement these two methods:
+커스텀 시크릿 매니저는 다음 두 메서드를 **반드시** 구현해야 합니다.
 
 ### `async_read_secret()`
 
@@ -198,9 +198,9 @@ def sync_read_secret(
     pass
 ```
 
-## Optional Methods
+## 선택적 메서드 {#optional-methods}
 
-Implement these for additional functionality:
+추가 기능이 필요하면 다음 메서드를 구현합니다.
 
 ### `async_write_secret()`
 
@@ -232,21 +232,20 @@ async def async_delete_secret(
     pass
 ```
 
-## Use Cases
+## 사용 사례 {#use-cases}
 
-✅ Proprietary vault systems  
-✅ Custom authentication (mTLS, OAuth)  
-✅ Organization-specific security policies  
-✅ Legacy secret storage systems  
-✅ Multi-region secret replication  
-✅ Secret versioning and rotation  
-✅ Compliance requirements (HIPAA, SOC2)  
+✅ 독자적인 볼트 시스템  
+✅ 커스텀 인증(mTLS, OAuth)  
+✅ 조직별 보안 정책  
+✅ 레거시 시크릿 저장 시스템  
+✅ 다중 리전 시크릿 복제  
+✅ 시크릿 버전 관리 및 교체  
+✅ 컴플라이언스 요구사항(HIPAA, SOC2)  
 
-## Example
+## 예제
 
-See [cookbook/litellm_proxy_server/secret_manager/my_secret_manager.py](https://github.com/BerriAI/litellm/blob/main/cookbook/litellm_proxy_server/secret_manager/my_secret_manager.py) for a complete working example with:
+[cookbook/litellm_proxy_server/secret_manager/my_secret_manager.py](https://github.com/BerriAI/litellm/blob/main/cookbook/litellm_proxy_server/secret_manager/my_secret_manager.py)에서 다음을 포함한 완전한 동작 예제를 확인할 수 있습니다.
 
-- In-memory secret manager implementation  
-- Integration with LiteLLM Proxy  
-- Read, write, and delete operations
-
+- 인메모리 시크릿 매니저 구현  
+- LiteLLM Proxy 통합  
+- 읽기, 쓰기, 삭제 작업

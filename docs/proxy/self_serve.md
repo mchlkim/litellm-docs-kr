@@ -2,23 +2,23 @@ import Image from '@theme/IdealImage';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Internal User Self-Serve
+# 내부 사용자 Self-Serve {#internal-user-self-serve}
 
-## Allow users to create their own keys on [Proxy UI](./ui.md).
+## 사용자가 [Proxy UI](./ui.md)에서 직접 키를 생성하도록 허용
 
-1. Add user with permissions to a team on proxy 
+1. proxy에서 팀 권한이 있는 사용자를 추가합니다.
 
 <Tabs>
 <TabItem value="ui" label="UI">
 
-Go to `Internal Users` -> `+New User`
+`Internal Users` -> `+New User`로 이동합니다.
 
 <Image img={require('../../img/add_internal_user.png')}  style={{ width: '800px', height: 'auto' }} />
 
 </TabItem>
 <TabItem value="api" label="API">
 
-Create a new Internal User on LiteLLM and assign them the role `internal_user`.
+LiteLLM에서 새 Internal User를 생성하고 `internal_user` role을 할당합니다.
 
 ```bash
 curl -X POST '<PROXY_BASE_URL>/user/new' \
@@ -30,7 +30,7 @@ curl -X POST '<PROXY_BASE_URL>/user/new' \
 }'
 ```
 
-Expected Response 
+예상 응답
 
 ```bash
 {
@@ -41,25 +41,25 @@ Expected Response
 }
 ```
 
-Here's the available UI roles for a LiteLLM Internal User: 
+LiteLLM Internal User에 사용할 수 있는 UI role은 다음과 같습니다.
 
-Admin Roles:
-  - `proxy_admin`: admin over the platform
-  - `proxy_admin_viewer`: can login, view all keys, view all spend. **Cannot** create/delete keys, add new users.
+Admin용 Role:
+  - `proxy_admin`: platform admin입니다.
+  - `proxy_admin_viewer`: 로그인, 모든 키 조회, 모든 spend 조회가 가능합니다. 키 생성/삭제, 새 사용자 추가는 **불가**합니다.
 
-Internal User Roles:
-  - `internal_user`: can login, view/create/delete their own keys, view their spend. **Cannot** add new users.
-  - `internal_user_viewer`: can login, view their own keys, view their own spend. **Cannot** create/delete keys, add new users.
+Internal User용 Role:
+  - `internal_user`: 로그인, 본인 키 조회/생성/삭제, 본인 spend 조회가 가능합니다. 새 사용자 추가는 **불가**합니다.
+  - `internal_user_viewer`: 로그인, 본인 키 조회, 본인 spend 조회가 가능합니다. 키 생성/삭제, 새 사용자 추가는 **불가**합니다.
 
 </TabItem>
 </Tabs>
 
-2. Share invitation link with user 
+2. 초대 링크를 사용자와 공유합니다.
 
 <Tabs>
 <TabItem value="ui" label="UI">
 
-Copy the invitation link with the user 
+사용자에게 전달할 초대 링크를 복사합니다.
 
 <Image img={require('../../img/invitation_link.png')}  style={{ width: '800px', height: 'auto' }} />
 
@@ -75,7 +75,7 @@ curl -X POST '<PROXY_BASE_URL>/invitation/new' \
 }'
 ```
 
-Expected Response 
+예상 응답
 
 ```bash
 {
@@ -91,7 +91,7 @@ Expected Response
 }
 ```
 
-Invitation Link: 
+초대 링크:
 
 ```bash
 http://0.0.0.0:4000/ui/onboarding?id=a2f0918f-43b0-4770-a664-96ddd192966e
@@ -104,11 +104,11 @@ http://0.0.0.0:4000/ui/onboarding?id=a2f0918f-43b0-4770-a664-96ddd192966e
 
 :::info
 
-Use [Email Notifications](./email.md) to email users onboarding links 
+[Email Notifications](./email.md)를 사용해 사용자에게 onboarding 링크를 email로 보낼 수 있습니다.
 
 :::
 
-3. User logs in via email + password auth
+3. 사용자가 email + password auth로 로그인합니다.
 
 <Image img={require('../../img/ui_clean_login.png')}  style={{ width: '500px', height: 'auto' }} />
 
@@ -116,63 +116,63 @@ Use [Email Notifications](./email.md) to email users onboarding links
 
 :::info 
 
-LiteLLM Enterprise: Enable [SSO login](./ui.md#setup-ssoauth-for-ui)
+LiteLLM Enterprise: [SSO login](./ui.md)을 활성화합니다.
 
 :::
 
-4. User can now create their own keys
+4. 이제 사용자가 본인 키를 생성할 수 있습니다.
 
 
 <Image img={require('../../img/ui_self_serve_create_key.png')}  style={{ width: '800px', height: 'auto' }} />
 
-## Allow users to View Usage, Caching Analytics
+## 사용자가 Usage 및 Caching Analytics를 조회하도록 허용 {#allowing-users-to-view-usage-caching-analytics}
 
-1. Go to Internal Users -> +Invite User
+1. Internal Users -> +Invite User로 이동합니다.
 
-Set their role to `Admin Viewer` - this means they can only view usage, caching analytics
+role을 `Admin Viewer`로 설정합니다. 이 role은 Usage와 Caching Analytics만 조회할 수 있습니다.
 
 <Image img={require('../../img/ui_invite_user.png')}  style={{ width: '800px', height: 'auto' }} />
 <br />
 
-2. Share invitation link with user
+2. 초대 링크를 사용자와 공유합니다.
 
 
 <Image img={require('../../img/ui_invite_link.png')}  style={{ width: '800px', height: 'auto' }} />
 <br />
 
-3. User logs in via email + password auth
+3. 사용자가 email + password auth로 로그인합니다.
 
 <Image img={require('../../img/ui_clean_login.png')}  style={{ width: '500px', height: 'auto' }} />
 <br />
 
-4. User can now view Usage, Caching Analytics
+4. 이제 사용자가 Usage와 Caching Analytics를 조회할 수 있습니다.
 
 <Image img={require('../../img/ui_usage.png')}  style={{ width: '800px', height: 'auto' }} />
 
 
-## Available Roles
-Here's the available UI roles for a LiteLLM Internal User: 
+## 사용 가능한 Roles {#available-roles}
+LiteLLM Internal User에 사용할 수 있는 UI role은 다음과 같습니다.
 
-**Admin Roles:**
-  - `proxy_admin`: admin over the platform
-  - `proxy_admin_viewer`: can login, view all keys, view all spend. **Cannot** create/delete keys, add new users.
+**Admin용 Role:**
+  - `proxy_admin`: platform admin입니다.
+  - `proxy_admin_viewer`: 로그인, 모든 키 조회, 모든 spend 조회가 가능합니다. 키 생성/삭제, 새 사용자 추가는 **불가**합니다.
 
-**Internal User Roles:**
-  - `internal_user`: can login, view/create/delete their own keys, view their spend. **Cannot** add new users.
-  - `internal_user_viewer`: can login, view their own keys, view their own spend. **Cannot** create/delete keys, add new users.
+**Internal User용 Role:**
+  - `internal_user`: 로그인, 본인 키 조회/생성/삭제, 본인 spend 조회가 가능합니다. 새 사용자 추가는 **불가**합니다.
+  - `internal_user_viewer`: 로그인, 본인 키 조회, 본인 spend 조회가 가능합니다. 키 생성/삭제, 새 사용자 추가는 **불가**합니다.
 
-**Team Roles:**
-  - `admin`: can add new members to the team, can control Team Permissions, can add team-only models (useful for onboarding a team's finetuned models).
-  - `user`: can login, view their own keys, view their own spend. **Cannot** create/delete keys (controllable via Team Permissions), add new users.
+**Team용 Role:**
+  - `admin`: 팀에 새 member 추가, Team Permissions 제어, team-only model 추가가 가능합니다(팀의 finetuned model onboarding에 유용).
+  - `user`: 로그인, 본인 키 조회, 본인 spend 조회가 가능합니다. 키 생성/삭제(Team Permissions로 제어 가능), 새 사용자 추가는 **불가**합니다.
 
 
-## Auto-add SSO users to teams
+## SSO 사용자를 팀에 자동 추가 {#auto-adding-sso-users-to-teams}
 
-This walks through setting up sso auto-add for **Okta, Google SSO**
+이 섹션은 **Okta, Google SSO**용 SSO auto-add 설정 과정을 설명합니다.
 
-### Okta, Google SSO 
+### Okta, Google SSO
 
-1. Specify the JWT field that contains the team ids, that the user belongs to. 
+1. 사용자가 속한 팀 id를 담고 있는 JWT field를 지정합니다.
 
 ```yaml
 general_settings:
@@ -181,7 +181,7 @@ general_settings:
     team_ids_jwt_field: "groups" # 👈 CAN BE ANY FIELD
 ```
 
-This is assuming your SSO token looks like this. **If you need to inspect the JWT fields received from your SSO provider by LiteLLM, follow these instructions [here](#debugging-sso-jwt-fields)**
+다음과 같은 SSO token을 가정합니다. **LiteLLM이 SSO provider에서 받은 JWT field를 확인해야 한다면 [여기](#debugging-sso-jwt-fields)의 안내를 따르세요.**
 
 ```
 {
@@ -190,7 +190,7 @@ This is assuming your SSO token looks like this. **If you need to inspect the JW
 }
 ```
 
-2. Create the teams on LiteLLM 
+2. LiteLLM에서 팀을 생성합니다.
 
 ```bash
 curl -X POST '<PROXY_BASE_URL>/team/new' \
@@ -202,23 +202,23 @@ curl -X POST '<PROXY_BASE_URL>/team/new' \
 }'
 ```
 
-3. Test the SSO flow
+3. SSO flow를 테스트합니다.
 
-Here's a walkthrough of [how it works](https://www.loom.com/share/8959be458edf41fd85937452c29a33f3?sid=7ebd6d37-569a-4023-866e-e0cde67cb23e)
+[동작 방식 walkthrough](https://www.loom.com/share/8959be458edf41fd85937452c29a33f3?sid=7ebd6d37-569a-4023-866e-e0cde67cb23e)를 참고하세요.
 
-### Microsoft Entra ID SSO group assignment
+### Microsoft Entra ID SSO group assignment 설정 {#microsoft-entra-id-sso-group-assignment}
 
-Follow this [tutorial for auto-adding sso users to teams with Microsoft Entra ID](https://docs.litellm.ai/docs/tutorials/msft_sso)
+[Microsoft Entra ID로 SSO 사용자를 팀에 자동 추가하는 tutorial](https://docs.litellm.ai/docs/tutorials/msft_sso)을 따르세요.
 
-### Debugging SSO JWT fields 
+### SSO JWT field 디버깅 {#debugging-sso-jwt-fields}
 
-[**Go Here**](./admin_ui_sso.md#debugging-sso-jwt-fields)
+[**여기로 이동**](./admin_ui_sso.md#debugging-sso-jwt-fields)
 
 
-## Advanced
-### Setting custom logout URLs
+## 고급 설정
+### Custom logout URL 설정 {#custom-logout-url}
 
-Set `PROXY_LOGOUT_URL` in your .env if you want users to get redirected to a specific URL when they click logout
+사용자가 logout을 클릭했을 때 특정 URL로 redirect되게 하려면 `.env`에 `PROXY_LOGOUT_URL`을 설정합니다.
 
 ```
 export PROXY_LOGOUT_URL="https://www.google.com"
@@ -227,9 +227,9 @@ export PROXY_LOGOUT_URL="https://www.google.com"
 <Image img={require('../../img/ui_logout.png')}  style={{ width: '400px', height: 'auto' }} />
 
 
-### Set default max budget for internal users 
+### Internal user 기본 max budget 설정 {#setting-default-max-budget-for-internal-users}
 
-Automatically apply budget per internal user when they sign up. By default the table will be checked every 10 minutes, for users to reset. To modify this, [see this](./users.md#reset-budgets)
+internal user가 sign up할 때 사용자별 budget을 자동 적용합니다. 기본적으로 user reset을 위해 table을 10분마다 확인합니다. 이를 변경하려면 [이 문서](./users.md#reset-budgets)를 참고하세요.
 
 ```yaml
 litellm_settings:
@@ -237,31 +237,31 @@ litellm_settings:
   internal_user_budget_duration: "1mo" # reset every month
 ```
 
-This sets a max budget of $10 USD for internal users when they sign up. 
+이 설정은 internal user가 sign up할 때 $10 USD max budget을 설정합니다.
 
-You can also manage these settings visually in the UI:
+이 설정은 UI에서도 시각적으로 관리할 수 있습니다.
 
 <Image img={require('../../img/default_user_settings_admin_ui.png')}  style={{ width: '700px', height: 'auto' }} />
 
-This budget only applies to personal keys created by that user - seen under `Default Team` on the UI. 
+이 budget은 해당 사용자가 만든 personal key에만 적용됩니다. UI에서는 `Default Team` 아래에서 확인할 수 있습니다.
 
 <Image img={require('../../img/max_budget_for_internal_users.png')}  style={{ width: '500px', height: 'auto' }} />
 
-This budget does not apply to keys created under non-default teams.
+이 budget은 non-default team 아래에서 생성된 key에는 적용되지 않습니다.
 
 
-### Set max budget for teams
+### Team max budget 설정 {#setting-team-max-budget}
 
-[**Go Here**](./team_budgets.md)
+[**여기로 이동**](./team_budgets.md)
 
-### Default Team
+### Default Team {#default-team}
 
 <Tabs>
 <TabItem value="ui" label="UI">
 
-Go to `Internal Users` -> `Default User Settings` and set the default team to the team you just created. 
+`Internal Users` -> `Default User Settings`로 이동하고 방금 생성한 팀을 default team으로 설정합니다.
 
-Let's also set the default models to `no-default-models`. This means a user can only create keys within a team.
+default model도 `no-default-models`로 설정합니다. 이렇게 하면 사용자는 팀 안에서만 key를 생성할 수 있습니다.
 
 <Image img={require('../../img/default_user_settings_with_default_team.png')}  style={{ width: '1000px', height: 'auto' }} />
 
@@ -269,7 +269,7 @@ Let's also set the default models to `no-default-models`. This means a user can 
 <TabItem value="yaml" label="YAML">
 
 :::info
-Team must be created before setting it as the default team. 
+default team으로 설정하기 전에 팀이 먼저 생성되어 있어야 합니다.
 :::
 
 ```yaml
@@ -285,11 +285,11 @@ litellm_settings:
 </TabItem>
 </Tabs>
 
-### Team Member Budgets
+### Team Member Budget {#team-member-budgets}
 
-Set a max budget for a team member. 
+team member의 max budget을 설정합니다.
 
-You can do this when creating a new team, or by updating an existing team. 
+새 팀을 생성할 때 또는 기존 팀을 업데이트할 때 설정할 수 있습니다.
 
 <Tabs>
 <TabItem value="ui" label="UI">
@@ -313,11 +313,11 @@ curl -X POST '<PROXY_BASE_URL>/team/new' \
 </TabItem>
 </Tabs>
 
-### Team Member Rate Limits
+### Team Member Rate Limit 설정 {#team-member-rate-limits}
 
-Set a default tpm/rpm limit for an individual team member. 
+개별 team member의 기본 TPM/RPM limit을 설정합니다.
 
-You can do this when creating a new team, or by updating an existing team. 
+새 팀을 생성할 때 또는 기존 팀을 업데이트할 때 설정할 수 있습니다.
 
 
 <Tabs>
@@ -344,17 +344,17 @@ curl -X POST '<PROXY_BASE_URL>/team/new' \
 
 
 
-### Set default params for new teams
+### 새 팀의 default params 설정 {#setting-default-params-for-new-teams}
 
-When you connect litellm to your SSO provider, litellm can auto-create teams. Use this to set the default `models`, `max_budget`, `budget_duration` for these auto-created teams. 
+LiteLLM을 SSO provider에 연결하면 LiteLLM이 팀을 자동 생성할 수 있습니다. 이 설정은 자동 생성된 팀의 기본 `models`, `max_budget`, `budget_duration`을 지정합니다.
 
-**How it works**
+**동작 방식**
 
-1. When litellm fetches `groups` from your SSO provider, it will check if the corresponding group_id exists as a `team_id` in litellm. 
-2. If the team_id does not exist, litellm will auto-create a team with the default params you've set. 
-3. If the team_id already exist, litellm will not apply any settings on the team. 
+1. LiteLLM이 SSO provider에서 `groups`를 가져오면, 해당 group_id가 LiteLLM의 `team_id`로 존재하는지 확인합니다.
+2. team_id가 없으면 LiteLLM은 설정한 default params로 팀을 자동 생성합니다.
+3. team_id가 이미 있으면 LiteLLM은 해당 팀에 어떤 설정도 적용하지 않습니다.
 
-**Usage**
+**사용법**
 
 ```yaml showLineNumbers title="Default Params for new teams"
 litellm_settings:
@@ -370,15 +370,15 @@ litellm_settings:
 ```
 
 
-### Restrict Users from creating personal keys 
+### User의 personal key 생성 제한
 
-This is useful if you only want users to create keys under a specific team. 
+사용자가 특정 팀 아래에서만 key를 생성하도록 제한하고 싶을 때 유용합니다.
 
-This will also prevent users from using their session tokens on the test keys chat pane. 
+이 설정은 사용자가 test keys chat pane에서 session token을 사용하는 것도 방지합니다.
 
-👉 [**See this**](./virtual_keys.md#restricting-key-generation)
+👉 [**이 문서 참고**](./virtual_keys.md#restricting-key-generation)
 
-## **All Settings for Self Serve / SSO Flow**
+## **Self Serve / SSO Flow 전체 설정** {#all-settings-for-self-serve-sso-flow}
 
 ```yaml showLineNumbers title="All Settings for Self Serve / SSO Flow"
 litellm_settings:
@@ -420,6 +420,6 @@ litellm_settings:
       allowed_user_roles: ["proxy_admin"]
 ```
 
-## Further Reading
+## 추가 읽기 {#further-reading}
 
-- [Onboard Users for AI Exploration](../tutorials/default_team_self_serve)
+- [AI Exploration용 사용자 온보딩](../tutorials/default_team_self_serve)

@@ -1,14 +1,14 @@
-# Gemini Realtime API - Google AI Studio
+# Gemini Realtime API - Google AI Studio 개요 {#gemini-realtime-api-google-ai-studio}
 
-| Feature | Description | Comments |
+| 기능 | 설명 | 비고 |
 | --- | --- | --- |
 | Proxy | ✅ |  |
-| SDK | ⌛️ | Experimental access via `litellm._arealtime`. |
+| SDK | ⌛️ | `litellm._arealtime`을 통한 실험적 액세스. |
 
 
-## Proxy Usage
+## Proxy 사용법 {#proxy-usage}
 
-### Add model to config 
+### config에 모델 추가 {#add-model-to-config}
 
 ```yaml
 model_list:
@@ -19,7 +19,7 @@ model_list:
       mode: realtime
 ```
 
-### Start proxy 
+### proxy 시작 {#start-proxy}
 
 ```bash
 litellm --config /path/to/config.yaml 
@@ -27,9 +27,9 @@ litellm --config /path/to/config.yaml
 # RUNNING on http://0.0.0.0:8000
 ```
 
-### Test 
+### 테스트 {#test}
 
-Run this script using node - `node test.js`
+node로 이 스크립트를 실행합니다 - `node test.js`
 
 ```js
 // test.js
@@ -64,12 +64,12 @@ ws.on("error", function handleError(error) {
 });
 ```
 
-## Limitations 
+## 제한 사항 {#limitations}
 
-- Does not support audio transcription. 
-- Does not support tool calling 
+- 오디오 transcription을 지원하지 않습니다.
+- tool calling을 지원하지 않습니다.
 
-## Supported OpenAI Realtime Events
+## 지원되는 OpenAI Realtime Events {#supported-openai-realtime-events}
 
 - `session.created`
 - `response.created`
@@ -86,7 +86,7 @@ ws.on("error", function handleError(error) {
 
 
 
-## [Supported Session Params](https://github.com/BerriAI/litellm/blob/e87b536d038f77c2a2206fd7433e275c487179ee/litellm/llms/gemini/realtime/transformation.py#L155)
+## [지원되는 Session Params](https://github.com/BerriAI/litellm/blob/e87b536d038f77c2a2206fd7433e275c487179ee/litellm/llms/gemini/realtime/transformation.py#L155) {#supported-session-params}
 
-## More Examples
-### [Gemini Realtime API with Audio Input/Output](../../../docs/tutorials/gemini_realtime_with_audio)
+## 더 보기 예제
+### [오디오 입력/출력을 사용하는 Gemini Realtime API](../../../docs/tutorials/gemini_realtime_with_audio) {#gemini-realtime-api-with-audio-inputoutput}

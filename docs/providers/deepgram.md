@@ -1,18 +1,18 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Deepgram 
+# `Deepgram`
 
-LiteLLM supports Deepgram's `/listen` endpoint.
+LiteLLM은 `Deepgram`의 `/listen` 엔드포인트를 지원합니다.
 
-| Property | Details |
+| 속성 | 세부 정보 |
 |-------|-------|
-| Description | Deepgram's voice AI platform provides APIs for speech-to-text, text-to-speech, and language understanding. |
-| Provider Route on LiteLLM | `deepgram/` |
-| Provider Doc | [Deepgram ↗](https://developers.deepgram.com/docs/introduction) |
-| Supported OpenAI Endpoints | `/audio/transcriptions` |
+| 설명 | `Deepgram`의 음성 AI 플랫폼은 음성-텍스트 변환, 텍스트-음성 변환, 언어 이해용 API를 제공합니다. |
+| LiteLLM 제공자 경로 | `deepgram/` |
+| 제공자 문서 | [Deepgram ↗](https://developers.deepgram.com/docs/introduction) |
+| 지원되는 OpenAI 엔드포인트 | `/audio/transcriptions` |
 
-## Quick Start
+## 빠른 시작
 
 ```python
 from litellm import transcription
@@ -27,11 +27,11 @@ response = transcription(model="deepgram/nova-2", file=audio_file)
 print(f"response: {response}")
 ```
 
-## LiteLLM Proxy Usage
+## LiteLLM Proxy 사용법
 
-### Add model to config 
+### config에 모델 추가하기 {#add-model-to-config}
 
-1. Add model to config.yaml
+1. `config.yaml`에 모델을 추가합니다.
 
 ```yaml
 model_list:
@@ -46,7 +46,7 @@ general_settings:
   master_key: sk-1234
 ```
 
-### Start proxy 
+### 프록시 시작하기 {#start-proxy}
 
 ```bash
 litellm --config /path/to/config.yaml 
@@ -54,7 +54,7 @@ litellm --config /path/to/config.yaml
 # RUNNING on http://0.0.0.0:4000
 ```
 
-### Test 
+### 테스트 {#test}
 
 <Tabs>
 <TabItem value="curl" label="Curl">

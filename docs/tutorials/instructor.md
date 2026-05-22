@@ -2,7 +2,7 @@
 
 Combine LiteLLM with [jxnl's instructor library](https://github.com/jxnl/instructor) for more robust structured outputs. Outputs are automatically validated into Pydantic types and validation errors are provided back to the model to increase the chance of a successful response in the retries.
 
-## Usage (Sync)
+## 사용법 (Sync)
 
 ```python
 import instructor
@@ -36,7 +36,7 @@ assert user.age == 25
 print(f"{user=}")
 ```
 
-## Usage (Async)
+## 사용법 (Async)
 
 ```python
 import asyncio

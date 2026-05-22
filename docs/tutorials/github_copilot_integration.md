@@ -7,47 +7,47 @@ import TabItem from '@theme/TabItem';
 
 # GitHub Copilot
 
-This tutorial shows you how to integrate GitHub Copilot with LiteLLM Proxy, allowing you to route requests through LiteLLM's unified interface.
+이 튜토리얼은 GitHub Copilot을 LiteLLM Proxy와 통합하여 LiteLLM의 통합 인터페이스를 통해 요청을 라우팅하는 방법을 보여줍니다.
 
 :::info 
 
-This tutorial is based on [Sergio Pino's excellent guide](https://dev.to/spino327/calling-github-copilot-models-from-openhands-using-litellm-proxy-1hl4) for calling GitHub Copilot models through LiteLLM Proxy. This integration allows you to use any LiteLLM supported model through GitHub Copilot's interface.
+이 튜토리얼은 LiteLLM Proxy를 통해 GitHub Copilot 모델을 호출하는 방법을 다룬 [Sergio Pino의 훌륭한 가이드](https://dev.to/spino327/calling-github-copilot-models-from-openhands-using-litellm-proxy-1hl4)를 기반으로 합니다. 이 통합을 사용하면 GitHub Copilot 인터페이스를 통해 LiteLLM이 지원하는 모든 모델을 사용할 수 있습니다.
 
 :::
 
-## Benefits of using GitHub Copilot with LiteLLM
+## LiteLLM과 함께 GitHub Copilot을 사용할 때의 이점 {#benefits-of-using-github-copilot-with-litellm}
 
-When you use GitHub Copilot with LiteLLM you get the following benefits:
+GitHub Copilot을 LiteLLM과 함께 사용하면 다음과 같은 이점이 있습니다.
 
-**Developer Benefits:**
-- Universal Model Access: Use any LiteLLM supported model (Anthropic, OpenAI, Vertex AI, Bedrock, etc.) through the GitHub Copilot interface.
-- Higher Rate Limits & Reliability: Load balance across multiple models and providers to avoid hitting individual provider limits, with fallbacks to ensure you get responses even if one provider fails.
+**개발자 이점:**
+- 범용 모델 접근: GitHub Copilot 인터페이스를 통해 LiteLLM이 지원하는 모든 모델(Anthropic, OpenAI, Vertex AI, Bedrock 등)을 사용할 수 있습니다.
+- 더 높은 요청 한도 및 안정성: 여러 모델과 제공자에 걸쳐 로드 밸런싱하여 개별 제공자 제한에 도달하는 것을 피하고, 대체 경로를 통해 한 제공자가 실패해도 응답을 받을 수 있습니다.
 
-**Proxy Admin Benefits:**
-- Centralized Management: Control access to all models through a single LiteLLM proxy instance without giving your developers API Keys to each provider.
-- Budget Controls: Set spending limits and track costs across all GitHub Copilot usage.
+**프록시 관리자 이점:**
+- 중앙 집중식 관리: 개발자에게 각 제공자의 API 키를 제공하지 않고도 단일 LiteLLM 프록시 인스턴스를 통해 모든 모델 접근을 제어할 수 있습니다.
+- 예산 제어: 모든 GitHub Copilot 사용량에 대해 지출 한도를 설정하고 비용을 추적할 수 있습니다.
 
-## Prerequisites
+## 사전 준비
 
-Before you begin, ensure you have:
-- GitHub Copilot subscription (Individual, Business, or Enterprise)
-- A running LiteLLM Proxy instance
-- A valid LiteLLM Proxy API key
-- VS Code or compatible IDE with GitHub Copilot extension
+시작하기 전에 다음을 준비했는지 확인하세요.
+- GitHub Copilot 구독(Individual, Business 또는 Enterprise)
+- 실행 중인 LiteLLM Proxy 인스턴스
+- 유효한 LiteLLM Proxy API 키
+- GitHub Copilot 확장 프로그램이 설치된 VS Code 또는 호환 IDE
 
-## Quick Start Guide
+## 빠른 시작 가이드 {#quick-start-guide}
 
-### Step 1: Install LiteLLM
+### 1단계: LiteLLM 설치 {#step-1-install-litellm}
 
-Install LiteLLM with proxy support:
+프록시 지원이 포함된 LiteLLM을 설치합니다.
 
 ```bash
 uv tool install litellm[proxy]
 ```
 
-### Step 2: Configure LiteLLM Proxy
+### 2단계: LiteLLM Proxy 구성 {#step-2-configure-litellm-proxy}
 
-Create a `config.yaml` file with your model configurations:
+모델 구성을 포함하는 `config.yaml` 파일을 만듭니다.
 
 ```yaml showLineNumbers title="config.yaml"
 model_list:
@@ -65,17 +65,17 @@ general_settings:
   master_key: sk-1234567890 # Change this to a secure key
 ```
 
-### Step 3: Start LiteLLM Proxy
+### 3단계: LiteLLM Proxy 시작 {#step-3-start-litellm-proxy}
 
-Start the proxy server:
+프록시 서버를 시작합니다.
 
 ```bash
 litellm --config config.yaml --port 4000
 ```
 
-### Step 4: Configure GitHub Copilot
+### 4단계: GitHub Copilot 구성 {#step-4-configure-github-copilot}
 
-Configure GitHub Copilot to use your LiteLLM proxy. Add the following to your VS Code `settings.json`:
+GitHub Copilot이 LiteLLM 프록시를 사용하도록 구성합니다. VS Code `settings.json`에 다음을 추가합니다.
 
 ```json
 {
@@ -86,24 +86,24 @@ Configure GitHub Copilot to use your LiteLLM proxy. Add the following to your VS
 }
 ```
 
-### Step 5: Test the Integration
+### 5단계: 통합 테스트 {#step-5-test-the-integration}
 
-Restart VS Code and test GitHub Copilot. Your requests will now be routed through LiteLLM Proxy, giving you access to LiteLLM's features like:
-- Request/response logging
-- Rate limiting
-- Cost tracking
-- Model routing and fallbacks
+VS Code를 다시 시작하고 GitHub Copilot을 테스트합니다. 이제 요청이 LiteLLM Proxy를 통해 라우팅되므로 다음과 같은 LiteLLM 기능을 사용할 수 있습니다.
+- 요청/응답 로깅
+- 속도 제한
+- 비용 추적
+- 모델 라우팅 및 대체 경로
 
-## Advanced
+## 고급 {#advanced}
 
-### Use Anthropic, OpenAI, Bedrock, etc. models with GitHub Copilot
+### GitHub Copilot에서 Anthropic, OpenAI, Bedrock 등 모델 사용 {#use-anthropic-openai-bedrock-etc-models-with-github-copilot}
 
-You can route GitHub Copilot requests to any provider by configuring different models in your LiteLLM Proxy config:
+LiteLLM Proxy 설정에서 여러 모델을 구성하면 GitHub Copilot 요청을 원하는 제공자로 라우팅할 수 있습니다.
 
 <Tabs>
 <TabItem value="anthropic" label="Anthropic">
 
-Route requests to Claude Sonnet:
+요청을 Claude Sonnet으로 라우팅합니다.
 
 ```yaml showLineNumbers title="config.yaml"
 model_list:
@@ -119,7 +119,7 @@ general_settings:
 </TabItem>
 <TabItem value="openai" label="OpenAI">
 
-Route requests to GPT-4o:
+요청을 GPT-4o로 라우팅합니다.
 
 ```yaml showLineNumbers title="config.yaml"
 model_list:
@@ -135,7 +135,7 @@ general_settings:
 </TabItem>
 <TabItem value="bedrock" label="Bedrock">
 
-Route requests to Claude on Bedrock:
+요청을 Bedrock의 Claude로 라우팅합니다.
 
 ```yaml showLineNumbers title="config.yaml"
 model_list:
@@ -153,7 +153,7 @@ general_settings:
 </TabItem>
 <TabItem value="multi-provider" label="Multi-Provider Load Balancing">
 
-All deployments with the same model_name will be load balanced. In this example we load balance between OpenAI and Anthropic:
+동일한 model_name을 가진 모든 배포는 로드 밸런싱됩니다. 이 예시에서는 OpenAI와 Anthropic 사이에서 로드 밸런싱합니다.
 
 ```yaml showLineNumbers title="config.yaml"
 model_list:
@@ -176,16 +176,16 @@ general_settings:
 </TabItem>
 </Tabs>
 
-With this configuration, GitHub Copilot will automatically route requests through LiteLLM to your configured provider(s) with load balancing and fallbacks.
+이 구성을 사용하면 GitHub Copilot이 로드 밸런싱과 대체 경로를 적용하여 LiteLLM을 통해 구성된 제공자로 요청을 자동 라우팅합니다.
 
-## Troubleshooting
+## 문제 해결
 
-If you encounter issues:
+문제가 발생하면 다음을 확인하세요.
 
-1. **GitHub Copilot not using proxy**: Verify the proxy URL is correctly configured in VS Code settings and that LiteLLM proxy is running
-2. **Authentication errors**: Ensure your master key is valid and API keys for providers are correctly set
-3. **Connection errors**: Check that your LiteLLM Proxy is accessible at `http://localhost:4000`
+1. **GitHub Copilot이 프록시를 사용하지 않음**: VS Code 설정에 프록시 URL이 올바르게 구성되어 있고 LiteLLM 프록시가 실행 중인지 확인하세요.
+2. **인증 오류**: master key가 유효하고 제공자용 API 키가 올바르게 설정되어 있는지 확인하세요.
+3. **연결 오류**: LiteLLM Proxy에 `http://localhost:4000`에서 접근할 수 있는지 확인하세요.
 
-## Credits
+## 크레딧 {#credits}
 
-This tutorial is based on the work by [Sergio Pino](https://dev.to/spino327) from his original article: [Calling GitHub Copilot models from OpenHands using LiteLLM Proxy](https://dev.to/spino327/calling-github-copilot-models-from-openhands-using-litellm-proxy-1hl4). Thank you for the foundational work! 
+이 튜토리얼은 [Sergio Pino](https://dev.to/spino327)의 원문 글 [Calling GitHub Copilot models from OpenHands using LiteLLM Proxy](https://dev.to/spino327/calling-github-copilot-models-from-openhands-using-litellm-proxy-1hl4)를 기반으로 합니다. 토대가 되는 작업에 감사드립니다!

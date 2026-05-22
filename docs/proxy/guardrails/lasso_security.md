@@ -4,23 +4,23 @@ import TabItem from '@theme/TabItem';
 
 # Lasso Security
 
-Use [Lasso Security](https://www.lasso.security/) to protect your LLM applications from prompt injection attacks, harmful content generation, and other security threats through comprehensive input and output validation.
+[Lasso Security](https://www.lasso.security/)를 사용하면 포괄적인 입력 및 출력 검증을 통해 LLM 애플리케이션을 프롬프트 인젝션 공격, 유해 콘텐츠 생성, 기타 보안 위협으로부터 보호할 수 있습니다.
 
-## Prerequisites
+## 사전 준비
 
-The Lasso guardrail requires the `ulid-py` package (version 1.1.0 or higher) for generating unique conversation identifiers:
+Lasso 가드레일은 고유한 대화 식별자를 생성하기 위해 `ulid-py` 패키지(버전 1.1.0 이상)가 필요합니다.
 
 ```shell
 uv add ulid-py>=1.1.0
 ```
 
-This package is used to create lexicographically sortable identifiers for tracking conversations and sessions in the Lasso Security platform.
+이 패키지는 Lasso Security 플랫폼에서 대화와 세션을 추적할 때 사용할 사전식 정렬 가능한 식별자를 생성하는 데 사용됩니다.
 
-## Quick Start
+## 빠른 시작
 
-### 1. Define Guardrails on your LiteLLM config.yaml 
+### 1. LiteLLM config.yaml에서 가드레일 정의
 
-Define your guardrails under the `guardrails` section:
+`guardrails` 섹션 아래에 가드레일을 정의합니다.
 
 ```yaml showLineNumbers title="config.yaml"
 model_list:
@@ -43,24 +43,24 @@ guardrails:
       api_key: os.environ/LASSO_API_KEY
 ```
 
-#### Supported values for `mode`
+#### `mode`에서 지원되는 값
 
-- `pre_call` - Run **before** LLM call to validate **user input**. Blocks requests with detected policy violations (jailbreaks, harmful prompts, PII, etc.)
-- `post_call` - Run **after** LLM call to validate **model output**. Blocks responses containing harmful content, policy violations, or sensitive information
+- `pre_call` - **사용자 입력**을 검증하기 위해 LLM 호출 **전**에 실행됩니다. 정책 위반(탈옥, 유해 프롬프트, PII 등)이 감지된 요청을 차단합니다.
+- `post_call` - **모델 출력**을 검증하기 위해 LLM 호출 **후**에 실행됩니다. 유해 콘텐츠, 정책 위반 또는 민감한 정보가 포함된 응답을 차단합니다.
 
 
-### 2. Start LiteLLM Gateway 
+### 2. LiteLLM Gateway 시작
 
 ```shell
 litellm --config config.yaml --detailed_debug
 ```
 
-### 3. Test request 
+### 3. 테스트 요청
 
 <Tabs>
-<TabItem label="Pre-call Guardrail Test" value = "pre-call-test">
+<TabItem label="Pre-call 가드레일 테스트" value = "pre-call-test">
 
-Test input validation with a prompt injection attempt:
+프롬프트 인젝션 시도로 입력 검증을 테스트합니다.
 
 ```shell
 curl -i http://0.0.0.0:4000/v1/chat/completions \
@@ -74,7 +74,7 @@ curl -i http://0.0.0.0:4000/v1/chat/completions \
   }'
 ```
 
-Expected response on policy violation:
+정책 위반 시 예상 응답:
 
 ```shell
 {
@@ -115,9 +115,9 @@ Expected response on policy violation:
 
 </TabItem>
 
-<TabItem label="Post-call Guardrail Test" value = "post-call-test">
+<TabItem label="Post-call 가드레일 테스트" value = "post-call-test">
 
-Test output validation by requesting harmful content generation:
+유해 콘텐츠 생성을 요청하여 출력 검증을 테스트합니다.
 
 ```shell
 curl -i http://0.0.0.0:4000/v1/chat/completions \
@@ -131,7 +131,7 @@ curl -i http://0.0.0.0:4000/v1/chat/completions \
   }'
 ```
 
-Expected response when model output violates policies:
+모델 출력이 정책을 위반할 때의 예상 응답:
 
 ```shell
 {
@@ -180,9 +180,9 @@ Expected response when model output violates policies:
 
 </TabItem>
 
-<TabItem label="Successful Call" value = "allowed">
+<TabItem label="성공한 호출" value = "allowed">
 
-Test with safe content that passes all guardrails:
+모든 가드레일을 통과하는 안전한 콘텐츠로 테스트합니다.
 
 ```shell
 curl -i http://0.0.0.0:4000/v1/chat/completions \
@@ -196,7 +196,7 @@ curl -i http://0.0.0.0:4000/v1/chat/completions \
   }'
 ```
 
-Expected response:
+예상 응답:
 
 ```shell
 {
@@ -226,13 +226,13 @@ Expected response:
 </TabItem>
 </Tabs>
 
-## PII Masking with Lasso
+## Lasso를 사용한 PII 마스킹
 
-Lasso supports automatic PII detection and masking using the `/classifix` endpoint. When enabled, sensitive information like emails, phone numbers, and other PII will be automatically masked with appropriate placeholders.
+Lasso는 `/classifix` 엔드포인트를 사용한 자동 PII 감지 및 마스킹을 지원합니다. 활성화하면 이메일, 전화번호, 기타 PII 같은 민감한 정보가 적절한 플레이스홀더로 자동 마스킹됩니다.
 
-### Enabling PII Masking
+### PII 마스킹 활성화
 
-To enable PII masking, add the `mask: true` parameter to your guardrail configuration:
+PII 마스킹을 활성화하려면 가드레일 구성에 `mask: true` 파라미터를 추가합니다.
 
 ```yaml showLineNumbers title="config.yaml"
 model_list:
@@ -256,20 +256,20 @@ guardrails:
       mask: true  # Enable PII masking
 ```
 
-### Masking Behavior
+### 마스킹 동작
 
-When masking is enabled:
+마스킹이 활성화되면 다음과 같이 동작합니다.
 
-- **Pre-call masking**: PII in user input is masked before being sent to the LLM
-- **Post-call masking**: PII in LLM responses is masked before being returned to the user
-- **Selective blocking**: Only harmful content (jailbreaks, hate speech, etc.) is blocked; PII violations are masked and allowed to continue
+- **Pre-call 마스킹**: 사용자 입력의 PII가 LLM으로 전송되기 전에 마스킹됩니다.
+- **Post-call 마스킹**: LLM 응답의 PII가 사용자에게 반환되기 전에 마스킹됩니다.
+- **선택적 차단**: 유해 콘텐츠(탈옥, 혐오 표현 등)만 차단됩니다. PII 위반은 마스킹된 뒤 계속 진행됩니다.
 
-### Masking Example
+### 마스킹 예제
 
 <Tabs>
-<TabItem label="Pre-call Masking" value="pre-call-masking">
+<TabItem label="Pre-call 마스킹" value="pre-call-masking">
 
-**Input with PII:**
+**PII가 포함된 입력:**
 ```shell
 curl -i http://0.0.0.0:4000/v1/chat/completions \
   -H "Content-Type: application/json" \
@@ -282,17 +282,17 @@ curl -i http://0.0.0.0:4000/v1/chat/completions \
   }'
 ```
 
-The message sent to the LLM will be automatically masked:
+LLM으로 전송되는 메시지는 자동으로 마스킹됩니다.
 `"My email is <EMAIL_ADDRESS> and phone is <PHONE_NUMBER>"`
 
 </TabItem>
 
-<TabItem label="Post-call Masking" value="post-call-masking">
+<TabItem label="Post-call 마스킹" value="post-call-masking">
 
-**LLM Response with PII:**
-If the LLM responds with: `"You can contact us at support@company.com or call 555-0123"`
+**PII가 포함된 LLM 응답:**
+LLM이 다음과 같이 응답하는 경우: `"You can contact us at support@company.com or call 555-0123"`
 
-**Masked Response to User:**
+**사용자에게 반환되는 마스킹된 응답:**
 ```json
 {
   "choices": [
@@ -309,22 +309,22 @@ If the LLM responds with: `"You can contact us at support@company.com or call 55
 </TabItem>
 </Tabs>
 
-### Supported PII Types
+### 지원되는 PII 유형
 
-Lasso can detect and mask various types of PII:
+Lasso는 다양한 유형의 PII를 감지하고 마스킹할 수 있습니다.
 
-- Email addresses → `<EMAIL_ADDRESS>`
-- Phone numbers → `<PHONE_NUMBER>`
-- Credit card numbers → `<CREDIT_CARD>`
-- Social security numbers → `<SSN>`
-- IP addresses → `<IP_ADDRESS>`
-- And many more based on your Lasso configuration
+- 이메일 주소 → `<EMAIL_ADDRESS>`
+- 전화번호 → `<PHONE_NUMBER>`
+- 신용카드 번호 → `<CREDIT_CARD>`
+- 사회보장번호 → `<SSN>`
+- IP 주소 → `<IP_ADDRESS>`
+- Lasso 구성에 따라 그 밖의 여러 유형
 
-## Advanced Configuration
+## 고급 설정
 
-### User and Conversation Tracking
+### 사용자 및 대화 추적
 
-Lasso allows you to track users and conversations for better security monitoring and contextual analysis:
+Lasso를 사용하면 더 나은 보안 모니터링과 컨텍스트 분석을 위해 사용자와 대화를 추적할 수 있습니다.
 
 ```yaml
 guardrails:
@@ -337,9 +337,9 @@ guardrails:
       lasso_conversation_id: os.environ/LASSO_CONVERSATION_ID  # Optional: Track conversation sessions
 ```
 
-### Multiple Guardrail Configuration
+### 여러 가드레일 설정
 
-You can configure both pre-call and post-call guardrails for comprehensive protection:
+포괄적인 보호를 위해 pre-call 및 post-call 가드레일을 모두 구성할 수 있습니다.
 
 ```yaml
 guardrails:
@@ -358,9 +358,9 @@ guardrails:
       lasso_user_id: os.environ/LASSO_USER_ID
 ```
 
-### Alternative Configuration: Generic Guardrail API
+### 대체 설정: Generic Guardrail API
 
-Lasso can also be configured using the [Generic Guardrail API](/docs/adding_provider/generic_guardrail_api) format:
+Lasso는 [Generic Guardrail API](/docs/adding_provider/generic_guardrail_api) 형식으로도 구성할 수 있습니다.
 
 ```yaml
 guardrails:
@@ -374,35 +374,35 @@ guardrails:
         mask: false  # Set to true to enable PII masking
 ```
 
-**Parameters:**
-- **`mask`**: Boolean flag to enable/disable PII masking (default: `false`)
+**파라미터:**
+- **`mask`**: PII 마스킹을 활성화하거나 비활성화하는 불리언 플래그(기본값: `false`)
 
-## Security Features
+## 보안 기능
 
-Lasso Security provides protection against:
+Lasso Security는 다음 위협으로부터 보호합니다.
 
-- **Jailbreak Attempts**: Detects prompt injection and instruction bypass attempts
-- **Harmful Content**: Identifies sexual, violent, hateful, or illegal content requests/responses
-- **PII Detection**: Finds and can mask personally identifiable information
-- **Custom Policies**: Enforces your organization-specific content policies
-- **Code Security**: Analyzes code snippets for potential security vulnerabilities
+- **탈옥 시도**: 프롬프트 인젝션과 지침 우회 시도를 감지합니다.
+- **유해 콘텐츠**: 성적, 폭력적, 혐오적 또는 불법적인 콘텐츠 요청/응답을 식별합니다.
+- **PII 감지**: 개인 식별 정보를 찾아 마스킹할 수 있습니다.
+- **사용자 지정 정책**: 조직별 콘텐츠 정책을 적용합니다.
+- **코드 보안**: 코드 스니펫의 잠재적 보안 취약점을 분석합니다.
 
-### Action-Based Response Control
+### 액션 기반 응답 제어
 
-The Lasso guardrail uses an intelligent action-based system to determine how to handle violations:
+Lasso 가드레일은 위반 사항을 처리하는 방식을 결정하기 위해 지능형 액션 기반 시스템을 사용합니다.
 
-- **`BLOCK`**: Violations with this action will block the request/response completely
-- **`AUTO_MASKING`**: Violations will be masked (if masking is enabled) and the request continues
-- **`WARN`**: Violations will be logged as warnings and the request continues
-- **Mixed Actions**: If ANY finding has a `BLOCK` action, the entire request is blocked
+- **`BLOCK`**: 이 액션이 지정된 위반 사항은 요청/응답을 완전히 차단합니다.
+- **`AUTO_MASKING`**: 위반 사항이 마스킹되고(마스킹이 활성화된 경우) 요청은 계속 진행됩니다.
+- **`WARN`**: 위반 사항이 경고로 기록되고 요청은 계속 진행됩니다.
+- **혼합 액션**: 어떤 탐지 결과라도 `BLOCK` 액션을 가지면 전체 요청이 차단됩니다.
 
-This provides granular control based on Lasso's risk assessment, allowing safe content to proceed while blocking genuinely dangerous requests.
+이를 통해 Lasso의 위험 평가를 기반으로 세밀하게 제어할 수 있으며, 실제로 위험한 요청은 차단하면서 안전한 콘텐츠는 계속 진행할 수 있습니다.
 
-**Example behavior:**
-- Jailbreak attempt → `"action": "BLOCK"` → Request blocked
-- PII detected → `"action": "AUTO_MASKING"` → Request continues with masking (if enabled)
-- Minor policy violation → `"action": "WARN"` → Request continues with warning log
+**동작 예시:**
+- 탈옥 시도 → `"action": "BLOCK"` → 요청 차단
+- PII 감지 → `"action": "AUTO_MASKING"` → 마스킹 후 요청 계속 진행(활성화된 경우)
+- 경미한 정책 위반 → `"action": "WARN"` → 경고 로그와 함께 요청 계속 진행
 
-## Need Help?
+## 도움이 필요하신가요?
 
-For any questions or support, please contact us at [support@lasso.security](mailto:support@lasso.security) 
+질문이나 지원이 필요하면 [support@lasso.security](mailto:support@lasso.security)로 문의하세요.

@@ -3,44 +3,44 @@ import TabItem from '@theme/TabItem';
 import Image from '@theme/IdealImage';
 
 
-# Google ADK with LiteLLM
+# LiteLLM에서 Google ADK 사용하기 {#google-adk-with-litellm}
 
 <Image 
   img={require('../../img/litellm_adk.png')}
   style={{width: '90%', display: 'block', margin: '2rem 0'}}
 />
 <p style={{textAlign: 'left', color: '#666'}}>
-  Use Google ADK with LiteLLM Python SDK, LiteLLM Proxy
+  LiteLLM Python SDK 및 LiteLLM Proxy와 함께 Google ADK 사용
 </p>
 
 
-This tutorial shows you how to create intelligent agents using Agent Development Kit (ADK) with support for multiple Large Language Model (LLM) providers with LiteLLM.
+이 튜토리얼에서는 LiteLLM을 통해 여러 Large Language Model(LLM) 제공자를 지원하면서 Agent Development Kit(ADK)로 지능형 에이전트를 만드는 방법을 보여줍니다.
 
 
 
-## Overview
+## 개요
 
-ADK (Agent Development Kit) allows you to build intelligent agents powered by LLMs. By integrating with LiteLLM, you can:
+ADK(Agent Development Kit)를 사용하면 LLM 기반 지능형 에이전트를 만들 수 있습니다. LiteLLM과 통합하면 다음을 할 수 있습니다.
 
-- Use multiple LLM providers (OpenAI, Anthropic, Google, etc.)
-- Switch easily between models from different providers
-- Connect to a LiteLLM proxy for centralized model management
+- 여러 LLM 제공자(OpenAI, Anthropic, Google 등) 사용
+- 서로 다른 제공자의 모델 간 손쉬운 전환
+- 중앙 집중식 모델 관리를 위해 LiteLLM proxy에 연결
 
-## Prerequisites
+## 사전 준비
 
-- Python environment setup
-- API keys for model providers (OpenAI, Anthropic, Google AI Studio)
-- Basic understanding of LLMs and agent concepts
+- Python 환경 설정
+- 모델 제공자용 API 키(OpenAI, Anthropic, Google AI Studio)
+- LLM 및 에이전트 개념에 대한 기본 이해
 
-## Installation
+## 설치
 
 ```bash showLineNumbers title="Install dependencies"
 uv add google-adk litellm
 ```
 
-## 1. Setting Up Environment
+## 1. 환경 설정 {#1-setting-up-environment}
 
-First, import the necessary libraries and set up your API keys:
+먼저 필요한 라이브러리를 가져오고 API 키를 설정합니다.
 
 ```python showLineNumbers title="Setup environment and API keys"
 import os
@@ -63,9 +63,9 @@ MODEL_GPT_4O = "openai/gpt-4o"
 MODEL_CLAUDE_SONNET = "anthropic/claude-3-sonnet-20240229"
 ```
 
-## 2. Define a Simple Tool
+## 2. 간단한 도구 정의 {#2-define-a-simple-tool}
 
-Create a tool that your agent can use:
+에이전트가 사용할 수 있는 도구를 만듭니다.
 
 ```python showLineNumbers title="Weather tool implementation"
 def get_weather(city: str) -> dict:
@@ -97,9 +97,9 @@ def get_weather(city: str) -> dict:
         return {"status": "error", "error_message": f"Sorry, I don't have weather information for '{city}'."}
 ```
 
-## 3. Helper Function for Agent Interaction
+## 3. 에이전트 상호작용용 헬퍼 함수 {#3-helper-function-for-agent-interaction}
 
-Create a helper function to facilitate agent interaction:
+에이전트 상호작용을 쉽게 처리할 수 있도록 헬퍼 함수를 만듭니다.
 
 ```python showLineNumbers title="Agent interaction helper function"
 async def call_agent_async(query: str, runner, user_id, session_id):
@@ -125,9 +125,9 @@ async def call_agent_async(query: str, runner, user_id, session_id):
     print(f"<<< Agent Response: {final_response_text}")
 ```
 
-## 4. Using Different Model Providers with ADK
+## 4. ADK에서 여러 모델 제공자 사용하기 {#4-using-different-model-providers-with-adk}
 
-### 4.1 Using OpenAI Models
+### 4.1 OpenAI 모델 사용 {#41-using-openai-model}
 
 ```python showLineNumbers title="OpenAI model implementation"
 # Create an agent powered by OpenAI's GPT model
@@ -173,7 +173,7 @@ await test_gpt_agent()
 #     asyncio.run(test_gpt_agent())
 ```
 
-### 4.2 Using Anthropic Models
+### 4.2 Anthropic 모델 사용 {#42-using-anthropic-model}
 
 ```python showLineNumbers title="Anthropic model implementation"
 # Create an agent powered by Anthropic's Claude model
@@ -219,7 +219,7 @@ await test_claude_agent()
 #     asyncio.run(test_claude_agent())
 ```
 
-### 4.3 Using Google's Gemini Models
+### 4.3 Google Gemini 모델 사용 {#43-using-googles-gemini-model}
 
 ```python showLineNumbers title="Gemini model implementation"
 # Create an agent powered by Google's Gemini model
@@ -265,17 +265,17 @@ await test_gemini_agent()
 #     asyncio.run(test_gemini_agent())
 ```
 
-## 5. Using LiteLLM Proxy with ADK
+## 5. ADK에서 LiteLLM Proxy 사용하기 {#5-using-litellm-proxy-with-adk}
 
-LiteLLM proxy provides a unified API endpoint for multiple models, simplifying deployment and centralized management.
+LiteLLM proxy는 여러 모델을 위한 통합 API 엔드포인트를 제공하여 배포와 중앙 집중식 관리를 단순화합니다.
 
-Required settings for using litellm proxy 
+litellm proxy를 사용하기 위한 필수 설정입니다.
 
-| Variable | Description | 
+| 변수 | 설명 | 
 |----------|-------------|
-| `LITELLM_PROXY_API_KEY` | The API key for the LiteLLM proxy |
-| `LITELLM_PROXY_API_BASE` | The base URL for the LiteLLM proxy |
-| `USE_LITELLM_PROXY` or `litellm.use_litellm_proxy` | When set to True, your request will be sent to litellm proxy. |
+| `LITELLM_PROXY_API_KEY` | LiteLLM proxy용 API 키 |
+| `LITELLM_PROXY_API_BASE` | LiteLLM proxy의 기본 URL |
+| `USE_LITELLM_PROXY` 또는 `litellm.use_litellm_proxy` | `True`로 설정하면 요청이 litellm proxy로 전송됩니다. |
 
 ```python showLineNumbers title="LiteLLM proxy integration"
 # Set your LiteLLM Proxy credentials as environment variables

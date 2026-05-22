@@ -3,32 +3,32 @@ import Image from '@theme/IdealImage';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Getting Started with UI Logs
+# UI 로그 시작하기
 
-View Spend, Token Usage, Key, Team Name for Each Request to LiteLLM
+LiteLLM으로 들어오는 각 요청의 spend, token usage, key, team name을 확인합니다.
 
 
 <Image img={require('../../img/ui_request_logs.png')}/>
 
 
-## Overview
+## 개요
 
-| Log Type | Tracked by Default |
+| 로그 유형 | 기본 추적 여부 |
 |----------|-------------------|
-| Success Logs | ✅ Yes |
-| Error Logs | ✅ Yes |
-| Request/Response Content Stored | ❌ No by Default, **opt in with `store_prompts_in_spend_logs`** |
+| Success 로그 | ✅ 예 |
+| Error 로그 | ✅ 예 |
+| Request/Response Content 저장 | ❌ 기본값은 아니며, `store_prompts_in_spend_logs`로 opt in |
 
 
 
-**By default LiteLLM does not track the request and response content.**
+**기본적으로 LiteLLM은 요청과 응답 본문을 추적하지 않습니다.**
 
-## Tracking - Request / Response Content in Logs Page 
+## Logs 페이지에서 Request / Response Content 추적하기
 
-If you want to view request and response content on LiteLLM Logs, you can enable it in either place:
+LiteLLM 로그에서 요청과 응답 본문을 확인하려면 다음 중 하나의 위치에서 활성화할 수 있습니다.
 
-- **From the UI (no restart):** Use [UI Spend Log Settings](./ui_spend_log_settings.md) — open Logs → Settings → enable "Store Prompts in Spend Logs" → Save. Takes effect immediately and overrides config.
-- **From config:** Add this to your `proxy_config.yaml` (requires restart):
+- **UI에서 설정(재시작 없음):** [UI Spend Log Settings](./ui_spend_log_settings.md)를 사용합니다. Logs -> Settings를 열고 프롬프트 저장 옵션을 활성화한 뒤 Save를 누릅니다. 즉시 적용되며 config보다 우선합니다.
+- **config에서 설정:** `proxy_config.yaml`에 다음을 추가합니다. 재시작이 필요합니다.
 
 ```yaml
 general_settings:
@@ -37,13 +37,13 @@ general_settings:
 
 <Image img={require('../../img/ui_request_logs_content.png')}/>
 
-## Tracing Tools
+## 도구 추적
 
-View which tools were provided and called in your completion requests.
+completion 요청에 어떤 도구가 제공되었고 어떤 도구가 호출되었는지 확인합니다.
 
 <Image img={require('../../img/ui_tools.png')}/>
 
-**Example:** Make a completion request with tools:
+**예제:** 도구가 포함된 completion 요청을 보냅니다.
 
 ```bash
 curl -X POST 'http://localhost:4000/chat/completions' \
@@ -70,34 +70,34 @@ curl -X POST 'http://localhost:4000/chat/completions' \
   }'
 ```
 
-Check the Logs page to see all tools provided and which ones were called.
+Logs 페이지에서 제공된 모든 도구와 실제 호출된 도구를 확인합니다.
 
-## Stop storing Error Logs in DB
+## DB에 Error 로그 저장 중지
 
-If you do not want to store error logs in DB, you can opt out with this setting
+error logs를 DB에 저장하고 싶지 않다면 다음 설정으로 제외할 수 있습니다.
 
 ```yaml
 general_settings:
   disable_error_logs: True   # Only disable writing error logs to DB, regular spend logs will still be written unless `disable_spend_logs: True`
 ```
 
-## Stop storing Spend Logs in DB
+## DB에 Spend 로그 저장 중지
 
-If you do not want to store spend logs in DB, you can opt out with this setting
+spend logs를 DB에 저장하고 싶지 않다면 다음 설정으로 제외할 수 있습니다.
 
 ```yaml
 general_settings:
   disable_spend_logs: True   # Disable writing spend logs to DB
 ```
 
-## Automatically Deleting Old Spend Logs
+## 오래된 Spend 로그 자동 삭제
 
-If you're storing spend logs, it might be a good idea to delete them regularly to keep the database fast.
+spend logs를 저장한다면 데이터베이스 성능을 유지하기 위해 정기적으로 삭제하는 것이 좋습니다.
 
-You can set the retention period in either place:
+보존 기간은 다음 중 하나의 위치에서 설정할 수 있습니다.
 
-- **From the UI (no restart):** [UI Spend Log Settings](./ui_spend_log_settings.md) — Logs → Settings → set Retention Period → Save.
-- **From config:** Add the following to your `proxy_config.yaml` (requires restart):
+- **UI에서 설정(재시작 없음):** [UI Spend Log Settings](./ui_spend_log_settings.md)에서 Logs -> Settings로 이동해 Retention Period를 설정하고 Save를 누릅니다.
+- **config에서 설정:** `proxy_config.yaml`에 다음을 추가합니다. 재시작이 필요합니다.
 
 ```yaml
 general_settings:
@@ -107,15 +107,15 @@ general_settings:
   maximum_spend_logs_retention_interval: "1d"  # Run once per day
 ```
 
-You can control how many logs are deleted per run using this environment variable:
+다음 환경 변수로 한 번 실행할 때 삭제할 로그 수를 제어할 수 있습니다.
 
 `SPEND_LOG_RUN_LOOPS=200  # Deletes up to 200,000 logs in one run`
 
-Set `SPEND_LOG_CLEANUP_BATCH_SIZE` to control how many logs are deleted per batch (default `1000`).
+`SPEND_LOG_CLEANUP_BATCH_SIZE`를 설정하면 batch당 삭제할 로그 수를 제어할 수 있습니다. 기본값은 `1000`입니다.
 
-For detailed architecture and how it works, see [Spend Logs Deletion](../proxy/spend_logs_deletion).
+자세한 아키텍처와 동작 방식은 [Spend 로그 삭제](../proxy/spend_logs_deletion)를 참고하세요.
 
 
-## What gets logged? 
+## 무엇이 기록되나요?
 
-[Here's a schema](https://github.com/BerriAI/litellm/blob/1cdd4065a645021aea931afb9494e7694b4ec64b/schema.prisma#L285) breakdown of what gets logged.
+무엇이 기록되는지는 [스키마 분석](https://github.com/BerriAI/litellm/blob/1cdd4065a645021aea931afb9494e7694b4ec64b/schema.prisma#L285)에서 확인할 수 있습니다.

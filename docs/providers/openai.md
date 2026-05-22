@@ -2,20 +2,20 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
 # OpenAI
-LiteLLM supports OpenAI Chat + Embedding calls.
+LiteLLM은 OpenAI 채팅 및 임베딩 호출을 지원합니다.
 
 :::tip
-**We recommend using `litellm.responses()` / Responses API** for the latest OpenAI models (GPT-5, gpt-5-codex, o3-mini, etc.)
+최신 OpenAI 모델(GPT-5, gpt-5-codex, o3-mini 등)에는 **`litellm.responses()` / Responses API 사용을 권장합니다.**
 :::
 
-### Required API Keys
+### 필수 API 키
 
 ```python
 import os 
 os.environ["OPENAI_API_KEY"] = "your-api-key"
 ```
 
-### Usage
+### 사용법
 ```python
 import os 
 from litellm import completion
@@ -29,8 +29,8 @@ response = completion(
 )
 ```
 
-:::info Metadata passthrough (preview)
-When `litellm.enable_preview_features = True`, LiteLLM forwards only the values inside `metadata` to OpenAI.
+:::info 메타데이터 패스스루(프리뷰)
+`litellm.enable_preview_features = True`일 때 LiteLLM은 `metadata` 안의 값만 OpenAI로 전달합니다.
 
 ```python
 completion(
@@ -41,17 +41,17 @@ completion(
 ```
 :::
 
-### Usage - LiteLLM Proxy Server
+### 사용법 - LiteLLM Proxy Server {#usage-litellm-proxy-server}
 
-Here's how to call OpenAI models with the LiteLLM Proxy Server
+LiteLLM Proxy Server로 OpenAI 모델을 호출하는 방법은 다음과 같습니다.
 
-### 1. Save key in your environment
+### 1. 환경에 키 저장
 
 ```bash
 export OPENAI_API_KEY=""
 ```
 
-### 2. Start the proxy 
+### 2. 프록시 시작 
 
 <Tabs>
 <TabItem value="config" label="config.yaml">
@@ -68,10 +68,10 @@ model_list:
       api_key: os.environ/OPENAI_API_KEY
 ```
 </TabItem>
-<TabItem value="config-*" label="config.yaml - proxy all OpenAI models">
+<TabItem value="config-*" label="config.yaml - 모든 OpenAI 모델 프록시">
 
-Use this to add all openai models with one API Key. **WARNING: This will not do any load balancing**
-This means requests to `gpt-4`, `gpt-3.5-turbo` , `gpt-4-turbo-preview` will all go through this route 
+하나의 API 키로 모든 OpenAI 모델을 추가하려면 이 방식을 사용하세요. **경고: 이 방식은 부하 분산을 수행하지 않습니다.**
+즉 `gpt-4`, `gpt-3.5-turbo`, `gpt-4-turbo-preview` 요청이 모두 이 경로를 통과합니다.
 
 ```yaml
 model_list:
@@ -92,11 +92,11 @@ $ litellm --model gpt-3.5-turbo
 
 </Tabs>
 
-### 3. Test it
+### 3. 테스트
 
 
 <Tabs>
-<TabItem value="Curl" label="Curl Request">
+<TabItem value="Curl" label="Curl 요청">
 
 ```shell
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -167,7 +167,7 @@ print(response)
 </Tabs>
 
 
-### Optional Keys - OpenAI Organization, OpenAI API Base
+### 선택 키 - OpenAI Organization, OpenAI API Base {#optional-keys-openai-organization-openai-api-base}
 
 ```python
 import os 
@@ -175,78 +175,78 @@ os.environ["OPENAI_ORGANIZATION"] = "your-org-id"       # OPTIONAL
 os.environ["OPENAI_BASE_URL"] = "https://your_host/v1"     # OPTIONAL
 ```
 
-### OpenAI Chat Completion Models
+### OpenAI Chat Completion 모델 {#openai-chat-completion-models}
 
-| Model Name            | Function Call                                                   |
+| 모델 이름            | 함수 호출                                                   |
 |-----------------------|-----------------------------------------------------------------|
-| gpt-5 | `response = completion(model="gpt-5", messages=messages)` |
-| gpt-5-mini | `response = completion(model="gpt-5-mini", messages=messages)` |
-| gpt-5-nano | `response = completion(model="gpt-5-nano", messages=messages)` |
-| gpt-5-chat | `response = completion(model="gpt-5-chat", messages=messages)` |
-| gpt-5-chat-latest | `response = completion(model="gpt-5-chat-latest", messages=messages)` |
-| gpt-5-2025-08-07 | `response = completion(model="gpt-5-2025-08-07", messages=messages)` |
-| gpt-5-mini-2025-08-07 | `response = completion(model="gpt-5-mini-2025-08-07", messages=messages)` |
-| gpt-5-nano-2025-08-07 | `response = completion(model="gpt-5-nano-2025-08-07", messages=messages)` |
-| gpt-5-pro | `response = completion(model="gpt-5-pro", messages=messages)` |
-| gpt-5.2 | `response = completion(model="gpt-5.2", messages=messages)` |
-| gpt-5.2-2025-12-11 | `response = completion(model="gpt-5.2-2025-12-11", messages=messages)` |
-| gpt-5.2-chat-latest | `response = completion(model="gpt-5.2-chat-latest", messages=messages)` |
-| gpt-5.3-chat-latest | `response = completion(model="gpt-5.3-chat-latest", messages=messages)` |
-| gpt-5.4 | `response = completion(model="gpt-5.4", messages=messages)` |
-| gpt-5.4-2026-03-05 | `response = completion(model="gpt-5.4-2026-03-05", messages=messages)` |
-| gpt-5.5 | `response = completion(model="gpt-5.5", messages=messages)` |
-| gpt-5.5-2026-04-23 | `response = completion(model="gpt-5.5-2026-04-23", messages=messages)` |
-| gpt-5.2-pro | `response = completion(model="gpt-5.2-pro", messages=messages)` |
-| gpt-5.2-pro-2025-12-11 | `response = completion(model="gpt-5.2-pro-2025-12-11", messages=messages)` |
-| gpt-5.4-pro | `response = completion(model="gpt-5.4-pro", messages=messages)` |
-| gpt-5.4-pro-2026-03-05 | `response = completion(model="gpt-5.4-pro-2026-03-05", messages=messages)` |
-| gpt-5.5-pro | `response = completion(model="gpt-5.5-pro", messages=messages)` |
-| gpt-5.5-pro-2026-04-23 | `response = completion(model="gpt-5.5-pro-2026-04-23", messages=messages)` |
-| gpt-5.1 | `response = completion(model="gpt-5.1", messages=messages)` |
-| gpt-5.1-codex | `response = completion(model="gpt-5.1-codex", messages=messages)` |
-| gpt-5.1-codex-mini | `response = completion(model="gpt-5.1-codex-mini", messages=messages)` |
-| gpt-5.1-codex-max | `response = completion(model="gpt-5.1-codex-max", messages=messages)` |
-| gpt-4.1 | `response = completion(model="gpt-4.1", messages=messages)` |
-| gpt-4.1-mini | `response = completion(model="gpt-4.1-mini", messages=messages)` |
-| gpt-4.1-nano | `response = completion(model="gpt-4.1-nano", messages=messages)` |
-| o4-mini | `response = completion(model="o4-mini", messages=messages)` |
-| o3-mini | `response = completion(model="o3-mini", messages=messages)` |
-| o3 | `response = completion(model="o3", messages=messages)` |
-| o1-mini | `response = completion(model="o1-mini", messages=messages)` |
-| o1-preview | `response = completion(model="o1-preview", messages=messages)` |
-| gpt-4o-mini  | `response = completion(model="gpt-4o-mini", messages=messages)` |
-| gpt-4o-mini-2024-07-18   | `response = completion(model="gpt-4o-mini-2024-07-18", messages=messages)` |
-| gpt-4o   | `response = completion(model="gpt-4o", messages=messages)` |
-| gpt-4o-2024-08-06   | `response = completion(model="gpt-4o-2024-08-06", messages=messages)` |
-| gpt-4o-2024-05-13   | `response = completion(model="gpt-4o-2024-05-13", messages=messages)` |
-| gpt-4-turbo   | `response = completion(model="gpt-4-turbo", messages=messages)` |
-| gpt-4-turbo-preview   | `response = completion(model="gpt-4-0125-preview", messages=messages)` |
-| gpt-4-0125-preview    | `response = completion(model="gpt-4-0125-preview", messages=messages)` |
-| gpt-4-1106-preview    | `response = completion(model="gpt-4-1106-preview", messages=messages)` |
-| gpt-3.5-turbo-1106    | `response = completion(model="gpt-3.5-turbo-1106", messages=messages)` |
-| gpt-3.5-turbo         | `response = completion(model="gpt-3.5-turbo", messages=messages)` |
-| gpt-3.5-turbo-0301    | `response = completion(model="gpt-3.5-turbo-0301", messages=messages)` |
-| gpt-3.5-turbo-0613    | `response = completion(model="gpt-3.5-turbo-0613", messages=messages)` |
-| gpt-3.5-turbo-16k     | `response = completion(model="gpt-3.5-turbo-16k", messages=messages)` |
-| gpt-3.5-turbo-16k-0613| `response = completion(model="gpt-3.5-turbo-16k-0613", messages=messages)` |
-| gpt-4                 | `response = completion(model="gpt-4", messages=messages)` |
-| gpt-4-0314            | `response = completion(model="gpt-4-0314", messages=messages)` |
-| gpt-4-0613            | `response = completion(model="gpt-4-0613", messages=messages)` |
-| gpt-4-32k             | `response = completion(model="gpt-4-32k", messages=messages)` |
-| gpt-4-32k-0314        | `response = completion(model="gpt-4-32k-0314", messages=messages)` |
-| gpt-4-32k-0613        | `response = completion(model="gpt-4-32k-0613", messages=messages)` |
+| `gpt-5` | `response = completion(model="gpt-5", messages=messages)` |
+| `gpt-5-mini` | `response = completion(model="gpt-5-mini", messages=messages)` |
+| `gpt-5-nano` | `response = completion(model="gpt-5-nano", messages=messages)` |
+| `gpt-5-chat` | `response = completion(model="gpt-5-chat", messages=messages)` |
+| `gpt-5-chat-latest` | `response = completion(model="gpt-5-chat-latest", messages=messages)` |
+| `gpt-5-2025-08-07` | `response = completion(model="gpt-5-2025-08-07", messages=messages)` |
+| `gpt-5-mini-2025-08-07` | `response = completion(model="gpt-5-mini-2025-08-07", messages=messages)` |
+| `gpt-5-nano-2025-08-07` | `response = completion(model="gpt-5-nano-2025-08-07", messages=messages)` |
+| `gpt-5-pro` | `response = completion(model="gpt-5-pro", messages=messages)` |
+| `gpt-5.2` | `response = completion(model="gpt-5.2", messages=messages)` |
+| `gpt-5.2-2025-12-11` | `response = completion(model="gpt-5.2-2025-12-11", messages=messages)` |
+| `gpt-5.2-chat-latest` | `response = completion(model="gpt-5.2-chat-latest", messages=messages)` |
+| `gpt-5.3-chat-latest` | `response = completion(model="gpt-5.3-chat-latest", messages=messages)` |
+| `gpt-5.4` | `response = completion(model="gpt-5.4", messages=messages)` |
+| `gpt-5.4-2026-03-05` | `response = completion(model="gpt-5.4-2026-03-05", messages=messages)` |
+| `gpt-5.5` | `response = completion(model="gpt-5.5", messages=messages)` |
+| `gpt-5.5-2026-04-23` | `response = completion(model="gpt-5.5-2026-04-23", messages=messages)` |
+| `gpt-5.2-pro` | `response = completion(model="gpt-5.2-pro", messages=messages)` |
+| `gpt-5.2-pro-2025-12-11` | `response = completion(model="gpt-5.2-pro-2025-12-11", messages=messages)` |
+| `gpt-5.4-pro` | `response = completion(model="gpt-5.4-pro", messages=messages)` |
+| `gpt-5.4-pro-2026-03-05` | `response = completion(model="gpt-5.4-pro-2026-03-05", messages=messages)` |
+| `gpt-5.5-pro` | `response = completion(model="gpt-5.5-pro", messages=messages)` |
+| `gpt-5.5-pro-2026-04-23` | `response = completion(model="gpt-5.5-pro-2026-04-23", messages=messages)` |
+| `gpt-5.1` | `response = completion(model="gpt-5.1", messages=messages)` |
+| `gpt-5.1-codex` | `response = completion(model="gpt-5.1-codex", messages=messages)` |
+| `gpt-5.1-codex-mini` | `response = completion(model="gpt-5.1-codex-mini", messages=messages)` |
+| `gpt-5.1-codex-max` | `response = completion(model="gpt-5.1-codex-max", messages=messages)` |
+| `gpt-4.1` | `response = completion(model="gpt-4.1", messages=messages)` |
+| `gpt-4.1-mini` | `response = completion(model="gpt-4.1-mini", messages=messages)` |
+| `gpt-4.1-nano` | `response = completion(model="gpt-4.1-nano", messages=messages)` |
+| `o4-mini` | `response = completion(model="o4-mini", messages=messages)` |
+| `o3-mini` | `response = completion(model="o3-mini", messages=messages)` |
+| `o3` | `response = completion(model="o3", messages=messages)` |
+| `o1-mini` | `response = completion(model="o1-mini", messages=messages)` |
+| `o1-preview` | `response = completion(model="o1-preview", messages=messages)` |
+| `gpt-4o-mini` | `response = completion(model="gpt-4o-mini", messages=messages)` |
+| `gpt-4o-mini-2024-07-18` | `response = completion(model="gpt-4o-mini-2024-07-18", messages=messages)` |
+| `gpt-4o` | `response = completion(model="gpt-4o", messages=messages)` |
+| `gpt-4o-2024-08-06` | `response = completion(model="gpt-4o-2024-08-06", messages=messages)` |
+| `gpt-4o-2024-05-13` | `response = completion(model="gpt-4o-2024-05-13", messages=messages)` |
+| `gpt-4-turbo` | `response = completion(model="gpt-4-turbo", messages=messages)` |
+| `gpt-4-turbo-preview` | `response = completion(model="gpt-4-0125-preview", messages=messages)` |
+| `gpt-4-0125-preview` | `response = completion(model="gpt-4-0125-preview", messages=messages)` |
+| `gpt-4-1106-preview` | `response = completion(model="gpt-4-1106-preview", messages=messages)` |
+| `gpt-3.5-turbo-1106` | `response = completion(model="gpt-3.5-turbo-1106", messages=messages)` |
+| `gpt-3.5-turbo` | `response = completion(model="gpt-3.5-turbo", messages=messages)` |
+| `gpt-3.5-turbo-0301` | `response = completion(model="gpt-3.5-turbo-0301", messages=messages)` |
+| `gpt-3.5-turbo-0613` | `response = completion(model="gpt-3.5-turbo-0613", messages=messages)` |
+| `gpt-3.5-turbo-16k` | `response = completion(model="gpt-3.5-turbo-16k", messages=messages)` |
+| `gpt-3.5-turbo-16k-0613` | `response = completion(model="gpt-3.5-turbo-16k-0613", messages=messages)` |
+| `gpt-4` | `response = completion(model="gpt-4", messages=messages)` |
+| `gpt-4-0314` | `response = completion(model="gpt-4-0314", messages=messages)` |
+| `gpt-4-0613` | `response = completion(model="gpt-4-0613", messages=messages)` |
+| `gpt-4-32k` | `response = completion(model="gpt-4-32k", messages=messages)` |
+| `gpt-4-32k-0314` | `response = completion(model="gpt-4-32k-0314", messages=messages)` |
+| `gpt-4-32k-0613` | `response = completion(model="gpt-4-32k-0613", messages=messages)` |
 
 
-These also support the `OPENAI_BASE_URL` environment variable, which can be used to specify a custom API endpoint.
+이 모델들은 사용자 지정 API 엔드포인트를 지정할 때 사용할 수 있는 `OPENAI_BASE_URL` 환경 변수도 지원합니다.
 
-### OpenAI Web Search Models
+### OpenAI 웹 검색 모델
 
-OpenAI has two ways to use web search, depending on the endpoint:
+OpenAI는 엔드포인트에 따라 웹 검색을 사용하는 두 가지 방식을 제공합니다.
 
-| Approach | Endpoint | Models | How to enable |
+| 방식 | 엔드포인트 | 모델 | 활성화 방법 |
 |----------|----------|--------|---------------|
-| **Search Models** | `/chat/completions` | `gpt-5-search-api`, `gpt-4o-search-preview`, `gpt-4o-mini-search-preview` | Pass `web_search_options` parameter |
-| **Web Search Tool** | `/responses` | `gpt-5`, `gpt-4.1`, `gpt-4o`, and other regular models | Pass `web_search_preview` tool |
+| **검색 모델** | `/chat/completions` | `gpt-5-search-api`, `gpt-4o-search-preview`, `gpt-4o-mini-search-preview` | `web_search_options` 파라미터 전달 |
+| **웹 검색 도구** | `/responses` | `gpt-5`, `gpt-4.1`, `gpt-4o` 및 기타 일반 모델 | `web_search_preview` 도구 전달 |
 
 <Tabs>
 <TabItem value="sdk-completion" label="SDK - /chat/completions">
@@ -300,16 +300,16 @@ model_list:
 </TabItem>
 </Tabs>
 
-For full details, see the [Web Search guide](../completion/web_search.md).
+전체 세부 정보는 [웹 검색 가이드](../completion/web_search.md)를 참고하세요.
 
-## OpenAI Vision Models
-| Model Name            | Function Call                                                   |
+## OpenAI Vision 모델 {#openai-vision-models}
+| 모델 이름            | 함수 호출                                                   |
 |-----------------------|-----------------------------------------------------------------|
-| gpt-4o   | `response = completion(model="gpt-4o", messages=messages)` |
-| gpt-4-turbo    | `response = completion(model="gpt-4-turbo", messages=messages)` |
-| gpt-4-vision-preview    | `response = completion(model="gpt-4-vision-preview", messages=messages)` |
+| `gpt-4o` | `response = completion(model="gpt-4o", messages=messages)` |
+| `gpt-4-turbo` | `response = completion(model="gpt-4-turbo", messages=messages)` |
+| `gpt-4-vision-preview` | `response = completion(model="gpt-4-vision-preview", messages=messages)` |
 
-#### Usage
+#### 사용법
 ```python
 import os 
 from litellm import completion
@@ -340,9 +340,9 @@ response = completion(
 
 ```
 
-## PDF File Parsing
+## PDF 파일 파싱 {#pdf-file-parsing}
 
-OpenAI has a new `file` message type that allows you to pass in a PDF file and have it parsed into a structured output. [Read more](https://platform.openai.com/docs/guides/pdf-files?api-mode=chat&lang=python)
+OpenAI는 PDF 파일을 전달하고 구조화된 출력으로 파싱할 수 있는 새로운 `file` 메시지 타입을 제공합니다. [자세히 보기](https://platform.openai.com/docs/guides/pdf-files?api-mode=chat&lang=python)
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -385,7 +385,7 @@ print(completion.choices[0].message.content)
 
 <TabItem value="proxy" label="PROXY">
 
-1. Setup config.yaml
+1. config.yaml 설정
 
 ```yaml
 model_list:
@@ -395,13 +395,13 @@ model_list:
       api_key: os.environ/OPENAI_API_KEY
 ```
 
-2. Start the proxy
+2. 프록시 시작
 
 ```bash
 litellm --config config.yaml
 ```
 
-3. Test it!
+3. 테스트
 
 ```bash
 curl -X POST 'http://0.0.0.0:4000/chat/completions' \
@@ -426,27 +426,27 @@ curl -X POST 'http://0.0.0.0:4000/chat/completions' \
 </TabItem>
 </Tabs>
 
-## OpenAI Fine Tuned Models
+## OpenAI 파인 튜닝 모델 {#openai-fine-tuned-models}
 
-| Model Name                | Function Call                                                          |
+| 모델 이름                | 함수 호출                                                          |
 |---------------------------|-----------------------------------------------------------------|
-| fine tuned `gpt-4-0613`    | `response = completion(model="ft:gpt-4-0613", messages=messages)`     |
-| fine tuned `gpt-4o-2024-05-13` | `response = completion(model="ft:gpt-4o-2024-05-13", messages=messages)` |
-| fine tuned `gpt-3.5-turbo-0125` | `response = completion(model="ft:gpt-3.5-turbo-0125", messages=messages)` |
-| fine tuned `gpt-3.5-turbo-1106` | `response = completion(model="ft:gpt-3.5-turbo-1106", messages=messages)` |
-| fine tuned `gpt-3.5-turbo-0613` | `response = completion(model="ft:gpt-3.5-turbo-0613", messages=messages)` |
+| 파인 튜닝된 `gpt-4-0613`    | `response = completion(model="ft:gpt-4-0613", messages=messages)`     |
+| 파인 튜닝된 `gpt-4o-2024-05-13` | `response = completion(model="ft:gpt-4o-2024-05-13", messages=messages)` |
+| 파인 튜닝된 `gpt-3.5-turbo-0125` | `response = completion(model="ft:gpt-3.5-turbo-0125", messages=messages)` |
+| 파인 튜닝된 `gpt-3.5-turbo-1106` | `response = completion(model="ft:gpt-3.5-turbo-1106", messages=messages)` |
+| 파인 튜닝된 `gpt-3.5-turbo-0613` | `response = completion(model="ft:gpt-3.5-turbo-0613", messages=messages)` |
 
-## [BETA] Route all .completions requests to Responses API (better quality)
- When enabled, LiteLLM sends OpenAI traffic from `litellm.completion()` and the proxy `/chat/completions` endpoint through the [Responses API](https://platform.openai.com/docs/api-reference/responses) instead of Chat Completions. That path generally matches OpenAI’s latest model behavior and quality (for example, reasoning output on GPT‑5 class models).
+## [BETA] 모든 .completions 요청을 Responses API로 라우팅(더 나은 품질) {#beta-route-all-completions-requests-to-responses-api-better-quality}
+ 활성화하면 LiteLLM은 `litellm.completion()` 및 프록시 `/chat/completions` 엔드포인트의 OpenAI 트래픽을 Chat Completions 대신 [Responses API](https://platform.openai.com/docs/api-reference/responses)로 보냅니다. 이 경로는 일반적으로 OpenAI 최신 모델의 동작 및 품질과 일치합니다. 예: GPT-5 계열 모델의 추론 출력.
 
-You can opt in globally or per request:
+전역 또는 요청별로 옵트인할 수 있습니다.
 
-**Option A — per-request prefix:** Use the `openai/responses/` model prefix.
+**옵션 A - 요청별 접두사:** `openai/responses/` 모델 접두사를 사용합니다.
 
-**Option B — global flag (recommended):** Set `route_all_chat_openai_to_responses = True` to automatically route all OpenAI `/chat/completions` requests through the Responses API, no model prefix needed.
+**옵션 B - 전역 플래그(권장):** 모든 OpenAI `/chat/completions` 요청을 Responses API로 자동 라우팅하려면 `route_all_chat_openai_to_responses = True`를 설정하세요. 모델 접두사는 필요하지 않습니다.
 
 <Tabs>
-<TabItem value="sdk-global" label="SDK - Global Flag">
+<TabItem value="sdk-global" label="SDK - 전역 플래그">
 
 ```python
 import litellm
@@ -461,15 +461,15 @@ response = litellm.completion(
 ```
 
 </TabItem>
-<TabItem value="proxy-global" label="PROXY - Global Flag">
+<TabItem value="proxy-global" label="PROXY - 전역 플래그">
 
-Set in your proxy config:
+프록시 설정에 설정합니다.
 ```yaml
 litellm_settings:
   route_all_chat_openai_to_responses: true
 ```
 
-Then call normally — no model prefix needed:
+그 다음에는 일반적으로 호출하면 됩니다. 모델 접두사는 필요하지 않습니다.
 ```bash
 curl -X POST 'http://0.0.0.0:4000/chat/completions' \
 -H 'Content-Type: application/json' \
@@ -485,10 +485,10 @@ curl -X POST 'http://0.0.0.0:4000/chat/completions' \
 </Tabs>
 
 :::note
-`route_all_chat_openai_to_responses` only applies to the `openai` provider. Azure OpenAI is unaffected. You can also set it via env var: `LITELLM_ROUTE_ALL_CHAT_OPENAI_TO_RESPONSES=true`.
+`route_all_chat_openai_to_responses`는 `openai` 프로바이더에만 적용됩니다. Azure OpenAI에는 영향을 주지 않습니다. 환경 변수로도 설정할 수 있습니다: `LITELLM_ROUTE_ALL_CHAT_OPENAI_TO_RESPONSES=true`.
 :::
 
-**Option A — per-request prefix:** You can also prefix individual model names with `openai/responses/` to route just that call through the Responses API.
+**옵션 A - 요청별 접두사:** 개별 모델 이름에 `openai/responses/`를 붙여 해당 호출만 Responses API로 라우팅할 수도 있습니다.
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -515,7 +515,7 @@ curl -X POST 'http://0.0.0.0:4000/chat/completions' \
 </TabItem>
 </Tabs>
 
-Expected Response:
+예상 응답:
 ```json
 {
   "id": "chatcmpl-6382a222-43c9-40c4-856b-22e105d88075",
@@ -553,11 +553,11 @@ Expected Response:
 
 ```
 
-### Advanced: Using `reasoning_effort` with `summary` field
+### 고급: `summary` 필드와 함께 `reasoning_effort` 사용
 
-By default, `reasoning_effort` accepts a string value (`"none"`, `"minimal"`, `"low"`, `"medium"`, `"high"`, `"xhigh"`—`"xhigh"` is only supported on `gpt-5.1-codex-max` and `gpt-5.2` models) and only sets the effort level without including a reasoning summary.
+기본적으로 `reasoning_effort`는 문자열 값(`"none"`, `"minimal"`, `"low"`, `"medium"`, `"high"`, `"xhigh"`)을 받으며 추론 요약 없이 effort 수준만 설정합니다. `"xhigh"`는 `gpt-5.1-codex-max` 및 `gpt-5.2` 모델에서만 지원됩니다.
 
-To opt-in to the `summary` feature, you can pass `reasoning_effort` as a dictionary. **Note:** The `summary` field requires your OpenAI organization to have verification status. Using `summary` without verification will result in a 400 error from OpenAI.
+`summary` 기능을 옵트인하려면 `reasoning_effort`를 딕셔너리로 전달할 수 있습니다. **참고:** `summary` 필드를 사용하려면 OpenAI organization이 검증 상태여야 합니다. 검증 없이 `summary`를 사용하면 OpenAI에서 400 오류가 반환됩니다.
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -604,45 +604,45 @@ curl -X POST 'http://0.0.0.0:4000/chat/completions' \
 </TabItem>
 </Tabs>
 
-**Summary field options:**
-- `"auto"`: System automatically determines the appropriate summary level based on the model
-- `"concise"`: Provides a shorter summary (not supported by GPT-5 series models)
-- `"detailed"`: Offers a comprehensive reasoning summary
+**요약 필드 옵션:**
+- `"auto"`: 시스템이 모델을 기준으로 적절한 요약 수준을 자동 결정합니다.
+- `"concise"`: 더 짧은 요약을 제공합니다. GPT-5 계열 모델에서는 지원되지 않습니다.
+- `"detailed"`: 포괄적인 추론 요약을 제공합니다.
 
-**Note:** GPT-5 series models support `"auto"` and `"detailed"`, but do not support `"concise"`. O-series models (o3-pro, o4-mini, o3) support all three options. Some models like o3-mini and o1 do not support reasoning summaries at all.
+**참고:** GPT-5 계열 모델은 `"auto"`와 `"detailed"`를 지원하지만 `"concise"`는 지원하지 않습니다. O-series 모델(o3-pro, o4-mini, o3)은 세 가지 옵션을 모두 지원합니다. o3-mini와 o1 같은 일부 모델은 추론 요약을 전혀 지원하지 않습니다.
 
-**Supported `reasoning_effort` values by model:**
+**모델별 지원 `reasoning_effort` 값:**
 
-| Model | Default (when not set) | Supported Values |
+| 모델 | 기본값(미설정 시) | 지원 값 |
 |-------|----------------------|------------------|
 | `gpt-5.1` | `none` | `none`, `low`, `medium`, `high` |
 | `gpt-5` | `medium` | `minimal`, `low`, `medium`, `high` |
 | `gpt-5-mini` | `medium` | `minimal`, `low`, `medium`, `high` |
 | `gpt-5-nano` | `none` | `none`, `low`, `medium`, `high` |
-| `gpt-5-codex` | `adaptive` | `low`, `medium`, `high` (no `minimal`) |
-| `gpt-5.1-codex` | `adaptive` | `low`, `medium`, `high` (no `minimal`) |
-| `gpt-5.1-codex-mini` | `adaptive` | `low`, `medium`, `high` (no `minimal`) |
-| `gpt-5.1-codex-max` | `adaptive` | `low`, `medium`, `high`, `xhigh` (no `minimal`) |
+| `gpt-5-codex` | `adaptive` | `low`, `medium`, `high` (`minimal` 없음) |
+| `gpt-5.1-codex` | `adaptive` | `low`, `medium`, `high` (`minimal` 없음) |
+| `gpt-5.1-codex-mini` | `adaptive` | `low`, `medium`, `high` (`minimal` 없음) |
+| `gpt-5.1-codex-max` | `adaptive` | `low`, `medium`, `high`, `xhigh` (`minimal` 없음) |
 | `gpt-5.2` | `medium` | `none`, `low`, `medium`, `high`, `xhigh` |
 | `gpt-5.2-pro` | `high` | `low`, `medium`, `high`, `xhigh` |
 | `gpt-5.5` | `medium` | `none`, `minimal`, `low`, `medium`, `high`, `xhigh` |
 | `gpt-5.5-pro` | `high` | `minimal`, `low`, `medium`, `high`, `xhigh` |
-| `gpt-5-pro` | `high` | `high` only |
+| `gpt-5-pro` | `high` | `high`만 |
 
-**Note:**
-- GPT-5.1 introduced a new `reasoning_effort="none"` setting for faster, lower-latency responses. This replaces the `"minimal"` setting from GPT-5.
-- `gpt-5.1-codex-max`, `gpt-5.2`, `gpt-5.2-pro`, `gpt-5.5`, and `gpt-5.5-pro` support `reasoning_effort="xhigh"`. Models outside this set will reject the value.
-- `gpt-5-pro` only accepts `reasoning_effort="high"`. Other values will return an error.
-- When `reasoning_effort` is not set (None), OpenAI defaults to the value shown in the "Default" column.
+**참고:**
+- GPT-5.1은 더 빠르고 지연 시간이 낮은 응답을 위해 새로운 `reasoning_effort="none"` 설정을 도입했습니다. 이는 GPT-5의 `"minimal"` 설정을 대체합니다.
+- `gpt-5.1-codex-max`, `gpt-5.2`, `gpt-5.2-pro`, `gpt-5.5`, `gpt-5.5-pro`는 `reasoning_effort="xhigh"`를 지원합니다. 이 목록 밖의 모델은 해당 값을 거부합니다.
+- `gpt-5-pro`는 `reasoning_effort="high"`만 허용합니다. 다른 값은 오류를 반환합니다.
+- `reasoning_effort`가 설정되지 않은 경우(None), OpenAI는 "기본값" 열에 표시된 값을 기본으로 사용합니다.
 
-See [OpenAI Reasoning documentation](https://platform.openai.com/docs/guides/reasoning) for more details on organization verification requirements.
+organization 검증 요구사항에 대한 자세한 내용은 [OpenAI 추론 문서](https://platform.openai.com/docs/guides/reasoning)을 참고하세요.
 
-### Multi-turn Conversations with `reasoning_items`
+### `reasoning_items`를 사용한 다중 턴 대화 {#multi-turn-conversation-with-reasoning-items}
 
-For multi-turn conversations you need `reasoning_items`: structured blocks that include the `encrypted_content` token OpenAI uses to restore reasoning state on the next request. Pass `include=["reasoning.encrypted_content"]` on every call where you want that token returned.
+다중 턴 대화에는 `reasoning_items`가 필요합니다. 이는 OpenAI가 다음 요청에서 추론 상태를 복원하는 데 사용하는 `encrypted_content` 토큰을 포함하는 구조화된 블록입니다. 해당 토큰을 반환받고 싶은 모든 호출에 `include=["reasoning.encrypted_content"]`를 전달하세요.
 
 <Tabs>
-<TabItem value="non-streaming" label="Non-Streaming">
+<TabItem value="non-streaming" label="비스트리밍">
 
 ```python showLineNumbers title="Non-streaming: round-trip reasoning_items"
 import litellm
@@ -676,9 +676,9 @@ response2 = litellm.completion(
 ```
 
 </TabItem>
-<TabItem value="streaming" label="Streaming">
+<TabItem value="streaming" label="스트리밍">
 
-`reasoning_items` (with `encrypted_content`) arrive on the final chunk when the full response completes:
+`encrypted_content`가 포함된 `reasoning_items`는 전체 응답이 완료될 때 마지막 청크에 도착합니다.
 
 ```python showLineNumbers title="Streaming: collect and round-trip reasoning_items"
 import litellm
@@ -721,18 +721,18 @@ response2 = litellm.completion(
 </TabItem>
 </Tabs>
 
-### Verbosity Control for GPT-5 Models
+### GPT-5 모델의 상세도 제어 {#gpt-5-model-verbosity-control}
 
-The `verbosity` parameter controls the length and detail of responses from GPT-5 family models. It accepts three values: `"low"`, `"medium"`, or `"high"`.
+`verbosity` 파라미터는 GPT-5 계열 모델 응답의 길이와 상세 수준을 제어합니다. `"low"`, `"medium"`, `"high"` 세 가지 값을 받습니다.
 
-**Supported models:** `gpt-5`, `gpt-5.1`, `gpt-5-mini`, `gpt-5-nano`, `gpt-5-pro`
+**지원 모델:** `gpt-5`, `gpt-5.1`, `gpt-5-mini`, `gpt-5-nano`, `gpt-5-pro`
 
-**Note:** GPT-5-Codex models (`gpt-5-codex`, `gpt-5.1-codex`, `gpt-5.1-codex-mini`, `gpt-5.1-codex-max`) do **not** support the `verbosity` parameter.
+**참고:** GPT-5-Codex 모델(`gpt-5-codex`, `gpt-5.1-codex`, `gpt-5.1-codex-mini`, `gpt-5.1-codex-max`)은 `verbosity` 파라미터를 지원하지 않습니다.
 
-**Use cases:**
-- **`"low"`**: Best for concise answers or simple code generation (e.g., SQL queries)
-- **`"medium"`**: Default - balanced output length
-- **`"high"`**: Use when you need thorough explanations or extensive code refactoring
+**사용 사례:**
+- **`"low"`**: 간결한 답변 또는 단순 코드 생성에 적합합니다. 예: SQL 쿼리.
+- **`"medium"`**: 기본값 - 균형 잡힌 출력 길이.
+- **`"high"`**: 자세한 설명이나 광범위한 코드 리팩터링이 필요할 때 사용합니다.
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -770,17 +770,17 @@ curl -X POST 'http://0.0.0.0:4000/chat/completions' \
 </Tabs>
 
 
-## OpenAI Chat Completion to Responses API Bridge
+## OpenAI Chat Completion에서 Responses API로 연결하는 브리지 {#openai-chat-completion-to-responses-api-bridge}
 
-LiteLLM offers a chat completion to Responses API bridge. This lets you use the completion interface while calling the Responses API under the hood.
+LiteLLM은 채팅 completion에서 Responses API로 이어지는 브리지를 제공합니다. 이를 통해 completion 인터페이스를 사용하면서 내부적으로 Responses API를 호출할 수 있습니다.
 
-This is useful when you want to use [Responses API](https://platform.openai.com/docs/api-reference/responses) specific features (like built-in tools, web search preview, or code interpreter).
+[Responses API](https://platform.openai.com/docs/api-reference/responses) 전용 기능(내장 도구, web search preview, code interpreter 등)을 사용하고 싶을 때 유용합니다.
 
-:::tip gpt-5.4+ + reasoning_effort + function tools
+:::tip gpt-5.4+ + reasoning_effort + 함수 도구
 
-LiteLLM drops `reasoning_effort` from `gpt-5.4` and newer (`gpt-5.4`, `gpt-5.5`, future 5.x releases) requests to `litellm.completion()` that include tools, since that combination is only supported in the Responses API.
+도구가 포함된 `gpt-5.4` 이상(`gpt-5.4`, `gpt-5.5`, 향후 5.x release) 요청을 `litellm.completion()`으로 보낼 때 LiteLLM은 `reasoning_effort`를 제거합니다. 이 조합은 Responses API에서만 지원되기 때문입니다.
 
-If you need reasoning **and** tools together, use the responses bridge instead (LiteLLM also auto-routes these requests to `/v1/responses` when both `tools` and `reasoning_effort` are set):
+추론과 도구를 함께 사용해야 한다면 responses bridge를 사용하세요. `tools`와 `reasoning_effort`가 모두 설정된 경우 LiteLLM도 이러한 요청을 `/v1/responses`로 자동 라우팅합니다.
 
 ```python
 response = litellm.completion(
@@ -793,25 +793,25 @@ response = litellm.completion(
 
 :::
 
-### When to use the `openai/responses/` prefix
+### `openai/responses/` 접두사 사용 시점 {#when-to-use-openai-responses-prefix}
 
-Each model has a `mode` property defined in [`model_prices_and_context_window.json`](https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json) that determines which API endpoint it uses by default:
+각 모델에는 기본적으로 사용할 API 엔드포인트를 결정하는 `mode` property가 [`model_prices_and_context_window.json`](https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json)에 정의되어 있습니다.
 
-- **`mode: responses`** - Model automatically uses the Responses API
-- **`mode: chat`** - Model defaults to the Chat Completions API
+- **`mode: responses`** - 모델이 Responses API를 자동 사용합니다.
+- **`mode: chat`** - 모델이 기본적으로 Chat Completions API를 사용합니다.
 
-**Models with `mode: responses`** (automatic Responses API):
+**`mode: responses`인 모델** (Responses API 자동 사용):
 - `o3-deep-research`, `o4-mini-deep-research`
 - `o1-pro`, `o3-pro`
 - `gpt-5.1-codex`, `gpt-5.1-codex-mini`, `gpt-5.1-codex-max`
 - `codex-mini-latest`
 
-**Models with `mode: chat`** (require `openai/responses/` prefix for built-in tools):
+**`mode: chat`인 모델** (내장 도구에는 `openai/responses/` 접두사 필요):
 - `gpt-4o`, `gpt-4o-mini`, `gpt-4.1`, `gpt-4.1-mini`
 - `gpt-5`, `gpt-5-mini`
 - `o3`, `o4-mini`
 
-To use built-in tools like `web_search_preview` with `mode: chat` models, add the `openai/responses/` prefix:
+`mode: chat` 모델에서 `web_search_preview` 같은 내장 도구를 사용하려면 `openai/responses/` 접두사를 추가하세요.
 
 ```python
 # This will FAIL - gpt-4o has mode: chat, uses Chat Completions API
@@ -831,12 +831,12 @@ response = litellm.completion(
 )
 ```
 
-### Examples
+### 예제
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
 
-**Using a model with `mode: responses` (automatic):**
+**`mode: responses` 모델 사용(자동):**
 
 ```python
 import litellm
@@ -855,7 +855,7 @@ response = litellm.completion(
 print(response)
 ```
 
-**Using a model with `mode: chat` (requires prefix):**
+**`mode: chat` 모델 사용(접두사 필요):**
 
 ```python
 import litellm
@@ -877,7 +877,7 @@ print(response)
 </TabItem>
 <TabItem value="proxy" label="PROXY">
 
-1. Setup config.yaml
+1. config.yaml 설정
 
 ```yaml
 model_list:
@@ -894,13 +894,13 @@ model_list:
       api_key: os.environ/OPENAI_API_KEY
 ```
 
-2. Start the proxy
+2. 프록시 시작
 
 ```bash
 litellm --config config.yaml
 ```
 
-3. Test it!
+3. 테스트
 
 ```bash
 curl -X POST 'http://0.0.0.0:4000/chat/completions' \
@@ -921,13 +921,13 @@ curl -X POST 'http://0.0.0.0:4000/chat/completions' \
 </Tabs>
 
 
-## OpenAI Audio Transcription
+## OpenAI 오디오 전사
 
-LiteLLM supports OpenAI Audio Transcription endpoint.
+LiteLLM은 OpenAI Audio Transcription 엔드포인트를 지원합니다.
 
-Supported models:
+지원 모델:
 
-| Model Name                | Function Call                                                          |
+| 모델 이름                | 함수 호출                                                          |
 |---------------------------|-----------------------------------------------------------------|
 | `whisper-1`    | `response = completion(model="whisper-1", file=audio_file)`     |
 | `gpt-4o-transcribe` | `response = completion(model="gpt-4o-transcribe", file=audio_file)` |
@@ -952,7 +952,7 @@ print(f"response: {response}")
 </TabItem>
 <TabItem value="proxy" label="PROXY">
 
-1. Setup config.yaml
+1. config.yaml 설정
 
 ```yaml
 model_list:
@@ -967,13 +967,13 @@ general_settings:
   master_key: sk-1234
 ```
 
-2. Start the proxy
+2. 프록시 시작
 
 ```bash
 litellm --config config.yaml
 ```
 
-3. Test it!
+3. 테스트
 
 ```bash
 curl --location 'http://0.0.0.0:8000/v1/audio/transcriptions' \
@@ -989,13 +989,13 @@ curl --location 'http://0.0.0.0:8000/v1/audio/transcriptions' \
 
 
 
-## Advanced
+## 고급
 
-### Getting OpenAI API Response Headers 
+### OpenAI API 응답 헤더 가져오기 {#get-openai-api-response-headers}
 
-Set `litellm.return_response_headers = True` to get raw response headers from OpenAI
+OpenAI의 원시 응답 헤더를 가져오려면 `litellm.return_response_headers = True`를 설정하세요.
 
-You can expect to always get the `_response_headers` field from `litellm.completion()`, `litellm.embedding()` functions
+`litellm.completion()`, `litellm.embedding()` 함수에서 항상 `_response_headers` 필드를 받을 수 있습니다.
 
 <Tabs>
 <TabItem value="litellm.completion" label="litellm.completion">
@@ -1058,7 +1058,7 @@ print("embedding_response_headers=", embedding_response_headers)
 
 </TabItem>
 </Tabs>
-Expected Response Headers from OpenAI
+OpenAI의 예상 응답 헤더
 
 ```json
 {
@@ -1089,8 +1089,8 @@ Expected Response Headers from OpenAI
 }
 ```
 
-### Parallel Function calling
-See a detailed walthrough of parallel function calling with litellm [here](https://docs.litellm.ai/docs/completion/function_call)
+### 병렬 함수 호출 {#parallel-function-calling}
+LiteLLM에서 병렬 함수 호출을 사용하는 자세한 단계별 설명은 [여기](https://docs.litellm.ai/docs/completion/function_call)를 참고하세요.
 ```python
 import litellm
 import json
@@ -1143,7 +1143,7 @@ response_message = response.choices[0].message
 tool_calls = response.choices[0].message.tool_calls
 ```
 
-### Setting `extra_headers` for completion calls
+### completion 호출에 `extra_headers` 설정 {#setting-extra-headers-for-completion-call}
 ```python
 import os 
 from litellm import completion
@@ -1157,11 +1157,11 @@ response = completion(
 )
 ```
 
-### Setting Organization-ID for completion calls
-This can be set in one of the following ways:
-- Environment Variable `OPENAI_ORGANIZATION`
-- Params to `litellm.completion(model=model, organization="your-organization-id")`
-- Set as `litellm.organization="your-organization-id"`
+### completion 호출에 Organization-ID 설정 {#setting-organization-id-for-completion-call}
+다음 방법 중 하나로 설정할 수 있습니다.
+- 환경 변수 `OPENAI_ORGANIZATION`
+- `litellm.completion(model=model, organization="your-organization-id")` 파라미터
+- `litellm.organization="your-organization-id"`로 설정
 ```python
 import os 
 from litellm import completion
@@ -1175,12 +1175,12 @@ response = completion(
 )
 ```
 
-### Set `ssl_verify=False`
+### `ssl_verify=False` 설정
 
-This is done by setting your own `httpx.Client` 
+자체 `httpx.Client`를 설정해 적용합니다.
 
-- For `litellm.completion` set `litellm.client_session=httpx.Client(verify=False)`
-- For `litellm.acompletion` set `litellm.aclient_session=AsyncClient.Client(verify=False)`
+- `litellm.completion`에는 `litellm.client_session=httpx.Client(verify=False)`를 설정합니다.
+- `litellm.acompletion`에는 `litellm.aclient_session=AsyncClient.Client(verify=False)`를 설정합니다.
 ```python
 import litellm, httpx
 
@@ -1200,7 +1200,7 @@ response = litellm.acompletion(
 ```
 
 
-### Using OpenAI Proxy with LiteLLM
+### LiteLLM에서 OpenAI Proxy 사용 {#using-openai-proxy-with-litellm}
 ```python
 import os 
 import litellm
@@ -1220,15 +1220,15 @@ messages = [{ "content": "Hello, how are you?","role": "user"}]
 response = completion("openai/your-model-name", messages)
 ```
 
-If you need to set api_base dynamically, just pass it in completions instead - `completions(...,api_base="your-proxy-api-base")`
+`api_base`를 동적으로 설정해야 한다면 completions에 직접 전달하세요. `completions(...,api_base="your-proxy-api-base")`
 
-For more check out [setting API Base/Keys](../set_keys.md)
+자세한 내용은 [API Base/Keys 설정](../set_keys.md)을 참고하세요.
 
-### Forwarding Org ID for Proxy requests
+### Proxy 요청의 Org ID 전달 {#pass-org-id-for-proxy-requests}
 
-Forward openai Org ID's from the client to OpenAI with `forward_openai_org_id` param. 
+`forward_openai_org_id` 파라미터를 사용해 클라이언트의 OpenAI Org ID를 OpenAI로 전달합니다.
 
-1. Setup config.yaml 
+1. config.yaml 설정
 
 ```yaml
 model_list:
@@ -1241,7 +1241,7 @@ general_settings:
     forward_openai_org_id: true # 👈 KEY CHANGE
 ```
 
-2. Start Proxy
+2. Proxy 시작
 
 ```bash
 litellm --config config.yaml --detailed_debug
@@ -1249,7 +1249,7 @@ litellm --config config.yaml --detailed_debug
 # RUNNING on http://0.0.0.0:4000
 ```
 
-3. Make OpenAI call
+3. OpenAI 호출 실행
 
 ```python
 from openai import OpenAI
@@ -1262,24 +1262,24 @@ client = OpenAI(
 client.chat.completions.create(model="gpt-3.5-turbo", messages=[{"role": "user", "content": "Hello world"}])
 ```
 
-In your logs you should see the forwarded org id
+로그에서 전달된 org id를 확인할 수 있어야 합니다.
 
 ```bash
 LiteLLM:DEBUG: utils.py:255 - Request to litellm:
 LiteLLM:DEBUG: utils.py:255 - litellm.acompletion(... organization='my-special-org',)
 ```
 
-## GPT-5 Pro Special Notes
+## GPT-5 Pro 특별 참고
 
-GPT-5 Pro is OpenAI's most advanced reasoning model with unique characteristics:
+GPT-5 Pro는 OpenAI의 가장 고급 추론 모델이며 고유한 특성을 가집니다.
 
-- **Responses API Only**: GPT-5 Pro is only available through the `/v1/responses` endpoint
-- **No Streaming**: Does not support streaming responses
-- **High Reasoning**: Designed for complex reasoning tasks with highest effort reasoning
-- **Context Window**: 400,000 tokens input, 272,000 tokens output
-- **Pricing**: $15.00 input / $120.00 output per 1M tokens (Standard), $7.50 input / $60.00 output (Batch)
-- **Tools**: Supports Web Search, File Search, Image Generation, MCP (but not Code Interpreter or Computer Use)
-- **Modalities**: Text and Image input, Text output only
+- **Responses API 전용**: GPT-5 Pro는 `/v1/responses` 엔드포인트에서만 사용할 수 있습니다.
+- **Streaming 미지원**: 스트리밍 응답을 지원하지 않습니다.
+- **높은 추론**: 높은 effort의 추론이 필요한 복잡한 추론 작업용으로 설계되었습니다.
+- **컨텍스트 창**: 입력 400,000 tokens, 출력 272,000 tokens.
+- **가격**: 1M token당 입력 $15.00 / 출력 $120.00(Standard), 입력 $7.50 / 출력 $60.00(Batch).
+- **도구**: Web Search, File Search, Image Generation, MCP를 지원합니다. Code Interpreter 또는 Computer Use는 지원하지 않습니다.
+- **모달리티**: Text 및 Image 입력, Text 출력만 지원합니다.
 
 ```python
 # GPT-5 Pro usage example
@@ -1289,8 +1289,8 @@ response = completion(
 )
 ```
 
-## Video Generation
+## 비디오 생성
 
-LiteLLM supports OpenAI's video generation models including Sora.
+LiteLLM은 Sora를 포함한 OpenAI 비디오 생성 모델을 지원합니다.
 
-For detailed documentation on video generation, see [OpenAI Video Generation →](./openai/videos.md)
+비디오 생성에 대한 자세한 문서는 [OpenAI Video Generation →](./openai/videos.md)를 참고하세요.

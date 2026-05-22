@@ -3,16 +3,16 @@ import TabItem from '@theme/TabItem';
 
 
 # Snowflake
-| Property                   | Details                                                                                                   |
+| 속성                       | 세부 정보                                                                                                 |
 |----------------------------|-----------------------------------------------------------------------------------------------------------|
-| Description                | The Snowflake Cortex LLM REST API lets you access the COMPLETE and EMBED functions via HTTP POST requests |
-| Provider Route on LiteLLM  | `snowflake/`                                                                                              |
-| Link to Provider Doc       | [Snowflake ↗](https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-llm-rest-api)              |
-| Base URLs                  | `https://{account-id}.snowflakecomputing.com/api/v2/cortex/inference:complete`,`https://{account-id}.snowflakecomputing.com/api/v2/cortex/inference:embed`|
-| Supported OpenAI Endpoints | `/chat/completions`, `/completions`, `/embeddings`                                                        |
+| 설명                       | Snowflake Cortex LLM REST API를 사용하면 HTTP POST 요청으로 COMPLETE 및 EMBED 함수에 액세스할 수 있습니다 |
+| LiteLLM의 Provider Route   | `snowflake/`                                                                                              |
+| Provider 문서 링크         | [Snowflake ↗](https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-llm-rest-api)              |
+| 기본 URL                   | `https://{account-id}.snowflakecomputing.com/api/v2/cortex/inference:complete`,`https://{account-id}.snowflakecomputing.com/api/v2/cortex/inference:embed`|
+| 지원되는 OpenAI 엔드포인트 | `/chat/completions`, `/completions`, `/embeddings`                                                        |
 
 
-## Supported OpenAI Parameters
+## 지원되는 OpenAI 매개변수 {#supported-openai-parameters}
 ```
     "temperature",
     "max_tokens",
@@ -20,11 +20,11 @@ import TabItem from '@theme/TabItem';
     "response_format"
 ```
 
-## API KEYS
+## API 키 {#api-keys}
 
-Snowflake does have API keys. Instead, you access the Snowflake API with your JWT token and account identifier.
+Snowflake는 API 키를 사용하지 않습니다. 대신 JWT 토큰과 계정 식별자로 Snowflake API에 액세스합니다.
 
-It is also possible to use [programmatic access tokens](https://docs.snowflake.com/en/user-guide/programmatic-access-tokens) (PAT). It can be defined by using 'pat/' prefix
+[programmatic access tokens](https://docs.snowflake.com/en/user-guide/programmatic-access-tokens) (PAT)도 사용할 수 있습니다. `pat/` 접두사를 사용해 정의할 수 있습니다.
 
 
 ```python
@@ -32,7 +32,7 @@ import os
 os.environ["SNOWFLAKE_JWT"] = "YOUR JWT"
 os.environ["SNOWFLAKE_ACCOUNT_ID"] = "YOUR ACCOUNT IDENTIFIER"
 ```
-## Usage
+## 사용법
 
 ```python
 from litellm import completion, embedding
@@ -69,15 +69,15 @@ response = completion(
 )
 ```
 
-## Usage with LiteLLM Proxy 
+## LiteLLM Proxy 사용법 {#사용법-with-litellm-proxy}
 
-#### 1. Required env variables
+#### 1. 필수 환경 변수 {#1-required-env-variables}
 ```bash
 export SNOWFLAKE_JWT=""
 export SNOWFLAKE_ACCOUNT_ID = ""
 ```
 
-#### 2. Start the proxy~
+#### 2. 프록시 시작 {#2-프록시-시작}
 ```yaml
 model_list:
   - model_name: mistral-7b
@@ -92,7 +92,7 @@ model_list:
 litellm --config /path/to/config.yaml
 ```
 
-#### 3. Test it
+#### 3. 테스트 {#3-test-it}
 ```shell
 curl --location 'http://0.0.0.0:4000/chat/completions' \
 --header 'Content-Type: application/json' \

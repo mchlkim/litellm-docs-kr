@@ -1,13 +1,13 @@
-# Model Fallbacks w/ LiteLLM
+# LiteLLM을 사용한 모델 폴백 {#model-fallbacks-w-litellm}
 
-Here's how you can implement model fallbacks across 3 LLM providers (OpenAI, Anthropic, Azure) using LiteLLM. 
+LiteLLM을 사용해 3개의 LLM 제공업체(OpenAI, Anthropic, Azure)에 걸쳐 모델 폴백을 구현하는 방법입니다. 
 
-## 1. Install LiteLLM
+## 1. LiteLLM 설치 {#1-install-litellm}
 ```python 
 !uv add litellm
 ```
 
-## 2. Basic Fallbacks Code 
+## 2. 기본 폴백 코드 {#2-basic-fallbacks-code}
 ```python 
 import litellm
 from litellm import embedding, completion
@@ -31,12 +31,12 @@ for model in model_fallback_list:
       print(f"error occurred: {traceback.format_exc()}")
 ```
 
-## 3. Context Window Exceptions 
-LiteLLM provides a sub-class of the InvalidRequestError class for Context Window Exceeded errors ([docs](https://docs.litellm.ai/docs/exception_mapping)).
+## 3. 컨텍스트 창 예외 {#3-context-window-exceptions}
+LiteLLM은 Context Window Exceeded 오류를 위해 `InvalidRequestError` 클래스의 하위 클래스를 제공합니다([docs](https://docs.litellm.ai/docs/exception_mapping)).
 
-Implement model fallbacks based on context window exceptions. 
+컨텍스트 창 예외를 기준으로 모델 폴백을 구현합니다. 
 
-LiteLLM also exposes a `get_max_tokens()` function, which you can use to identify the context window limit that's been exceeded. 
+LiteLLM은 `get_max_tokens()` 함수도 노출하며, 이 함수로 초과된 컨텍스트 창 한도를 확인할 수 있습니다. 
 
 ```python 
 import litellm

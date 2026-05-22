@@ -5,13 +5,13 @@ import Image from '@theme/IdealImage';
 # 📈 Prometheus metrics
 
 
-LiteLLM Exposes a `/metrics` endpoint for Prometheus to Poll
+LiteLLM은 Prometheus가 poll할 수 있는 `/metrics` endpoint를 expose합니다.
 
-## Quick Start
+## 빠른 시작
 
-If you're using the LiteLLM CLI with `litellm --config proxy_config.yaml` then you need to `uv add prometheus_client==0.20.0`. **This is already pre-installed on the litellm Docker image**
+LiteLLM CLI를 `litellm --config proxy_config.yaml`로 사용한다면 `uv add prometheus_client==0.20.0`가 필요합니다. **litellm Docker image에는 이미 pre-installed되어 있습니다**
 
-Add this to your proxy config.yaml 
+proxy config.yaml에 다음을 추가합니다 
 ```yaml
 model_list:
   - model_name: gpt-4o
@@ -22,12 +22,12 @@ litellm_settings:
     - prometheus
 ```
 
-Start the proxy
+프록시 시작
 ```shell
 litellm --config config.yaml --debug
 ```
 
-Test Request
+Request 테스트
 ```shell
 curl --location 'http://0.0.0.0:4000/chat/completions' \
     --header 'Content-Type: application/json' \
@@ -42,103 +42,69 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 }'
 ```
 
-View Metrics on `/metrics`, Visit `http://localhost:4000/metrics` 
+`/metrics`에서 metric을 확인합니다. `http://localhost:4000/metrics`를 방문하세요 
 ```shell
 http://localhost:4000/metrics
 
 # <proxy_base_url>/metrics
 ```
 
-### Multiple Workers
+### Multiple Worker
 
-When using LiteLLM with multiple workers, you need to set the `PROMETHEUS_MULTIPROC_DIR` environment variable to enable aggregated metric collection across worker processes.
+LiteLLM을 multiple worker로 사용할 때 worker process 전체의 aggregated metric collection을 활성화하려면 `PROMETHEUS_MULTIPROC_DIR` environment variable을 설정해야 합니다.
 
 ```shell
 export PROMETHEUS_MULTIPROC_DIR="/prometheus_multiproc"
 ```
 
-This directory is used by the Prometheus client library to store metric files that can be shared across multiple worker processes. Make sure the directory exists and is writable by your LiteLLM process.
+이 directory는 Prometheus client library가 여러 worker process에서 공유할 수 있는 metric file을 저장하는 데 사용합니다. directory가 존재하고 LiteLLM process에서 write 가능해야 합니다.
 
-## Virtual Keys, Teams, Internal Users
+## 가상 키, Teams, Internal Users
 
-Use this for for tracking per [user, key, team, etc.](virtual_keys)
+[user, key, team 등](virtual_keys) 단위 tracking에 사용합니다
 
-| Metric Name          | Description                          |
+| Metric Name          | 설명                          |
 |----------------------|--------------------------------------|
-| `litellm_spend_metric`                | Total Spend, per `"end_user", "hashed_api_key", "api_key_alias", "model", "team", "team_alias", "user"`                 |
-| `litellm_total_tokens_metric`         | input + output tokens per `"end_user", "hashed_api_key", "api_key_alias", "requested_model", "team", "team_alias", "user", "model"`     |
-| `litellm_input_tokens_metric`         | input tokens per `"end_user", "hashed_api_key", "api_key_alias", "requested_model", "team", "team_alias", "user", "model"`     |
-| `litellm_output_tokens_metric`        | output tokens per `"end_user", "hashed_api_key", "api_key_alias", "requested_model", "team", "team_alias", "user", "model"`             |
-
-#### Token type detail metrics
-
-Per-token-type counters that break out the `usage.prompt_tokens_details` and `usage.completion_tokens_details` fields providers report (e.g. OpenAI prompt caching, Anthropic prompt caching, audio I/O, reasoning tokens). These are **additive** to the totals above — the existing `litellm_input_tokens_metric` / `litellm_output_tokens_metric` / `litellm_total_tokens_metric` counters are unchanged.
-
-Each detail counter is **sparse**: it is only incremented when the provider reports a non-zero value for the corresponding field, so providers that don't expose a given detail will not produce a series for it. The label set is identical to the parent input / output token counter, so you can join cleanly in PromQL.
-
-| Metric Name                                      | Source field on `usage`                                              | Typical providers                                  |
-|--------------------------------------------------|----------------------------------------------------------------------|----------------------------------------------------|
-| `litellm_input_cached_tokens_metric`             | `prompt_tokens_details.cached_tokens`                                | OpenAI prompt cache, Anthropic `cache_read_input_tokens`, DeepSeek `prompt_cache_hit_tokens` |
-| `litellm_input_cache_creation_tokens_metric`     | `prompt_tokens_details.cache_creation_tokens`                        | Anthropic `cache_creation_input_tokens` (prompt cache writes) |
-| `litellm_input_audio_tokens_metric`              | `prompt_tokens_details.audio_tokens`                                 | OpenAI `gpt-4o-audio-*`, Gemini audio inputs       |
-| `litellm_output_reasoning_tokens_metric`         | `completion_tokens_details.reasoning_tokens`                         | OpenAI `o1-*` / `o3-*`, Anthropic extended thinking |
-| `litellm_output_audio_tokens_metric`             | `completion_tokens_details.audio_tokens`                             | OpenAI `gpt-4o-audio-*` audio outputs              |
-
-Example PromQL — cache-hit ratio for a model group:
-
-```promql
-sum by (requested_model) (rate(litellm_input_cached_tokens_metric_total[5m]))
-/
-sum by (requested_model) (rate(litellm_input_tokens_metric_total[5m]))
-```
-
-Example PromQL — reasoning-token share of output:
-
-```promql
-sum by (requested_model) (rate(litellm_output_reasoning_tokens_metric_total[5m]))
-/
-sum by (requested_model) (rate(litellm_output_tokens_metric_total[5m]))
-```
-
-:::info
-`litellm_input_cached_tokens_metric` tracks **provider-side** prompt-cache reads (the provider reports a cached portion of the input). This is different from `litellm_cached_tokens_metric`, which tracks LiteLLM's own response-cache hits (the entire response was served from LiteLLM's cache and no provider request was made).
-:::
+| `litellm_spend_metric`                | `"end_user", "hashed_api_key", "api_key_alias", "model", "team", "team_alias", "user"`별 총 Spend                 |
+| `litellm_total_tokens_metric`         | `"end_user", "hashed_api_key", "api_key_alias", "requested_model", "team", "team_alias", "user", "model"`별 input + output token     |
+| `litellm_input_tokens_metric`         | `"end_user", "hashed_api_key", "api_key_alias", "requested_model", "team", "team_alias", "user", "model"`별 input token     |
+| `litellm_output_tokens_metric`        | `"end_user", "hashed_api_key", "api_key_alias", "requested_model", "team", "team_alias", "user", "model"`별 output token             |
 
 ### Team - Budget
 
 
-| Metric Name          | Description                          |
+| Metric Name          | 설명                          |
 |----------------------|--------------------------------------|
-| `litellm_team_max_budget_metric`                    | Max Budget for Team Labels: `"team", "team_alias"`|
-| `litellm_remaining_team_budget_metric`             | Remaining Budget for Team (A team created on LiteLLM) Labels: `"team", "team_alias"`|
-| `litellm_team_budget_remaining_hours_metric`        | Hours before the team budget is reset Labels: `"team", "team_alias"`|
+| `litellm_team_max_budget_metric`                    | Team의 max budget. Labels: `"team", "team_alias"`|
+| `litellm_remaining_team_budget_metric`             | LiteLLM에서 생성된 team의 remaining budget. Labels: `"team", "team_alias"`|
+| `litellm_team_budget_remaining_hours_metric`        | team budget이 reset되기 전 남은 시간. Labels: `"team", "team_alias"`|
 
-### Virtual Key - Budget
+### Virtual Key - Budget 예산
 
-| Metric Name          | Description                          |
+| Metric Name          | 설명                          |
 |----------------------|--------------------------------------|
-| `litellm_api_key_max_budget_metric`                 | Max Budget for API Key Labels: `"hashed_api_key", "api_key_alias"`|
-| `litellm_remaining_api_key_budget_metric`                | Remaining Budget for API Key (A key Created on LiteLLM) Labels: `"hashed_api_key", "api_key_alias"`|
-| `litellm_api_key_budget_remaining_hours_metric`          | Hours before the API Key budget is reset Labels: `"hashed_api_key", "api_key_alias"`|
+| `litellm_api_key_max_budget_metric`                 | API key의 max budget. Labels: `"hashed_api_key", "api_key_alias"`|
+| `litellm_remaining_api_key_budget_metric`                | LiteLLM에서 생성된 API key의 remaining budget. Labels: `"hashed_api_key", "api_key_alias"`|
+| `litellm_api_key_budget_remaining_hours_metric`          | API key budget이 reset되기 전 남은 시간. Labels: `"hashed_api_key", "api_key_alias"`|
 
-### Virtual Key - Rate Limit
+### Virtual Key - Rate Limit 제한
 
-| Metric Name          | Description                          |
+| Metric Name          | 설명                          |
 |----------------------|--------------------------------------|
-| `litellm_remaining_api_key_requests_for_model`                | Remaining Requests for a LiteLLM virtual API key, only if a model-specific rate limit (rpm) has been set for that virtual key. Labels: `"hashed_api_key", "api_key_alias", "model"`|
-| `litellm_remaining_api_key_tokens_for_model`                | Remaining Tokens for a LiteLLM virtual API key, only if a model-specific token limit (tpm) has been set for that virtual key. Labels: `"hashed_api_key", "api_key_alias", "model"`|
+| `litellm_remaining_api_key_requests_for_model`                | LiteLLM virtual API key의 remaining request 수입니다. 해당 virtual key에 model-specific rate limit(rpm)이 설정된 경우에만 제공됩니다. Labels: `"hashed_api_key", "api_key_alias", "model"`|
+| `litellm_remaining_api_key_tokens_for_model`                | LiteLLM virtual API key의 remaining token 수입니다. 해당 virtual key에 model-specific token limit(tpm)이 설정된 경우에만 제공됩니다. Labels: `"hashed_api_key", "api_key_alias", "model"`|
 
 
-### Initialize Budget Metrics on Startup
+### Startup 시 Budget Metric 초기화
 
-If you want litellm to emit the budget metrics for all keys, teams irrespective of whether they are getting requests or not, set `prometheus_initialize_budget_metrics` to `true` in the `config.yaml`
+request 수신 여부와 관계없이 모든 key, team에 대해 budget metric을 emit하려면 `config.yaml`에서 `prometheus_initialize_budget_metrics`를 `true`로 설정합니다
 
-**How this works:**
+**동작 방식:**
 
 - If the `prometheus_initialize_budget_metrics` is set to `true`
-  - Every 5 minutes litellm runs a cron job to read all keys, teams from the database
-  - It then emits the budget metrics for each key, team
-  - This is used to populate the budget metrics on the `/metrics` endpoint
+  - litellm은 5분마다 cron job을 실행해 database에서 모든 key와 team을 읽습니다
+  - 그 후 각 key와 team에 대한 budget metric을 emit합니다
+  - 이는 `/metrics` endpoint의 budget metric을 채우는 데 사용됩니다
 
 ```yaml
 litellm_settings:
@@ -147,24 +113,24 @@ litellm_settings:
 ```
 
 
-## Pod Health Metrics
+## Pod Health Metric
 
-Use these to measure per-pod queue depth and diagnose latency that occurs **before** LiteLLM starts processing a request.
+pod별 queue depth를 측정하고 LiteLLM이 request 처리를 시작하기 **전** 발생하는 latency를 진단할 때 사용합니다.
 
 | Metric Name | Type | Description |
 |---|---|---|
-| `litellm_in_flight_requests` | Gauge | Number of HTTP requests currently in-flight on this uvicorn worker. Tracks the pod's queue depth in real time. With multiple workers, values are summed across all live workers (`livesum`). |
+| `litellm_in_flight_requests` | Gauge | 현재 이 uvicorn worker에서 in-flight 상태인 HTTP request 수입니다. pod의 queue depth를 실시간으로 추적합니다. multiple worker에서는 모든 live worker의 값이 합산됩니다(`livesum`). |
 
-### When to use this
+### 사용 시점
 
-LiteLLM measures latency from when its handler starts. If a request waits in uvicorn's event loop before the handler runs, that wait is invisible to LiteLLM's own logs. `litellm_in_flight_requests` shows how loaded the pod was at any point in time.
+LiteLLM은 handler가 시작된 시점부터 latency를 측정합니다. request가 handler 실행 전에 uvicorn event loop에서 대기하면 그 대기 시간은 LiteLLM 자체 log에 보이지 않습니다. `litellm_in_flight_requests`는 특정 시점의 pod load를 보여줍니다.
 
 ```
 high in_flight_requests + high ALB TargetResponseTime → pod overloaded, scale out
 low  in_flight_requests + high ALB TargetResponseTime → delay is pre-ASGI (event loop blocking)
 ```
 
-You can also check the current value directly without Prometheus:
+Prometheus 없이도 현재 값을 직접 확인할 수 있습니다:
 
 ```bash
 curl http://localhost:4000/health/backlog \
@@ -172,99 +138,99 @@ curl http://localhost:4000/health/backlog \
 # {"in_flight_requests": 47}
 ```
 
-## Proxy Level Tracking Metrics
+## Proxy Level Tracking Metric 추적
 
-Use this to track overall LiteLLM Proxy usage.
-- Track Actual traffic rate to proxy 
-- Number of **client side** requests and failures for requests made to proxy 
+전체 LiteLLM Proxy usage를 추적할 때 사용합니다.
+- proxy의 실제 traffic rate 추적 
+- proxy로 들어온 request의 **client side** request 및 failure 수 
 
-| Metric Name          | Description                          |
+| Metric Name          | 설명                          |
 |----------------------|--------------------------------------|
-| `litellm_proxy_failed_requests_metric`             | Total number of failed responses from proxy - the client did not get a success response from litellm proxy. Labels: `"end_user", "hashed_api_key", "api_key_alias", "requested_model", "team", "team_alias", "user", "user_email", "exception_status", "exception_class", "route", "model_id"`          |
-| `litellm_proxy_total_requests_metric`             | Total number of requests made to the proxy server - track number of client side requests. Labels: `"end_user", "hashed_api_key", "api_key_alias", "requested_model", "team", "team_alias", "user", "status_code", "user_email", "route", "model_id"`. Optionally includes `"stream"` — see [Emit Stream Label](#emit-stream-label).          |
+| `litellm_proxy_failed_requests_metric`             | proxy에서 실패한 response의 총수입니다. client가 litellm proxy에서 성공 response를 받지 못한 경우입니다. Labels: `"end_user", "hashed_api_key", "api_key_alias", "requested_model", "team", "team_alias", "user", "user_email", "exception_status", "exception_class", "route", "model_id"`          |
+| `litellm_proxy_total_requests_metric`             | proxy server로 들어온 request의 총수입니다. client side request 수를 추적합니다. Labels: `"end_user", "hashed_api_key", "api_key_alias", "requested_model", "team", "team_alias", "user", "status_code", "user_email", "route", "model_id"`. 선택적으로 `"stream"`을 포함합니다. [Emit Stream Label](#emit-stream-label)을 참고하세요.          |
 
-### Callback Logging Metrics
+### Callback Logging Metric 로깅
 
-Monitor failures while shipping logs to downstream callbacks like `s3_v3` cold storage
+`s3_v3` cold storage 같은 downstream callback으로 log를 전송하는 동안 발생하는 failure를 monitor합니다
 
-| Metric Name          | Description                          |
+| Metric Name          | 설명                          |
 |----------------------|--------------------------------------|
-| `litellm_callback_logging_failures_metric` | Total number of failed attempts to emit logs to a configured callback. Labels: `"callback_name"`. Use this to alert on callback delivery issues such as repeated failures when writing to `s3_v3`, `langfuse`, or `langfuse_otel` and other otel providers |
+| `litellm_callback_logging_failures_metric` | configured callback으로 log를 emit하는 데 실패한 attempt 총수입니다. Labels: `"callback_name"`. `s3_v3`, `langfuse`, `langfuse_otel` 및 기타 otel provider에 write할 때 반복 실패 같은 callback delivery issue에 alert를 걸 때 사용합니다 |
 
-**Supported Callbacks:**
-- `S3Logger` - S3 v2 cold storage failures
-- `langfuse` - Langfuse logging failures
-- `otel` -  OpenTelemetry logging failures
+**지원 Callback:**
+- `S3Logger` - S3 v2 cold storage 실패
+- `langfuse` - Langfuse logging 실패
+- `otel` -  OpenTelemetry logging 실패
 
-## LLM Provider Metrics
+## LLM Provider Metric 지표
 
-Use this for LLM API Error monitoring and tracking remaining rate limits and token limits
+LLM API error monitoring과 남은 rate limit 및 token limit tracking에 사용합니다
 
-### Labels Tracked
+### 추적 Label
 
-| Label | Description |
+| Label | 설명 |
 |-------|-------------|
-| litellm_model_name | The name of the LLM model used by LiteLLM |
-| requested_model | The model sent in the request |
-| model_id | The model_id of the deployment. Autogenerated by LiteLLM, each deployment has a unique model_id |
-| api_base | The API Base of the deployment |
-| api_provider | The LLM API provider, used for the provider. Example (azure, openai, vertex_ai) |
-| hashed_api_key | The hashed api key of the request |
-| api_key_alias | The alias of the api key used |
-| team | The team of the request |
-| team_alias | The alias of the team used |
-| exception_status | The status of the exception, if any |
-| exception_class | The class of the exception, if any |
+| litellm_model_name | LiteLLM이 사용하는 LLM model name |
+| requested_model | request로 전송된 model |
+| model_id | deployment의 model_id입니다. LiteLLM이 자동 생성하며 각 deployment는 unique model_id를 가집니다 |
+| api_base | deployment의 API Base |
+| api_provider | provider에 사용되는 LLM API provider. 예제 (azure, openai, vertex_ai) |
+| hashed_api_key | request의 hashed api key |
+| api_key_alias | 사용된 api key alias |
+| team | request의 team |
+| team_alias | 사용된 team alias |
+| exception_status | exception이 있으면 해당 status |
+| exception_class | exception이 있으면 해당 class |
 
-### Success and Failure
+### Success와 Failure
 
-| Metric Name          | Description                          |
+| Metric Name          | 설명                          |
 |----------------------|--------------------------------------|
- `litellm_deployment_success_responses`              | Total number of successful LLM API calls for deployment. Labels: `"requested_model", "litellm_model_name", "model_id", "api_base", "api_provider", "hashed_api_key", "api_key_alias", "team", "team_alias"` |
-| `litellm_deployment_failure_responses`              | Total number of failed LLM API calls for a specific LLM deployment. Labels: `"requested_model", "litellm_model_name", "model_id", "api_base", "api_provider", "hashed_api_key", "api_key_alias", "team", "team_alias", "exception_status", "exception_class"` |
-| `litellm_deployment_total_requests`                 | Total number of LLM API calls for deployment - success + failure. Labels: `"requested_model", "litellm_model_name", "model_id", "api_base", "api_provider", "hashed_api_key", "api_key_alias", "team", "team_alias"` |
+ `litellm_deployment_success_responses`              | deployment의 successful LLM API call 총수. Labels: `"requested_model", "litellm_model_name", "model_id", "api_base", "api_provider", "hashed_api_key", "api_key_alias", "team", "team_alias"` |
+| `litellm_deployment_failure_responses`              | 특정 LLM deployment의 failed LLM API call 총수. Labels: `"requested_model", "litellm_model_name", "model_id", "api_base", "api_provider", "hashed_api_key", "api_key_alias", "team", "team_alias", "exception_status", "exception_class"` |
+| `litellm_deployment_total_requests`                 | deployment의 LLM API call 총수 - success + failure. Labels: `"requested_model", "litellm_model_name", "model_id", "api_base", "api_provider", "hashed_api_key", "api_key_alias", "team", "team_alias"` |
 
-### Remaining Requests and Tokens
+### 남은 Request와 Token
 
-| Metric Name          | Description                          |
+| Metric Name          | 설명                          |
 |----------------------|--------------------------------------|
-| `litellm_remaining_requests_metric`             | Track `x-ratelimit-remaining-requests` returned from LLM API Deployment. Labels: `"model_group", "api_provider", "api_base", "litellm_model_name", "hashed_api_key", "api_key_alias"` |
-| `litellm_remaining_tokens_metric`                | Track `x-ratelimit-remaining-tokens` return from LLM API Deployment. Labels: `"model_group", "api_provider", "api_base", "litellm_model_name", "hashed_api_key", "api_key_alias"` |
+| `litellm_remaining_requests_metric`             | LLM API Deployment에서 반환된 `x-ratelimit-remaining-requests` 추적. Labels: `"model_group", "api_provider", "api_base", "litellm_model_name", "hashed_api_key", "api_key_alias"` |
+| `litellm_remaining_tokens_metric`                | LLM API Deployment에서 반환된 `x-ratelimit-remaining-tokens` 추적. Labels: `"model_group", "api_provider", "api_base", "litellm_model_name", "hashed_api_key", "api_key_alias"` |
 
 ### Deployment State 
-| Metric Name          | Description                          |
+| Metric Name          | 설명                          |
 |----------------------|--------------------------------------|
-| `litellm_deployment_state`             | The state of the deployment: 0 = healthy, 1 = partial outage, 2 = complete outage. Labels: `"litellm_model_name", "model_id", "api_base", "api_provider"` |
-| `litellm_deployment_latency_per_output_token`       | Latency per output token for deployment. Labels: `"litellm_model_name", "model_id", "api_base", "api_provider", "hashed_api_key", "api_key_alias", "team", "team_alias"` |
+| `litellm_deployment_state`             | deployment state입니다. 0 = healthy, 1 = partial outage, 2 = complete outage. Labels: `"litellm_model_name", "model_id", "api_base", "api_provider"` |
+| `litellm_deployment_latency_per_output_token`       | deployment의 output token당 latency. Labels: `"litellm_model_name", "model_id", "api_base", "api_provider", "hashed_api_key", "api_key_alias", "team", "team_alias"` |
 
-#### Fallback (Failover) Metrics
+#### Fallback(Failover) Metric 지표
 
-| Metric Name          | Description                          |
+| Metric Name          | 설명                          |
 |----------------------|--------------------------------------|
-| `litellm_deployment_cooled_down`             | Number of times a deployment has been cooled down by LiteLLM load balancing logic. Labels: `"litellm_model_name", "model_id", "api_base", "api_provider"` |
-| `litellm_deployment_successful_fallbacks`           | Number of successful fallback requests from primary model -> fallback model. Labels: `"requested_model", "fallback_model", "hashed_api_key", "api_key_alias", "team", "team_alias", "exception_status", "exception_class"` |
-| `litellm_deployment_failed_fallbacks`               | Number of failed fallback requests from primary model -> fallback model. Labels: `"requested_model", "fallback_model", "hashed_api_key", "api_key_alias", "team", "team_alias", "exception_status", "exception_class"` |
+| `litellm_deployment_cooled_down`             | LiteLLM load balancing logic에 의해 deployment가 cooled down된 횟수. Labels: `"litellm_model_name", "model_id", "api_base", "api_provider"` |
+| `litellm_deployment_successful_fallbacks`           | primary model -> fallback model의 successful fallback request 수. Labels: `"requested_model", "fallback_model", "hashed_api_key", "api_key_alias", "team", "team_alias", "exception_status", "exception_class"` |
+| `litellm_deployment_failed_fallbacks`               | primary model -> fallback model의 failed fallback request 수. Labels: `"requested_model", "fallback_model", "hashed_api_key", "api_key_alias", "team", "team_alias", "exception_status", "exception_class"` |
 
-## Request Counting Metrics
+## Request Counting Metric 집계
 
-| Metric Name          | Description                          |
+| Metric Name          | 설명                          |
 |----------------------|--------------------------------------|
-| `litellm_requests_metric`             | Total number of requests tracked per endpoint. Labels: `"end_user", "hashed_api_key", "api_key_alias", "model", "team", "team_alias", "user", "user_email"` |
+| `litellm_requests_metric`             | endpoint별 tracking된 request 총수. Labels: `"end_user", "hashed_api_key", "api_key_alias", "model", "team", "team_alias", "user", "user_email"` |
 
-## Request Latency Metrics 
+## Request Latency Metric 지연 시간
 
-| Metric Name          | Description                          |
+| Metric Name          | 설명                          |
 |----------------------|--------------------------------------|
-| `litellm_request_total_latency_metric`             | Total latency (seconds) for a request to LiteLLM Proxy Server - tracked for labels "end_user", "hashed_api_key", "api_key_alias", "requested_model", "team", "team_alias", "user", "model", "model_id" |
-| `litellm_overhead_latency_metric`             | Latency overhead (seconds) added by LiteLLM processing - tracked for labels "model_group", "api_provider", "api_base", "litellm_model_name", "hashed_api_key", "api_key_alias" |
-| `litellm_llm_api_latency_metric`  | Latency (seconds) for just the LLM API call - tracked for labels "model", "hashed_api_key", "api_key_alias", "team", "team_alias", "requested_model", "end_user", "user" |
-| `litellm_llm_api_time_to_first_token_metric`             | Time to first token for LLM API call - tracked for labels `model`, `hashed_api_key`, `api_key_alias`, `team`, `team_alias`, `requested_model`, `end_user`, `user`, `model_id` [Note: only emitted for streaming requests] |
+| `litellm_request_total_latency_metric`             | LiteLLM Proxy Server request의 total latency(seconds)입니다. "end_user", "hashed_api_key", "api_key_alias", "requested_model", "team", "team_alias", "user", "model", "model_id" label 기준으로 추적됩니다 |
+| `litellm_overhead_latency_metric`             | LiteLLM processing이 추가한 latency overhead(seconds)입니다. "model_group", "api_provider", "api_base", "litellm_model_name", "hashed_api_key", "api_key_alias" label 기준으로 추적됩니다 |
+| `litellm_llm_api_latency_metric`  | LLM API call 자체의 latency(seconds)입니다. "model", "hashed_api_key", "api_key_alias", "team", "team_alias", "requested_model", "end_user", "user" label 기준으로 추적됩니다 |
+| `litellm_llm_api_time_to_first_token_metric`             | LLM API call에서 첫 token까지 걸린 시간입니다. `model`, `hashed_api_key`, `api_key_alias`, `team`, `team_alias`, `requested_model`, `end_user`, `user`, `model_id` label 기준으로 추적됩니다 [참고: streaming request에서만 emit] |
 
-## Tracking `end_user` on Prometheus
+## Prometheus에서 `end_user` 추적 {#tracking-end_user-on-prometheus}
 
-By default LiteLLM does not track `end_user` on Prometheus. This is done to reduce the cardinality of the metrics from LiteLLM Proxy.
+기본적으로 LiteLLM은 Prometheus에서 `end_user`를 track하지 않습니다. LiteLLM Proxy metric의 cardinality를 줄이기 위한 동작입니다.
 
-If you want to track `end_user` on Prometheus, you can do the following:
+Prometheus에서 `end_user`를 track하려면 다음처럼 설정하세요:
 
 ```yaml showLineNumbers title="config.yaml"
 litellm_settings:
@@ -273,9 +239,9 @@ litellm_settings:
 ```
 
 
-### Emit Stream Label
+### Stream Label Emit {#emit-stream-label}
 
-Add a `stream` label to `litellm_proxy_total_requests_metric` to split requests by streaming vs. non-streaming. Disabled by default.
+streaming과 non-streaming request를 분리하려면 `litellm_proxy_total_requests_metric`에 `stream` label을 추가합니다. 기본값은 disabled입니다.
 
 ```yaml title="config.yaml"
 litellm_settings:
@@ -283,7 +249,7 @@ litellm_settings:
   prometheus_emit_stream_label: true
 ```
 
-When enabled, `litellm_proxy_total_requests_metric` gains a `stream` label with values `"True"`, `"False"`, or `"None"`.
+활성화하면 `litellm_proxy_total_requests_metric`에 `"True"`, `"False"`, `"None"` 값을 갖는 `stream` label이 추가됩니다.
 
 ```
 litellm_proxy_total_requests_metric{..., stream="True"} 42
@@ -291,17 +257,17 @@ litellm_proxy_total_requests_metric{..., stream="False"} 100
 ```
 
 :::note
-This label is opt-in because adding a new label to an existing metric changes its cardinality and breaks existing Prometheus queries / Grafana dashboards that target this metric. Enable it only on fresh deployments or when you are ready to update your dashboards.
+이 label은 opt-in입니다. 기존 metric에 새 label을 추가하면 cardinality가 바뀌고 이 metric을 대상으로 하는 기존 Prometheus query / Grafana dashboard가 깨질 수 있기 때문입니다. fresh deployment이거나 dashboard update 준비가 된 경우에만 활성화하세요.
 :::
 
 
-## [BETA] Custom Metrics
+## [BETA] Custom Metric
 
-Track custom metrics on prometheus on all events mentioned above.
+위에서 언급한 모든 event에서 Prometheus custom metric을 track합니다.
 
-### Custom Metadata Labels
+### Custom Metadata Label 설정
 
-1. Define the custom metadata labels in the `config.yaml`
+1. `config.yaml`에 custom metadata label을 정의합니다
 
 ```yaml
 model_list:
@@ -315,7 +281,7 @@ litellm_settings:
   custom_prometheus_metadata_labels: ["metadata.foo", "metadata.bar"]
 ```
 
-2. Make a request with the custom metadata labels
+2. custom metadata label이 포함된 request를 보냅니다
 
 <Tabs>
 <TabItem value="Curl" label="Curl Request">
@@ -371,17 +337,17 @@ curl -L -X POST 'http://0.0.0.0:4000/team/new' \
 </TabItem>
 </Tabs>
 
-3. Check your `/metrics` endpoint for the custom metrics  
+3. `/metrics` endpoint에서 custom metric을 확인합니다  
 
 ```
 ... "metadata_foo": "hello world" ...
 ```
 
-### Custom Tags
+### Custom Tag {#custom-tags}
 
-Track specific tags as prometheus labels for better filtering and monitoring.
+더 나은 filtering과 monitoring을 위해 특정 tag를 Prometheus label로 track합니다.
 
-1. Define the custom tags in the `config.yaml`
+1. `config.yaml`에 custom tag를 정의합니다
 
 ```yaml
 model_list:
@@ -401,7 +367,7 @@ litellm_settings:
     - "User-Agent: claude-cli/*"
 ```
 
-2. Make a request with tags
+2. tag가 포함된 request를 보냅니다
 
 ```bash
 curl -L -X POST 'http://0.0.0.0:4000/v1/chat/completions' \
@@ -427,19 +393,19 @@ curl -L -X POST 'http://0.0.0.0:4000/v1/chat/completions' \
 }'
 ```
 
-3. Check your `/metrics` endpoint for the custom tag metrics
+3. `/metrics` endpoint에서 custom tag metric을 확인합니다
 
 ```
 ... "tag_prod": "true", "tag_staging": "false", "tag_batch_job": "false" ...
 ```
 
-**How Custom Tags Work:**
-- Each configured tag becomes a boolean label in prometheus metrics  
-- If a tag matches (exact or wildcard), the label value is `"true"`, otherwise `"false"`
-- Tag names are sanitized for prometheus compatibility (e.g., `"batch-job"` becomes `"tag_batch_job"`)
-- **Wildcard patterns** supported using `*` (e.g., `"User-Agent: RooCode/*"` matches `"User-Agent: RooCode/1.0.0"`)
+**Custom Tag 동작 방식:**
+- configured tag마다 Prometheus metric의 boolean label이 됩니다  
+- tag가 match(exact 또는 wildcard)되면 label value는 `"true"`, 그렇지 않으면 `"false"`입니다
+- tag name은 Prometheus compatibility를 위해 sanitize됩니다 (e.g., `"batch-job"` becomes `"tag_batch_job"`)
+- `*`를 사용하는 **Wildcard pattern**을 지원합니다 (e.g., `"User-Agent: RooCode/*"` matches `"User-Agent: RooCode/1.0.0"`)
 
-**Example with wildcards:**
+**wildcard 예제:**
 ```yaml
 litellm_settings:
   callbacks: ["prometheus"]
@@ -448,21 +414,21 @@ litellm_settings:
     - "User-Agent: claude-cli/*"
 ``` 
 
-**Use Cases:**
-- Environment tracking (`prod`, `staging`, `dev`)
-- Request type classification (`batch-job`, `user-facing`, `background`)
-- Feature flags (`new-feature`, `beta-users`)
-- Team or service identification (`team-a`, `service-xyz`)
-- User-Agent Tracking - use this to track how much Roo Code, Claude Code, Gemini CLI are used (`User-Agent: RooCode/*`, `User-Agent: claude-cli/*`, `User-Agent: gemini-cli/*`)
+**Use Case:**
+- Environment tracking 환경 구분 (`prod`, `staging`, `dev`)
+- Request type classification 요청 유형 분류 (`batch-job`, `user-facing`, `background`)
+- Feature flag 기능 플래그 (`new-feature`, `beta-users`)
+- Team 또는 service identification 식별 (`team-a`, `service-xyz`)
+- User-Agent Tracking - Roo Code, Claude Code, Gemini CLI가 얼마나 사용되는지 track할 때 사용 (`User-Agent: RooCode/*`, `User-Agent: claude-cli/*`, `User-Agent: gemini-cli/*`)
 
 
-## Configuring Metrics and Labels
+## Metric 및 Label 구성
 
-You can selectively enable specific metrics and control which labels are included to optimize performance and reduce cardinality.
+performance를 최적화하고 cardinality를 줄이기 위해 특정 metric만 선택적으로 활성화하고 포함할 label을 제어할 수 있습니다.
 
-### Enable Specific Metrics and Labels
+### 특정 Metric 및 Label 활성화
 
-Configure which metrics to emit by specifying them in `prometheus_metrics_config`. Each configuration group needs a `group` name (for organization) and a list of `metrics` to enable. You can optionally include a list of `include_labels` to filter the labels for the metrics.
+`prometheus_metrics_config`에 지정해 emit할 metric을 구성합니다. 각 configuration group에는 구성을 위한 `group` name과 활성화할 `metrics` list가 필요합니다. 선택적으로 `include_labels` list를 포함해 metric label을 filter할 수 있습니다.
 
 ```yaml
 model_list:
@@ -484,7 +450,7 @@ litellm_settings:
         - "model_group"
 ```
 
-On starting up LiteLLM if your metrics were correctly configured, you should see the following on your container logs
+LiteLLM startup 시 metric이 올바르게 구성되었다면 container log에서 다음을 볼 수 있습니다
 
 <Image 
   img={require('../../img/prom_config.png')}
@@ -492,9 +458,9 @@ On starting up LiteLLM if your metrics were correctly configured, you should see
 />
 
 
-### Filter Labels Per Metric
+### Metric별 Label Filter
 
-Control which labels are included for each metric to reduce cardinality:
+cardinality를 줄이기 위해 각 metric에 포함되는 label을 제어합니다:
 
 ```yaml
 litellm_settings:
@@ -517,9 +483,9 @@ litellm_settings:
         - "requested_model"
 ```
 
-### Advanced Configuration
+### Advanced 설정
 
-You can create multiple configuration groups with different label sets:
+서로 다른 label set을 가진 여러 configuration group을 만들 수 있습니다:
 
 ```yaml
 litellm_settings:
@@ -557,16 +523,16 @@ litellm_settings:
         - "requested_model"
 ```
 
-**Configuration Structure:**
-- `group`: A descriptive name for organizing related metrics
-- `metrics`: List of metric names to include in this group  
-- `include_labels`: (Optional) List of labels to include for these metrics
+**설정 구조:**
+- `group`: 관련 metric을 구성하기 위한 descriptive name
+- `metrics`: 이 group에 포함할 metric name list  
+- `include_labels`: (Optional) 이 metric에 포함할 label list
 
-**Default Behavior**: If no `prometheus_metrics_config` is specified, all metrics are enabled with their default labels (backward compatible).
+**기본 동작**: `prometheus_metrics_config`가 지정되지 않으면 모든 metric이 default label과 함께 활성화됩니다(backward compatible).
 
-## Monitor System Health
+## System Health Monitor 상태 모니터링
 
-To monitor the health of litellm adjacent services (redis / postgres), do:
+litellm 인접 service(redis / postgres)의 health를 monitor하려면 다음처럼 설정합니다:
 
 ```yaml
 model_list:
@@ -577,33 +543,33 @@ litellm_settings:
   service_callback: ["prometheus_system"]
 ```
 
-| Metric Name          | Description                          |
+| Metric Name          | 설명                          |
 |----------------------|--------------------------------------|
-| `litellm_redis_latency`         | histogram latency for redis calls     |
-| `litellm_redis_fails`         | Number of failed redis calls    |
-| `litellm_self_latency`         | Histogram latency for successful litellm api call    |
+| `litellm_redis_latency`         | redis call의 histogram latency     |
+| `litellm_redis_fails`         | failed redis call 수    |
+| `litellm_self_latency`         | successful litellm api call의 histogram latency    |
 
-#### DB Transaction Queue Health Metrics
+#### DB Transaction Queue Health Metric 상태 지표
 
-Use these metrics to monitor the health of the DB Transaction Queue. Eg. Monitoring the size of the in-memory and redis buffers. 
+DB Transaction Queue의 health를 monitor할 때 이 metric을 사용합니다. 예: in-memory 및 redis buffer size monitoring. 
 
-| Metric Name                                         | Description                                                                 | Storage Type |
+| Metric Name                                         | 설명                                                                 | Storage Type |
 |-----------------------------------------------------|-----------------------------------------------------------------------------|--------------|
-| `litellm_pod_lock_manager_size`                     | Indicates which pod has the lock to write updates to the database.         | Redis    |
-| `litellm_in_memory_daily_spend_update_queue_size`   | Number of items in the in-memory daily spend update queue. These are the aggregate spend logs for each user.                 | In-Memory    |
-| `litellm_redis_daily_spend_update_queue_size`       | Number of items in the Redis daily spend update queue.  These are the aggregate spend logs for each user.                    | Redis        |
-| `litellm_in_memory_spend_update_queue_size`         | In-memory aggregate spend values for keys, users, teams, team members, etc.| In-Memory    |
-| `litellm_redis_spend_update_queue_size`             | Redis aggregate spend values for keys, users, teams, etc.                  | Redis        |
+| `litellm_pod_lock_manager_size`                     | database update write lock을 가진 pod를 나타냅니다.         | Redis    |
+| `litellm_in_memory_daily_spend_update_queue_size`   | in-memory의 daily spend update queue item 수입니다. 각 user의 aggregate spend log입니다.                 | In-Memory    |
+| `litellm_redis_daily_spend_update_queue_size`       | Redis daily spend update queue의 item 수입니다. 각 user의 aggregate spend log입니다.                    | Redis        |
+| `litellm_in_memory_spend_update_queue_size`         | key, user, team, team member 등의 in-memory 집계 spend 값입니다.| In-Memory    |
+| `litellm_redis_spend_update_queue_size`             | key, user, team 등의 Redis aggregate spend value입니다.                  | Redis        |
 
 
 
-## 🔥 LiteLLM Maintained Grafana Dashboards 
+## 🔥 LiteLLM Maintained Grafana Dashboard 대시보드
 
-Link to Grafana Dashboards maintained by LiteLLM
+LiteLLM이 유지 관리하는 Grafana Dashboard link
 
 https://github.com/BerriAI/litellm/tree/main/cookbook/litellm_proxy_server/grafana_dashboard
 
-Here is a screenshot of the metrics you can monitor with the LiteLLM Grafana Dashboard
+LiteLLM Grafana Dashboard로 monitor할 수 있는 metric screenshot입니다
 
 
 <Image img={require('../../img/grafana_1.png')} />
@@ -613,19 +579,19 @@ Here is a screenshot of the metrics you can monitor with the LiteLLM Grafana Das
 <Image img={require('../../img/grafana_3.png')} />
 
 
-## Deprecated Metrics 
+## Deprecated Metric 
 
-| Metric Name          | Description                          |
+| Metric Name          | 설명                          |
 |----------------------|--------------------------------------|
-| `litellm_llm_api_failed_requests_metric`             | **deprecated** use `litellm_proxy_failed_requests_metric` |
+| `litellm_llm_api_failed_requests_metric`             | **deprecated** 대신 `litellm_proxy_failed_requests_metric` |
 
 
 
-## Add authentication on /metrics endpoint
+## /metrics endpoint에 authentication 추가
 
-**By default /metrics endpoint is unauthenticated.** 
+**기본적으로 /metrics endpoint는 unauthenticated입니다.** 
 
-You can opt into running litellm authentication on the /metrics endpoint by setting the following on the config 
+config에 다음을 설정해 /metrics endpoint에서 litellm authentication을 실행하도록 opt-in할 수 있습니다 
 
 ```yaml
 litellm_settings:
@@ -634,9 +600,9 @@ litellm_settings:
 
 ## FAQ 
 
-### What are `_created` vs. `_total` metrics?
+### `_created`와 `_total` metric은 무엇인가요?
 
-- `_created` metrics are metrics that are created when the proxy starts
-- `_total` metrics are metrics that are incremented for each request
+- `_created` metric은 proxy 시작 시 생성되는 metric입니다
+- `_total` metric은 각 request마다 증가하는 metric입니다
 
-You should consume the `_total` metrics for your counting purposes
+counting 목적에는 `_total` metric을 사용해야 합니다

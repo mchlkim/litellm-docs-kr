@@ -6,23 +6,23 @@ https://deepinfra.com/
 
 :::tip
 
-**We support ALL DeepInfra models, just set `model=deepinfra/<any-model-on-deepinfra>` as a prefix when sending litellm requests**
+**모든 DeepInfra 모델을 지원합니다. litellm 요청을 보낼 때 `model=deepinfra/<any-model-on-deepinfra>`를 접두사로 설정하면 됩니다.**
 
 :::
 
-## Table of Contents
+## 목차 {#table-of-contents}
 
-- [API Key](#api-key)
-- [Chat Models](#chat-models)
-- [Rerank Endpoint](#rerank-endpoint)
+- [API 키](#api-key)
+- [채팅 모델](#chat-models)
+- [Rerank 엔드포인트](#rerank-endpoint)
 
-## API Key
+## API 키 {#api-key}
 ```python
 # env variable
 os.environ['DEEPINFRA_API_KEY']
 ```
 
-## Sample Usage
+## 샘플 사용법 {#sample-usage}
 ```python
 from litellm import completion
 import os
@@ -34,7 +34,7 @@ response = completion(
 )
 ```
 
-## Sample Usage - Streaming
+## 샘플 사용법 - 스트리밍 {#sample-usage-streaming}
 ```python
 from litellm import completion
 import os
@@ -50,31 +50,31 @@ for chunk in response:
     print(chunk)
 ```
 
-## Chat Models
-| Model Name       | Function Call                        |
+## 채팅 모델 {#chat-models}
+| 모델 이름       | 함수 호출                        |
 |------------------|--------------------------------------|
-| meta-llama/Meta-Llama-3-8B-Instruct  | `completion(model="deepinfra/meta-llama/Meta-Llama-3-8B-Instruct", messages)` | 
-| meta-llama/Meta-Llama-3-70B-Instruct  | `completion(model="deepinfra/meta-llama/Meta-Llama-3-70B-Instruct", messages)` | 
-| meta-llama/Llama-2-70b-chat-hf  | `completion(model="deepinfra/meta-llama/Llama-2-70b-chat-hf", messages)` | 
-| meta-llama/Llama-2-7b-chat-hf  | `completion(model="deepinfra/meta-llama/Llama-2-7b-chat-hf", messages)` | 
-| meta-llama/Llama-2-13b-chat-hf | `completion(model="deepinfra/meta-llama/Llama-2-13b-chat-hf", messages)` | 
-| codellama/CodeLlama-34b-Instruct-hf | `completion(model="deepinfra/codellama/CodeLlama-34b-Instruct-hf", messages)` |
-| mistralai/Mistral-7B-Instruct-v0.1 | `completion(model="deepinfra/mistralai/Mistral-7B-Instruct-v0.1", messages)` | 
-| jondurbin/airoboros-l2-70b-gpt4-1.4.1 | `completion(model="deepinfra/jondurbin/airoboros-l2-70b-gpt4-1.4.1", messages)` |
+| `meta-llama/Meta-Llama-3-8B-Instruct`  | `completion(model="deepinfra/meta-llama/Meta-Llama-3-8B-Instruct", messages)` | 
+| `meta-llama/Meta-Llama-3-70B-Instruct`  | `completion(model="deepinfra/meta-llama/Meta-Llama-3-70B-Instruct", messages)` | 
+| `meta-llama/Llama-2-70b-chat-hf`  | `completion(model="deepinfra/meta-llama/Llama-2-70b-chat-hf", messages)` | 
+| `meta-llama/Llama-2-7b-chat-hf`  | `completion(model="deepinfra/meta-llama/Llama-2-7b-chat-hf", messages)` | 
+| `meta-llama/Llama-2-13b-chat-hf` | `completion(model="deepinfra/meta-llama/Llama-2-13b-chat-hf", messages)` | 
+| `codellama/CodeLlama-34b-Instruct-hf` | `completion(model="deepinfra/codellama/CodeLlama-34b-Instruct-hf", messages)` |
+| `mistralai/Mistral-7B-Instruct-v0.1` | `completion(model="deepinfra/mistralai/Mistral-7B-Instruct-v0.1", messages)` | 
+| `jondurbin/airoboros-l2-70b-gpt4-1.4.1` | `completion(model="deepinfra/jondurbin/airoboros-l2-70b-gpt4-1.4.1", messages)` |
 
-## Rerank Endpoint
+## Rerank 엔드포인트 {#rerank-endpoint}
 
-LiteLLM provides a Cohere API compatible `/rerank` endpoint for DeepInfra rerank models.
+LiteLLM은 DeepInfra rerank 모델을 위한 Cohere API 호환 `/rerank` 엔드포인트를 제공합니다.
 
-### Supported Rerank Models
+### 지원되는 Rerank 모델 {#supported-rerank-models}
 
-| Model Name | Description |
+| 모델 이름 | 설명 |
 |------------|-------------|
-| `deepinfra/Qwen/Qwen3-Reranker-0.6B` | Lightweight rerank model (0.6B parameters) |
-| `deepinfra/Qwen/Qwen3-Reranker-4B` | Medium rerank model (4B parameters) |
-| `deepinfra/Qwen/Qwen3-Reranker-8B` | Large rerank model (8B parameters) |
+| `deepinfra/Qwen/Qwen3-Reranker-0.6B` | 경량 rerank 모델(0.6B 파라미터) |
+| `deepinfra/Qwen/Qwen3-Reranker-4B` | 중간 규모 rerank 모델(4B 파라미터) |
+| `deepinfra/Qwen/Qwen3-Reranker-8B` | 대규모 rerank 모델(8B 파라미터) |
 
-### Usage - LiteLLM Python SDK
+### 사용법 - LiteLLM Python SDK {#usage-litellm-python-sdk}
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -102,7 +102,7 @@ print(response)
 </TabItem>
 <TabItem value="proxy" label="PROXY">
 
-1. Add to config.yaml
+1. config.yaml에 추가합니다.
 ```yaml
 model_list:
   - model_name: Qwen/Qwen3-Reranker-0.6B
@@ -111,7 +111,7 @@ model_list:
       api_key: os.environ/DEEPINFRA_API_KEY
 ```
 
-2. Start proxy 
+2. 프록시를 시작합니다.
 
 ```bash
 litellm --config /path/to/config.yaml
@@ -119,7 +119,7 @@ litellm --config /path/to/config.yaml
 # RUNNING on http://0.0.0.0:4000/
 ```
 
-3. Test it! 
+3. 테스트합니다.
 
 ```bash 
 curl -L -X POST 'http://0.0.0.0:4000/rerank' \
@@ -141,16 +141,16 @@ curl -L -X POST 'http://0.0.0.0:4000/rerank' \
 </TabItem>
 </Tabs>
 
-### Supported Cohere Rerank API Params
+### 지원되는 Cohere Rerank API 파라미터 {#supported-cohere-rerank-api-params}
 
-| Param              | Type        | Description                                     |
+| 파라미터              | 타입        | 설명                                     |
 | ------------------ | ----------- | ----------------------------------------------- |
-| `query`            | `str`       | The query to rerank the documents against       |
-| `documents`        | `list[str]` | The documents to rerank                         |
+| `query`            | `str`       | 문서를 rerank할 기준 쿼리       |
+| `documents`        | `list[str]` | rerank할 문서                         |
 
 
-### Provider-specific parameters
-Pass any deepinfra specific parameters as a keyword argument to the rerank function, e.g.
+### 제공자별 파라미터 {#provider-specific-parameters}
+DeepInfra 전용 파라미터가 있으면 rerank 함수에 키워드 인수로 전달합니다. 예:
 
 ```
 response = rerank(
@@ -167,7 +167,7 @@ response = rerank(
 )
 ```
 
-### Response Format
+### 응답 형식 {#response-format}
 
 ```json
 {

@@ -1,23 +1,23 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Ollama 
-LiteLLM supports all models from [Ollama](https://github.com/ollama/ollama)
+# Ollama
+LiteLLM은 [Ollama](https://github.com/ollama/ollama)의 모든 모델을 지원합니다.
 
 <a target="_blank" href="https://colab.research.google.com/github/BerriAI/litellm/blob/main/cookbook/liteLLM_Ollama.ipynb">
   <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
 </a>
 
-:::info 
+:::info
 
-We recommend using [ollama_chat](#using-ollama-apichat) for better responses.
+더 나은 응답을 위해 [ollama_chat](#using-ollama-apichat) 사용을 권장합니다.
 
 :::
 
-## Pre-requisites
-Ensure you have your ollama server running
+## 사전 요구 사항 {#pre-requisites}
+Ollama 서버가 실행 중인지 확인하세요.
 
-## Example usage
+## 사용 예시 {#예제-usage}
 ```python
 from litellm import completion
 
@@ -30,7 +30,7 @@ print(response)
 
 ```
 
-## Example usage - Streaming
+## 사용 예시 - 스트리밍 {#예제-usage---streaming}
 ```python
 from litellm import completion
 
@@ -46,8 +46,8 @@ for chunk in response:
 
 ```
 
-## Example usage - Streaming + Acompletion
-Ensure you have async_generator installed for using ollama acompletion with streaming
+## 사용 예시 - 스트리밍 + Acompletion {#예제-usage---streaming--acompletion}
+Ollama `acompletion`을 스트리밍과 함께 사용하려면 `async_generator`가 설치되어 있어야 합니다.
 ```shell
 uv add async_generator
 ```
@@ -69,8 +69,8 @@ asyncio.run(async_ollama())
 
 ```
 
-## Example Usage - JSON Mode
-To use ollama JSON Mode pass `format="json"` to `litellm.completion()`
+## 사용 예시 - JSON Mode {#예제-사용법---json-mode}
+Ollama JSON Mode를 사용하려면 `litellm.completion()`에 `format="json"`을 전달하세요.
 
 ```python
 from litellm import completion
@@ -87,9 +87,9 @@ response = completion(
 )
 ```
 
-## Example Usage - Tool Calling 
+## 사용 예시 - 도구 호출 {#예제-사용법---도구-호출}
 
-To use ollama tool calling, pass `tools=[{..}]` to `litellm.completion()` 
+Ollama 도구 호출을 사용하려면 `litellm.completion()`에 `tools=[{..}]`를 전달하세요.
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -140,7 +140,7 @@ response = completion(
 </TabItem>
 <TabItem value="proxy" label="PROXY">
 
-1. Setup config.yaml 
+1. `config.yaml` 설정
 
 ```yaml
 model_list:
@@ -152,13 +152,13 @@ model_list:
       supports_function_calling: true
 ```
 
-2. Start proxy 
+2. 프록시 시작
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-3. Test it! 
+3. 테스트
 
 ```bash
 curl -X POST 'http://0.0.0.0:4000/chat/completions' \
@@ -203,9 +203,9 @@ curl -X POST 'http://0.0.0.0:4000/chat/completions' \
 </Tabs>
 
 
-## Using Ollama FIM on `/v1/completions`
+## `/v1/completions`에서 Ollama FIM 사용 {#using-ollama-fim-on-v1completions}
 
-LiteLLM supports calling Ollama's `/api/generate` endpoint on `/v1/completions` requests. 
+LiteLLM은 `/v1/completions` 요청에서 Ollama의 `/api/generate` 엔드포인트 호출을 지원합니다.
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -225,7 +225,7 @@ print(response)
 </TabItem>
 <TabItem value="proxy" label="PROXY">
 
-1. Setup config.yaml 
+1. `config.yaml` 설정
 
 ```yaml
 model_list:
@@ -235,7 +235,7 @@ model_list:
       api_base: "http://localhost:11434"
 ```
 
-2. Start proxy 
+2. 프록시 시작
 
 ```bash
 litellm --config /path/to/config.yaml --detailed_debug
@@ -243,7 +243,7 @@ litellm --config /path/to/config.yaml --detailed_debug
 # RUNNING ON http://0.0.0.0:4000 
 ```
 
-3. Test it! 
+3. 테스트
 
 ```python
 from openai import OpenAI
@@ -263,8 +263,8 @@ print(response)
 </TabItem>
 </Tabs>
 
-## Using ollama `api/chat` 
-In order to send ollama requests to `POST /api/chat` on your ollama server, set the model prefix to `ollama_chat`
+## ollama `api/chat` 사용 {#using-ollama-apichat}
+Ollama 서버의 `POST /api/chat`으로 Ollama 요청을 보내려면 모델 접두사를 `ollama_chat`으로 설정하세요.
 
 ```python
 from litellm import completion
@@ -275,32 +275,32 @@ response = completion(
 )
 print(response)
 ```
-## Ollama Models
-Ollama supported models: https://github.com/ollama/ollama
+## Ollama 모델
+Ollama 지원 모델: https://github.com/ollama/ollama
 
-| Model Name           | Function Call                                                                     |
+| 모델 이름           | 함수 호출                                                                     |
 |----------------------|-----------------------------------------------------------------------------------
 | Mistral    | `completion(model='ollama/mistral', messages, api_base="http://localhost:11434", stream=True)` |
-| Mistral-7B-Instruct-v0.1 | `completion(model='ollama/mistral-7B-Instruct-v0.1', messages, api_base="http://localhost:11434", stream=False)` |
-| Mistral-7B-Instruct-v0.2 | `completion(model='ollama/mistral-7B-Instruct-v0.2', messages, api_base="http://localhost:11434", stream=False)` |
-| Mixtral-8x7B-Instruct-v0.1 | `completion(model='ollama/mistral-8x7B-Instruct-v0.1', messages, api_base="http://localhost:11434", stream=False)` |
-| Mixtral-8x22B-Instruct-v0.1 | `completion(model='ollama/mixtral-8x22B-Instruct-v0.1', messages, api_base="http://localhost:11434", stream=False)` |
-| Llama2 7B            | `completion(model='ollama/llama2', messages, api_base="http://localhost:11434", stream=True)` | 
-| Llama2 13B           | `completion(model='ollama/llama2:13b', messages, api_base="http://localhost:11434", stream=True)` | 
-| Llama2 70B           | `completion(model='ollama/llama2:70b', messages, api_base="http://localhost:11434", stream=True)` | 
-| Llama2 Uncensored    | `completion(model='ollama/llama2-uncensored', messages, api_base="http://localhost:11434", stream=True)` | 
+| `Mistral-7B-Instruct-v0.1` | `completion(model='ollama/mistral-7B-Instruct-v0.1', messages, api_base="http://localhost:11434", stream=False)` |
+| `Mistral-7B-Instruct-v0.2` | `completion(model='ollama/mistral-7B-Instruct-v0.2', messages, api_base="http://localhost:11434", stream=False)` |
+| `Mixtral-8x7B-Instruct-v0.1` | `completion(model='ollama/mistral-8x7B-Instruct-v0.1', messages, api_base="http://localhost:11434", stream=False)` |
+| `Mixtral-8x22B-Instruct-v0.1` | `completion(model='ollama/mixtral-8x22B-Instruct-v0.1', messages, api_base="http://localhost:11434", stream=False)` |
+| `Llama2 7B`            | `completion(model='ollama/llama2', messages, api_base="http://localhost:11434", stream=True)` | 
+| `Llama2 13B`           | `completion(model='ollama/llama2:13b', messages, api_base="http://localhost:11434", stream=True)` | 
+| `Llama2 70B`           | `completion(model='ollama/llama2:70b', messages, api_base="http://localhost:11434", stream=True)` | 
+| `Llama2 Uncensored`    | `completion(model='ollama/llama2-uncensored', messages, api_base="http://localhost:11434", stream=True)` | 
 | Code Llama    | `completion(model='ollama/codellama', messages, api_base="http://localhost:11434", stream=True)` | 
-| Llama2 Uncensored    | `completion(model='ollama/llama2-uncensored', messages, api_base="http://localhost:11434", stream=True)` |
+| `Llama2 Uncensored`    | `completion(model='ollama/llama2-uncensored', messages, api_base="http://localhost:11434", stream=True)` |
 |Meta LLaMa3 8B | `completion(model='ollama/llama3', messages, api_base="http://localhost:11434", stream=False)` |
 | Meta LLaMa3 70B | `completion(model='ollama/llama3:70b', messages, api_base="http://localhost:11434", stream=False)` |
-| Orca Mini            | `completion(model='ollama/orca-mini', messages, api_base="http://localhost:11434", stream=True)` |
-| Vicuna               | `completion(model='ollama/vicuna', messages, api_base="http://localhost:11434", stream=True)` |
-| Nous-Hermes          | `completion(model='ollama/nous-hermes', messages, api_base="http://localhost:11434", stream=True)` |
-| Nous-Hermes 13B     | `completion(model='ollama/nous-hermes:13b', messages, api_base="http://localhost:11434", stream=True)` | 
-| Wizard Vicuna Uncensored | `completion(model='ollama/wizard-vicuna', messages, api_base="http://localhost:11434", stream=True)` |
+| `Orca Mini`            | `completion(model='ollama/orca-mini', messages, api_base="http://localhost:11434", stream=True)` |
+| `Vicuna`               | `completion(model='ollama/vicuna', messages, api_base="http://localhost:11434", stream=True)` |
+| `Nous-Hermes`          | `completion(model='ollama/nous-hermes', messages, api_base="http://localhost:11434", stream=True)` |
+| `Nous-Hermes 13B`     | `completion(model='ollama/nous-hermes:13b', messages, api_base="http://localhost:11434", stream=True)` | 
+| `Wizard Vicuna Uncensored` | `completion(model='ollama/wizard-vicuna', messages, api_base="http://localhost:11434", stream=True)` |
 
 
-### JSON Schema support 
+### JSON Schema 지원 {#json-schema-support}
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -318,7 +318,7 @@ print(response)
 </TabItem>
 <TabItem value="proxy" label="PROXY">
 
-1. Setup config.yaml 
+1. `config.yaml` 설정
 
 ```yaml
 model_list:
@@ -328,7 +328,7 @@ model_list:
       api_base: "http://localhost:11434"
 ```
 
-2. Start proxy 
+2. 프록시 시작
 
 ```bash
 litellm --config /path/to/config.yaml
@@ -336,7 +336,7 @@ litellm --config /path/to/config.yaml
 # RUNNING ON http://0.0.0.0:4000
 ```
 
-3. Test it! 
+3. 테스트
 
 ```python
 from pydantic import BaseModel
@@ -369,19 +369,19 @@ math_reasoning = completion.choices[0].message.parsed
 </TabItem>
 </Tabs>
 
-## Ollama Vision Models
-| Model Name       | Function Call                        |
+## Ollama Vision 모델
+| 모델 이름       | 함수 호출                        |
 |------------------|--------------------------------------|
 |  llava  | `completion('ollama/llava', messages)` |
 
-#### Using Ollama Vision Models
+#### Ollama Vision 모델 사용 {#using-ollama-vision-모델}
 
-Call `ollama/llava` in the same input/output format as OpenAI [`gpt-4-vision`](https://docs.litellm.ai/docs/providers/openai#openai-vision-models)
+OpenAI [`gpt-4-vision`](https://docs.litellm.ai/docs/providers/openai#openai-vision-models)과 동일한 입력/출력 형식으로 `ollama/llava`를 호출하세요.
 
-LiteLLM Supports the following image types passed in `url`
-- Base64 encoded svgs
+LiteLLM은 `url`에 전달되는 다음 이미지 유형을 지원합니다.
+- Base64로 인코딩된 SVG
 
-**Example Request**
+**요청 예시**
 ```python
 import litellm
 
@@ -410,18 +410,18 @@ print(response)
 
 
 
-## LiteLLM/Ollama Docker Image 
+## LiteLLM/Ollama Docker 이미지 {#litellmollama-docker-image}
 
-For Ollama LiteLLM Provides a Docker Image for an OpenAI API compatible server for local LLMs - llama2, mistral, codellama
+Ollama용 LiteLLM은 로컬 LLM(llama2, mistral, codellama)을 위한 OpenAI API 호환 서버 Docker 이미지를 제공합니다.
 
 
 [![Chat on WhatsApp](https://img.shields.io/static/v1?label=Chat%20on&message=WhatsApp&color=success&logo=WhatsApp&style=flat-square)](https://wa.link/huol9n) [![Chat on Discord](https://img.shields.io/static/v1?label=Chat%20on&message=Discord&color=blue&logo=Discord&style=flat-square)](https://discord.gg/wuPM9dRgDw) 
-### An OpenAI API compatible server for local LLMs - llama2, mistral, codellama
+### 로컬 LLM용 OpenAI API 호환 서버 - llama2, mistral, codellama {#an-openai-api-compatible-server-for-local-llms---llama2-mistral-codellama}
 
-### Quick Start:
-Docker Hub: 
-For ARM Processors: https://hub.docker.com/repository/docker/litellm/ollama/general
-For Intel/AMD Processors: to be added
+### 빠른 시작:
+Docker Hub:
+ARM 프로세서용: https://hub.docker.com/repository/docker/litellm/ollama/general
+Intel/AMD 프로세서용: 추가 예정
 ```shell
 docker pull litellm/ollama
 ```
@@ -430,11 +430,11 @@ docker pull litellm/ollama
 docker run --name ollama litellm/ollama
 ```
 
-#### Test the server container
-On the docker container run the `test.py` file using `python3 test.py`
+#### 서버 컨테이너 테스트 {#test-the-server-container}
+Docker 컨테이너에서 `python3 test.py`로 `test.py` 파일을 실행하세요.
 
 
-### Making a request to this server
+### 이 서버에 요청 보내기 {#making-a-request-to-this-server}
 ```python
 import openai
 
@@ -461,7 +461,7 @@ for chunk in response:
     print(f'LiteLLM: streaming response from proxy {chunk}')
 ```
 
-### Responses from this server 
+### 이 서버의 응답 {#responses-from-this-server}
 ```json
 {
   "object": "chat.completion",
@@ -487,6 +487,6 @@ for chunk in response:
 }
 ```
 
-## Calling Docker Container (host.docker.internal)
+## Docker 컨테이너 호출(host.docker.internal) {#calling-docker-container-hostdockerinternal}
 
-[Follow these instructions](https://github.com/BerriAI/litellm/issues/1517#issuecomment-1922022209/)
+[이 안내를 따르세요](https://github.com/BerriAI/litellm/issues/1517#issuecomment-1922022209/)

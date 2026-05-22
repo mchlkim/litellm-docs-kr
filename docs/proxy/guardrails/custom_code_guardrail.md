@@ -1,13 +1,13 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Custom Code Guardrail
+# 커스텀 코드 Guardrail {#custom-code-guardrail}
 
-Write custom guardrail logic using Python-like code that runs in a sandboxed environment.
+샌드박스 환경에서 실행되는 Python 유사 코드로 커스텀 guardrail 로직을 작성합니다.
 
-## Quick Start
+## 빠른 시작
 
-### 1. Define the guardrail in config
+### 1. config에서 guardrail 정의 {#1-define-the-guardrail-in-config}
 
 ```yaml
 model_list:
@@ -29,13 +29,13 @@ guardrails:
                 return allow()
 ```
 
-### 2. Start proxy
+### 2. proxy 시작 {#2-start-proxy}
 
 ```bash
 litellm --config config.yaml
 ```
 
-### 3. Test
+### 3. 테스트 {#3-test}
 
 ```bash
 curl -X POST http://localhost:4000/chat/completions \
@@ -48,20 +48,20 @@ curl -X POST http://localhost:4000/chat/completions \
   }'
 ```
 
-## Configuration
+## 설정
 
-| Parameter | Type | Required | Description |
+| Parameter | 타입 | 필수 | 설명 |
 |-----------|------|----------|-------------|
-| `guardrail` | string | ✅ | Must be `custom_code` |
-| `mode` | string | ✅ | When to run: `pre_call`, `post_call`, `during_call` |
-| `custom_code` | string | ✅ | Python-like code with `apply_guardrail` function |
-| `default_on` | bool | ❌ | Run on all requests (default: `false`) |
+| `guardrail` | string | ✅ | `custom_code`여야 합니다 |
+| `mode` | string | ✅ | 실행 시점: `pre_call`, `post_call`, `during_call` |
+| `custom_code` | string | ✅ | `apply_guardrail` 함수가 포함된 Python 유사 코드 |
+| `default_on` | bool | ❌ | 모든 요청에서 실행합니다(기본값: `false`) |
 
-## Writing Custom Code
+## 커스텀 코드 작성 {#writing-custom-code}
 
-### Function Signature
+### 함수 시그니처 {#function-signature}
 
-Your code must define an `apply_guardrail` function. It can be either sync or async:
+코드는 `apply_guardrail` 함수를 정의해야 합니다. 이 함수는 sync 또는 async일 수 있습니다.
 
 ```python
 # Sync version
@@ -80,90 +80,90 @@ async def apply_guardrail(inputs, request_data, input_type):
     return allow()
 ```
 
-### `inputs` Parameter
+### `inputs` Parameter {#inputs-parameter}
 
-| Field | Type | Description |
+| 필드 | 타입 | 설명 |
 |-------|------|-------------|
-| `texts` | `List[str]` | Extracted text from the request/response |
-| `images` | `List[str]` | Extracted images (for image guardrails) |
-| `tools` | `List[dict]` | Tools sent to the LLM |
-| `tool_calls` | `List[dict]` | Tool calls returned from the LLM |
-| `structured_messages` | `List[dict]` | Full messages with role info (system/user/assistant) |
-| `model` | `str` | The model being used |
+| `texts` | `List[str]` | 요청/응답에서 추출된 텍스트 |
+| `images` | `List[str]` | 추출된 이미지(image guardrails용) |
+| `tools` | `List[dict]` | LLM으로 전송된 tools |
+| `tool_calls` | `List[dict]` | LLM에서 반환된 tool calls |
+| `structured_messages` | `List[dict]` | role 정보(system/user/assistant)가 포함된 전체 messages |
+| `model` | `str` | 사용 중인 model |
 
-### `request_data` Parameter
+### `request_data` Parameter {#request_data-parameter}
 
-| Field | Type | Description |
+| 필드 | 타입 | 설명 |
 |-------|------|-------------|
-| `model` | `str` | Model name |
-| `user_id` | `str` | User ID from API key |
-| `team_id` | `str` | Team ID from API key |
+| `model` | `str` | Model 이름 |
+| `user_id` | `str` | API key에서 가져온 User ID |
+| `team_id` | `str` | API key에서 가져온 Team ID |
 | `end_user_id` | `str` | End user ID |
-| `metadata` | `dict` | Request metadata |
+| `metadata` | `dict` | 요청 metadata |
 
-### Return Values
+### 반환 값 {#return-values}
 
-| Function | Description |
+| 함수 | 설명 |
 |----------|-------------|
-| `allow()` | Let request/response through |
-| `block(reason)` | Reject with message |
-| `modify(texts=[], images=[], tool_calls=[])` | Transform content |
+| `allow()` | 요청/응답을 통과시킵니다 |
+| `block(reason)` | 메시지와 함께 거부합니다 |
+| `modify(texts=[], images=[], tool_calls=[])` | 콘텐츠를 변환합니다 |
 
-## Built-in Primitives
+## 기본 제공 Primitives {#built-in-primitives}
 
 ### Regex
 
-| Function | Description |
+| 함수 | 설명 |
 |----------|-------------|
-| `regex_match(text, pattern)` | Returns `True` if pattern found |
-| `regex_replace(text, pattern, replacement)` | Replace all matches |
-| `regex_find_all(text, pattern)` | Return list of matches |
+| `regex_match(text, pattern)` | pattern이 발견되면 `True`를 반환합니다 |
+| `regex_replace(text, pattern, replacement)` | 모든 match를 교체합니다 |
+| `regex_find_all(text, pattern)` | match 목록을 반환합니다 |
 
 ### JSON
 
-| Function | Description |
+| 함수 | 설명 |
 |----------|-------------|
-| `json_parse(text)` | Parse JSON string, returns `None` on error |
-| `json_stringify(obj)` | Convert to JSON string |
-| `json_schema_valid(obj, schema)` | Validate against JSON schema |
+| `json_parse(text)` | JSON 문자열을 parse하고, 오류 시 `None`을 반환합니다 |
+| `json_stringify(obj)` | JSON 문자열로 변환합니다 |
+| `json_schema_valid(obj, schema)` | JSON schema를 기준으로 검증합니다 |
 
 ### URL
 
-| Function | Description |
+| 함수 | 설명 |
 |----------|-------------|
-| `extract_urls(text)` | Extract all URLs from text |
-| `is_valid_url(url)` | Check if URL is valid |
-| `all_urls_valid(text)` | Check all URLs in text are valid |
+| `extract_urls(text)` | 텍스트에서 모든 URL을 추출합니다 |
+| `is_valid_url(url)` | URL이 유효한지 확인합니다 |
+| `all_urls_valid(text)` | 텍스트의 모든 URL이 유효한지 확인합니다 |
 
-### Code Detection
+### 코드 감지 {#code-detection}
 
-| Function | Description |
+| 함수 | 설명 |
 |----------|-------------|
-| `detect_code(text)` | Returns `True` if code detected |
-| `detect_code_languages(text)` | Returns list of detected languages |
-| `contains_code_language(text, ["sql", "python"])` | Check for specific languages |
+| `detect_code(text)` | 코드가 감지되면 `True`를 반환합니다 |
+| `detect_code_languages(text)` | 감지된 언어 목록을 반환합니다 |
+| `contains_code_language(text, ["sql", "python"])` | 특정 언어가 포함되어 있는지 확인합니다 |
 
-### Text Utilities
+### 텍스트 유틸리티 {#text-utilities}
 
-| Function | Description |
+| 함수 | 설명 |
 |----------|-------------|
-| `contains(text, substring)` | Check if substring exists |
-| `contains_any(text, [substr1, substr2])` | Check if any substring exists |
-| `word_count(text)` | Count words |
-| `char_count(text)` | Count characters |
-| `lower(text)` / `upper(text)` / `trim(text)` | String transforms |
+| `contains(text, substring)` | substring이 존재하는지 확인합니다 |
+| `contains_any(text, [substr1, substr2])` | substring 중 하나라도 존재하는지 확인합니다 |
+| `word_count(text)` | 단어 수를 셉니다 |
+| `char_count(text)` | 문자 수를 셉니다 |
+| `lower(text)` / `upper(text)` / `trim(text)` | 문자열을 변환합니다 |
 
-### HTTP Requests (Async)
+### HTTP 요청(Async) {#http-requests-async}
 
-Make async HTTP requests to external APIs for additional validation or content moderation.
+추가 검증 또는 content moderation을 위해 외부 API에 async HTTP 요청을 보냅니다.
 
-| Function | Description |
+| 함수 | 설명 |
 |----------|-------------|
-| `await http_request(url, method, headers, body, timeout)` | General async HTTP request |
-| `await http_get(url, headers, timeout)` | Async GET request |
-| `await http_post(url, body, headers, timeout)` | Async POST request |
+| `await http_request(url, method, headers, body, timeout)` | 일반 async HTTP 요청 |
+| `await http_get(url, headers, timeout)` | Async GET 요청 |
+| `await http_post(url, body, headers, timeout)` | Async POST 요청 |
 
-**Response format:**
+**응답 형식:**
 ```python
 {
     "status_code": 200,        # HTTP status code
@@ -174,11 +174,11 @@ Make async HTTP requests to external APIs for additional validation or content m
 }
 ```
 
-**Note:** When using HTTP primitives, define your function as `async def apply_guardrail(...)` for non-blocking execution.
+**참고:** HTTP primitives를 사용할 때는 non-blocking 실행을 위해 함수를 `async def apply_guardrail(...)`로 정의합니다.
 
-## Examples
+## 예제
 
-### Block PII (SSN)
+### PII(SSN) 차단 {#block-pii-ssn}
 
 ```python
 def apply_guardrail(inputs, request_data, input_type):
@@ -188,7 +188,7 @@ def apply_guardrail(inputs, request_data, input_type):
     return allow()
 ```
 
-### Redact Email Addresses
+### 이메일 주소 마스킹 {#redact-email-addresses}
 
 ```python
 def apply_guardrail(inputs, request_data, input_type):
@@ -199,7 +199,7 @@ def apply_guardrail(inputs, request_data, input_type):
     return modify(texts=modified)
 ```
 
-### Block SQL Injection
+### SQL Injection 차단 {#block-sql-injection}
 
 ```python
 def apply_guardrail(inputs, request_data, input_type):
@@ -211,7 +211,7 @@ def apply_guardrail(inputs, request_data, input_type):
     return allow()
 ```
 
-### Validate JSON Response
+### JSON 응답 검증 {#validate-json-response}
 
 ```python
 def apply_guardrail(inputs, request_data, input_type):
@@ -232,7 +232,7 @@ def apply_guardrail(inputs, request_data, input_type):
     return allow()
 ```
 
-### Check URLs in Response
+### 응답의 URL 확인 {#check-urls-in-response}
 
 ```python
 def apply_guardrail(inputs, request_data, input_type):
@@ -244,7 +244,7 @@ def apply_guardrail(inputs, request_data, input_type):
     return allow()
 ```
 
-### Call External Moderation API (Async)
+### 외부 Moderation API 호출(Async) {#call-external-moderation-api-async}
 
 ```python
 async def apply_guardrail(inputs, request_data, input_type):
@@ -267,7 +267,7 @@ async def apply_guardrail(inputs, request_data, input_type):
     return allow()
 ```
 
-### Combine Multiple Checks
+### 여러 검사 결합 {#combine-multiple-checks}
 
 ```python
 def apply_guardrail(inputs, request_data, input_type):
@@ -289,19 +289,19 @@ def apply_guardrail(inputs, request_data, input_type):
     return modify(texts=modified)
 ```
 
-## Sandbox Restrictions
+## Sandbox 제한 사항 {#sandbox-restrictions}
 
-Custom code runs in a restricted environment:
+커스텀 코드는 제한된 환경에서 실행됩니다.
 
-- ❌ No `import` statements
-- ❌ No file I/O
-- ❌ No `exec()` or `eval()`
-- ✅ HTTP requests via built-in `http_request`, `http_get`, `http_post` primitives
-- ✅ Only LiteLLM-provided primitives available
+- ❌ `import` 문 없음
+- ❌ file I/O 없음
+- ❌ `exec()` 또는 `eval()` 없음
+- ✅ 기본 제공 `http_request`, `http_get`, `http_post` primitives를 통한 HTTP 요청
+- ✅ LiteLLM에서 제공하는 primitives만 사용 가능
 
-## Per-Request Usage
+## 요청별 사용법 {#per-request-usage}
 
-Enable guardrail per request:
+요청별로 guardrail을 활성화합니다.
 
 ```bash
 curl -X POST http://localhost:4000/chat/completions \
@@ -314,9 +314,9 @@ curl -X POST http://localhost:4000/chat/completions \
   }'
 ```
 
-## Default On
+## 기본 활성화 {#default-on}
 
-Run guardrail on all requests:
+모든 요청에서 guardrail을 실행합니다.
 
 ```yaml
 litellm_settings:

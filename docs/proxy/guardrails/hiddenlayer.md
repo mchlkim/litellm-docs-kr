@@ -2,19 +2,19 @@ import Image from '@theme/IdealImage';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# HiddenLayer Guardrails
+# HiddenLayer 가드레일
 
-LiteLLM ships with a native integration for [HiddenLayer](https://hiddenlayer.com/). The proxy sends every request/response to HiddenLayer’s `/detection/v1/interactions` endpoint so you can block or redact unsafe content before it reaches your users.
+LiteLLM은 [HiddenLayer](https://hiddenlayer.com/) 네이티브 연동을 제공합니다. 프록시는 모든 요청/응답을 HiddenLayer의 `/detection/v1/interactions` 엔드포인트로 보내므로, 안전하지 않은 콘텐츠가 사용자에게 도달하기 전에 차단하거나 마스킹할 수 있습니다.
 
-## Quick Start
+## 빠른 시작
 
-### 1. Create a HiddenLayer project & API credentials
+### 1. HiddenLayer 프로젝트 및 API 자격 증명 생성
 
 **SaaS (`*.hiddenlayer.ai`)**
 
-1. Sign in to the HiddenLayer console and create (or select) a project with policies enabled.
-2. Generate a **Client ID** and **Client Secret** for the project.
-3. Export them as environment variables in your LiteLLM deployment:
+1. HiddenLayer 콘솔에 로그인하고 정책이 활성화된 프로젝트를 생성하거나 선택합니다.
+2. 프로젝트용 **Client ID**와 **Client Secret**을 생성합니다.
+3. LiteLLM 배포 환경에서 환경 변수로 내보냅니다.
 
 ```shell
 export HIDDENLAYER_CLIENT_ID="hl_client_id"
@@ -25,15 +25,15 @@ export HIDDENLAYER_CLIENT_SECRET="hl_client_secret"
 # export HL_AUTH_URL="https://auth.hiddenlayer.ai"
 ```
 
-**Self-hosted HiddenLayer**
+**셀프 호스팅 HiddenLayer**
 
-If you run HiddenLayer on-prem, just expose the endpoint and set:
+온프레미스에서 HiddenLayer를 실행하는 경우 엔드포인트를 노출하고 다음을 설정하면 됩니다.
 
 ```shell
 export HIDDENLAYER_API_BASE="https://hiddenlayer.your-domain.com"
 ```
 
-### 2. Add the hiddenlayer guardrail to `config.yaml`
+### 2. `config.yaml`에 hiddenlayer 가드레일 추가
 
 ```yaml showLineNumbers title="litellm config.yaml"
 model_list:
@@ -53,25 +53,25 @@ guardrails:
       api_key: os.environ/HIDDENLAYER_CLIENT_SECRET # only needed for SaaS
 ```
 
-#### Supported values for `mode`
+#### `mode`에서 지원되는 값
 
-- `pre_call` Run **before** the LLM call on **input**.
-- `post_call` Run **after** the LLM call on **input & output**.
-- `during_call` Run **during** the LLM call on **input**. LiteLLM sends the request to the model and HiddenLayer in parallel. The response waits for the guardrail result before returning.
+- `pre_call` **입력**에 대해 LLM 호출 **전**에 실행합니다.
+- `post_call` **입력 및 출력**에 대해 LLM 호출 **후**에 실행합니다.
+- `during_call` **입력**에 대해 LLM 호출 **중**에 실행합니다. LiteLLM은 모델과 HiddenLayer에 요청을 병렬로 보냅니다. 응답은 가드레일 결과를 기다린 뒤 반환됩니다.
 
-### 3. Start LiteLLM Gateway
+### 3. LiteLLM Gateway 시작
 
 ```shell
 litellm --config config.yaml --detailed_debug
 ```
 
-### 4. Test a request
+### 4. 요청 테스트
 
-You can tag requests with `hl-project-id` (maps to the HiddenLayer project) and `hl-requester-id` (auditing metadata). LiteLLM forwards both headers to your detector.
+`hl-project-id`(HiddenLayer 프로젝트에 매핑)와 `hl-requester-id`(감사 메타데이터)로 요청에 태그를 지정할 수 있습니다. LiteLLM은 두 헤더를 모두 탐지기로 전달합니다.
 
 <Tabs>
-<TabItem label="Blocked request" value="not-allowed">
-This request leaks system instructions and should be blocked when prompt-injection detection is enabled in HiddenLayer.
+<TabItem label="차단되는 요청" value="not-allowed">
+이 요청은 시스템 지침을 유출하므로 HiddenLayer에서 프롬프트 인젝션 탐지가 활성화되어 있으면 차단되어야 합니다.
 
 ```shell showLineNumbers title="Curl Request"
 curl -i http://0.0.0.0:4000/v1/chat/completions \
@@ -86,7 +86,7 @@ curl -i http://0.0.0.0:4000/v1/chat/completions \
   }'
 ```
 
-Expected response on failure
+실패 시 예상 응답
 
 ```json
 {
@@ -104,7 +104,7 @@ Expected response on failure
 
 </TabItem>
 
-<TabItem label="Allowed request" value="allowed">
+<TabItem label="허용되는 요청" value="allowed">
 
 ```shell showLineNumbers title="Curl Request"
 curl -i http://0.0.0.0:4000/v1/chat/completions \
@@ -118,7 +118,7 @@ curl -i http://0.0.0.0:4000/v1/chat/completions \
   }'
 ```
 
-Expected response
+예상 응답
 
 ```json
 {
@@ -147,9 +147,9 @@ Expected response
 </TabItem>
 </Tabs>
 
-If HiddenLayer responds with `action: "Redact"`, the proxy automatically rewrites the offending input/output before continuing, so your application receives a sanitized payload.
+HiddenLayer가 `action: "Redact"`로 응답하면 프록시는 계속 진행하기 전에 문제가 있는 입력/출력을 자동으로 다시 작성하므로, 애플리케이션은 정제된 페이로드를 받습니다.
 
-## Supported Params
+## 지원되는 매개변수
 
 ```yaml
 guardrails:
@@ -162,21 +162,21 @@ guardrails:
       default_on: true
 ```
 
-### Required parameters
+### 필수 매개변수
 
-- **`guardrail`**: Must be set to `hiddenlayer` so LiteLLM loads the HiddenLayer hook.
+- **`guardrail`**: LiteLLM이 HiddenLayer 훅을 로드할 수 있도록 `hiddenlayer`로 설정해야 합니다.
 
-### Optional parameters
+### 선택 매개변수
 
-- **`api_base`**: HiddenLayer REST endpoint. Defaults to `https://api.hiddenlayer.ai`, but point it at your self-hosted instance if you have one.
-- **`auth_url`**: Authentication url for hiddenlayer. Defaults to `https;//auth.hiddenlayer.ai`.
-- **`mode`**: Control when the guardrail runs (`pre_call`, `post_call`, `during_call`).
-- **`default_on`**: Automatically attach the guardrail to every request unless the client opts out.
-- **`hl-project-id` header**: Routes scans to a specific HiddenLayer project.
-- **`hl-requester-id` header**: Sets `metadata.requester_id` for auditing.
-- **`hl-session-id` header**: Groups related requests into a session for contextual analysis and tracing in the HiddenLayer console.
+- **`api_base`**: HiddenLayer REST 엔드포인트입니다. 기본값은 `https://api.hiddenlayer.ai`이지만, 셀프 호스팅 인스턴스가 있으면 해당 주소를 지정합니다.
+- **`auth_url`**: HiddenLayer 인증 URL입니다. 기본값은 `https;//auth.hiddenlayer.ai`입니다.
+- **`mode`**: 가드레일이 실행되는 시점을 제어합니다(`pre_call`, `post_call`, `during_call`).
+- **`default_on`**: 클라이언트가 명시적으로 제외하지 않는 한 모든 요청에 가드레일을 자동으로 연결합니다.
+- **`hl-project-id` 헤더**: 스캔을 특정 HiddenLayer 프로젝트로 라우팅합니다.
+- **`hl-requester-id` 헤더**: 감사를 위해 `metadata.requester_id`를 설정합니다.
+- **`hl-session-id` 헤더**: 관련 요청을 하나의 세션으로 그룹화하여 HiddenLayer 콘솔에서 컨텍스트 분석과 추적을 할 수 있게 합니다.
 
-## Environment variables
+## 환경 변수
 
 ```shell
 # SaaS
@@ -187,4 +187,4 @@ export HIDDENLAYER_CLIENT_SECRET="hl_client_secret"
 export HIDDENLAYER_API_BASE="https://api.hiddenlayer.ai"
 ```
 
-Set only the variables you need, self-hosted installs can leave the client ID/secret unset and just configure `HIDDENLAYER_API_BASE`.
+필요한 변수만 설정하세요. 셀프 호스팅 설치에서는 client ID/secret을 설정하지 않고 `HIDDENLAYER_API_BASE`만 구성할 수 있습니다.

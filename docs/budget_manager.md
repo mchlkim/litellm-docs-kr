@@ -3,20 +3,20 @@ import TabItem from '@theme/TabItem';
 
 # Budget Manager
 
-Don't want to get crazy bills because either while you're calling LLM APIs **or** while your users are calling them? use this. 
+직접 LLM API를 호출하거나 사용자가 호출할 때 과도한 청구가 발생하지 않도록 제어하려면 이 기능을 사용하세요.
 
 :::info
 
-If you want a server to manage user keys, budgets, etc. use our [LiteLLM Proxy Server](./proxy/virtual_keys.md)
+사용자 키, 예산 등을 서버에서 관리하려면 [LiteLLM Proxy Server](./proxy/virtual_keys.md)를 사용하세요.
 
 :::
 
-LiteLLM exposes: 
-* `litellm.max_budget`: a global variable you can use to set the max budget (in USD) across all your litellm calls. If this budget is exceeded, it will raise a BudgetExceededError 
-* `BudgetManager`: A class to help set budgets per user. BudgetManager creates a dictionary to manage the user budgets, where the key is user and the object is their current cost + model-specific costs. 
-* `LiteLLM Proxy Server`: A server to call 100+ LLMs with an openai-compatible endpoint. Manages user budgets, spend tracking, load balancing etc. 
+LiteLLM은 다음을 제공합니다.
+* `litellm.max_budget`: 모든 litellm 호출에 적용할 최대 예산(USD)을 설정하는 전역 변수입니다. 예산을 초과하면 `BudgetExceededError`를 발생시킵니다.
+* `BudgetManager`: 사용자별 예산 설정을 돕는 클래스입니다. `BudgetManager`는 사용자를 key로, 현재 비용과 모델별 비용을 object로 갖는 dictionary를 만들어 사용자 예산을 관리합니다.
+* `LiteLLM Proxy Server`: OpenAI 호환 엔드포인트로 100개 이상의 LLM을 호출하는 서버입니다. 사용자 예산, 지출 추적, 로드 밸런싱 등을 관리합니다.
 
-## quick start
+## 빠른 시작 {#quick-start}
 
 ```python 
 import litellm, os 
@@ -33,7 +33,7 @@ print(litellm._current_cost)
 completion(model="gpt-4", messages=messages)
 ```
 
-## User-based rate limiting 
+## 사용자 기반 rate limiting {#user-based-rate-limiting}
 <a target="_blank" href="https://colab.research.google.com/github/BerriAI/litellm/blob/main/cookbook/LiteLLM_User_Based_Rate_Limits.ipynb">
   <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
 </a>
@@ -57,11 +57,11 @@ else:
     response = "Sorry - no budget!"
 ```
 
-[**Implementation Code**](https://github.com/BerriAI/litellm/blob/main/litellm/budget_manager.py)
+[**구현 코드**](https://github.com/BerriAI/litellm/blob/main/litellm/budget_manager.py)
 
-## use with Text Input / Output
+## Text Input / Output으로 사용 {#use-with-text-input-output}
 
-Update cost by just passing in the text input / output and model name. 
+텍스트 입력/출력과 모델 이름만 전달해 비용을 업데이트할 수 있습니다.
 
 ```python
 from litellm import BudgetManager
@@ -78,23 +78,23 @@ budget_manager.update_cost(user=user, model=model, input_text=input_text, output
 print(budget_manager.get_current_cost(user))
 ```
 
-## advanced usage
-In production, we will need to 
-* store user budgets in a database
-* reset user budgets based on a set duration 
+## 고급 사용법 {#advanced-usage}
+프로덕션에서는 다음이 필요합니다.
+* 사용자 예산을 데이터베이스에 저장
+* 설정된 기간을 기준으로 사용자 예산 재설정
 
 
 
 ### LiteLLM API
 
-The LiteLLM API provides both. It stores the user object in a hosted db, and runs a cron job daily to reset user-budgets based on the set duration (e.g. reset budget daily/weekly/monthly/etc.). 
+LiteLLM API는 두 가지를 모두 제공합니다. 사용자 객체를 hosted DB에 저장하고, 매일 cron job을 실행해 설정된 기간을 기준으로 사용자 예산을 재설정합니다(예: 일/주/월 단위 예산 재설정).
 
-**Usage**
+**사용법**
 ```python
 budget_manager = BudgetManager(project_name="<my-unique-project>", client_type="hosted")
 ```
 
-**Complete Code**
+**전체 코드**
 ```python
 from litellm import BudgetManager, completion 
 
@@ -116,15 +116,15 @@ else:
 
 ### Self-hosted
 
-To use your own db, set the BudgetManager client type to `hosted` **and** set the api_base. 
+자체 DB를 사용하려면 `BudgetManager` client type을 `hosted`로 설정하고 `api_base`도 설정하세요.
 
-Your api is expected to expose `/get_budget` and `/set_budget` endpoints. [See code for details](https://github.com/BerriAI/litellm/blob/27f1051792176a7eb1fe3b72b72bccd6378d24e9/litellm/budget_manager.py#L7)
+API는 `/get_budget` 및 `/set_budget` 엔드포인트를 노출해야 합니다. 자세한 내용은 [코드](https://github.com/BerriAI/litellm/blob/27f1051792176a7eb1fe3b72b72bccd6378d24e9/litellm/budget_manager.py#L7)를 확인하세요.
 
-**Usage**
+**사용법**
 ```python
 budget_manager = BudgetManager(project_name="<my-unique-project>", client_type="hosted", api_base="your_custom_api")
 ```
-**Complete Code**
+**전체 코드**
 ```python
 from litellm import BudgetManager, completion 
 
@@ -144,112 +144,112 @@ else:
     response = "Sorry - no budget!"
 ```
 
-## Budget Manager Class
-The `BudgetManager` class is used to manage budgets for different users. It provides various functions to create, update, and retrieve budget information. 
+## Budget Manager 클래스 {#budget-manager-class}
+`BudgetManager` 클래스는 사용자별 예산을 관리하는 데 사용합니다. 예산 정보를 생성, 업데이트, 조회하는 여러 함수를 제공합니다.
 
-Below is a list of public functions exposed by the Budget Manager class and their input/outputs. 
+아래는 Budget Manager 클래스가 노출하는 public 함수와 입출력 목록입니다.
 
 ### __init__
 ```python
 def __init__(self, project_name: str, client_type: str = "local", api_base: Optional[str] = None)
 ```
-- `project_name` (str): The name of the project.
-- `client_type` (str): The client type ("local" or "hosted"). Defaults to "local".
-- `api_base` (Optional[str]): The base URL of the API. Defaults to None.
+- `project_name` (str): 프로젝트 이름입니다.
+- `client_type` (str): 클라이언트 타입(`"local"` 또는 `"hosted"`). 기본값은 `"local"`입니다.
+- `api_base` (Optional[str]): API의 base URL입니다. 기본값은 `None`입니다.
 
 
 ### create_budget
 ```python
 def create_budget(self, total_budget: float, user: str, duration: Literal["daily", "weekly", "monthly", "yearly"], created_at: float = time.time())
 ```
-Creates a budget for a user.
+사용자의 예산을 생성합니다.
 
-- `total_budget` (float): The total budget of the user.
-- `user` (str): The user id.
-- `duration` (Literal["daily", "weekly", "monthly", "yearly"]): The budget duration.
-- `created_at` (float): The creation time. Default is the current time.
+- `total_budget` (float): 사용자의 총 예산입니다.
+- `user` (str): 사용자 ID입니다.
+- `duration` (Literal["daily", "weekly", "monthly", "yearly"]): 예산 기간입니다.
+- `created_at` (float): 생성 시간입니다. 기본값은 현재 시간입니다.
 
 ### projected_cost
 ```python
 def projected_cost(self, model: str, messages: list, user: str)
 ```
-Computes the projected cost for a session.
+세션의 예상 비용을 계산합니다.
 
-- `model` (str): The name of the model.
-- `messages` (list): The list of messages.
-- `user` (str): The user id.
+- `model` (str): 모델 이름입니다.
+- `messages` (list): 메시지 목록입니다.
+- `user` (str): 사용자 ID입니다.
 
 ### get_total_budget
 ```python
 def get_total_budget(self, user: str)
 ```
-Returns the total budget of a user.
+사용자의 총 예산을 반환합니다.
 
-- `user` (str): user id.
+- `user` (str): 사용자 ID입니다.
 
 ### update_cost
 ```python
 def update_cost(self, completion_obj: ModelResponse, user: str)
 ```
-Updates the user's cost.
+사용자의 비용을 업데이트합니다.
 
-- `completion_obj` (ModelResponse): The completion object received from the model.
-- `user` (str): The user id.
+- `completion_obj` (ModelResponse): 모델에서 받은 completion 객체입니다.
+- `user` (str): 사용자 ID입니다.
 
 ### get_current_cost
 ```python
 def get_current_cost(self, user: str)
 ```
-Returns the current cost of a user.
+사용자의 현재 비용을 반환합니다.
 
-- `user` (str): The user id.
+- `user` (str): 사용자 ID입니다.
 
 ### get_model_cost 
 ```python
 def get_model_cost(self, user: str)
 ```
-Returns the model cost of a user.
+사용자의 모델별 비용을 반환합니다.
 
-- `user` (str): The user id.
+- `user` (str): 사용자 ID입니다.
 
 ### is_valid_user 
 ```python
 def is_valid_user(self, user: str) -> bool
 ```
-Checks if a user is valid.
+사용자가 유효한지 확인합니다.
 
-- `user` (str): The user id.
+- `user` (str): 사용자 ID입니다.
 
 ### get_users 
 ```python
 def get_users(self)
 ```
-Returns a list of all users.
+모든 사용자 목록을 반환합니다.
 
 ### reset_cost 
 ```python
 def reset_cost(self, user: str)
 ```
-Resets the cost of a user.
+사용자의 비용을 재설정합니다.
 
-- `user` (str): The user id.
+- `user` (str): 사용자 ID입니다.
 
 ### reset_on_duration 
 ```python
 def reset_on_duration(self, user: str)
 ```
-Resets the cost of a user based on the duration.
+기간을 기준으로 사용자의 비용을 재설정합니다.
 
-- `user` (str): The user id.
+- `user` (str): 사용자 ID입니다.
 
 ### update_budget_all_users 
 ```python
 def update_budget_all_users(self)
 ```
-Updates the budget for all users.
+모든 사용자의 예산을 업데이트합니다.
 
 ### save_data 
 ```python
 def save_data(self)
 ```
-Stores the user dictionary.
+사용자 dictionary를 저장합니다.

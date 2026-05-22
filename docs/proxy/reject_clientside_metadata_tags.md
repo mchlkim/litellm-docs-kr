@@ -1,30 +1,30 @@
-# Reject Client-Side Metadata Tags
+# 클라이언트 측 metadata.tags 거부
 
-## Overview
+## 개요
 
-The `reject_clientside_metadata_tags` setting allows you to prevent users from passing client-side `metadata.tags` in their API requests. This ensures that tags are only inherited from the API key metadata and cannot be overridden by users to potentially influence budget tracking or routing decisions.
+`reject_clientside_metadata_tags` 설정을 사용하면 사용자가 API 요청에서 클라이언트 측 `metadata.tags`를 전달하지 못하게 할 수 있습니다. 이를 통해 태그가 API 키 metadata에서만 상속되도록 보장하고, 사용자가 예산 추적 또는 라우팅 결정에 영향을 줄 수 있도록 태그를 재정의하는 것을 방지할 수 있습니다.
 
-## Use Case
+## 사용 사례
 
-This feature is particularly useful in multi-tenant scenarios where:
-- You want to enforce strict budget tracking based on API key tags
-- You want to prevent users from manipulating routing decisions by sending custom client-side tags
-- You need to ensure consistent tag-based filtering and reporting
+이 기능은 다음과 같은 멀티 테넌트 시나리오에서 특히 유용합니다.
+- API 키 태그를 기준으로 엄격한 예산 추적을 강제하려는 경우
+- 사용자가 사용자 지정 클라이언트 측 태그를 보내 라우팅 결정을 조작하지 못하게 하려는 경우
+- 일관된 태그 기반 필터링 및 보고를 보장해야 하는 경우
 
-## Configuration
+## 설정
 
-Add the following to your `config.yaml`:
+`config.yaml`에 다음 내용을 추가합니다.
 
 ```yaml
 general_settings:
   reject_clientside_metadata_tags: true  # Default is false/null
 ```
 
-## Behavior
+## 동작
 
-### When `reject_clientside_metadata_tags: true`
+### `reject_clientside_metadata_tags: true`인 경우
 
-**Rejected Request Example:**
+**거부되는 요청 예제:**
 ```bash
 curl -X POST http://localhost:4000/chat/completions \
   -H "Authorization: Bearer sk-1234" \
@@ -38,7 +38,7 @@ curl -X POST http://localhost:4000/chat/completions \
   }'
 ```
 
-**Error Response:**
+**오류 응답:**
 ```json
 {
   "error": {
@@ -50,7 +50,7 @@ curl -X POST http://localhost:4000/chat/completions \
 }
 ```
 
-**Allowed Request Example:**
+**허용되는 요청 예제:**
 ```bash
 curl -X POST http://localhost:4000/chat/completions \
   -H "Authorization: Bearer sk-1234" \
@@ -64,13 +64,13 @@ curl -X POST http://localhost:4000/chat/completions \
   }'
 ```
 
-### When `reject_clientside_metadata_tags: false` or not set
+### `reject_clientside_metadata_tags: false`이거나 설정하지 않은 경우
 
-All requests are allowed, including those with client-side `metadata.tags`.
+클라이언트 측 `metadata.tags`가 포함된 요청을 포함하여 모든 요청이 허용됩니다.
 
-## Setting Tags via API Key
+## API 키로 태그 설정
 
-When `reject_clientside_metadata_tags` is enabled, tags should be set on the API key metadata:
+`reject_clientside_metadata_tags`가 활성화된 경우 태그는 API 키 metadata에 설정해야 합니다.
 
 ```bash
 curl -X POST http://localhost:4000/key/generate \
@@ -83,9 +83,9 @@ curl -X POST http://localhost:4000/key/generate \
   }'
 ```
 
-These tags will be automatically inherited by all requests made with that API key.
+이 태그는 해당 API 키로 수행되는 모든 요청에 자동으로 상속됩니다.
 
-## Complete Example Configuration
+## 전체 예제 설정
 
 ```yaml
 model_list:
@@ -105,16 +105,16 @@ general_settings:
   enforce_user_param: true
 ```
 
-## Similar Features
+## 유사 기능
 
-- `enforce_user_param` - Requires all requests to include a 'user' parameter
-- Tag-based routing - Use tags for intelligent request routing
-- Budget tracking - Track spending per tag
+- `enforce_user_param` - 모든 요청에 'user' 파라미터가 포함되도록 요구합니다.
+- 태그 기반 라우팅 - 지능형 요청 라우팅에 태그를 사용합니다.
+- 예산 추적 - 태그별 지출을 추적합니다.
 
-## Notes
+## 참고
 
-- This check only applies to LLM API routes (e.g., `/chat/completions`, `/embeddings`)
-- Management endpoints (e.g., `/key/generate`) are not affected
-- The check validates that client-side `metadata.tags` is not present in the request body
-- Other metadata fields can still be passed in requests
-- Tags set on API keys will still be applied to all requests
+- 이 검사는 LLM API 라우트(예: `/chat/completions`, `/embeddings`)에만 적용됩니다.
+- 관리 엔드포인트(예: `/key/generate`)는 영향을 받지 않습니다.
+- 이 검사는 요청 본문에 클라이언트 측 `metadata.tags`가 없는지 확인합니다.
+- 다른 metadata 필드는 계속 요청에 전달할 수 있습니다.
+- API 키에 설정된 태그는 계속 모든 요청에 적용됩니다.

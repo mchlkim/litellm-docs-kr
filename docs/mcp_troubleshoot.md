@@ -1,14 +1,14 @@
 import Image from '@theme/IdealImage';
 
-# MCP Troubleshooting Guide
+# MCP 문제 해결 가이드
 
-When LiteLLM acts as an MCP proxy, traffic normally flows `Client → LiteLLM Proxy → MCP Server`, while OAuth-enabled setups add an authorization server for metadata discovery.
+LiteLLM이 MCP 프록시로 동작할 때 트래픽은 일반적으로 `Client → LiteLLM Proxy → MCP Server` 순서로 흐르며, OAuth가 활성화된 구성에서는 메타데이터 검색을 위한 authorization server가 추가됩니다.
 
-For provisioning steps, transport options, and configuration fields, refer to [mcp.md](./mcp.md).
+프로비저닝 단계, transport 옵션, 구성 필드는 [mcp.md](./mcp.md)를 참고하세요.
 
-## Quick Start: Debug with One Command
+## 빠른 시작: 한 명령으로 디버그하기
 
-The fastest way to debug MCP issues is to enable **debug headers**. Run this curl against your LiteLLM proxy and check the response headers:
+MCP 문제를 디버그하는 가장 빠른 방법은 **debug headers**를 활성화하는 것입니다. LiteLLM 프록시에 대해 아래 curl을 실행한 뒤 응답 헤더를 확인하세요.
 
 ```bash
 curl -si -X POST http://localhost:4000/{your_mcp_server}/mcp \
@@ -19,7 +19,7 @@ curl -si -X POST http://localhost:4000/{your_mcp_server}/mcp \
   2>&1 | grep -i "x-mcp-debug"
 ```
 
-This returns masked diagnostic headers that tell you exactly what's happening with authentication:
+이 명령은 authentication에서 실제로 어떤 일이 일어나는지 보여 주는 마스킹된 진단 헤더를 반환합니다.
 
 ```
 x-mcp-debug-inbound-auth: x-litellm-api-key=Bearer****1234
@@ -29,9 +29,9 @@ x-mcp-debug-outbound-url: https://mcp.atlassian.com/v1/mcp
 x-mcp-debug-server-auth-type: oauth2
 ```
 
-If you see `SAME_AS_LITELLM_KEY` in `x-mcp-debug-oauth2-token`, your LiteLLM API key is leaking to the MCP server instead of an OAuth2 token. See [Debugging OAuth](./mcp_oauth#debugging-oauth) for the fix and other common issues.
+`x-mcp-debug-oauth2-token`에 `SAME_AS_LITELLM_KEY`가 보이면 OAuth2 token 대신 LiteLLM API key가 MCP server로 유출되고 있는 것입니다. 수정 방법과 다른 일반적인 문제는 [OAuth 디버깅](./mcp_oauth#debugging-oauth)을 참고하세요.
 
-For Claude Code, add the debug header to your MCP config:
+Claude Code에서는 MCP config에 debug header를 추가하세요.
 
 ```bash
 claude mcp add --transport http my_server http://localhost:4000/my_mcp/mcp \
@@ -39,12 +39,12 @@ claude mcp add --transport http my_server http://localhost:4000/my_mcp/mcp \
   --header "x-litellm-mcp-debug: true"
 ```
 
-## Locate the Error Source
+## 오류 발생 지점 찾기
 
-Pin down where the failure occurs before adjusting settings so you do not mix symptoms from separate hops.
+설정을 조정하기 전에 실패가 발생한 위치를 먼저 좁혀야 서로 다른 hop의 증상을 섞어 보지 않을 수 있습니다.
 
-### LiteLLM UI / Playground Errors (LiteLLM → MCP)
-Failures shown on the MCP creation form or within the MCP Tool Testing Playground mean the LiteLLM proxy cannot reach the MCP server. Typical causes are misconfiguration (transport, headers, credentials), MCP/server outages, network/firewall blocks, or inaccessible OAuth metadata.
+### LiteLLM UI / Playground 오류 (LiteLLM → MCP)
+MCP 생성 form이나 MCP Tool Testing Playground에 표시되는 실패는 LiteLLM proxy가 MCP server에 도달하지 못한다는 뜻입니다. 일반적인 원인은 잘못된 구성(transport, headers, credentials), MCP/server 장애, network/firewall 차단, 접근할 수 없는 OAuth metadata입니다.
 
 <Image
   img={require('../img/mcp_tool_testing_playground.png')}
@@ -53,107 +53,63 @@ Failures shown on the MCP creation form or within the MCP Tool Testing Playgroun
 
 <br/>
 
-**Actions**
-- Capture LiteLLM proxy logs alongside MCP-server logs (see [Error Log Example](./mcp_troubleshoot#error-log-example-failed-mcp-call)) to inspect the request/response pair and stack traces.
-- From the LiteLLM server, run a [`curl` smoke test](./mcp_troubleshoot#curl-smoke-test) against the MCP endpoint to confirm basic connectivity.
+**조치**
+- request/response 쌍과 stack trace를 확인할 수 있도록 LiteLLM proxy logs와 MCP-server logs를 함께 수집하세요([Error Log 예제](./mcp_troubleshoot#error-log-example-failed-mcp-call) 참고).
+- 기본 connectivity를 확인하려면 LiteLLM server에서 MCP endpoint를 대상으로 [`curl` 스모크 테스트](./mcp_troubleshoot#curl-smoke-test)를 실행하세요.
 
-### Client Traffic Issues (Client → LiteLLM)
-If only real client requests fail, determine whether LiteLLM ever reaches the MCP hop.
+### Client 트래픽 문제 (Client → LiteLLM)
+실제 client 요청만 실패한다면 LiteLLM이 MCP hop까지 도달했는지 확인하세요.
 
-#### MCP Protocol Sessions
-Clients such as IDEs or agent runtimes speak the MCP protocol directly with LiteLLM.
+#### MCP Protocol 세션
+IDE나 agent runtime 같은 client는 LiteLLM과 직접 MCP protocol로 통신합니다.
 
-**Actions**
-- Inspect LiteLLM access logs (see [Access Log Example](./mcp_troubleshoot#access-log-example-successful-mcp-call)) to verify the client request reached the proxy and which MCP server it targeted.
-- Review LiteLLM error logs (see [Error Log Example](./mcp_troubleshoot#error-log-example-failed-mcp-call)) for TLS, authentication, or routing errors that block the request before the MCP call starts.
-- Use the [MCP Inspector](./mcp_troubleshoot#mcp-inspector) to confirm the MCP server is reachable outside of the failing client.
+**조치**
+- client 요청이 proxy에 도달했는지, 어떤 MCP server를 대상으로 했는지 확인하려면 LiteLLM access logs를 살펴보세요([Access Log 예제](./mcp_troubleshoot#access-log-example-successful-mcp-call) 참고).
+- MCP call이 시작되기 전에 요청을 막는 TLS, authentication, routing 오류가 있는지 LiteLLM error logs를 검토하세요([Error Log 예제](./mcp_troubleshoot#error-log-example-failed-mcp-call) 참고).
+- 실패하는 client 외부에서 MCP server에 도달할 수 있는지 [MCP Inspector](./mcp_troubleshoot#mcp-inspector)로 확인하세요.
 
-#### Responses/Completions with Embedded MCP Calls
-During `/responses` or `/chat/completions`, LiteLLM may trigger MCP tool calls mid-request. An error could occur before the MCP call begins or after the MCP responds.
+#### MCP Call이 포함된 Responses/Completions
+`/responses` 또는 `/chat/completions` 처리 중 LiteLLM이 요청 중간에 MCP tool call을 트리거할 수 있습니다. 오류는 MCP call이 시작되기 전이나 MCP가 응답한 뒤에 발생할 수 있습니다.
 
-**Actions**
-- Check LiteLLM request logs (see [Access Log Example](./mcp_troubleshoot#access-log-example-successful-mcp-call)) to see whether an MCP attempt was recorded; if not, the problem lies in `Client → LiteLLM`.
-- Validate MCP connectivity with the [MCP Inspector](./mcp_troubleshoot#mcp-inspector) to ensure the server responds.
-- Reproduce the same MCP call via the LiteLLM Playground to confirm LiteLLM can complete the MCP hop independently.
+**조치**
+- MCP 시도가 기록되었는지 LiteLLM request logs에서 확인하세요([Access Log 예제](./mcp_troubleshoot#access-log-example-successful-mcp-call) 참고). 기록이 없다면 문제는 `Client → LiteLLM` 구간에 있습니다.
+- server가 응답하는지 확인하려면 [MCP Inspector](./mcp_troubleshoot#mcp-inspector)로 MCP connectivity를 검증하세요.
+- LiteLLM이 MCP hop을 독립적으로 완료할 수 있는지 확인하려면 LiteLLM Playground에서 같은 MCP call을 재현하세요.
 
 <Image
   img={require('../img/mcp_playground.png')}
   style={{width: '80%', display: 'block', margin: '0'}}
 />
 
-### OAuth Metadata Discovery
-LiteLLM performs metadata discovery per the MCP spec ([section 2.3](https://modelcontextprotocol.info/specification/draft/basic/authorization/#23-server-metadata-discovery)). When OAuth is enabled, confirm the authorization server exposes the metadata URL and that LiteLLM can fetch it.
+### OAuth Metadata 검색
+LiteLLM은 MCP spec([section 2.3](https://modelcontextprotocol.info/specification/draft/basic/authorization/#23-server-metadata-discovery))에 따라 metadata discovery를 수행합니다. OAuth가 활성화된 경우 authorization server가 metadata URL을 노출하고 LiteLLM이 이를 가져올 수 있는지 확인하세요.
 
-**Actions**
-- Use `curl <metadata_url>` (or similar) from the LiteLLM host to ensure the discovery document is reachable and contains the expected authorization/token endpoints.
-- Record the exact metadata URL, requested scopes, and any static client credentials so support can replay the discovery step if needed.
+**조치**
+- LiteLLM host에서 `curl <metadata_url>` 또는 유사한 명령을 사용해 discovery document에 도달할 수 있고 예상한 authorization/token endpoints가 포함되어 있는지 확인하세요.
+- support가 필요할 때 discovery 단계를 재현할 수 있도록 정확한 metadata URL, requested scopes, static client credentials를 기록하세요.
 
-## Debugging OAuth
+## OAuth 디버깅
 
-For detailed OAuth2 debugging — including debug header reference, common misconfigurations, and example output — see [Debugging OAuth](./mcp_oauth#debugging-oauth).
+debug header reference, 일반적인 misconfiguration, example output을 포함한 자세한 OAuth2 디버깅 내용은 [OAuth 디버깅](./mcp_oauth#debugging-oauth)을 참고하세요.
 
-### MCP OAuth: Connect returns `{"detail":"invalid_request"}` {#mcp-oauth-invalid-request}
+## Connectivity 검증
 
-**Symptom.** Clicking **Connect** on an MCP OAuth server in the LiteLLM UI returns:
+production traffic에 영향을 주기 전에 가벼운 검증을 먼저 실행하세요.
 
-```
-HTTP/1.1 400 Bad Request
-{"detail":"invalid_request"}
-```
-
-The proxy logs (with verbose logging) show a line like `MCP OAuth: rejecting redirect_uri ... as invalid_request. Computed proxy base=...`.
-
-**Cause.** The `/v1/mcp/server/oauth/{server_id}/authorize` endpoint validates that the browser-supplied `redirect_uri` (`https://llm.example.com/ui/mcp/oauth/callback`) shares scheme + host + port with the proxy's own public origin. Behind a TLS-terminating ingress (Kubernetes, ALB, nginx, Cloudflare, etc.) the proxy resolves to its internal address (`http://<pod-ip>:4000`) by default, so the same-origin check rejects.
-
-**Diagnostic.** Compare what the proxy advertises as its origin to what the browser sees:
-
-```bash
-curl -sS https://llm.example.com/.well-known/oauth-authorization-server | jq .issuer
-```
-
-The `issuer` value should equal the origin the user types into their browser (`https://llm.example.com`). If it returns an internal hostname or `http://...`, the proxy's resolved origin is wrong.
-
-**Fixes**, in order of preference:
-
-1. **Set `PROXY_BASE_URL`** (recommended). Operator declares the proxy's true public origin out of band, no header trust required:
-
-   ```bash
-   PROXY_BASE_URL=https://llm.example.com
-   ```
-
-   Full origin only: scheme + host (+ port if non-default), no trailing slash, no path. See [Reverse proxy and ingress configuration](./mcp_oauth#reverse-proxy-and-ingress-configuration).
-
-2. **Trust `X-Forwarded-*` from your ingress.** Set both keys in `general_settings`:
-
-   ```yaml title="config.yaml" showLineNumbers
-   general_settings:
-     use_x_forwarded_for: true
-     mcp_trusted_proxy_ranges:
-       - "10.0.0.0/8"      # your ingress / load-balancer CIDR(s)
-   ```
-
-   `use_x_forwarded_for` alone is not enough — without `mcp_trusted_proxy_ranges`, the proxy refuses to honor `X-Forwarded-*` because it cannot tell a trusted reverse proxy from a direct attacker. Verify that your ingress sends `X-Forwarded-Proto`, `X-Forwarded-Host`, and (when running on a non-default port) `X-Forwarded-Port`.
-
-3. **Fix the ingress.** If the ingress is stripping or rewriting `X-Forwarded-*`, no proxy setting will help — restore the headers at the ingress layer.
-
-If the `redirect_uri` legitimately lives on a sister domain you control (e.g. an internal web app registering as an OAuth client of the MCP proxy), allowlist its origin via `MCP_TRUSTED_REDIRECT_ORIGINS`. See [Allowing additional first-party redirect_uri origins](./mcp_oauth#allowing-additional-first-party-redirect_uri-origins).
-
-## Verify Connectivity
-
-Run lightweight validations before impacting production traffic.
-
+<a id="mcp-inspector"></a>
 ### MCP Inspector
-Use the MCP Inspector when you need to test both `Client → LiteLLM` and `Client → MCP` communications in one place; it makes isolating the failing hop straightforward.
+`Client → LiteLLM`과 `Client → MCP` 통신을 한곳에서 모두 테스트해야 할 때 MCP Inspector를 사용하세요. 실패한 hop을 분리하기 쉬워집니다.
 
-1. Execute `npx @modelcontextprotocol/inspector` on your workstation.
-2. Configure and connect:
-   - **Transport Type:** choose the transport the client uses (Streamable HTTP for LiteLLM).
-   - **URL:** the endpoint under test (LiteLLM MCP URL for `Client → LiteLLM`, or the MCP server URL for `Client → MCP`).
-   - **Custom Headers:** e.g., `x-litellm-api-key: Bearer <LiteLLM API Key>`.
-3. Open the **Tools** tab and click **List Tools** to verify the MCP alias responds.
+1. workstation에서 `npx @modelcontextprotocol/inspector`를 실행합니다.
+2. 구성한 뒤 연결합니다.
+   - **Transport Type:** client가 사용하는 transport를 선택합니다(LiteLLM의 경우 Streamable HTTP).
+   - **URL:** 테스트 대상 endpoint입니다(`Client → LiteLLM`의 경우 LiteLLM MCP URL, `Client → MCP`의 경우 MCP server URL).
+   - **Custom Headers:** 예: `x-litellm-api-key: Bearer <LiteLLM API Key>`.
+3. **Tools** 탭을 열고 **List Tools**를 클릭해 MCP alias가 응답하는지 확인합니다.
 
-### `curl` Smoke Test
-`curl` is ideal on servers where installing the Inspector is impractical. It replicates the MCP tool call LiteLLM would make—swap in the domain of the system under test (LiteLLM or the MCP server).
+<a id="curl-smoke-test"></a>
+### `curl` 스모크 테스트
+Inspector 설치가 현실적이지 않은 server에서는 `curl`이 적합합니다. LiteLLM이 수행할 MCP tool call을 재현합니다. 테스트 대상 system(LiteLLM 또는 MCP server)의 domain으로 바꿔 넣으세요.
 
 ```bash
 curl -X POST https://your-target-domain.example.com/mcp \
@@ -162,18 +118,20 @@ curl -X POST https://your-target-domain.example.com/mcp \
   -d '{"jsonrpc":"2.0","id":1,"method":"tools/list","params":{}}'
 ```
 
-Add `-H "x-litellm-api-key: Bearer <LiteLLM API Key>"` when the target is a LiteLLM endpoint that requires authentication. Adjust the headers or payload to target other MCP methods. Matching failures between `curl` and LiteLLM confirm that the MCP server or network/OAuth layer is the culprit.
+대상이 authentication을 요구하는 LiteLLM endpoint라면 `-H "x-litellm-api-key: Bearer <LiteLLM API Key>"`를 추가하세요. 다른 MCP methods를 대상으로 하려면 headers 또는 payload를 조정하세요. `curl`과 LiteLLM에서 같은 실패가 나타나면 MCP server 또는 network/OAuth layer가 원인임을 확인할 수 있습니다.
 
-## Review Logs
+## 로그 검토
 
-Well-scoped logs make it clear whether LiteLLM reached the MCP server and what happened next.
+범위가 잘 잡힌 logs는 LiteLLM이 MCP server에 도달했는지와 그다음에 무슨 일이 일어났는지를 명확히 보여 줍니다.
 
-### Access Log Example (successful MCP call)
+<a id="access-log-example-successful-mcp-call"></a>
+### Access Log 예제 (성공한 MCP call)
 ```text
 INFO:     127.0.0.1:57230 - "POST /everything/mcp HTTP/1.1" 200 OK
 ```
 
-### Error Log Example (failed MCP call)
+<a id="error-log-example-failed-mcp-call"></a>
+### Error Log 예제 (실패한 MCP call)
 ```text
 07:22:00 - LiteLLM:ERROR: client.py:224 - MCP client list_tools failed - Error Type: ExceptionGroup, Error: unhandled errors in a TaskGroup (1 sub-exception), Server: http://localhost:3001/mcp, Transport: MCPTransport.http
   httpcore.ConnectError: All connection attempts failed

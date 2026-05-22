@@ -23,23 +23,23 @@ export function CascadeFailure() {
   return (
     <figure style={s.fig}>
       <div style={s.box}>
-        <p style={s.label}>Without circuit breaker — cascade failure</p>
+        <p style={s.label}>서킷 브레이커 없음 — 연쇄 장애</p>
         <div style={{display:'flex', flexDirection:'column', alignItems:'center', gap:0}}>
           <div style={s.node()}>LiteLLM Pod (×100)</div>
           <SmallArrow />
-          <div style={s.node()}>Rate limit / cache check</div>
+          <div style={s.node()}>속도 제한 / 캐시 확인</div>
           <div style={{position:'relative', display:'flex', flexDirection:'column', alignItems:'center'}}>
             <SmallArrow color="#f87171"/>
-            <span style={{position:'absolute', left:8, top:4, fontSize:11, color:'#f87171', whiteSpace:'nowrap'}}>hangs 30s per request</span>
+            <span style={{position:'absolute', left:8, top:4, fontSize:11, color:'#f87171', whiteSpace:'nowrap'}}>요청마다 30초 정지</span>
           </div>
-          <div style={s.node('#fca5a5','#fef2f2')}><span style={{color:'#b91c1c', fontWeight:600}}>Redis — degraded, timing out</span></div>
+          <div style={s.node('#fca5a5','#fef2f2')}><span style={{color:'#b91c1c', fontWeight:600}}>Redis — 성능 저하, 타임아웃 발생</span></div>
           <SmallArrow color="#fb923c"/>
-          <div style={s.node('#fdba74','#fff7ed')}><span style={{color:'#c2410c', fontWeight:600}}>Postgres — 100× normal read load</span></div>
+          <div style={s.node('#fdba74','#fff7ed')}><span style={{color:'#c2410c', fontWeight:600}}>Postgres — 평소 읽기 부하의 100배</span></div>
           <SmallArrow />
-          <div style={{...s.node('#111827','#111827'), color:'#fff', fontWeight:600}}>Total outage — gateway down</div>
+          <div style={{...s.node('#111827','#111827'), color:'#fff', fontWeight:600}}>전체 장애 — gateway 다운</div>
         </div>
       </div>
-      <figcaption style={s.caption}>Slow Redis → every auth check times out → database overwhelmed → full cascade</figcaption>
+      <figcaption style={s.caption}>Redis 지연 → 모든 auth 확인 타임아웃 → database 과부하 → 전체 연쇄 장애</figcaption>
     </figure>
   );
 }
@@ -66,13 +66,13 @@ export function CircuitBreakerStates() {
   return (
     <figure style={s.fig}>
       <div style={s.box}>
-        <p style={s.label}>Circuit breaker state machine</p>
+        <p style={s.label}>서킷 브레이커 상태 머신</p>
         <div style={{display:'flex', justifyContent:'center', alignItems:'flex-start'}}>
-          {circle('#1f2937','#111827','CLOSED','normal')}
-          {arrow('5 failures')}
-          {circle('#f87171','#dc2626','OPEN','fast-fail')}
-          {arrow('60s timeout')}
-          {circle('#fbbf24','#b45309','HALF-OPEN','probing')}
+          {circle('#1f2937','#111827','CLOSED','정상')}
+          {arrow('5회 실패')}
+          {circle('#f87171','#dc2626','OPEN','빠른 실패')}
+          {arrow('60초 타임아웃')}
+          {circle('#fbbf24','#b45309','HALF-OPEN','탐색')}
         </div>
         <div style={{display:'flex', justifyContent:'center', gap:32, marginTop:24}}>
           <div style={{display:'flex', flexDirection:'column', alignItems:'center', gap:4}}>
@@ -80,14 +80,14 @@ export function CircuitBreakerStates() {
               <svg width="8" height="8"><polygon points="8,0 0,4 8,8" fill="#16a34a"/></svg>
               <div style={{height:1, width:100, background:'#16a34a'}}/>
             </div>
-            <span style={{fontSize:10, color:'#16a34a'}}>probe success → CLOSED</span>
+            <span style={{fontSize:10, color:'#16a34a'}}>탐색 성공 → CLOSED</span>
           </div>
           <div style={{display:'flex', flexDirection:'column', alignItems:'center', gap:4}}>
             <div style={{display:'flex', alignItems:'center', gap:4}}>
               <svg width="8" height="8"><polygon points="8,0 0,4 8,8" fill="#ef4444"/></svg>
               <div style={{height:1, width:100, borderTop:'2px dashed #f87171'}}/>
             </div>
-            <span style={{fontSize:10, color:'#ef4444'}}>probe failure → OPEN again</span>
+            <span style={{fontSize:10, color:'#ef4444'}}>탐색 실패 → 다시 OPEN</span>
           </div>
         </div>
       </div>
@@ -99,29 +99,29 @@ export function CircuitBreakerFlow() {
   return (
     <figure style={s.fig}>
       <div style={s.box}>
-        <p style={s.label}>With circuit breaker — graceful degradation</p>
+        <p style={s.label}>서킷 브레이커 사용 — 점진적 성능 저하</p>
         <div style={{display:'flex', flexDirection:'column', alignItems:'center'}}>
-          <div style={s.node()}>Incoming request</div>
+          <div style={s.node()}>들어오는 요청</div>
           <SmallArrow />
-          <div style={{...s.node('#111827'), border:'2px solid #111827', fontWeight:600}}>Circuit Breaker</div>
+          <div style={{...s.node('#111827'), border:'2px solid #111827', fontWeight:600}}>서킷 브레이커</div>
           <div style={{display:'flex', gap:80, marginTop:20, alignItems:'flex-start'}}>
             <div style={{display:'flex', flexDirection:'column', alignItems:'center', gap:8}}>
               <SmallArrow />
               <span style={{fontSize:10, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', color:'#6b7280', border:'1px solid #e5e7eb', borderRadius:4, padding:'2px 8px'}}>Closed</span>
-              <div style={{...s.node(), textAlign:'center', fontSize:13}}>Redis call<br/><span style={{fontSize:11, color:'#9ca3af'}}>normal latency</span></div>
+              <div style={{...s.node(), textAlign:'center', fontSize:13}}>Redis 호출<br/><span style={{fontSize:11, color:'#9ca3af'}}>정상 latency</span></div>
             </div>
             <div style={{display:'flex', flexDirection:'column', alignItems:'center', gap:8}}>
               <SmallArrow />
               <span style={{fontSize:10, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.06em', color:'#ef4444', border:'1px solid #fca5a5', borderRadius:4, padding:'2px 8px'}}>Open</span>
-              <div style={{...s.node('#fca5a5'), textAlign:'center', fontSize:13}}>Fast-fail — 0ms<br/><span style={{fontSize:11, color:'#9ca3af'}}>no network call</span></div>
+              <div style={{...s.node('#fca5a5'), textAlign:'center', fontSize:13}}>빠른 실패 — 0ms<br/><span style={{fontSize:11, color:'#9ca3af'}}>network 호출 없음</span></div>
               <SmallArrow />
-              <div style={{...s.node(), textAlign:'center', fontSize:13}}>DB fallback<br/><span style={{fontSize:11, color:'#9ca3af'}}>bounded load</span></div>
+              <div style={{...s.node(), textAlign:'center', fontSize:13}}>DB fallback<br/><span style={{fontSize:11, color:'#9ca3af'}}>제한된 부하</span></div>
             </div>
           </div>
-          <div style={{...s.node('#111827','#111827'), color:'#fff', fontWeight:600, marginTop:24}}>Request completes — gateway stays up</div>
+          <div style={{...s.node('#111827','#111827'), color:'#fff', fontWeight:600, marginTop:24}}>요청 완료 — gateway 유지</div>
         </div>
       </div>
-      <figcaption style={s.caption}>Redis down → circuit opens → 0ms rejection → DB absorbs bounded fallback traffic</figcaption>
+      <figcaption style={s.caption}>Redis 다운 → circuit 열림 → 0ms 거부 → DB가 제한된 fallback traffic 흡수</figcaption>
     </figure>
   );
 }
@@ -136,21 +136,21 @@ export function IncidentTimeline() {
   return (
     <figure style={s.fig}>
       <div style={s.box}>
-        <p style={s.label}>Redis degrades — before vs. after</p>
+        <p style={s.label}>Redis 성능 저하 — 전후 비교</p>
         <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:20}}>
           <div style={{border:'1px solid #e5e7eb', borderRadius:8, padding:20}}>
-            <p style={{fontSize:10, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.1em', color:'#9ca3af', marginBottom:16}}>Without circuit breaker</p>
-            {row('#f87171','All 100 pods hang for 30s on each auth check')}
-            {row('#f87171','Threadpools fill up, requests queue')}
-            {row('#f87171','100× simultaneous DB fallbacks overwhelm Postgres')}
-            {row('#f87171','Requires manual intervention to recover')}
+            <p style={{fontSize:10, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.1em', color:'#9ca3af', marginBottom:16}}>서킷 브레이커 없음</p>
+            {row('#f87171','100개 pod가 모두 auth 확인마다 30초 정지')}
+            {row('#f87171','Threadpool이 가득 차고 request가 queue에 쌓임')}
+            {row('#f87171','동시 DB fallback 100배가 Postgres를 압도')}
+            {row('#f87171','복구에 수동 개입 필요')}
           </div>
           <div style={{border:'1px solid #111827', borderRadius:8, padding:20}}>
-            <p style={{fontSize:10, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.1em', color:'#9ca3af', marginBottom:16}}>With circuit breaker</p>
-            {row('#111827','Circuit opens after 5 failures — 0ms fast-fail')}
-            {row('#111827','Auth falls back to DB — bounded, not 100× load')}
-            {row('#111827','Cache miss rate temporarily elevated — gateway stays up')}
-            {row('#111827','Auto-recovers when Redis comes back — no intervention needed')}
+            <p style={{fontSize:10, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.1em', color:'#9ca3af', marginBottom:16}}>서킷 브레이커 사용</p>
+            {row('#111827','5회 실패 후 circuit 열림 — 0ms 빠른 실패')}
+            {row('#111827','Auth가 DB로 fallback — 100배 부하가 아닌 제한된 부하')}
+            {row('#111827','Cache miss rate가 일시적으로 상승 — gateway 유지')}
+            {row('#111827','Redis가 돌아오면 자동 복구 — 개입 불필요')}
           </div>
         </div>
       </div>

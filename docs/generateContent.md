@@ -3,29 +3,29 @@ import TabItem from '@theme/TabItem';
 
 # /generateContent
 
-Use LiteLLM to call Google AI's generateContent endpoints for text generation, multimodal interactions, and streaming responses.
+LiteLLM을 사용해 텍스트 생성, 멀티모달 상호작용, 스트리밍 응답을 위한 Google AI의 generateContent 엔드포인트를 호출합니다.
 
-## Overview 
+## 개요 
 
-| Feature | Supported | Notes | 
+| 기능 | 지원 여부 | 참고 | 
 |-------|-------|-------|
-| Cost Tracking | ✅ |  |
-| Logging | ✅ | works across all integrations |
-| End-user Tracking | ✅ | |
-| Streaming | ✅ | |
-| Fallbacks | ✅ | between supported models |
-| Loadbalancing | ✅ | between supported models |
-| Metadata Tracking | ✅ | passes trace ID, metadata to observability callbacks (e.g. S3, Langfuse) |
+| 비용 추적 | ✅ |  |
+| 로깅 | ✅ | 모든 통합에서 작동 |
+| 최종 사용자 추적 | ✅ | |
+| 스트리밍 | ✅ | |
+| 폴백 | ✅ | 지원되는 모델 간 적용 |
+| 로드 밸런싱 | ✅ | 지원되는 모델 간 적용 |
+| 메타데이터 추적 | ✅ | trace ID와 metadata를 observability 콜백(예: S3, Langfuse)에 전달 |
 
-## Usage 
+## 사용법 
 ---
 
-### LiteLLM Python SDK 
+### `LiteLLM Python SDK`
 
 <Tabs>
-<TabItem value="basic" label="Basic Usage">
+<TabItem value="basic" label="Basic 사용법">
 
-#### Non-streaming example
+#### 비스트리밍 예시 {#non-streaming-example}
 ```python showLineNumbers title="Basic Text Generation"
 from litellm.google_genai import agenerate_content
 from google.genai.types import ContentDict, PartDict
@@ -49,7 +49,7 @@ response = await agenerate_content(
 print(response)
 ```
 
-#### Streaming example
+#### 스트리밍 예시 {#streaming-example}
 ```python showLineNumbers title="Streaming Text Generation"
 from litellm.google_genai import agenerate_content_stream
 from google.genai.types import ContentDict, PartDict
@@ -77,9 +77,9 @@ async for chunk in response:
 
 </TabItem>
 
-<TabItem value="sync" label="Sync Usage">
+<TabItem value="sync" label="Sync 사용법">
 
-#### Sync non-streaming example
+#### Sync 비스트리밍 예시 {#sync-non-streaming-example}
 ```python showLineNumbers title="Sync Text Generation"
 from litellm.google_genai import generate_content
 from google.genai.types import ContentDict, PartDict
@@ -103,7 +103,7 @@ response = generate_content(
 print(response)
 ```
 
-#### Sync streaming example
+#### Sync 스트리밍 예시 {#sync-streaming-example}
 ```python showLineNumbers title="Sync Streaming Text Generation"
 from litellm.google_genai import generate_content_stream
 from google.genai.types import ContentDict, PartDict
@@ -132,9 +132,9 @@ for chunk in response:
 </TabItem>
 </Tabs>
 
-### LiteLLM Proxy Server 
+### `LiteLLM Proxy Server`
 
-1. Setup config.yaml
+1. config.yaml을 설정합니다.
 
 ```yaml
 model_list:
@@ -144,13 +144,13 @@ model_list:
         api_key: os.environ/GEMINI_API_KEY
 ```
 
-2. Start proxy 
+2. proxy를 시작합니다.
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-3. Test it! 
+3. 테스트합니다.
 
 <Tabs>
 <TabItem value="gemini-proxy" label="Google GenAI SDK">
@@ -182,7 +182,7 @@ response = client.models.generate_content(
 
 <TabItem value="curl-proxy" label="curl">
 
-#### Generate Content
+#### 콘텐츠 생성 {#generate-content}
 
 ```bash showLineNumbers title="generateContent via LiteLLM Proxy"
 curl -L -X POST 'http://localhost:4000/v1beta/models/gemini-flash:generateContent' \
@@ -205,7 +205,7 @@ curl -L -X POST 'http://localhost:4000/v1beta/models/gemini-flash:generateConten
 }'
 ```
 
-#### Stream Generate Content
+#### 스트리밍 콘텐츠 생성 {#stream-generate-content}
 
 ```bash showLineNumbers title="streamGenerateContent via LiteLLM Proxy"
 curl -L -X POST 'http://localhost:4000/v1beta/models/gemini-flash:streamGenerateContent' \
@@ -232,6 +232,6 @@ curl -L -X POST 'http://localhost:4000/v1beta/models/gemini-flash:streamGenerate
 </Tabs>
 
 
-## Related 
+## 관련 문서 {#related}
 
 - [Use LiteLLM with gemini-cli](../docs/tutorials/litellm_gemini_cli)

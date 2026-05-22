@@ -1,90 +1,90 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# LiteLLM AI Gateway Prompt Management
+# LiteLLM AI Gateway 프롬프트 관리 {#litellm-ai-gateway-prompt-management}
 
-Use the LiteLLM AI Gateway to create, manage and version your prompts.
+LiteLLM AI Gateway를 사용해 프롬프트를 생성하고 관리하며 버전을 지정합니다.
 
-## Quick Start
+## 빠른 시작
 
-### Accessing the Prompts Interface
+### Prompts 인터페이스 접근 {#prompts-interface}
 
-1. Navigate to **Experimental > Prompts** in your LiteLLM dashboard
-2. You'll see a table displaying all your existing prompts with the following columns:
-   - **Prompt ID**: Unique identifier for each prompt
-   - **Model**: The LLM model configured for the prompt
-   - **Created At**: Timestamp when the prompt was created
-   - **Updated At**: Timestamp of the last update
-   - **Type**: Prompt type (e.g., db)
-   - **Actions**: Delete and manage prompt options (admin only)
+1. LiteLLM dashboard에서 **Experimental > Prompts**로 이동합니다.
+2. 기존 프롬프트가 다음 열과 함께 테이블에 표시됩니다.
+   - **Prompt ID**: 각 프롬프트의 고유 식별자
+   - **Model**: 프롬프트에 설정된 LLM 모델
+   - **Created At**: 프롬프트가 생성된 타임스탬프
+   - **Updated At**: 마지막 업데이트 타임스탬프
+   - **Type**: 프롬프트 유형(예: db)
+   - **Actions**: 프롬프트 삭제 및 관리 옵션(admin only)
 
 ![Prompt Table](../../img/prompt_table.png)
 
-## Create a Prompt
+## 프롬프트 생성 {#prompt-create}
 
-Click the **+ Add New Prompt** button to create a new prompt.
+새 프롬프트를 만들려면 **+ Add New Prompt** 버튼을 클릭합니다.
 
-### Step 1: Select Your Model
+### 1단계: 모델 선택 {#step-1-select-model}
 
-Choose the LLM model you want to use from the dropdown menu at the top. You can select from any of your configured models (e.g., `aws/anthropic/bedrock-claude-3-5-sonnet`, `gpt-4o`, etc.).
+상단 드롭다운 메뉴에서 사용할 LLM 모델을 선택합니다. 설정된 모델 중 아무 모델이나 선택할 수 있습니다(예: `aws/anthropic/bedrock-claude-3-5-sonnet`, `gpt-4o` 등).
 
-### Step 2: Set the Developer Message 
+### 2단계: Developer Message 설정 {#step-2-developer-message}
 
-The **Developer message** section allows you to set optional system instructions for the model. This acts as the system prompt that guides the model's behavior.
+**Developer message** 섹션에서는 모델에 대한 선택적 시스템 지침을 설정할 수 있습니다. 이는 모델 동작을 안내하는 시스템 프롬프트로 작동합니다.
 
-For example:
+예:
 
 ```
 Respond as jack sparrow would
 ```
 
-This will instruct the model to respond in the style of Captain Jack Sparrow from Pirates of the Caribbean.
+이 설정은 모델이 영화 캐리비안의 해적에 나오는 Captain Jack Sparrow 스타일로 응답하도록 지시합니다.
 
-![Add Prompt with Developer Message](../../img/add_prompt.png)
+![Developer Message가 포함된 프롬프트 추가](../../img/add_prompt.png)
 
-### Step 3: Add Prompt Messages
+### 3단계: Prompt Messages 추가 {#step-3-prompt-messages}
 
-In the **Prompt messages** section, you can add the actual prompt content. Click **+ Add message** to add additional messages to your prompt template.
+**Prompt messages** 섹션에서 실제 프롬프트 콘텐츠를 추가할 수 있습니다. 프롬프트 템플릿에 추가 메시지를 넣으려면 **+ Add message**를 클릭합니다.
 
-### Step 4: Use Variables in Your Prompts
+### 4단계: 프롬프트에서 변수 사용 {#step-4-prompt-variables}
 
-Variables allow you to create dynamic prompts that can be customized at runtime. Use the `{{variable_name}}` syntax to insert variables into your prompts.
+변수를 사용하면 런타임에 사용자 지정 가능한 동적 프롬프트를 만들 수 있습니다. 프롬프트에 변수를 삽입하려면 `{{variable_name}}` 구문을 사용합니다.
 
-For example:
+예:
 
 ```
 Give me a recipe for {{dish}}
 ```
 
-The UI will automatically detect variables in your prompt and display them in the **Detected variables** section.
+UI는 프롬프트의 변수를 자동 감지하고 **Detected variables** 섹션에 표시합니다.
 
-![Add Prompt with Variables](../../img/add_prompt_var.png)
+![변수가 포함된 프롬프트 추가](../../img/add_prompt_var.png)
 
-### Step 5: Test Your Prompt
+### 5단계: 프롬프트 테스트 {#step-5-test-prompt}
 
-Before saving, you can test your prompt directly in the UI:
+저장하기 전에 UI에서 프롬프트를 직접 테스트할 수 있습니다.
 
-1. Fill in the template variables in the right panel (e.g., set `dish` to `cookies`)
-2. Type a message in the chat interface to test the prompt
-3. The assistant will respond using your configured model, developer message, and substituted variables
+1. 오른쪽 패널에서 템플릿 변수를 입력합니다(예: `dish`를 `cookies`로 설정).
+2. 프롬프트를 테스트하기 위해 채팅 인터페이스에 메시지를 입력합니다.
+3. 어시스턴트는 설정된 모델, developer message, 치환된 변수를 사용해 응답합니다.
 
-![Test Prompt with Variables](../../img/add_prompt_use_var1.png)
+![변수가 포함된 프롬프트 테스트](../../img/add_prompt_use_var1.png)
 
-The result will show the model's response with your variables substituted:
+결과에는 변수가 치환된 모델 응답이 표시됩니다.
 
-![Prompt Test Results](../../img/add_prompt_use_var.png)
+![프롬프트 테스트 결과](../../img/add_prompt_use_var.png)
 
-### Step 6: Save Your Prompt
+### 6단계: 프롬프트 저장 {#step-6-save-prompt}
 
-Once you're satisfied with your prompt, click the **Save** button in the top right corner to save it to your prompt library.
+프롬프트가 만족스럽다면 오른쪽 위의 **Save** 버튼을 클릭해 프롬프트 라이브러리에 저장합니다.
 
-## Using Your Prompts
+## 프롬프트 사용 {#prompt-usage}
 
-Now that your prompt is published, you can use it in your application via the LiteLLM proxy API. Click the **Get Code** button in the UI to view code snippets customized for your prompt.
+프롬프트가 게시되면 LiteLLM Proxy API를 통해 애플리케이션에서 사용할 수 있습니다. UI의 **Get Code** 버튼을 클릭하면 프롬프트에 맞게 사용자 지정된 코드 스니펫을 볼 수 있습니다.
 
-### Basic Usage
+### 기본 사용법 {#basic-usage}
 
-Call a prompt using just the prompt ID and model:
+프롬프트 ID와 모델만으로 프롬프트를 호출합니다.
 
 <Tabs>
 <TabItem value="curl" label="cURL">
@@ -146,9 +146,9 @@ main();
 </TabItem>
 </Tabs>
 
-### With Custom Messages
+### 사용자 지정 메시지 사용 {#custom-messages}
 
-Add custom messages to your prompt:
+프롬프트에 사용자 지정 메시지를 추가합니다.
 
 <Tabs>
 <TabItem value="curl" label="cURL">
@@ -222,9 +222,9 @@ main();
 </TabItem>
 </Tabs>
 
-### With Prompt Variables
+### 프롬프트 변수 사용 {#prompt-variables}
 
-Pass variables to your prompt template using `prompt_variables`:
+`prompt_variables`를 사용해 프롬프트 템플릿에 변수를 전달합니다.
 
 <Tabs>
 <TabItem value="curl" label="cURL">
@@ -295,80 +295,80 @@ main();
 </TabItem>
 </Tabs>
 
-## Prompt Versioning
+## 프롬프트 버전 관리 {#prompt-versioning}
 
-LiteLLM automatically versions your prompts each time you update them. This allows you to maintain a complete history of changes and roll back to previous versions if needed.
+LiteLLM은 프롬프트를 업데이트할 때마다 자동으로 버전을 생성합니다. 이를 통해 변경 이력을 완전하게 유지하고 필요할 때 이전 버전으로 롤백할 수 있습니다.
 
-### View Prompt Details
+### 프롬프트 상세 보기 {#prompt-details}
 
-Click on any prompt ID in the prompts table to view its details page. This page shows:
-- **Prompt ID**: The unique identifier for your prompt
-- **Version**: The current version number (e.g., v4)
-- **Prompt Type**: The storage type (e.g., db)
-- **Created At**: When the prompt was first created
-- **Last Updated**: Timestamp of the most recent update
-- **LiteLLM Parameters**: The raw JSON configuration
+프롬프트 테이블에서 prompt ID를 클릭하면 상세 페이지를 볼 수 있습니다. 이 페이지에는 다음이 표시됩니다.
+- **Prompt ID**: 프롬프트의 고유 식별자
+- **Version**: 현재 버전 번호(예: v4)
+- **Prompt Type**: 저장소 유형(예: db)
+- **Created At**: 프롬프트가 처음 생성된 시점
+- **Last Updated**: 가장 최근 업데이트 타임스탬프
+- **LiteLLM Parameters**: 원시 JSON 설정
 
 ![Prompt Details](../../img/edit_prompt.png)
 
-### Update a Prompt
+### Prompt 업데이트
 
-To update an existing prompt:
+기존 프롬프트를 업데이트하려면:
 
-1. Click on the prompt you want to update from the prompts table
-2. Click the **Prompt Studio** button in the top right
-3. Make your changes to:
-   - Model selection
-   - Developer message (system instructions)
-   - Prompt messages
-   - Variables
-4. Test your changes in the chat interface on the right
-5. Click the **Update** button to save the new version
+1. 프롬프트 테이블에서 업데이트할 프롬프트를 클릭합니다.
+2. 오른쪽 위의 **Prompt Studio** 버튼을 클릭합니다.
+3. 다음 항목을 변경합니다.
+   - 모델 선택
+   - Developer message(시스템 지침)
+   - 프롬프트 메시지
+   - 변수
+4. 오른쪽 채팅 인터페이스에서 변경 사항을 테스트합니다.
+5. 새 버전을 저장하려면 **Update** 버튼을 클릭합니다.
 
-![Edit Prompt in Studio](../../img/edit_prompt2.png)
+![Studio에서 프롬프트 편집](../../img/edit_prompt2.png)
 
-Each time you click **Update**, a new version is created (v1 → v2 → v3, etc.) while maintaining the same prompt ID.
+**Update**를 클릭할 때마다 같은 프롬프트 ID를 유지하면서 새 버전이 생성됩니다(v1 -> v2 -> v3 등).
 
-### View Version History
+### 버전 기록 보기 {#version-history}
 
-To view all versions of a prompt:
+프롬프트의 모든 버전을 보려면:
 
-1. Open the prompt in **Prompt Studio**
-2. Click the **History** button in the top right
-3. A **Version History** panel will open on the right side
+1. **Prompt Studio**에서 prompt를 엽니다.
+2. 오른쪽 위의 **History** 버튼을 클릭합니다.
+3. 오른쪽에 **Version History** 패널이 열립니다.
 
-![Version History Panel](../../img/edit_prompt3.png)
+![버전 기록 패널](../../img/edit_prompt3.png)
 
-The version history panel displays:
-- **Latest version** (marked with a "Latest" badge and "Active" status)
-- All previous versions (v4, v3, v2, v1, etc.)
-- Timestamps for each version
-- Database save status ("Saved to Database")
+버전 기록 패널에는 다음이 표시됩니다.
+- **Latest version**("Latest" 배지와 "Active" 상태로 표시)
+- 모든 이전 버전(v4, v3, v2, v1 등)
+- 각 버전의 타임스탬프
+- 데이터베이스 저장 상태("Saved to Database")
 
-### View and Restore Older Versions
+### 이전 버전 보기 및 복원 {#previous-version-restore}
 
-To view or restore an older version:
+이전 버전을 보거나 복원하려면:
 
-1. In the **Version History** panel, click on any previous version (e.g., v2)
-2. The prompt studio will load that version's configuration
-3. You can see:
-   - The developer message from that version
-   - The prompt messages from that version
-   - The model and parameters used
-   - All variables defined at that time
+1. **Version History** 패널에서 이전 버전(예: v2)을 클릭합니다.
+2. Prompt Studio가 해당 버전의 설정을 불러옵니다.
+3. 다음을 확인할 수 있습니다.
+   - 해당 버전의 developer message
+   - 해당 버전의 prompt messages
+   - 사용된 모델과 매개변수
+   - 당시 정의된 모든 변수
 
 ![View Older Version](../../img/edit_prompt4.png)
 
-The selected version will be highlighted with an "Active" badge in the version history panel.
+선택한 버전은 버전 기록 패널에서 "Active" 배지로 강조 표시됩니다.
 
-To restore an older version:
-1. View the older version you want to restore
-2. Click the **Update** button
-3. This will create a new version with the content from the older version
+이전 버전을 복원하려면:
+1. 복원하려는 이전 버전을 봅니다.
+2. **Update** 버튼을 클릭합니다.
+3. 이전 버전의 콘텐츠로 새 버전이 생성됩니다.
 
-### Use Specific Versions in API Calls
+### API 호출에서 특정 버전 사용 {#specific-version-api-call}
 
-By default, API calls use the latest version of a prompt. To use a specific version, pass the `prompt_version` parameter:
+기본적으로 API 호출은 프롬프트의 최신 버전을 사용합니다. 특정 버전을 사용하려면 `prompt_version` 매개변수를 전달합니다.
 
 <Tabs>
 <TabItem value="curl" label="cURL">
@@ -444,8 +444,3 @@ main();
 
 </TabItem>
 </Tabs>
-
-
-
-
-

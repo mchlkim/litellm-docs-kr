@@ -2,150 +2,150 @@ import Image from '@theme/IdealImage';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# ✨ [Beta] Project Management UI
+# ✨ [Beta] 프로젝트 관리 UI
 
 :::info
 
-This is an Enterprise feature.
-[Enterprise Pricing](https://www.litellm.ai/#pricing)
+이 기능은 엔터프라이즈 기능입니다.
+[엔터프라이즈 가격](https://www.litellm.ai/#pricing)
 
-[Contact us here to get a free trial](https://enterprise.litellm.ai/demo)
+[무료 체험을 받으려면 여기로 문의하세요](https://enterprise.litellm.ai/demo)
 
 :::
 
-Manage projects directly from the LiteLLM Admin UI. Projects sit between teams and keys in your organizational hierarchy, enabling fine-grained access control and budget management for specific use cases or applications.
+LiteLLM 관리자 UI에서 직접 프로젝트를 관리할 수 있습니다. 프로젝트는 조직 계층에서 팀과 키 사이에 위치하며, 특정 사용 사례나 애플리케이션에 대해 세밀한 액세스 제어와 예산 관리를 지원합니다.
 
 :::info
-Project Management is a beta feature. The API and UI are subject to change. For the full API documentation, see [Project Management](./project_management.md).
+프로젝트 관리는 베타 기능입니다. API와 UI는 변경될 수 있습니다. 전체 API 문서는 [Project Management](./project_management.md)를 참조하세요.
 :::
 
-## Overview
+## 개요
 
-Projects enable you to:
+프로젝트를 사용하면 다음을 수행할 수 있습니다.
 
-- Organize API keys by use case or application
-- Set project-level budgets and rate limits
-- Track spend and usage at the project level
-- Control which models each project can access
-- Maintain clear separation between different applications or teams
+- 사용 사례 또는 애플리케이션별로 API 키 구성
+- 프로젝트 수준의 예산 및 속도 제한 설정
+- 프로젝트 수준의 지출 및 사용량 추적
+- 각 프로젝트가 액세스할 수 있는 모델 제어
+- 서로 다른 애플리케이션 또는 팀 간의 명확한 분리 유지
 
-**Hierarchy**: `Organizations > Teams > Projects > Keys`
+**계층 구조**: `Organizations > Teams > Projects > Keys`
 
-For detailed information about the project API and configuration, see [Project Management](./project_management.md).
+프로젝트 API와 설정에 대한 자세한 내용은 [Project Management](./project_management.md)를 참조하세요.
 
-## Prerequisites
+## 사전 준비
 
-- Admin or Team Admin access
-- At least one team created (projects belong to teams)
-- The LiteLLM Admin UI running locally or remote
+- Admin 또는 Team Admin 액세스 권한
+- 하나 이상의 팀 생성 완료(프로젝트는 팀에 속함)
+- 로컬 또는 원격에서 실행 중인 LiteLLM 관리자 UI
 
-## Enable Projects in UI Settings
+## UI 설정에서 프로젝트 활성화
 
-Before you can create projects, you need to enable the Projects feature in the Admin UI settings.
+프로젝트를 만들기 전에 관리자 UI 설정에서 Projects 기능을 활성화해야 합니다.
 
-### Step 1: Access Admin Settings
+### 단계 1: 관리자 설정 접근
 
-Navigate to the Admin UI (e.g., `http://localhost:4000/ui/?login=success`).
+관리자 UI로 이동합니다(예: `http://localhost:4000/ui/?login=success`).
 
 ![](https://colony-recorder.s3.amazonaws.com/files/2026-03-01/b8de4dbf-a23b-4979-84a3-95fe17427b5a/ascreenshot_84dcb13b57a84fd589dff2d5af58adde_text_export.jpeg)
 
-### Step 2: Open Settings Menu
+### 단계 2: 설정 메뉴 열기
 
-Click the **"New"** button in the top navigation.
+상단 탐색 영역에서 **"New"** 버튼을 클릭합니다.
 
 ![](https://colony-recorder.s3.amazonaws.com/files/2026-03-01/b8de4dbf-a23b-4979-84a3-95fe17427b5a/ascreenshot_447c8ea124f64d0eb18d3c9621f7cbbc_text_export.jpeg)
 
-### Step 3: Navigate to Admin Settings
+### 단계 3: 관리자 설정으로 이동
 
-Click **"Admin Settings"**.
+**"Admin Settings"**를 클릭합니다.
 
 ![](https://colony-recorder.s3.amazonaws.com/files/2026-03-01/cc2ce9d9-d2d2-49f3-9fb8-c546fb8dfdcf/ascreenshot_fd792e9dbda24e7eb5cdb508c4f181f8_text_export.jpeg)
 
-### Step 4: Open UI Settings
+### 단계 4: UI 설정 열기
 
-Click **"UI Settings New"**.
+**"UI Settings New"**를 클릭합니다.
 
 ![](https://colony-recorder.s3.amazonaws.com/files/2026-03-01/d667f4b4-300b-47c6-9d76-12e439519da6/ascreenshot_3f3db4df432843a48b53ae16b311e7df_text_export.jpeg)
 
-### Step 5: Enable Projects Feature
+### 단계 5: Projects 기능 활성화
 
-Click the toggle to enable the Projects feature.
+토글을 클릭해 Projects 기능을 활성화합니다.
 
 ![](https://colony-recorder.s3.amazonaws.com/files/2026-03-01/4819f76b-4855-4f5c-8c4b-b4c272399724/ascreenshot_9df0555ae6db425ab839d73485ee9b99_text_export.jpeg)
 
-Once enabled, the Projects section will appear in your Admin UI navigation, and you'll be able to create and manage projects.
+활성화되면 관리자 UI 탐색 영역에 Projects 섹션이 표시되며, 프로젝트를 만들고 관리할 수 있습니다.
 
-## Create and Manage Projects
+## 프로젝트 생성 및 관리
 
-After enabling the Projects feature, you can create projects from the Projects page.
+Projects 기능을 활성화한 후 Projects 페이지에서 프로젝트를 만들 수 있습니다.
 
-### Step 1: Navigate to Projects
+### 단계 1: Projects로 이동
 
-Click **"Projects New"** in the sidebar.
+사이드바에서 **"Projects New"**를 클릭합니다.
 
 ![](https://colony-recorder.s3.amazonaws.com/files/2026-03-01/889e2e55-af7a-42f1-90d5-8bba8efaa986/ascreenshot_c42e33e2226c4e8b8e8ea83a7c8955e4_text_export.jpeg)
 
-### Step 2: Create a New Project
+### 단계 2: 새 프로젝트 만들기
 
-Click **"Create Project"**.
+**"Create Project"**를 클릭합니다.
 
 ![](https://colony-recorder.s3.amazonaws.com/files/2026-03-01/8ecb531c-8e96-443d-ba1d-1a9e04ba2da3/ascreenshot_74f1b3c1c1b84517ae51881a050df73a_text_export.jpeg)
 
-### Step 3: Enter Project Name
+### 단계 3: 프로젝트 이름 입력
 
-Click the **"Project Name"** field and enter a name for your project.
+**"Project Name"** 필드를 클릭하고 프로젝트 이름을 입력합니다.
 
 ![](https://colony-recorder.s3.amazonaws.com/files/2026-03-01/83bf0612-2b19-4b28-ae02-bdb122dca4fa/ascreenshot_16ca328a71f04a79bb9641ab9c1ed6fe_text_export.jpeg)
 
-### Step 4: Select a Team
+### 단계 4: 팀 선택
 
-Choose which team this project belongs to. Projects are scoped to teams, so you can only access models and features available to that team.
+이 프로젝트가 속할 팀을 선택합니다. 프로젝트는 팀 범위로 제한되므로 해당 팀에서 사용할 수 있는 모델과 기능에만 액세스할 수 있습니다.
 
 ![](https://colony-recorder.s3.amazonaws.com/files/2026-03-01/653c2f1e-5140-49b8-962f-a2b112f4834c/ascreenshot_7861310ad77d4859adcae789a9d51bd0_text_export.jpeg)
 
-### Step 5: Configure Model Access
+### 단계 5: 모델 액세스 설정
 
-Select which models this project has access to. Available models are scoped to the team's allowed models.
+이 프로젝트가 액세스할 수 있는 모델을 선택합니다. 사용 가능한 모델은 팀에 허용된 모델 범위로 제한됩니다.
 
 ![](https://colony-recorder.s3.amazonaws.com/files/2026-03-01/401a5716-ea16-4744-866a-d0ed6007065d/ascreenshot_a936c3ca417a49b2b603c890dee9d0ea_text_export.jpeg)
 
-### Step 6: Create Project
+### 단계 6: 프로젝트 생성
 
-Click **"Create Project"** to save your project.
+프로젝트를 저장하려면 **"Create Project"**를 클릭합니다.
 
 ![](https://colony-recorder.s3.amazonaws.com/files/2026-03-01/2f9f9ba1-df0b-4bef-b17c-77dfc38372f7/ascreenshot_933e4c1b119d43beb84161b94b17b764_text_export.jpeg)
 
-## Use Cases
+## 사용 사례
 
-### Key Organization Within Teams
+### 팀 내 키 구성
 
-Organize API keys within a team by use case or application. Group related keys together in projects so you can manage budgets, model access, and permissions as a unit instead of individually.
+팀 내 API 키를 사용 사례 또는 애플리케이션별로 구성합니다. 관련 키를 프로젝트로 함께 묶으면 예산, 모델 액세스, 권한을 개별 항목이 아니라 하나의 단위로 관리할 수 있습니다.
 
-### Cost Allocation
+### 비용 배분
 
-Assign projects to different cost centers or teams. Track spend per project and allocate costs back to the responsible team or business unit.
+프로젝트를 서로 다른 비용 센터 또는 팀에 할당합니다. 프로젝트별 지출을 추적하고 비용을 담당 팀 또는 비즈니스 단위에 다시 배분할 수 있습니다.
 
-### Feature Rollout
+### 기능 출시
 
-Create a dedicated project for new features or experimental use cases. Control which models are available and set conservative rate limits during testing.
+새 기능 또는 실험적 사용 사례를 위한 전용 프로젝트를 만듭니다. 테스트 중에는 사용할 수 있는 모델을 제어하고 보수적인 속도 제한을 설정할 수 있습니다.
 
-### Customer Segmentation
+### 고객 세분화
 
-If you're a platform, create projects for different customer segments or use cases. Control resource allocation independently for each segment.
+플랫폼을 운영하는 경우 고객 세그먼트 또는 사용 사례별로 프로젝트를 만듭니다. 각 세그먼트에 대한 리소스 할당을 독립적으로 제어할 수 있습니다.
 
-## Next Steps
+## 다음 단계
 
-After creating a project:
+프로젝트를 만든 후에는 다음을 수행할 수 있습니다.
 
-1. **Generate API Keys** – Create API keys scoped to your project for application use
-2. **Set Budgets** – Configure project-level budget limits via the [Project Management API](./project_management.md)
-3. **Track Spend** – View project-level spend in the Usage dashboard
-4. **Manage Access** – Use [Access Groups](./access_groups.md) to control model and MCP server access
+1. **API 키 생성** - 애플리케이션 사용을 위해 프로젝트 범위의 API 키 생성
+2. **예산 설정** - [Project Management API](./project_management.md)를 통해 프로젝트 수준의 예산 한도 설정
+3. **지출 추적** - 사용법 대시보드에서 프로젝트 수준의 지출 확인
+4. **액세스 관리** - [Access Groups](./access_groups.md)를 사용하여 모델 및 MCP 서버 액세스 제어
 
-## Related Documentation
+## 관련 문서
 
-- [Project Management API](./project_management.md) – Full API reference for projects
-- [Access Groups](./access_groups.md) – Define reusable access controls for models, MCP servers, and agents
-- [Virtual Keys](./virtual_keys.md) – Create and manage API keys scoped to projects
-- [Role-based Access Control](./access_control.md) – Organizations, teams, and user roles
-- [Spend Logs](./spend_logs_deletion.md) – Track detailed request-level costs and usage
+- [Project Management API](./project_management.md) - 프로젝트에 대한 전체 API 참조
+- [Access Groups](./access_groups.md) - 모델, MCP 서버, 에이전트에 대한 재사용 가능한 액세스 제어 정의
+- [가상 키](./virtual_keys.md) - 프로젝트 범위의 API 키 생성 및 관리
+- [Role-based Access Control](./access_control.md) - 조직, 팀, 사용자 역할
+- [Spend 로그](./spend_logs_deletion.md) - 요청 수준의 상세 비용 및 사용량 추적

@@ -1,31 +1,22 @@
 // @ts-check
 // Note: type annotations allow type checking and IDEs autocompletion
 
-require('dotenv').config();
-
 // @ts-ignore
 const lightCodeTheme = require('prism-react-renderer/themes/vsLight');
 // @ts-ignore
 const darkCodeTheme = require('prism-react-renderer/themes/nightOwl');
 
-const algoliaAppId = process.env.ALGOLIA_APP_ID;
-const algoliaApiKey = process.env.ALGOLIA_API_KEY;
-const algoliaIndexName = process.env.ALGOLIA_INDEX_NAME;
-// conditional check, docs should work if these keys are missing.
-const hasAlgoliaSearch =
-  Boolean(algoliaAppId) && Boolean(algoliaApiKey) && Boolean(algoliaIndexName);
-
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'liteLLM',
-  tagline: 'Simplify LLM API Calls',
-  favicon: '/img/favicon.ico', 
+  tagline: 'LLM API 호출을 단순하게',
+  favicon: 'img/favicon.ico', 
 
   // Set the production url of your site here
-  url: 'https://docs.litellm.ai/',
+  url: 'https://mchlkim.github.io',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/',
+  baseUrl: '/litellm-docs-kr/',
 
   onBrokenLinks: 'warn',
   onBrokenMarkdownLinks: 'warn',
@@ -34,8 +25,8 @@ const config = {
   // metadata like html lang. For example, if your site is Chinese, you may want
   // to replace "en" with "zh-Hans".
   i18n: {
-    defaultLocale: 'en',
-    locales: ['en'],
+    defaultLocale: 'ko',
+    locales: ['ko'],
   },
   plugins: [
     [
@@ -139,8 +130,8 @@ const config = {
         id: 'blog',
         path: './blog',
         routeBasePath: 'blog',
-        blogTitle: 'Blog',
-        blogSidebarTitle: 'All Posts',
+        blogTitle: '블로그',
+        blogSidebarTitle: '전체 글',
         blogSidebarCount: 'ALL',
         postsPerPage: 'ALL',
         showReadingTime: false,
@@ -150,33 +141,6 @@ const config = {
       },
     ],
 
-    () => ({
-      name: 'cripchat',
-      injectHtmlTags() {
-        return {
-          headTags: [
-            {
-              tagName: 'script',
-              innerHTML: `window.$crisp=[];window.CRISP_WEBSITE_ID="be07a4d6-dba0-4df7-961d-9302c86b7ebc";(function(){d=document;s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();`,
-            },
-          ],
-        };
-      },
-    }),
-    // Ensure gtag exists before the GA script loads.
-    () => ({
-      name: 'gtag-shim',
-      injectHtmlTags() {
-        return {
-          headTags: [
-            {
-              tagName: 'script',
-              innerHTML: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}if(!window.gtag){window.gtag=gtag;}`,
-            },
-          ],
-        };
-      },
-    }),
   ],
 
   presets: [
@@ -184,13 +148,6 @@ const config = {
       'classic',
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
-        gtag:
-          process.env.NODE_ENV === 'production'
-            ? {
-                trackingID: 'G-K7K215ZVNC',
-                anonymizeIP: true,
-              }
-            : undefined,
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
           remarkPlugins: [require('./src/remark/raw-markdown')],
@@ -204,24 +161,24 @@ const config = {
     ],
   ],
 
-  // Algolia search comes from preset-classic when themeConfig.algolia is set.
   themes: ['@docusaurus/theme-mermaid'],
   markdown: {
     mermaid: true,
   },
 
-  scripts: [
-    {
-      async: true,
-      src: 'https://www.feedbackrocket.io/sdk/v1.2.js',
-      'data-fr-id': 'GQwepB0f0L-x_ZH63kR_V',
-      'data-fr-theme': 'dynamic',
-    },
-  ],
+  scripts: [],
 
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
+      announcementBar: {
+        id: 'may_townhall_2026_ko',
+        content:
+          '📅 <strong>LiteLLM 5월 타운홀</strong> — 5월 18일 월요일 오전 7:30(PST). 제품 업데이트, 로드맵, Q&A를 확인하세요. <a href="https://forms.gle/rVeiTtpY96EKLT9i9" target="_blank" rel="noopener noreferrer">등록하기 →</a>',
+        backgroundColor: '#0078d4',
+        textColor: '#ffffff',
+        isCloseable: false,
+      },
       // Replace with your project's social card
       image: 'img/docusaurus-social-card.png',
       navbar: {
@@ -231,75 +188,55 @@ const config = {
             type: 'docSidebar',
             sidebarId: 'tutorialSidebar',
             position: 'left',
-            label: 'Docs',
+            label: '문서',
           },
           {
             type: 'docSidebar',
             sidebarId: 'learnSidebar',
             position: 'left',
-            label: 'Learn',
+            label: '학습',
           },
           {
             type: 'docSidebar',
             sidebarId: 'integrationsSidebar',
             position: 'left',
-            label: 'Integrations',
+            label: '통합',
           },
           {
             position: 'left',
-            label: 'Enterprise',
-            to: 'docs/enterprise',
+            label: '엔터프라이즈',
+            to: "docs/enterprise"
           },
-          {to: '/release_notes', label: 'Changelog', position: 'left'},
-          {to: '/blog', label: 'Blog', position: 'left'},
-          {
-            href: 'https://docs.litellm-agent-platform.ai/',
-            label: 'LiteLLM Agent Platform',
-            position: 'left',
-          },
+          { to: '/release_notes', label: '변경 이력', position: 'left' },
+          { to: '/blog', label: '블로그', position: 'left' },
           {
             href: 'https://github.com/BerriAI/litellm',
             position: 'right',
             className: 'header-github-link',
-            'aria-label': 'GitHub repository',
+            'aria-label': 'GitHub 저장소',
           },
           {
             href: 'https://www.litellm.ai/support',
             position: 'right',
             className: 'header-discord-link',
-            'aria-label': 'Discord / Slack community',
+            'aria-label': 'Discord / Slack 커뮤니티',
           },
-          // Shown on mobile; hidden on desktop via custom.css (sidebar has search).
-          ...(hasAlgoliaSearch
-            ? [{type: 'search', position: 'right'}]
-            : []),
         ],
       },
-      ...(hasAlgoliaSearch
-        ? {
-            algolia: {
-              appId: algoliaAppId,
-              apiKey: algoliaApiKey,
-              indexName: algoliaIndexName,
-              contextualSearch: true,
-              searchPagePath: 'search',
-            },
-          }
-        : {}),
       footer: {
         style: 'dark',
         links: [
           {
-            title: 'Docs',
+            title: '문서',
             items: [
               {
-                label: 'Getting Started',
-                to: 'https://docs.litellm.ai/docs/',
+                label: '시작하기',
+                to: '/docs/',
               },
             ],
           },
           {
-            title: 'Community',
+            title: '커뮤니티',
             items: [
               {
                 label: 'Discord',
@@ -312,7 +249,7 @@ const config = {
             ],
           },
           {
-            title: 'More',
+            title: '더 보기',
             items: [
               {
                 label: 'GitHub',

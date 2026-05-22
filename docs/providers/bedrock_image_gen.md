@@ -1,27 +1,27 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# AWS Bedrock - Image Generation
+# AWS Bedrock - 이미지 생성 {#aws-bedrock---image-generation}
 
-Use Bedrock for image generation with Stable Diffusion, Amazon Titan Image Generator, and Amazon Nova Canvas models.
+Stable Diffusion, Amazon Titan Image Generator, Amazon Nova Canvas 모델로 이미지를 생성할 때 Bedrock을 사용합니다.
 
-## Supported Models
+## 지원되는 모델 {#supported-models}
 
-| Model Name              | Function Call                               | Cost Tracking |
+| 모델명              | 함수 호출                               | 비용 추적 |
 |-------------------------|---------------------------------------------|---------------|
-| Stable Diffusion 3 - v0 | `image_generation(model="bedrock/stability.stability.sd3-large-v1:0", prompt=prompt)` | ✅ |
-| Stable Diffusion - v0   | `image_generation(model="bedrock/stability.stable-diffusion-xl-v0", prompt=prompt)` | ✅ |
-| Stable Diffusion - v1   | `image_generation(model="bedrock/stability.stable-diffusion-xl-v1", prompt=prompt)` | ✅ |
-| Amazon Titan Image Generator - v1 | `image_generation(model="bedrock/amazon.titan-image-generator-v1", prompt=prompt)` | ✅ |
-| Amazon Titan Image Generator - v2 | `image_generation(model="bedrock/amazon.titan-image-generator-v2:0", prompt=prompt)` | ✅ |
-| Amazon Nova Canvas - v1 | `image_generation(model="bedrock/amazon.nova-canvas-v1:0", prompt=prompt)` | ✅ |
+| `Stable Diffusion 3 - v0` | `image_generation(model="bedrock/stability.stability.sd3-large-v1:0", prompt=prompt)` | ✅ |
+| `Stable Diffusion - v0`   | `image_generation(model="bedrock/stability.stable-diffusion-xl-v0", prompt=prompt)` | ✅ |
+| `Stable Diffusion - v1`   | `image_generation(model="bedrock/stability.stable-diffusion-xl-v1", prompt=prompt)` | ✅ |
+| `Amazon Titan Image Generator - v1` | `image_generation(model="bedrock/amazon.titan-image-generator-v1", prompt=prompt)` | ✅ |
+| `Amazon Titan Image Generator - v2` | `image_generation(model="bedrock/amazon.titan-image-generator-v2:0", prompt=prompt)` | ✅ |
+| `Amazon Nova Canvas - v1` | `image_generation(model="bedrock/amazon.nova-canvas-v1:0", prompt=prompt)` | ✅ |
 
-## Usage
+## 사용법
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
 
-### Basic Usage
+### 기본 사용법 {#basic-usage}
 
 ```python
 import os
@@ -38,7 +38,7 @@ response = image_generation(
 print(f"response: {response}")
 ```
 
-### Set Optional Parameters
+### 선택적 파라미터 설정하기 {#set-optional-parameters}
 
 ```python
 import os
@@ -60,9 +60,9 @@ print(f"response: {response}")
 ```
 
 </TabItem>
-<TabItem value="proxy" label="PROXY">
+<TabItem value="proxy" label="프록시">
 
-### 1. Setup config.yaml
+### 1. config.yaml 설정하기 {#1-setup-configyaml}
 
 ```yaml
 model_list:
@@ -74,15 +74,15 @@ model_list:
       aws_secret_access_id: my-id # OPTIONAL - all boto3 auth params supported
 ```
 
-### 2. Start proxy 
+### 2. 프록시 시작하기 {#2-start-proxy}
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-### 3. Test it! 
+### 3. 테스트 {#3-test-it}
 
-**Text to Image:**
+**텍스트를 이미지로 변환:**
 
 ```bash
 curl -L -X POST 'http://0.0.0.0:4000/v1/images/generations' \
@@ -94,7 +94,7 @@ curl -L -X POST 'http://0.0.0.0:4000/v1/images/generations' \
 }'
 ```
 
-**Color Guided Generation:**
+**색상 가이드 생성:**
 
 ```bash
 curl -L -X POST 'http://0.0.0.0:4000/v1/images/generations' \
@@ -111,15 +111,15 @@ curl -L -X POST 'http://0.0.0.0:4000/v1/images/generations' \
 </TabItem>
 </Tabs>
 
-## Amazon Nova Canvas - Image Edit
+## Amazon Nova Canvas - 이미지 편집 {#amazon-nova-canvas---image-edit}
 
-Use OpenAI-compatible `image_edit()` with Bedrock Nova Canvas (`amazon.nova-canvas-v1:0`). Requests use the same `InvokeModel` API as generation; LiteLLM maps inputs to [Nova Canvas task types](https://docs.aws.amazon.com/nova/latest/userguide/image-gen-access.html):
+Bedrock Nova Canvas(`amazon.nova-canvas-v1:0`)와 함께 OpenAI 호환 `image_edit()`를 사용합니다. 요청은 생성과 동일한 `InvokeModel` API를 사용하며, LiteLLM은 입력을 [Nova Canvas 작업 유형](https://docs.aws.amazon.com/nova/latest/userguide/image-gen-access.html)에 매핑합니다.
 
-| Scenario | `taskType` sent to Bedrock |
+| 시나리오 | Bedrock으로 전송되는 `taskType` |
 |----------|----------------------------|
-| Image + prompt (no mask) | `IMAGE_VARIATION` |
-| Image + prompt + mask | `INPAINTING` (`inPaintingParams.image`, `maskImage` or `maskPrompt`) |
-| `taskType: OUTPAINTING` + `mask` or `maskPrompt` | `OUTPAINTING` (Bedrock requires one; LiteLLM raises a clear error if both are missing) |
+| 이미지 + 프롬프트(마스크 없음) | `IMAGE_VARIATION` |
+| 이미지 + 프롬프트 + 마스크 | `INPAINTING`(`inPaintingParams.image`, `maskImage` 또는 `maskPrompt`) |
+| `taskType: OUTPAINTING` + `mask` 또는 `maskPrompt` | `OUTPAINTING`(Bedrock은 둘 중 하나를 요구하며, 둘 다 없으면 LiteLLM이 명확한 오류를 발생시킵니다.) |
 | `taskType: BACKGROUND_REMOVAL` | `BACKGROUND_REMOVAL` |
 
 ```python
@@ -132,11 +132,11 @@ response = image_edit(
 )
 ```
 
-For **`BACKGROUND_REMOVAL`**, the AWS request must not include `imageGenerationConfig`; LiteLLM omits it for that task even if you pass `size`, `n`, `seed`, etc. Additional Nova Canvas inference IDs for image edit should set **`supports_nova_canvas_image_edit`: true** in `model_prices_and_context_window.json` (see `amazon.nova-canvas-v1:0`).
+**`BACKGROUND_REMOVAL`**의 경우 AWS 요청에 `imageGenerationConfig`가 포함되면 안 됩니다. `size`, `n`, `seed` 등을 전달하더라도 LiteLLM은 이 작업에서 해당 값을 생략합니다. 이미지 편집용 Nova Canvas 추론 ID를 추가하려면 `model_prices_and_context_window.json`에서 **`supports_nova_canvas_image_edit`: true**로 설정해야 합니다(`amazon.nova-canvas-v1:0` 참조).
 
-## Using Inference Profiles with Image Generation
+## 이미지 생성에서 추론 프로필 사용 {#using-inference-profiles-with-image-generation}
 
-For AWS Bedrock Application Inference Profiles with image generation, use the `model_id` parameter to specify the inference profile ARN:
+이미지 생성에서 AWS Bedrock Application Inference Profiles를 사용할 때는 `model_id` 파라미터로 추론 프로필 ARN을 지정합니다.
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -153,7 +153,7 @@ print(f"response: {response}")
 ```
 
 </TabItem>
-<TabItem value="proxy" label="PROXY">
+<TabItem value="proxy" label="프록시">
 
 ```yaml
 model_list:
@@ -167,6 +167,6 @@ model_list:
 </TabItem>
 </Tabs>
 
-## Authentication
+## 인증
 
-All standard Bedrock authentication methods are supported for image generation. See [Bedrock Authentication](./bedrock#boto3---authentication) for details.
+이미지 생성에는 모든 표준 Bedrock 인증 방식이 지원됩니다. 자세한 내용은 [Bedrock 인증](./bedrock#boto3---authentication)을 참고하세요.

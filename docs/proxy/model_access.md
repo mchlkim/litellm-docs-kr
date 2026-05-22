@@ -1,11 +1,11 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Restrict Model Access
+# 모델 액세스 제한 {#restrict-model-access}
 
-## **Restrict models by Virtual Key**
+## **Virtual Key로 모델 제한** {#restrict-models-by-virtual-key}
 
-Set allowed models for a key using the `models` param
+`models` 매개변수를 사용해 키에 허용할 모델을 설정합니다.
 
 
 ```shell
@@ -17,14 +17,14 @@ curl 'http://0.0.0.0:4000/key/generate' \
 
 :::info
 
-This key can only make requests to `models` that are `gpt-3.5-turbo` or `gpt-4`
+이 키는 `gpt-3.5-turbo` 또는 `gpt-4`인 `models`에만 요청할 수 있습니다.
 
 :::
 
-Verify this is set correctly by 
+다음으로 올바르게 설정되었는지 확인합니다.
 
 <Tabs>
-<TabItem label="Allowed Access" value = "allowed">
+<TabItem label="허용된 액세스" value = "allowed">
 
 ```shell
 curl -i http://localhost:4000/v1/chat/completions \
@@ -40,11 +40,11 @@ curl -i http://localhost:4000/v1/chat/completions \
 
 </TabItem>
 
-<TabItem label="Disallowed Access" value = "not-allowed">
+<TabItem label="허용되지 않은 액세스" value = "not-allowed">
 
 :::info
 
-Expect this to fail since gpt-4o is not in the `models` for the key generated
+생성된 키의 `models`에 gpt-4o가 없으므로 이 요청은 실패해야 합니다.
 
 :::
 
@@ -65,12 +65,12 @@ curl -i http://localhost:4000/v1/chat/completions \
 </Tabs>
 
 
-### [API Reference](https://litellm-api.up.railway.app/#/key%20management/generate_key_fn_key_generate_post)
+### [API 참고 문서](https://litellm-api.up.railway.app/#/key%20management/generate_key_fn_key_generate_post)
 
-## **Restrict models by `team_id`**
-`litellm-dev` can only access `azure-gpt-3.5`
+## **`team_id`로 모델 제한** {#restrict-models-by-team_id}
+`litellm-dev`는 `azure-gpt-3.5`에만 액세스할 수 있습니다.
 
-**1. Create a team via `/team/new`**
+**1. `/team/new`를 통해 팀 생성**
 ```shell
 curl --location 'http://localhost:4000/team/new' \
 --header 'Authorization: Bearer <your-master-key>' \
@@ -83,7 +83,7 @@ curl --location 'http://localhost:4000/team/new' \
 # returns {...,"team_id": "my-unique-id"}
 ```
 
-**2. Create a key for team**
+**2. 팀용 키 생성**
 ```shell
 curl --location 'http://localhost:4000/key/generate' \
 --header 'Authorization: Bearer sk-1234' \
@@ -91,7 +91,7 @@ curl --location 'http://localhost:4000/key/generate' \
 --data-raw '{"team_id": "my-unique-id"}'
 ```
 
-**3. Test it**
+**3. 테스트**
 ```shell
 curl --location 'http://0.0.0.0:4000/chat/completions' \
     --header 'Content-Type: application/json' \
@@ -111,80 +111,80 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 {"error":{"message":"Invalid model for team litellm-dev: BEDROCK_GROUP.  Valid models for team are: ['azure-gpt-3.5']\n\n\nTraceback (most recent call last):\n  File \"/Users/ishaanjaffer/Github/litellm/litellm/proxy/proxy_server.py\", line 2298, in chat_completion\n    _is_valid_team_configs(\n  File \"/Users/ishaanjaffer/Github/litellm/litellm/proxy/utils.py\", line 1296, in _is_valid_team_configs\n    raise Exception(\nException: Invalid model for team litellm-dev: BEDROCK_GROUP.  Valid models for team are: ['azure-gpt-3.5']\n\n","type":"None","param":"None","code":500}}%            
 ```         
 
-### [API Reference](https://litellm-api.up.railway.app/#/team%20management/new_team_team_new_post)
+### [API 참고 문서](https://litellm-api.up.railway.app/#/team%20management/new_team_team_new_post)
 
 
-## **View Available Fallback Models**
+## **사용 가능한 Fallback 모델 조회** {#view-available-fallback-models}
 
-Use the `/v1/models` endpoint to discover available fallback models for a given model. This helps you understand which backup models are available when your primary model is unavailable or restricted.
+`/v1/models` 엔드포인트를 사용해 특정 모델에 사용할 수 있는 fallback 모델을 확인합니다. 기본 모델을 사용할 수 없거나 제한된 경우 어떤 백업 모델을 사용할 수 있는지 파악하는 데 도움이 됩니다.
 
-:::info Extension Point
+:::info 확장 지점
 
-The `include_metadata` parameter serves as an extension point for exposing additional model metadata in the future. While currently focused on fallback models, this approach will be expanded to include other model metadata such as pricing information, capabilities, rate limits, and more.
+`include_metadata` 매개변수는 앞으로 추가 모델 메타데이터를 노출하기 위한 확장 지점 역할을 합니다. 현재는 fallback 모델에 중점을 두고 있지만, 이 접근 방식은 가격 정보, 기능, 속도 제한 등 다른 모델 메타데이터까지 포함하도록 확장될 예정입니다.
 
 :::
 
-### Basic Usage
+### 기본 사용법 {#basic-usage}
 
-Get all available models:
+사용 가능한 모든 모델을 가져옵니다.
 
 ```shell
 curl -X GET 'http://localhost:4000/v1/models' \
   -H 'Authorization: Bearer <your-api-key>'
 ```
 
-### Get Fallback Models with Metadata
+### 메타데이터와 함께 Fallback 모델 가져오기 {#get-fallback-models-with-metadata}
 
-Include metadata to see fallback model information:
+fallback 모델 정보를 보려면 메타데이터를 포함합니다.
 
 ```shell
 curl -X GET 'http://localhost:4000/v1/models?include_metadata=true' \
   -H 'Authorization: Bearer <your-api-key>'
 ```
 
-### Get Specific Fallback Types
+### 특정 Fallback 유형 가져오기 {#get-specific-fallback-types}
 
-You can specify the type of fallbacks you want to see:
+확인하려는 fallback 유형을 지정할 수 있습니다.
 
 <Tabs>
-<TabItem value="general" label="General Fallbacks">
+<TabItem value="general" label="일반 Fallback">
 
 ```shell
 curl -X GET 'http://localhost:4000/v1/models?include_metadata=true&fallback_type=general' \
   -H 'Authorization: Bearer <your-api-key>'
 ```
 
-General fallbacks are alternative models that can handle the same types of requests.
+general fallback은 같은 유형의 요청을 처리할 수 있는 대체 모델입니다.
 
 </TabItem>
 
-<TabItem value="context_window" label="Context Window Fallbacks">
+<TabItem value="context_window" label="컨텍스트 창 Fallback">
 
 ```shell
 curl -X GET 'http://localhost:4000/v1/models?include_metadata=true&fallback_type=context_window' \
   -H 'Authorization: Bearer <your-api-key>'
 ```
 
-Context window fallbacks are models with larger context windows that can handle requests when the primary model's context limit is exceeded.
+context window fallback은 기본 모델의 컨텍스트 제한을 초과했을 때 요청을 처리할 수 있는 더 큰 컨텍스트 창을 가진 모델입니다.
 
 </TabItem>
 
-<TabItem value="content_policy" label="Content Policy Fallbacks">
+<TabItem value="content_policy" label="콘텐츠 정책 Fallback">
 
 ```shell
 curl -X GET 'http://localhost:4000/v1/models?include_metadata=true&fallback_type=content_policy' \
   -H 'Authorization: Bearer <your-api-key>'
 ```
 
-Content policy fallbacks are models that can handle requests when the primary model rejects content due to safety policies.
+content policy fallback은 기본 모델이 안전 정책으로 인해 콘텐츠를 거부할 때 요청을 처리할 수 있는 모델입니다.
 
 </TabItem>
 
 </Tabs>
 
-### Example Response
+### 예제 응답 {#example-response}
 
-When `include_metadata=true` is specified, the response includes fallback information:
+`include_metadata=true`를 지정하면 응답에 fallback 정보가 포함됩니다.
 
 ```json
 {
@@ -204,23 +204,23 @@ When `include_metadata=true` is specified, the response includes fallback inform
 }
 ```
 
-### Use Cases
+### 사용 사례 {#use-cases}
 
-- **High Availability**: Identify backup models to ensure service continuity
-- **Cost Optimization**: Find cheaper alternatives when primary models are expensive
-- **Content Filtering**: Discover models with different content policies
-- **Context Length**: Find models that can handle larger inputs
-- **Load Balancing**: Distribute requests across multiple compatible models
+- **고가용성**: 서비스 연속성을 보장하기 위해 백업 모델을 식별합니다.
+- **비용 최적화**: 기본 모델이 비쌀 때 더 저렴한 대체 모델을 찾습니다.
+- **콘텐츠 필터링**: 서로 다른 콘텐츠 정책을 가진 모델을 확인합니다.
+- **컨텍스트 길이**: 더 큰 입력을 처리할 수 있는 모델을 찾습니다.
+- **부하 분산**: 호환되는 여러 모델에 요청을 분산합니다.
 
-### API Parameters
+### API 매개변수 {#api-parameters}
 
-| Parameter | Type | Description |
+| 매개변수 | 유형 | 설명 |
 |-----------|------|-------------|
-| `include_metadata` | boolean | Include additional model metadata including fallbacks |
-| `fallback_type` | string | Filter fallbacks by type: `general`, `context_window`, or `content_policy` |
+| `include_metadata` | boolean | fallback을 포함한 추가 모델 메타데이터를 포함합니다. |
+| `fallback_type` | string | `general`, `context_window` 또는 `content_policy` 유형으로 fallback을 필터링합니다. |
 
-## Advanced: Model Access Groups
+## 고급: Model Access Groups {#advanced-model-access-groups}
 
-For advanced use cases, use [Model Access Groups](./model_access_groups) to dynamically group multiple models and manage access without restarting the proxy.
+고급 사용 사례에서는 [Model Access Groups](./model_access_groups)를 사용해 프록시를 다시 시작하지 않고 여러 모델을 동적으로 그룹화하고 액세스를 관리합니다.
 
-## [Role Based Access Control (RBAC)](./jwt_auth_arch)
+## [역할 기반 접근 제어(RBAC)](./jwt_auth_arch) {#role-based-access-control-rbac}

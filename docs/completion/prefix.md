@@ -1,9 +1,9 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Pre-fix Assistant Messages
+# 사전 입력 Assistant 메시지 {#pre-fix-assistant-messages}
 
-Supported by:
+지원 제공:
 - Deepseek
 - Mistral
 - Anthropic
@@ -17,7 +17,7 @@ Supported by:
 }
 ```
 
-## Quick Start 
+## 빠른 시작 
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -61,7 +61,7 @@ curl http://0.0.0.0:4000/v1/chat/completions \
 </TabItem>
 </Tabs>
 
-**Expected Response**
+**예상 응답**
 
 ```bash
 {
@@ -91,9 +91,9 @@ curl http://0.0.0.0:4000/v1/chat/completions \
 }
 ```
 
-## Check Model Support 
+## 모델 지원 여부 확인 {#check-model-support}
 
-Call `litellm.get_model_info` to check if a model/provider supports `prefix`. 
+모델/제공자가 `prefix`를 지원하는지 확인하려면 `litellm.get_model_info`를 호출합니다.
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -109,7 +109,7 @@ assert params["supports_assistant_prefill"] is True
 </TabItem>
 <TabItem value="proxy" label="PROXY">
 
-Call the `/model/info` endpoint to get a list of models + their supported params.
+모델 목록과 지원되는 파라미터 목록을 가져오려면 `/model/info` 엔드포인트를 호출합니다.
 
 ```bash
 curl -X GET 'http://0.0.0.0:4000/v1/model/info' \

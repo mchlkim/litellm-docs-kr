@@ -4,7 +4,7 @@ import TabItem from '@theme/TabItem';
 # /moderations
 
 
-### Usage
+### 사용법
 <Tabs>
 <TabItem value="python" label="LiteLLM Python SDK">
 
@@ -20,10 +20,10 @@ response = moderation(
 </TabItem>
 <TabItem value="proxy" label="LiteLLM Proxy Server">
 
-For `/moderations` endpoint, there is **no need to specify `model` in the request or on the litellm config.yaml**
+`/moderations` 엔드포인트의 경우, 요청이나 litellm config.yaml에서 **`model`을 지정할 필요가 없습니다**
 
 
-1. Setup config.yaml
+1. config.yaml 설정
 ```yaml
 model_list:
   - model_name: text-moderation-stable
@@ -31,7 +31,7 @@ model_list:
       model: openai/omni-moderation-latest
 ```
 
-2. Start litellm proxy server 
+2. litellm proxy server 시작
 
 ```
 litellm --config /path/to/config.yaml
@@ -57,7 +57,7 @@ print(response)
 ```
 </TabItem>
 
-<TabItem value="curl" label="Curl Request">
+<TabItem value="curl" label="Curl 요청">
 
 ```shell
 curl --location 'http://0.0.0.0:4000/moderations' \
@@ -71,30 +71,30 @@ curl --location 'http://0.0.0.0:4000/moderations' \
 </TabItem>
 </Tabs>
 
-## Input Params
-LiteLLM accepts and translates the [OpenAI Moderation params](https://platform.openai.com/docs/api-reference/moderations) across all supported providers.
+## 입력 파라미터 {#input-params}
+LiteLLM은 지원되는 모든 프로바이더에서 [OpenAI Moderation params](https://platform.openai.com/docs/api-reference/moderations)를 받아 변환합니다.
 
-### Required Fields
+### 필수 필드 {#required-fields}
 
-- `input`: *string or array* - Input (or inputs) to classify. Can be a single string, an array of strings, or an array of multi-modal input objects similar to other models.
-  - If string: A string of text to classify for moderation
-  - If array of strings: An array of strings to classify for moderation
-  - If array of objects: An array of multi-modal inputs to the moderation model, where each object can be:
-    - An object describing an image to classify with:
-      - `type`: *string, required* - Always `image_url`
-      - `image_url`: *object, required* - Contains either an image URL or a data URL for a base64 encoded image
-    - An object describing text to classify with:
-      - `type`: *string, required* - Always `text`
-      - `text`: *string, required* - A string of text to classify
+- `input`: *string or array* - 분류할 입력입니다. 단일 문자열, 문자열 배열, 또는 다른 모델과 유사한 멀티모달 입력 객체 배열일 수 있습니다.
+  - 문자열인 경우: moderation 분류 대상 텍스트 문자열입니다.
+  - 문자열 배열인 경우: moderation 분류 대상 문자열 배열입니다.
+  - 객체 배열인 경우: moderation 모델로 전달되는 멀티모달 입력 배열이며, 각 객체는 다음 중 하나일 수 있습니다.
+    - 분류할 이미지를 설명하는 객체:
+      - `type`: *string, required* - 항상 `image_url`
+      - `image_url`: *object, required* - 이미지 URL 또는 base64로 인코딩된 이미지의 데이터 URL을 포함합니다.
+    - 분류할 텍스트를 설명하는 객체:
+      - `type`: *string, required* - 항상 `text`
+      - `text`: *string, required* - 분류할 텍스트 문자열입니다.
 
-### Optional Fields
+### 선택 필드 {#optional-fields}
 
-- `model`: *string (optional)* - The moderation model to use. Defaults to `omni-moderation-latest`.
+- `model`: *string (optional)* - 사용할 moderation 모델입니다. 기본값은 `omni-moderation-latest`입니다.
 
-## Output Format
-Here's the exact json output and type you can expect from all moderation calls:
+## 출력 형식 {#output-format}
+모든 moderation 호출에서 기대할 수 있는 정확한 json 출력과 타입은 다음과 같습니다.
 
-[**LiteLLM follows OpenAI's output format**](https://platform.openai.com/docs/api-reference/moderations/object)
+[**LiteLLM은 OpenAI의 출력 형식을 따릅니다**](https://platform.openai.com/docs/api-reference/moderations/object)
 
 
 ```python
@@ -137,10 +137,10 @@ Here's the exact json output and type you can expect from all moderation calls:
 ```
 
 
-## **Supported Providers**
+## **지원 프로바이더**
 
-#### ⚡️See all supported models and providers at [models.litellm.ai](https://models.litellm.ai/)
+#### ⚡️지원되는 모든 모델과 프로바이더는 [models.litellm.ai](https://models.litellm.ai/)에서 확인하세요
 
-| Provider    |
+| 프로바이더    |
 |-------------|
 | OpenAI      |  

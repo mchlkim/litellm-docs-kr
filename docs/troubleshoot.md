@@ -1,56 +1,56 @@
-# Issue Reporting
+# 이슈 보고
 
-When reporting issues, please include as much of the following as possible. It's okay if you can't provide everything—especially in production scenarios where the trigger might be unknown. Sharing most of this information will help us assist you more effectively.
+이슈를 보고할 때는 아래 정보를 가능한 한 많이 포함해 주세요. 특히 운영 환경에서는 트리거를 알 수 없는 경우가 있으므로 모든 항목을 제공하지 못해도 괜찮습니다. 대부분의 정보를 공유하면 더 정확하게 도와드릴 수 있습니다.
 
-## 1. LiteLLM Configuration File
+## 1. LiteLLM 설정 파일
 
-Your `config.yaml` file (redact sensitive info like API keys). Include number of workers if not in config.
+`config.yaml` 파일을 공유해 주세요. API 키 같은 민감 정보는 제거하세요. worker 수가 config에 없다면 함께 알려 주세요.
 
-## 2. Initialization Command
+## 2. 초기화 명령
 
-The command used to start LiteLLM (e.g., `litellm --config config.yaml --num_workers 8 --detailed_debug`).
+LiteLLM을 시작할 때 사용한 명령을 포함해 주세요(예: `litellm --config config.yaml --num_workers 8 --detailed_debug`).
 
 ## 3. LiteLLM Version
 
-- Current version
-- Version when the issue first appeared (if different)
-- If upgraded, the version changed from → to
+- 현재 버전
+- 이슈가 처음 발생한 버전(다른 경우)
+- 업그레이드했다면 변경 전/후 버전
 
-## 4. Environment Variables
+## 4. 환경 변수
 
-Non-sensitive environment variables not in your config (e.g., `NUM_WORKERS`, `LITELLM_LOG`, `LITELLM_MODE`). Do not include passwords or API keys.
+config에 없는 비민감 환경 변수를 포함해 주세요(예: `NUM_WORKERS`, `LITELLM_LOG`, `LITELLM_MODE`). 비밀번호나 API 키는 포함하지 마세요.
 
-## 5. Server Specifications
+## 5. 서버 사양
 
-CPU cores, RAM, OS, number of instances/replicas, etc.
+CPU 코어 수, RAM, OS, 인스턴스/replica 수 등을 알려 주세요.
 
-## 6. Database and Redis Usage
+## 6. Database와 Redis 사용 여부
 
-- **Database:** Using database? (`DATABASE_URL` set), database type and version
-- **Redis:** Using Redis? Redis version, configuration type (Standalone/Cluster/Sentinel).
+- **Database:** database를 사용 중인가요? (`DATABASE_URL` 설정 여부), database 유형과 버전을 알려 주세요.
+- **Redis:** Redis를 사용 중인가요? Redis 버전과 구성 유형(Standalone/Cluster/Sentinel)을 알려 주세요.
 
 ## 7. Endpoints
 
-The endpoint(s) you're using that are experiencing issues (e.g., `/chat/completions`, `/embeddings`).
+문제가 발생한 엔드포인트를 알려 주세요(예: `/chat/completions`, `/embeddings`).
 
-## 8. Request Example
+## 8. 요청 예제
 
-A realistic example of the request causing issues, including expected vs. actual response and any error messages.
+문제를 일으킨 실제에 가까운 요청 예제를 공유해 주세요. 기대 응답과 실제 응답, 오류 메시지도 함께 포함해 주세요.
 
-## 9. Error Logs, Stack Traces, and Metrics
+## 9. 오류 로그, Stack Trace, Metrics
 
-Full error logs, stack traces, and any images from service metrics (CPU, memory, request rates, etc.) that might help diagnose the issue.
+진단에 도움이 될 수 있는 전체 오류 로그, stack trace, 서비스 metrics 이미지(CPU, memory, request rate 등)를 공유해 주세요.
 
 ---
 
-## Support Channels
+## 지원 채널
 
 [Schedule Demo 👋](https://calendly.com/d/4mp-gd3-k5k/berriai-1-1-onboarding-litellm-hosted-version)
 
-[Community Discord 💭](https://discord.gg/wuPM9dRgDw)
-[Community Slack 💭](https://www.litellm.ai/support)
+[커뮤니티 Discord 💭](https://discord.gg/wuPM9dRgDw)
+[커뮤니티 Slack 💭](https://www.litellm.ai/support)
 
 
-Our emails ✉️ ishaan@berri.ai / krrish@berri.ai
+이메일 ✉️ ishaan@berri.ai / krrish@berri.ai
 
 [![Chat on WhatsApp](https://img.shields.io/static/v1?label=Chat%20on&message=WhatsApp&color=success&logo=WhatsApp&style=flat-square)](https://wa.link/huol9n) [![Chat on Discord](https://img.shields.io/static/v1?label=Chat%20on&message=Discord&color=blue&logo=Discord&style=flat-square)](https://discord.gg/wuPM9dRgDw)

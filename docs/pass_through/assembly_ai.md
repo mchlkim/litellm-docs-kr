@@ -1,36 +1,36 @@
 # AssemblyAI
 
-Pass-through endpoints for AssemblyAI - call AssemblyAI endpoints, in native format (no translation).
+AssemblyAI용 패스스루 엔드포인트입니다. AssemblyAI 엔드포인트를 네이티브 형식으로 호출합니다(변환 없음).
 
-| Feature | Supported | Notes |
+| 기능 | 지원 여부 | 참고 |
 |-------|-------|-------|
-| Cost Tracking | ✅ | works across all integrations |
-| Logging | ✅ | works across all integrations |
+| 비용 추적 | ✅ | 모든 통합에서 작동 |
+| 로깅 | ✅ | 모든 통합에서 작동 |
 
 
-Supports **ALL** AssemblyAI Endpoints
+**모든** AssemblyAI 엔드포인트를 지원합니다.
 
-[**See All AssemblyAI Endpoints**](https://www.assemblyai.com/docs/api-reference)
+[**모든 AssemblyAI 엔드포인트 보기**](https://www.assemblyai.com/docs/api-reference)
 
 
-## Supported Routes
+## 지원되는 라우트 {#supported-routes}
 
-| AssemblyAI Service | LiteLLM Route | AssemblyAI Base URL |
+| AssemblyAI 서비스 | LiteLLM 라우트 | AssemblyAI 기본 URL |
 |-------------------|---------------|---------------------|
-| Speech-to-Text (US) | `/assemblyai/*` | `api.assemblyai.com` |
-| Speech-to-Text (EU) | `/eu.assemblyai/*` | `eu.api.assemblyai.com` |
+| 음성 텍스트 변환(미국) | `/assemblyai/*` | `api.assemblyai.com` |
+| 음성 텍스트 변환(EU) | `/eu.assemblyai/*` | `eu.api.assemblyai.com` |
 
-## Quick Start
+## 빠른 시작
 
-Let's call the AssemblyAI [`/v2/transcripts` endpoint](https://www.assemblyai.com/docs/api-reference/transcripts)
+AssemblyAI [`/v2/transcripts` 엔드포인트](https://www.assemblyai.com/docs/api-reference/transcripts)를 호출해 보겠습니다.
 
-1. Add AssemblyAI API Key to your environment
+1. 환경에 AssemblyAI API 키를 추가합니다.
 
 ```bash
 export ASSEMBLYAI_API_KEY=""
 ```
 
-2. Start LiteLLM Proxy
+2. LiteLLM Proxy를 시작합니다.
 
 ```bash
 litellm
@@ -38,9 +38,9 @@ litellm
 # RUNNING on http://0.0.0.0:4000
 ```
 
-3. Test it!
+3. 테스트합니다.
 
-Let's call the AssemblyAI [`/v2/transcripts` endpoint](https://www.assemblyai.com/docs/api-reference/transcripts). Includes commented-out [Speech Understanding](https://www.assemblyai.com/docs/speech-understanding) features you can toggle on.
+AssemblyAI [`/v2/transcripts` 엔드포인트](https://www.assemblyai.com/docs/api-reference/transcripts)를 호출해 보겠습니다. 필요할 때 켤 수 있도록 주석 처리된 [Speech Understanding](https://www.assemblyai.com/docs/speech-understanding) 기능도 포함되어 있습니다.
 
 ```python
 import assemblyai as aai
@@ -80,7 +80,7 @@ print(f"\nFull Transcript:\n\n{transcript.text}")
 #     print(f"Speaker {utterance.speaker}: {utterance.text}")
 ```
 
-4. [Prompting with Universal-3 Pro](https://www.assemblyai.com/docs/speech-to-text/prompting) (optional)
+4. [Universal-3 Pro로 프롬프트 사용하기](https://www.assemblyai.com/docs/speech-to-text/prompting)(선택 사항)
 
 ```python
 import assemblyai as aai
@@ -101,9 +101,9 @@ transcript = aai.Transcriber().transcribe(audio_file, config)
 print(transcript.text)
 ```
 
-## Calling AssemblyAI EU endpoints
+## AssemblyAI EU 엔드포인트 호출 {#calling-assemblyai-eu-endpoints}
 
-If you want to send your request to the AssemblyAI EU endpoint, you can do so by setting the `LITELLM_PROXY_BASE_URL` to `<your-proxy-base-url>/eu.assemblyai`
+요청을 AssemblyAI EU 엔드포인트로 보내려면 `LITELLM_PROXY_BASE_URL`을 `<your-proxy-base-url>/eu.assemblyai`로 설정하면 됩니다.
 
 
 ```python
@@ -126,11 +126,11 @@ print(transcript.id)
 
 ## LLM Gateway
 
-Use AssemblyAI's [LLM Gateway](https://www.assemblyai.com/docs/llm-gateway) as an OpenAI-compatible provider — a unified API for Claude, GPT, and Gemini models with full LiteLLM logging, guardrails, and cost tracking support.
+AssemblyAI의 [LLM Gateway](https://www.assemblyai.com/docs/llm-gateway)를 OpenAI 호환 제공자로 사용합니다. Claude, GPT, Gemini 모델을 위한 통합 API이며 LiteLLM 로깅, 가드레일, 비용 추적을 모두 지원합니다.
 
-[**See Available Models**](https://www.assemblyai.com/docs/llm-gateway#available-models)
+[**사용 가능한 모델 보기**](https://www.assemblyai.com/docs/llm-gateway#available-models)
 
-### Usage
+### 사용법
 
 #### LiteLLM Python SDK
 
@@ -150,7 +150,7 @@ print(response.choices[0].message.content)
 
 #### LiteLLM Proxy
 
-1. Config
+1. 구성
 
 ```yaml
 model_list:
@@ -160,7 +160,7 @@ model_list:
       api_key: os.environ/ASSEMBLYAI_API_KEY
 ```
 
-2. Start proxy
+2. 프록시 시작
 
 ```bash
 litellm --config config.yaml
@@ -168,7 +168,7 @@ litellm --config config.yaml
 # RUNNING on http://0.0.0.0:4000
 ```
 
-3. Test it!
+3. 테스트
 
 ```python
 import requests

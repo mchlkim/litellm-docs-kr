@@ -3,18 +3,18 @@ import TabItem from '@theme/TabItem';
 
 # Lemonade
 
-[Lemonade Server](https://lemonade-server.ai/) is an OpenAI-compatible local language model inference provider optimized for AMD GPUs and NPUs. The `lemonade` litellm provider supports standard chat completions with full OpenAI API compatibility.
+[Lemonade Server](https://lemonade-server.ai/)는 AMD GPU 및 NPU에 최적화된 OpenAI 호환 로컬 언어 모델 추론 provider입니다. `lemonade` LiteLLM provider는 OpenAI API와 완전히 호환되는 표준 chat completion을 지원합니다.
 
-| Property | Details |
+| 속성 | 세부 정보 |
 |-------|-------|
-| Description | OpenAI-compatible AI provider for local and cloud-based language model inference |
-| Provider Route on LiteLLM | `lemonade/` (add this prefix to the model name - e.g. `lemonade/your-model-name`) |
-| API Endpoint for Provider | http://localhost:8000/api/v1 (default) |
-| Supported Endpoints | `/chat/completions` |
+| 설명 | 로컬 및 클라우드 기반 언어 모델 추론을 위한 OpenAI 호환 AI provider |
+| LiteLLM Provider Route | `lemonade/`(모델 이름 앞에 이 prefix를 추가합니다. 예: `lemonade/your-model-name`) |
+| Provider API Endpoint | http://localhost:8000/api/v1(기본값) |
+| 지원 엔드포인트 | `/chat/completions` |
 
-## Supported OpenAI Parameters
+## 지원되는 OpenAI 파라미터 {#supported-openai-parameters}
 
-Lemonade is fully OpenAI-compatible and supports the following parameters:
+Lemonade는 OpenAI와 완전히 호환되며 다음 파라미터를 지원합니다.
 
 ```
 "repeat_penalty"
@@ -32,11 +32,11 @@ Lemonade is fully OpenAI-compatible and supports the following parameters:
 ```
 
 
-## API Key Setup
+## API 키 설정 {#api-key-setup}
 
-Lemonade can be configured with custom API URLs and doesn't require strict API key validation. Set the `LEMONADE_API_BASE` environment variable to modify the base URL.
+Lemonade는 custom API URL로 구성할 수 있으며 엄격한 API 키 검증이 필요하지 않습니다. base URL을 변경하려면 `LEMONADE_API_BASE` environment variable을 설정하세요.
 
-## Usage
+## 사용법
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -58,7 +58,7 @@ response = completion(
 print(response)
 ```
 
-## Streaming
+## Streaming {#streaming}
 
 ```python
 from litellm import completion
@@ -80,11 +80,11 @@ for chunk in response:
     print(chunk.choices[0].delta.content, end='', flush=True)
 ```
 
-## Advanced Usage
+## 고급 사용법
 
-### Custom Parameters
+### Custom Parameters {#custom-parameters}
 
-Lemonade supports additional parameters beyond the standard OpenAI set:
+Lemonade는 표준 OpenAI 세트 외의 추가 파라미터를 지원합니다.
 
 ```python
 from litellm import completion
@@ -102,9 +102,9 @@ response = completion(
 print(response)
 ```
 
-### Function Calling
+### 함수 호출 {#function-calling}
 
-Lemonade supports OpenAI-compatible function calling:
+Lemonade는 OpenAI 호환 함수 호출을 지원합니다.
 
 ```python
 from litellm import completion
@@ -135,9 +135,9 @@ response = completion(
 print(response)
 ```
 
-### Response Format
+### 응답 형식
 
-Lemonade supports structured output with response format:
+Lemonade는 response format을 사용한 structured output을 지원합니다.
 
 ```python
 from litellm import completion
@@ -170,9 +170,9 @@ json_data = json.loads(response.choices[0].message.content)
 print(json.dumps(json_data, indent=2))
 ```
 
-## Available Models
+## 사용 가능한 모델 {#available-models}
 
-Lemonade automatically validates available models by querying the `/models` endpoint. You can check available models programmatically:
+Lemonade는 `/models` endpoint를 쿼리해 사용 가능한 모델을 자동으로 검증합니다. 사용 가능한 모델은 코드로도 확인할 수 있습니다.
 
 ```python
 import httpx
@@ -183,9 +183,9 @@ models = response.json()
 print("Available models:", [model['id'] for model in models.get('data', [])])
 ```
 
-## Support
+## 지원 {#support}
 
-For more information regarding Lemonade please go to to the [Lemonade website](https://lemonade-server.ai/) or [Lemonade repository](https://github.com/lemonade-sdk/lemonade).
+Lemonade에 대한 자세한 내용은 [Lemonade website](https://lemonade-server.ai/) 또는 [Lemonade repository](https://github.com/lemonade-sdk/lemonade)를 참고하세요.
 
 </TabItem>
 </Tabs>

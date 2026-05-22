@@ -1,24 +1,24 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Vertex AI Video Generation (Veo)
+# Vertex AI 비디오 생성 (Veo) {#vertex-ai-video-generation-veo}
 
-LiteLLM supports Vertex AI's Veo video generation models using the unified OpenAI video API surface.
+LiteLLM은 통합 OpenAI 비디오 API 표면을 통해 Vertex AI의 Veo 비디오 생성 모델을 지원합니다.
 
-| Property | Details |
+| 속성 | 세부 정보 |
 |-------|-------|
-| Description | Google Cloud Vertex AI Veo video generation models |
-| Provider Route on LiteLLM | `vertex_ai/` |
-| Supported Models | `veo-2.0-generate-001`, `veo-3.0-generate-preview`, `veo-3.0-fast-generate-preview`, `veo-3.1-generate-preview`, `veo-3.1-fast-generate-preview` |
-| Cost Tracking | ✅ Duration-based pricing |
-| Logging Support | ✅ Full request/response logging |
-| Proxy Server Support | ✅ Full proxy integration with virtual keys |
-| Spend Management | ✅ Budget tracking and rate limiting |
-| Link to Provider Doc | [Vertex AI Veo Documentation ↗](https://cloud.google.com/vertex-ai/generative-ai/docs/model-reference/veo-video-generation) |
+| 설명 | Google Cloud Vertex AI Veo 비디오 생성 모델 |
+| LiteLLM의 프로바이더 라우트 | `vertex_ai/` |
+| 지원 모델 | `veo-2.0-generate-001`, `veo-3.0-generate-preview`, `veo-3.0-fast-generate-preview`, `veo-3.1-generate-preview`, `veo-3.1-fast-generate-preview` |
+| 비용 추적 | ✅ 시간 기반 가격 책정 |
+| 로깅 지원 | ✅ 전체 요청/응답 로깅 |
+| Proxy 서버 지원 | ✅ 가상 키와 완전히 통합되는 Proxy |
+| 지출 관리 | ✅ 예산 추적 및 속도 제한 |
+| 프로바이더 문서 링크 | [Vertex AI Veo 문서 ↗](https://cloud.google.com/vertex-ai/generative-ai/docs/model-reference/veo-video-generation) |
 
-## Quick Start
+## 빠른 시작
 
-### Required Environment Setup
+### 필수 환경 설정 {#required-environment-setup}
 
 ```python
 import json
@@ -35,7 +35,7 @@ with open("/path/to/service_account.json", "r", encoding="utf-8") as f:
     os.environ["VERTEXAI_CREDENTIALS"] = f.read()
 ```
 
-### Basic Usage
+### 기본 사용법 {#basic-사용법}
 
 ```python
 from litellm import video_generation, video_status, video_content
@@ -89,35 +89,35 @@ with open("generated_video.mp4", "wb") as f:
     f.write(video_bytes)
 ```
 
-## Supported Models
+## 지원 모델 {#supported-모델}
 
-| Model Name | Description | Max Duration | Status |
+| 모델 이름 | 설명 | 최대 길이 | 상태 |
 |------------|-------------|--------------|--------|
-| veo-2.0-generate-001 | Veo 2.0 video generation | 5 seconds | GA |
-| veo-3.0-generate-preview | Veo 3.0 high quality | 8 seconds | Preview |
-| veo-3.0-fast-generate-preview | Veo 3.0 fast generation | 8 seconds | Preview |
-| veo-3.1-generate-preview | Veo 3.1 high quality | 10 seconds | Preview |
-| veo-3.1-fast-generate-preview | Veo 3.1 fast | 10 seconds | Preview |
+| veo-2.0-generate-001 | Veo 2.0 비디오 생성 | 5초 | GA |
+| veo-3.0-generate-preview | Veo 3.0 고품질 | 8초 | Preview |
+| veo-3.0-fast-generate-preview | Veo 3.0 빠른 생성 | 8초 | Preview |
+| veo-3.1-generate-preview | Veo 3.1 고품질 | 10초 | Preview |
+| veo-3.1-fast-generate-preview | Veo 3.1 빠른 생성 | 10초 | Preview |
 
-## Video Generation Parameters
+## 비디오 생성 매개변수 {#video-generation-parameters}
 
-LiteLLM converts OpenAI-style parameters to Veo's API shape automatically:
+LiteLLM은 OpenAI 스타일 매개변수를 Veo의 API 형식으로 자동 변환합니다.
 
-| OpenAI Parameter | Vertex AI Parameter | Description | Example |
+| OpenAI 매개변수 | Vertex AI 매개변수 | 설명 | 예제 |
 |------------------|---------------------|-------------|---------|
-| `prompt` | `instances[].prompt` | Text description of the video | "A cat playing" |
-| `size` | `parameters.aspectRatio` | Converted to `16:9` or `9:16` | "1280x720" → `16:9` |
-| `seconds` | `parameters.durationSeconds` | Clip length in seconds | "8" → `8` |
-| `input_reference` | `instances[].image` | Reference image for animation | `open("image.jpg", "rb")` |
-| Provider-specific params | `extra_body` | Forwarded to Vertex API | `{"negativePrompt": "blurry"}` |
+| `prompt` | `instances[].prompt` | 비디오의 텍스트 설명 | "A cat playing" |
+| `size` | `parameters.aspectRatio` | `16:9` 또는 `9:16`으로 변환됨 | "1280x720" → `16:9` |
+| `seconds` | `parameters.durationSeconds` | 클립 길이(초) | "8" → `8` |
+| `input_reference` | `instances[].image` | 애니메이션용 참조 이미지 | `open("image.jpg", "rb")` |
+| 프로바이더별 매개변수 | `extra_body` | Vertex API로 전달됨 | `{"negativePrompt": "blurry"}` |
 
-### Size to Aspect Ratio Mapping
+### 크기와 화면 비율 매핑 {#size-to-aspect-ratio-mapping}
 
 - `1280x720`, `1920x1080` → `16:9`
 - `720x1280`, `1080x1920` → `9:16`
-- Unknown sizes default to `16:9`
+- 알 수 없는 크기는 기본값으로 `16:9`를 사용합니다.
 
-## Async Usage
+## Async 사용법
 
 ```python
 from litellm import avideo_generation, avideo_status, avideo_content
@@ -166,9 +166,9 @@ async def workflow():
 asyncio.run(workflow())
 ```
 
-## LiteLLM Proxy Usage
+## LiteLLM Proxy 사용법 {#litellm-proxy-사용법}
 
-Add Veo models to your `config.yaml`:
+`config.yaml`에 Veo 모델을 추가합니다.
 
 ```yaml
 model_list:
@@ -180,7 +180,7 @@ model_list:
       vertex_credentials: os.environ/VERTEXAI_CREDENTIALS
 ```
 
-Start the proxy and make requests:
+프록시를 시작하고 요청을 보냅니다.
 
 <Tabs>
 <TabItem value="curl" label="Curl">
@@ -233,9 +233,9 @@ if status.status == "completed":
 </TabItem>
 </Tabs>
 
-## Cost Tracking
+## 비용 추적 {#cost-tracking}
 
-LiteLLM records the duration returned by Veo so you can apply duration-based pricing.
+LiteLLM은 Veo가 반환한 길이를 기록하므로 시간 기반 가격 책정을 적용할 수 있습니다.
 
 ```python
 with open("/path/to/service_account.json", "r", encoding="utf-8") as f:
@@ -253,16 +253,15 @@ response = video_generation(
 print(response.usage)  # {"duration_seconds": 5.0}
 ```
 
-## Troubleshooting
+## 문제 해결
 
-- **`vertex_project is required`**: set `VERTEXAI_PROJECT` env var or pass `vertex_project` in the request.
-- **`Permission denied`**: ensure the service account has the `Vertex AI User` role and the correct region enabled.
-- **Video stuck in `processing`**: Veo operations are long-running. Continue polling every 10–15 seconds up to ~10 minutes.
+- **`vertex_project is required`**: `VERTEXAI_PROJECT` env var를 설정하거나 요청에 `vertex_project`를 전달합니다.
+- **`Permission denied`**: 서비스 계정에 `Vertex AI User` 역할이 있고 올바른 리전이 활성화되어 있는지 확인합니다.
+- **비디오가 `processing`에 멈춤**: Veo 작업은 오래 실행됩니다. 최대 약 10분 동안 10~15초마다 계속 폴링합니다.
 
-## See Also
+## 함께 보기 {#see-also}
 
-- [OpenAI Video Generation](../openai/videos.md)
-- [Azure Video Generation](../azure/videos.md)
-- [Gemini Video Generation](../gemini/videos.md)
-- [Video Generation API Reference](/docs/videos)
-
+- [OpenAI 비디오 생성](../openai/videos.md)
+- [Azure 비디오 생성](../azure/videos.md)
+- [Gemini 비디오 생성](../gemini/videos.md)
+- [비디오 생성 API 참조](/docs/videos)

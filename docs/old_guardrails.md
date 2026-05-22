@@ -1,13 +1,13 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# 🛡️ [Beta] Guardrails
+# 🛡️ [Beta] 가드레일
 
-Setup Prompt Injection Detection, Secret Detection on LiteLLM Proxy
+LiteLLM Proxy에서 Prompt Injection Detection과 Secret Detection을 설정합니다.
 
-## Quick Start
+## 빠른 시작
 
-### 1. Setup guardrails on litellm proxy config.yaml
+### 1. litellm proxy `config.yaml`에 가드레일 설정 {#1-setup-guardrails-on-litellm-proxy-configyaml}
 
 ```yaml
 model_list:
@@ -34,22 +34,22 @@ litellm_settings:
 
 :::info
 
-Since `pii_masking` is default Off for all requests, [you can switch it on per API Key](#switch-guardrails-onoff-per-api-key)
+`pii_masking`은 모든 요청에서 기본값이 Off이므로, <a href="#switch-guardrails-onoff-per-api-key">API Key별로 켤 수 있습니다</a>.
 
 :::
 
-### 2. Test it
+### 2. 테스트
 
-Run litellm proxy
+litellm proxy를 실행합니다.
 
 ```shell
 litellm --config config.yaml
 ```
 
-Make LLM API request
+LLM API 요청을 보냅니다.
 
 
-Test it with this request -> expect it to get rejected by LiteLLM Proxy
+이 요청으로 테스트하면 LiteLLM Proxy에서 거부될 것으로 예상됩니다.
 
 ```shell
 curl --location 'http://localhost:4000/chat/completions' \
@@ -66,18 +66,18 @@ curl --location 'http://localhost:4000/chat/completions' \
 }'
 ```
 
-## Control Guardrails On/Off per Request
+## 요청별 가드레일 On/Off 제어
 
-You can switch off/on any guardrail on the config.yaml by passing 
+다음 값을 전달하면 `config.yaml`의 모든 가드레일을 끄거나 켤 수 있습니다.
 
 ```shell
 "metadata": {"guardrails": {"<guardrail_name>": false}}
 ```
 
-example - we defined `prompt_injection`, `hide_secrets_guard` [on step 1](#1-setup-guardrails-on-litellm-proxy-configyaml)
-This will 
-- switch **off** `prompt_injection` checks running on this request
-- switch **on** `hide_secrets_guard` checks on this request
+<a href="#1-setup-guardrails-on-litellm-proxy-configyaml">1단계</a>에서 정의한 `prompt_injection`, `hide_secrets_guard` 예시입니다.
+이 설정은 다음과 같이 동작합니다.
+- 이 요청에서 실행되는 `prompt_injection` 검사를 **끕니다**
+- 이 요청에서 `hide_secrets_guard` 검사를 **켭니다**
 ```shell
 "metadata": {"guardrails": {"prompt_injection": false, "hide_secrets_guard": true}}
 ```
@@ -186,21 +186,21 @@ print(response)
 
 </Tabs>
 
-## Switch Guardrails On/Off Per API Key
+## API Key별 가드레일 On/Off 전환 {#switch-guardrails-onoff-per-api-key}
 
-❓ Use this when you need to switch guardrails on/off per API Key
+❓ API Key별로 가드레일을 켜거나 꺼야 할 때 사용합니다.
 
-**Step 1** Create Key with `pii_masking` On 
+**1단계** `pii_masking`이 On인 Key 생성
 
-**NOTE:** We defined `pii_masking` [on step 1](#1-setup-guardrails-on-litellm-proxy-configyaml)
+**참고:** `pii_masking`은 <a href="#1-setup-guardrails-on-litellm-proxy-configyaml">1단계</a>에서 정의했습니다.
 
-👉 Set `"permissions": {"pii_masking": true}` with either `/key/generate` or `/key/update`
+👉 `/key/generate` 또는 `/key/update`에서 `"permissions": {"pii_masking": true}`를 설정합니다.
 
-This means the `pii_masking` guardrail is on for all requests from this API Key
+이는 이 API Key에서 들어오는 모든 요청에 `pii_masking` 가드레일이 켜진다는 뜻입니다.
 
 :::info
 
-If you need to switch `pii_masking` off for an API Key set `"permissions": {"pii_masking": false}` with either `/key/generate` or `/key/update`
+API Key에서 `pii_masking`을 꺼야 한다면 `/key/generate` 또는 `/key/update`에서 `"permissions": {"pii_masking": false}`를 설정합니다.
 
 :::
 
@@ -241,7 +241,7 @@ curl --location 'http://0.0.0.0:4000/key/update' \
 </TabItem>
 </Tabs>
 
-**Step 2** Test it with new key
+**2단계** 새 Key로 테스트
 
 ```shell
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -258,10 +258,10 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 }'
 ```
 
-## Disable team from turning on/off guardrails
+## 팀이 가드레일을 켜거나 끄지 못하게 비활성화
 
 
-### 1. Disable team from modifying guardrails 
+### 1. 팀의 가드레일 수정 비활성화
 
 ```bash
 curl -X POST 'http://0.0.0.0:4000/team/update' \
@@ -273,7 +273,7 @@ curl -X POST 'http://0.0.0.0:4000/team/update' \
 }'
 ```
 
-### 2. Try to disable guardrails for a call 
+### 2. 호출에서 가드레일 비활성화 시도
 
 ```bash
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -291,7 +291,7 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 }'
 ```
 
-### 3. Get 403 Error
+### 3. 403 Error 확인
 
 ```
 {
@@ -306,16 +306,16 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 }
 ```
 
-Expect to NOT see `+1 412-612-9992` in your server logs on your callback. 
+callback의 서버 로그에 `+1 412-612-9992`가 표시되지 않아야 합니다.
 
 :::info
-The `pii_masking` guardrail ran on this request because api key=sk-jNm1Zar7XfNdZXp49Z1kSQ has `"permissions": {"pii_masking": true}`
+api key=sk-jNm1Zar7XfNdZXp49Z1kSQ에 `"permissions": {"pii_masking": true}`가 있으므로 이 요청에서 `pii_masking` 가드레일이 실행되었습니다.
 :::
 
 
 
 
-## Spec for `guardrails` on litellm config
+## litellm config의 `guardrails` 사양
 
 ```yaml
 litellm_settings:
@@ -323,16 +323,16 @@ litellm_settings:
     - string: GuardrailItemSpec
 ```
 
-- `string` - Your custom guardrail name
+- `string` - 사용자 지정 가드레일 이름
 
 - `GuardrailItemSpec`:
-    - `callbacks`: List[str], list of supported guardrail callbacks.
-        - Full List: presidio, lakera_prompt_injection, hide_secrets, llmguard_moderations, llamaguard_moderations, google_text_moderation
-    - `default_on`: bool,  will run on all llm requests when true
-    - `logging_only`: Optional[bool], if true, run guardrail only on logged output, not on the actual LLM API call. Currently only supported for presidio pii masking. Requires `default_on` to be True as well.
-    - `callback_args`: Optional[Dict[str, Dict]]: If set, pass in init args for that specific guardrail
+    - `callbacks`: List[str], 지원되는 가드레일 callback 목록입니다.
+        - 전체 목록: presidio, lakera_prompt_injection, hide_secrets, llmguard_moderations, llamaguard_moderations, google_text_moderation
+    - `default_on`: bool, true이면 모든 llm 요청에서 실행됩니다.
+    - `logging_only`: Optional[bool], true이면 실제 LLM API 호출이 아니라 로그에 기록된 출력에만 가드레일을 실행합니다. 현재 presidio pii masking에서만 지원됩니다. `default_on`도 True여야 합니다.
+    - `callback_args`: Optional[Dict[str, Dict]]: 설정하면 해당 가드레일에 init args를 전달합니다.
 
-Example: 
+예제: 
 
 ```yaml
 litellm_settings:
@@ -352,4 +352,3 @@ litellm_settings:
         callbacks: [hide_secrets]
         default_on: false
 ```
-

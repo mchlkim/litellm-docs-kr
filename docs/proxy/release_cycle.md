@@ -1,45 +1,31 @@
-# Release Cycle
+# 릴리스 주기 {#release-cycle}
 
-Litellm Proxy has the following release cycle:
+Litellm Proxy는 다음 릴리스 주기를 따릅니다.
 
-- `1.x.x-dev.N` (nightly): Releases which pass ci/cd (no manual review). Published on PyPI as `1.x.x.devN`.
-- `1.x.x-rc.N` (release candidate): Releases which pass ci/cd + [manual review](https://github.com/BerriAI/litellm/discussions/8495#discussioncomment-12180711) + performance testing (pending — being implemented soon) + a 7-day window for early testers to submit issues. Published on PyPI as `1.x.xrcN`.
-- `1.x.x` (stable): An `rc` that has passed everything above, then promoted to stable after a second round of manual testing.
+- `v1.x.x-nightly`: CI/CD를 통과한 릴리스입니다.
+- `v1.x.x.rc`: CI/CD와 [수동 리뷰](https://github.com/BerriAI/litellm/discussions/8495#discussioncomment-12180711)를 통과한 릴리스입니다.
+- `v1.x.x:main-stable`: CI/CD, 수동 리뷰, 3일간의 프로덕션 테스트를 통과한 릴리스입니다.
 
-In production, we recommend pinning to the latest stable `1.x.x` release.
+프로덕션에서는 최신 `v1.x.x:main-stable` 릴리스 사용을 권장합니다.
 
-:::info Versioning changed starting 1.84.0
 
-The `-stable` and `-nightly` suffixes are gone. Stable releases are now plain PEP 440 / SemVer 2.0 (e.g. `1.84.0`), weekly scheduled releases bump the **MINOR** component, and **PATCH** is reserved for hotfixes. Docker publishes both bare (`1.84.0`) and `v`-prefixed (`v1.84.0`) tags pointing to the same image; PyPI uses the bare PEP 440 form (`1.84.0`, never `v1.84.0`). Releases published under the old naming (`v1.83.x-stable`, etc.) stay available forever.
-
-See [LiteLLM release versioning is changing](/blog/cleaner-release-versions) for the full old → new name mapping.
-
-:::
-
-Follow our release notes [here](https://github.com/BerriAI/litellm/releases).
+릴리스 노트는 [여기](https://github.com/BerriAI/litellm/releases)에서 확인할 수 있습니다.
 
 
 ## FAQ
 
-### Is there a release schedule for LiteLLM stable release?
+### LiteLLM stable 릴리스 일정이 있나요? {#is-there-a-release-schedule-for-litellm-stable-release}
 
-Stable releases come out every week (typically Sunday). Each scheduled stable bumps the MINOR version: `1.84.0` → `1.85.0` → `1.86.0`.
+Stable 릴리스는 매주 배포됩니다(보통 일요일).
 
-### What is considered a 'minor' bump vs. 'patch' bump?
+### `minor` bump와 `patch` bump는 어떻게 구분하나요? {#what-is-considered-a-minor-bump-vs-patch-bump}
 
-Starting with `1.84.0` (see [the versioning blog post](/blog/cleaner-release-versions)):
+- `patch` bump: 기존 기능에 영향을 주지 않고 사용자에게 보이는 기능도 추가하지 않는 매우 작은 변경입니다. 예: 데이터베이스 테이블의 `created_at` 컬럼 추가.
+- `minor` bump: 하위 호환되는 새 기능이나 새 데이터베이스 테이블을 추가하는 변경입니다.
+- `major` bump: 하위 호환성을 깨는 변경입니다.
 
-- 'minor' bumps: the regular weekly scheduled stable release (`1.84.0` → `1.85.0`). This is the normal cadence and may include new backward-compatible features or database tables.
-- 'patch' bumps: reserved for hotfixes to the current stable (`1.84.0` → `1.84.1`).
-- 'major' bumps: break backward compatibility (`1.x.x` → `2.x.x`).
+### 엔터프라이즈 지원 {#enterprise-support}
 
-### Enterprise Support
 
-:::info Support model changing — May 18, 2026
-
-As LiteLLM has grown, the current professional support model no longer fits our scale. We're moving to a new model built around clear, predictable communication on when customers can expect support and changes. The model described below is being deprecated, we'll share details on the new system as we finalize it over the next few weeks.
-
-:::
-
-- Stable releases come out every week. Once a new one is available, we no longer provide support for an older one. 
-- If there is a MAJOR change (according to semvar conventions - e.g. 1.x.x -> 2.x.x), we can provide support for upto 90 days on the prior stable image. 
+- Stable 릴리스는 매주 배포됩니다. 새 릴리스가 제공되면 이전 릴리스는 더 이상 지원하지 않습니다.
+- MAJOR 변경이 있는 경우(semvar 규칙 기준, 예: `1.x.x` -> `2.x.x`) 이전 stable 이미지에 대해 최대 90일까지 지원을 제공할 수 있습니다.

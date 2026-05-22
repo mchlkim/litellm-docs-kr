@@ -2,46 +2,46 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
 # AWS Bedrock
-ALL Bedrock models (Anthropic, Meta, Deepseek, Mistral, Amazon, etc.) are Supported
+모든 Bedrock 모델(Anthropic, Meta, Deepseek, Mistral, Amazon 등)을 지원합니다.
 
-| Property | Details |
+| 속성 | 세부 정보 |
 |-------|-------|
-| Description | Amazon Bedrock is a fully managed service that offers a choice of high-performing foundation models (FMs). |
-| Provider Route on LiteLLM | `bedrock/`, [`bedrock/converse/`](#set-converse--invoke-route), [`bedrock/invoke/`](#set-invoke-route), [`bedrock/converse_like/`](#calling-via-internal-proxy), [`bedrock/llama/`](#deepseek-not-r1), [`bedrock/deepseek_r1/`](#deepseek-r1), [`bedrock/qwen3/`](#qwen3-imported-models), [`bedrock/qwen2/`](./bedrock_imported.md#qwen2-imported-models), [`bedrock/openai/`](./bedrock_imported.md#openai-compatible-imported-models-qwen-25-vl-etc), [`bedrock/moonshot`](./bedrock_imported.md#moonshot-kimi-k2-thinking) |
-| Provider Doc | [Amazon Bedrock ↗](https://docs.aws.amazon.com/bedrock/latest/userguide/what-is-bedrock.html) |
-| Supported OpenAI Endpoints | `/chat/completions`, `/completions`, `/embeddings`, `/images/generations`, `/v1/realtime`|
-| Rerank Endpoint | `/rerank` |
-| Pass-through Endpoint | [Supported](../pass_through/bedrock.md) |
+| 설명 | Amazon Bedrock은 고성능 파운데이션 모델(FM)을 선택해 사용할 수 있는 완전 관리형 서비스입니다. |
+| LiteLLM의 제공자 라우트 | `bedrock/`, `bedrock/converse/`, `bedrock/invoke/`, `bedrock/converse_like/`, `bedrock/llama/`, `bedrock/deepseek_r1/`, `bedrock/qwen3/`, `bedrock/qwen2/`, `bedrock/openai/`, `bedrock/moonshot` |
+| 제공자 문서 | [Amazon Bedrock ↗](https://docs.aws.amazon.com/bedrock/latest/userguide/what-is-bedrock.html) |
+| 지원되는 OpenAI 엔드포인트 | `/chat/completions`, `/completions`, `/embeddings`, `/images/generations`, `/v1/realtime`|
+| 재정렬 엔드포인트 | `/rerank` |
+| 패스스루 엔드포인트 | [지원됨](../pass_through/bedrock.md) |
 
 
-LiteLLM requires `boto3` to be installed on your system for Bedrock requests
+Bedrock 요청을 사용하려면 시스템에 `boto3`가 설치되어 있어야 합니다.
 ```shell
 uv add boto3>=1.28.57
 ```
 
 :::info
 
-For **Amazon Nova Models**: Bump to v1.53.5+
+**Amazon Nova 모델**은 v1.53.5 이상으로 올리세요.
 
 :::
 
-## Authentication
+## 인증
 
 :::info
 
-LiteLLM uses boto3 to handle authentication. All these options are supported - https://boto3.amazonaws.com/v1/documentation/api/latest/guide/credentials.html#credentials.
+LiteLLM은 boto3를 사용해 인증을 처리합니다. 다음 boto3 자격 증명 옵션을 모두 지원합니다: https://boto3.amazonaws.com/v1/documentation/api/latest/guide/credentials.html#credentials.
 
 :::
  
-LiteLLM supports API key authentication in addition to traditional boto3 authentication methods. For additional API key details, refer to [docs](https://docs.aws.amazon.com/bedrock/latest/userguide/api-keys.html).
+LiteLLM은 기존 boto3 인증 방식 외에도 API key 인증을 지원합니다. API key 세부 정보는 [문서](https://docs.aws.amazon.com/bedrock/latest/userguide/api-keys.html)를 참고하세요.
 
-Option 1: use the AWS_BEARER_TOKEN_BEDROCK environment variable 
+옵션 1: `AWS_BEARER_TOKEN_BEDROCK` 환경 변수 사용
 
 ```bash
 export AWS_BEARER_TOKEN_BEDROCK="your-api-key"
 ```
 
-Option 2: use the api_key parameter to pass in API key for completion, embedding, image_generation API calls.
+옵션 2: completion, embedding, image_generation API 호출에 `api_key` 매개변수로 API key 전달
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -64,10 +64,10 @@ model_list:
 </TabItem>
 </Tabs>
 
-## Usage
+## 사용법
 
 <a target="_blank" href="https://colab.research.google.com/github/BerriAI/litellm/blob/main/cookbook/LiteLLM_Bedrock.ipynb">
-  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
+  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Colab에서 열기"/>
 </a>
 
 
@@ -85,11 +85,11 @@ response = completion(
 )
 ```
 
-## LiteLLM Proxy Usage 
+## LiteLLM 프록시 사용법
 
-Here's how to call Bedrock with the LiteLLM Proxy Server
+LiteLLM 프록시 서버로 Bedrock을 호출하는 방법입니다.
 
-### 1. Setup config.yaml
+### 1. config.yaml 설정
 
 ```yaml
 model_list:
@@ -101,7 +101,7 @@ model_list:
       aws_region_name: os.environ/AWS_REGION_NAME
 ```
 
-All possible auth params: 
+사용 가능한 모든 인증 매개변수:
 
 ```
 aws_access_key_id: Optional[str],
@@ -116,16 +116,16 @@ aws_bedrock_runtime_endpoint: Optional[str],
 api_key: Optional[str],
 ```
 
-### 2. Start the proxy 
+### 2. 프록시 시작 
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
-### 3. Test it
+### 3. 테스트
 
 
 <Tabs>
-<TabItem value="Curl" label="Curl Request">
+<TabItem value="Curl" label="Curl 요청">
 
 ```shell
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -195,7 +195,7 @@ print(response)
 </TabItem>
 </Tabs>
 
-## Set temperature, top p, etc.
+## temperature, top p 등 설정
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -218,7 +218,7 @@ response = completion(
 </TabItem>
 <TabItem value="proxy" label="PROXY">
 
-**Set on yaml**
+**yaml에 설정**
 
 ```yaml
 model_list:
@@ -229,7 +229,7 @@ model_list:
       top_p: <your-top-p>
 ```
 
-**Set on request**
+**요청에 설정**
 
 ```python
 
@@ -257,9 +257,9 @@ print(response)
 </TabItem>
 </Tabs>
 
-## Pass provider-specific params 
+## 제공자별 매개변수 전달
 
-If you pass a non-openai param to litellm, we'll assume it's provider-specific and send it as a kwarg in the request body. [See more](../completion/input.md#provider-specific-params)
+LiteLLM에 OpenAI가 아닌 매개변수를 전달하면 제공자별 매개변수로 간주하고 요청 본문의 kwarg로 보냅니다. [더 보기](../completion/input.md#provider-specific-params)
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -281,7 +281,7 @@ response = completion(
 </TabItem>
 <TabItem value="proxy" label="PROXY">
 
-**Set on yaml**
+**yaml에 설정**
 
 ```yaml
 model_list:
@@ -291,7 +291,7 @@ model_list:
       top_k: 1 # 👈 PROVIDER-SPECIFIC PARAM
 ```
 
-**Set on request**
+**요청에 설정**
 
 ```python
 
@@ -321,9 +321,9 @@ print(response)
 </TabItem>
 </Tabs>
 
-## Usage - Request Metadata
+## 사용법 - 요청 메타데이터
 
-Attach metadata to Bedrock requests for logging and cost attribution.
+로깅과 비용 귀속을 위해 Bedrock 요청에 메타데이터를 붙입니다.
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -348,7 +348,7 @@ response = completion(
 </TabItem>
 <TabItem value="proxy" label="PROXY">
 
-**Set on yaml**
+**yaml에 설정**
 
 ```yaml
 model_list:
@@ -359,7 +359,7 @@ model_list:
         cost_center: "engineering"
 ```
 
-**Set on request**
+**요청에 설정**
 
 ```python
 import openai
@@ -380,9 +380,9 @@ response = client.chat.completions.create(
 </TabItem>
 </Tabs>
 
-## Usage - Function Calling / Tool calling
+## 사용법 - 함수 호출 / 도구 호출
 
-LiteLLM supports tool calling via Bedrock's Converse and Invoke API's.
+LiteLLM은 Bedrock의 Converse 및 Invoke API를 통한 도구 호출을 지원합니다.
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -433,7 +433,7 @@ assert isinstance(
 </TabItem>
 <TabItem value="proxy" label="PROXY">
 
-1. Setup config.yaml
+1. config.yaml 설정
 
 ```yaml
 model_list:
@@ -442,13 +442,13 @@ model_list:
       model: bedrock/us.anthropic.claude-3-7-sonnet-20250219-v1:0 # for bedrock invoke, specify `bedrock/invoke/<model>`
 ```
 
-2. Start proxy 
+2. 프록시 시작
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-3. Test it! 
+3. 테스트
 
 ```bash
 curl http://0.0.0.0:4000/v1/chat/completions \
@@ -495,7 +495,7 @@ curl http://0.0.0.0:4000/v1/chat/completions \
 </Tabs>
 
 
-## Usage - Vision 
+## 사용법 - 비전
 
 ```python
 from litellm import completion
@@ -537,22 +537,22 @@ print(f"\nResponse: {resp}")
 ```
 
 
-## Usage - 'thinking' / 'reasoning content'
+## 사용법 - 'thinking' / 'reasoning content' {#usage---thinking--reasoning-content}
 
-This is currently only supported for Anthropic's Claude 3.7 Sonnet + Deepseek R1 + GPT-OSS models.
+현재 Anthropic Claude 3.7 Sonnet, Deepseek R1, GPT-OSS 모델에서만 지원됩니다.
 
-Works on v1.61.20+.
+v1.61.20 이상에서 작동합니다.
 
-Returns 2 new fields in `message` and `delta` object:
-- `reasoning_content` - string - The reasoning content of the response
-- `thinking_blocks` - list of objects (Anthropic only) - The thinking blocks of the response
+`message` 및 `delta` 객체에 두 개의 새 필드를 반환합니다.
+- `reasoning_content` - string - 응답의 reasoning content입니다.
+- `thinking_blocks` - 객체 목록(Anthropic 전용) - 응답의 thinking 블록
 
-Each object has the following fields:
-- `type` - Literal["thinking"] - The type of thinking block
-- `thinking` - string - The thinking of the response. Also returned in `reasoning_content`
-- `signature` - string - A base64 encoded string, returned by Anthropic.
+각 객체에는 다음 필드가 있습니다.
+- `type` - Literal["thinking"] - thinking 블록 타입
+- `thinking` - string - 응답의 thinking입니다. `reasoning_content`에도 반환됩니다.
+- `signature` - string - Anthropic이 반환하는 base64 인코딩 문자열입니다.
 
-The `signature` is required by Anthropic on subsequent calls, if 'thinking' content is passed in (only required to use `thinking` with tool calling). [Learn more](https://docs.anthropic.com/en/docs/build-with-claude/extended-thinking#understanding-thinking-blocks)
+후속 호출에 'thinking' content를 전달하는 경우 Anthropic은 `signature`를 요구합니다(`thinking`을 도구 호출과 함께 사용할 때만 필요). [자세히 알아보기](https://docs.anthropic.com/en/docs/build-with-claude/extended-thinking#understanding-thinking-blocks)
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -577,7 +577,7 @@ print(resp)
 </TabItem>
 <TabItem value="proxy" label="PROXY">
 
-1. Setup config.yaml
+1. config.yaml 설정
 
 ```yaml
 model_list:
@@ -587,13 +587,13 @@ model_list:
       reasoning_effort: "low" # 👈 EITHER HERE OR ON REQUEST
 ```
 
-2. Start proxy 
+2. 프록시 시작
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-3. Test it! 
+3. 테스트
 
 ```bash
 curl http://0.0.0.0:4000/v1/chat/completions \
@@ -610,9 +610,9 @@ curl http://0.0.0.0:4000/v1/chat/completions \
 </Tabs>
 
 
-**Expected Response**
+**예상 응답**
 
-Same as [Anthropic API response](../providers/anthropic#usage---thinking--reasoning_content).
+[Anthropic API 응답](../providers/anthropic#usage---thinking--reasoning_content)과 동일합니다.
 
 ```python
 {
@@ -651,37 +651,37 @@ Same as [Anthropic API response](../providers/anthropic#usage---thinking--reason
 }
 ```
 
-### Pass `thinking` to Anthropic models
+### Anthropic 모델에 `thinking` 전달
 
-Same as [Anthropic API response](../providers/anthropic#usage---thinking--reasoning_content).
+[Anthropic API 응답](../providers/anthropic#usage---thinking--reasoning_content)과 동일합니다.
 
 
-## Usage - Anthropic Beta Features
+## 사용법 - Anthropic 베타 기능 {#usage---anthropic-beta-features}
 
-LiteLLM supports Anthropic's beta features on AWS Bedrock through the `anthropic-beta` header. This enables access to experimental features like:
+LiteLLM은 AWS Bedrock에서 `anthropic-beta` 헤더를 통해 Anthropic 베타 기능을 지원합니다. 이를 통해 다음 실험적 기능에 접근할 수 있습니다.
 
-- **1M Context Window** - Up to 1 million tokens of context (Claude Opus 4.6, Sonnet 4.5, Sonnet 4)
-- **Computer Use Tools** - AI that can interact with computer interfaces
-- **Token-Efficient Tools** - More efficient tool usage patterns  
-- **Extended Output** - Up to 128K output tokens
-- **Enhanced Thinking** - Advanced reasoning capabilities
+- **1M 컨텍스트 창** - 최대 100만 토큰 컨텍스트(Claude Opus 4.6, Sonnet 4.5, Sonnet 4)
+- **Computer Use 도구** - 컴퓨터 인터페이스와 상호작용할 수 있는 AI
+- **토큰 효율 도구** - 더 효율적인 도구 사용 패턴
+- **확장 출력** - 최대 128K 출력 토큰
+- **향상된 Thinking** - 고급 reasoning 기능
 
-### Supported Beta Features
+### 지원되는 베타 기능 {#supported-beta-features}
 
-| Beta Feature | Header Value | Compatible Models | Description |
+| 베타 기능 | 헤더 값 | 호환 모델 | 설명 |
 |--------------|-------------|------------------|-------------|
-| 1M Context Window | `context-1m-2025-08-07` | Claude Opus 4.6, Sonnet 4.5, Sonnet 4 | Enable 1 million token context window |
-| Computer Use (Latest) | `computer-use-2025-01-24` | Claude 3.7 Sonnet | Latest computer use tools |
-| Computer Use (Legacy) | `computer-use-2024-10-22` | Claude 3.5 Sonnet v2 | Computer use tools for Claude 3.5 |
-| Token-Efficient Tools | `token-efficient-tools-2025-02-19` | Claude 3.7 Sonnet | More efficient tool usage |
-| Interleaved Thinking | `interleaved-thinking-2025-05-14` | Claude 4 models | Enhanced thinking capabilities |
-| Extended Output | `output-128k-2025-02-19` | Claude 3.7 Sonnet | Up to 128K output tokens |
-| Developer Thinking | `dev-full-thinking-2025-05-14` | Claude 4 models | Raw thinking mode for developers |
+| 1M 컨텍스트 창 | `context-1m-2025-08-07` | Claude Opus 4.6, Sonnet 4.5, Sonnet 4 | 100만 토큰 컨텍스트 창 활성화 |
+| Computer Use(최신) | `computer-use-2025-01-24` | Claude 3.7 Sonnet | 최신 computer use 도구 |
+| Computer Use(레거시) | `computer-use-2024-10-22` | Claude 3.5 Sonnet v2 | Claude 3.5용 computer use 도구 |
+| 토큰 효율 도구 | `token-efficient-tools-2025-02-19` | Claude 3.7 Sonnet | 더 효율적인 도구 사용 |
+| Interleaved Thinking | `interleaved-thinking-2025-05-14` | Claude 4 모델 | 향상된 thinking 기능 |
+| 확장 출력 | `output-128k-2025-02-19` | Claude 3.7 Sonnet | 최대 128K 출력 토큰 |
+| Developer Thinking | `dev-full-thinking-2025-05-14` | Claude 4 모델 | 개발자를 위한 원시 thinking 모드 |
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
 
-**Single Beta Feature**
+**단일 베타 기능**
 
 ```python
 from litellm import completion
@@ -703,7 +703,7 @@ response = completion(
 )
 ```
 
-**Multiple Beta Features**
+**여러 베타 기능**
 
 ```python
 from litellm import completion
@@ -719,7 +719,7 @@ response = completion(
 )
 ```
 
-**Computer Use Tools with Beta Features**
+**베타 기능과 Computer Use 도구**
 
 ```python
 from litellm import completion
@@ -744,7 +744,7 @@ response = completion(
 </TabItem>
 <TabItem value="proxy" label="PROXY">
 
-**Set on YAML Config**
+**YAML 설정에 구성**
 
 ```yaml
 model_list:
@@ -764,7 +764,7 @@ general_settings:
   forward_client_headers_to_llm_api: true  # 👈 Required for client-side header forwarding
 ```
 
-**Set on Request**
+**요청에 설정**
 
 ```python
 import openai
@@ -787,7 +787,7 @@ response = client.chat.completions.create(
 ```
 
 :::info
-**For client-side header forwarding**: When using the proxy and sending `anthropic-beta` headers from the client (like the OpenAI SDK), you need to enable `forward_client_headers_to_llm_api: true` in your proxy's `general_settings`. This tells the proxy to extract headers from HTTP requests and forward them to the underlying LLM provider.
+**클라이언트 측 헤더 전달의 경우**: 프록시를 사용하면서 클라이언트(OpenAI SDK 등)에서 `anthropic-beta` 헤더를 보내려면 프록시의 `general_settings`에서 `forward_client_headers_to_llm_api: true`를 활성화해야 합니다. 이 설정은 프록시가 HTTP 요청에서 헤더를 추출해 기반 LLM 제공자로 전달하도록 합니다.
 :::
 
 </TabItem>
@@ -795,12 +795,12 @@ response = client.chat.completions.create(
 
 :::info
 
-Beta features may require special access or permissions in your AWS account. Some features are only available in specific AWS regions. Check the [AWS Bedrock documentation](https://docs.aws.amazon.com/bedrock/latest/userguide/model-parameters-anthropic-claude-messages-request-response.html) for availability and access requirements.
+베타 기능은 AWS 계정에서 특별한 접근 권한 또는 권한을 요구할 수 있습니다. 일부 기능은 특정 AWS 리전에서만 사용할 수 있습니다. 사용 가능 여부와 접근 요구사항은 [AWS Bedrock 문서](https://docs.aws.amazon.com/bedrock/latest/userguide/model-parameters-anthropic-claude-messages-request-response.html)를 확인하세요.
 
 :::
 
 
-## Usage - Structured Output / JSON mode 
+## 사용법 - 구조화된 출력 / JSON 모드 {#usage---structured-output--json-mode}
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -836,7 +836,7 @@ print(response.choices[0].message.content)
 </TabItem>
 <TabItem value="proxy" label="PROXY">
 
-1. Setup config.yaml
+1. config.yaml 설정
 
 ```yaml
 model_list:
@@ -848,13 +848,13 @@ model_list:
       aws_region_name: os.environ/CUSTOM_AWS_REGION_NAME
 ```
 
-2. Start proxy 
+2. 프록시 시작
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-3. Test it!
+3. 테스트
 
 ```bash
 curl http://0.0.0.0:4000/v1/chat/completions \
@@ -905,9 +905,9 @@ curl http://0.0.0.0:4000/v1/chat/completions \
 </TabItem>
 </Tabs>
 
-## Usage - Latency Optimized Inference
+## 사용법 - 지연 시간 최적화 추론 {#usage---latency-optimized-inference}
 
-Valid from v1.65.1+
+v1.65.1 이상에서 유효합니다.
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -925,7 +925,7 @@ response = completion(
 </TabItem>
 <TabItem value="proxy" label="PROXY">
 
-1. Setup config.yaml
+1. config.yaml 설정
 
 ```yaml
 model_list:
@@ -935,13 +935,13 @@ model_list:
       performanceConfig: {"latency": "optimized"} # 👈 EITHER HERE OR ON REQUEST
 ```
 
-2. Start proxy 
+2. 프록시 시작
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-3. Test it!
+3. 테스트
 
 ```bash
 curl http://0.0.0.0:4000/v1/chat/completions \
@@ -957,19 +957,19 @@ curl http://0.0.0.0:4000/v1/chat/completions \
 </TabItem>
 </Tabs>
 
-## Usage - Service Tier
+## 사용법 - Service Tier {#usage---service-tier}
 
-Control the processing tier for your Bedrock requests using `serviceTier`. Valid values are `priority`, `default`, or `flex`.
+`serviceTier`를 사용해 Bedrock 요청의 처리 계층을 제어합니다. 유효한 값은 `priority`, `default`, `flex`입니다.
 
-- `priority`: Higher priority processing with guaranteed capacity
-- `default`: Standard processing tier
-- `flex`: Cost-optimized processing for batch workloads
+- `priority`: 보장된 용량을 사용하는 높은 우선순위 처리
+- `default`: 표준 처리 계층
+- `flex`: 배치 워크로드용 비용 최적화 처리
 
-[Bedrock ServiceTier API Reference](https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_ServiceTier.html)
+[Bedrock ServiceTier API 참고 문서](https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_ServiceTier.html)
 
-### OpenAI-compatible `service_tier` parameter
+### OpenAI 호환 `service_tier` 매개변수 {#openai-compatible-service_tier-parameter}
 
-LiteLLM also supports the OpenAI-style `service_tier` parameter, which is automatically translated to Bedrock's native `serviceTier` format:
+LiteLLM은 OpenAI 스타일 `service_tier` 매개변수도 지원합니다. 이 값은 Bedrock 네이티브 `serviceTier` 형식으로 자동 변환됩니다.
 
 | OpenAI `service_tier` | Bedrock `serviceTier` |
 |-----------------------|----------------------|
@@ -989,7 +989,7 @@ response = completion(
 )
 ```
 
-### Native Bedrock `serviceTier` parameter
+### 네이티브 Bedrock `serviceTier` 매개변수 {#native-bedrock-servicetier-parameter}
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -1007,7 +1007,7 @@ response = completion(
 </TabItem>
 <TabItem value="proxy" label="PROXY">
 
-1. Setup config.yaml
+1. config.yaml 설정
 
 ```yaml
 model_list:
@@ -1019,13 +1019,13 @@ model_list:
         type: priority
 ```
 
-2. Start proxy
+2. 프록시 시작
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-3. Test it!
+3. 테스트
 
 ```bash
 curl http://0.0.0.0:4000/v1/chat/completions \
@@ -1040,21 +1040,21 @@ curl http://0.0.0.0:4000/v1/chat/completions \
 
 </TabItem>
 </Tabs>
-## Usage - Bedrock Guardrails
+## 사용법 - Bedrock 가드레일
 
-Example of using [Bedrock Guardrails with LiteLLM](https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-use-converse-api.html)
+[LiteLLM에서 Bedrock 가드레일 사용](https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-use-converse-api.html) 예제입니다.
 
-### Selective Content Moderation with `guarded_text`
+### `guarded_text`를 사용한 선택적 콘텐츠 모더레이션 {#selective-content-moderation-with-guarded_text}
 
-LiteLLM supports selective content moderation using the `guarded_text` content type. This allows you to wrap only specific content that should be moderated by Bedrock Guardrails, rather than evaluating the entire conversation.
+LiteLLM은 `guarded_text` 콘텐츠 타입을 사용한 선택적 콘텐츠 모더레이션을 지원합니다. 전체 대화를 평가하는 대신 Bedrock 가드레일로 모더레이션해야 하는 특정 콘텐츠만 감쌀 수 있습니다.
 
-**How it works:**
-- Content with `type: "guarded_text"` gets automatically wrapped in `guardrailConverseContent` blocks
-- Only the wrapped content is evaluated by Bedrock Guardrails
-- Regular content with `type: "text"` bypasses guardrail evaluation
+**동작 방식:**
+- `type: "guarded_text"` 콘텐츠는 `guardrailConverseContent` 블록으로 자동 래핑됩니다.
+- 래핑된 콘텐츠만 Bedrock 가드레일에서 평가됩니다.
+- `type: "text"` 일반 콘텐츠는 가드레일 평가를 우회합니다.
 
 :::note
-If `guarded_text` is not used, the entire conversation history will be sent to the guardrail for evaluation, which can increase latency and costs.
+`guarded_text`를 사용하지 않으면 전체 대화 기록이 평가를 위해 가드레일로 전송됩니다. 이로 인해 지연 시간과 비용이 증가할 수 있습니다.
 :::
 
 <Tabs>
@@ -1103,7 +1103,7 @@ response_guard = completion(
 )
 ```
 </TabItem>
-<TabItem value="proxy" label="Proxy on request">
+<TabItem value="proxy" label="요청의 프록시">
 
 ```python
 
@@ -1133,9 +1133,9 @@ extra_body={
 print(response)
 ```
 </TabItem>
-<TabItem value="proxy-config" label="Proxy on config.yaml">
+<TabItem value="proxy-config" label="config.yaml의 프록시">
 
-1. Update config.yaml 
+1. config.yaml 업데이트
 
 ```yaml
 model_list:
@@ -1153,13 +1153,13 @@ model_list:
 
 ```
 
-2. Start proxy 
+2. 프록시 시작
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-3. Test it! 
+3. 테스트
 
 ```python
 
@@ -1197,12 +1197,12 @@ print(response_guard)
 </TabItem>
 </Tabs>
 
-## Usage - "Assistant Pre-fill"
+## 사용법 - "Assistant Pre-fill" {#usage---assistant-pre-fill}
 
-If you're using Anthropic's Claude with Bedrock, you can "put words in Claude's mouth" by including an `assistant` role message as the last item in the `messages` array.
+Bedrock에서 Anthropic Claude를 사용하는 경우 `messages` 배열의 마지막 항목으로 `assistant` role 메시지를 포함해 "Claude의 입에 말을 넣는" 방식의 사전 채우기(pre-fill)를 사용할 수 있습니다.
 
 > [!IMPORTANT]
-> The returned completion will _**not**_ include your "pre-fill" text, since it is part of the prompt itself. Make sure to prefix Claude's completion with your pre-fill.
+> 반환된 completion에는 "pre-fill" 텍스트가 포함되지 않습니다. 해당 텍스트는 prompt 자체의 일부이기 때문입니다. Claude의 completion 앞에 pre-fill을 직접 붙여야 합니다.
 
 ```python
 import os
@@ -1219,7 +1219,7 @@ messages = [
 response = completion(model="bedrock/anthropic.claude-v2", messages=messages)
 ```
 
-### Example prompt sent to Claude
+### Claude로 전송되는 예제 프롬프트 {#example-prompt-sent-to-claude}
 
 ```
 
@@ -1230,8 +1230,8 @@ Human: How do you say 'Hello' in German? Return your answer as a JSON object, li
 Assistant: {
 ```
 
-## Usage - "System" messages
-If you're using Anthropic's Claude 2.1 with Bedrock, `system` role messages are properly formatted for you.
+## 사용법 - "System" 메시지 {#usage---system-messages}
+Bedrock에서 Anthropic Claude 2.1을 사용하는 경우 `system` role 메시지가 적절한 형식으로 자동 변환됩니다.
 
 ```python
 import os
@@ -1248,7 +1248,7 @@ messages = [
 response = completion(model="bedrock/anthropic.claude-v2:1", messages=messages)
 ```
 
-### Example prompt sent to Claude
+### Claude로 전송되는 예제 프롬프트 {#example-prompt-sent-to-claude-1}
 
 ```
 You are a snarky assistant.
@@ -1260,7 +1260,7 @@ Assistant:
 
 
 
-## Usage - Streaming
+## 사용법 - 스트리밍 {#usage---streaming}
 ```python
 import os
 from litellm import completion
@@ -1278,7 +1278,7 @@ for chunk in response:
   print(chunk)
 ```
 
-#### Example Streaming Output Chunk
+#### 예제 스트리밍 출력 청크 {#example-streaming-output-chunk}
 ```json
 {
   "choices": [
@@ -1300,9 +1300,9 @@ for chunk in response:
 }
 ```
 
-## Cross-region inferencing 
+## 교차 리전 추론 {#cross-region-inferencing}
 
-LiteLLM supports Bedrock [cross-region inferencing](https://docs.aws.amazon.com/bedrock/latest/userguide/cross-region-inference.html) across all [supported bedrock models](https://docs.aws.amazon.com/bedrock/latest/userguide/cross-region-inference-support.html).
+LiteLLM은 모든 [지원 Bedrock 모델](https://docs.aws.amazon.com/bedrock/latest/userguide/cross-region-inference-support.html)에서 Bedrock [교차 리전 추론](https://docs.aws.amazon.com/bedrock/latest/userguide/cross-region-inference.html)을 지원합니다.
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -1332,7 +1332,7 @@ print("Final Response: {}".format(response))
 </TabItem>
 <TabItem value="proxy" label="PROXY">
 
-#### 1. Setup config.yaml
+#### 1. config.yaml 설정
 
 ```yaml
 model_list:
@@ -1345,17 +1345,17 @@ model_list:
 ```
 
 
-#### 2. Start the proxy 
+#### 2. 프록시 시작 
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-#### 3. Test it
+#### 3. 테스트
 
 
 <Tabs>
-<TabItem value="Curl" label="Curl Request">
+<TabItem value="Curl" label="Curl 요청">
 
 ```shell
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -1429,20 +1429,20 @@ print(response)
 </Tabs>
 
 
-## Set 'converse' / 'invoke' route 
+## 'converse' / 'invoke' 라우트 설정 {#set-converse--invoke-route}
 
 :::info
 
-Supported from LiteLLM Version `v1.53.5`
+LiteLLM 버전 `v1.53.5`부터 지원됩니다.
 
 :::
 
-LiteLLM defaults to the `invoke` route. LiteLLM uses the `converse` route for Bedrock models that support it.
+LiteLLM의 기본값은 `invoke` 라우트입니다. LiteLLM은 이를 지원하는 Bedrock 모델에 대해 `converse` 라우트를 사용합니다.
 
-To explicitly set the route, do `bedrock/converse/<model>` or `bedrock/invoke/<model>`.
+라우트를 명시적으로 설정하려면 `bedrock/converse/<model>` 또는 `bedrock/invoke/<model>`을 사용하세요.
 
 
-E.g. 
+예:
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -1466,9 +1466,9 @@ model_list:
 </TabItem>
 </Tabs>
 
-## Alternate user/assistant messages
+## user/assistant 메시지 교대 처리 {#handling-userassistant-message-alternation}
 
-Use `user_continue_message` to add a default user message, for cases (e.g. Autogen) where the client might not follow alternating user/assistant messages starting and ending with a user message. 
+클라이언트가 user 메시지로 시작하고 끝나는 user/assistant 메시지 교대 규칙을 따르지 않을 수 있는 경우(예: Autogen), `user_continue_message`를 사용해 기본 user 메시지를 추가합니다.
 
 
 ```yaml
@@ -1479,9 +1479,9 @@ model_list:
       user_continue_message: {"role": "user", "content": "Please continue"}
 ```
 
-OR 
+또는
 
-just set `litellm.modify_params=True` and LiteLLM will automatically handle this with a default user_continue_message.
+`litellm.modify_params=True`만 설정하면 LiteLLM이 기본 `user_continue_message`로 이를 자동 처리합니다.
 
 ```yaml
 model_list:
@@ -1493,7 +1493,7 @@ litellm_settings:
    modify_params: true
 ```
 
-Test it! 
+테스트:
 
 ```bash
 curl -X POST 'http://0.0.0.0:4000/chat/completions' \
@@ -1505,21 +1505,21 @@ curl -X POST 'http://0.0.0.0:4000/chat/completions' \
 }'
 ```
 
-## Usage - PDF / Document Understanding
+## 사용법 - PDF / 문서 이해 {#usage---pdf--document-understanding}
 
-LiteLLM supports Document Understanding for Bedrock models - [AWS Bedrock Docs](https://docs.aws.amazon.com/nova/latest/userguide/modalities-document.html).
+LiteLLM은 Bedrock 모델의 문서 이해를 지원합니다. [AWS Bedrock 문서](https://docs.aws.amazon.com/nova/latest/userguide/modalities-document.html)를 참고하세요.
 
 :::info
 
-LiteLLM supports ALL Bedrock document types - 
+LiteLLM은 모든 Bedrock 문서 타입을 지원합니다.
 
-E.g.: "pdf", "csv", "doc", "docx", "xls", "xlsx", "html", "txt", "md"
+예: "pdf", "csv", "doc", "docx", "xls", "xlsx", "html", "txt", "md"
 
-You can also pass these as either `image_url` or `base64`
+또한 `image_url` 또는 `base64`로 전달할 수 있습니다.
 
 :::
 
-### url 
+### URL {#url}
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -1568,7 +1568,7 @@ assert response is not None
 </TabItem>
 <TabItem value="proxy" label="PROXY">
 
-1. Setup config.yaml
+1. config.yaml 설정
 
 ```yaml
 model_list:
@@ -1580,13 +1580,13 @@ model_list:
       aws_region_name: os.environ/AWS_REGION_NAME
 ```
 
-2. Start the proxy 
+2. 프록시 시작 
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-3. Test it! 
+3. 테스트
 
 ```bash
 curl -X POST 'http://0.0.0.0:4000/chat/completions' \
@@ -1654,7 +1654,7 @@ assert response is not None
 </TabItem>
 <TabItem value="proxy" label="PROXY">
 
-1. Setup config.yaml
+1. config.yaml 설정
 
 ```yaml
 model_list:
@@ -1666,13 +1666,13 @@ model_list:
       aws_region_name: os.environ/AWS_REGION_NAME
 ```
 
-2. Start the proxy 
+2. 프록시 시작 
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-3. Test it! 
+3. 테스트
 
 ```bash
 curl -X POST 'http://0.0.0.0:4000/chat/completions' \
@@ -1693,17 +1693,17 @@ curl -X POST 'http://0.0.0.0:4000/chat/completions' \
 </Tabs>
 
 
-### OpenAI GPT OSS
+### OpenAI GPT OSS {#openai-gpt-oss}
 
-| Property | Details |
+| 속성 | 세부 정보 |
 |----------|---------|
-| Provider Route | `bedrock/converse/openai.gpt-oss-20b-1:0`, `bedrock/converse/openai.gpt-oss-120b-1:0` |
-| Provider Documentation | [Amazon Bedrock ↗](https://docs.aws.amazon.com/bedrock/latest/userguide/what-is-bedrock.html) |
+| 제공자 라우트 | `bedrock/converse/openai.gpt-oss-20b-1:0`, `bedrock/converse/openai.gpt-oss-120b-1:0` |
+| 제공자 문서 | [Amazon Bedrock ↗](https://docs.aws.amazon.com/bedrock/latest/userguide/what-is-bedrock.html) |
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
 
-```python title="GPT OSS SDK Usage" showLineNumbers
+```python title="GPT OSS SDK 사용법" showLineNumbers
 from litellm import completion
 import os
 
@@ -1729,9 +1729,9 @@ print(response.choices[0].message.content)
 
 </TabItem>
 
-<TabItem value="proxy" label="Proxy">
+<TabItem value="proxy" label="프록시">
 
-**1. Add to config**
+**1. config에 추가**
 
 ```yaml title="config.yaml" showLineNumbers
 model_list:
@@ -1750,17 +1750,17 @@ model_list:
       aws_region_name: os.environ/AWS_REGION_NAME
 ```
 
-**2. Start proxy**
+**2. 프록시 시작**
 
-```bash title="Start LiteLLM Proxy" showLineNumbers
+```bash title="LiteLLM 프록시 시작" showLineNumbers
 litellm --config /path/to/config.yaml
 
 # RUNNING at http://0.0.0.0:4000
 ```
 
-**3. Test it!**
+**3. 테스트**
 
-```bash title="Test GPT OSS via Proxy" showLineNumbers
+```bash title="프록시로 GPT OSS 테스트" showLineNumbers
 curl --location 'http://0.0.0.0:4000/chat/completions' \
   --header 'Authorization: Bearer sk-1234' \
   --header 'Content-Type: application/json' \
@@ -1778,29 +1778,29 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 </TabItem>
 </Tabs>
 
-## TwelveLabs Pegasus - Video Understanding
+## TwelveLabs Pegasus - 비디오 이해 {#twelvelabs-pegasus---video-understanding}
 
-TwelveLabs Pegasus 1.2 is a video understanding model that can analyze and describe video content. LiteLLM supports this model through Bedrock's `/invoke` endpoint.
+TwelveLabs Pegasus 1.2는 비디오 콘텐츠를 분석하고 설명할 수 있는 비디오 이해 모델입니다. LiteLLM은 Bedrock의 `/invoke` 엔드포인트를 통해 이 모델을 지원합니다.
 
-| Property | Details |
+| 속성 | 세부 정보 |
 |----------|---------|
-| Provider Route | `bedrock/us.twelvelabs.pegasus-1-2-v1:0`, `bedrock/eu.twelvelabs.pegasus-1-2-v1:0` |
-| Provider Documentation | [TwelveLabs Pegasus Docs ↗](https://docs.twelvelabs.io/docs/models/pegasus) |
-| Supported Parameters | `max_tokens`, `temperature`, `response_format` |
-| Media Input | S3 URI or base64-encoded video |
+| 제공자 라우트 | `bedrock/us.twelvelabs.pegasus-1-2-v1:0`, `bedrock/eu.twelvelabs.pegasus-1-2-v1:0` |
+| 제공자 문서 | [TwelveLabs Pegasus 문서 ↗](https://docs.twelvelabs.io/docs/models/pegasus) |
+| 지원 파라미터 | `max_tokens`, `temperature`, `response_format` |
+| 미디어 입력 | S3 URI 또는 base64 인코딩 비디오 |
 
-### Supported Features
+### 지원 기능
 
-- **Video Analysis**: Analyze video content from S3 or base64 input
-- **Structured Output**: Support for JSON schema response format
-- **S3 Integration**: Support for S3 video URLs with bucket owner specification
+- **비디오 분석**: S3 또는 base64 입력의 비디오 콘텐츠 분석
+- **구조화된 출력**: JSON schema 응답 형식 지원
+- **S3 연동**: 버킷 소유자 지정이 포함된 S3 비디오 URL 지원
 
-### Usage with S3 Video
+### S3 비디오 사용법 {#s3-video-usage}
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
 
-```python title="TwelveLabs Pegasus SDK Usage" showLineNumbers
+```python title="TwelveLabs Pegasus SDK 사용법" showLineNumbers
 from litellm import completion
 import os
 
@@ -1826,9 +1826,9 @@ print(response.choices[0].message.content)
 
 </TabItem>
 
-<TabItem value="proxy" label="Proxy">
+<TabItem value="proxy" label="프록시">
 
-**1. Add to config**
+**1. config에 추가**
 
 ```yaml title="config.yaml" showLineNumbers
 model_list:
@@ -1840,17 +1840,17 @@ model_list:
       aws_region_name: os.environ/AWS_REGION_NAME
 ```
 
-**2. Start proxy**
+**2. 프록시 시작**
 
-```bash title="Start LiteLLM Proxy" showLineNumbers
+```bash title="LiteLLM 프록시 시작" showLineNumbers
 litellm --config /path/to/config.yaml
 
 # RUNNING at http://0.0.0.0:4000
 ```
 
-**3. Test it!**
+**3. 테스트**
 
-```bash title="Test Pegasus via Proxy" showLineNumbers
+```bash title="프록시로 Pegasus 테스트" showLineNumbers
 curl --location 'http://0.0.0.0:4000/chat/completions' \
   --header 'Authorization: Bearer sk-1234' \
   --header 'Content-Type: application/json' \
@@ -1875,11 +1875,11 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 </TabItem>
 </Tabs>
 
-### Usage with Base64 Video
+### base64 비디오 사용법 {#base64-video-usage}
 
-You can also pass video content directly as base64:
+비디오 콘텐츠를 base64로 직접 전달할 수도 있습니다.
 
-```python title="Base64 Video Input" showLineNumbers
+```python title="base64 비디오 입력" showLineNumbers
 from litellm import completion
 import base64
 
@@ -1899,16 +1899,16 @@ response = completion(
 print(response.choices[0].message.content)
 ```
 
-### Important Notes
+### 중요 참고 사항
 
-- **Response Format**: The model supports structured output via `response_format` with JSON schema
+- **응답 형식**: 이 모델은 JSON schema와 함께 `response_format`을 통한 구조화된 출력을 지원합니다.
 
-## Provisioned throughput models
-To use provisioned throughput Bedrock models pass 
-- `model=bedrock/<base-model>`, example `model=bedrock/anthropic.claude-v2`. Set `model` to any of the [Supported AWS models](#supported-aws-bedrock-models)
+## 프로비저닝된 처리량 모델 {#provisioned-throughput-models}
+프로비저닝된 처리량 Bedrock 모델을 사용하려면 다음을 전달합니다.
+- `model=bedrock/<base-model>`, 예: `model=bedrock/anthropic.claude-v2`. `model`은 [지원 AWS 모델](#supported-aws-bedrock-models) 중 하나로 설정하세요.
 - `model_id=provisioned-model-arn` 
 
-Completion
+Completion 호출:
 ```python
 import litellm
 response = litellm.completion(
@@ -1918,7 +1918,7 @@ response = litellm.completion(
 )
 ```
 
-Embedding
+Embedding 호출:
 ```python
 import litellm
 response = litellm.embedding(
@@ -1929,49 +1929,49 @@ response = litellm.embedding(
 ```
 
 
-## Supported AWS Bedrock Models
+## 지원 AWS Bedrock 모델 {#supported-aws-bedrock-models}
 
-LiteLLM supports ALL Bedrock models. 
+LiteLLM은 모든 Bedrock 모델을 지원합니다.
 
-Here's an example of using a bedrock model with LiteLLM. For a complete list, refer to the [model cost map](https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json)
+다음은 LiteLLM에서 Bedrock 모델을 사용하는 예시입니다. 전체 목록은 [모델 비용 맵](https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json)을 참고하세요.
 
-| Model Name                 | Command                                                          |
+| 모델 이름                 | 명령                                                          |
 |----------------------------|------------------------------------------------------------------|
 | GPT-OSS 20B | `completion(model='bedrock/converse/openai.gpt-oss-20b-1:0', messages=messages)` | `os.environ['AWS_ACCESS_KEY_ID']`, `os.environ['AWS_SECRET_ACCESS_KEY']`, `os.environ['AWS_REGION_NAME']` |
 | GPT-OSS 120B | `completion(model='bedrock/converse/openai.gpt-oss-120b-1:0', messages=messages)` | `os.environ['AWS_ACCESS_KEY_ID']`, `os.environ['AWS_SECRET_ACCESS_KEY']`, `os.environ['AWS_REGION_NAME']` |
 | Deepseek R1    | `completion(model='bedrock/us.deepseek.r1-v1:0', messages=messages)`   | `os.environ['AWS_ACCESS_KEY_ID']`, `os.environ['AWS_SECRET_ACCESS_KEY']`           |
-| Anthropic Claude Sonnet 4.5    | `completion(model='bedrock/us.anthropic.claude-sonnet-4-5-20250929-v1:0', messages=messages)`   | `os.environ['AWS_ACCESS_KEY_ID']`, `os.environ['AWS_SECRET_ACCESS_KEY']`           |
-| Anthropic Claude-V3.5 Sonnet    | `completion(model='bedrock/us.anthropic.claude-haiku-4-5-20251001-v1:0', messages=messages)`   | `os.environ['AWS_ACCESS_KEY_ID']`, `os.environ['AWS_SECRET_ACCESS_KEY']`           |
-| Anthropic Claude-V3  sonnet    | `completion(model='bedrock/anthropic.claude-3-sonnet-20240229-v1:0', messages=messages)`   | `os.environ['AWS_ACCESS_KEY_ID']`, `os.environ['AWS_SECRET_ACCESS_KEY']`           |
-| Anthropic Claude-V3 Haiku     | `completion(model='bedrock/anthropic.claude-3-haiku-20240307-v1:0', messages=messages)`   | `os.environ['AWS_ACCESS_KEY_ID']`, `os.environ['AWS_SECRET_ACCESS_KEY']`           |
-| Anthropic Claude-V3 Opus     | `completion(model='bedrock/anthropic.claude-3-opus-20240229-v1:0', messages=messages)`   | `os.environ['AWS_ACCESS_KEY_ID']`, `os.environ['AWS_SECRET_ACCESS_KEY']`           |
-| Anthropic Claude-V2.1      | `completion(model='bedrock/anthropic.claude-v2:1', messages=messages)`   | `os.environ['AWS_ACCESS_KEY_ID']`, `os.environ['AWS_SECRET_ACCESS_KEY']`           |
-| Anthropic Claude-V2        | `completion(model='bedrock/anthropic.claude-v2', messages=messages)`   | `os.environ['AWS_ACCESS_KEY_ID']`, `os.environ['AWS_SECRET_ACCESS_KEY']`           |
-| Anthropic Claude-Instant V1 | `completion(model='bedrock/anthropic.claude-instant-v1', messages=messages)` | `os.environ['AWS_ACCESS_KEY_ID']`, `os.environ['AWS_SECRET_ACCESS_KEY']`           |
-| Meta llama3-1-405b        | `completion(model='bedrock/meta.llama3-1-405b-instruct-v1:0', messages=messages)`   | `os.environ['AWS_ACCESS_KEY_ID']`, `os.environ['AWS_SECRET_ACCESS_KEY']`           |
-| Meta llama3-1-70b        | `completion(model='bedrock/meta.llama3-1-70b-instruct-v1:0', messages=messages)`   | `os.environ['AWS_ACCESS_KEY_ID']`, `os.environ['AWS_SECRET_ACCESS_KEY']`           |
-| Meta llama3-1-8b        | `completion(model='bedrock/meta.llama3-1-8b-instruct-v1:0', messages=messages)`   | `os.environ['AWS_ACCESS_KEY_ID']`, `os.environ['AWS_SECRET_ACCESS_KEY']`           |
-| Meta llama3-70b        | `completion(model='bedrock/meta.llama3-70b-instruct-v1:0', messages=messages)`   | `os.environ['AWS_ACCESS_KEY_ID']`, `os.environ['AWS_SECRET_ACCESS_KEY']`           |
+| `Anthropic Claude Sonnet 4.5`    | `completion(model='bedrock/us.anthropic.claude-sonnet-4-5-20250929-v1:0', messages=messages)`   | `os.environ['AWS_ACCESS_KEY_ID']`, `os.environ['AWS_SECRET_ACCESS_KEY']`           |
+| `Anthropic Claude-V3.5 Sonnet`    | `completion(model='bedrock/us.anthropic.claude-haiku-4-5-20251001-v1:0', messages=messages)`   | `os.environ['AWS_ACCESS_KEY_ID']`, `os.environ['AWS_SECRET_ACCESS_KEY']`           |
+| `Anthropic Claude-V3 sonnet`    | `completion(model='bedrock/anthropic.claude-3-sonnet-20240229-v1:0', messages=messages)`   | `os.environ['AWS_ACCESS_KEY_ID']`, `os.environ['AWS_SECRET_ACCESS_KEY']`           |
+| `Anthropic Claude-V3 Haiku`     | `completion(model='bedrock/anthropic.claude-3-haiku-20240307-v1:0', messages=messages)`   | `os.environ['AWS_ACCESS_KEY_ID']`, `os.environ['AWS_SECRET_ACCESS_KEY']`           |
+| `Anthropic Claude-V3 Opus`     | `completion(model='bedrock/anthropic.claude-3-opus-20240229-v1:0', messages=messages)`   | `os.environ['AWS_ACCESS_KEY_ID']`, `os.environ['AWS_SECRET_ACCESS_KEY']`           |
+| `Anthropic Claude-V2.1`      | `completion(model='bedrock/anthropic.claude-v2:1', messages=messages)`   | `os.environ['AWS_ACCESS_KEY_ID']`, `os.environ['AWS_SECRET_ACCESS_KEY']`           |
+| `Anthropic Claude-V2`        | `completion(model='bedrock/anthropic.claude-v2', messages=messages)`   | `os.environ['AWS_ACCESS_KEY_ID']`, `os.environ['AWS_SECRET_ACCESS_KEY']`           |
+| `Anthropic Claude-Instant V1` | `completion(model='bedrock/anthropic.claude-instant-v1', messages=messages)` | `os.environ['AWS_ACCESS_KEY_ID']`, `os.environ['AWS_SECRET_ACCESS_KEY']`           |
+| `Meta llama3-1-405b`        | `completion(model='bedrock/meta.llama3-1-405b-instruct-v1:0', messages=messages)`   | `os.environ['AWS_ACCESS_KEY_ID']`, `os.environ['AWS_SECRET_ACCESS_KEY']`           |
+| `Meta llama3-1-70b`        | `completion(model='bedrock/meta.llama3-1-70b-instruct-v1:0', messages=messages)`   | `os.environ['AWS_ACCESS_KEY_ID']`, `os.environ['AWS_SECRET_ACCESS_KEY']`           |
+| `Meta llama3-1-8b`        | `completion(model='bedrock/meta.llama3-1-8b-instruct-v1:0', messages=messages)`   | `os.environ['AWS_ACCESS_KEY_ID']`, `os.environ['AWS_SECRET_ACCESS_KEY']`           |
+| `Meta llama3-70b`        | `completion(model='bedrock/meta.llama3-70b-instruct-v1:0', messages=messages)`   | `os.environ['AWS_ACCESS_KEY_ID']`, `os.environ['AWS_SECRET_ACCESS_KEY']`           |
 | Meta llama3-8b | `completion(model='bedrock/meta.llama3-8b-instruct-v1:0', messages=messages)` | `os.environ['AWS_ACCESS_KEY_ID']`, `os.environ['AWS_SECRET_ACCESS_KEY']`           |
-| Amazon Titan Lite          | `completion(model='bedrock/amazon.titan-text-lite-v1', messages=messages)` | `os.environ['AWS_ACCESS_KEY_ID']`, `os.environ['AWS_SECRET_ACCESS_KEY']`, `os.environ['AWS_REGION_NAME']` |
-| Amazon Titan Express       | `completion(model='bedrock/amazon.titan-text-express-v1', messages=messages)`   | `os.environ['AWS_ACCESS_KEY_ID']`, `os.environ['AWS_SECRET_ACCESS_KEY']`, `os.environ['AWS_REGION_NAME']` |
-| Cohere Command             | `completion(model='bedrock/cohere.command-text-v14', messages=messages)`   | `os.environ['AWS_ACCESS_KEY_ID']`, `os.environ['AWS_SECRET_ACCESS_KEY']`, `os.environ['AWS_REGION_NAME']` |
-| AI21 J2-Mid                | `completion(model='bedrock/ai21.j2-mid-v1', messages=messages)`   | `os.environ['AWS_ACCESS_KEY_ID']`, `os.environ['AWS_SECRET_ACCESS_KEY']`, `os.environ['AWS_REGION_NAME']` |
-| AI21 J2-Ultra              | `completion(model='bedrock/ai21.j2-ultra-v1', messages=messages)`   | `os.environ['AWS_ACCESS_KEY_ID']`, `os.environ['AWS_SECRET_ACCESS_KEY']`, `os.environ['AWS_REGION_NAME']` |
-| AI21 Jamba-Instruct              | `completion(model='bedrock/ai21.jamba-instruct-v1:0', messages=messages)`   | `os.environ['AWS_ACCESS_KEY_ID']`, `os.environ['AWS_SECRET_ACCESS_KEY']`, `os.environ['AWS_REGION_NAME']` |
-| Meta Llama 2 Chat 13b      | `completion(model='bedrock/meta.llama2-13b-chat-v1', messages=messages)`   | `os.environ['AWS_ACCESS_KEY_ID']`, `os.environ['AWS_SECRET_ACCESS_KEY']`, `os.environ['AWS_REGION_NAME']` |
-| Meta Llama 2 Chat 70b      | `completion(model='bedrock/meta.llama2-70b-chat-v1', messages=messages)`   | `os.environ['AWS_ACCESS_KEY_ID']`, `os.environ['AWS_SECRET_ACCESS_KEY']`, `os.environ['AWS_REGION_NAME']` |
-| Mistral 7B Instruct        | `completion(model='bedrock/mistral.mistral-7b-instruct-v0:2', messages=messages)`   | `os.environ['AWS_ACCESS_KEY_ID']`, `os.environ['AWS_SECRET_ACCESS_KEY']`, `os.environ['AWS_REGION_NAME']` |
-| Mixtral 8x7B Instruct      | `completion(model='bedrock/mistral.mixtral-8x7b-instruct-v0:1', messages=messages)`   | `os.environ['AWS_ACCESS_KEY_ID']`, `os.environ['AWS_SECRET_ACCESS_KEY']`, `os.environ['AWS_REGION_NAME']` |
-| TwelveLabs Pegasus 1.2 (US) | `completion(model='bedrock/us.twelvelabs.pegasus-1-2-v1:0', messages=messages, mediaSource={...})`   | `os.environ['AWS_ACCESS_KEY_ID']`, `os.environ['AWS_SECRET_ACCESS_KEY']`, `os.environ['AWS_REGION_NAME']` |
-| TwelveLabs Pegasus 1.2 (EU) | `completion(model='bedrock/eu.twelvelabs.pegasus-1-2-v1:0', messages=messages, mediaSource={...})`   | `os.environ['AWS_ACCESS_KEY_ID']`, `os.environ['AWS_SECRET_ACCESS_KEY']`, `os.environ['AWS_REGION_NAME']` |
-| Moonshot Kimi K2 Thinking | `completion(model='bedrock/moonshot.kimi-k2-thinking', messages=messages)` or `completion(model='bedrock/invoke/moonshot.kimi-k2-thinking', messages=messages)` | `os.environ['AWS_ACCESS_KEY_ID']`, `os.environ['AWS_SECRET_ACCESS_KEY']`, `os.environ['AWS_REGION_NAME']` |
+| `Amazon Titan Lite`          | `completion(model='bedrock/amazon.titan-text-lite-v1', messages=messages)` | `os.environ['AWS_ACCESS_KEY_ID']`, `os.environ['AWS_SECRET_ACCESS_KEY']`, `os.environ['AWS_REGION_NAME']` |
+| `Amazon Titan Express`       | `completion(model='bedrock/amazon.titan-text-express-v1', messages=messages)`   | `os.environ['AWS_ACCESS_KEY_ID']`, `os.environ['AWS_SECRET_ACCESS_KEY']`, `os.environ['AWS_REGION_NAME']` |
+| `Cohere Command`             | `completion(model='bedrock/cohere.command-text-v14', messages=messages)`   | `os.environ['AWS_ACCESS_KEY_ID']`, `os.environ['AWS_SECRET_ACCESS_KEY']`, `os.environ['AWS_REGION_NAME']` |
+| `AI21 J2-Mid`                | `completion(model='bedrock/ai21.j2-mid-v1', messages=messages)`   | `os.environ['AWS_ACCESS_KEY_ID']`, `os.environ['AWS_SECRET_ACCESS_KEY']`, `os.environ['AWS_REGION_NAME']` |
+| `AI21 J2-Ultra`              | `completion(model='bedrock/ai21.j2-ultra-v1', messages=messages)`   | `os.environ['AWS_ACCESS_KEY_ID']`, `os.environ['AWS_SECRET_ACCESS_KEY']`, `os.environ['AWS_REGION_NAME']` |
+| `AI21 Jamba-Instruct`              | `completion(model='bedrock/ai21.jamba-instruct-v1:0', messages=messages)`   | `os.environ['AWS_ACCESS_KEY_ID']`, `os.environ['AWS_SECRET_ACCESS_KEY']`, `os.environ['AWS_REGION_NAME']` |
+| `Meta Llama 2 Chat 13b`      | `completion(model='bedrock/meta.llama2-13b-chat-v1', messages=messages)`   | `os.environ['AWS_ACCESS_KEY_ID']`, `os.environ['AWS_SECRET_ACCESS_KEY']`, `os.environ['AWS_REGION_NAME']` |
+| `Meta Llama 2 Chat 70b`      | `completion(model='bedrock/meta.llama2-70b-chat-v1', messages=messages)`   | `os.environ['AWS_ACCESS_KEY_ID']`, `os.environ['AWS_SECRET_ACCESS_KEY']`, `os.environ['AWS_REGION_NAME']` |
+| `Mistral 7B Instruct`        | `completion(model='bedrock/mistral.mistral-7b-instruct-v0:2', messages=messages)`   | `os.environ['AWS_ACCESS_KEY_ID']`, `os.environ['AWS_SECRET_ACCESS_KEY']`, `os.environ['AWS_REGION_NAME']` |
+| `Mixtral 8x7B Instruct`      | `completion(model='bedrock/mistral.mixtral-8x7b-instruct-v0:1', messages=messages)`   | `os.environ['AWS_ACCESS_KEY_ID']`, `os.environ['AWS_SECRET_ACCESS_KEY']`, `os.environ['AWS_REGION_NAME']` |
+| `TwelveLabs Pegasus 1.2 (US)` | `completion(model='bedrock/us.twelvelabs.pegasus-1-2-v1:0', messages=messages, mediaSource={...})`   | `os.environ['AWS_ACCESS_KEY_ID']`, `os.environ['AWS_SECRET_ACCESS_KEY']`, `os.environ['AWS_REGION_NAME']` |
+| `TwelveLabs Pegasus 1.2 (EU)` | `completion(model='bedrock/eu.twelvelabs.pegasus-1-2-v1:0', messages=messages, mediaSource={...})`   | `os.environ['AWS_ACCESS_KEY_ID']`, `os.environ['AWS_SECRET_ACCESS_KEY']`, `os.environ['AWS_REGION_NAME']` |
+| Moonshot Kimi K2 Thinking | `completion(model='bedrock/moonshot.kimi-k2-thinking', messages=messages)` 또는 `completion(model='bedrock/invoke/moonshot.kimi-k2-thinking', messages=messages)` | `os.environ['AWS_ACCESS_KEY_ID']`, `os.environ['AWS_SECRET_ACCESS_KEY']`, `os.environ['AWS_REGION_NAME']` |
 
 
-## Bedrock Embedding
+## Bedrock 임베딩 {#bedrock-embedding}
 
-### API keys
-This can be set as env variables or passed as **params to litellm.embedding()**
+### API 키 {#api-keys}
+환경 변수로 설정하거나 **litellm.embedding()의 매개변수**로 전달할 수 있습니다.
 ```python
 import os
 os.environ["AWS_ACCESS_KEY_ID"] = ""        # Access key
@@ -1979,7 +1979,7 @@ os.environ["AWS_SECRET_ACCESS_KEY"] = ""    # Secret access key
 os.environ["AWS_REGION_NAME"] = ""           # us-east-1, us-east-2, us-west-1, us-west-2
 ```
 
-### Usage
+### 사용법
 ```python
 from litellm import embedding
 response = embedding(
@@ -1989,7 +1989,7 @@ response = embedding(
 print(response)
 ```
 
-#### Titan V2 - encoding_format support
+#### Titan V2 - encoding_format 지원
 ```python
 from litellm import embedding
 # Float format (default)
@@ -2007,37 +2007,37 @@ response = embedding(
 )
 ```
 
-## Supported AWS Bedrock Embedding Models
+## 지원 AWS Bedrock 임베딩 모델
 
-| Model Name           | Usage                               | Supported Additional OpenAI params |
+| 모델 이름           | 사용법                               | 지원되는 추가 OpenAI 매개변수 |
 |----------------------|---------------------------------------------|-----|
-| Titan Embeddings V2 | `embedding(model="bedrock/amazon.titan-embed-text-v2:0", input=input)` | `dimensions`, `encoding_format` |
-| Titan Embeddings - V1 | `embedding(model="bedrock/amazon.titan-embed-text-v1", input=input)` | [here](https://github.com/BerriAI/litellm/blob/f5905e100068e7a4d61441d7453d7cf5609c2121/litellm/llms/bedrock/embed/amazon_titan_g1_transformation.py#L53)
-| Titan Multimodal Embeddings | `embedding(model="bedrock/amazon.titan-embed-image-v1", input=input)` | [here](https://github.com/BerriAI/litellm/blob/f5905e100068e7a4d61441d7453d7cf5609c2121/litellm/llms/bedrock/embed/amazon_titan_multimodal_transformation.py#L28) |
-| Cohere Embeddings - English | `embedding(model="bedrock/cohere.embed-english-v3", input=input)` | [here](https://github.com/BerriAI/litellm/blob/f5905e100068e7a4d61441d7453d7cf5609c2121/litellm/llms/bedrock/embed/cohere_transformation.py#L18)
-| Cohere Embeddings - Multilingual | `embedding(model="bedrock/cohere.embed-multilingual-v3", input=input)` | [here](https://github.com/BerriAI/litellm/blob/f5905e100068e7a4d61441d7453d7cf5609c2121/litellm/llms/bedrock/embed/cohere_transformation.py#L18)
+| `Titan Embeddings V2` | `embedding(model="bedrock/amazon.titan-embed-text-v2:0", input=input)` | `dimensions`, `encoding_format` |
+| `Titan Embeddings - V1` | `embedding(model="bedrock/amazon.titan-embed-text-v1", input=input)` | [여기](https://github.com/BerriAI/litellm/blob/f5905e100068e7a4d61441d7453d7cf5609c2121/litellm/llms/bedrock/embed/amazon_titan_g1_transformation.py#L53)
+| Titan Multimodal Embeddings | `embedding(model="bedrock/amazon.titan-embed-image-v1", input=input)` | [여기](https://github.com/BerriAI/litellm/blob/f5905e100068e7a4d61441d7453d7cf5609c2121/litellm/llms/bedrock/embed/amazon_titan_multimodal_transformation.py#L28) |
+| Cohere Embeddings - English | `embedding(model="bedrock/cohere.embed-english-v3", input=input)` | [여기](https://github.com/BerriAI/litellm/blob/f5905e100068e7a4d61441d7453d7cf5609c2121/litellm/llms/bedrock/embed/cohere_transformation.py#L18)
+| Cohere Embeddings - Multilingual | `embedding(model="bedrock/cohere.embed-multilingual-v3", input=input)` | [여기](https://github.com/BerriAI/litellm/blob/f5905e100068e7a4d61441d7453d7cf5609c2121/litellm/llms/bedrock/embed/cohere_transformation.py#L18)
 
-### Advanced - [Drop Unsupported Params](https://docs.litellm.ai/docs/completion/drop_params#openai-proxy-usage)
+### 고급 - [지원되지 않는 매개변수 제거](https://docs.litellm.ai/docs/completion/drop_params#openai-proxy-usage)
 
-### Advanced - [Pass model/provider-specific Params](https://docs.litellm.ai/docs/completion/provider_specific_params#proxy-usage)
+### 고급 - [`model`/`provider`별 매개변수 전달](https://docs.litellm.ai/docs/completion/provider_specific_params#proxy-usage)
 
-## Image Generation
+## 이미지 생성 {#image-generation}
 
-See [Bedrock Image Generation](./bedrock_image_gen) for using Stable Diffusion and Amazon Nova Canvas models on Bedrock.
-
-
-## Rerank API
-
-See [Bedrock Rerank](./bedrock_rerank) for using Bedrock's Rerank API in the Cohere `/rerank` format.
+Bedrock에서 Stable Diffusion 및 Amazon Nova Canvas 모델을 사용하는 방법은 [Bedrock 이미지 생성](./bedrock_image_gen)을 참고하세요.
 
 
-## Bedrock Application Inference Profile 
+## 재정렬 API {#rerank-api}
 
-Use Bedrock Application Inference Profile to track costs for projects on AWS. 
+Bedrock의 재정렬 API를 Cohere `/rerank` 형식으로 사용하는 방법은 [Bedrock 재정렬](./bedrock_rerank)을 참고하세요.
 
-You can either pass it in the model name - `model="bedrock/arn:...` or as a separate `model_id="arn:..` param.
 
-### Set via `model_id` 
+## Bedrock Application Inference Profile 사용 {#bedrock-application-inference-profile}
+
+AWS의 프로젝트 비용을 추적하려면 Bedrock Application Inference Profile을 사용하세요.
+
+모델 이름에 `model="bedrock/arn:...` 형태로 전달하거나 별도 `model_id="arn:..` 매개변수로 전달할 수 있습니다.
+
+### `model_id`로 설정
 
 <Tabs>
 <TabItem label="SDK" value="sdk">
@@ -2062,7 +2062,7 @@ print(response)
 </TabItem>
 <TabItem label="PROXY" value="proxy">
 
-1. Setup config.yaml 
+1. config.yaml 설정
 
 ```yaml
 model_list:
@@ -2073,13 +2073,13 @@ model_list:
       model_id: arn:aws:bedrock:eu-central-1:000000000000:application-inference-profile/a0a0a0a0a0a0
 ```
 
-2. Start proxy
+2. 프록시 시작
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-3. Test it! 
+3. 테스트
 
 ```bash
 curl -L -X POST 'http://0.0.0.0:4000/v1/chat/completions' \
@@ -2104,10 +2104,10 @@ curl -L -X POST 'http://0.0.0.0:4000/v1/chat/completions' \
 </TabItem>
 </Tabs>
 
-## Boto3 - Authentication
+## Boto3 - 인증
 
-### Passing credentials as parameters - Completion()
-Pass AWS credentials as parameters to litellm.completion
+### 매개변수로 자격 증명 전달 - Completion() {#pass-credentials-as-parameters-completion}
+AWS 자격 증명을 litellm.completion 매개변수로 전달합니다.
 ```python
 import os
 from litellm import completion
@@ -2121,9 +2121,9 @@ response = completion(
 )
 ```
 
-### Passing extra headers + Custom API Endpoints
+### 추가 헤더와 사용자 지정 API 엔드포인트 전달 {#pass-extra-headers-and-custom-api-endpoint}
 
-This can be used to override existing headers (e.g. `Authorization`) when calling custom api endpoints
+사용자 지정 API 엔드포인트를 호출할 때 기존 헤더(예: `Authorization`)를 재정의하는 데 사용할 수 있습니다.
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -2149,7 +2149,7 @@ response = completion(
 
 <TabItem value="proxy" label="PROXY">
 
-1. Setup config.yaml 
+1. config.yaml 설정
 
 ```yaml
 model_list:
@@ -2163,13 +2163,13 @@ model_list:
         extra_headers: {"key": "value"}
 ```
 
-2. Start proxy 
+2. 프록시 시작
 
 ```bash
 litellm --config /path/to/config.yaml --detailed_debug
 ```
 
-3. Test it! 
+3. 테스트
 
 ```bash
 curl -X POST 'http://0.0.0.0:4000/chat/completions' \
@@ -2194,9 +2194,9 @@ curl -X POST 'http://0.0.0.0:4000/chat/completions' \
 
 </Tabs>
 
-### SSO Login (AWS Profile)
-- Set `AWS_PROFILE` environment variable
-- Make bedrock completion call
+### SSO 로그인(AWS 프로필) {#sso-login-aws-profile}
+- `AWS_PROFILE` 환경 변수를 설정합니다.
+- Bedrock completion 호출을 실행합니다.
 
 ```python
 import os
@@ -2208,7 +2208,7 @@ response = completion(
 )
 ```
 
-or pass `aws_profile_name`:
+또는 `aws_profile_name`을 전달합니다.
 
 ```python
 import os
@@ -2221,23 +2221,23 @@ response = completion(
 )
 ```
 
-### STS (Role-based Auth)
+### STS(role 기반 인증) {#sts-role-based-auth}
 
-- Set `aws_role_name` and `aws_session_name`
+- `aws_role_name`과 `aws_session_name`을 설정합니다.
 
 
-| LiteLLM Parameter | Boto3 Parameter | Description | Boto3 Documentation |
+| LiteLLM 매개변수 | Boto3 매개변수 | 설명 | Boto3 문서 |
 |------------------|-----------------|-------------|-------------------|
-| `aws_access_key_id` | `aws_access_key_id` | AWS access key associated with an IAM user or role | [Credentials](https://boto3.amazonaws.com/v1/documentation/api/latest/guide/credentials.html) |
-| `aws_secret_access_key` | `aws_secret_access_key` | AWS secret key associated with the access key | [Credentials](https://boto3.amazonaws.com/v1/documentation/api/latest/guide/credentials.html) |
-| `aws_role_name` | `RoleArn` | The Amazon Resource Name (ARN) of the role to assume | [AssumeRole API](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/sts.html#STS.Client.assume_role) |
-| `aws_session_name` | `RoleSessionName` | An identifier for the assumed role session | [AssumeRole API](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/sts.html#STS.Client.assume_role) |
+| `aws_access_key_id` | `aws_access_key_id` | IAM 사용자 또는 role과 연결된 AWS access key | [자격 증명](https://boto3.amazonaws.com/v1/documentation/api/latest/guide/credentials.html) |
+| `aws_secret_access_key` | `aws_secret_access_key` | access key와 연결된 AWS secret key | [자격 증명](https://boto3.amazonaws.com/v1/documentation/api/latest/guide/credentials.html) |
+| `aws_role_name` | `RoleArn` | assume할 role의 Amazon Resource Name(ARN) | [AssumeRole API](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/sts.html#STS.Client.assume_role) |
+| `aws_session_name` | `RoleSessionName` | assumed role 세션의 식별자 | [AssumeRole API](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/sts.html#STS.Client.assume_role) |
 
-### IAM Roles Anywhere (On-Premise / External Workloads)
+### IAM Roles Anywhere(온프레미스 / 외부 워크로드) {#iam-roles-anywhere-on-premise--external-workloads}
 
-[IAM Roles Anywhere](https://docs.aws.amazon.com/rolesanywhere/latest/userguide/introduction.html) extends IAM roles to workloads **outside of AWS** (on-premise servers, edge devices, other clouds). It uses the same STS mechanism as regular IAM roles but authenticates via X.509 certificates instead of AWS credentials.
+[IAM Roles Anywhere](https://docs.aws.amazon.com/rolesanywhere/latest/userguide/introduction.html)는 **AWS 외부** 워크로드(온프레미스 서버, 엣지 디바이스, 다른 클라우드)까지 IAM role을 확장합니다. 일반 IAM role과 동일한 STS 메커니즘을 사용하지만 AWS 자격 증명 대신 X.509 인증서로 인증합니다.
 
-**Setup**: Configure the [AWS Signing Helper](https://docs.aws.amazon.com/rolesanywhere/latest/userguide/credential-helper.html) as a credential process in `~/.aws/config`:
+**설정**: [AWS Signing Helper](https://docs.aws.amazon.com/rolesanywhere/latest/userguide/credential-helper.html)를 `~/.aws/config`의 자격 증명 프로세스로 구성합니다.
 
 ```ini
 [profile litellm-roles-anywhere]
@@ -2249,7 +2249,7 @@ credential_process = aws_signing_helper credential-process \
     --role-arn arn:aws:iam::123456789012:role/MyBedrockRole
 ```
 
-**Usage**: Reference the profile in LiteLLM:
+**사용법**: LiteLLM에서 프로필을 참조합니다.
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -2278,27 +2278,27 @@ model_list:
 </TabItem>
 </Tabs>
 
-See the [IAM Roles Anywhere Getting Started Guide](https://docs.aws.amazon.com/rolesanywhere/latest/userguide/getting-started.html) for trust anchor and profile setup.
+신뢰 앵커(trust anchor)와 프로필 설정은 [IAM Roles Anywhere 시작하기 가이드](https://docs.aws.amazon.com/rolesanywhere/latest/userguide/getting-started.html)를 참고하세요.
 
 
 
-Make the bedrock completion call
+Bedrock completion 호출을 실행합니다.
 
 ---
 
-### Required AWS IAM Policy for AssumeRole
+### AssumeRole에 필요한 AWS IAM 정책 {#aws-iam-policy-required-for-assumerole}
 
-To use `aws_role_name` (STS AssumeRole) with LiteLLM, your IAM user or role **must** have permission to call `sts:AssumeRole` on the target role. If you see an error like:
+LiteLLM에서 `aws_role_name`(STS AssumeRole)을 사용하려면 IAM 사용자 또는 role에 대상 role의 `sts:AssumeRole` 호출 권한이 **반드시** 있어야 합니다. 다음과 같은 오류가 보이면:
 
 ```
 An error occurred (AccessDenied) when calling the AssumeRole operation: User: arn:aws:sts::...:assumed-role/litellm-ecs-task-role/... is not authorized to perform: sts:AssumeRole on resource: arn:aws:iam::...:role/Enterprise/BedrockCrossAccountConsumer
 ```
 
-This means the IAM identity running LiteLLM does **not** have permission to assume the target role. You must update your IAM policy to allow this action.
+이는 LiteLLM을 실행하는 IAM identity(IAM 자격 증명)가 대상 role을 assume할 권한이 **없다**는 뜻입니다. 이 작업을 허용하도록 IAM 정책을 업데이트해야 합니다.
 
-#### Example IAM Policy
+#### 예제 IAM 정책 {#example-iam-policy}
 
-Replace `<TARGET_ROLE_ARN>` with the ARN of the role you want to assume (e.g., `arn:aws:iam::123456789012:role/Enterprise/BedrockCrossAccountConsumer`).
+`<TARGET_ROLE_ARN>`을 assume하려는 role의 ARN으로 바꾸세요(예: `arn:aws:iam::123456789012:role/엔터프라이즈/BedrockCrossAccountConsumer`).
 
 ```json
 {
@@ -2313,7 +2313,7 @@ Replace `<TARGET_ROLE_ARN>` with the ARN of the role you want to assume (e.g., `
 }
 ```
 
-**Note:** The target role itself must also trust the calling IAM identity (via its trust policy) for AssumeRole to succeed. See [AWS AssumeRole docs](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_switch-role-api.html) for more details.
+**참고:** AssumeRole이 성공하려면 대상 role 자체도 신뢰 정책(trust policy)을 통해 호출하는 IAM identity(IAM 자격 증명)를 신뢰해야 합니다. 자세한 내용은 [AWS AssumeRole 문서](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_switch-role-api.html)를 참고하세요.
 
 ---
 
@@ -2333,7 +2333,7 @@ response = completion(
         )
 ```
 
-If you also need to dynamically set the aws user accessing the role, add the additional args in the completion()/embedding() function
+role에 접근하는 AWS 사용자를 동적으로 설정해야 한다면 completion()/embedding() 함수에 추가 인자를 넣으세요.
 
 ```python
 from litellm import completion
@@ -2370,9 +2370,9 @@ model_list:
 
 </Tabs>
 
-### Passing an external BedrockRuntime.Client as a parameter - Completion()
+### 외부 BedrockRuntime.Client를 매개변수로 전달 - Completion() {#pass-external-bedrockruntimeclient-as-parameter-completion}
   
-This is a deprecated flow. Boto3 is not async. And boto3.client does not let us make the http call through httpx. Pass in your aws params through the method above 👆. [See Auth Code](https://github.com/BerriAI/litellm/blob/55a20c7cce99a93d36a82bf3ae90ba3baf9a7f89/litellm/llms/bedrock_httpx.py#L284) [Add new auth flow](https://github.com/BerriAI/litellm/issues)
+이는 지원 중단된 흐름입니다. Boto3는 async가 아니며, boto3.client는 httpx를 통한 HTTP 호출을 허용하지 않습니다. 위 방식으로 AWS 매개변수를 전달하세요. [인증 코드 보기](https://github.com/BerriAI/litellm/blob/55a20c7cce99a93d36a82bf3ae90ba3baf9a7f89/litellm/llms/bedrock_httpx.py#L284) [새 인증 흐름 추가](https://github.com/BerriAI/litellm/issues)
 
 :::warning
 
@@ -2380,14 +2380,14 @@ This is a deprecated flow. Boto3 is not async. And boto3.client does not let us 
 
 
 
-Experimental - 2024-Jun-23:
-    `aws_access_key_id`, `aws_secret_access_key`, and `aws_session_token` will be extracted from boto3.client and be passed into the httpx client 
+실험적 기능 - 2024-Jun-23:
+    `aws_access_key_id`, `aws_secret_access_key`, `aws_session_token`이 boto3.client에서 추출되어 httpx 클라이언트로 전달됩니다.
 
 :::
 
-Pass an external BedrockRuntime.Client object as a parameter to litellm.completion. Useful when using an AWS credentials profile, SSO session, assumed role session, or if environment variables are not available for auth.
+외부 BedrockRuntime.Client 객체를 litellm.completion 매개변수로 전달합니다. AWS 자격 증명 프로필, SSO 세션, assumed role 세션을 사용하거나 인증에 환경 변수를 사용할 수 없을 때 유용합니다.
 
-Create a client from session credentials:
+세션 자격 증명에서 클라이언트를 생성합니다.
 ```python
 import boto3
 from litellm import completion
@@ -2407,7 +2407,7 @@ response = completion(
 )
 ```
 
-Create a client from AWS profile in `~/.aws/config`:
+`~/.aws/config`의 AWS 프로필에서 클라이언트를 생성합니다.
 ```python
 import boto3
 from litellm import completion
@@ -2424,9 +2424,9 @@ response = completion(
             aws_bedrock_client=bedrock,
 )
 ```
-## Calling via Internal Proxy (not bedrock url compatible)
+## 내부 프록시를 통한 호출(Bedrock URL 호환 아님) {#calling-via-internal-proxy}
 
-Use the `bedrock/converse_like/model` endpoint to call bedrock converse model via your internal proxy.
+내부 프록시를 통해 Bedrock converse 모델을 호출하려면 `bedrock/converse_like/model` 엔드포인트를 사용합니다.
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -2444,9 +2444,9 @@ response = completion(
 ```
 
 </TabItem>
-<TabItem value="proxy" label="LiteLLM Proxy">
+<TabItem value="proxy" label="LiteLLM 프록시">
 
-1. Setup config.yaml
+1. config.yaml 설정
 
 ```yaml
 model_list:
@@ -2456,7 +2456,7 @@ model_list:
         api_base: https://some-api-url/models
 ```
 
-2. Start proxy server
+2. 프록시 서버 시작
 
 ```bash
 litellm --config config.yaml
@@ -2464,7 +2464,7 @@ litellm --config config.yaml
 # RUNNING on http://0.0.0.0:4000
 ```
 
-3. Test it! 
+3. 테스트
 
 ```bash
 curl -X POST 'http://0.0.0.0:4000/chat/completions' \
@@ -2485,7 +2485,7 @@ curl -X POST 'http://0.0.0.0:4000/chat/completions' \
 </TabItem>
 </Tabs>
 
-**Expected Output URL**
+**예상 출력 URL**
 
 ```bash
 https://some-api-url/models

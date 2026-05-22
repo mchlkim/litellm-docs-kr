@@ -1,25 +1,25 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Azure Video Generation
+# Azure 비디오 생성 {#azure-video-generation}
 
-LiteLLM supports Azure OpenAI's video generation models including Sora with full end-to-end integration.
+LiteLLM은 Sora를 포함한 Azure OpenAI 비디오 생성 모델을 전체 엔드투엔드 통합으로 지원합니다.
 
-| Property | Details |
+| 속성 | 세부 정보 |
 |-------|-------|
-| Description | Azure OpenAI's video generation models including Sora-2 |
-| Provider Route on LiteLLM | `azure/` |
-| Supported Models | `sora-2` |
-| Cost Tracking | ✅ Duration-based pricing ($0.10/second) |
-| Logging Support | ✅ Full request/response logging |
-| Guardrails Support | ✅ Content moderation and safety checks |
-| Proxy Server Support | ✅ Full proxy integration with virtual keys |
-| Spend Management | ✅ Budget tracking and rate limiting |
-| Link to Provider Doc | [Azure OpenAI Video Generation ↗](https://learn.microsoft.com/en-us/azure/ai-foundry/openai/concepts/video-generation) |
+| 설명 | Sora-2를 포함한 Azure OpenAI 비디오 생성 모델 |
+| LiteLLM의 Provider Route | `azure/` |
+| 지원 모델 | `sora-2` |
+| 비용 추적 | ✅ 기간 기반 가격 책정($0.10/second) |
+| 로깅 지원 | ✅ 전체 요청/응답 로깅 |
+| 가드레일 지원 | ✅ 콘텐츠 모더레이션 및 안전 검사 |
+| Proxy Server 지원 | ✅ 가상 키를 통한 전체 프록시 통합 |
+| 지출 관리 | ✅ 예산 추적 및 속도 제한 |
+| 제공자 문서 링크 | [Azure OpenAI 비디오 생성 ↗](https://learn.microsoft.com/en-us/azure/ai-foundry/openai/concepts/video-generation) |
 
-## Quick Start
+## 빠른 시작
 
-### Required API Keys
+### 필수 API 키 {#required-api-keys}
 
 ```python
 import os 
@@ -27,7 +27,7 @@ os.environ["AZURE_OPENAI_API_KEY"] = "your-azure-api-key"
 os.environ["AZURE_OPENAI_API_BASE"] = "https://your-resource.openai.azure.com/"
 ```
 
-### Basic Usage
+### 기본 사용법 {#basic-usage}
 
 ```python
 from litellm import video_generation, video_status, video_content
@@ -74,18 +74,18 @@ with open("generated_video.mp4", "wb") as f:
     f.write(video_bytes)
 ```
 
-## Usage - LiteLLM Proxy Server
+## LiteLLM Proxy Server 사용법
 
-Here's how to call Azure video generation models with the LiteLLM Proxy Server
+LiteLLM Proxy Server로 Azure 비디오 생성 모델을 호출하는 방법은 다음과 같습니다.
 
-### 1. Save key in your environment
+### 1. 환경에 키 저장 {#1-save-key-in-your-environment}
 
 ```bash
 export AZURE_OPENAI_API_KEY="your-azure-api-key"
 export AZURE_OPENAI_API_BASE="https://your-resource.openai.azure.com/"
 ```
 
-### 2. Start the proxy 
+### 2. 프록시 시작 
 
 <Tabs>
 <TabItem value="config" label="config.yaml">
@@ -112,10 +112,10 @@ $ litellm --model azure/sora-2
 
 </Tabs>
 
-### 3. Test it
+### 3. 테스트 {#3-test-it}
 
 <Tabs>
-<TabItem value="Curl" label="Curl Request">
+<TabItem value="Curl" label="Curl 요청">
 
 ```shell
 curl --location 'http://0.0.0.0:4000/videos/generations' \
@@ -153,36 +153,36 @@ print(response)
 </TabItem>
 </Tabs>
 
-## Supported Models
+## 지원 모델 {#supported-models}
 
-| Model Name | 
+| 모델 이름 | 
 |------------|
 | sora-2 | 
 |sora-2-pro |
-|sora-2-pro-high-res|
+|`sora-2-pro-high-res`|
 
 
-## Logging & Observability
+## 로깅 및 관측성 {#logging--observability}
 
-### Request/Response Logging
+### 요청/응답 로깅 {#requestresponse-logging}
 
-All video generation requests are automatically logged with:
+모든 비디오 생성 요청은 다음 정보와 함께 자동으로 기록됩니다.
 
-- **Request details**: prompt, model, duration, size
-- **Response details**: video ID, status, creation time
-- **Cost tracking**: duration-based pricing calculation
-- **Performance metrics**: request latency, processing time
+- **요청 세부 정보**: prompt, model, duration, size
+- **응답 세부 정보**: video ID, status, creation time
+- **비용 추적**: 기간 기반 가격 계산
+- **성능 지표**: 요청 지연 시간, 처리 시간
 
-### Logging Providers
+### 로깅 제공자 {#logging-providers}
 
-Video generation works with all LiteLLM logging providers:
+비디오 생성은 모든 LiteLLM 로깅 제공자와 함께 작동합니다.
 
-- **Datadog**: Real-time monitoring and alerting
-- **Helicone**: Request tracing and debugging
-- **LangSmith**: LangChain integration and tracing
-- **Custom webhooks**: Send logs to your own endpoints
+- **Datadog**: 실시간 모니터링 및 알림
+- **Helicone**: 요청 추적 및 디버깅
+- **LangSmith**: LangChain 통합 및 추적
+- **사용자 지정 webhooks**: 자체 엔드포인트로 로그 전송
 
-**Example: Enable Datadog logging**
+**예제: Datadog 로깅 활성화**
 
 ```yaml
 general_settings:
@@ -191,16 +191,16 @@ general_settings:
 ```
 
 
-## Video Generation Parameters
+## 비디오 생성 매개변수 {#video-generation-parameters}
 
-- `prompt` (required): Text description of the desired video
-- `model` (optional): Model to use, defaults to "azure/sora-2"
-- `seconds` (optional): Video duration in seconds (e.g., "8", "16")
-- `size` (optional): Video dimensions (e.g., "720x1280", "1280x720")
-- `input_reference` (optional): Reference image for video editing
-- `user` (optional): User identifier for tracking
+- `prompt` (required): 원하는 비디오에 대한 텍스트 설명
+- `model` (optional): 사용할 모델이며 기본값은 "azure/sora-2"입니다.
+- `seconds` (optional): 초 단위 비디오 길이(예: "8", "16")
+- `size` (optional): 비디오 크기(예: "720x1280", "1280x720")
+- `input_reference` (optional): 비디오 편집에 사용할 참조 이미지
+- `user` (optional): 추적에 사용할 사용자 식별자
 
-## Video Content Retrieval
+## 비디오 콘텐츠 가져오기 {#video-content-retrieval}
 
 ```python
 # Download video content
@@ -213,7 +213,7 @@ with open("video.mp4", "wb") as f:
     f.write(video_bytes)
 ```
 
-## Complete Workflow
+## 전체 워크플로 {#complete-workflow}
 
 ```python
 import litellm
@@ -251,7 +251,7 @@ video_file = generate_and_download_video(
 )
 ```
 
-## Video Remix (Video Editing)
+## Video Remix(비디오 편집) {#video-remix-video-editing}
 
 ```python
 # Video editing with reference image
@@ -265,7 +265,7 @@ response = litellm.video_remix(
 print(f"Video ID: {response.id}")
 ```
 
-## Error Handling
+## 오류 처리 {#error-handling}
 
 ```python
 from litellm.exceptions import BadRequestError, AuthenticationError

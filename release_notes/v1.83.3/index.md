@@ -1,5 +1,5 @@
 ---
-title: "v1.83.3-stable - MCP Toolsets & Skills Marketplace"
+title: "v1.83.3-stable - MCP Toolsets 및 Skills Marketplace"
 slug: "v1-83-3-stable"
 date: 2026-04-04T00:00:00
 authors:
@@ -26,7 +26,7 @@ authors:
 hide_table_of_contents: false
 ---
 
-## Deploy this version
+## 이 버전 배포 {#deploy-this-version}
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -51,179 +51,179 @@ pip install litellm==1.83.3
 </TabItem>
 </Tabs>
 
-## Key Highlights
+## 주요 하이라이트 {#key-highlights}
 
-- **MCP Toolsets** — [Create curated tool subsets from one or more MCP servers with scoped permissions, and manage them from the UI or API](../../docs/mcp)
-- **Skills Marketplace** — [Browse, install, and publish Claude Code skills from a self-hosted marketplace — works across Anthropic, Vertex AI, Azure, and Bedrock](../../docs/proxy/skills)
-- **Guardrail Fallbacks** — [Configure `on_error` behavior so guardrail failures degrade gracefully instead of blocking the request](../../docs/proxy/guardrails)
-- **Team Bring Your Own Guardrails** — [Teams can now attach and manage their own guardrails directly from team settings in the UI](../../docs/proxy/guardrails)
+- **MCP Toolsets** — [범위 지정 권한으로 하나 이상의 MCP 서버에서 엄선된 도구 하위 집합을 만들고 UI 또는 API에서 관리합니다](../../docs/mcp)
+- **Skills Marketplace** — [자체 호스팅 marketplace에서 Claude Code skill을 탐색, 설치, 게시합니다. Anthropic, Vertex AI, Azure, Bedrock 전반에서 동작합니다](../../docs/proxy/skills)
+- **Guardrail Fallbacks** — [가드레일 실패가 요청을 차단하지 않고 점진적으로 처리되도록 `on_error` 동작을 구성합니다](../../docs/proxy/guardrails)
+- **Team Bring Your Own 가드레일** — [팀이 UI의 팀 설정에서 자체 가드레일을 직접 연결하고 관리할 수 있습니다](../../docs/proxy/guardrails)
 
 ---
 
 
-### Skills Marketplace
+### Skills Marketplace {#skills-marketplace}
 
-The Skills Marketplace gives teams a self-hosted catalog for discovering, installing, and publishing Claude Code skills. Skills are portable across Anthropic, Vertex AI, Azure, and Bedrock — so a skill published once works everywhere your gateway routes to.
+Skills Marketplace는 팀이 Claude Code skill을 찾고, 설치하고, 게시할 수 있는 자체 호스팅 카탈로그를 제공합니다. Skill은 Anthropic, Vertex AI, Azure, Bedrock 전반에서 이식 가능하므로 한 번 게시한 skill을 gateway가 라우팅하는 모든 곳에서 사용할 수 있습니다.
 
 ![Skills Marketplace](../../img/release_notes/skills_marketplace.png)
 
-[Get Started](../../docs/proxy/skills)
+[시작하기](../../docs/proxy/skills)
 
-### Guardrail Fallbacks
+### 가드레일 fallback {#guardrail-fallbacks}
 
-![Guardrail Fallbacks](../../img/release_notes/guardrail_fallbacks.png)
+![가드레일 fallback](../../img/release_notes/guardrail_fallbacks.png)
 
-Guardrail pipelines now support an optional `on_error` behavior. When a guardrail check fails or errors out, you can configure the pipeline to fall back gracefully — logging the failure and continuing the request — instead of returning a hard 500 to the caller. This is especially useful for non-critical guardrails where availability matters more than enforcement.
+가드레일 파이프라인은 이제 선택적 `on_error` 동작을 지원합니다. 가드레일 검사가 실패하거나 오류가 발생하면 호출자에게 즉시 500을 반환하는 대신 실패를 기록하고 요청을 계속하도록 파이프라인을 구성할 수 있습니다. 적용 강제보다 가용성이 더 중요한 비핵심 가드레일에 특히 유용합니다.
 
-[Get Started](../../docs/proxy/guardrails/policy_flow_builder)
+[시작하기](../../docs/proxy/guardrails/policy_flow_builder)
 
-### Team Bring Your Own Guardrails
+### Team Bring Your Own 가드레일 {#team-bring-your-own-guardrails}
 
-Teams can now attach guardrails directly from the team management UI. Admins configure available guardrails at the project or proxy level, and individual teams select which ones apply to their traffic — no config file changes or proxy restarts needed. This also ships with project-level guardrail support in the project create/edit flows.
+이제 팀은 팀 관리 UI에서 가드레일을 직접 연결할 수 있습니다. 관리자는 프로젝트 또는 proxy 수준에서 사용 가능한 가드레일을 구성하고, 각 팀은 자기 트래픽에 적용할 항목을 선택합니다. config 파일 변경이나 proxy 재시작은 필요하지 않습니다. 프로젝트 생성/편집 흐름의 프로젝트 수준 가드레일 지원도 함께 제공됩니다.
 
-### MCP Toolsets
+### MCP Toolsets {#mcp-toolsets}
 
-MCP Toolsets let AI platform admins create curated subsets of tools from one or more MCP servers and assign them to teams and keys with scoped permissions. Instead of granting access to an entire MCP server, you can now bundle specific tools into a named toolset — controlling exactly which tools each team or API key can invoke. Toolsets are fully managed through the UI (new Toolsets tab) and API, and work seamlessly with the Responses API and Playground.
+MCP Toolsets를 사용하면 AI 플랫폼 관리자가 하나 이상의 MCP 서버에서 엄선된 도구 하위 집합을 만들고 범위 지정 권한으로 팀과 키에 할당할 수 있습니다. 전체 MCP 서버 접근 권한을 부여하는 대신, 특정 도구를 이름 있는 toolset으로 묶어 각 팀 또는 API 키가 호출할 수 있는 도구를 정확히 제어할 수 있습니다. Toolset은 UI의 새 Toolsets 탭과 API에서 완전히 관리되며 Responses API 및 Playground와 매끄럽게 동작합니다.
 
 ![MCP Toolsets](../../img/release_notes/mcp_toolsets.jpeg)
 
-[Get Started](../../docs/mcp)
+[시작하기](../../docs/mcp)
 
 ---
 
-## New Models / Updated Models
+## 신규 모델 / 업데이트된 모델 {#new-models-updated-models}
 
-#### New Model Support (60 new models)
+#### 신규 모델 지원(신규 모델 60개) {#new-model-support-60-new-models}
 
-| Provider | Model | Context Window | Input ($/1M tokens) | Output ($/1M tokens) | Features |
+| Provider | Model | Context Window | Input($/1M tokens) | Output($/1M tokens) | 기능 |
 | -------- | ----- | -------------- | ------------------- | -------------------- | -------- |
-| OpenAI | `gpt-5.4-mini` | 272K | $0.75 | $4.50 | Chat, cache read, flex/batch/priority tiers |
-| OpenAI | `gpt-5.4-nano` | 272K | $0.20 | - | Chat, flex/batch tiers |
-| OpenAI | `gpt-4-0314` | 8K | $30.00 | $60.00 | Re-added legacy entry (deprecation 2026-03-26) |
-| Azure OpenAI | `azure/gpt-5.4-mini` | 1.05M | $0.75 | $4.50 | Chat completions, cache read |
+| OpenAI | `gpt-5.4-mini` | 272K | $0.75 | $4.50 | Chat, cache read, flex/batch/priority 계층 |
+| OpenAI | `gpt-5.4-nano` | 272K | $0.20 | - | Chat, flex/batch 계층 |
+| OpenAI | `gpt-4-0314` | 8K | $30.00 | $60.00 | 레거시 항목 재추가(지원 중단 2026-03-26) |
+| Azure OpenAI | `azure/gpt-5.4-mini` | 1.05M | $0.75 | $4.50 | Chat completions, cache read 지원 |
 | Azure OpenAI | `azure/gpt-5.4-nano` | - | - | - | Chat completions |
-| AWS Bedrock | `us.amazon.nova-canvas-v1:0` | 2.6K | - | $0.06 / image | Nova Canvas image edit support |
-| AWS Bedrock | `nvidia.nemotron-super-3-120b` | 256K | $0.15 | $0.65 | Function calling, reasoning, system messages |
-| AWS Bedrock | `minimax.minimax-m2.5` (12 regions) | 1M | $0.30 | $1.20 | Function calling, reasoning, system messages |
-| AWS Bedrock | `zai.glm-5` | 200K | $1.00 | $3.20 | Function calling, reasoning |
-| AWS Bedrock | `bedrock/us-gov-{east,west}-1/anthropic.claude-haiku-4-5-20251001-v1:0` | 200K | $1.20 | $6.00 | GovCloud Claude Haiku 4.5 |
-| Vertex AI | `vertex_ai/claude-haiku-4-5` | 200K | $1.00 | $5.00 | Chat, cache creation/read |
-| Gemini | `gemini-3.1-flash-live-preview` / `gemini/gemini-3.1-flash-live-preview` | 131K | $0.75 | - | Live audio/video/image/text |
-| Gemini | `gemini/lyria-3-pro-preview`, `gemini/lyria-3-clip-preview` | 131K | - | - | Music generation preview |
-| xAI | `xai/grok-4.20-beta-0309-reasoning` | 2M | $2.00 | $6.00 | Function calling, reasoning |
+| AWS Bedrock | `us.amazon.nova-canvas-v1:0` | 2.6K | - | $0.06 / image | Nova Canvas 이미지 편집 지원 |
+| AWS Bedrock | `nvidia.nemotron-super-3-120b` | 256K | $0.15 | $0.65 | Function calling, reasoning, system message 지원 |
+| AWS Bedrock | `minimax.minimax-m2.5` (12 regions) | 1M | $0.30 | $1.20 | Function calling, reasoning, system message 지원 |
+| AWS Bedrock | `zai.glm-5` | 200K | $1.00 | $3.20 | Function calling 및 reasoning 지원 |
+| AWS Bedrock | `bedrock/us-gov-{east,west}-1/anthropic.claude-haiku-4-5-20251001-v1:0` | 200K | $1.20 | $6.00 | GovCloud의 Claude Haiku 4.5 |
+| Vertex AI | `vertex_ai/claude-haiku-4-5` | 200K | $1.00 | $5.00 | Chat, cache 생성/read |
+| Gemini | `gemini-3.1-flash-live-preview` / `gemini/gemini-3.1-flash-live-preview` | 131K | $0.75 | - | 실시간 audio/video/image/text |
+| Gemini | `gemini/lyria-3-pro-preview`, `gemini/lyria-3-clip-preview` | 131K | - | - | 음악 생성 preview |
+| xAI | `xai/grok-4.20-beta-0309-reasoning` | 2M | $2.00 | $6.00 | Function calling 및 reasoning 지원 |
 | xAI | `xai/grok-4.20-beta-0309-non-reasoning` | 2M | - | - | Function calling |
-| xAI | `xai/grok-4.20-multi-agent-beta-0309` | 2M | - | - | Multi-agent preview |
-| OCI GenAI | `oci/cohere.command-a-reasoning-08-2025`, `oci/cohere.command-a-vision-07-2025`, `oci/cohere.command-a-translate-08-2025`, `oci/cohere.command-r-08-2024`, `oci/cohere.command-r-plus-08-2024` | 256K | $1.56 | $1.56 | Cohere chat family on OCI |
-| OCI GenAI | `oci/meta.llama-3.1-70b-instruct`, `oci/meta.llama-3.2-11b-vision-instruct`, `oci/meta.llama-3.3-70b-instruct-fp8-dynamic` | Varies | Varies | Varies | Llama chat family on OCI |
-| OCI GenAI | `oci/xai.grok-4-fast`, `oci/xai.grok-4.1-fast`, `oci/xai.grok-4.20`, `oci/xai.grok-4.20-multi-agent`, `oci/xai.grok-code-fast-1` | 131K | $3.00 | $15.00 | Grok family on OCI |
-| OCI GenAI | `oci/google.gemini-2.5-pro`, `oci/google.gemini-2.5-flash`, `oci/google.gemini-2.5-flash-lite` | 1M+ | $1.25 | $10.00 | Gemini family on OCI |
-| OCI GenAI | `oci/cohere.embed-english-v3.0`, `oci/cohere.embed-english-light-v3.0`, `oci/cohere.embed-multilingual-v3.0`, `oci/cohere.embed-multilingual-light-v3.0`, `oci/cohere.embed-english-image-v3.0`, `oci/cohere.embed-english-light-image-v3.0`, `oci/cohere.embed-multilingual-light-image-v3.0`, `oci/cohere.embed-v4.0` | Varies | Varies | - | Embeddings on OCI |
-| Volcengine | `volcengine/doubao-seed-2-0-pro-260215`, `doubao-seed-2-0-lite-260215`, `doubao-seed-2-0-mini-260215`, `doubao-seed-2-0-code-preview-260215` | 256K | - | - | Doubao Seed 2.0 family |
+| xAI | `xai/grok-4.20-multi-agent-beta-0309` | 2M | - | - | Multi-agent preview 지원 |
+| OCI GenAI | `oci/cohere.command-a-reasoning-08-2025`, `oci/cohere.command-a-vision-07-2025`, `oci/cohere.command-a-translate-08-2025`, `oci/cohere.command-r-08-2024`, `oci/cohere.command-r-plus-08-2024` | 256K | $1.56 | $1.56 | OCI의 Cohere chat 계열 |
+| OCI GenAI | `oci/meta.llama-3.1-70b-instruct`, `oci/meta.llama-3.2-11b-vision-instruct`, `oci/meta.llama-3.3-70b-instruct-fp8-dynamic` | Varies | Varies | Varies | OCI의 Llama chat 계열 |
+| OCI GenAI | `oci/xai.grok-4-fast`, `oci/xai.grok-4.1-fast`, `oci/xai.grok-4.20`, `oci/xai.grok-4.20-multi-agent`, `oci/grok-code-fast-1` | 131K | $3.00 | $15.00 | OCI의 Grok 계열 |
+| OCI GenAI | `oci/google.gemini-2.5-pro`, `oci/google.gemini-2.5-flash`, `oci/google.gemini-2.5-flash-lite` | 1M+ | $1.25 | $10.00 | OCI의 Gemini 계열 |
+| OCI GenAI | `oci/cohere.embed-english-v3.0`, `oci/cohere.embed-english-light-v3.0`, `oci/cohere.embed-multilingual-v3.0`, `oci/cohere.embed-multilingual-light-v3.0`, `oci/cohere.embed-english-image-v3.0`, `oci/cohere.embed-english-light-image-v3.0`, `oci/cohere.embed-multilingual-light-image-v3.0`, `oci/cohere.embed-v4.0` | Varies | Varies | - | OCI의 embedding |
+| Volcengine | `volcengine/doubao-seed-2-0-pro-260215`, `doubao-seed-2-0-lite-260215`, `doubao-seed-2-0-mini-260215`, `doubao-seed-2-0-code-preview-260215` | 256K | - | - | Doubao Seed 2.0 계열 |
 
-#### Features
+#### 기능 {#features}
 
 - **[AWS Bedrock](../../docs/providers/bedrock)**
-    - Add Nova Canvas image edit support - [PR #24869](https://github.com/BerriAI/litellm/pull/24869), [PR #25110](https://github.com/BerriAI/litellm/pull/25110)
-    - Add `nvidia.nemotron-super-3-120b` entries and Bedrock model catalog updates - [PR #24588](https://github.com/BerriAI/litellm/pull/24588), [PR #24645](https://github.com/BerriAI/litellm/pull/24645)
-    - Add MiniMax M2.5 cross-region entries - cost map additions
-    - Add `zai.glm-5` pricing entry
-    - Improve cache usage exposure for Claude-compatible streaming paths - [PR #24850](https://github.com/BerriAI/litellm/pull/24850)
-    - Structured output cost tracking fix for Bedrock JSON mode - [PR #23794](https://github.com/BerriAI/litellm/pull/23794)
-    - Preserve JSON-RPC envelope for AgentCore A2A-native agents - [PR #25092](https://github.com/BerriAI/litellm/pull/25092)
-    - Fix Bedrock Anthropic file/document handling - [PR #25047](https://github.com/BerriAI/litellm/pull/25047), [PR #25050](https://github.com/BerriAI/litellm/pull/25050)
-    - Fix Bedrock count-tokens with custom endpoint - [PR #24199](https://github.com/BerriAI/litellm/pull/24199)
+    - Nova Canvas 이미지 편집 지원 추가 - [PR #24869](https://github.com/BerriAI/litellm/pull/24869), [PR #25110](https://github.com/BerriAI/litellm/pull/25110)
+    - `nvidia.nemotron-super-3-120b` 항목 및 Bedrock 모델 카탈로그 업데이트 추가 - [PR #24588](https://github.com/BerriAI/litellm/pull/24588), [PR #24645](https://github.com/BerriAI/litellm/pull/24645)
+    - MiniMax M2.5 교차 리전 항목 추가 - 비용 맵 추가
+    - `zai.glm-5` 가격 항목 추가
+    - Claude 호환 streaming 경로의 cache 사용량 노출 개선 - [PR #24850](https://github.com/BerriAI/litellm/pull/24850)
+    - Bedrock JSON mode의 structured output 비용 추적 수정 - [PR #23794](https://github.com/BerriAI/litellm/pull/23794)
+    - AgentCore A2A-native agent의 JSON-RPC envelope 보존 - [PR #25092](https://github.com/BerriAI/litellm/pull/25092)
+    - Bedrock Anthropic file/document 처리 수정 - [PR #25047](https://github.com/BerriAI/litellm/pull/25047), [PR #25050](https://github.com/BerriAI/litellm/pull/25050)
+    - custom endpoint 사용 시 Bedrock count-tokens 수정 - [PR #24199](https://github.com/BerriAI/litellm/pull/24199)
 
 - **[Fireworks AI](../../docs/providers/fireworks_ai)**
-    - Skip `#transform=inline` for base64 data URLs - [PR #23818](https://github.com/BerriAI/litellm/pull/23818)
+    - base64 data URL에는 `#transform=inline` 건너뛰기 - [PR #23818](https://github.com/BerriAI/litellm/pull/23818)
 
 - **[DeepInfra](../../docs/providers/deepinfra)**
-    - Mock DeepInfra completion tests to avoid real API calls - [PR #24805](https://github.com/BerriAI/litellm/pull/24805)
+    - 실제 API 호출을 피하도록 DeepInfra completion test mock 처리 - [PR #24805](https://github.com/BerriAI/litellm/pull/24805)
 
 - **[WatsonX](../../docs/providers/watsonx)**
-    - Fix WatsonX tests failing in CI due to missing env vars - [PR #24814](https://github.com/BerriAI/litellm/pull/24814)
+    - 누락된 env var로 CI에서 실패하던 WatsonX test 수정 - [PR #24814](https://github.com/BerriAI/litellm/pull/24814)
 
 - **[Snowflake Cortex](../../docs/providers/snowflake)**
-    - Move Snowflake mocked tests to unit test directory - [PR #24822](https://github.com/BerriAI/litellm/pull/24822)
+    - Snowflake mock test를 unit test 디렉터리로 이동 - [PR #24822](https://github.com/BerriAI/litellm/pull/24822)
 
 - **[Anthropic](../../docs/providers/anthropic)**
-    - Surface Anthropic tool results in Responses API - [PR #23784](https://github.com/BerriAI/litellm/pull/23784)
-    - Auth token and custom `api_base` support - [PR #24140](https://github.com/BerriAI/litellm/pull/24140)
-    - Preserve beta header order - [PR #23715](https://github.com/BerriAI/litellm/pull/23715)
-    - Cache-control support for Anthropic document/file message blocks - [PR #23906](https://github.com/BerriAI/litellm/pull/23906), [PR #23911](https://github.com/BerriAI/litellm/pull/23911)
-    - Map Anthropic refusal finish_reason - [PR #23899](https://github.com/BerriAI/litellm/pull/23899)
-    - Cache-control on tool config - [PR #24076](https://github.com/BerriAI/litellm/pull/24076)
-    - Remove 200K pricing entries for Opus/Sonnet 4.6 - [PR #24689](https://github.com/BerriAI/litellm/pull/24689)
+    - Anthropic tool 결과를 Responses API에 노출 - [PR #23784](https://github.com/BerriAI/litellm/pull/23784)
+    - auth token 및 custom `api_base` 지원 - [PR #24140](https://github.com/BerriAI/litellm/pull/24140)
+    - beta header 순서 보존 - [PR #23715](https://github.com/BerriAI/litellm/pull/23715)
+    - Anthropic document/file message block의 cache-control 지원 - [PR #23906](https://github.com/BerriAI/litellm/pull/23906), [PR #23911](https://github.com/BerriAI/litellm/pull/23911)
+    - Anthropic refusal `finish_reason` 매핑 - [PR #23899](https://github.com/BerriAI/litellm/pull/23899)
+    - tool config의 cache-control 지원 - [PR #24076](https://github.com/BerriAI/litellm/pull/24076)
+    - Opus/Sonnet 4.6의 200K 가격 항목 제거 - [PR #24689](https://github.com/BerriAI/litellm/pull/24689)
 
 - **[OpenAI](../../docs/providers/openai)**
-    - Add `gpt-5.4-mini` / `gpt-5.4-nano` with flex/batch/priority tiers - [PR #23958](https://github.com/BerriAI/litellm/pull/23958)
-    - Restore `gpt-4-0314` cost entry with deprecation metadata - [PR #23753](https://github.com/BerriAI/litellm/pull/23753)
-    - OpenAI reasoning items in chat completions - [PR #24690](https://github.com/BerriAI/litellm/pull/24690)
+    - flex/batch/priority tier와 함께 `gpt-5.4-mini` / `gpt-5.4-nano` 추가 - [PR #23958](https://github.com/BerriAI/litellm/pull/23958)
+    - 지원 중단 metadata와 함께 `gpt-4-0314` 비용 항목 복원 - [PR #23753](https://github.com/BerriAI/litellm/pull/23753)
+    - chat completions의 OpenAI reasoning item 지원 - [PR #24690](https://github.com/BerriAI/litellm/pull/24690)
 
 - **[Google Vertex AI](../../docs/providers/vertex)**
-    - Add `vertex_ai/claude-haiku-4-5` pricing entry - [PR #25151](https://github.com/BerriAI/litellm/pull/25151)
-    - Vertex `count_tokens` location override - [PR #23907](https://github.com/BerriAI/litellm/pull/23907)
-    - Vertex cancel batch endpoint - [PR #23957](https://github.com/BerriAI/litellm/pull/23957)
-    - Vertex PAYGO tutorial - [PR #24009](https://github.com/BerriAI/litellm/pull/24009)
-    - Fix Vertex AI batch - [PR #23718](https://github.com/BerriAI/litellm/pull/23718)
-    - DeepSeek v3.2 Vertex region mapping - [PR #23864](https://github.com/BerriAI/litellm/pull/23864)
+    - `vertex_ai/claude-haiku-4-5` 가격 항목 추가 - [PR #25151](https://github.com/BerriAI/litellm/pull/25151)
+    - Vertex `count_tokens` location override 지원 - [PR #23907](https://github.com/BerriAI/litellm/pull/23907)
+    - Vertex batch 취소 endpoint 추가 - [PR #23957](https://github.com/BerriAI/litellm/pull/23957)
+    - Vertex PAYGO tutorial 추가 - [PR #24009](https://github.com/BerriAI/litellm/pull/24009)
+    - Vertex AI batch 수정 - [PR #23718](https://github.com/BerriAI/litellm/pull/23718)
+    - DeepSeek v3.2 Vertex region mapping 추가 - [PR #23864](https://github.com/BerriAI/litellm/pull/23864)
 
 - **[Google Gemini](../../docs/providers/gemini)**
-    - Add `gemini-3.1-flash-live-preview` model - [PR #24665](https://github.com/BerriAI/litellm/pull/24665)
-    - Add Lyria 3 Pro / Clip preview entries + docs - [PR #24610](https://github.com/BerriAI/litellm/pull/24610)
-    - Normalize Gemini retrieve-file URL - [PR #24662](https://github.com/BerriAI/litellm/pull/24662)
-    - Gemini context caching with custom `api_base` - [PR #23928](https://github.com/BerriAI/litellm/pull/23928)
-    - Strict `additional_properties` cleanup - [PR #24072](https://github.com/BerriAI/litellm/pull/24072)
-    - Gemini context circulation - [PR #24073](https://github.com/BerriAI/litellm/pull/24073)
+    - `gemini-3.1-flash-live-preview` 모델 추가 - [PR #24665](https://github.com/BerriAI/litellm/pull/24665)
+    - Lyria 3 Pro / Clip preview 항목과 문서 추가 - [PR #24610](https://github.com/BerriAI/litellm/pull/24610)
+    - Gemini retrieve-file URL 정규화 - [PR #24662](https://github.com/BerriAI/litellm/pull/24662)
+    - custom `api_base`를 사용하는 Gemini context caching - [PR #23928](https://github.com/BerriAI/litellm/pull/23928)
+    - strict `additional_properties` 정리 - [PR #24072](https://github.com/BerriAI/litellm/pull/24072)
+    - Gemini context circulation 지원 - [PR #24073](https://github.com/BerriAI/litellm/pull/24073)
 
 - **[Azure OpenAI](../../docs/providers/azure)**
-    - Add `azure/gpt-5.4-mini` / `azure/gpt-5.4-nano` pricing - model catalog
-    - Bump proxy Azure API version - [PR #24120](https://github.com/BerriAI/litellm/pull/24120)
-    - Azure fine-tuning fixes - [PR #24687](https://github.com/BerriAI/litellm/pull/24687)
-    - Azure gpt-5.4 Responses API routing fix - [PR #23926](https://github.com/BerriAI/litellm/pull/23926)
-    - Azure AI annotations - [PR #23939](https://github.com/BerriAI/litellm/pull/23939)
+    - `azure/gpt-5.4-mini` / `azure/gpt-5.4-nano` 가격 추가 - 모델 카탈로그
+    - proxy Azure API version 상향 - [PR #24120](https://github.com/BerriAI/litellm/pull/24120)
+    - Azure fine-tuning 수정 - [PR #24687](https://github.com/BerriAI/litellm/pull/24687)
+    - Azure gpt-5.4 Responses API routing 수정 - [PR #23926](https://github.com/BerriAI/litellm/pull/23926)
+    - Azure AI annotation 지원 - [PR #23939](https://github.com/BerriAI/litellm/pull/23939)
 
 - **[xAI](../../docs/providers/xai)**
-    - Add Grok 4.20 reasoning / non-reasoning / multi-agent preview entries - cost map
+    - Grok 4.20 reasoning / non-reasoning / multi-agent preview 항목 추가 - cost map
 
 - **[OCI GenAI](../../docs/providers/oci)**
-    - Native embeddings support and expanded chat + embedding model catalog - [PR #24887](https://github.com/BerriAI/litellm/pull/24887), [PR #25151](https://github.com/BerriAI/litellm/pull/25151)
+    - native embedding 지원 및 chat + embedding 모델 카탈로그 확장 - [PR #24887](https://github.com/BerriAI/litellm/pull/24887), [PR #25151](https://github.com/BerriAI/litellm/pull/25151)
 
 - **[Volcengine](../../docs/providers/volcengine)**
-    - Add Doubao Seed 2.0 pro/lite/mini/code-preview entries - cost map
+    - Doubao Seed 2.0 pro/lite/mini/code-preview 항목 추가 - cost map
 
 - **[Mistral](../../docs/providers/mistral)**
-    - Fix Mistral diarize segments response - [PR #23925](https://github.com/BerriAI/litellm/pull/23925)
+    - Mistral diarize segment response 수정 - [PR #23925](https://github.com/BerriAI/litellm/pull/23925)
 
 - **[OpenRouter](../../docs/providers/openrouter)**
-    - Strip prefix on OpenRouter wildcard routing - [PR #24603](https://github.com/BerriAI/litellm/pull/24603)
+    - OpenRouter wildcard routing에서 prefix 제거 - [PR #24603](https://github.com/BerriAI/litellm/pull/24603)
 
 - **[Deepgram](../../docs/providers/deepgram)**
-    - Revert problematic cost-per-second change - [PR #24297](https://github.com/BerriAI/litellm/pull/24297)
+    - 문제가 있던 초당 비용 변경 revert - [PR #24297](https://github.com/BerriAI/litellm/pull/24297)
 
 - **[GitHub Copilot](../../docs/providers/github_copilot)**
-    - Short-circuit web search when not supported by Copilot model - [PR #24143](https://github.com/BerriAI/litellm/pull/24143)
+    - Copilot model이 지원하지 않는 경우 web search를 즉시 중단 - [PR #24143](https://github.com/BerriAI/litellm/pull/24143)
 
 - **[Snowflake Cortex](../../docs/providers/snowflake)**
-    - Test conflict resolution and reliability fixes - merges across release window
+    - release window 전반의 test conflict 해결 및 안정성 수정 merge
 
 - **[Quora / Poe](../../docs/providers/poe)**
-    - Fix missing content-part added event - [PR #24445](https://github.com/BerriAI/litellm/pull/24445)
+    - 누락된 content-part added event 수정 - [PR #24445](https://github.com/BerriAI/litellm/pull/24445)
 
-### Bug Fixes
+### 버그 수정 {#bug-fixes}
 
 - **General**
-    - Fix `gpt-5.4` pricing metadata - [PR #24748](https://github.com/BerriAI/litellm/pull/24748)
-    - Fix gov pricing tests and Bedrock model test follow-ups - [PR #24931](https://github.com/BerriAI/litellm/pull/24931), [PR #24947](https://github.com/BerriAI/litellm/pull/24947), [PR #25022](https://github.com/BerriAI/litellm/pull/25022)
-    - Fix thinking blocks null handling - [PR #24070](https://github.com/BerriAI/litellm/pull/24070)
-    - Streaming tool-call finish reason with empty content - [PR #23895](https://github.com/BerriAI/litellm/pull/23895)
-    - Ensure alternating roles in conversion paths - [PR #24015](https://github.com/BerriAI/litellm/pull/24015)
-    - File → input_file mapping fix - [PR #23618](https://github.com/BerriAI/litellm/pull/23618)
-    - File-search emulated alignment - [PR #23969](https://github.com/BerriAI/litellm/pull/23969)
-    - Preserve final streaming attributes - [PR #23530](https://github.com/BerriAI/litellm/pull/23530)
-    - Streaming metadata hidden params - [PR #24220](https://github.com/BerriAI/litellm/pull/24220)
-    - Improve LLM repeated message detection performance - [PR #18120](https://github.com/BerriAI/litellm/pull/18120)
+    - `gpt-5.4` pricing metadata 수정 - [PR #24748](https://github.com/BerriAI/litellm/pull/24748)
+    - gov pricing test 및 Bedrock model test 후속 수정 - [PR #24931](https://github.com/BerriAI/litellm/pull/24931), [PR #24947](https://github.com/BerriAI/litellm/pull/24947), [PR #25022](https://github.com/BerriAI/litellm/pull/25022)
+    - thinking block null 처리 수정 - [PR #24070](https://github.com/BerriAI/litellm/pull/24070)
+    - 빈 content가 있는 streaming tool-call finish reason 처리 - [PR #23895](https://github.com/BerriAI/litellm/pull/23895)
+    - conversion path에서 role 교대 보장 - [PR #24015](https://github.com/BerriAI/litellm/pull/24015)
+    - file에서 `input_file`로의 매핑 수정 - [PR #23618](https://github.com/BerriAI/litellm/pull/23618)
+    - file-search emulated alignment 수정 - [PR #23969](https://github.com/BerriAI/litellm/pull/23969)
+    - 최종 streaming attribute 보존 - [PR #23530](https://github.com/BerriAI/litellm/pull/23530)
+    - streaming metadata hidden param 처리 - [PR #24220](https://github.com/BerriAI/litellm/pull/24220)
+    - LLM repeated message detection 성능 개선 - [PR #18120](https://github.com/BerriAI/litellm/pull/18120)
 
-## LLM API Endpoints
+## LLM API endpoints {#llm-api-endpoints}
 
 #### Features
 
@@ -280,11 +280,11 @@ MCP Toolsets let AI platform admins create curated subsets of tools from one or 
     - Proxy-only failure call-type handling - [PR #24050](https://github.com/BerriAI/litellm/pull/24050)
     - Generic API model-group logging fix - [PR #24044](https://github.com/BerriAI/litellm/pull/24044)
 
-## Management Endpoints / UI
+## 관리 endpoint / UI {#management-endpoints-ui}
 
 #### Features
 
-- **Virtual Keys**
+- **가상 키**
     - Substring search for `user_id` and `key_alias` on `/key/list` - [PR #24746](https://github.com/BerriAI/litellm/pull/24746), [PR #24751](https://github.com/BerriAI/litellm/pull/24751)
     - Wire `team_id` filter to key alias dropdown - [PR #25114](https://github.com/BerriAI/litellm/pull/25114), [PR #25119](https://github.com/BerriAI/litellm/pull/25119)
     - Allow hashed `token_id` in `/key/update` - [PR #24969](https://github.com/BerriAI/litellm/pull/24969)
@@ -298,7 +298,7 @@ MCP Toolsets let AI platform admins create curated subsets of tools from one or 
     - Fix invalid keys for internal users - [PR #23795](https://github.com/BerriAI/litellm/pull/23795)
     - Distributed lock for scheduled key rotation job execution - [PR #23364](https://github.com/BerriAI/litellm/pull/23364), [PR #23834](https://github.com/BerriAI/litellm/pull/23834), [PR #25150](https://github.com/BerriAI/litellm/pull/25150)
 
-- **Teams + Organizations**
+- **팀 + 조직**
     - Resolve access-group models / MCP servers / agents in team endpoints and UI - [PR #25027](https://github.com/BerriAI/litellm/pull/25027), [PR #25119](https://github.com/BerriAI/litellm/pull/25119)
     - Allow changing team organization from team settings - [PR #25095](https://github.com/BerriAI/litellm/pull/25095)
     - Per-model rate limits in team edit/info views - [PR #25144](https://github.com/BerriAI/litellm/pull/25144), [PR #25156](https://github.com/BerriAI/litellm/pull/25156)
@@ -309,7 +309,7 @@ MCP Toolsets let AI platform admins create curated subsets of tools from one or 
     - Add missing `team_member_budget_duration` param to `new_team` docstring - [PR #24243](https://github.com/BerriAI/litellm/pull/24243)
     - Fix teams table refresh, infinite dropdown, and leftnav migration - [PR #24342](https://github.com/BerriAI/litellm/pull/24342)
 
-- **Usage + Analytics**
+- **사용법 + Analytics**
     - Paginated team search on usage page filters - [PR #25107](https://github.com/BerriAI/litellm/pull/25107)
     - Use entity key for usage export display correctness - [PR #25153](https://github.com/BerriAI/litellm/pull/25153)
     - Aggregated activity entity breakdown - [PR #23471](https://github.com/BerriAI/litellm/pull/23471)
@@ -317,12 +317,12 @@ MCP Toolsets let AI platform admins create curated subsets of tools from one or 
     - Audit log S3 export - [PR #23167](https://github.com/BerriAI/litellm/pull/23167)
     - Audit log export UI - [PR #24486](https://github.com/BerriAI/litellm/pull/24486)
 
-- **Models + Providers**
+- **모델 + Providers**
     - Include access-group models in UI model listing - [PR #24743](https://github.com/BerriAI/litellm/pull/24743)
     - Expose Azure Entra ID credential fields in provider forms - [PR #25137](https://github.com/BerriAI/litellm/pull/25137)
     - Do not inject `vector_store_ids: []` when editing a model - [PR #25133](https://github.com/BerriAI/litellm/pull/25133)
 
-- **Guardrails UI**
+- **가드레일 UI**
     - Project-level guardrails in project create/edit flows - [PR #25100](https://github.com/BerriAI/litellm/pull/25100)
     - Project-level guardrails support in the proxy - [PR #25087](https://github.com/BerriAI/litellm/pull/25087)
     - Allow adding team guardrails from the UI - [PR #25038](https://github.com/BerriAI/litellm/pull/25038)
@@ -339,7 +339,7 @@ MCP Toolsets let AI platform admins create curated subsets of tools from one or 
     - Copy `user_id` on click - [PR #24315](https://github.com/BerriAI/litellm/pull/24315)
     - Fix default user perms not synced with UI - [PR #23666](https://github.com/BerriAI/litellm/pull/23666)
 
-- **UI Cleanup / Migration**
+- **UI 정리 / migration**
     - Migrate Tremor Text/Badge to antd Tag and native spans - [PR #24750](https://github.com/BerriAI/litellm/pull/24750)
     - Migrate default user settings to antd - [PR #23787](https://github.com/BerriAI/litellm/pull/23787)
     - Migrate route preview Tremor → antd - [PR #24485](https://github.com/BerriAI/litellm/pull/24485)
@@ -383,9 +383,9 @@ MCP Toolsets let AI platform admins create curated subsets of tools from one or 
     - Shared aiohttp session auto-recovery - [PR #23808](https://github.com/BerriAI/litellm/pull/23808)
     - Deferred guardrail logging v2 - [PR #24135](https://github.com/BerriAI/litellm/pull/24135)
 
-### Guardrails
+### 가드레일
 
-- Register DynamoAI guardrail initializer and enum entry - [PR #23752](https://github.com/BerriAI/litellm/pull/23752)
+- 등록 DynamoAI guardrail initializer and enum entry - [PR #23752](https://github.com/BerriAI/litellm/pull/23752)
 - Extract helper methods in guardrail handlers to fix PLR0915 - [PR #24802](https://github.com/BerriAI/litellm/pull/24802)
 - Add optional `on_error` fallback for guardrail pipeline failures - [PR #24831](https://github.com/BerriAI/litellm/pull/24831), [PR #25150](https://github.com/BerriAI/litellm/pull/25150)
 - Allow teams to attach/manage their own guardrails from team settings - [PR #25038](https://github.com/BerriAI/litellm/pull/25038)
@@ -404,9 +404,9 @@ MCP Toolsets let AI platform admins create curated subsets of tools from one or 
 
 ### Secret Managers
 
-- No new secret manager provider additions in this release.
+- 이번 릴리스에는 새 secret manager provider 추가가 없습니다.
 
-## Spend Tracking, Budgets and Rate Limiting
+## 비용 추적, budget 및 rate limiting {#cost-tracking-budgets-and-rate-limiting}
 
 - Enforce budget for models not directly present in the cost map - [PR #24949](https://github.com/BerriAI/litellm/pull/24949)
 - Per-model rate limits in team settings/info UI - [PR #25144](https://github.com/BerriAI/litellm/pull/25144), [PR #25156](https://github.com/BerriAI/litellm/pull/25156)
@@ -431,7 +431,7 @@ MCP Toolsets let AI platform admins create curated subsets of tools from one or 
 - Upgrade MCP SDK to 1.26.0 - [PR #24179](https://github.com/BerriAI/litellm/pull/24179)
 - Restore MCP server fields dropped by schema sync migration - [PR #24078](https://github.com/BerriAI/litellm/pull/24078)
 
-## Performance / Loadbalancing / Reliability improvements
+## 성능 / load balancing / 안정성 개선 {#performance-loadbalancing-reliability-improvements}
 
 - Add control plane for multi-proxy worker management - [PR #24217](https://github.com/BerriAI/litellm/pull/24217)
 - Make DB migration failure exit opt-in via `--enforce_prisma_migration_check` - [PR #23675](https://github.com/BerriAI/litellm/pull/23675)
@@ -448,7 +448,7 @@ MCP Toolsets let AI platform admins create curated subsets of tools from one or 
 - Use dynamic DB URL - [PR #24827](https://github.com/BerriAI/litellm/pull/24827)
 - Migration corrections - [PR #24105](https://github.com/BerriAI/litellm/pull/24105)
 
-## Documentation Updates
+## 문서 업데이트 {#documentation-updates}
 
 - MCP zero trust auth guide - [PR #23918](https://github.com/BerriAI/litellm/pull/23918)
 - Week 1 onboarding checklist - [PR #25083](https://github.com/BerriAI/litellm/pull/25083)
@@ -467,10 +467,10 @@ MCP Toolsets let AI platform admins create curated subsets of tools from one or 
 - OpenCode / reasoningSummary docs - [PR #24468](https://github.com/BerriAI/litellm/pull/24468)
 - Thinking summary docs - [PR #22823](https://github.com/BerriAI/litellm/pull/22823)
 - v0 docs contributions - [PR #24023](https://github.com/BerriAI/litellm/pull/24023)
-- Blog posts RSS update - [PR #23791](https://github.com/BerriAI/litellm/pull/23791)
+- 블로그 posts RSS update - [PR #23791](https://github.com/BerriAI/litellm/pull/23791)
 - General docs cleanup + townhall announcements - [PR #24839](https://github.com/BerriAI/litellm/pull/24839), [PR #25021](https://github.com/BerriAI/litellm/pull/25021), [PR #25026](https://github.com/BerriAI/litellm/pull/25026)
 
-## Infrastructure / Security Notes
+## Infrastructure / Security 참고
 
 - Optimize CI pipeline - [PR #23721](https://github.com/BerriAI/litellm/pull/23721)
 - Add zizmor to CI/CD - [PR #24663](https://github.com/BerriAI/litellm/pull/24663)
@@ -505,17 +505,17 @@ MCP Toolsets let AI platform admins create curated subsets of tools from one or 
 * @stuxf made their first contribution in https://github.com/BerriAI/litellm/pull/24838
 * @clfhhc made their first contribution in https://github.com/BerriAI/litellm/pull/24932
 
-**Full Changelog**: https://github.com/BerriAI/litellm/compare/v1.82.3-stable...v1.83.3-stable
+**Full 변경 이력**: https://github.com/BerriAI/litellm/compare/v1.82.3-stable...v1.83.3-stable
 
 ---
 
 ## 04/04/2026
 
-* New Models / Updated Models: 59
+* New 모델 / Updated 모델: 59
 * LLM API Endpoints: 28
 * Management Endpoints / UI: 61
 * Logging / Guardrail / Prompt Management Integrations: 30
-* Spend Tracking, Budgets and Rate Limiting: 11
+* 비용 추적, Budgets and Rate Limiting: 11
 * MCP Gateway: 8
 * Performance / Loadbalancing / Reliability improvements: 17
 * Documentation Updates: 24

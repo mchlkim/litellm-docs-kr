@@ -2,20 +2,20 @@ import Image from '@theme/IdealImage';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Azure Content Safety Guardrail
+# Azure Content Safety 가드레일
 
-LiteLLM supports Azure Content Safety guardrails via the [Azure Content Safety API](https://learn.microsoft.com/en-us/azure/ai-services/content-safety/overview). 
+LiteLLM은 [Azure Content Safety API](https://learn.microsoft.com/en-us/azure/ai-services/content-safety/overview)를 통해 Azure Content Safety 가드레일을 지원합니다.
 
 
-## Supported Guardrails
+## 지원되는 가드레일 {#supported-guardrails}
 
 - [Prompt Shield](https://learn.microsoft.com/en-us/azure/ai-services/content-safety/quickstart-jailbreak?pivots=programming-language-rest)
 - [Text Moderation](https://learn.microsoft.com/en-us/azure/ai-services/content-safety/quickstart-text?tabs=visual-studio%2Clinux&pivots=programming-language-rest)
 
-## Quick Start
-### 1. Define Guardrails on your LiteLLM config.yaml 
+## 빠른 시작
+### 1. LiteLLM config.yaml에 가드레일 정의 {#1-define-guardrail-on-your-litellm-configyaml}
 
-Define your guardrails under the `guardrails` section
+`guardrails` 섹션 아래에 가드레일을 정의합니다.
 
 ```yaml
 model_list:
@@ -40,21 +40,21 @@ guardrails:
       default_on: true
 ```
 
-#### Supported values for `mode`
+#### `mode`에 지원되는 값 {#supported-values-for-mode}
 
-- `pre_call` Run **before** LLM call, on **input**
-- `post_call` Run **after** LLM call, on **input & output**
+- `pre_call` **입력**에 대해 LLM 호출 **전** 실행
+- `post_call` **입력 및 출력**에 대해 LLM 호출 **후** 실행
 
-### 2. Start LiteLLM Gateway 
+### 2. LiteLLM Gateway 시작 {#2-start-litellm-gateway}
 
 
 ```shell
 litellm --config config.yaml --detailed_debug
 ```
 
-### 3. Test request 
+### 3. 테스트 요청 {#3-test-request}
 
-**[Langchain, OpenAI SDK Usage Examples](../proxy/user_keys#request-format)**
+**[Langchain, OpenAI SDK 사용법 예제](../proxy/user_keys#request-format)**
 
 ```shell
 curl -i http://localhost:4000/v1/chat/completions \
@@ -71,49 +71,49 @@ curl -i http://localhost:4000/v1/chat/completions \
   }'
 ```
 
-## Supported Params 
+## 지원되는 매개변수 {#supported-params}
 
-### Common Params
+### 공통 매개변수 {#common-params}
 
-- `api_key` - str - Azure Content Safety API key
-- `api_base` - str - Azure Content Safety API base URL
-- `default_on` - bool - Whether to run the guardrail by default. Default is `false`.
-- `mode` - Union[str, list[str]] - Mode to run the guardrail. Either `pre_call` or `post_call`. Default is `pre_call`.
+- `api_key` - str - Azure Content Safety API 키
+- `api_base` - str - Azure Content Safety API 기본 URL
+- `default_on` - bool - 기본적으로 가드레일을 실행할지 여부입니다. 기본값은 `false`입니다.
+- `mode` - Union[str, list[str]] - 가드레일을 실행할 모드입니다. `pre_call` 또는 `post_call` 중 하나입니다. 기본값은 `pre_call`입니다.
 
-### Azure Text Moderation
+### Azure Text Moderation 설정
 
-- `severity_threshold` - int - Severity threshold for the Azure Content Safety Text Moderation guardrail across all categories
-- `severity_threshold_by_category` - Dict[AzureHarmCategories, int] - Severity threshold by category for the Azure Content Safety Text Moderation guardrail. See list of categories - https://learn.microsoft.com/en-us/azure/ai-services/content-safety/concepts/harm-categories?tabs=warning
-- `categories` - List[AzureHarmCategories] - Categories to scan for the Azure Content Safety Text Moderation guardrail. See list of categories - https://learn.microsoft.com/en-us/azure/ai-services/content-safety/concepts/harm-categories?tabs=warning
-- `blocklistNames` - List[str] - Blocklist names to scan for the Azure Content Safety Text Moderation guardrail. Learn more - https://learn.microsoft.com/en-us/azure/ai-services/content-safety/quickstart-text
-- `haltOnBlocklistHit` - bool - Whether to halt the request if a blocklist hit is detected
-- `outputType` - Literal["FourSeverityLevels", "EightSeverityLevels"] - Output type for the Azure Content Safety Text Moderation guardrail. Learn more - https://learn.microsoft.com/en-us/azure/ai-services/content-safety/quickstart-text
+- `severity_threshold` - int - 모든 카테고리에 적용되는 Azure Content Safety Text Moderation 가드레일의 심각도 임계값
+- `severity_threshold_by_category` - Dict[AzureHarmCategories, int] - Azure Content Safety Text Moderation 가드레일의 카테고리별 심각도 임계값입니다. 카테고리 목록은 https://learn.microsoft.com/en-us/azure/ai-services/content-safety/concepts/harm-categories?tabs=warning 에서 확인하세요.
+- `categories` - List[AzureHarmCategories] - Azure Content Safety Text Moderation 가드레일에서 스캔할 카테고리입니다. 카테고리 목록은 https://learn.microsoft.com/en-us/azure/ai-services/content-safety/concepts/harm-categories?tabs=warning 에서 확인하세요.
+- `blocklistNames` - List[str] - Azure Content Safety Text Moderation 가드레일에서 스캔할 차단 목록 이름입니다. 자세한 내용은 https://learn.microsoft.com/en-us/azure/ai-services/content-safety/quickstart-text 에서 확인하세요.
+- `haltOnBlocklistHit` - bool - 차단 목록 일치가 감지되면 요청을 중단할지 여부입니다.
+- `outputType` - Literal["FourSeverityLevels", "EightSeverityLevels"] - Azure Content Safety Text Moderation 가드레일의 출력 유형입니다. 자세한 내용은 https://learn.microsoft.com/en-us/azure/ai-services/content-safety/quickstart-text 에서 확인하세요.
 
 
-AzureHarmCategories:
+`AzureHarmCategories`:
 - Hate
 - SelfHarm
 - Sexual
 - Violence
 
-### Azure Prompt Shield Only
+### Azure Prompt Shield 전용 {#azure-prompt-shield-only}
 
 n/a 
 
-## Important Notes
+## 중요 참고 사항 {#important-notes}
 
-### Azure Content Safety Character Limit
+### Azure Content Safety 문자 제한 {#azure-content-safety-character-limit}
 
-Both Azure Prompt Shield and Azure Text Moderation have a **10,000 character limit** per request. When text exceeds this limit:
+Azure Prompt Shield와 Azure Text Moderation은 모두 요청당 **10,000자 제한**이 있습니다. 텍스트가 이 제한을 초과하면 다음과 같이 처리됩니다.
 
-- LiteLLM automatically splits the text into chunks at word boundaries (no words are broken)
-- Each chunk is sent separately to the Azure Content Safety API for analysis
-- If any chunk is flagged (attack detected or severity threshold exceeded), the entire request is blocked
-- If all chunks are safe, the request is allowed to proceed
+- LiteLLM이 단어 경계에서 텍스트를 자동으로 청크로 나눕니다. 단어는 중간에서 잘리지 않습니다.
+- 각 청크는 분석을 위해 Azure Content Safety API로 별도 전송됩니다.
+- 어떤 청크라도 플래그 처리되면, 즉 공격이 감지되거나 심각도 임계값을 초과하면 전체 요청이 차단됩니다.
+- 모든 청크가 안전하면 요청이 계속 진행됩니다.
 
-This applies to both `pre_call` and `post_call` hooks and ensures that long prompts are properly analyzed without breaking words or losing context. 
+이는 `pre_call` 및 `post_call` 훅 모두에 적용되며, 긴 프롬프트도 단어가 깨지거나 문맥이 손실되지 않은 상태로 올바르게 분석되도록 보장합니다.
 
 
-## Further Reading
+## 더 읽어보기 {#further-reading}
 
-- [Control Guardrails per API Key](./quick_start#-control-guardrails-per-api-key)
+- [API Key별 가드레일 제어](./quick_start#-control-guardrails-per-api-key)

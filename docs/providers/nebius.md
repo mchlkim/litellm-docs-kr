@@ -6,7 +6,7 @@ https://docs.nebius.com/studio/inference/quickstart
 
 :::tip
 
-**Litellm provides support to all models from Nebius AI Studio. To use a model, set `model=nebius/<any-model-on-nebius-ai-studio>` as a prefix for litellm requests. The full list of supported models is provided at https://studio.nebius.ai/ **
+**LiteLLM은 Nebius AI Studio의 모든 model을 지원합니다. model을 사용하려면 LiteLLM request에서 `model=nebius/<any-model-on-nebius-ai-studio>` prefix를 설정하세요. 지원 model의 전체 목록은 https://studio.nebius.ai/ 에서 확인할 수 있습니다.**
 
 :::
 
@@ -17,7 +17,7 @@ import os
 os.environ['NEBIUS_API_KEY']
 ```
 
-## Sample Usage: Text Generation
+## 사용 예시: Text Generation
 ```python
 from litellm import completion
 import os
@@ -44,7 +44,7 @@ response = completion(
 print(response)
 ```
 
-## Sample Usage - Streaming
+## 사용 예시 - Streaming
 ```python
 from litellm import completion
 import os
@@ -74,7 +74,7 @@ for chunk in response:
     print(chunk)
 ```
 
-## Sample Usage - Embedding
+## 사용 예시 - Embedding
 ```python
 from litellm import embedding
 import os
@@ -88,11 +88,11 @@ print(response)
 ```
 
 
-## Usage with LiteLLM Proxy Server
+## LiteLLM Proxy Server 사용법
 
-Here's how to call a Nebius AI Studio model with the LiteLLM Proxy Server
+LiteLLM Proxy Server로 Nebius AI Studio model을 호출하는 방법입니다.
 
-1. Modify the config.yaml 
+1. config.yaml 수정
 
   ```yaml
   model_list:
@@ -101,12 +101,12 @@ Here's how to call a Nebius AI Studio model with the LiteLLM Proxy Server
         model: nebius/<your-model-name>  # add nebius/ prefix to use Nebius AI Studio as provider
         api_key: api-key                 # api key to send your model
   ```
-2. Start the proxy 
+2. 프록시 시작 
   ```bash
   $ litellm --config /path/to/config.yaml
   ```
 
-3. Send Request to LiteLLM Proxy Server
+3. LiteLLM Proxy Server로 request 전송
 
   <Tabs>
 
@@ -153,43 +153,43 @@ Here's how to call a Nebius AI Studio model with the LiteLLM Proxy Server
 
   </Tabs>
 
-## Supported Parameters
+## 지원 파라미터
 
-The Nebius provider supports the following parameters:
+Nebius provider는 다음 파라미터를 지원합니다.
 
-### Chat Completion Parameters
-
-| Parameter | Type | Description |
-| --------- | ---- | ----------- |
-| frequency_penalty | number | Penalizes new tokens based on their frequency in the text |
-| function_call | string/object | Controls how the model calls functions |
-| functions | array | List of functions for which the model may generate JSON inputs |
-| logit_bias | map | Modifies the likelihood of specified tokens |
-| max_tokens | integer | Maximum number of tokens to generate |
-| n | integer | Number of completions to generate |
-| presence_penalty | number | Penalizes tokens based on if they appear in the text so far |
-| response_format | object | Format of the response, e.g., `{"type": "json"}` |
-| seed | integer | Sampling seed for deterministic results |
-| stop | string/array | Sequences where the API will stop generating tokens |
-| stream | boolean | Whether to stream the response |
-| temperature | number | Controls randomness (0-2) |
-| top_p | number | Controls nucleus sampling |
-| tool_choice | string/object | Controls which (if any) function to call |
-| tools | array | List of tools the model can use |
-| user | string | User identifier |
-
-### Embedding Parameters
+### Chat Completion 파라미터
 
 | Parameter | Type | Description |
 | --------- | ---- | ----------- |
-| input | string/array | Text to embed |
-| user | string | User identifier |
+| frequency_penalty | number | text 내 빈도에 따라 새 token에 penalty를 적용합니다. |
+| function_call | string/object | model이 function을 호출하는 방식을 제어합니다. |
+| functions | array | model이 JSON input을 생성할 수 있는 function 목록입니다. |
+| logit_bias | map | 지정한 token의 likelihood를 수정합니다. |
+| max_tokens | integer | 생성할 최대 token 수입니다. |
+| n | integer | 생성할 completion 수입니다. |
+| presence_penalty | number | 지금까지 text에 등장했는지에 따라 token에 penalty를 적용합니다. |
+| response_format | object | response 형식입니다. 예: `{"type": "json"}` |
+| seed | integer | 결정적 결과를 위한 sampling seed입니다. |
+| stop | string/array | API가 token 생성을 중단할 sequence입니다. |
+| stream | boolean | response를 stream할지 여부입니다. |
+| temperature | number | 무작위성을 제어합니다(0-2). |
+| top_p | number | nucleus sampling을 제어합니다. |
+| tool_choice | string/object | 호출할 function이 있는 경우 어떤 function을 호출할지 제어합니다. |
+| tools | array | model이 사용할 수 있는 tool 목록입니다. |
+| user | string | user identifier입니다. |
+
+### Embedding 파라미터
+
+| Parameter | Type | Description |
+| --------- | ---- | ----------- |
+| input | string/array | embed할 text입니다. |
+| user | string | user identifier입니다. |
 
 ## Error Handling
 
-The integration uses the standard LiteLLM error handling. Common errors include:
+이 integration은 표준 LiteLLM error handling을 사용합니다. 일반적인 error는 다음과 같습니다.
 
-- **Authentication Error**: Check your API key
-- **Model Not Found**: Ensure you're using a valid model name
-- **Rate Limit Error**: You've exceeded your rate limits
-- **Timeout Error**: Request took too long to complete
+- **인증 Error**: API key를 확인하세요.
+- **Model Not Found**: 유효한 model name을 사용 중인지 확인하세요.
+- **Rate Limit Error**: rate limit을 초과했습니다.
+- **Timeout Error**: request 완료 시간이 너무 오래 걸렸습니다.

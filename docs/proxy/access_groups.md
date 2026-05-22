@@ -4,52 +4,52 @@ import TabItem from '@theme/TabItem';
 
 # Access Groups
 
-Access Groups simplify how you define and manage resource access across your organization. Instead of configuring models, MCP servers, and agents separately on each key or team, you create one group that bundles the resources you want to grant, then attach that group to your keys or teams.
+Access Groups는 조직 전체에서 리소스 접근을 정의하고 관리하는 방식을 단순화합니다. 각 키나 팀마다 모델, MCP servers, agents를 따로 설정하는 대신, 허용할 리소스를 하나로 묶은 그룹을 만든 뒤 해당 그룹을 키나 팀에 연결합니다.
 
-## Overview
+## 개요
 
-**Access Groups** let you define a reusable set of allowed resources—models, MCP servers, and agents—in a single place. One group can grant access to all three resource types. Simply attach the group to a key or team, and they get access to everything defined in that group.
+**Access Groups**를 사용하면 허용된 리소스 집합(모델, MCP servers, agents)을 한곳에서 재사용 가능하게 정의할 수 있습니다. 하나의 그룹으로 세 가지 리소스 유형 모두에 대한 접근을 부여할 수 있습니다. 그룹을 키나 팀에 연결하기만 하면 해당 그룹에 정의된 모든 리소스에 접근할 수 있습니다.
 
-- **Unified resource control** – One group controls access to models, MCP servers, and agents together
-- **Reusable** – Define once, attach to many keys or teams
-- **Easy to maintain** – Update the group (add or remove resources) and all attached keys and teams automatically reflect the change
-- **Clear visibility** – See exactly which resources each group grants and which keys/teams use it
+- **통합 리소스 제어** – 하나의 그룹으로 모델, MCP servers, agents 접근을 함께 제어합니다.
+- **재사용 가능** – 한 번 정의한 뒤 여러 키나 팀에 연결할 수 있습니다.
+- **유지보수 용이** – 그룹을 업데이트하면(리소스 추가 또는 제거) 연결된 모든 키와 팀에 변경 사항이 자동으로 반영됩니다.
+- **명확한 가시성** – 각 그룹이 어떤 리소스를 부여하는지, 어떤 키/팀이 사용하는지 정확히 확인할 수 있습니다.
 
 <Image img={require('../../img/ui_access_groups.png')} />
 
-### How It Works
+### 작동 방식
 
-**Key concept:** Define resources in a group → Attach group to key or team → Key/team gets access to all resources in the group
+**핵심 개념:** 그룹에 리소스 정의 → 그룹을 키 또는 팀에 연결 → 키/팀이 그룹의 모든 리소스에 접근
 
-| Resource Type   | What the group controls                                              |
+| 리소스 유형   | 그룹이 제어하는 항목                                              |
 | --------------- | -------------------------------------------------------------------- |
-| **Models**      | Which LLM models keys/teams can use (e.g., `gpt-4`, `claude-3-opus`) |
-| **MCP Servers** | Which MCP servers are available for tool calling                     |
-| **Agents**      | Which agents can be invoked                                          |
+| **모델**      | 키/팀이 사용할 수 있는 LLM models (예: `gpt-4`, `claude-3-opus`) |
+| **MCP Servers** | Tool calling에 사용할 수 있는 MCP servers                     |
+| **Agents**      | 호출할 수 있는 agents                                          |
 
-## How to Create and Use Access Groups in the UI
+## UI에서 Access Groups를 생성하고 사용하는 방법
 
-### 1. Navigate to Access Groups
+### 1. Access Groups로 이동
 
-Go to the Admin UI (e.g. `http://localhost:4000/ui` or your `PROXY_BASE_URL/ui`) and click **Access Groups** in the sidebar.
+관리자 UI(예: `http://localhost:4000/ui` 또는 사용하는 `PROXY_BASE_URL/ui`)로 이동한 뒤 사이드바에서 **Access Groups**를 클릭합니다.
 
 ![](https://colony-recorder.s3.amazonaws.com/files/2026-02-15/d117fdb2-18c8-49e0-91e6-1f830d2d4b85/ascreenshot_f5822a0ddac64e3383124419d0c66298_text_export.jpeg)
 
-### 2. Create an Access Group
+### 2. Access Group 생성
 
-Click **Create Access Group** and give your group a name.
+**Create Access Group**을 클릭하고 그룹 이름을 입력합니다.
 
 ![](https://colony-recorder.s3.amazonaws.com/files/2026-02-15/aefb900d-d106-4436-806c-3608ad19659f/ascreenshot_3f6fed1256604fe3b7038a0778ce3342_text_export.jpeg)
 
 ![](https://colony-recorder.s3.amazonaws.com/files/2026-02-15/0951bb93-61bd-477e-beaf-f58810f8980b/ascreenshot_f0fb5d552fd74ff8a1080e82758fcdc2_text_export.jpeg)
 
-### 3. Define Resources in the Group
+### 3. 그룹에 리소스 정의
 
-Use the tabs to select which models, MCP servers, and agents this group grants access to:
+탭을 사용해 이 그룹이 접근을 부여할 models, MCP servers, agents를 선택합니다.
 
-- **Models tab** – Select the LLM models
-- **MCP Servers tab** – Select MCP servers (for tool calling)
-- **Agents tab** – Select agents
+- **모델 tab** – LLM models를 선택합니다.
+- **MCP Servers tab** – MCP servers를 선택합니다(tool calling용).
+- **Agents tab** – agents를 선택합니다.
 
 ![](https://colony-recorder.s3.amazonaws.com/files/2026-02-15/37398e8f-cd50-48c9-85e2-c77b2eeb994b/ascreenshot_440ec7906c8f4199b30ef91c903960b9_text_export.jpeg)
 
@@ -57,14 +57,14 @@ Use the tabs to select which models, MCP servers, and agents this group grants a
 
 ![](https://colony-recorder.s3.amazonaws.com/files/2026-02-15/06fc5919-5c71-4fc3-999b-da7a4800af3f/ascreenshot_db93fdf742b249dc90a4b9d5991d6097_text_export.jpeg)
 
-### 4. Attach the Access Group to a Key
+### 4. Access Group을 키에 연결
 
-When creating or editing a virtual key, expand **Optional Settings** and select your Access Group. The key will inherit access to all models, MCP servers, and agents defined in that group.
+가상 키를 생성하거나 편집할 때 **Optional Settings**를 펼친 뒤 Access Group을 선택합니다. 해당 키는 그룹에 정의된 모든 models, MCP servers, agents 접근 권한을 상속합니다.
 
-1. Go to **Virtual Keys** and click **+ Create New Key**
-2. Expand **Optional Settings**
-3. In the Access Group field, select the group you created
-4. Save the key
+1. **가상 키**로 이동한 뒤 **+ Create New Key**를 클릭합니다.
+2. **Optional Settings**를 펼칩니다.
+3. Access Group 필드에서 생성한 그룹을 선택합니다.
+4. 키를 저장합니다.
 
 ![](https://colony-recorder.s3.amazonaws.com/files/2026-02-15/cdfa76ab-bf38-4ca4-a97d-2cb50fafe50b/ascreenshot_046daecb57554c28ba553cf6c01f5450_text_export.jpeg)
 
@@ -76,47 +76,47 @@ When creating or editing a virtual key, expand **Optional Settings** and select 
 
 ![](https://colony-recorder.s3.amazonaws.com/files/2026-02-15/3fe33cad-6b64-46c3-a66e-6e6e073c3d7a/ascreenshot_f2dcc79ae8af47dd86ade2f85165d3c1_text_export.jpeg)
 
-### 5. Attach the Access Group to a Team
+### 5. Access Group을 팀에 연결
 
-You can also attach an Access Group to a team when creating or editing the team. All keys associated with that team will then have access to the resources defined in the group.
+팀을 생성하거나 편집할 때도 Access Group을 팀에 연결할 수 있습니다. 그러면 해당 팀에 연결된 모든 키가 그룹에 정의된 리소스에 접근할 수 있습니다.
 
-## Use Cases
+## 사용 사례
 
-### Team-based Access
+### 팀 기반 접근
 
-Create groups like "Engineering", "Data Science", or "Product" with the models, MCP servers, and agents each team needs. Attach the group to the team—no need to configure each resource on every key.
+"Engineering", "Data Science", "Product"처럼 각 팀에 필요한 models, MCP servers, agents를 포함한 그룹을 만듭니다. 그룹을 팀에 연결하면 되므로 모든 키에 각 리소스를 따로 설정할 필요가 없습니다.
 
-### Environment Separation
+### 환경 분리
 
-- **Production group** – Production models, approved MCP servers, and production agents
-- **Development group** – Cost-efficient models, experimental MCP tools, and dev agents
+- **Production group** – Production models, 승인된 MCP servers, production agents
+- **Development group** – 비용 효율적인 models, 실험용 MCP tools, dev agents
 
-Attach the appropriate group to keys or teams based on environment.
+환경에 따라 적절한 그룹을 키나 팀에 연결합니다.
 
-### Simplified Onboarding
+### 온보딩 단순화
 
-New developers get a key with an Access Group instead of manually configuring models, MCP servers, and agents. Add them to the right team or give them a key with the correct group.
+새 개발자에게 models, MCP servers, agents를 수동으로 설정한 키를 주는 대신 Access Group이 연결된 키를 제공합니다. 알맞은 팀에 추가하거나 올바른 그룹이 연결된 키를 발급하면 됩니다.
 
-### Centralized Updates
+### 중앙 집중식 업데이트
 
-When you add a new model or MCP server to a group, every key and team attached to that group automatically gains access. Remove a resource from the group and it’s revoked everywhere at once.
+그룹에 새 model이나 MCP server를 추가하면 해당 그룹에 연결된 모든 키와 팀이 자동으로 접근 권한을 얻습니다. 그룹에서 리소스를 제거하면 모든 연결 대상에서 한 번에 권한이 회수됩니다.
 
-## Access Group vs. Model Access Groups
+## Access Group와 Model Access Groups 비교
 
-LiteLLM has two related concepts:
+LiteLLM에는 서로 관련된 두 가지 개념이 있습니다.
 
-| Feature    | **Access Groups** (this page)                                           | **Model Access Groups**                                 |
+| 기능    | **Access Groups** (이 페이지)                                           | **Model Access Groups**                                 |
 | ---------- | ----------------------------------------------------------------------- | ------------------------------------------------------- |
-| Definition | Define in the UI; one group can include models, MCP servers, and agents | Defined in config or via API; groups are model-centric  |
-| Scope      | Models + MCP servers + agents                                           | Models only                                             |
-| Attach to  | Keys, teams                                                             | Keys, teams                                             |
-| Use when   | You want unified control over models, MCP, and agents from the UI       | You need config-based or API-based model access control |
+| 정의 | UI에서 정의합니다. 하나의 그룹에 models, MCP servers, agents를 포함할 수 있습니다. | Config 또는 API로 정의합니다. 그룹은 모델 중심입니다.  |
+| 범위      | 모델 + MCP servers + agents                                           | 모델 only                                             |
+| 연결 대상  | Keys, teams                                                             | Keys, teams                                             |
+| 사용 시점   | UI에서 models, MCP, agents를 통합 제어하려는 경우       | Config 기반 또는 API 기반 model access control이 필요한 경우 |
 
-For config-based model access with `access_groups` in `model_info`, see [Model Access Groups](./model_access_groups.md).
+`model_info`의 `access_groups`를 사용하는 config 기반 model access는 [Model Access Groups](./model_access_groups.md)를 참고하세요.
 
-## Related Documentation
+## 관련 문서
 
-- [Virtual Keys](./virtual_keys.md) – Creating and managing API keys
-- [Role-based Access Controls](./access_control.md) – Organizations, teams, and user roles
-- [Model Access Groups](./model_access_groups.md) – Config-based model access groups
-- [MCP Control](../mcp_control.md) – MCP server setup and access control
+- [가상 키](./virtual_keys.md) – API keys 생성 및 관리
+- [역할 기반 접근 제어](./access_control.md) – 조직, 팀, user roles
+- [Model Access Groups](./model_access_groups.md) – Config 기반 model access groups
+- [MCP Control](../mcp_control.md) – MCP server 설정 및 access control

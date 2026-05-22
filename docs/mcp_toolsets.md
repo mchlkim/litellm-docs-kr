@@ -3,9 +3,9 @@ import TabItem from '@theme/TabItem';
 
 # MCP Toolsets
 
-A **Toolset** is a named collection of specific tools drawn from one or more MCP servers. Instead of giving an agent access to every tool on every server, you pick exactly which tools it needs — from whichever servers they live on — and bundle them under a single name.
+**Toolset**은 하나 이상의 MCP 서버에서 가져온 특정 도구들을 이름이 있는 묶음으로 구성한 것입니다. 에이전트에 모든 서버의 모든 도구 접근 권한을 주는 대신, 필요한 도구만 정확히 선택해 단일 이름 아래로 묶습니다.
 
-## How it works
+## 동작 방식
 
 ```
                     ┌─────────────────────────────────┐
@@ -33,44 +33,44 @@ A **Toolset** is a named collection of specific tools drawn from one or more MCP
         Agent sees exactly 6 tools, nothing more.
 ```
 
-Instead of 13+ tools across two servers, the agent gets 6 — the ones it actually needs.
+두 서버에 걸친 13개 이상의 도구 대신, 에이전트는 실제로 필요한 6개 도구만 받습니다.
 
-**Why this matters:**
-- Smaller tool lists → fewer tokens, faster responses, less hallucination
-- Combine tools from GitHub + Linear + CircleCI into one named grant
-- Assign to keys and teams the same way you assign MCP servers today
+**이 기능이 중요한 이유:**
+- 더 작은 도구 목록 → 더 적은 토큰, 더 빠른 응답, 더 적은 hallucination
+- GitHub + Linear + CircleCI 도구를 이름이 있는 하나의 권한 묶음으로 결합
+- 현재 MCP 서버를 할당하는 방식과 동일하게 key 및 team에 할당
 
 ---
 
-## Create a toolset
+## toolset 생성
 
-### 1. Go to the MCP page
+### 1. MCP 페이지로 이동
 
-Navigate to **MCP** in the left sidebar.
+왼쪽 사이드바에서 **MCP**로 이동합니다.
 
 ![Navigate to MCP](https://colony-recorder.s3.amazonaws.com/files/2026-03-22/1a96c713-6a37-4f96-92f1-07bd58c1973c/ascreenshot_23515f386ccc4597b0633987667fe01f_text_export.jpeg)
 
-### 2. Open the Toolsets tab
+### 2. Toolsets 탭 열기
 
-Click the **Toolsets** tab on the MCP page.
+MCP 페이지에서 **Toolsets** 탭을 클릭합니다.
 
 ![Click Toolsets tab](https://colony-recorder.s3.amazonaws.com/files/2026-03-22/65b6986b-595a-4b28-8fdc-a7b36bc76e59/ascreenshot_ca70c18fe7ec415486f96a6b405bf550_text_export.jpeg)
 
-### 3. Click "New Toolset"
+### 3. "New Toolset" 클릭
 
 ![New Toolset button](https://colony-recorder.s3.amazonaws.com/files/2026-03-22/798c55c4-5d6b-4815-a642-70ac9f34f102/ascreenshot_3f144f54a1a944e28454239c837b4e6d_text_export.jpeg)
 
-### 4. Enter a name
+### 4. 이름 입력
 
-Type a name for the toolset. Pick something descriptive — this is what agents will reference.
+toolset 이름을 입력합니다. 에이전트가 참조할 이름이므로 용도를 알 수 있게 지정하세요.
 
 ![Enter toolset name](https://colony-recorder.s3.amazonaws.com/files/2026-03-22/62b412e0-d38f-44c3-99e4-3693f1512f6a/ascreenshot_b678c7c988a04f8b887b0f54c4dd95a7_text_export.jpeg)
 
 ![Toolset name field](https://colony-recorder.s3.amazonaws.com/files/2026-03-22/ba5ebc95-cab7-470b-a7c9-21f12b9b01a3/ascreenshot_a602e982a2a44890a83dca64d61c38eb_text_export.jpeg)
 
-### 5. Add the first tool
+### 5. 첫 번째 도구 추가
 
-Select an MCP server from the dropdown, then choose the tool you want to include from that server.
+드롭다운에서 MCP 서버를 선택한 다음, 해당 서버에서 포함할 도구를 선택합니다.
 
 ![Select MCP server](https://colony-recorder.s3.amazonaws.com/files/2026-03-22/2aa5bcba-6414-42e3-9813-efb0a9078e32/ascreenshot_58fbff35ba654210a1b4dc5452aa6bd9_text_export.jpeg)
 
@@ -78,9 +78,9 @@ Select an MCP server from the dropdown, then choose the tool you want to include
 
 ![Select tool from server](https://colony-recorder.s3.amazonaws.com/files/2026-03-22/60718e72-2062-494b-9a23-456992c88cbd/ascreenshot_7a1f8eeab30a4a05ba39c450e5458b78_text_export.jpeg)
 
-### 6. Add tools from a second server
+### 6. 두 번째 서버의 도구 추가
 
-Click **Add Tool**, pick a different MCP server, and select another tool. Repeat for as many tools as you need — they can come from any number of servers.
+**Add Tool**을 클릭하고 다른 MCP 서버를 선택한 뒤 다른 도구를 선택합니다. 필요한 만큼 반복할 수 있으며, 도구는 여러 서버에서 가져올 수 있습니다.
 
 ![Add tool from second server](https://colony-recorder.s3.amazonaws.com/files/2026-03-22/f34e0600-cc74-4b18-8794-88d45f326144/ascreenshot_98834b14ab9343e39fb503e458d72b7c_text_export.jpeg)
 
@@ -88,27 +88,27 @@ Click **Add Tool**, pick a different MCP server, and select another tool. Repeat
 
 ![Select tool from second server](https://colony-recorder.s3.amazonaws.com/files/2026-03-22/ed2cdf6e-025d-4d50-8b12-ed68745d5c51/ascreenshot_0c1c7f76524b46c5a056fda5e6956e2b_text_export.jpeg)
 
-### 7. Create the toolset
+### 7. toolset 생성
 
-Click **Create Toolset** to save.
+**Create Toolset**을 클릭해 저장합니다.
 
 ![Create Toolset](https://colony-recorder.s3.amazonaws.com/files/2026-03-22/021ca7b3-2d9a-49a0-8758-dae3dc3bcb4d/ascreenshot_14c6434e71114a6091e359a996f20e12_text_export.jpeg)
 
 ---
 
-## Use a toolset in the Playground
+## Playground에서 toolset 사용
 
-Once created, your toolset appears alongside MCP servers in the **MCP Servers** dropdown in the Playground — it's selectable the same way.
+생성된 toolset은 Playground의 **MCP Servers** 드롭다운에 MCP 서버와 함께 표시되며, 같은 방식으로 선택할 수 있습니다.
 
-### 1. Go to the Playground
+### 1. Playground로 이동
 
 ![Navigate to Playground](https://colony-recorder.s3.amazonaws.com/files/2026-03-22/f9d4aa4c-d98e-4767-b98e-aad2890e97ca/ascreenshot_d84239c441bb4e828f229d0c9e079e3f_text_export.jpeg)
 
 ![Click Playground](https://colony-recorder.s3.amazonaws.com/files/2026-03-22/d8a07563-97fe-453a-b974-88da46c87294/ascreenshot_ea494300a536400abb2ea6bf3bdfd5ab_text_export.jpeg)
 
-### 2. Select your toolset from MCP Servers
+### 2. MCP Servers에서 toolset 선택
 
-In the left panel under **MCP Servers**, open the dropdown and pick your toolset. The model will only see the tools you included in it.
+왼쪽 패널의 **MCP Servers** 아래에서 드롭다운을 열고 toolset을 선택합니다. 모델은 toolset에 포함한 도구만 볼 수 있습니다.
 
 ![Select MCP servers dropdown](https://colony-recorder.s3.amazonaws.com/files/2026-03-22/ee8cb38c-c4ff-4b4b-844c-22f2e40832ae/ascreenshot_e300fb39cea0434fb5e3986e912a2b8d_text_export.jpeg)
 
@@ -118,13 +118,13 @@ In the left panel under **MCP Servers**, open the dropdown and pick your toolset
 
 ![Toolset selected and active](https://colony-recorder.s3.amazonaws.com/files/2026-03-22/9a59c3b9-1563-4731-838f-1c35d636ddc9/ascreenshot_c05d8fa5f37a4b3093fc46e26f293b4d_text_export.jpeg)
 
-The model now has access to exactly the tools in your toolset and nothing else.
+이제 모델은 해당 toolset 안의 도구에만 접근할 수 있으며, 그 외 도구에는 접근할 수 없습니다.
 
 ---
 
-## Use a toolset via API
+## API로 toolset 사용
 
-Pass the toolset's route as the `server_url` in your tools list. LiteLLM resolves it server-side — no public URL needed.
+tools 목록의 `server_url`로 toolset route를 전달합니다. LiteLLM이 서버 측에서 이를 해석하므로 public URL은 필요하지 않습니다.
 
 <Tabs>
 <TabItem value="responses" label="Responses API">
@@ -204,7 +204,7 @@ curl http://your-proxy/v1/responses \
 
 ---
 
-## Manage toolsets via API
+## API로 toolset 관리
 
 ```bash
 # List all toolsets

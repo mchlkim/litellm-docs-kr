@@ -7,8 +7,8 @@ interface Stage {
 }
 
 const STAGES: Stage[] = [
-  { label: 'Scope Check', subtitle: 'scope["type"] != "http"' },
-  { label: 'Direct Call', subtitle: 'await self.app(scope, receive, send)' },
+  { label: 'Scope 확인', subtitle: 'scope["type"] != "http"' },
+  { label: '직접 호출', subtitle: 'await self.app(scope, receive, send)' },
 ];
 
 const INTERVAL_MS = 1200;
@@ -46,7 +46,7 @@ export default function PureASGIAnimation() {
 
   return (
     <div className={styles.pipelineWrapper}>
-      <div className={styles.pipelineLabel}>2 steps per request</div>
+      <div className={styles.pipelineLabel}>요청당 2단계</div>
       <div className={`${styles.pipeline} ${styles.pipelineTwoCol}`}>
         {STAGES.map((stage, i) => (
           <div className={styles.stageWrapper} key={i}>

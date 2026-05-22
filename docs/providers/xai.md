@@ -11,22 +11,22 @@ https://docs.x.ai/docs
 
 :::
 
-## Supported Models
+## Supported 모델
 
 
 
-**Latest Release** - Grok 4.1 Fast: Optimized for high-performance agentic tool calling with 2M context and prompt caching.
+**최신 릴리즈** - Grok 4.1 Fast: 2M context와 prompt caching을 제공하며 고성능 agentic tool calling에 최적화되어 있습니다.
 
 | Model | Context | Features |
 |-------|---------|----------|
-| `xai/grok-4-1-fast-reasoning` | 2M tokens | **Reasoning**, Function calling, Vision, Audio, Web search, Caching |
-| `xai/grok-4-1-fast-non-reasoning` | 2M tokens | Function calling, Vision, Audio, Web search, Caching |
+| `xai/grok-4-1-fast-reasoning` | 2M tokens | **Reasoning**, Function calling, Vision, Audio, Web search, 캐싱 |
+| `xai/grok-4-1-fast-non-reasoning` | 2M tokens | Function calling, Vision, Audio, Web search, 캐싱 |
 
-**When to use:**
-- ✅ **Reasoning model**: Complex analysis, planning, multi-step reasoning problems
-- ✅ **Non-reasoning model**: Simple queries, faster responses, lower token usage
+**언제 사용하나요:**
+- ✅ **Reasoning model**: 복잡한 분석, 계획, 다단계 reasoning 문제
+- ✅ **Non-reasoning model**: 단순 query, 더 빠른 응답, 더 낮은 token 사용량
 
-**Example:**
+**예제:**
 ```python
 from litellm import completion
 
@@ -45,12 +45,12 @@ response = completion(
 
 ---
 
-### All Available Models
+### 사용 가능한 모든 모델 {#all-available-models}
 
 | Model Family | Model | Context | Features |
 |--------------|-------|---------|----------|
-| **Grok 4.1** | `xai/grok-4-1-fast-reasoning` | 2M | **Reasoning**, Tools, Vision, Audio, Web search, Caching |
-| | `xai/grok-4-1-fast-non-reasoning` | 2M | Tools, Vision, Audio, Web search, Caching |
+| **Grok 4.1** | `xai/grok-4-1-fast-reasoning` | 2M | **Reasoning**, Tools, Vision, Audio, Web search, 캐싱 |
+| | `xai/grok-4-1-fast-non-reasoning` | 2M | Tools, Vision, Audio, Web search, 캐싱 |
 | **Grok 4** | `xai/grok-4` | 256K | Tools, Web search |
 | | `xai/grok-4-0709` | 256K | Tools, Web search |
 | | `xai/grok-4-fast-reasoning` | 2M | **Reasoning**, Tools, Web search |
@@ -58,28 +58,28 @@ response = completion(
 | **Grok 3** | `xai/grok-3` | 131K | Tools, Web search |
 | | `xai/grok-3-mini` | 131K | Tools, Web search |
 | | `xai/grok-3-fast-beta` | 131K | Tools, Web search |
-| **Grok Code** | `xai/grok-code-fast` | 256K | **Reasoning**, Tools, Code generation, Caching |
+| **Grok Code** | `xai/grok-code-fast` | 256K | **Reasoning**, Tools, Code generation, 캐싱 |
 | **Grok 2** | `xai/grok-2` | 131K | Tools, **Vision** |
 | | `xai/grok-2-vision-latest` | 32K | Tools, **Vision** |
 
-**Features:**
-- **Reasoning** = Chain-of-thought reasoning with reasoning tokens
-- **Tools** = Function calling / Tool use
-- **Web search** = Live internet search
-- **Vision** = Image understanding
-- **Audio** = Audio input support
-- **Caching** = Prompt caching for cost savings
-- **Code generation** = Optimized for code tasks
+**기능:**
+- **Reasoning** = `reasoning token`을 사용하는 chain-of-thought 추론
+- **Tools** = function calling / tool 사용
+- **Web search** = 실시간 internet search
+- **Vision** = 이미지 이해
+- **Audio** = audio input 지원
+- **캐싱** = 비용 절감을 위한 prompt caching
+- **Code generation** = 코드 작업에 최적화
 
-**Pricing:** See [xAI's pricing page](https://docs.x.ai/docs/models) for current rates.
+**가격:** 현재 요금은 [xAI pricing page](https://docs.x.ai/docs/models)를 참고하세요.
 
-## API Key
+## API Key {#api-key}
 ```python
 # env variable
 os.environ['XAI_API_KEY']
 ```
 
-## Sample Usage
+## 샘플 사용법 {#sample-usage}
 
 ```python showLineNumbers title="LiteLLM python sdk usage - Non-streaming"
 from litellm import completion
@@ -107,7 +107,7 @@ response = completion(
 print(response)
 ```
 
-## Sample Usage - Streaming
+## 샘플 사용법 - Streaming {#sample-usage---streaming}
 
 ```python showLineNumbers title="LiteLLM python sdk usage - Streaming"
 from litellm import completion
@@ -138,7 +138,7 @@ for chunk in response:
     print(chunk)
 ```
 
-## Sample Usage - Vision
+## 샘플 사용법 - Vision {#sample-usage---vision}
 
 ```python showLineNumbers title="LiteLLM python sdk usage - Vision"
 import os 
@@ -169,11 +169,11 @@ response = completion(
 )
 ```
 
-## Usage with LiteLLM Proxy Server
+## LiteLLM Proxy Server 사용법 {#usage-with-litellm-proxy-server}
 
-Here's how to call a XAI model with the LiteLLM Proxy Server
+LiteLLM Proxy Server로 XAI 모델을 호출하는 방법입니다.
 
-1. Modify the config.yaml 
+1. config.yaml 수정
 
   ```yaml showLineNumbers
   model_list:
@@ -184,13 +184,13 @@ Here's how to call a XAI model with the LiteLLM Proxy Server
   ```
 
 
-2. Start the proxy 
+2. 프록시 시작 
 
   ```bash
   $ litellm --config /path/to/config.yaml
   ```
 
-3. Send Request to LiteLLM Proxy Server
+3. LiteLLM Proxy Server로 요청 전송
 
   <Tabs>
 
@@ -238,9 +238,9 @@ Here's how to call a XAI model with the LiteLLM Proxy Server
   </Tabs>
 
 
-## Reasoning Usage
+## Reasoning 사용법
 
-LiteLLM supports reasoning usage for xAI models.
+LiteLLM은 xAI 모델의 reasoning 사용을 지원합니다.
 
 <Tabs>
 
@@ -268,7 +268,7 @@ print(completion.usage.completion_tokens_details.reasoning_tokens)
 ```
 </TabItem>
 
-<TabItem value="curl" label="LiteLLM Proxy - OpenAI SDK Usage">
+<TabItem value="curl" label="LiteLLM Proxy - OpenAI SDK 사용법">
 
 ```python showLineNumbers title="reasoning with xai/grok-3-mini-beta"
 import openai
@@ -299,7 +299,7 @@ print(completion.usage.completion_tokens_details.reasoning_tokens)
 </TabItem>
 </Tabs>
 
-**Example Response:**
+**예제 Response:**
 
 ```shell
 Reasoning Content:

@@ -1,12 +1,12 @@
-# CodeLlama - Code Infilling 
+# CodeLlama - 코드 채우기 {#codellama---code-infilling}
 
-This tutorial shows how you can call CodeLlama (hosted on Huggingface PRO Inference Endpoints), to fill code. 
+이 튜토리얼에서는 CodeLlama(Huggingface PRO Inference Endpoints에서 호스팅)를 호출해 코드를 채우는 방법을 보여줍니다.
 
-This is a specialized task particular to code models. The model is trained to generate the code (including comments) that best matches an existing prefix and suffix. 
+이는 코드 모델에 특화된 작업입니다. 모델은 기존 접두사와 접미사에 가장 잘 맞는 코드(주석 포함)를 생성하도록 학습되었습니다.
 
-This task is available in the base and instruction variants of the **7B** and **13B** CodeLlama models. It is not available for any of the 34B models or the Python versions.
+이 작업은 **7B** 및 **13B** CodeLlama 모델의 base 및 instruction 변형에서 사용할 수 있습니다. 34B 모델이나 Python 버전에서는 사용할 수 없습니다.
 
-# usage
+# 사용법 {#usage}
 
 ```python 
 import os
@@ -26,7 +26,7 @@ model = "huggingface/codellama/CodeLlama-34b-Instruct-hf" # specify huggingface 
 response = completion(model=model, messages=messages, max_tokens=500)
 ```
 
-# output 
+# 출력 {#output}
 ```python
 def remove_non_ascii(s: str) -> str:
     """ Remove non-ASCII characters from a string.

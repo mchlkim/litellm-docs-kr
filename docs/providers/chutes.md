@@ -1,26 +1,26 @@
 # Chutes
 
-## Overview
+## 개요
 
-| Property | Details |
+| 속성 | 세부 정보 |
 |-------|-------|
-| Description | Chutes is a cloud-native AI deployment platform that allows you to deploy, run, and scale LLM applications with OpenAI-compatible APIs using pre-built templates for popular frameworks like vLLM and SGLang. |
-| Provider Route on LiteLLM | `chutes/` |
-| Link to Provider Doc | [Chutes Website ↗](https://chutes.ai) |
+| 설명 | Chutes는 vLLM, SGLang 같은 popular framework용 pre-built template을 사용해 OpenAI 호환 API로 LLM application을 deploy, run, scale할 수 있는 cloud-native AI deployment platform입니다. |
+| LiteLLM Provider 경로 | `chutes/` |
+| Provider Doc 링크 | [Chutes Website ↗](https://chutes.ai) |
 | Base URL | `https://llm.chutes.ai/v1/` |
-| Supported Operations | [`/chat/completions`](#sample-usage), Embeddings |
+| 지원 작업 | [`/chat/completions`](#sample-usage), Embeddings |
 
 <br />
 
-## What is Chutes?
+## Chutes란?
 
-Chutes is a powerful AI deployment and serving platform that provides:
-- **Pre-built Templates**: Ready-to-use configurations for vLLM, SGLang, diffusion models, and embeddings
-- **OpenAI-Compatible APIs**: Use standard OpenAI SDKs and clients
-- **Multi-GPU Scaling**: Support for large models across multiple GPUs
-- **Streaming Responses**: Real-time model outputs
-- **Custom Configurations**: Override any parameter for your specific needs
-- **Performance Optimization**: Pre-configured optimization settings
+Chutes는 다음 기능을 제공하는 AI deployment 및 serving platform입니다.
+- **Pre-built Templates**: vLLM, SGLang, diffusion model, embedding용 ready-to-use 설정
+- **OpenAI 호환 API**: 표준 OpenAI SDK와 client 사용
+- **Multi-GPU Scaling**: 여러 GPU에 걸친 large model 지원
+- **Streaming Responses**: 실시간 model output
+- **Custom 설정**: 필요에 맞게 모든 parameter override
+- **Performance Optimization**: 미리 구성된 optimization setting
 
 ## Required Variables
 
@@ -28,9 +28,9 @@ Chutes is a powerful AI deployment and serving platform that provides:
 os.environ["CHUTES_API_KEY"] = ""  # your Chutes API key
 ```
 
-Get your Chutes API key from [chutes.ai](https://chutes.ai).
+[chutes.ai](https://chutes.ai)에서 Chutes API key를 가져옵니다.
 
-## Usage - LiteLLM Python SDK
+## 사용법 - LiteLLM Python SDK
 
 ### Non-streaming
 
@@ -74,15 +74,15 @@ for chunk in response:
     print(chunk)
 ```
 
-## Usage - LiteLLM Proxy Server
+## 사용법 - LiteLLM Proxy Server
 
-### 1. Save key in your environment
+### 1. 환경에 key 저장
 
 ```bash
 export CHUTES_API_KEY=""
 ```
 
-### 2. Start the proxy
+### 2. 프록시 시작
 
 ```yaml
 model_list:
@@ -92,81 +92,81 @@ model_list:
       api_key: os.environ/CHUTES_API_KEY
 ```
 
-## Supported OpenAI Parameters
+## 지원 OpenAI Parameter
 
-Chutes supports all standard OpenAI-compatible parameters:
+Chutes는 모든 표준 OpenAI 호환 parameter를 지원합니다.
 
-| Parameter | Type | Description |
+| Parameter | Type | 설명 |
 |-----------|------|-------------|
-| `messages` | array | **Required**. Array of message objects with 'role' and 'content' |
-| `model` | string | **Required**. Model ID or HuggingFace model identifier |
-| `stream` | boolean | Optional. Enable streaming responses |
-| `temperature` | float | Optional. Sampling temperature |
-| `top_p` | float | Optional. Nucleus sampling parameter |
-| `max_tokens` | integer | Optional. Maximum tokens to generate |
-| `frequency_penalty` | float | Optional. Penalize frequent tokens |
-| `presence_penalty` | float | Optional. Penalize tokens based on presence |
-| `stop` | string/array | Optional. Stop sequences |
-| `tools` | array | Optional. List of available tools/functions |
-| `tool_choice` | string/object | Optional. Control tool/function calling |
-| `response_format` | object | Optional. Response format specification |
+| `messages` | array | **Required**. `role`과 `content`를 가진 message object 배열 |
+| `model` | string | **Required**. Model ID 또는 HuggingFace model identifier |
+| `stream` | boolean | Optional. streaming response 활성화 |
+| `temperature` | float | Optional. sampling 온도 |
+| `top_p` | float | Optional. nucleus sampling parameter 값 |
+| `max_tokens` | integer | Optional. 생성할 최대 token 수 |
+| `frequency_penalty` | float | Optional. 자주 등장하는 token에 penalty 적용 |
+| `presence_penalty` | float | Optional. presence 기반 token penalty 적용 |
+| `stop` | string/array | Optional. stop sequence 값 |
+| `tools` | array | Optional. 사용 가능한 tool/function 목록 |
+| `tool_choice` | string/object | Optional. tool/function calling 제어 |
+| `response_format` | object | Optional. response format 지정 |
 
-## Support Frameworks
+## 지원 Framework
 
-Chutes provides optimized templates for popular AI frameworks:
+Chutes는 popular AI framework에 최적화된 template을 제공합니다.
 
-### vLLM (High-Performance LLM Serving)
-- OpenAI-compatible endpoints
-- Multi-GPU scaling support
-- Advanced optimization settings
-- Best for production workloads
+### vLLM (고성능 LLM Serving)
+- OpenAI 호환 endpoint
+- Multi-GPU scaling 지원
+- 고급 optimization setting
+- production workload에 적합
 
-### SGLang (Advanced LLM Serving)
-- Structured generation capabilities
-- Advanced features and controls
-- Custom configuration options
-- Best for complex use cases
+### SGLang (고급 LLM Serving)
+- structured generation 기능
+- 고급 feature와 control
+- custom configuration 선택지
+- 복잡한 use case에 적합
 
-### Diffusion Models (Image Generation)
-- Pre-configured image generation templates
-- Optimized settings for best results
-- Support for popular diffusion models
+### Diffusion 모델 (Image Generation)
+- 미리 구성된 image generation template
+- 최상의 결과를 위한 optimized setting
+- popular diffusion model 지원
 
-### Embedding Models
-- Text embedding templates
-- Vector search optimization
-- Support for popular embedding models
+### Embedding 모델
+- text embedding용 template
+- vector search 최적화
+- popular embedding model 지원
 
-## Authentication
+## 인증
 
-Chutes supports multiple authentication methods:
-- API Key via `X-API-Key` header
-- Bearer token via `Authorization` header
+Chutes는 여러 authentication method를 지원합니다.
+- `X-API-Key` header를 통한 API key
+- `Authorization` header를 통한 bearer token
 
-Example for LiteLLM (uses environment variable):
+LiteLLM 예제(environment variable 사용):
 ```python
 os.environ["CHUTES_API_KEY"] = "your-api-key"
 ```
 
-## Performance Optimization
+## Performance 최적화
 
-Chutes offers hardware selection and optimization:
-- **Small Models (7B-13B)**: 1 GPU with 24GB VRAM
-- **Medium Models (30B-70B)**: 4 GPUs with 80GB VRAM each
-- **Large Models (100B+)**: 8 GPUs with 140GB+ VRAM each
+Chutes는 hardware 선택과 optimization을 제공합니다.
+- **Small 모델 (7B-13B)**: 24GB VRAM GPU 1개
+- **Medium 모델 (30B-70B)**: 각 80GB VRAM GPU 4개
+- **Large 모델 (100B+)**: 각 140GB+ VRAM GPU 8개
 
-Engine optimization parameters available for fine-tuning performance.
+performance fine-tuning을 위한 engine optimization parameter를 사용할 수 있습니다.
 
 ## Deployment Options
 
-Chutes provides flexible deployment:
-- **Quick Setup**: Use pre-built templates for instant deployment
-- **Custom Images**: Deploy with custom Docker images
-- **Scaling**: Configure max instances and auto-scaling thresholds
-- **Hardware**: Choose specific GPU types and configurations
+Chutes는 유연한 deployment를 제공합니다.
+- **Quick Setup**: 즉시 deployment할 수 있는 pre-built template 사용
+- **Custom Images**: custom Docker image로 deploy
+- **Scaling**: max instance와 auto-scaling threshold 설정
+- **Hardware**: 특정 GPU type과 configuration 선택
 
-## Additional Resources
+## 추가 Resource
 
 - [Chutes Documentation](https://chutes.ai/docs)
-- [Chutes Getting Started](https://chutes.ai/docs/getting-started/running-a-chute)
+- [Chutes 시작하기](https://chutes.ai/docs/getting-started/running-a-chute)
 - [Chutes API Reference](https://chutes.ai/docs/sdk-reference)

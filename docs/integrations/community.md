@@ -1,30 +1,30 @@
-# Be an Integration Partner
+# 통합 파트너가 되기
 
-Welcome, integration partners! 👋
+통합 파트너 여러분, 환영합니다! 👋
 
-We're excited to have you contribute to LiteLLM. To get started and connect with the LiteLLM community:
+LiteLLM에 기여해 주셔서 기쁩니다. 시작하고 LiteLLM 커뮤니티와 연결하려면 다음을 진행하세요.
 
-## Get Support & Connect
+## 지원받고 연결하기
 
-**Fill out our support form to join the community:**
+**커뮤니티에 참여하려면 지원 양식을 작성하세요.**
 
 👉 [**https://www.litellm.ai/support**](https://www.litellm.ai/support)
 
-By filling out this form, you'll be able to:
-- Join our **OSS Slack community** for real-time discussions
-- Get help and feedback on your integration
-- Connect with other developers and contributors
-- Stay updated on the latest LiteLLM developments
+이 양식을 작성하면 다음을 할 수 있습니다.
+- 실시간 논의를 위해 **OSS Slack 커뮤니티**에 참여
+- 통합 작업에 대한 도움과 피드백 받기
+- 다른 개발자 및 기여자와 연결
+- 최신 LiteLLM 개발 소식 확인
 
-## What We Offer Integration Partners
+## 통합 파트너에게 제공하는 것
 
-- **Direct support** from the LiteLLM team
-- **Feedback** on your integration implementation
-- **Collaboration** with a growing community of LLM developers
-- **Visibility** for your integration in our documentation
+- LiteLLM 팀의 **직접 지원**
+- 통합 구현에 대한 **피드백**
+- 성장하는 LLM 개발자 커뮤니티와의 **협업**
+- 문서에서 통합 항목의 **노출 기회**
 
-## Questions?
+## 질문이 있나요?
 
-Once you've joined our Slack community, head over to the **`#integration-partners`** channel to introduce yourself and ask questions. Our team and community members are happy to help you build great integrations with LiteLLM.
+Slack 커뮤니티에 참여한 뒤 **`#integration-partners`** 채널로 이동해 자기소개를 하고 질문을 남겨 주세요. LiteLLM으로 훌륭한 통합을 구축할 수 있도록 LiteLLM 팀과 커뮤니티 구성원이 기꺼이 돕겠습니다.
 
-We look forward to working with you! 🚀
+함께 작업하기를 기대합니다! 🚀

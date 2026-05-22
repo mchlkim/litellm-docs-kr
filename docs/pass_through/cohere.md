@@ -1,17 +1,17 @@
 # Cohere SDK
 
-Pass-through endpoints for Cohere - call provider-specific endpoint, in native format (no translation).
+Cohere용 패스스루 엔드포인트입니다. 공급자별 엔드포인트를 네이티브 형식으로 호출합니다(변환 없음).
 
-| Feature | Supported | Notes | 
+| 기능 | 지원 여부 | 참고 | 
 |-------|-------|-------|
-| Cost Tracking | ✅ | Supported for `/v1/chat`, and `/v2/chat` |
-| Logging | ✅ | works across all integrations |
-| End-user Tracking | ❌ | [Tell us if you need this](https://github.com/BerriAI/litellm/issues/new) |
-| Streaming | ✅ | |
+| 비용 추적 | ✅ | `/v1/chat` 및 `/v2/chat` 지원 |
+| 로깅 | ✅ | 모든 통합에서 동작 |
+| 최종 사용자 추적 | ❌ | 필요하면 [알려주세요](https://github.com/BerriAI/litellm/issues/new) |
+| 스트리밍 | ✅ | |
 
-Just replace `https://api.cohere.com` with `LITELLM_PROXY_BASE_URL/cohere` 🚀
+`https://api.cohere.com`을 `LITELLM_PROXY_BASE_URL/cohere`로 바꾸기만 하면 됩니다 🚀
 
-#### **Example Usage**
+#### **예제 사용법**
 ```bash
 curl --request POST \
   --url http://0.0.0.0:4000/cohere/v1/chat \
@@ -28,21 +28,21 @@ curl --request POST \
   }'
 ```
 
-Supports **ALL** Cohere Endpoints (including streaming).
+**모든** Cohere 엔드포인트를 지원합니다(스트리밍 포함).
 
-[**See All Cohere Endpoints**](https://docs.cohere.com/reference/chat)
+[**모든 Cohere 엔드포인트 보기**](https://docs.cohere.com/reference/chat)
 
-## Quick Start
+## 빠른 시작
 
-Let's call the Cohere [`/rerank` endpoint](https://docs.cohere.com/reference/rerank)
+Cohere [`/rerank` 엔드포인트](https://docs.cohere.com/reference/rerank)를 호출해 보겠습니다.
 
-1. Add Cohere API Key to your environment 
+1. 환경에 Cohere API 키를 추가합니다.
 
 ```bash
 export COHERE_API_KEY=""
 ```
 
-2. Start LiteLLM Proxy 
+2. LiteLLM Proxy를 시작합니다.
 
 ```bash
 litellm
@@ -50,9 +50,9 @@ litellm
 # RUNNING on http://0.0.0.0:4000
 ```
 
-3. Test it! 
+3. 테스트합니다.
 
-Let's call the Cohere /rerank endpoint
+Cohere /rerank 엔드포인트를 호출해 보겠습니다.
 
 ```bash
 curl --request POST \
@@ -73,21 +73,21 @@ curl --request POST \
 ```
 
 
-## Examples
+## 예제
 
-Anything after `http://0.0.0.0:4000/cohere` is treated as a provider-specific route, and handled accordingly.
+`http://0.0.0.0:4000/cohere` 뒤에 오는 모든 경로는 공급자별 라우트로 간주되어 그에 맞게 처리됩니다.
 
-Key Changes: 
+주요 변경 사항:
 
-| **Original Endpoint**                                | **Replace With**                  |
+| **원본 엔드포인트**                                | **대체 값**                  |
 |------------------------------------------------------|-----------------------------------|
 | `https://api.cohere.com`          | `http://0.0.0.0:4000/cohere` (LITELLM_PROXY_BASE_URL="http://0.0.0.0:4000")      |
-| `bearer $CO_API_KEY`                                 | `bearer anything` (use `bearer LITELLM_VIRTUAL_KEY` if Virtual Keys are setup on proxy)                    |
+| `bearer $CO_API_KEY`                                 | `bearer anything` (프록시에 가상 키가 설정되어 있으면 `bearer LITELLM_VIRTUAL_KEY` 사용)                    |
 
 
-### **Example 1: Rerank endpoint**
+### **예제 1: Rerank 엔드포인트** {#example-1-rerank-endpoint}
 
-#### LiteLLM Proxy Call 
+#### LiteLLM Proxy 호출 {#litellm-proxy-call}
 
 ```bash
 curl --request POST \
@@ -107,7 +107,7 @@ curl --request POST \
   }'
 ```
 
-#### Direct Cohere API Call 
+#### 직접 Cohere API 호출 {#direct-cohere-api-call}
 
 ```bash
 curl --request POST \
@@ -127,9 +127,9 @@ curl --request POST \
   }'
 ```
 
-### **Example 2: Chat API**
+### **예제 2: Chat API**
 
-#### LiteLLM Proxy Call 
+#### LiteLLM Proxy 호출 {#litellm-proxy-call-1}
 
 ```bash
 curl --request POST \
@@ -147,7 +147,7 @@ curl --request POST \
   }'
 ```
 
-#### Direct Cohere API Call 
+#### 직접 Cohere API 호출 {#direct-cohere-api-call-1}
 
 ```bash
 curl --request POST \
@@ -165,7 +165,7 @@ curl --request POST \
   }'
 ```
 
-### **Example 3: Embedding**
+### **예제 3: Embedding**
 
 
 ```bash
@@ -181,7 +181,7 @@ curl --request POST \
   }'
 ```
 
-#### Direct Cohere API Call 
+#### 직접 Cohere API 호출 {#direct-cohere-api-call-2}
 
 ```bash
 curl --request POST \
@@ -197,16 +197,16 @@ curl --request POST \
 ```
 
 
-## Advanced - Use with Virtual Keys 
+## 고급 - 가상 키와 함께 사용 {#advanced---use-with-virtual-keys}
 
-Pre-requisites
-- [Setup proxy with DB](../proxy/virtual_keys.md#setup)
+사전 요구 사항
+- [DB로 프록시 설정](../proxy/virtual_keys.md#setup)
 
-Use this, to avoid giving developers the raw Cohere API key, but still letting them use Cohere endpoints.
+개발자에게 원본 Cohere API 키를 제공하지 않으면서도 Cohere 엔드포인트를 사용할 수 있게 하려면 이 방식을 사용하세요.
 
-### Usage
+### 사용법
 
-1. Setup environment
+1. 환경을 설정합니다.
 
 ```bash
 export DATABASE_URL=""
@@ -220,7 +220,7 @@ litellm
 # RUNNING on http://0.0.0.0:4000
 ```
 
-2. Generate virtual key 
+2. 가상 키를 생성합니다.
 
 ```bash
 curl -X POST 'http://0.0.0.0:4000/key/generate' \
@@ -229,7 +229,7 @@ curl -X POST 'http://0.0.0.0:4000/key/generate' \
 -d '{}'
 ```
 
-Expected Response 
+예상 응답
 
 ```bash
 {
@@ -238,7 +238,7 @@ Expected Response
 }
 ```
 
-3. Test it! 
+3. 테스트합니다.
 
 
 ```bash

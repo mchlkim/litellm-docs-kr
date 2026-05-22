@@ -2,39 +2,39 @@ import Image from '@theme/IdealImage';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Team/Key Based Logging
+# Team/Key 기반 Logging {#team-key-based-logging}
 
-## Overview
+## 개요
 
-Allow each key/team to use their own Langfuse Project / custom callbacks. This enables granular control over logging and compliance requirements.
+각 key/team이 자체 Langfuse Project 또는 custom callback을 사용하도록 허용합니다. 이를 통해 logging과 규정 준수 요구사항을 세밀하게 제어할 수 있습니다.
 
-**Example Use Cases:**
+**예제 사용 사례:**
 ```showLineNumbers title="Team Based Logging"
 Team 1 -> Logs to Langfuse Project 1 
 Team 2 -> Logs to Langfuse Project 2
 Team 3 -> Disabled Logging (for GDPR compliance)
 ```
 
-## Supported Logging Integrations
+## 지원 Logging 통합 {#supported-logging-integrations}
 - `langfuse`
 - `gcs_bucket`
 - `langsmith`
 - `arize`
 
 
-## [BETA] Team Logging
+## [BETA] Team Logging {#beta-team-logging}
 
 :::info
 
-✨ This is an Enterprise only feature [Get Started with Enterprise here](https://enterprise.litellm.ai/demo)
+✨ 이 기능은 엔터프라이즈 전용 기능입니다. [여기에서 엔터프라이즈 시작하기](https://enterprise.litellm.ai/demo)
 
 :::
 
-### UI Usage
+### UI 사용법
 
-1. Create a Team with Logging Settings
+1. logging 설정이 있는 team을 생성합니다.
 
-Create a team called "AI Agents"
+"AI Agents"라는 team을 생성합니다.
 <Image 
   img={require('../../img/team_logging1.png')}
   style={{width: '100%', display: 'block', margin: '2rem auto'}}
@@ -43,9 +43,9 @@ Create a team called "AI Agents"
 <br />
 
 
-2. Create a Key for the Team
+2. team용 key를 생성합니다.
 
-We will create a key for the team "AI Agents". The team logging settings will be used for all keys created for the team.
+"AI Agents" team용 key를 생성합니다. 이 team에 대해 생성된 모든 key에는 team logging settings가 사용됩니다.
 
 <Image 
   img={require('../../img/team_logging2.png')}
@@ -55,9 +55,9 @@ We will create a key for the team "AI Agents". The team logging settings will be
 <br />
 
 
-3. Make a test LLM API Request 
+3. 테스트 LLM API request를 보냅니다.
 
-Use the new key to make a test LLM API Request, we expect to see the logs on your logging provider configured in step 1.
+새 key로 테스트 LLM API request를 보냅니다. 1단계에서 설정한 logging provider에서 log가 보여야 합니다.
 
 <Image 
   img={require('../../img/team_logging3.png')}
@@ -66,9 +66,9 @@ Use the new key to make a test LLM API Request, we expect to see the logs on you
 
 <br />
 
-4. Check Logs on your Logging Provider 
+4. logging provider에서 log를 확인합니다.
 
-Navigate to your configured logging provider and check if you received the logs from step 2.
+설정한 logging provider로 이동하여 2단계의 log를 받았는지 확인합니다.
 
 <Image 
   img={require('../../img/team_logging4.png')}
@@ -77,12 +77,12 @@ Navigate to your configured logging provider and check if you received the logs 
 
 <br />
 
-### API Usage
-### Set Callbacks Per Team
+### API 사용법
+### Team별 Callback 설정 {#set-callbacks-per-team}
 
-#### 1. Set callback for team 
+#### 1. Team callback 설정 {#1-set-callback-for-team}
 
-We make a request to `POST /team/{team_id}/callback` to add a callback for
+callback을 추가하려면 `POST /team/{team_id}/callback`으로 request를 보냅니다.
 
 ```shell
 curl -X POST 'http:/localhost:4000/team/dbe2f686-a686-4896-864a-4c3924458709/callback' \
@@ -100,22 +100,22 @@ curl -X POST 'http:/localhost:4000/team/dbe2f686-a686-4896-864a-4c3924458709/cal
 }'
 ```
 
-##### Supported Values
+##### 지원 값 {#supported-values}
 
-| Field | Supported Values | Notes |
+| 필드 | 지원 값 | 참고 |
 |-------|------------------|-------|
-| `callback_name` | `"langfuse"`, `"gcs_bucket"`| Currently only supports `"langfuse"`, `"gcs_bucket"` |
+| `callback_name` | `"langfuse"`, `"gcs_bucket"`| 현재 `"langfuse"`, `"gcs_bucket"`만 지원 |
 | `callback_type` | `"success"`, `"failure"`, `"success_and_failure"` | |
-| `callback_vars` | | dict of callback settings |
-| &nbsp;&nbsp;&nbsp;&nbsp;`langfuse_public_key` | string | Required for Langfuse |
-| &nbsp;&nbsp;&nbsp;&nbsp;`langfuse_secret_key` | string | Required for Langfuse |
-| &nbsp;&nbsp;&nbsp;&nbsp;`langfuse_host` | string | Optional for Langfuse (defaults to https://cloud.langfuse.com) |
-| &nbsp;&nbsp;&nbsp;&nbsp;`gcs_bucket_name` | string | Required for GCS Bucket. Name of your GCS bucket |
-| &nbsp;&nbsp;&nbsp;&nbsp;`gcs_path_service_account` | string | Required for GCS Bucket. Path to your service account json |
+| `callback_vars` | | callback settings dict입니다. |
+| &nbsp;&nbsp;&nbsp;&nbsp;`langfuse_public_key` | string | Langfuse에 필요 |
+| &nbsp;&nbsp;&nbsp;&nbsp;`langfuse_secret_key` | string | Langfuse에 필요 |
+| &nbsp;&nbsp;&nbsp;&nbsp;`langfuse_host` | string | Langfuse에서는 선택 사항입니다. 기본값은 https://cloud.langfuse.com 입니다. |
+| &nbsp;&nbsp;&nbsp;&nbsp;`gcs_bucket_name` | string | GCS Bucket에 필요. GCS bucket name |
+| &nbsp;&nbsp;&nbsp;&nbsp;`gcs_path_service_account` | string | GCS Bucket에 필요. service account json path |
 
-#### 2. Create key for team
+#### 2. Team용 key 생성
 
-All keys created for team `dbe2f686-a686-4896-864a-4c3924458709` will log to langfuse project specified on [Step 1. Set callback for team](#1-set-callback-for-team)
+<span>team <code>dbe2f686-a686-4896-864a-4c3924458709</code>에 대해 생성된 모든 key는 <a href="#1-set-callback-for-team">1단계. team callback 설정</a>에 지정된 langfuse project로 log를 보냅니다.</span>
 
 
 ```shell
@@ -128,7 +128,7 @@ curl --location 'http://0.0.0.0:4000/key/generate' \
 ```
 
 
-#### 3. Make `/chat/completion` request for team
+#### 3. Team용 `/chat/completion` request 보내기
 
 ```shell
 curl -i http://localhost:4000/v1/chat/completions \
@@ -142,27 +142,27 @@ curl -i http://localhost:4000/v1/chat/completions \
 }'
 ```
 
-Expect this to be logged on the langfuse project specified on [Step 1. Set callback for team](#1-set-callback-for-team)
+<span>이 request는 <a href="#1-set-callback-for-team">1단계. team callback 설정</a>에 지정된 langfuse project에 log로 기록되어야 합니다.</span>
 
 
-### Disable Logging for a Team
+### Team Logging 비활성화
 
-To disable logging for a specific team, you can use the following endpoint:
+특정 team의 logging을 비활성화하려면 다음 endpoint를 사용합니다.
 
 `POST /team/{team_id}/disable_logging`
 
-This endpoint removes all success and failure callbacks for the specified team, effectively disabling logging.
+이 endpoint는 지정된 team의 모든 success/failure callback을 제거하여 logging을 비활성화합니다.
 
-#### Step 1. Disable logging for team
+#### 1단계. Team logging 비활성화 {#step-1-disable-team-logging}
 
 ```shell
 curl -X POST 'http://localhost:4000/team/YOUR_TEAM_ID/disable_logging' \
     -H 'Authorization: Bearer YOUR_API_KEY'
 ```
-Replace YOUR_TEAM_ID with the actual team ID
+`YOUR_TEAM_ID`를 실제 team ID로 바꿉니다.
 
 **Response**
-A successful request will return a response similar to this:
+성공한 request는 다음과 유사한 response를 반환합니다.
 ```json
 {
     "status": "success",
@@ -175,9 +175,9 @@ A successful request will return a response similar to this:
 }
 ```
 
-#### Step 2. Test it - `/chat/completions`
+#### 2단계. Test - `/chat/completions` {#step-2-test-chat-completions}
 
-Use a key generated for team = `team_id` - you should see no logs on your configured success callback (eg. Langfuse)
+team = `team_id`에 대해 생성된 key를 사용합니다. 설정된 success callback(예: Langfuse)에 log가 없어야 합니다.
 
 ```shell
 curl -i http://localhost:4000/v1/chat/completions \
@@ -191,31 +191,31 @@ curl -i http://localhost:4000/v1/chat/completions \
 }'
 ```
 
-#### Debugging / Troubleshooting
+#### 디버깅 / 문제 해결 {#debugging-troubleshooting}
 
-- Check active callbacks for team using `GET /team/{team_id}/callback`
+- `GET /team/{team_id}/callback`으로 team의 active callback을 확인합니다.
 
-Use this to check what success/failure callbacks are active for team=`team_id`
+team=`team_id`에서 어떤 success/failure callback이 active 상태인지 확인할 때 사용합니다.
 
 ```shell
 curl -X GET 'http://localhost:4000/team/dbe2f686-a686-4896-864a-4c3924458709/callback' \
         -H 'Authorization: Bearer sk-1234'
 ```
 
-### Team Logging Endpoints
+### Team Logging endpoint 목록 {#team-logging-endpoints}
 
-- [`POST /team/{team_id}/callback` Add a success/failure callback to a team](https://litellm-api.up.railway.app/#/team%20management/add_team_callbacks_team__team_id__callback_post)
-- [`GET /team/{team_id}/callback` - Get the success/failure callbacks and variables for a team](https://litellm-api.up.railway.app/#/team%20management/get_team_callbacks_team__team_id__callback_get)
+- [`POST /team/{team_id}/callback` team에 success/failure callback 추가](https://litellm-api.up.railway.app/#/team%20management/add_team_callbacks_team__team_id__callback_post)
+- [`GET /team/{team_id}/callback` - team의 success/failure callback과 variables 조회](https://litellm-api.up.railway.app/#/team%20management/get_team_callbacks_team__team_id__callback_get)
 
 
 
-## Team Logging - `config.yaml`
+## Team Logging - `config.yaml` {#team-logging-configyaml}
 
-Turn on/off logging and caching for a specific team id. 
+특정 team id의 logging과 caching을 켜거나 끕니다.
 
-**Example:**
+**예제:**
 
-This config would send langfuse logs to 2 different langfuse projects, based on the team id 
+이 config는 team id에 따라 langfuse log를 서로 다른 두 langfuse project로 보냅니다.
 
 ```yaml
 litellm_settings:
@@ -230,7 +230,7 @@ litellm_settings:
       langfuse_secret: os.environ/LANGFUSE_SECRET_2 # Project 2
 ```
 
-Now, when you [generate keys](./virtual_keys.md) for this team-id 
+이제 이 team-id에 대해 [key를 생성](./virtual_keys.md)하면:
 
 ```bash
 curl -X POST 'http://0.0.0.0:4000/key/generate' \
@@ -239,30 +239,30 @@ curl -X POST 'http://0.0.0.0:4000/key/generate' \
 -d '{"team_id": "06ed1e01-3fa7-4b9e-95bc-f2e59b74f3a8"}'
 ```
 
-All requests made with these keys will log data to their team-specific logging. 
+이 key로 보낸 모든 request는 team-specific logging으로 data를 기록합니다.
 
 
-## [BETA] Key Based Logging 
+## [BETA] Key 기반 Logging {#beta-key-based-logging}
 
-Use the `/key/generate` or `/key/update` endpoints to add logging callbacks to a specific key.
+특정 key에 logging callback을 추가하려면 `/key/generate` 또는 `/key/update` endpoint를 사용합니다.
 
 :::info
 
-✨ This is an Enterprise only feature [Get Started with Enterprise here](https://enterprise.litellm.ai/demo)
+✨ 이 기능은 엔터프라이즈 전용 기능입니다. [여기에서 엔터프라이즈 시작하기](https://enterprise.litellm.ai/demo)
 
 :::
 
-**How key based logging works:**
+**Key 기반 logging 동작 방식:**
 
-- If **Key has no callbacks** configured, it will use the default callbacks specified in the config.yaml file
-- If **Key has callbacks** configured, it will use the callbacks specified in the key
+- **Key에 callback이 설정되지 않은 경우**, `config.yaml` 파일에 지정된 default callback을 사용합니다.
+- **Key에 callback이 설정된 경우**, key에 지정된 callback을 사용합니다.
 
 
-### UI Usage 
+### UI 사용법 
 
-1. Create a Key with Logging Settings
+1. logging 설정이 있는 key를 생성합니다.
 
-When creating a key, you can configure the specific logging settings for the key. These logging settings will be used for all requests made with this key.
+key를 생성할 때 해당 key의 특정 logging setting을 구성할 수 있습니다. 이 logging setting은 이 key로 보낸 모든 request에 사용됩니다.
 
 <Image 
   img={require('../../img/key_logging.png')}
@@ -271,9 +271,9 @@ When creating a key, you can configure the specific logging settings for the key
 <br />
 
 
-2. Make a test LLM API Request 
+2. 테스트 LLM API request를 보냅니다.
 
-Use the new key to make a test LLM API Request, we expect to see the logs on your logging provider configured in step 1.
+새 key로 테스트 LLM API request를 보냅니다. 1단계에서 설정한 logging provider에서 log가 보여야 합니다.
 
 <Image 
   img={require('../../img/key_logging2.png')}
@@ -282,9 +282,9 @@ Use the new key to make a test LLM API Request, we expect to see the logs on you
 
 <br />
 
-3. Check Logs on your Logging Provider 
+3. logging provider에서 log를 확인합니다.
 
-Navigate to your configured logging provider and check if you received the logs from step 2.
+설정한 logging provider로 이동하여 2단계의 log를 받았는지 확인합니다.
 
 <Image 
   img={require('../../img/key_logging_arize.png')}
@@ -293,7 +293,7 @@ Navigate to your configured logging provider and check if you received the logs 
 
 <br />
 
-### API Usage
+### API 사용법
 
 
 
@@ -325,9 +325,9 @@ curl -X POST 'http://0.0.0.0:4000/key/generate' \
 </TabItem>
 <TabItem label="GCS Bucket" value="gcs_bucket">
 
-1. Create Virtual Key to log to a specific GCS Bucket
+1. 특정 GCS Bucket에 log를 보내는 Virtual Key를 생성합니다.
 
-  Set `GCS_SERVICE_ACCOUNT` in your environment to the path of the service account json
+  environment에서 `GCS_SERVICE_ACCOUNT`를 service account json path로 설정합니다.
   ```bash
   export GCS_SERVICE_ACCOUNT=/path/to/service-account.json # GCS_SERVICE_ACCOUNT=/Users/ishaanjaffer/Downloads/adroit-crow-413218-a956eef1a2a8.json
   ```
@@ -351,11 +351,11 @@ curl -X POST 'http://0.0.0.0:4000/key/generate' \
 
   ```
 
-2. Test it - `/chat/completions` request
+2. Test - `/chat/completions` request
 
-  Use the virtual key from step 3 to make a `/chat/completions` request
+  3단계의 virtual key를 사용해 `/chat/completions` request를 보냅니다.
 
-  You should see your logs on GCS Bucket on a successful request
+  request가 성공하면 GCS Bucket에서 log를 확인할 수 있어야 합니다.
 
   ```shell
   curl -i http://localhost:4000/v1/chat/completions \
@@ -374,7 +374,7 @@ curl -X POST 'http://0.0.0.0:4000/key/generate' \
 
 <TabItem label="Langsmith" value="langsmith">
 
-1. Create Virtual Key to log to a specific Langsmith Project
+1. 특정 Langsmith Project에 log를 보내는 Virtual Key를 생성합니다.
 
   ```bash
   curl -X POST 'http://0.0.0.0:4000/key/generate' \
@@ -396,11 +396,11 @@ curl -X POST 'http://0.0.0.0:4000/key/generate' \
 
   ```
 
-2. Test it - `/chat/completions` request
+2. Test - `/chat/completions` request
 
-  Use the virtual key from step 3 to make a `/chat/completions` request
+  3단계의 virtual key를 사용해 `/chat/completions` request를 보냅니다.
 
-  You should see your logs on your Langsmith project on a successful request
+  request가 성공하면 Langsmith project에서 log를 확인할 수 있어야 합니다.
 
   ```shell
   curl -i http://localhost:4000/v1/chat/completions \
@@ -420,13 +420,13 @@ curl -X POST 'http://0.0.0.0:4000/key/generate' \
 
 ---
 
-Help us improve this feature, by filing a [ticket here](https://github.com/BerriAI/litellm/issues)
+이 기능 개선을 위해 [여기에서 ticket](https://github.com/BerriAI/litellm/issues)을 생성해 주세요.
 
-### Check if key callbacks are configured correctly `/key/health`
+### Key callback 설정 확인 `/key/health` {#checking-key-callback-configuration-keyhealth}
 
-Call `/key/health` with the key to check if the callback settings are configured correctly
+callback setting이 올바르게 구성되었는지 확인하려면 key와 함께 `/key/health`를 호출합니다.
 
-Pass the key in the request header
+request header에 key를 전달합니다.
 
 ```bash
 curl -X POST "http://localhost:4000/key/health" \
@@ -435,11 +435,11 @@ curl -X POST "http://localhost:4000/key/health" \
 ```
 
 <Tabs>
-<TabItem label="Response when key is configured correctly" value="Response when key is configured correctly">
+<TabItem label="key가 올바르게 구성된 경우 Response" value="Response when key is configured correctly">
 
-Response when logging callbacks are setup correctly:
+logging callback이 올바르게 설정된 경우의 response:
 
-A key is **healthy** when the logging callbacks are setup correctly.
+logging callback이 올바르게 설정되어 있으면 key는 **healthy**입니다.
 
 ```json
 {
@@ -456,11 +456,11 @@ A key is **healthy** when the logging callbacks are setup correctly.
 
 </TabItem>
 
-<TabItem label="Response when key is configured incorrectly" value="Response when key is configured incorrectly">
+<TabItem label="key가 잘못 구성된 경우 Response" value="Response when key is configured incorrectly">
 
-Response when logging callbacks are not setup correctly
+logging callback이 올바르게 설정되지 않은 경우의 response:
 
-A key is **unhealthy** when the logging callbacks are not setup correctly.
+logging callback이 올바르게 설정되어 있지 않으면 key는 **unhealthy**입니다.
 
 ```json
 {
@@ -478,11 +478,11 @@ A key is **unhealthy** when the logging callbacks are not setup correctly.
 </TabItem>
 </Tabs>
 
-### Disable/Enable Message redaction
+### Message redaction 비활성화/활성화
 
-Use this to enable prompt logging for specific keys when you have globally disabled it
+prompt logging을 전역으로 비활성화한 상태에서 특정 key에만 prompt logging을 활성화할 때 사용합니다.
 
-Example config.yaml with globally disabled prompt logging (message redaction)
+prompt logging(message redaction)을 전역으로 비활성화한 config.yaml 예제:
 ```yaml
 model_list:
  - model_name: gpt-4o
@@ -493,9 +493,9 @@ litellm_settings:
   turn_off_message_logging: True # 👈 Globally logging prompt / response is disabled
 ```
 
-**Enable prompt logging for key**
+**key에 prompt logging 활성화**
 
-Set `turn_off_message_logging` to `false` for the key you want to enable prompt logging for. This will override the global `turn_off_message_logging` setting.
+prompt logging을 활성화할 key에서 `turn_off_message_logging`을 `false`로 설정합니다. 이 값은 전역 `turn_off_message_logging` setting을 재정의합니다.
 
 ```shell
 curl -X POST 'http://0.0.0.0:4000/key/generate' \
@@ -513,7 +513,7 @@ curl -X POST 'http://0.0.0.0:4000/key/generate' \
 }'
 ```
 
-Response from `/key/generate`
+`/key/generate` response
 
 ```json
 {
@@ -533,9 +533,9 @@ Response from `/key/generate`
 }
 ```
 
-Use key for `/chat/completions` request
+`/chat/completions` request에 key 사용
 
-This key will log the prompt to the callback specified in the request
+이 key는 request에 지정된 callback으로 prompt를 log합니다.
 
 ```shell
 curl -i http://localhost:4000/v1/chat/completions \
@@ -548,8 +548,3 @@ curl -i http://localhost:4000/v1/chat/completions \
     ]
   }'
 ```
-
-
-
-
-

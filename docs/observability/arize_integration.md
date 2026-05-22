@@ -5,19 +5,19 @@ import TabItem from '@theme/TabItem';
 
 # Arize AI
 
-AI Observability and Evaluation Platform
+AI 관측성 및 평가 플랫폼
 
 <Image img={require('../../img/arize.png')} />
 
 
 
-## Pre-Requisites
-Make an account on [Arize AI](https://app.arize.com/auth/login)
+## 사전 요구 사항 {#pre-requisites}
+[Arize AI](https://app.arize.com/auth/login)에서 계정을 만드세요.
 
-## Quick Start
-Use just 2 lines of code, to instantly log your responses **across all providers** with arize
+## 빠른 시작
+코드 2줄만으로 **모든 제공업체의** 응답을 arize에 즉시 로깅할 수 있습니다.
 
-You can also use the instrumentor option instead of the callback, which you can find [here](https://docs.arize.com/arize/llm-tracing/tracing-integrations-auto/litellm).
+callback 대신 instrumentor 옵션도 사용할 수 있으며, 자세한 내용은 [여기](https://docs.arize.com/arize/llm-tracing/tracing-integrations-auto/litellm)에서 확인할 수 있습니다.
 
 ```python
 litellm.callbacks = ["arize"]
@@ -46,9 +46,9 @@ response = litellm.completion(
 )
 ```
 
-## Using with LiteLLM Proxy
+## LiteLLM Proxy와 함께 사용하기 {#using-with-litellm-proxy}
 
-1. Setup config.yaml
+1. config.yaml 설정
 ```yaml
 model_list:
   - model_name: gpt-4
@@ -71,13 +71,13 @@ environment_variables:
     ARIZE_PROJECT_NAME: "my-litellm-project" # OPTIONAL - sets the arize project name
 ```
 
-2. Start the proxy
+2. 프록시 시작
 
 ```bash
 litellm --config config.yaml
 ```
 
-3. Test it!
+3. 테스트하기
 
 ```bash
 curl -X POST 'http://0.0.0.0:4000/chat/completions' \
@@ -86,11 +86,11 @@ curl -X POST 'http://0.0.0.0:4000/chat/completions' \
 -d '{ "model": "gpt-4", "messages": [{"role": "user", "content": "Hi 👋 - i'm openai"}]}'
 ```
 
-## Pass Arize Space/Key per-request
+## 요청별로 Arize Space/Key 전달하기 {#pass-arize-spacekey-per-request}
 
-Supported parameters:
+지원되는 파라미터:
 - `arize_api_key`
-- `arize_space_key` *(deprecated, use `arize_space_id` instead)*
+- `arize_space_key` *(사용 중단됨, 대신 `arize_space_id` 사용)*
 - `arize_space_id`
 
 <Tabs>
@@ -118,9 +118,9 @@ response = litellm.completion(
 ```
 
 </TabItem>
-<TabItem value="proxy" label="PROXY">
+<TabItem value="proxy" label="프록시">
 
-1. Setup config.yaml
+1. config.yaml 설정
 ```yaml
 model_list:
   - model_name: gpt-4
@@ -136,13 +136,13 @@ general_settings:
   master_key: "sk-1234" # can also be set as an environment variable
 ```
 
-2. Start the proxy
+2. 프록시 시작
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-3. Test it!
+3. 테스트하기
 
 <Tabs>
 <TabItem value="curl" label="CURL">
@@ -190,8 +190,8 @@ print(response)
 </TabItem>
 </Tabs>
 
-## Support & Talk to Founders
+## 지원 및 창립자에게 문의하기 {#support--talk-to-founders}
 
-- [Schedule Demo 👋](https://calendly.com/d/4mp-gd3-k5k/berriai-1-1-onboarding-litellm-hosted-version)
-- [Community Discord 💭](https://discord.gg/wuPM9dRgDw)
-- Our emails ✉️ ishaan@berri.ai / krrish@berri.ai
+- [데모 예약 👋](https://calendly.com/d/4mp-gd3-k5k/berriai-1-1-onboarding-litellm-hosted-version)
+- [커뮤니티 Discord 💭](https://discord.gg/wuPM9dRgDw)
+- 이메일 ✉️ ishaan@berri.ai / krrish@berri.ai

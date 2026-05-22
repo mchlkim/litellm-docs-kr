@@ -2,30 +2,30 @@ import TabItem from '@theme/TabItem';
 import Tabs from '@theme/Tabs';
 import Image from '@theme/IdealImage';
 
-# [BETA] LiteLLM Managed Files
+# [BETA] LiteLLM 관리형 파일
 
-- Reuse the same file across different providers.
-- Prevent users from seeing files they don't have access to on `list` and `retrieve` calls. 
+- 서로 다른 프로바이더에서 같은 파일을 재사용합니다.
+- `list` 및 `retrieve` 호출에서 접근 권한이 없는 파일이 사용자에게 보이지 않도록 합니다.
 
 :::info
 
-This is a free LiteLLM Enterprise feature.
+이 기능은 무료 LiteLLM 엔터프라이즈 기능입니다.
 
-Available via the `litellm` docker image. If you are using the pip package, you must install [`litellm-enterprise`](https://pypi.org/project/litellm-enterprise/).
+`litellm` docker 이미지를 통해 사용할 수 있습니다. pip 패키지를 사용하는 경우 [`litellm-enterprise`](https://pypi.org/project/litellm-enterprise/)를 설치해야 합니다.
 
 :::
 
 
-| Property | Value | Comments |
+| 속성 | 값 | 설명 |
 | --- | --- | --- |
 | Proxy | ✅ |  |
-| SDK | ❌ | Requires postgres DB for storing file ids. |
-| Available across all providers | ✅ |  |
-| Supported endpoints | `/chat/completions`, `/batch`, `/fine_tuning`, `/responses` |  |
+| SDK | ❌ | 파일 ID를 저장하려면 postgres DB가 필요합니다. |
+| 모든 프로바이더에서 사용 가능 | ✅ |  |
+| 지원되는 엔드포인트 | `/chat/completions`, `/batch`, `/fine_tuning`, `/responses` |  |
 
-## Usage
+## 사용법
 
-### 1. Setup config.yaml
+### 1. config.yaml 설정
 
 ```yaml
 model_list:
@@ -44,23 +44,23 @@ general_settings:
   database_url: "postgresql://<user>:<password>@<host>:<port>/<dbname>" # alternatively use the env var - DATABASE_URL
 ```
 
-### 2. Start proxy
+### 2. 프록시 시작
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-### 3. Test it!
+### 3. 테스트
 
-Specify `target_model_names` to use the same file id across different providers. This is the list of model_names set via config.yaml (or 'public_model_names' on UI). 
+서로 다른 프로바이더에서 같은 파일 ID를 사용하려면 `target_model_names`를 지정합니다. 이는 config.yaml에서 설정한 model_name 목록 또는 UI의 'public_model_names' 목록입니다.
 
 ```python
 target_model_names="gpt-4o-mini-openai, gemini-2.0-flash" # 👈 Specify model_names
 ```
 
-Check `/v1/models` to see the list of available model names for a key.
+키에서 사용할 수 있는 모델 이름 목록을 확인하려면 `/v1/models`를 확인합니다.
 
-#### **Store a PDF file**
+#### **PDF 파일 저장**
 
 ```python
 from openai import OpenAI
@@ -88,7 +88,7 @@ file = client.files.create(
 print(f"file id={file.id}")
 ```
 
-#### **Use the same file id across different providers**
+#### **서로 다른 프로바이더에서 같은 파일 ID 사용**
 
 <Tabs>
 <TabItem value="openai" label="OpenAI">
@@ -145,7 +145,7 @@ print(completion.choices[0].message)
 </TabItem>
 </Tabs>
 
-### Complete Example
+### 전체 예제
 
 ```python   
 import base64
@@ -220,11 +220,11 @@ print(completion.choices[0].message)
 
 ```
 
-## File Permissions
+## 파일 권한 {#file-permissions}
 
-Prevent users from seeing files they don't have access to on `list` and `retrieve` calls. 
+`list` 및 `retrieve` 호출에서 접근 권한이 없는 파일이 사용자에게 보이지 않도록 합니다.
 
-### 1. Setup config.yaml
+### 1. config.yaml 설정
 
 ```yaml
 model_list:
@@ -238,15 +238,15 @@ general_settings:
   database_url: "postgresql://<user>:<password>@<host>:<port>/<dbname>" # alternatively use the env var - DATABASE_URL
 ```
 
-### 2. Start proxy
+### 2. 프록시 시작
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-### 3. Issue a key to the user
+### 3. 사용자에게 키 발급
 
-Let's create a user with the id `user_123`.
+ID가 `user_123`인 사용자를 생성합니다.
 
 ```bash
 curl -L -X POST 'http://0.0.0.0:4000/user/new' \
@@ -255,7 +255,7 @@ curl -L -X POST 'http://0.0.0.0:4000/user/new' \
 -d '{"models": ["gpt-4o-mini-openai"], "user_id": "user_123"}'
 ```
 
-Get the key from the response.
+응답에서 키를 가져옵니다.
 
 ```json
 {
@@ -263,16 +263,16 @@ Get the key from the response.
 }
 ```
 
-### 4. User creates a file
+### 4. 사용자가 파일 생성
 
-#### 4a. Create a file
+#### 4a. 파일 생성
 
 ```jsonl
 {"messages": [{"role": "system", "content": "Clippy is a factual chatbot that is also sarcastic."}, {"role": "user", "content": "What's the capital of France?"}, {"role": "assistant", "content": "Paris, as if everyone doesn't know that already."}]}
 {"messages": [{"role": "system", "content": "Clippy is a factual chatbot that is also sarcastic."}, {"role": "user", "content": "Who wrote 'Romeo and Juliet'?"}, {"role": "assistant", "content": "Oh, just some guy named William Shakespeare. Ever heard of him?"}]}
 ```
 
-#### 4b. Upload the file
+#### 4b. 파일 업로드
 
 ```python
 from openai import OpenAI
@@ -292,10 +292,10 @@ finetuning_input_file = client.files.create(
 print(finetuning_input_file) # file.id = "litellm_proxy/..." = {"model_name": {"deployment_id": "deployment_file_id"}}
 ```
 
-### 5. User retrieves a file 
+### 5. 사용자가 파일 조회
 
 <Tabs>
-<TabItem value="has_access" label="User created file">
+<TabItem value="has_access" label="사용자가 생성한 파일">
 
 ```python
 from openai import OpenAI
@@ -310,9 +310,8 @@ print(file) # File retrieved successfully
 ```
 
 </TabItem>
-<TabItem value="no_access" label="User did not create file">
+<TabItem value="no_access" label="사용자가 생성하지 않은 파일">
 
-```python
 ```python
 from openai import OpenAI
 
@@ -333,9 +332,9 @@ except Exception as e:
 
 
 
-## Supported Endpoints
+## 지원되는 엔드포인트
 
-#### Create a file - `/files`
+#### 파일 생성 - `/files`
 
 ```python
 from openai import OpenAI
@@ -361,7 +360,7 @@ file = client.files.create(
 )
 ```
 
-#### Retrieve a file - `/files/{file_id}`
+#### 파일 조회 - `/files/{file_id}`
 
 ```python
 client = OpenAI(base_url="http://0.0.0.0:4000", api_key="sk-1234", max_retries=0)
@@ -369,7 +368,7 @@ client = OpenAI(base_url="http://0.0.0.0:4000", api_key="sk-1234", max_retries=0
 file = client.files.retrieve(file_id=file.id)
 ```
 
-#### Delete a file - `/files/{file_id}/delete`
+#### 파일 삭제 - `/files/{file_id}/delete`
 
 ```python
 client = OpenAI(base_url="http://0.0.0.0:4000", api_key="sk-1234", max_retries=0)
@@ -377,7 +376,7 @@ client = OpenAI(base_url="http://0.0.0.0:4000", api_key="sk-1234", max_retries=0
 file = client.files.delete(file_id=file.id)
 ```
 
-#### List files - `/files`
+#### 파일 목록 조회 - `/files`
 
 ```python
 client = OpenAI(base_url="http://0.0.0.0:4000", api_key="sk-1234", max_retries=0)
@@ -387,33 +386,33 @@ files = client.files.list(extra_body={"target_model_names": "gpt-4o-mini-openai"
 print(files) # All files user has created
 ```
 
-Pre-GA Limitations on List Files:
- - No multi-model support: Just 1 model name is supported for now. 
- - No multi-deployment support: Just 1 deployment of the model is supported for now (e.g. if you have 2 deployments with the `gpt-4o-mini-openai` public model name, it will pick one and return all files on that deployment).
+파일 목록 조회의 Pre-GA 제한 사항:
+ - 다중 모델 미지원: 현재는 모델 이름 1개만 지원됩니다.
+ - 다중 배포 미지원: 현재는 모델 배포 1개만 지원됩니다. 예를 들어 `gpt-4o-mini-openai` 공개 모델 이름에 배포가 2개 있으면, 그중 하나를 선택하고 해당 배포의 모든 파일을 반환합니다.
 
-Pre-GA Limitations will be fixed before GA of the Managed Files feature.
+Pre-GA 제한 사항은 관리형 파일 기능의 GA 전에 수정될 예정입니다.
 
 ## FAQ
 
-**1. Does LiteLLM store the file?**
+**1. LiteLLM이 파일을 저장하나요?**
 
-No, LiteLLM does not store the file. It only stores the file id's in the postgres DB.
+아니요. LiteLLM은 파일을 저장하지 않습니다. postgres DB에는 파일 ID만 저장합니다.
 
-**2. How does LiteLLM know which file to use for a given file id?**
+**2. LiteLLM은 주어진 파일 ID에 어떤 파일을 사용할지 어떻게 알 수 있나요?**
 
-LiteLLM stores a mapping of the litellm file id to the model-specific file id in the postgres DB. When a request comes in, LiteLLM looks up the model-specific file id and uses it in the request to the provider.
+LiteLLM은 litellm 파일 ID와 모델별 파일 ID의 매핑을 postgres DB에 저장합니다. 요청이 들어오면 LiteLLM은 모델별 파일 ID를 조회하고, 프로바이더에 보내는 요청에서 해당 ID를 사용합니다.
 
-**3. How do file deletions work?**
+**3. 파일 삭제는 어떻게 동작하나요?**
 
-When a file is deleted, LiteLLM deletes the mapping from the postgres DB, and the files on each provider.
+파일이 삭제되면 LiteLLM은 postgres DB의 매핑과 각 프로바이더에 있는 파일을 삭제합니다.
 
-**4. Can a user call a file id that was created by another user?**
+**4. 사용자가 다른 사용자가 생성한 파일 ID를 호출할 수 있나요?**
 
-No, as of `v1.71.2` users can only view/edit/delete files they have created.
+아니요. `v1.71.2`부터 사용자는 자신이 생성한 파일만 조회, 수정, 삭제할 수 있습니다.
 
 
 
-## Architecture
+## 아키텍처
 
 
 
@@ -421,7 +420,7 @@ No, as of `v1.71.2` users can only view/edit/delete files they have created.
 
 <Image img={require('../../img/managed_files_arch.png')}  style={{ width: '800px', height: 'auto' }} />
 
-## See Also
+## 함께 보기
 
-- [Managed Files w/ Finetuning APIs](../../docs/proxy/managed_finetuning)
-- [Managed Files w/ Batch APIs](../../docs/proxy/managed_batches)
+- [Finetuning API를 사용하는 관리형 파일](../../docs/proxy/managed_finetuning)
+- [Batch API를 사용하는 관리형 파일](../../docs/proxy/managed_batches)

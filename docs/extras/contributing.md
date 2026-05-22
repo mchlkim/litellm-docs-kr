@@ -1,16 +1,16 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Contributing to Documentation
+# 문서에 기여하기 {#contributing-to-documentation}
 
-This website is built using [Docusaurus 2](https://docusaurus.io/), a modern static website generator.
+이 웹사이트는 최신 정적 웹사이트 생성기인 [Docusaurus 2](https://docusaurus.io/)로 빌드됩니다.
 
-Clone litellm 
+`litellm`을 클론합니다.
 ```
 git clone https://github.com/BerriAI/litellm.git
 ```
 
-### Local setup for locally running docs
+### 로컬에서 문서 실행하기 {#local-setup-for-locally-running-docs}
 
 ```
 cd docs/my-website
@@ -21,15 +21,15 @@ cd docs/my-website
 
 <TabItem value="yarn" label="Yarn">
 
-Installation
+설치
 ```
 npm install --global yarn
 ```
-Install requirement
+필수 패키지 설치
 ```
 yarn
 ```
-Run website
+웹사이트 실행
 ```
 yarn start
 ```
@@ -38,15 +38,15 @@ yarn start
 
 <TabItem value="pnpm" label="pnpm">
 
-Installation
+설치
 ```
 npm install --global pnpm
 ```
-Install requirement
+필수 패키지 설치
 ```
 pnpm install
 ```
-Run website
+웹사이트 실행
 ```
 pnpm start
 ```
@@ -56,13 +56,13 @@ pnpm start
 </Tabs>
 
 
-Open docs here: [http://localhost:3000/](http://localhost:3000/)
+여기에서 문서를 엽니다: [http://localhost:3000/](http://localhost:3000/)
 
-This command builds your Markdown files into HTML and starts a development server to browse your documentation. Open up [http://127.0.0.1:8000/](http://127.0.0.1:8000/) in your web browser to see your documentation. You can make changes to your Markdown files and your docs will automatically rebuild.
+이 명령은 `Markdown` 파일을 `HTML`로 빌드하고, 문서를 확인할 수 있는 개발 서버를 시작합니다. 웹 브라우저에서 [http://127.0.0.1:8000/](http://127.0.0.1:8000/)을 열어 문서를 확인할 수 있습니다. `Markdown` 파일을 수정하면 문서가 자동으로 다시 빌드됩니다.
 
-[Full tutorial here](https://docs.readthedocs.io/en/stable/intro/getting-started-with-mkdocs.html)
+[전체 튜토리얼 보기](https://docs.readthedocs.io/en/stable/intro/getting-started-with-mkdocs.html)
 
-### Making changes to Docs
-- All the docs are placed under the `docs` directory
-- If you are adding a new `.md` file or editing the hierarchy edit `mkdocs.yml` in the root of the project
-- After testing your changes, make a change/pull request to the `main` branch of [github.com/BerriAI/litellm](https://github.com/BerriAI/litellm)
+### 문서 변경하기 {#making-changes-to-docs}
+- 모든 문서는 `docs` 디렉터리 아래에 있습니다.
+- 새 `.md` 파일을 추가하거나 계층 구조를 수정하는 경우, 프로젝트 루트의 `mkdocs.yml`을 편집합니다.
+- 변경 사항을 테스트한 뒤 [github.com/BerriAI/litellm](https://github.com/BerriAI/litellm)의 `main` 브랜치로 변경 사항 또는 `pull request`를 제출합니다.

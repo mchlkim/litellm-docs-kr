@@ -1,37 +1,37 @@
-# ✨ [BETA] LiteLLM Managed Files with Finetuning
+# ✨ [BETA] Finetuning을 지원하는 LiteLLM Managed Files
 
 
 :::info
 
-This is a free LiteLLM Enterprise feature.
+이 기능은 무료 LiteLLM 엔터프라이즈 기능입니다.
 
-Available via the `litellm[proxy]` package or any `litellm` docker image.
+`litellm[proxy]` 패키지 또는 모든 `litellm` docker 이미지에서 사용할 수 있습니다.
 
 :::
 
 
-| Property | Value | Comments |
+| 속성 | 값 | 설명 |
 | --- | --- | --- |
 | Proxy | ✅ |  |
-| SDK | ❌ | Requires postgres DB for storing file ids. |
-| Available across all [Batch providers](../batches#supported-providers) | ✅ |  |
-| Supported endpoints | `/fine_tuning/jobs` |  |
+| SDK | ❌ | 파일 ID를 저장하려면 postgres DB가 필요합니다. |
+| 모든 [Batch providers](../batches#supported-providers)에서 사용 가능 | ✅ |  |
+| 지원 엔드포인트 | `/fine_tuning/jobs` |  |
 
-## Overview
+## 개요
 
-Use this to:
+다음 용도로 사용합니다.
 
-- Create Finetuning jobs across OpenAI/Azure/Vertex AI in the OpenAI format (no additional `custom_llm_provider` param required). 
-- Control finetuning model access by key/user/team (same as chat completion models)
+- OpenAI 형식으로 OpenAI/Azure/Vertex AI 전반의 Finetuning 작업을 생성합니다(추가 `custom_llm_provider` 매개변수 필요 없음).
+- 키/사용자/팀별로 finetuning 모델 접근을 제어합니다(chat completion 모델과 동일).
 
 
-## (Proxy Admin) Usage
+## (Proxy Admin) 사용법
 
-Here's how to give developers access to your Finetuning models.
+개발자에게 Finetuning 모델 접근 권한을 부여하는 방법입니다.
 
-### 1. Setup config.yaml
+### 1. config.yaml 설정
 
-Include `/fine_tuning` in the `supported_endpoints` list. Tells developers this model supports the `/fine_tuning` endpoint.
+`supported_endpoints` 목록에 `/fine_tuning`을 포함합니다. 이 모델이 `/fine_tuning` 엔드포인트를 지원한다는 것을 개발자에게 알려줍니다.
 
 ```yaml showLineNumbers title="litellm_config.yaml"
 model_list:
@@ -43,7 +43,7 @@ model_list:
       supported_endpoints: ["/chat/completions", "/fine_tuning"]
 ```
 
-### 2. Create Virtual Key
+### 2. Virtual Key 생성
 
 ```bash showLineNumbers title="create_virtual_key.sh"
 curl -L -X POST 'https://{PROXY_BASE_URL}/key/generate' \
@@ -53,13 +53,13 @@ curl -L -X POST 'https://{PROXY_BASE_URL}/key/generate' \
 ```
 
 
-You can now use the virtual key to access the finetuning models (See Developer flow).
+이제 virtual key를 사용해 finetuning 모델에 접근할 수 있습니다(Developer 흐름 참고).
 
-## (Developer) Usage
+## (Developer) 사용법
 
-Here's how to create a LiteLLM managed file and execute Finetuning CRUD operations with the file. 
+LiteLLM managed file을 생성하고 해당 파일로 Finetuning CRUD 작업을 실행하는 방법입니다.
 
-### 1. Create request.jsonl 
+### 1. request.jsonl 생성
 
 
 ```json showLineNumbers title="request.jsonl"
@@ -67,11 +67,11 @@ Here's how to create a LiteLLM managed file and execute Finetuning CRUD operatio
 {"messages": [{"role": "system", "content": "Clippy is a factual chatbot that is also sarcastic."}, {"role": "user", "content": "Who wrote 'Romeo and Juliet'?"}, {"role": "assistant", "content": "Oh, just some guy named William Shakespeare. Ever heard of him?"}]}
 ```
 
-### 2. Upload File 
+### 2. 파일 업로드
 
-Specify `target_model_names: "<model-name>"` to enable LiteLLM managed files and request validation.
+LiteLLM managed files와 요청 검증을 활성화하려면 `target_model_names: "<model-name>"`을 지정합니다.
 
-model-name should be the same as the model-name in the request.jsonl
+model-name은 request.jsonl의 model-name과 같아야 합니다.
 
 ```python showLineNumbers title="create_finetuning_job.py"
 from openai import OpenAI
@@ -92,11 +92,11 @@ print(finetuning_input_file)
 ```
 
 
-**Where is the file written?**:
+**파일은 어디에 기록되나요?**:
 
-All gpt-4.1-openai deployments will be written to. This enables loadbalancing across all gpt-4.1-openai deployments in Step 3, when a job is created. Once the job is created, any retrieve/list/cancel operations will be routed to that deployment.
+모든 gpt-4.1-openai 배포에 기록됩니다. 이렇게 하면 3단계에서 작업을 생성할 때 모든 gpt-4.1-openai 배포 전반에 loadbalancing을 사용할 수 있습니다. 작업이 생성된 후에는 모든 retrieve/list/cancel 작업이 해당 배포로 라우팅됩니다.
 
-### 3. Create the Finetuning Job
+### 3. Finetuning Job 생성
 
 ```python showLineNumbers title="create_finetuning_job.py"
 ... # Step 2
@@ -110,7 +110,7 @@ ft_job = client.fine_tuning.jobs.create(
 )
 ```
 
-### 4. Retrieve Finetuning Job
+### 4. Finetuning Job 조회
 
 ```python showLineNumbers title="create_finetuning_job.py"
 ... # Step 3
@@ -119,7 +119,7 @@ response = client.fine_tuning.jobs.retrieve(ft_job.id)
 print(response)
 ```
 
-### 5. List Finetuning Jobs
+### 5. Finetuning Jobs 목록 조회
 
 ```python showLineNumbers title="create_finetuning_job.py"
 ...
@@ -127,7 +127,7 @@ print(response)
 client.fine_tuning.jobs.list(extra_body={"target_model_names": "gpt-4.1-openai"})
 ```
 
-### 6. Cancel a Finetuning Job
+### 6. Finetuning Job 취소
 
 ```python showLineNumbers title="create_finetuning_job.py"
 ...
@@ -139,7 +139,7 @@ cancel_ft_job = client.fine_tuning.jobs.cancel(
 
 
 
-## E2E Example
+## E2E 예제
 
 ```python showLineNumbers title="create_finetuning_job.py"
 from openai import OpenAI
@@ -191,8 +191,8 @@ print(response)
 
 ## FAQ
 
-### Where are my files written?
+### 파일은 어디에 기록되나요?
 
-When a `target_model_names` is specified, the file is written to all deployments that match the `target_model_names`.
+`target_model_names`를 지정하면 파일은 `target_model_names`와 일치하는 모든 배포에 기록됩니다.
 
-No additional infrastructure is required.
+추가 인프라는 필요하지 않습니다.

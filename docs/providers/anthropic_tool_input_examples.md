@@ -1,34 +1,34 @@
-# Anthropic Tool Input Examples
+# Anthropic tool input 예제
 
-Provide concrete examples of valid tool inputs to help Claude understand how to use your tools more effectively. This is particularly useful for complex tools with nested objects, optional parameters, or format-sensitive inputs.
+Claude가 tool을 더 효과적으로 사용하는 방법을 이해할 수 있도록 유효한 tool input의 구체적인 예제를 제공합니다. 중첩 객체, 선택 parameter, 형식에 민감한 입력이 있는 복잡한 tool에 특히 유용합니다.
 
 :::info
-Tool input examples is a beta feature. LiteLLM automatically detects tools with the `input_examples` field and adds the appropriate beta header based on your provider:
+Tool input 예제는 beta 기능입니다. LiteLLM은 `input_examples` 필드가 있는 tool을 자동으로 감지하고 provider에 맞는 beta header를 추가합니다.
 
-- **Anthropic API & Microsoft Foundry**: `advanced-tool-use-2025-11-20`
-- **Amazon Bedrock**: `advanced-tool-use-2025-11-20` (Claude Opus 4.5 only)
-- **Google Cloud Vertex AI**: Not supported
+- **`Anthropic API` 및 `Microsoft Foundry`**: `advanced-tool-use-2025-11-20`
+- **Amazon Bedrock**: `advanced-tool-use-2025-11-20` (Claude Opus 4.5만 해당)
+- **Google Cloud Vertex AI**: 지원되지 않음
 
-You don't need to manually specify beta headers—LiteLLM handles this automatically.
+beta header를 수동으로 지정할 필요는 없습니다. LiteLLM이 자동으로 처리합니다.
 :::
 
-## When to Use Input Examples
+## Input 예제를 사용할 때
 
-Input examples are most helpful for:
+Input 예제는 다음 경우에 가장 유용합니다.
 
-- **Complex nested objects**: Tools with deeply nested parameter structures
-- **Optional parameters**: Showing when optional parameters should be included
-- **Format-sensitive inputs**: Demonstrating expected formats (dates, addresses, etc.)
-- **Enum values**: Illustrating valid enum choices in context
-- **Edge cases**: Showing how to handle special cases
+- **복잡한 중첩 객체**: 깊게 중첩된 parameter 구조를 가진 tool
+- **선택 parameter**: optional parameter를 언제 포함해야 하는지 보여주는 경우
+- **형식에 민감한 입력**: 날짜, 주소 등 예상 형식을 보여주는 경우
+- **Enum values**: context 안에서 유효한 enum 선택지를 보여주는 경우
+- **Edge cases**: 특수 사례를 처리하는 방법을 보여주는 경우
 
 :::tip
-**Prioritize descriptions first!** Clear, detailed tool descriptions are more important than examples. Use `input_examples` as a supplement for complex tools where descriptions alone may not be sufficient.
+**description을 먼저 우선하세요.** 명확하고 자세한 tool description이 예제보다 더 중요합니다. description만으로 충분하지 않은 복잡한 tool에서 `input_examples`를 보조 수단으로 사용하세요.
 :::
 
-## Quick Start
+## 빠른 시작
 
-Add an `input_examples` field to your tool definition with an array of example input objects:
+tool 정의에 예제 input object 배열을 담은 `input_examples` 필드를 추가합니다.
 
 ```python
 import litellm
@@ -80,19 +80,19 @@ response = litellm.completion(
 print(response)
 ```
 
-## How It Works
+## 작동 방식
 
-When you provide `input_examples`:
+`input_examples`를 제공하면 다음과 같이 동작합니다.
 
-1. **LiteLLM detects** the `input_examples` field in your tool definition
-2. **Beta header added automatically**: The `advanced-tool-use-2025-11-20` header is injected
-3. **Examples included in prompt**: Anthropic includes the examples alongside your tool schema
-4. **Claude learns patterns**: The model uses examples to understand proper tool usage
-5. **Better tool calls**: Claude makes more accurate tool calls with correct parameter formats
+1. **LiteLLM 감지**: tool 정의의 `input_examples` 필드를 감지합니다.
+2. **Beta header 자동 추가**: `advanced-tool-use-2025-11-20` header가 주입됩니다.
+3. **예제를 prompt에 포함**: Anthropic이 tool schema와 함께 예제를 포함합니다.
+4. **Claude가 pattern 학습**: model이 예제를 사용해 올바른 tool 사용법을 이해합니다.
+5. **더 나은 tool call**: Claude가 올바른 parameter 형식으로 더 정확한 tool call을 생성합니다.
 
-## Example Formats
+## 예제 형식
 
-### Simple Tool with Examples
+### 예제가 포함된 단순 tool
 
 ```python
 {
@@ -125,7 +125,7 @@ When you provide `input_examples`:
 }
 ```
 
-### Complex Nested Objects
+### 복잡한 중첩 객체
 
 ```python
 {
@@ -182,7 +182,7 @@ When you provide `input_examples`:
 }
 ```
 
-### Format-Sensitive Parameters
+### 형식에 민감한 parameter
 
 ```python
 {
@@ -218,49 +218,49 @@ When you provide `input_examples`:
 }
 ```
 
-## Requirements and Limitations
+## 요구 사항과 제한 사항
 
-### Schema Validation
+### Schema validation
 
-- Each example **must be valid** according to the tool's `input_schema`
-- Invalid examples will return a **400 error** from Anthropic
-- Validation happens server-side (LiteLLM passes examples through)
+- 각 예제는 tool의 `input_schema` 기준으로 **유효해야 합니다**.
+- 유효하지 않은 예제는 Anthropic에서 **400 error**를 반환합니다.
+- validation은 server-side에서 수행됩니다. LiteLLM은 예제를 그대로 전달합니다.
 
-### Server-Side Tools Not Supported
+### Server-side tool은 지원되지 않음
 
-Input examples are **only supported for user-defined tools**. The following server-side tools do NOT support `input_examples`:
+Input examples는 **사용자 정의 tool에서만 지원됩니다**. 다음 server-side tool은 `input_examples`를 지원하지 않습니다.
 
 - `web_search` (web search tool)
-- `code_execution` (code execution tool)
+- `code_execution`(코드 실행 tool)
 - `computer_use` (computer use tool)
-- `bash_tool` (bash execution tool)
+- `bash_tool`(bash 실행 tool)
 - `text_editor` (text editor tool)
 
-### Token Costs
+### Token 비용
 
-Examples add to your prompt tokens:
+예제는 prompt token에 추가됩니다.
 
-- **Simple examples**: ~20-50 tokens per example
-- **Complex nested objects**: ~100-200 tokens per example
-- **Trade-off**: Higher token cost for better tool call accuracy
+- **단순 예제**: 예제당 약 20-50 token
+- **복잡한 중첩 객체**: 예제당 약 100-200 token
+- **Trade-off**: 더 높은 token 비용으로 더 정확한 tool call을 얻습니다.
 
-### Model Compatibility
+### 모델 호환성
 
-Input examples work with all Claude models that support the `advanced-tool-use-2025-11-20` beta header:
+Input 예제는 `advanced-tool-use-2025-11-20` beta header를 지원하는 모든 Claude 모델에서 동작합니다.
 
 - Claude Opus 4.5 (`claude-opus-4-5-20251101`)
-- Claude Sonnet 4.5 (`claude-sonnet-4-5-20250929`)
+- `Claude Sonnet 4.5`(`claude-sonnet-4-5-20250929`)
 - Claude Opus 4.1 (`claude-opus-4-1-20250805`)
 
 :::note
-On Google Cloud's Vertex AI and Amazon Bedrock, only Claude Opus 4.5 supports tool input examples.
+Google Cloud Vertex AI와 Amazon Bedrock에서는 Claude Opus 4.5만 tool input 예제를 지원합니다.
 :::
 
-## Best Practices
+## 권장 사항
 
-### 1. Show Diverse Examples
+### 1. 다양한 예제 보여주기
 
-Include examples that demonstrate different use cases:
+서로 다른 사용 사례를 보여주는 예제를 포함하세요.
 
 ```python
 "input_examples": [
@@ -270,9 +270,9 @@ Include examples that demonstrate different use cases:
 ]
 ```
 
-### 2. Demonstrate Optional Parameters
+### 2. 선택 parameter 보여주기
 
-Show when optional parameters should and shouldn't be included:
+optional parameter를 포함해야 하는 경우와 포함하지 않아야 하는 경우를 보여주세요.
 
 ```python
 "input_examples": [
@@ -286,9 +286,9 @@ Show when optional parameters should and shouldn't be included:
 ]
 ```
 
-### 3. Illustrate Format Requirements
+### 3. 형식 요구 사항 보여주기
 
-Make format expectations clear through examples:
+예제를 통해 예상 형식을 명확히 보여주세요.
 
 ```python
 "input_examples": [
@@ -300,9 +300,9 @@ Make format expectations clear through examples:
 ]
 ```
 
-### 4. Keep Examples Realistic
+### 4. 예제를 현실적으로 유지
 
-Use realistic, production-like examples rather than placeholder data:
+placeholder data 대신 실제 운영 환경에 가까운 현실적인 예제를 사용하세요.
 
 ```python
 # ✅ Good - realistic examples
@@ -318,17 +318,17 @@ Use realistic, production-like examples rather than placeholder data:
 ]
 ```
 
-### 5. Limit Example Count
+### 5. 예제 수 제한
 
-Provide 2-5 examples per tool:
+tool당 2-5개의 예제를 제공하세요.
 
-- **Too few** (1): May not show enough variation
-- **Just right** (2-5): Demonstrates patterns without bloating tokens
-- **Too many** (10+): Wastes tokens, diminishing returns
+- **너무 적음**(1개): 충분한 variation을 보여주지 못할 수 있습니다.
+- **적절함**(2-5개): token을 과도하게 늘리지 않으면서 pattern을 보여줍니다.
+- **너무 많음**(10개 이상): token을 낭비하고 효율이 떨어집니다.
 
-## Integration with Other Features
+## 다른 기능과의 통합
 
-Input examples work seamlessly with other Anthropic tool features:
+Input examples는 다른 Anthropic tool 기능과 함께 자연스럽게 동작합니다.
 
 ### With Tool Search
 
@@ -347,7 +347,7 @@ Input examples work seamlessly with other Anthropic tool features:
 }
 ```
 
-### With Programmatic Tool Calling
+### With Programmatic 도구 호출
 
 ```python
 {
@@ -364,7 +364,7 @@ Input examples work seamlessly with other Anthropic tool features:
 }
 ```
 
-### All Features Combined
+### 모든 기능 조합
 
 ```python
 {
@@ -382,24 +382,24 @@ Input examples work seamlessly with other Anthropic tool features:
 }
 ```
 
-## Provider Support
+## Provider 지원
 
-LiteLLM supports input examples across the following Anthropic-compatible providers:
+LiteLLM은 다음 Anthropic 호환 provider에서 input examples를 지원합니다.
 
-- **Standard Anthropic API** (`anthropic/claude-sonnet-4-5-20250929`) ✅
-- **Azure Anthropic / Microsoft Foundry** (`azure/claude-sonnet-4-5-20250929`) ✅
+- **`Standard Anthropic API`**(`anthropic/claude-sonnet-4-5-20250929`) ✅
+- **`Azure Anthropic / Microsoft Foundry`**(`azure/claude-sonnet-4-5-20250929`) ✅
 - **Amazon Bedrock** (`bedrock/invoke/anthropic.claude-opus-4-5-20251101-v1:0`) ✅ (Opus 4.5 only)
-- **Google Cloud Vertex AI** (`vertex_ai/claude-sonnet-4-5-20250929`) ❌ Not supported
+- **Google Cloud Vertex AI** (`vertex_ai/claude-sonnet-4-5-20250929`) ❌ 지원되지 않음
 
-The beta header (`advanced-tool-use-2025-11-20`) is automatically added when LiteLLM detects tools with the `input_examples` field.
+LiteLLM이 `input_examples` 필드가 있는 tool을 감지하면 beta header(`advanced-tool-use-2025-11-20`)가 자동으로 추가됩니다.
 
-## Troubleshooting
+## 문제 해결
 
-### "Invalid request" error with examples
+### 예제 사용 시 "Invalid request" error
 
-**Problem**: Receiving 400 error when using input examples
+**문제**: input examples 사용 시 400 error를 받음
 
-**Solution**: Ensure each example is valid according to your `input_schema`:
+**해결책**: 각 예제가 `input_schema` 기준으로 유효한지 확인합니다.
 
 ```python
 # Check that:
@@ -409,37 +409,36 @@ The beta header (`advanced-tool-use-2025-11-20`) is automatically added when Lit
 # 4. Nested objects follow the schema structure
 ```
 
-### Examples not improving tool calls
+### 예제가 tool call을 개선하지 않음
 
-**Problem**: Adding examples doesn't seem to help
+**문제**: 예제를 추가해도 도움이 되지 않는 것처럼 보임
 
-**Solution**:
-1. **Check descriptions first**: Ensure tool descriptions are detailed and clear
-2. **Review example quality**: Make sure examples are realistic and diverse
-3. **Verify schema**: Confirm examples actually match your schema
-4. **Add more variation**: Include examples showing different use cases
+**해결책**:
+1. **description 먼저 확인**: tool description이 자세하고 명확한지 확인합니다.
+2. **예제 품질 검토**: 예제가 현실적이고 다양한지 확인합니다.
+3. **schema 확인**: 예제가 실제 schema와 일치하는지 확인합니다.
+4. **variation 추가**: 서로 다른 사용 사례를 보여주는 예제를 포함합니다.
 
-### Token usage too high
+### Token 사용량이 너무 높음
 
-**Problem**: Input examples consuming too many tokens
+**문제**: Input examples가 너무 많은 token을 소비함
 
-**Solution**:
-1. **Reduce example count**: Use 2-3 examples instead of 5+
-2. **Simplify examples**: Remove unnecessary fields from examples
-3. **Consider descriptions**: If descriptions are clear, examples may not be needed
+**해결책**:
+1. **예제 수 줄이기**: 5개 이상 대신 2-3개 예제를 사용합니다.
+2. **예제 단순화**: 예제에서 불필요한 필드를 제거합니다.
+3. **description 검토**: description이 명확하다면 예제가 필요하지 않을 수 있습니다.
 
-## When NOT to Use Input Examples
+## Input 예제를 사용하지 않아야 할 때
 
-Skip input examples if:
+다음 경우에는 input examples를 생략하세요.
 
-- **Tool is simple**: Single parameter tools with clear descriptions
-- **Schema is self-explanatory**: Well-structured schema with good descriptions
-- **Token budget is tight**: Examples add 20-200 tokens each
-- **Server-side tools**: web_search, code_execution, etc. don't support examples
+- **Tool이 단순함**: 명확한 description이 있는 단일 parameter tool
+- **Schema가 자명함**: 좋은 description과 함께 잘 구조화된 schema
+- **Token budget이 빡빡함**: 예제는 각각 20-200 token을 추가합니다.
+- **Server-side tools**: web_search, code_execution 등은 예제를 지원하지 않습니다.
 
-## Related Features
+## 관련 기능
 
-- [Anthropic Tool Search](./anthropic_tool_search.md) - Dynamically discover and load tools on-demand
-- [Anthropic Programmatic Tool Calling](./anthropic_programmatic_tool_calling.md) - Call tools from code execution
-- [Anthropic Provider](./anthropic.md) - General Anthropic provider documentation
-
+- [Anthropic Tool Search](./anthropic_tool_search.md) - 필요할 때 tool을 동적으로 검색하고 로드
+- [Anthropic Programmatic 도구 호출](./anthropic_programmatic_tool_calling.md) - 코드 실행에서 tool 호출
+- [Anthropic Provider](./anthropic.md) - 일반 Anthropic provider 문서

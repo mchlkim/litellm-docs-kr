@@ -1,22 +1,22 @@
-# 🖇️ AgentOps - LLM Observability Platform
+# 🖇️ AgentOps - LLM 관측성 플랫폼
 
 :::tip
 
-This is community maintained. Please make an issue if you run into a bug:
+이 문서는 커뮤니티에서 관리합니다. 버그가 발생하면 이슈를 생성해 주세요:
 https://github.com/BerriAI/litellm
 
 :::
 
-[AgentOps](https://docs.agentops.ai) is an observability platform that enables tracing and monitoring of LLM calls, providing detailed insights into your AI operations.
+[AgentOps](https://docs.agentops.ai)는 LLM 호출의 추적과 모니터링을 지원하는 관측성 플랫폼으로, AI 운영에 대한 자세한 인사이트를 제공합니다.
 
-## Using AgentOps with LiteLLM
+## LiteLLM에서 AgentOps 사용하기 {#using-agentops-with-litellm}
 
-LiteLLM provides `success_callbacks` and `failure_callbacks`, allowing you to easily integrate AgentOps for comprehensive tracing and monitoring of your LLM operations.
+LiteLLM은 `success_callbacks`와 `failure_callbacks`를 제공하므로, AgentOps를 쉽게 통합해 LLM 운영을 포괄적으로 추적하고 모니터링할 수 있습니다.
 
-### Integration
+### 통합 {#integration}
 
-Use just a few lines of code to instantly trace your responses **across all providers** with AgentOps:
-Get your AgentOps API Keys from https://app.agentops.ai/
+몇 줄의 코드만으로 AgentOps에서 **모든 제공자에 걸쳐** 응답을 즉시 추적할 수 있습니다:
+AgentOps API 키는 https://app.agentops.ai/ 에서 발급받으세요.
 ```python
 import litellm
 
@@ -30,7 +30,7 @@ response = litellm.completion(
 )
 ```
 
-Complete Code:
+전체 코드:
 
 ```python
 import os
@@ -52,17 +52,17 @@ response = completion(
 print(response)
 ```
 
-### Configuration Options
+### 설정 옵션 {#설정-options}
 
-The AgentOps integration can be configured through environment variables:
+AgentOps 통합은 환경 변수를 통해 설정할 수 있습니다:
 
-- `AGENTOPS_API_KEY` (str, optional): Your AgentOps API key
-- `AGENTOPS_ENVIRONMENT` (str, optional): Deployment environment (defaults to "production")
-- `AGENTOPS_SERVICE_NAME` (str, optional): Service name for tracing (defaults to "agentops")
+- `AGENTOPS_API_KEY` (str, 선택 사항): AgentOps API 키
+- `AGENTOPS_ENVIRONMENT` (str, 선택 사항): 배포 환경(기본값: "production")
+- `AGENTOPS_SERVICE_NAME` (str, 선택 사항): 추적용 서비스 이름(기본값: "agentops")
 
-### Advanced Usage
+### 고급 사용법
 
-You can configure additional settings through environment variables:
+환경 변수를 통해 추가 설정을 구성할 수 있습니다:
 
 ```python
 import os
@@ -76,8 +76,8 @@ os.environ["AGENTOPS_SERVICE_NAME"] = "my-service"
 litellm.success_callback = ["agentops"]
 ```
 
-### Support
+### 지원 {#support}
 
-For issues or questions, please refer to:
-- [AgentOps Documentation](https://docs.agentops.ai)
-- [LiteLLM Documentation](https://docs.litellm.ai) 
+문제나 질문이 있으면 다음을 참고하세요:
+- [AgentOps 문서](https://docs.agentops.ai)
+- [LiteLLM 문서](https://docs.litellm.ai)

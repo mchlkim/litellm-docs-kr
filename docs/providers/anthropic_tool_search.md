@@ -1,44 +1,44 @@
 # Tool Search
 
-Tool search enables Claude to dynamically discover and load tools on-demand from large tool catalogs (10,000+ tools). Instead of loading all tool definitions into the context window upfront, Claude searches your tool catalog and loads only the tools it needs.
+Tool search를 사용하면 Claude가 대규모 도구 카탈로그(10,000개 이상의 도구)에서 필요한 도구를 동적으로 검색하고 온디맨드로 로드할 수 있습니다. 모든 도구 정의를 미리 context window에 넣는 대신, Claude가 도구 카탈로그를 검색해 필요한 도구만 로드합니다.
 
-## Supported Providers
+## 지원 프로바이더
 
-| Provider | Chat Completions API | Messages API |
+| 제공자 | Chat Completions API | Messages API |
 |----------|---------------------|--------------|
 | **Anthropic API** | ✅ | ✅ |
-| **Azure Anthropic** (Microsoft Foundry) | ✅ | ✅ |
-| **Google Cloud Vertex AI** | ✅ | ✅ |
-| **Amazon Bedrock** | ✅ (Invoke API only, Opus 4.5 only) | ✅ (Invoke API only, Opus 4.5 only) |
+| **`Azure Anthropic` (`Microsoft Foundry`)** | ✅ | ✅ |
+| **`Google Cloud Vertex AI`** | ✅ | ✅ |
+| **Amazon Bedrock** | ✅ (Invoke API만, Opus 4.5만) | ✅ (Invoke API만, Opus 4.5만) |
 
 
-## Benefits
+## 장점
 
-- **Context efficiency**: Avoid consuming massive portions of your context window with tool definitions
-- **Better tool selection**: Claude's tool selection accuracy degrades with more than 30-50 tools. Tool search maintains accuracy even with thousands of tools
-- **On-demand loading**: Tools are only loaded when Claude needs them
+- **Context 효율성**: 도구 정의로 context window의 큰 비중을 소모하지 않습니다.
+- **더 나은 도구 선택**: 도구가 30-50개를 넘으면 Claude의 도구 선택 정확도가 낮아질 수 있습니다. Tool search는 수천 개의 도구가 있어도 정확도를 유지합니다.
+- **온디맨드 로딩**: Claude가 필요로 할 때만 도구를 로드합니다.
 
-## Tool Search Variants
+## Tool Search 변형
 
-LiteLLM supports both tool search variants:
+LiteLLM은 두 가지 tool search 변형을 모두 지원합니다.
 
-### 1. Regex Tool Search (`tool_search_tool_regex_20251119`)
+### 1. `Regex Tool Search`(`tool_search_tool_regex_20251119`) {#regex-tool-search}
 
-Claude constructs regex patterns to search for tools. Best for exact pattern matching (faster).
+Claude가 도구 검색용 regex pattern을 구성합니다. 정확한 패턴 매칭에 적합하며 더 빠릅니다.
 
-### 2. BM25 Tool Search (`tool_search_tool_bm25_20251119`)
+### 2. `BM25 Tool Search`(`tool_search_tool_bm25_20251119`) {#bm25-tool-search}
 
-Claude uses natural language queries to search for tools using the BM25 algorithm. Best for natural language semantic search.
+Claude가 BM25 알고리즘을 사용해 자연어 쿼리로 도구를 검색합니다. 자연어 의미 검색에 적합합니다.
 
-**Note**: BM25 variant is not supported on Bedrock.
+**참고**: BM25 변형은 Bedrock에서 지원되지 않습니다.
 
 ---
 
-## Chat Completions API
+## `Chat Completions API` {#chat-completions-api}
 
-### SDK Usage
+### SDK 사용법
 
-#### Basic Example with Regex Tool Search
+#### Regex Tool Search 기본 예제
 
 ```python showLineNumbers title="Basic Tool Search Example"
 import litellm
@@ -80,7 +80,7 @@ response = litellm.completion(
 print(response.choices[0].message.content)
 ```
 
-#### BM25 Tool Search Example
+#### BM25 Tool Search 예제
 
 ```python showLineNumbers title="BM25 Tool Search"
 import litellm
@@ -117,7 +117,7 @@ response = litellm.completion(
 )
 ```
 
-#### Azure Anthropic Example
+#### Azure Anthropic 예제
 
 ```python showLineNumbers title="Azure Anthropic Tool Search"
 import litellm
@@ -153,7 +153,7 @@ response = litellm.completion(
 )
 ```
 
-#### Vertex AI Example
+#### Vertex AI 예제
 
 ```python showLineNumbers title="Vertex AI Tool Search"
 import litellm
@@ -175,7 +175,7 @@ response = litellm.completion(
 )
 ```
 
-#### Streaming Support
+#### 스트리밍 지원
 
 ```python showLineNumbers title="Streaming with Tool Search"
 import litellm
@@ -214,11 +214,11 @@ for chunk in response:
         print(chunk.choices[0].delta.content, end="")
 ```
 
-### AI Gateway Usage
+### AI Gateway 사용법
 
-Tool search works automatically through the LiteLLM proxy.
+Tool search는 LiteLLM proxy를 통해 자동으로 작동합니다.
 
-#### Proxy Configuration
+#### Proxy 설정
 
 ```yaml showLineNumbers title="config.yaml"
 model_list:
@@ -228,7 +228,7 @@ model_list:
       api_key: os.environ/ANTHROPIC_API_KEY
 ```
 
-#### Client Request
+#### 클라이언트 요청
 
 ```python showLineNumbers title="Client Request via Proxy"
 from anthropic import Anthropic
@@ -269,11 +269,11 @@ response = client.messages.create(
 
 ## Messages API
 
-The Messages API provides native Anthropic-style tool search support via the `litellm.anthropic.messages` interface.
+Messages API는 `litellm.anthropic.messages` 인터페이스를 통해 Anthropic 스타일 tool search를 네이티브로 지원합니다.
 
-### SDK Usage
+### SDK 사용법
 
-#### Basic Example
+#### 기본 예제
 
 ```python showLineNumbers title="Messages API - Basic Tool Search"
 import litellm
@@ -314,7 +314,7 @@ response = await litellm.anthropic.messages.acreate(
 print(response)
 ```
 
-#### Azure Anthropic Messages Example
+#### Azure Anthropic Messages 예제
 
 ```python showLineNumbers title="Azure Anthropic Messages API"
 import litellm
@@ -353,7 +353,7 @@ response = await litellm.anthropic.messages.acreate(
 )
 ```
 
-#### Vertex AI Messages Example
+#### Vertex AI Messages 예제
 
 ```python showLineNumbers title="Vertex AI Messages API"
 import litellm
@@ -392,7 +392,7 @@ response = await litellm.anthropic.messages.acreate(
 )
 ```
 
-#### Bedrock Messages Example
+#### Bedrock Messages 예제
 
 ```python showLineNumbers title="Bedrock Messages API (Invoke)"
 import litellm
@@ -428,7 +428,7 @@ response = await litellm.anthropic.messages.acreate(
 )
 ```
 
-#### Streaming Support
+#### 스트리밍 지원
 
 ```python showLineNumbers title="Messages API - Streaming"
 import litellm
@@ -477,11 +477,11 @@ async for chunk in response:
                     pass
 ```
 
-### AI Gateway Usage
+### AI Gateway 사용법
 
-Configure the proxy to use Messages API endpoints.
+Messages API 엔드포인트를 사용하도록 프록시를 설정합니다.
 
-#### Proxy Configuration
+#### Proxy 설정
 
 ```yaml showLineNumbers title="config.yaml"
 model_list:
@@ -491,7 +491,7 @@ model_list:
       api_key: os.environ/ANTHROPIC_API_KEY
 ```
 
-#### Client Request
+#### 클라이언트 요청
 
 ```python showLineNumbers title="Client Request via Proxy (Messages API)"
 from anthropic import Anthropic
@@ -536,7 +536,7 @@ print(response)
 
 ---
 
-## Additional Resources
+## 추가 리소스
 
-- [Anthropic Tool Search Documentation](https://docs.anthropic.com/en/docs/build-with-claude/tool-use/tool-search)
-- [LiteLLM Tool Calling Guide](https://docs.litellm.ai/docs/completion/function_call)
+- [Anthropic Tool Search 문서](https://docs.anthropic.com/en/docs/build-with-claude/tool-use/tool-search)
+- [LiteLLM 도구 호출 가이드](https://docs.litellm.ai/docs/completion/function_call)

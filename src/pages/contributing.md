@@ -1,35 +1,34 @@
-# Contributing to Documentation
+# 문서 기여하기
 
-Clone litellm 
+litellm 클론하기
 ```
 git clone https://github.com/BerriAI/litellm.git
 ```
 
-### Local setup for locally running docs
+### 로컬에서 문서 실행하기
 
-#### Installation
+#### 설치
 ```
 uv add mkdocs
 ```
 
-#### Locally Serving Docs
+#### 로컬에서 문서 제공하기
 ```
 mkdocs serve
 ```
-If you see `command not found: mkdocs` try running the following
+`command not found: mkdocs`가 표시되면 다음 명령을 실행해 보세요.
 ```
 python3 -m mkdocs serve
 ```
 
-This command builds your Markdown files into HTML and starts a development server to browse your documentation. Open up [http://127.0.0.1:8000/](http://127.0.0.1:8000/) in your web browser to see your documentation. You can make changes to your Markdown files and your docs will automatically rebuild.
+이 명령은 Markdown 파일을 HTML로 빌드하고 문서를 볼 수 있는 개발 서버를 시작합니다. 웹 브라우저에서 [http://127.0.0.1:8000/](http://127.0.0.1:8000/)을 열어 문서를 확인하세요. Markdown 파일을 변경하면 문서가 자동으로 다시 빌드됩니다.
 
-[Full tutorial here](https://docs.readthedocs.io/en/stable/intro/getting-started-with-mkdocs.html)
+[전체 튜토리얼 보기](https://docs.readthedocs.io/en/stable/intro/getting-started-with-mkdocs.html)
 
-### Making changes to Docs
-- All the docs are placed under the `docs` directory
-- If you are adding a new `.md` file or editing the hierarchy edit `mkdocs.yml` in the root of the project
-- After testing your changes, make a change to the `main` branch of [github.com/BerriAI/litellm](https://github.com/BerriAI/litellm)
-
+### 문서 변경하기
+- 모든 문서는 `docs` 디렉터리 아래에 있습니다.
+- 새 `.md` 파일을 추가하거나 계층 구조를 수정하는 경우 프로젝트 루트의 `mkdocs.yml`을 편집하세요.
+- 변경 사항을 테스트한 뒤 [github.com/BerriAI/litellm](https://github.com/BerriAI/litellm)의 `main` 브랜치에 반영하세요.
 
 
 

@@ -6,11 +6,11 @@ const DEFAULT_REQUEST = {
   "messages": [
     {
       "role": "system",
-      "content": "You are a helpful assistant."
+      "content": "당신은 도움이 되는 assistant입니다."
     },
     {
       "role": "user",
-      "content": "Explain quantum computing in simple terms"
+      "content": "양자 컴퓨팅을 쉽게 설명해 주세요"
     }
   ],
   "temperature": 0.7,
@@ -27,8 +27,7 @@ const TransformRequestPlayground: React.FC = () => {
 
   const handleTransform = async () => {
     try {
-      // Here you would make the actual API call to transform the request
-      // For now, we'll just set a sample response
+      // 실제 API 호출 대신 예시 응답을 표시합니다.
       const sampleResponse = `curl -X POST \\
   https://api.openai.com/v1/chat/completions \\
   -H 'Authorization: Bearer sk-xxx' \\
@@ -38,7 +37,7 @@ const TransformRequestPlayground: React.FC = () => {
     "messages": [
       {
         "role": "system",
-        "content": "You are a helpful assistant."
+        "content": "당신은 도움이 되는 assistant입니다."
       }
     ],
     "temperature": 0.7
@@ -59,8 +58,8 @@ const TransformRequestPlayground: React.FC = () => {
         return (
           <div className={styles.panel}>
             <div className={styles['panel-header']}>
-              <h2>Original Request</h2>
-              <p>The request you would send to LiteLLM /chat/completions endpoint.</p>
+              <h2>원본 요청</h2>
+              <p>LiteLLM /chat/completions endpoint로 보낼 요청입니다.</p>
             </div>
             <textarea
               className={styles['code-input']}
@@ -70,7 +69,7 @@ const TransformRequestPlayground: React.FC = () => {
             />
             <div className={styles['panel-footer']}>
               <button className={styles['transform-button']} onClick={handleTransform}>
-                Transform →
+                변환 →
               </button>
             </div>
           </div>
@@ -79,14 +78,14 @@ const TransformRequestPlayground: React.FC = () => {
         return (
           <div className={styles.panel}>
             <div className={styles['panel-header']}>
-              <h2>Transformed Request</h2>
-              <p>How LiteLLM transforms your request for the specified provider.</p>
-              <p className={styles.note}>Note: Sensitive headers are not shown.</p>
+              <h2>변환된 요청</h2>
+              <p>LiteLLM이 지정 provider에 맞게 요청을 변환한 결과입니다.</p>
+              <p className={styles.note}>참고: 민감한 header는 표시하지 않습니다.</p>
             </div>
             <div className={styles['code-output-container']}>
               <pre className={styles['code-output']}>{transformedRequest}</pre>
               <button className={styles['copy-button']} onClick={handleCopy}>
-                Copy
+                복사
               </button>
             </div>
           </div>
@@ -96,8 +95,8 @@ const TransformRequestPlayground: React.FC = () => {
           <>
             <div className={styles.panel}>
               <div className={styles['panel-header']}>
-                <h2>Original Request</h2>
-                <p>The request you would send to LiteLLM /chat/completions endpoint.</p>
+                <h2>원본 요청</h2>
+                <p>LiteLLM /chat/completions endpoint로 보낼 요청입니다.</p>
               </div>
               <textarea
                 className={styles['code-input']}
@@ -107,20 +106,20 @@ const TransformRequestPlayground: React.FC = () => {
               />
               <div className={styles['panel-footer']}>
                 <button className={styles['transform-button']} onClick={handleTransform}>
-                  Transform →
+                  변환 →
                 </button>
               </div>
             </div>
             <div className={styles.panel}>
               <div className={styles['panel-header']}>
-                <h2>Transformed Request</h2>
-                <p>How LiteLLM transforms your request for the specified provider.</p>
-                <p className={styles.note}>Note: Sensitive headers are not shown.</p>
+                <h2>변환된 요청</h2>
+                <p>LiteLLM이 지정 provider에 맞게 요청을 변환한 결과입니다.</p>
+                <p className={styles.note}>참고: 민감한 header는 표시하지 않습니다.</p>
               </div>
               <div className={styles['code-output-container']}>
                 <pre className={styles['code-output']}>{transformedRequest}</pre>
                 <button className={styles['copy-button']} onClick={handleCopy}>
-                  Copy
+                  복사
                 </button>
               </div>
             </div>
@@ -136,19 +135,19 @@ const TransformRequestPlayground: React.FC = () => {
           className={viewMode === 'split' ? styles.active : ''}
           onClick={() => setViewMode('split')}
         >
-          Split View
+          분할 보기
         </button>
         <button
           className={viewMode === 'request' ? styles.active : ''}
           onClick={() => setViewMode('request')}
         >
-          Request
+          요청
         </button>
         <button
           className={viewMode === 'transformed' ? styles.active : ''}
           onClick={() => setViewMode('transformed')}
         >
-          Transformed
+          변환 결과
         </button>
       </div>
       <div className={styles['playground-container']}>

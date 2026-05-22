@@ -1,20 +1,20 @@
 # /ocr
 
-| Feature | Supported | 
+| 기능 | 지원 여부 | 
 |---------|-----------|
-| Cost Tracking | ✅ |
-| Logging | ✅ (Basic Logging not supported) |
-| Load Balancing | ✅ |
-| Supported Providers | `mistral`, `azure_ai`, `vertex_ai` |
+| 비용 추적 | ✅ |
+| 로깅 | ✅ (Basic Logging 미지원) |
+| 로드 밸런싱 | ✅ |
+| 지원 프로바이더 | `mistral`, `azure_ai`, `vertex_ai` |
 
 :::tip
 
-LiteLLM follows the [Mistral API request/response for the OCR API](https://docs.mistral.ai/capabilities/vision/#optical-character-recognition-ocr)
+LiteLLM은 [OCR API용 Mistral API 요청/응답](https://docs.mistral.ai/capabilities/vision/#optical-character-recognition-ocr)을 따릅니다.
 
 :::
 
-## **LiteLLM Python SDK Usage**
-### Quick Start 
+## **LiteLLM Python SDK 사용법**
+### 빠른 시작 {#quick-start}
 
 ```python
 from litellm import ocr
@@ -36,7 +36,7 @@ for page in response.pages:
     print(page.markdown)
 ```
 
-### Async Usage 
+### 비동기 사용법 {#async-usage}
 
 ```python
 from litellm import aocr
@@ -61,9 +61,9 @@ async def test_async_ocr():
 asyncio.run(test_async_ocr())
 ```
 
-### Using Local Files
+### 로컬 파일 사용 {#using-local-files}
 
-LiteLLM can read local files directly — no manual base64 encoding needed:
+LiteLLM은 로컬 파일을 직접 읽을 수 있습니다. 수동 base64 인코딩이 필요하지 않습니다.
 
 ```python
 from litellm import ocr
@@ -100,14 +100,14 @@ response = ocr(
 )
 ```
 
-The `file` field accepts:
-- **File path** (`str` or `pathlib.Path`) — LiteLLM reads the file and detects the MIME type from the extension
-- **File object** (binary file-like object) — e.g. `open("doc.pdf", "rb")`
-- **Raw bytes** (`bytes`) — use `mime_type` to specify the content type
+`file` 필드는 다음 입력을 받습니다.
+- **파일 경로** (`str` 또는 `pathlib.Path`) - LiteLLM이 파일을 읽고 확장자에서 MIME 타입을 감지합니다.
+- **파일 객체** (바이너리 file-like object) - 예: `open("doc.pdf", "rb")`
+- **원시 bytes** (`bytes`) - 콘텐츠 타입을 지정하려면 `mime_type`을 사용합니다.
 
-LiteLLM automatically converts file inputs to base64 data URIs internally, so all providers work seamlessly.
+LiteLLM은 내부적으로 파일 입력을 base64 data URI로 자동 변환하므로 모든 프로바이더에서 자연스럽게 작동합니다.
 
-### Using Base64 Encoded Documents
+### base64 인코딩 문서 사용 {#using-base64-encoded-documents}
 
 ```python
 import base64
@@ -126,7 +126,7 @@ response = ocr(
 )
 ```
 
-### Optional Parameters
+### 선택적 파라미터 {#optional-parameters}
 
 ```python
 response = ocr(
@@ -143,13 +143,13 @@ response = ocr(
 )
 ```
 
-## **LiteLLM Proxy Usage**
+## **LiteLLM Proxy 사용법**
 
-LiteLLM provides a Mistral API compatible `/ocr` endpoint for OCR calls.
+LiteLLM은 OCR 호출을 위해 Mistral API와 호환되는 `/ocr` 엔드포인트를 제공합니다.
 
-**Setup**
+**설정**
 
-Add this to your litellm proxy config.yaml
+litellm proxy `config.yaml`에 다음을 추가합니다.
 
 ```yaml
 model_list:
@@ -159,7 +159,7 @@ model_list:
       api_key: os.environ/MISTRAL_API_KEY
 ```
 
-Start litellm
+litellm을 시작합니다.
 
 ```bash
 litellm --config /path/to/config.yaml
@@ -167,7 +167,7 @@ litellm --config /path/to/config.yaml
 # RUNNING on http://0.0.0.0:4000
 ```
 
-**Test request — JSON body**
+**테스트 요청 - JSON 본문**
 
 ```bash
 curl http://0.0.0.0:4000/v1/ocr \
@@ -182,9 +182,9 @@ curl http://0.0.0.0:4000/v1/ocr \
   }'
 ```
 
-**Test request — multipart file upload**
+**테스트 요청 - multipart 파일 업로드**
 
-Upload a file directly using multipart form data. No need to base64-encode the file yourself.
+multipart form data를 사용해 파일을 직접 업로드합니다. 파일을 직접 base64로 인코딩할 필요가 없습니다.
 
 ```bash
 curl http://0.0.0.0:4000/v1/ocr \
@@ -193,7 +193,7 @@ curl http://0.0.0.0:4000/v1/ocr \
   -F "file=@/path/to/document.pdf"
 ```
 
-You can also pass optional parameters as additional form fields:
+선택적 파라미터를 추가 폼 필드로 전달할 수도 있습니다.
 
 ```bash
 curl http://0.0.0.0:4000/v1/ocr \
@@ -204,17 +204,17 @@ curl http://0.0.0.0:4000/v1/ocr \
   -F "include_image_base64=true"
 ```
 
-## **Request/Response Format**
+## **요청/응답 형식** {#requestresponse-format}
 
 :::info
 
-LiteLLM follows the **Mistral OCR API specification**. 
+LiteLLM은 **Mistral OCR API 사양**을 따릅니다.
 
-See the [official Mistral OCR documentation](https://docs.mistral.ai/capabilities/vision/#optical-character-recognition-ocr) for complete details.
+전체 세부 내용은 [공식 Mistral OCR 문서](https://docs.mistral.ai/capabilities/vision/#optical-character-recognition-ocr)를 참고하세요.
 
 :::
 
-### Example Request
+### 예제 요청 {#example-request}
 
 ```python
 {
@@ -230,25 +230,25 @@ See the [official Mistral OCR documentation](https://docs.mistral.ai/capabilitie
 }
 ```
 
-### Request Parameters
+### 요청 파라미터 {#request-parameters}
 
-| Parameter | Type | Required | Description |
+| 파라미터 | 타입 | 필수 여부 | 설명 |
 |-----------|------|----------|-------------|
-| `model` | string | Yes | The OCR model to use (e.g., `"mistral/mistral-ocr-latest"`) |
-| `document` | object | Yes | Document to process. Must contain `type` and the corresponding field |
-| `document.type` | string | Yes | `"document_url"` for PDFs/docs, `"image_url"` for images, or `"file"` for local files |
-| `document.document_url` | string | Conditional | URL or data URI to the document (required if `type` is `"document_url"`) |
-| `document.image_url` | string | Conditional | URL or data URI to the image (required if `type` is `"image_url"`) |
-| `document.file` | string/bytes/file | Conditional | File path, bytes, or file-like object (required if `type` is `"file"`) |
-| `document.mime_type` | string | No | Explicit MIME type for file inputs (auto-detected from extension if not provided) |
-| `pages` | array | No | List of specific page indices to process (0-indexed) |
-| `include_image_base64` | boolean | No | Whether to include extracted images as base64 strings |
-| `image_limit` | integer | No | Maximum number of images to return |
-| `image_min_size` | integer | No | Minimum size (in pixels) for images to include |
+| `model` | string | 예 | 사용할 OCR 모델 (예: `"mistral/mistral-ocr-latest"`) |
+| `document` | object | 예 | 처리할 문서입니다. `type`과 그에 대응하는 필드를 포함해야 합니다. |
+| `document.type` | string | 예 | PDF/문서는 `"document_url"`, 이미지는 `"image_url"`, 로컬 파일은 `"file"`을 사용합니다. |
+| `document.document_url` | string | 조건부 | 문서의 URL 또는 data URI입니다. `type`이 `"document_url"`이면 필수입니다. |
+| `document.image_url` | string | 조건부 | 이미지의 URL 또는 data URI입니다. `type`이 `"image_url"`이면 필수입니다. |
+| `document.file` | string/bytes/file | 조건부 | 파일 경로, bytes 또는 file-like object입니다. `type`이 `"file"`이면 필수입니다. |
+| `document.mime_type` | string | 아니요 | 파일 입력의 명시적 MIME 타입입니다. 제공하지 않으면 확장자에서 자동 감지됩니다. |
+| `pages` | array | 아니요 | 처리할 특정 페이지 인덱스 목록입니다(0-indexed). |
+| `include_image_base64` | boolean | 아니요 | 추출된 이미지를 base64 문자열로 포함할지 여부입니다. |
+| `image_limit` | integer | 아니요 | 반환할 최대 이미지 수입니다. |
+| `image_min_size` | integer | 아니요 | 포함할 이미지의 최소 크기(픽셀)입니다. |
 
-#### Document Format Examples
+#### 문서 형식 예제 {#document-format-examples}
 
-**For PDFs and documents (URL):**
+**PDF 및 문서(URL):**
 ```json
 {
   "type": "document_url",
@@ -256,7 +256,7 @@ See the [official Mistral OCR documentation](https://docs.mistral.ai/capabilitie
 }
 ```
 
-**For images (URL):**
+**이미지(URL):**
 ```json
 {
   "type": "image_url",
@@ -264,7 +264,7 @@ See the [official Mistral OCR documentation](https://docs.mistral.ai/capabilitie
 }
 ```
 
-**For base64-encoded content:**
+**base64 인코딩 콘텐츠:**
 ```json
 {
   "type": "document_url",
@@ -272,14 +272,14 @@ See the [official Mistral OCR documentation](https://docs.mistral.ai/capabilitie
 }
 ```
 
-**For local files (SDK):**
+**로컬 파일(SDK):**
 ```python
 {"type": "file", "file": "/path/to/document.pdf"}
 {"type": "file", "file": open("image.png", "rb")}
 {"type": "file", "file": pdf_bytes, "mime_type": "application/pdf"}
 ```
 
-**For file uploads (Proxy — multipart form):**
+**파일 업로드(Proxy - multipart form):**
 ```bash
 curl http://0.0.0.0:4000/v1/ocr \
   -H "Authorization: Bearer sk-1234" \
@@ -287,9 +287,9 @@ curl http://0.0.0.0:4000/v1/ocr \
   -F "file=@document.pdf"
 ```
 
-### Response Format
+### 응답 형식
 
-The response follows Mistral's OCR format with the following structure:
+응답은 다음 구조의 Mistral OCR 형식을 따릅니다.
 
 ```json
 {
@@ -325,26 +325,25 @@ The response follows Mistral's OCR format with the following structure:
 }
 ```
 
-#### Response Fields
+#### 응답 필드 {#response-fields}
 
-| Field | Type | Description |
+| 필드 | 타입 | 설명 |
 |-------|------|-------------|
-| `pages` | array | List of processed pages with extracted content |
-| `pages[].index` | integer | Page number (0-indexed) |
-| `pages[].markdown` | string | Extracted text in Markdown format |
-| `pages[].dimensions` | object | Page dimensions (dpi, height, width in pixels) |
-| `pages[].images` | array | Extracted images from the page (if `include_image_base64=true`) |
-| `model` | string | The model used for OCR processing |
-| `usage_info` | object | Processing statistics (pages processed, document size) |
-| `document_annotation` | object | Optional document-level annotations |
-| `object` | string | Always `"ocr"` for OCR responses |
+| `pages` | array | 추출된 콘텐츠가 포함된 처리 완료 페이지 목록입니다. |
+| `pages[].index` | integer | 페이지 번호입니다(0-indexed). |
+| `pages[].markdown` | string | Markdown 형식으로 추출된 텍스트입니다. |
+| `pages[].dimensions` | object | 페이지 크기입니다(dpi, 높이, 너비는 픽셀 단위). |
+| `pages[].images` | array | 페이지에서 추출된 이미지입니다(`include_image_base64=true`인 경우). |
+| `model` | string | OCR 처리에 사용된 모델입니다. |
+| `usage_info` | object | 처리 통계입니다(처리된 페이지, 문서 크기). |
+| `document_annotation` | object | 선택적 문서 수준 annotation입니다. |
+| `object` | string | OCR 응답에서는 항상 `"ocr"`입니다. |
 
 
-## **Supported Providers**
+## **지원 프로바이더**
 
-| Provider    | Link to Usage      |
+| 프로바이더    | 사용법 링크      |
 |-------------|--------------------|
-| Mistral AI  |   [Usage](#quick-start)                 |
-| Azure AI    |   [Usage](../docs/providers/azure_ocr)                 |
-| Vertex AI   |   [Usage](../docs/providers/vertex_ocr)                 |
-
+| Mistral AI  |   [사용법](#quick-start)                 |
+| Azure AI    |   [사용법](../docs/providers/azure_ocr)                 |
+| Vertex AI   |   [사용법](../docs/providers/vertex_ocr)                 |

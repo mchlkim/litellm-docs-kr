@@ -3,14 +3,14 @@ import TabItem from '@theme/TabItem';
 
 # Infinity
 
-| Property                  | Details                                                                                                    |
+| 속성                      | 세부 정보                                                                                                  |
 | ------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| Description               | Infinity is a high-throughput, low-latency REST API for serving text-embeddings, reranking models and clip |
-| Provider Route on LiteLLM | `infinity/`                                                                                                |
-| Supported Operations      | `/rerank`, `/embeddings`                                                                                   |
-| Link to Provider Doc      | [Infinity ↗](https://github.com/michaelfeil/infinity)                                                      |
+| 설명                      | Infinity는 text-embeddings, reranking 모델, clip을 제공하는 고처리량, 저지연 REST API입니다.               |
+| LiteLLM Provider 경로     | `infinity/`                                                                                                |
+| 지원 작업                 | `/rerank`, `/embeddings`                                                                                   |
+| Provider 문서 링크        | [Infinity ↗](https://github.com/michaelfeil/infinity)                                                      |
 
-## **Usage - LiteLLM Python SDK**
+## **사용법 - LiteLLM Python SDK**
 
 ```python
 from litellm import rerank, embedding
@@ -25,13 +25,13 @@ response = rerank(
 )
 ```
 
-## **Usage - LiteLLM Proxy**
+## **사용법 - LiteLLM Proxy**
 
-LiteLLM provides an cohere api compatible `/rerank` endpoint for Rerank calls.
+LiteLLM은 Rerank 호출을 위해 Cohere API와 호환되는 `/rerank` 엔드포인트를 제공합니다.
 
-**Setup**
+**설정**
 
-Add this to your litellm proxy config.yaml
+LiteLLM Proxy `config.yaml`에 다음을 추가하세요.
 
 ```yaml
 model_list:
@@ -42,7 +42,7 @@ model_list:
       api_key: os.environ/INFINITY_API_KEY
 ```
 
-Start litellm
+LiteLLM을 시작합니다.
 
 ```bash
 litellm --config /path/to/config.yaml
@@ -50,7 +50,7 @@ litellm --config /path/to/config.yaml
 # RUNNING on http://0.0.0.0:4000
 ```
 
-## Test request:
+## 테스트 요청:
 
 ### Rerank
 
@@ -71,16 +71,16 @@ curl http://0.0.0.0:4000/rerank \
   }'
 ```
 
-#### Supported Cohere Rerank API Params
+#### 지원되는 Cohere Rerank API 파라미터
 
-| Param              | Type        | Description                                     |
+| 파라미터           | 타입        | 설명                                            |
 | ------------------ | ----------- | ----------------------------------------------- |
-| `query`            | `str`       | The query to rerank the documents against       |
-| `documents`        | `list[str]` | The documents to rerank                         |
-| `top_n`            | `int`       | The number of documents to return               |
-| `return_documents` | `bool`      | Whether to return the documents in the response |
+| `query`            | `str`       | 문서를 rerank할 때 기준으로 사용할 쿼리         |
+| `documents`        | `list[str]` | rerank할 문서                                   |
+| `top_n`            | `int`       | 반환할 문서 수                                  |
+| `return_documents` | `bool`      | 응답에 문서를 포함해 반환할지 여부              |
 
-### Usage - Return Documents
+### 사용법 - Return Documents {#usage---returning-documents}
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -118,9 +118,9 @@ curl http://0.0.0.0:4000/rerank \
 </TabItem>
 </Tabs>
 
-## Pass Provider-specific Params
+## Provider별 파라미터 전달
 
-Any unmapped params will be passed to the provider as-is.
+매핑되지 않은 모든 파라미터는 provider에 그대로 전달됩니다.
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -143,7 +143,7 @@ response = rerank(
 
 <TabItem value="proxy" label="PROXY">
 
-1. Setup config.yaml
+1. `config.yaml` 설정
 
 ```yaml
 model_list:
@@ -154,7 +154,7 @@ model_list:
       raw_scores: True # 👈 EITHER SET PROVIDER-SPECIFIC PARAMS HERE OR IN REQUEST BODY
 ```
 
-2. Start litellm
+2. LiteLLM 시작
 
 ```bash
 litellm --config /path/to/config.yaml
@@ -162,7 +162,7 @@ litellm --config /path/to/config.yaml
 # RUNNING on http://0.0.0.0:4000
 ```
 
-3. Test it!
+3. 테스트
 
 ```bash
 curl http://0.0.0.0:4000/rerank \
@@ -187,11 +187,11 @@ curl http://0.0.0.0:4000/rerank \
 
 ## Embeddings
 
-LiteLLM provides an OpenAI api compatible `/embeddings` endpoint for embedding calls.
+LiteLLM은 embedding 호출을 위해 OpenAI API와 호환되는 `/embeddings` 엔드포인트를 제공합니다.
 
-**Setup**
+**설정**
 
-Add this to your litellm proxy config.yaml
+LiteLLM Proxy `config.yaml`에 다음을 추가하세요.
 
 ```yaml
 model_list:
@@ -202,7 +202,7 @@ model_list:
       api_key: os.environ/INFINITY_API_KEY
 ```
 
-### Test request:
+### 테스트 요청:
 
 ```bash
 curl http://0.0.0.0:4000/embeddings \
@@ -214,16 +214,16 @@ curl http://0.0.0.0:4000/embeddings \
   }'
 ```
 
-#### Supported Embedding API Params
+#### 지원되는 Embedding API 파라미터
 
-| Param             | Type        | Description                                                 |
+| 파라미터          | 타입        | 설명                                                        |
 | ----------------- | ----------- | ----------------------------------------------------------- |
-| `model`           | `str`       | The embedding model to use                                  |
-| `input`           | `list[str]` | The text inputs to generate embeddings for                  |
-| `encoding_format` | `str`       | The format to return embeddings in (e.g. "float", "base64") |
-| `modality`        | `str`       | The type of input (e.g. "text", "image", "audio")           |
+| `model`           | `str`       | 사용할 embedding 모델                                       |
+| `input`           | `list[str]` | embedding을 생성할 텍스트 입력                              |
+| `encoding_format` | `str`       | embedding을 반환할 형식(예: "float", "base64")             |
+| `modality`        | `str`       | 입력 타입(예: "text", "image", "audio")                   |
 
-### Usage - Basic Examples
+### 사용법 - Basic 예제
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -259,7 +259,7 @@ curl http://0.0.0.0:4000/embeddings \
 </TabItem>
 </Tabs>
 
-### Usage - OpenAI Client
+### 사용법 - OpenAI Client
 
 <Tabs>
 <TabItem value="sdk" label="SDK">

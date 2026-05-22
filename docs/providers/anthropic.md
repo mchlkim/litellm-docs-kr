@@ -2,7 +2,7 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
 # Anthropic
-LiteLLM supports all anthropic models.
+LiteLLM은 모든 Anthropic 모델을 지원합니다.
 
 - `claude-opus-4-6` (`claude-opus-4-6-20260205`)
 - `claude-sonnet-4-6`
@@ -18,18 +18,18 @@ LiteLLM supports all anthropic models.
 - `claude-instant-1.2`
 
 
-| Property | Details |
+| 속성 | 세부 정보 |
 |-------|-------|
-| Description | Claude is a highly performant, trustworthy, and intelligent AI platform built by Anthropic. Claude excels at tasks involving language, reasoning, analysis, coding, and more. Also available via Azure Foundry. |
-| Provider Route on LiteLLM | `anthropic/` (add this prefix to the model name, to route any requests to Anthropic - e.g. `anthropic/claude-3-5-sonnet-20240620`). For Azure Foundry deployments, use `azure/claude-*` (see [Azure Anthropic documentation](../providers/azure/azure_anthropic)) |
-| Provider Doc | [Anthropic ↗](https://docs.anthropic.com/en/docs/build-with-claude/overview), [Azure Foundry Claude ↗](https://learn.microsoft.com/en-us/azure/ai-services/foundry-models/claude) |
-| API Endpoint for Provider | https://api.anthropic.com (or Azure Foundry endpoint: `https://<resource-name>.services.ai.azure.com/anthropic`) |
-| Supported Endpoints | `/chat/completions`, `/v1/messages` (passthrough) |
+| 설명 | Claude는 Anthropic이 만든 고성능, 신뢰성, 지능형 AI 플랫폼입니다. Claude는 언어, 추론, 분석, 코딩 등 다양한 작업에 강합니다. Azure Foundry에서도 사용할 수 있습니다. |
+| LiteLLM Provider Route | `anthropic/` (요청을 Anthropic으로 라우팅하려면 model name에 이 prefix를 추가합니다. 예: `anthropic/claude-3-5-sonnet-20240620`). Azure Foundry deployment에는 `azure/claude-*`를 사용하세요. [Azure Anthropic documentation](../providers/azure/azure_anthropic)을 참고하세요. |
+| Provider 문서 | [Anthropic ↗](https://docs.anthropic.com/en/docs/build-with-claude/overview), [Azure Foundry Claude ↗](https://learn.microsoft.com/en-us/azure/ai-services/foundry-models/claude) |
+| Provider API Endpoint | https://api.anthropic.com (또는 Azure Foundry endpoint: `https://<resource-name>.services.ai.azure.com/anthropic`) |
+| 지원 엔드포인트 | `/chat/completions`, `/v1/messages` (passthrough) |
 
 
-## Supported OpenAI Parameters
+## 지원되는 OpenAI 파라미터
 
-Check this in code, [here](../completion/input.md#translated-openai-params)
+코드에서는 [여기](../completion/input.md#translated-openai-params)에서 확인할 수 있습니다.
 
 ```
 "stream",
@@ -49,25 +49,25 @@ Check this in code, [here](../completion/input.md#translated-openai-params)
 
 :::info
 
-**Notes:**
-- Anthropic API fails requests when `max_tokens` are not passed. Due to this litellm passes `max_tokens=4096` when no `max_tokens` are passed.
-- `response_format` is fully supported for Claude Sonnet 4.5 and Opus 4.1 models (see [Structured Outputs](#structured-outputs) section)
-- `reasoning_effort` is automatically mapped to `output_config={"effort": ...}` for Claude 4.6 and Opus 4.5 models (see [Effort Parameter](./anthropic_effort.md))
+**참고:**
+- Anthropic API는 `max_tokens`가 전달되지 않으면 요청에 실패합니다. 따라서 `max_tokens`가 없을 때 litellm은 `max_tokens=4096`을 전달합니다.
+- `response_format`은 Claude Sonnet 4.5 및 Opus 4.1 모델에서 완전히 지원됩니다. [Structured Outputs](#structured-outputs) 섹션을 참고하세요.
+- `reasoning_effort`는 Claude 4.6 및 Opus 4.5 모델에서 `output_config={"effort": ...}`로 자동 매핑됩니다. [Effort Parameter](./anthropic_effort.md)를 참고하세요.
 
 :::
 
-## **Structured Outputs**
+## **Structured Outputs** {#structured-outputs}
 
-LiteLLM supports Anthropic's [structured outputs feature](https://platform.claude.com/docs/en/build-with-claude/structured-outputs) for Claude Sonnet 4.5 and Opus 4.1 models. When you use `response_format` with these models, LiteLLM automatically:
-- Adds the required `structured-outputs-2025-11-13` beta header
-- Transforms OpenAI's `response_format` to Anthropic's `output_format` format
+LiteLLM은 Claude Sonnet 4.5 및 Opus 4.1 모델에서 Anthropic의 [structured outputs feature](https://platform.claude.com/docs/en/build-with-claude/structured-outputs)를 지원합니다. 이 모델에서 `response_format`을 사용하면 LiteLLM은 자동으로 다음을 수행합니다.
+- 필요한 `structured-outputs-2025-11-13` beta 헤더 추가
+- OpenAI의 `response_format`을 Anthropic의 `output_format` 형식으로 변환
 
-### Supported Models
-- `sonnet-4-5` or `sonnet-4.5` (all Sonnet 4.5 variants)
-- `opus-4-1` or `opus-4.1` (all Opus 4.1 variants)
-  - `opus-4-5` or `opus-4.5` (all Opus 4.5 variants)
+### 지원 모델 {#supported-models}
+- `sonnet-4-5` 또는 `sonnet-4.5` (모든 Sonnet 4.5 변형)
+- `opus-4-1` 또는 `opus-4.1` (모든 Opus 4.1 변형)
+  - `opus-4-5` 또는 `opus-4.5` (모든 Opus 4.5 변형)
   
-### Example Usage
+### 예제 사용법 {#example-usage}
 
 <Tabs>
 <TabItem value="sdk" label="LiteLLM SDK">
@@ -103,7 +103,7 @@ print(response.choices[0].message.content)
 </TabItem>
 <TabItem value="proxy" label="LiteLLM Proxy">
 
-1. Setup config.yaml
+1. config.yaml 설정
 
 ```yaml
 model_list:
@@ -113,13 +113,13 @@ model_list:
       api_key: os.environ/ANTHROPIC_API_KEY
 ```
 
-2. Start proxy
+2. proxy 시작
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-3. Test it!
+3. 테스트
 
 ```bash
 curl http://0.0.0.0:4000/v1/chat/completions \
@@ -151,13 +151,13 @@ curl http://0.0.0.0:4000/v1/chat/completions \
 </Tabs>
 
 :::info
-When using structured outputs with supported models, LiteLLM automatically:
-- Converts OpenAI's `response_format` to Anthropic's `output_schema`
-- Adds the `anthropic-beta: structured-outputs-2025-11-13` header
-- Creates a tool with the schema and forces the model to use it
+지원 모델에서 structured output을 사용하면 LiteLLM은 자동으로 다음을 수행합니다.
+- OpenAI의 `response_format`을 Anthropic의 `output_schema`로 변환
+- `anthropic-beta: structured-outputs-2025-11-13` 헤더 추가
+- schema가 포함된 도구를 만들고 모델이 이를 사용하도록 강제
 :::
 
-## API Keys
+## API 키 {#api-keys}
 
 ```python
 import os
@@ -167,11 +167,11 @@ os.environ["ANTHROPIC_API_KEY"] = "your-api-key"
 # os.environ["LITELLM_ANTHROPIC_DISABLE_URL_SUFFIX"] = "true" # [OPTIONAL] Disable automatic URL suffix appending
 ```
 
-:::tip Azure Foundry Support
+:::tip Azure Foundry 지원
 
-Claude models are also available via Microsoft Azure Foundry. Use the `azure/` prefix instead of `anthropic/` and configure Azure authentication. See the [Azure Anthropic documentation](../providers/azure/azure_anthropic) for details.
+Claude 모델은 Microsoft Azure Foundry에서도 사용할 수 있습니다. `anthropic/` 대신 `azure/` prefix를 사용하고 Azure authentication을 구성하세요. 자세한 내용은 [Azure Anthropic documentation](../providers/azure/azure_anthropic)을 참고하세요.
 
-Example:
+예제:
 ```python
 response = completion(
     model="azure/claude-sonnet-4-5",
@@ -183,11 +183,11 @@ response = completion(
 
 :::
 
-### Custom API Base
+### Custom API Base {#custom-api-base}
 
-When using a custom API base for Anthropic (e.g., a proxy or custom endpoint), LiteLLM automatically appends the appropriate suffix (`/v1/messages` or `/v1/complete`) to your base URL.
+Anthropic에 custom API base(proxy 또는 custom endpoint 등)를 사용할 때 LiteLLM은 base URL에 적절한 suffix(`/v1/messages` 또는 `/v1/complete`)를 자동으로 추가합니다.
 
-If your custom endpoint already includes the full path or doesn't follow Anthropic's standard URL structure, you can disable this automatic suffix appending:
+custom endpoint가 이미 전체 path를 포함하거나 Anthropic의 표준 URL 구조를 따르지 않는다면 이 자동 suffix 추가를 비활성화할 수 있습니다.
 
 ```python
 import os
@@ -196,20 +196,20 @@ os.environ["ANTHROPIC_API_BASE"] = "https://my-custom-endpoint.com/custom/path"
 os.environ["LITELLM_ANTHROPIC_DISABLE_URL_SUFFIX"] = "true"  # Prevents automatic suffix
 ```
 
-Without `LITELLM_ANTHROPIC_DISABLE_URL_SUFFIX`:
+`LITELLM_ANTHROPIC_DISABLE_URL_SUFFIX`가 없을 때:
 - Base URL `https://my-proxy.com` → `https://my-proxy.com/v1/messages`
 - Base URL `https://my-proxy.com/api` → `https://my-proxy.com/api/v1/messages`
 
-With `LITELLM_ANTHROPIC_DISABLE_URL_SUFFIX=true`:
-- Base URL `https://my-proxy.com/custom/path` → `https://my-proxy.com/custom/path` (unchanged)
+`LITELLM_ANTHROPIC_DISABLE_URL_SUFFIX=true`일 때:
+- Base URL `https://my-proxy.com/custom/path` → `https://my-proxy.com/custom/path` (변경 없음)
 
-### Azure AI Foundry (Alternative Method)
+### Azure AI Foundry(대체 방법)
 
-:::tip Recommended Method
-For full Azure support including Azure AD authentication, use the dedicated [Azure Anthropic provider](./azure/azure_anthropic) with `azure_ai/` prefix.
+:::tip 권장 방법
+Azure AD authentication을 포함한 전체 Azure 지원에는 `azure_ai/` prefix와 전용 [Azure Anthropic provider](./azure/azure_anthropic)를 사용하세요.
 :::
 
-As an alternative, you can use the `anthropic/` provider directly with your Azure endpoint since Azure exposes Claude using Anthropic's native API.
+대안으로, Azure가 Anthropic native API를 사용해 Claude를 노출하므로 Azure endpoint와 함께 `anthropic/` provider를 직접 사용할 수도 있습니다.
 
 ```python
 from litellm import completion
@@ -224,10 +224,10 @@ print(response)
 ```
 
 :::info
-**Finding your Azure endpoint:** Go to Azure AI Foundry → Your deployment → Overview. Your base URL will be `https://<resource-name>.services.ai.azure.com/anthropic`
+**Azure endpoint 찾기:** Azure AI Foundry → Your deployment → 개요로 이동하세요. base URL은 `https://<resource-name>.services.ai.azure.com/anthropic`입니다.
 :::
 
-## Usage
+## 사용법
 
 ```python
 import os
@@ -242,8 +242,8 @@ print(response)
 ```
 
 
-## Usage - Streaming
-Just set `stream=True` when calling completion.
+## 사용법 - Streaming {#usage-streaming}
+completion 호출 시 `stream=True`만 설정하면 됩니다.
 
 ```python
 import os
@@ -258,17 +258,17 @@ for chunk in response:
     print(chunk["choices"][0]["delta"]["content"])  # same as openai format
 ```
 
-## Usage with LiteLLM Proxy 
+## LiteLLM Proxy 사용법 {#usage-with-litellm-proxy}
 
-Here's how to call Anthropic with the LiteLLM Proxy Server
+LiteLLM Proxy Server로 Anthropic을 호출하는 방법은 다음과 같습니다.
 
-### 1. Save key in your environment
+### 1. environment에 key 저장 {#1-save-key-in-environment}
 
 ```bash
 export ANTHROPIC_API_KEY="your-api-key"
 ```
 
-### 2. Start the proxy 
+### 2. 프록시 시작 {#2-start-proxy}
 
 <Tabs>
 <TabItem value="config" label="config.yaml">
@@ -285,11 +285,11 @@ model_list:
 litellm --config /path/to/config.yaml
 ```
 </TabItem>
-<TabItem value="config-all" label="config - default all Anthropic Model">
+<TabItem value="config-all" label="config - 모든 Anthropic Model 기본 처리">
 
-Use this if you want to make requests to `claude-3-haiku-20240307`,`claude-3-opus-20240229`,`claude-2.1` without defining them on the config.yaml
+`config.yaml`에 `claude-3-haiku-20240307`, `claude-3-opus-20240229`, `claude-2.1`을 정의하지 않고 요청하려면 이 방식을 사용하세요.
 
-#### Required env variables
+#### 필수 env variable {#required-env-variable}
 ```
 ANTHROPIC_API_KEY=sk-ant****
 ```
@@ -305,9 +305,9 @@ model_list:
 litellm --config /path/to/config.yaml
 ```
 
-Example Request for this config.yaml
+이 config.yaml에 대한 예제 요청입니다.
 
-**Ensure you use `anthropic/` prefix to route the request to Anthropic API**
+**요청을 Anthropic API로 라우팅하려면 `anthropic/` prefix를 사용해야 합니다.**
 
 ```shell
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -336,7 +336,7 @@ $ litellm --model claude-opus-4-20250514
 </TabItem>
 </Tabs>
 
-### 3. Test it
+### 3. 테스트 {#3-test}
 
 
 <Tabs>
@@ -410,40 +410,40 @@ print(response)
 </TabItem>
 </Tabs>
 
-## Supported Models
+## 지원 모델 {#supported-models-1}
 
-`Model Name` 👉 Human-friendly name.  
-`Function Call` 👉 How to call the model in LiteLLM.
+`Model Name` 👉 사람이 읽기 쉬운 이름입니다.  
+`Function Call` 👉 LiteLLM에서 모델을 호출하는 방법입니다.
 
-| Model Name       | Function Call                              |
+| Model Name       | 호출 방법                              |
 |------------------|--------------------------------------------|
 | claude-opus-4-6  | `completion('claude-opus-4-6-20260205', messages)` | `os.environ['ANTHROPIC_API_KEY']`       |
-| claude-sonnet-4-5  | `completion('claude-sonnet-4-5-20250929', messages)` | `os.environ['ANTHROPIC_API_KEY']`       |
+| `claude-sonnet-4-5`  | `completion('claude-sonnet-4-5-20250929', messages)` | `os.environ['ANTHROPIC_API_KEY']`       |
 | claude-opus-4-5  | `completion('claude-opus-4-5-20251101', messages)` | `os.environ['ANTHROPIC_API_KEY']`       |
 | claude-opus-4-1  | `completion('claude-opus-4-1-20250805', messages)` | `os.environ['ANTHROPIC_API_KEY']`       |
 | claude-opus-4  | `completion('claude-opus-4-20250514', messages)` | `os.environ['ANTHROPIC_API_KEY']`       |
 | claude-sonnet-4  | `completion('claude-sonnet-4-20250514', messages)` | `os.environ['ANTHROPIC_API_KEY']`       |
 | claude-3.7  | `completion('claude-3-7-sonnet-20250219', messages)` | `os.environ['ANTHROPIC_API_KEY']`       |
-| claude-3-5-sonnet  | `completion('claude-3-5-sonnet-20240620', messages)` | `os.environ['ANTHROPIC_API_KEY']`       |
+| `claude-3-5-sonnet`  | `completion('claude-3-5-sonnet-20240620', messages)` | `os.environ['ANTHROPIC_API_KEY']`       |
 | claude-3-haiku  | `completion('claude-3-haiku-20240307', messages)` | `os.environ['ANTHROPIC_API_KEY']`       |
 | claude-3-opus  | `completion('claude-3-opus-20240229', messages)` | `os.environ['ANTHROPIC_API_KEY']`       |
-| claude-3-5-sonnet-20240620  | `completion('claude-3-5-sonnet-20240620', messages)` | `os.environ['ANTHROPIC_API_KEY']`       |
+| `claude-3-5-sonnet-20240620`  | `completion('claude-3-5-sonnet-20240620', messages)` | `os.environ['ANTHROPIC_API_KEY']`       |
 | claude-3-sonnet  | `completion('claude-3-sonnet-20240229', messages)` | `os.environ['ANTHROPIC_API_KEY']`       |
 | claude-2.1  | `completion('claude-2.1', messages)` | `os.environ['ANTHROPIC_API_KEY']`       |
 | claude-2  | `completion('claude-2', messages)` | `os.environ['ANTHROPIC_API_KEY']`       |
-| claude-instant-1.2  | `completion('claude-instant-1.2', messages)` | `os.environ['ANTHROPIC_API_KEY']`       |
+| `claude-instant-1.2`  | `completion('claude-instant-1.2', messages)` | `os.environ['ANTHROPIC_API_KEY']`       |
 | claude-instant-1  | `completion('claude-instant-1', messages)` | `os.environ['ANTHROPIC_API_KEY']`       |
 
-## **Prompt Caching**
+## **Prompt 캐싱** {#prompt-caching}
 
-Use Anthropic Prompt Caching
+Anthropic Prompt 캐싱을 사용합니다.
 
 
-[Relevant Anthropic API Docs](https://docs.anthropic.com/en/docs/build-with-claude/prompt-caching)
+[관련 Anthropic API 문서](https://docs.anthropic.com/en/docs/build-with-claude/prompt-caching)
 
 :::note
 
-Here's what a sample Raw Request from LiteLLM for Anthropic Context Caching looks like: 
+Anthropic Context 캐싱을 위해 LiteLLM이 보내는 sample Raw Request는 다음과 같습니다.
 
 ```bash
 POST Request Sent from LiteLLM:
@@ -478,13 +478,13 @@ https://api.anthropic.com/v1/messages \
 }'
 ```
 
-**Note:** Anthropic no longer requires the `anthropic-beta: prompt-caching-2024-07-31` header. Prompt caching now works automatically when you use `cache_control` in your messages.
+**참고:** Anthropic은 더 이상 `anthropic-beta: prompt-caching-2024-07-31` 헤더를 요구하지 않습니다. 이제 message에서 `cache_control`을 사용하면 prompt caching이 자동으로 동작합니다.
 ::: 
 
-### Caching - Large Context Caching 
+### 캐싱 - Large Context 캐싱 {#caching-large-context-caching}
 
 
-This example demonstrates basic Prompt Caching usage, caching the full text of the legal agreement as a prefix while keeping the user instruction uncached.
+이 예제는 기본 Prompt 캐싱 사용법을 보여줍니다. 법률 계약서 전체 text를 prefix로 caching하면서 사용자 instruction은 caching하지 않습니다.
 
 
 <Tabs>
@@ -521,11 +521,11 @@ response = await litellm.acompletion(
 
 :::info
 
-LiteLLM Proxy is OpenAI compatible
+LiteLLM Proxy는 OpenAI와 호환됩니다.
 
-This is an example using the OpenAI Python SDK sending a request to LiteLLM Proxy
+OpenAI Python SDK를 사용해 LiteLLM Proxy로 요청을 보내는 예제입니다.
 
-Assuming you have a model=`anthropic/claude-3-5-sonnet-20240620` on the [litellm proxy config.yaml](#usage-with-litellm-proxy)
+litellm proxy config.yaml에 model=`anthropic/claude-3-5-sonnet-20240620`이 있다고 가정합니다.
 
 :::
 
@@ -566,11 +566,11 @@ response = await client.chat.completions.create(
 </TabItem>
 </Tabs>
 
-### Caching - Tools definitions
+### 캐싱 - 도구 정의
 
-In this example, we demonstrate caching tool definitions.
+이 예제는 tool definition을 caching하는 방법을 보여줍니다.
 
-The cache_control parameter is placed on the final tool
+`cache_control` 파라미터는 마지막 도구에 배치합니다.
 
 <Tabs>
 <TabItem value="sdk" label="LiteLLM SDK">
@@ -609,11 +609,11 @@ response = await litellm.acompletion(
 
 :::info
 
-LiteLLM Proxy is OpenAI compatible
+LiteLLM Proxy는 OpenAI와 호환됩니다.
 
-This is an example using the OpenAI Python SDK sending a request to LiteLLM Proxy
+OpenAI Python SDK를 사용해 LiteLLM Proxy로 요청을 보내는 예제입니다.
 
-Assuming you have a model=`anthropic/claude-3-5-sonnet-20240620` on the [litellm proxy config.yaml](#usage-with-litellm-proxy)
+litellm proxy config.yaml에 model=`anthropic/claude-3-5-sonnet-20240620`이 있다고 가정합니다.
 
 :::
 
@@ -655,13 +655,13 @@ response = await client.chat.completions.create(
 </Tabs>
 
 
-### Caching - Continuing Multi-Turn Convo
+### 캐싱 - Multi-Turn 대화 이어가기 {#caching-continuing-a-multi-turn-conversation}
 
-In this example, we demonstrate how to use Prompt Caching in a multi-turn conversation.
+이 예제는 multi-turn conversation에서 Prompt caching을 사용하는 방법을 보여줍니다.
 
-The cache_control parameter is placed on the system message to designate it as part of the static prefix.
+`cache_control` 파라미터는 system message에 배치해 해당 message를 static prefix의 일부로 지정합니다.
 
-The conversation history (previous messages) is included in the messages array. The final turn is marked with cache-control, for continuing in followups. The second-to-last user message is marked for caching with the cache_control parameter, so that this checkpoint can read from the previous cache.
+conversation history(previous messages)는 messages array에 포함됩니다. follow-up을 이어갈 수 있도록 마지막 turn에는 cache-control을 표시합니다. 마지막에서 두 번째 user message는 `cache_control` 파라미터로 caching 대상이 되므로, 이 checkpoint가 이전 cache에서 읽을 수 있습니다.
 
 <Tabs>
 <TabItem value="sdk" label="LiteLLM SDK">
@@ -718,11 +718,11 @@ response = await litellm.acompletion(
 
 :::info
 
-LiteLLM Proxy is OpenAI compatible
+LiteLLM Proxy는 OpenAI와 호환됩니다.
 
-This is an example using the OpenAI Python SDK sending a request to LiteLLM Proxy
+OpenAI Python SDK를 사용해 LiteLLM Proxy로 요청을 보내는 예제입니다.
 
-Assuming you have a model=`anthropic/claude-3-5-sonnet-20240620` on the [litellm proxy config.yaml](#usage-with-litellm-proxy)
+litellm proxy config.yaml에 model=`anthropic/claude-3-5-sonnet-20240620`이 있다고 가정합니다.
 
 :::
 
@@ -781,7 +781,7 @@ response = await client.chat.completions.create(
 </TabItem>
 </Tabs>
 
-## **Function/Tool Calling**
+## **Function/도구 호출** {#functiontool-calling}
 
 ```python
 from litellm import completion
@@ -827,11 +827,11 @@ assert isinstance(
 ```
 
 
-### Forcing Anthropic Tool Use
+### Anthropic 도구 사용 강제 {#forcing-anthropic-tool-use}
 
-If you want Claude to use a specific tool to answer the user’s question
+Claude가 사용자의 질문에 답하기 위해 특정 도구를 사용하게 하려는 경우
 
-You can do this by specifying the tool in the `tool_choice` field like so:
+다음처럼 `tool_choice` field에 도구를 지정하면 됩니다.
 ```python
 response = completion(
     model="anthropic/claude-3-opus-20240229",
@@ -841,9 +841,9 @@ response = completion(
 )
 ```
 
-### Disable Tool Calling
+### 도구 호출 비활성화 {#disable-tool-calling}
 
-You can disable tool calling by setting the `tool_choice` to `"none"`.
+`tool_choice`를 `"none"`으로 설정하면 tool calling을 비활성화할 수 있습니다.
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -862,7 +862,7 @@ response = completion(
 </TabItem>
 <TabItem value="proxy" label="Proxy">
 
-1. Setup config.yaml
+1. config.yaml 설정
 
 ```yaml
 model_list:
@@ -872,15 +872,15 @@ model_list:
         api_key: os.environ/ANTHROPIC_API_KEY
 ```
 
-2. Start proxy
+2. proxy 시작
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-3. Test it! 
+3. 테스트
 
-Replace `anything` with your LiteLLM Proxy Virtual Key, if [setup](../proxy/virtual_keys).
+[설정](../proxy/virtual_keys)을 마쳤다면 `anything`을 LiteLLM Proxy Virtual Key로 바꾸세요.
 
 ```bash
 curl http://0.0.0.0:4000/v1/chat/completions \
@@ -898,14 +898,14 @@ curl http://0.0.0.0:4000/v1/chat/completions \
 
 
 
-### MCP Tool Calling 
+### MCP 도구 호출 {#mcp-tool-calling}
 
-Here's how to use MCP tool calling with Anthropic:
+Anthropic에서 MCP tool calling을 사용하는 방법은 다음과 같습니다.
 
 <Tabs>
 <TabItem value="sdk" label="LiteLLM SDK">
 
-LiteLLM supports MCP tool calling with Anthropic in the OpenAI Responses API format.
+LiteLLM은 OpenAI Responses API format으로 Anthropic MCP tool calling을 지원합니다.
 
 <Tabs>
 <TabItem value="openai_format" label="OpenAI Format">
@@ -964,7 +964,7 @@ print(response)
 </TabItem>
 <TabItem value="proxy" label="LiteLLM Proxy">
 
-1. Setup config.yaml
+1. config.yaml 설정
 
 ```yaml
 model_list:
@@ -974,13 +974,13 @@ model_list:
         api_key: os.environ/ANTHROPIC_API_KEY
 ```
 
-2. Start proxy
+2. proxy 시작
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-3. Test it! 
+3. 테스트
 
 <Tabs>
 <TabItem value="openai" label="OpenAI Format">
@@ -1021,9 +1021,9 @@ curl http://0.0.0.0:4000/v1/chat/completions \
 </TabItem>
 </Tabs>
 
-### Parallel Function Calling 
+### 병렬 function calling {#parallel-function-calling}
 
-Here's how to pass the result of a function call back to an anthropic model: 
+function call 결과를 Anthropic 모델로 다시 전달하는 방법은 다음과 같습니다.
 
 ```python
 from litellm import completion
@@ -1104,11 +1104,11 @@ except Exception as e:
     print(f"An error occurred - {str(e)}")
 ```
 
-s/o @[Shekhar Patnaik](https://www.linkedin.com/in/patnaikshekhar) for requesting this!
+이 예제를 요청해 준 @[Shekhar Patnaik](https://www.linkedin.com/in/patnaikshekhar)에게 감사드립니다.
 
-### Context Management (Beta)
+### Context management 베타 {#context-management-beta}
 
-Anthropic’s [context editing](https://docs.claude.com/en/docs/build-with-claude/context-editing) API lets you automatically clear older tool results or thinking blocks. LiteLLM now forwards the native `context_management` payload when you call Anthropic models, and automatically attaches the required `context-management-2025-06-27` beta header.
+Anthropic의 [context editing](https://docs.claude.com/en/docs/build-with-claude/context-editing) API를 사용하면 오래된 tool result나 thinking block을 자동으로 지울 수 있습니다. LiteLLM은 Anthropic 모델을 호출할 때 native `context_management` payload를 전달하고, 필요한 `context-management-2025-06-27` beta 헤더를 자동으로 붙입니다.
 
 ```python
 from litellm import completion
@@ -1130,7 +1130,7 @@ response = completion(
 )
 ```
 
-### Anthropic Hosted Tools (Computer, Text Editor, Web Search, Memory)
+### Anthropic 호스팅 도구(Computer, Text Editor, Web Search, Memory) {#anthropic-hosted-tools-computer-text-editor-web-search-memory}
 
 
 <Tabs>
@@ -1193,7 +1193,7 @@ print(resp)
 </TabItem>
 <TabItem value="proxy" label="PROXY">
 
-1. Setup config.yaml
+1. config.yaml 설정
 
 ```yaml
 - model_name: claude-3-5-sonnet-latest
@@ -1202,13 +1202,13 @@ print(resp)
     api_key: os.environ/ANTHROPIC_API_KEY
 ```
 
-2. Start proxy
+2. proxy 시작
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-3. Test it! 
+3. 테스트
 
 ```bash
 curl http://0.0.0.0:4000/v1/chat/completions \
@@ -1227,10 +1227,10 @@ curl http://0.0.0.0:4000/v1/chat/completions \
 <TabItem value="web_search" label="Web Search">
 
 :::info
-Live from v1.70.1+
+v1.70.1+부터 사용할 수 있습니다.
 :::
 
-LiteLLM maps OpenAI's `search_context_size` param to Anthropic's `max_uses` param.
+LiteLLM은 OpenAI의 `search_context_size` 파라미터를 Anthropic의 `max_uses` 파라미터로 매핑합니다.
 
 | OpenAI | Anthropic |
 | --- | --- |
@@ -1297,7 +1297,7 @@ print(resp)
 
 <TabItem value="proxy" label="PROXY">
 
-1. Setup config.yaml
+1. config.yaml 설정
 
 ```yaml
 - model_name: claude-3-5-sonnet-latest
@@ -1306,13 +1306,13 @@ print(resp)
     api_key: os.environ/ANTHROPIC_API_KEY
 ```
 
-2. Start proxy
+2. proxy 시작
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-3. Test it! 
+3. 테스트
 
 <Tabs>
 <TabItem value="openai" label="OpenAI Format">
@@ -1364,7 +1364,7 @@ curl http://0.0.0.0:4000/v1/chat/completions \
 <TabItem value="memory" label="Memory">
 
 :::info
-The Anthropic Memory tool is currently in beta.
+Anthropic Memory tool은 현재 beta입니다.
 :::
 
 <Tabs>
@@ -1393,7 +1393,7 @@ print(response)
 </TabItem>
 <TabItem value="proxy" label="Proxy">
 
-1. Setup config.yaml
+1. config.yaml 설정
 
 ```yaml
 model_list:
@@ -1403,13 +1403,13 @@ model_list:
         api_key: os.environ/ANTHROPIC_API_KEY
 ```
 
-2. Start proxy
+2. proxy 시작
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-3. Test it! 
+3. 테스트
 
 ```bash
 curl http://0.0.0.0:4000/v1/chat/completions \
@@ -1430,7 +1430,7 @@ curl http://0.0.0.0:4000/v1/chat/completions \
 
 
 
-## Usage - Vision 
+## 사용법 - Vision {#usage-vision}
 
 ```python
 from litellm import completion
@@ -1468,9 +1468,9 @@ resp = litellm.completion(
 print(f"\nResponse: {resp}")
 ```
 
-## Usage - Thinking / `reasoning_content`
+## 사용법 - Thinking / `reasoning_content` {#usage-thinking--reasoning_content}
 
-LiteLLM translates OpenAI's `reasoning_effort` to Anthropic's `thinking` parameter. [Code](https://github.com/BerriAI/litellm/blob/23051d89dd3611a81617d84277059cd88b2df511/litellm/llms/anthropic/chat/transformation.py#L298)
+LiteLLM은 OpenAI의 `reasoning_effort`를 Anthropic의 `thinking` 파라미터로 변환합니다. [Code](https://github.com/BerriAI/litellm/blob/23051d89dd3611a81617d84277059cd88b2df511/litellm/llms/anthropic/chat/transformation.py#L298)
 
 | reasoning_effort | thinking |
 | ---------------- | -------- |
@@ -1479,7 +1479,7 @@ LiteLLM translates OpenAI's `reasoning_effort` to Anthropic's `thinking` paramet
 | "high"           | "budget_tokens": 4096 |
 
 :::note
-`reasoning_effort` maps to Anthropic's [adaptive thinking](https: //docs.claude.com/en/docs/build-with-claude/extended-thinking/adaptive-thinking) plus the `output_config.effort` parameter on Claude 4.6 and 4.7 models (including `claude-opus-4-6`, `claude-opus-4-7`, `claude-sonnet-4-6`, etc. ), **not** `budget_tokens`. In particular, LiteLLM will inject the following into the underlying Anthropic request on the OpenAI-compatible `/chat/completions` route:
+Claude 4.6 및 4.7 모델(`claude-opus-4-6`, `claude-opus-4-7`, `claude-sonnet-4-6` 등)에서 `reasoning_effort`는 `budget_tokens`가 아니라 Anthropic의 [adaptive thinking](https: //docs.claude.com/en/docs/build-with-claude/extended-thinking/adaptive-thinking)과 `output_config.effort` 파라미터로 매핑됩니다. 특히 OpenAI-compatible `/chat/completions` route에서 LiteLLM은 underlying Anthropic request에 다음 값을 주입합니다.
 
 ```json
 {
@@ -1488,9 +1488,9 @@ LiteLLM translates OpenAI's `reasoning_effort` to Anthropic's `thinking` paramet
 }
 ```
 
-This means **any value other than `"none"` for `reasoning_effort` will automatically turn thinking on for these models**, even though the OpenAI-compatible request body does not have a separate `thinking` field. This is intended to match Anthropic's own recommended usage: budget_tokens has been deprecated on 4.6 models and rejected entirely on Opus 4.7, where only adaptive is a supported thinking mode.
+즉 OpenAI-compatible request body에 별도 `thinking` field가 없더라도, `reasoning_effort`가 `"none"`이 아닌 값이면 이 모델들에서는 thinking이 자동으로 켜집니다. 이는 Anthropic의 권장 usage와 맞추기 위한 동작입니다. 4.6 모델에서는 `budget_tokens`가 deprecated되었고, adaptive만 지원되는 thinking mode인 Opus 4.7에서는 완전히 reject됩니다.
 
-You can disable thinking either by omitting `reasoning_effort` entirely or setting it to `"none"`. LiteLLM will not send a `thinking` field in that case. You can still pass the native `thinking` parameter directly if you wish to explicitly control thinking with a fixed budget on prior models:
+`reasoning_effort`를 완전히 생략하거나 `"none"`으로 설정하면 thinking을 비활성화할 수 있습니다. 이 경우 LiteLLM은 `thinking` field를 보내지 않습니다. 이전 모델에서 fixed budget으로 thinking을 명시적으로 제어하려면 native `thinking` 파라미터를 직접 전달할 수 있습니다.
 
 ```python
 from litellm import completion
@@ -1510,7 +1510,7 @@ resp = completion(
 )
 ```
 
-The Anthropic `/v1/messages` passthrough route is unaffected by this reasoning effort mapping. `thinking` is passed through unchanged.
+Anthropic `/v1/messages` passthrough route는 이 reasoning effort mapping의 영향을 받지 않습니다. `thinking`은 변경 없이 pass-through됩니다.
 :::
 
 <Tabs>
@@ -1531,7 +1531,7 @@ resp = completion(
 
 <TabItem value="proxy" label="PROXY">
 
-1. Setup config.yaml
+1. config.yaml 설정
 
 ```yaml
 - model_name: claude-3-7-sonnet-20250219
@@ -1540,13 +1540,13 @@ resp = completion(
     api_key: os.environ/ANTHROPIC_API_KEY
 ```
 
-2. Start proxy
+2. proxy 시작
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-3. Test it! 
+3. 테스트
 
 ```bash
 curl http://0.0.0.0:4000/v1/chat/completions \
@@ -1563,7 +1563,7 @@ curl http://0.0.0.0:4000/v1/chat/completions \
 </Tabs>
 
 
-**Expected Response**
+**예상 응답**
 
 ```python
 ModelResponse(
@@ -1619,12 +1619,11 @@ ModelResponse(
 )
 ```
 
-### Pass `thinking` to Anthropic models
+### Anthropic 모델에 `thinking` 전달 {#passing-thinking-to-anthropic-models}
 
-You can also pass the `thinking` parameter to Anthropic models.
+Anthropic 모델에 `thinking` 파라미터를 전달할 수도 있습니다.
 
-
-You can also pass the `thinking` parameter to Anthropic models.
+아래 예시는 SDK와 Proxy에서 같은 파라미터를 사용하는 방법을 보여줍니다.
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -1654,7 +1653,7 @@ curl http://0.0.0.0:4000/v1/chat/completions \
 </TabItem>
 </Tabs>
 
-#### Adaptive Thinking (Claude Opus 4.6)
+#### 적응형 thinking(Claude Opus 4.6) {#adaptive-thinking-claude-opus-46}
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -1684,7 +1683,7 @@ curl http://0.0.0.0:4000/v1/chat/completions \
 </TabItem>
 </Tabs>
 
-#### Enabled Thinking with Budget
+#### Budget을 지정한 Thinking 활성화 {#enable-thinking-with-a-budget}
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -1714,9 +1713,9 @@ curl http://0.0.0.0:4000/v1/chat/completions \
 </TabItem>
 </Tabs>
 
-## **Passing Extra Headers to Anthropic API**
+## **Anthropic API에 Extra Headers 전달** {#passing-extra-headers-to-anthropic-api}
 
-Pass `extra_headers: dict` to `litellm.completion`
+`litellm.completion`에 `extra_headers: dict`를 전달합니다.
 
 ```python
 from litellm import completion
@@ -1728,12 +1727,12 @@ response = completion(
 )
 ```
 
-## Usage - "Assistant Pre-fill"
+## 사용법 - "Assistant Pre-fill" {#usage-assistant-pre-fill}
 
-You can "put words in Claude's mouth" by including an `assistant` role message as the last item in the `messages` array.
+`messages` array의 마지막 item으로 `assistant` role message를 포함하면 Claude의 응답 시작 부분을 미리 채울 수 있습니다.
 
 > [!IMPORTANT]
-> The returned completion will _not_ include your "pre-fill" text, since it is part of the prompt itself. Make sure to prefix Claude's completion with your pre-fill.
+> 반환되는 completion에는 "pre-fill" text가 포함되지 않습니다. 해당 text는 prompt 자체의 일부이기 때문입니다. Claude의 completion 앞에 pre-fill을 직접 붙여야 합니다.
 
 ```python
 import os
@@ -1750,7 +1749,7 @@ response = completion(model="claude-2.1", messages=messages)
 print(response)
 ```
 
-#### Example prompt sent to Claude
+#### Claude로 전송되는 예제 prompt {#example-prompt-sent-to-claude}
 
 ```
 
@@ -1761,8 +1760,8 @@ Human: How do you say 'Hello' in German? Return your answer as a JSON object, li
 Assistant: {
 ```
 
-## Usage - "System" messages
-If you're using Anthropic's Claude 2.1, `system` role messages are properly formatted for you.
+## 사용법 - "System" messages {#usage-system-messages}
+Anthropic Claude 2.1을 사용하는 경우 `system` role message는 LiteLLM이 올바른 형식으로 변환합니다.
 
 ```python
 import os
@@ -1778,7 +1777,7 @@ messages = [
 response = completion(model="claude-2.1", messages=messages)
 ```
 
-#### Example prompt sent to Claude
+#### Claude로 전송되는 예제 prompt {#example-prompt-sent-to-claude-1}
 
 ```
 You are a snarky assistant.
@@ -1789,14 +1788,14 @@ Assistant:
 ```
 
 
-## Usage - PDF
+## 사용법 - PDF
 
-Pass base64 encoded PDF files to Anthropic models using the `file` content type with a `file_data` field.
+`file_data` field가 있는 `file` content type을 사용해 base64 encoded PDF file을 Anthropic 모델에 전달합니다.
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
 
-### **using base64**
+### **base64 사용** {#using-base64}
 ```python
 from litellm import completion, supports_pdf_input
 import base64
@@ -1838,7 +1837,7 @@ print(response.choices[0])
 </TabItem>
 <TabItem value="proxy" label="PROXY">
 
-1. Add model to config 
+1. config에 model 추가
 
 ```yaml
 - model_name: claude-3-5-haiku-20241022
@@ -1847,13 +1846,13 @@ print(response.choices[0])
     api_key: os.environ/ANTHROPIC_API_KEY
 ```
 
-2. Start Proxy
+2. Proxy 시작
 
 ```
 litellm --config /path/to/config.yaml
 ```
 
-3. Test it! 
+3. 테스트
 
 ```bash
 curl http://0.0.0.0:4000/v1/chat/completions \
@@ -1886,11 +1885,11 @@ curl http://0.0.0.0:4000/v1/chat/completions \
 </TabItem>
 </Tabs>
 
-## [BETA] Citations API 
+## [BETA] Citations API {#beta-citations-api}
 
-Pass `citations: {"enabled": true}` to Anthropic, to get citations on your document responses. 
+document response에서 citation을 받으려면 Anthropic에 `citations: {"enabled": true}`를 전달합니다.
 
-Note: This interface is in BETA. If you have feedback on how citations should be returned, please [tell us here](https://github.com/BerriAI/litellm/issues/7970#issuecomment-2644437943)
+참고: 이 interface는 BETA입니다. citation 반환 방식에 대한 feedback이 있으면 [여기](https://github.com/BerriAI/litellm/issues/7970#issuecomment-2644437943)에 남겨 주세요.
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -1932,7 +1931,7 @@ assert citations is not None
 </TabItem>
 <TabItem value="proxy" label="PROXY">
 
-1. Setup config.yaml
+1. config.yaml 설정
 
 ```yaml
 model_list:
@@ -1942,7 +1941,7 @@ model_list:
         api_key: os.environ/ANTHROPIC_API_KEY
 ```
 
-2. Start proxy 
+2. proxy 시작
 
 ```bash
 litellm --config /path/to/config.yaml
@@ -1950,7 +1949,7 @@ litellm --config /path/to/config.yaml
 # RUNNING on http://0.0.0.0:4000
 ```
 
-3. Test it! 
+3. 테스트
 
 ```bash
 curl -L -X POST 'http://0.0.0.0:4000/v1/chat/completions' \
@@ -1986,23 +1985,23 @@ curl -L -X POST 'http://0.0.0.0:4000/v1/chat/completions' \
 </TabItem>
 </Tabs>
 
-## Files API
+## Files API {#files-api}
 
-Upload files once and reference them by `file_id` in multiple requests—no need to re-upload content each time.
+file을 한 번 upload한 뒤 여러 request에서 `file_id`로 참조할 수 있습니다. 매번 content를 다시 upload할 필요가 없습니다.
 
 :::info
-The `file_id` obtained from Anthropic only works with Anthropic Claude models. You cannot use it with other providers (OpenAI, Bedrock, etc.).
+Anthropic에서 받은 `file_id`는 Anthropic Claude 모델에서만 동작합니다. 다른 provider(OpenAI, Bedrock 등)에서는 사용할 수 없습니다.
 :::
 
-- **Max file size:** 500 MB | **Total storage:** 100 GB per org
-- **Pricing:** File API operations are free. File content used in Messages requests is priced as input tokens.
+- **최대 file size:** 500 MB | **총 storage:** org당 100 GB
+- **가격:** File API operation은 무료입니다. Messages request에서 사용하는 file content는 input token으로 과금됩니다.
 
-**Supported models by file type:**
-- **Images:** All Claude 3+ models
-- **PDFs:** All Claude 3.5+ models
-- **Other file types** (for code execution): Claude 3.5 Haiku + all Claude 3.7+ models
+**file type별 지원 모델:**
+- **Images:** 모든 Claude 3+ 모델
+- **PDFs:** 모든 Claude 3.5+ 모델
+- **기타 file type** (code execution용): Claude 3.5 Haiku + 모든 Claude 3.7+ 모델
 
-### Quick Start
+### 빠른 시작
 
 ```python
 import litellm
@@ -2030,9 +2029,9 @@ response = litellm.completion(
 )
 ```
 
-### File Operations
+### File Operations {#file-operations}
 
-| Operation | Function |
+| 작업 | 함수 |
 |-----------|----------|
 | Upload | `litellm.create_file(file, purpose="messages", custom_llm_provider="anthropic")` |
 | List | `litellm.file_list(custom_llm_provider="anthropic")` |
@@ -2041,10 +2040,10 @@ response = litellm.completion(
 | Download | `litellm.file_content(file_id, custom_llm_provider="anthropic")` |
 
 :::note
-Download only works for files created by the [code execution tool](https://docs.anthropic.com/en/docs/agents-and-tools/tool-use/code-execution-tool), not uploaded files.
+[code execution tool](https://docs.anthropic.com/en/docs/agents-and-tools/tool-use/code-execution-tool)이 만든 file만 download할 수 있습니다. upload한 file은 download할 수 없습니다.
 :::
 
-### Supported Formats
+### 지원 format {#supported-formats}
 
 | File Type | Format Value |
 |-----------|-------------|
@@ -2055,7 +2054,7 @@ Download only works for files created by the [code execution tool](https://docs.
 | GIF | `image/gif` |
 | WebP | `image/webp` |
 
-### Using Images
+### Image 사용 {#image-usage}
 
 ```python
 # Upload image
@@ -2078,9 +2077,9 @@ response = litellm.completion(
 )
 ```
 
-## Usage - passing 'user_id' to Anthropic
+## 사용법 - Anthropic에 `user_id` 전달 {#usage-passing-user_id-to-anthropic}
 
-LiteLLM translates the OpenAI `user` param to Anthropic's `metadata[user_id]` param.
+LiteLLM은 OpenAI `user` 파라미터를 Anthropic의 `metadata[user_id]` 파라미터로 변환합니다.
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -2095,7 +2094,7 @@ response = completion(
 </TabItem>
 <TabItem value="proxy" label="PROXY">
 
-1. Setup config.yaml
+1. config.yaml 설정
 
 ```yaml
 model_list:
@@ -2105,13 +2104,13 @@ model_list:
         api_key: os.environ/ANTHROPIC_API_KEY
 ```
 
-2. Start Proxy
+2. Proxy 시작
 
 ```
 litellm --config /path/to/config.yaml
 ```
 
-3. Test it! 
+3. 테스트
 
 ```bash
 curl http://0.0.0.0:4000/v1/chat/completions \
@@ -2128,9 +2127,9 @@ curl http://0.0.0.0:4000/v1/chat/completions \
 </Tabs>
 
 
-## Usage - Agent Skills
+## 사용법 - Agent Skills {#usage-agent-skills}
 
-LiteLLM supports using Agent Skills with the API
+LiteLLM은 API에서 Agent Skills 사용을 지원합니다.
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -2159,7 +2158,7 @@ response = completion(
 </TabItem>
 <TabItem value="proxy" label="PROXY">
 
-1. Setup config.yaml
+1. config.yaml 설정
 
 ```yaml
 model_list:
@@ -2169,13 +2168,13 @@ model_list:
         api_key: os.environ/ANTHROPIC_API_KEY
 ```
 
-2. Start Proxy
+2. Proxy 시작
 
 ```
 litellm --config /path/to/config.yaml
 ```
 
-3. Test it! 
+3. 테스트
 
 ```bash
 curl --location 'http://localhost:4000/chat/completions' \
@@ -2210,4 +2209,4 @@ curl --location 'http://localhost:4000/chat/completions' \
 </TabItem>
 </Tabs>
 
-The container and its "id" will be present in "provider_specific_fields" in streaming/non-streaming response
+container와 해당 "id"는 streaming/non-streaming response의 `provider_specific_fields`에 포함됩니다.

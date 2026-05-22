@@ -1,52 +1,52 @@
-# Guardrails on Pass-Through Endpoints
+# Pass-Through 엔드포인트의 가드레일
 
 import Image from '@theme/IdealImage';
 
-## Overview
+## 개요
 
-| Property | Details |
+| 속성 | 세부 정보 |
 |----------|---------|
-| Description | Enable guardrail execution on LiteLLM pass-through endpoints with opt-in activation and automatic inheritance from org/team/key levels |
-| Supported Guardrails | All LiteLLM guardrails (Bedrock, Aporia, Lakera, etc.) |
-| Default Behavior | Guardrails are **disabled** on pass-through endpoints unless explicitly enabled |
+| 설명 | opt-in 활성화와 org/team/key 수준의 자동 상속을 사용해 LiteLLM pass-through 엔드포인트에서 가드레일 실행을 활성화합니다 |
+| 지원되는 가드레일 | 모든 LiteLLM 가드레일(Bedrock, Aporia, Lakera 등) |
+| 기본 동작 | 명시적으로 활성화하지 않으면 pass-through 엔드포인트에서 가드레일은 **비활성화**됩니다 |
 
-## Quick Start
+## 빠른 시작
 
-You can configure guardrails on pass-through endpoints either via the **UI** (recommended) or **config file**.
+pass-through 엔드포인트의 가드레일은 **UI**(권장) 또는 **config file**로 구성할 수 있습니다.
 
-### Using the UI
+### UI 사용
 
-#### 1. Navigate to Pass-Through Endpoints
+#### 1. Pass-Through 엔드포인트로 이동
 
-Go to **Models + Endpoints** → Click **+ Add Pass-Through Endpoint**
+**모델 + Endpoints**로 이동한 뒤 **+ Add Pass-Through Endpoint**를 클릭합니다.
 
-<Image img={require('../../img/pt_guard1.png')} alt="Add guardrails to pass-through endpoint" />
+<Image img={require('../../img/pt_guard1.png')} alt="pass-through 엔드포인트에 가드레일 추가" />
 
-Scroll to the **Guardrails** section and select which guardrails to enforce.
+**가드레일** 섹션으로 스크롤한 뒤 적용할 가드레일을 선택합니다.
 
-:::tip Default Behavior
-By default, you don't need to specify fields - LiteLLM will JSON dump the entire request/response payload and send it to the guardrail.
+:::tip 기본 동작
+기본적으로 필드를 지정할 필요는 없습니다. LiteLLM은 전체 요청/응답 payload를 JSON으로 덤프해 가드레일로 보냅니다.
 :::
 
-#### 2. Target Specific Fields (Optional)
+#### 2. 특정 필드 지정(선택 사항)
 
-<Image img={require('../../img/pt_guard2.png')} alt="Configure field-level targeting" />
+<Image img={require('../../img/pt_guard2.png')} alt="필드 수준 타기팅 구성" />
 
-To check only specific fields instead of the entire payload:
+전체 payload 대신 특정 필드만 검사하려면 다음을 수행합니다.
 
-1. Select your guardrails
-2. In **Field Targeting (Optional)**, specify fields for each guardrail
-3. Use the quick-add buttons (`+ query`, `+ documents[*]`) or type custom JSONPath expressions
-4. **Request Fields (pre_call)**: Fields to check before sending to target API
-5. **Response Fields (post_call)**: Fields to check in the response from target API
+1. 가드레일을 선택합니다
+2. **Field Targeting (Optional)**에서 각 가드레일에 사용할 필드를 지정합니다
+3. 빠른 추가 버튼(`+ query`, `+ documents[*]`)을 사용하거나 사용자 지정 JSONPath 표현식을 입력합니다
+4. **Request Fields (pre_call)**: target API로 보내기 전에 검사할 필드입니다
+5. **Response Fields (post_call)**: target API에서 받은 응답에서 검사할 필드입니다
 
-**Example**: In the screenshot above, we set `query` as a request field, so only the `query` field is sent to the guardrail instead of the entire request.
+**예제**: 위 스크린샷에서는 `query`를 요청 필드로 설정했으므로 전체 요청 대신 `query` 필드만 가드레일로 전송됩니다.
 
 ---
 
-### Using Config File
+### Config File 사용
 
-#### 1. Define guardrails and pass-through endpoint
+#### 1. 가드레일과 pass-through 엔드포인트 정의
 
 ```yaml showLineNumbers title="config.yaml"
 guardrails:
@@ -67,13 +67,13 @@ general_settings:
         pii-guard:
 ```
 
-#### 2. Start proxy
+#### 2. proxy 시작
 
 ```bash
 litellm --config config.yaml
 ```
 
-#### 3. Test request
+#### 3. 요청 테스트
 
 ```bash
 curl -X POST "http://localhost:4000/v1/rerank" \
@@ -88,35 +88,35 @@ curl -X POST "http://localhost:4000/v1/rerank" \
 
 ---
 
-## Opt-In Behavior
+## Opt-In 동작
 
-| Configuration | Behavior |
+| 설정 | 동작 |
 |--------------|----------|
-| `guardrails` not set | No guardrails execute (default) |
-| `guardrails` set | All org/team/key + pass-through guardrails execute |
+| `guardrails` 미설정 | 가드레일이 실행되지 않습니다(기본값) |
+| `guardrails` 설정 | 모든 org/team/key + pass-through 가드레일이 실행됩니다 |
 
-When guardrails are enabled, the system collects and executes:
-- Org-level guardrails
-- Team-level guardrails  
-- Key-level guardrails
-- Pass-through specific guardrails
+가드레일이 활성화되면 시스템은 다음을 수집해 실행합니다.
+- Org 수준 가드레일
+- Team 수준 가드레일
+- Key 수준 가드레일
+- Pass-through 전용 가드레일
 
 ---
 
 
-## How It Works
+## 작동 방식
 
-The diagram below shows what happens when a client makes a request to `/special/rerank` - a pass-through endpoint configured with guardrails in your `config.yaml`.
+아래 다이어그램은 클라이언트가 `config.yaml`에서 가드레일이 구성된 pass-through 엔드포인트인 `/special/rerank`로 요청을 보낼 때의 흐름을 보여줍니다.
 
-When guardrails are configured on a pass-through endpoint:
-1. **Pre-call guardrails** run on the request before forwarding to the target API
-2. If `request_fields` is specified (e.g., `["query"]`), only those fields are sent to the guardrail. Otherwise, the entire request payload is evaluated.
-3. The request is forwarded to the target API only if guardrails pass
-4. **Post-call guardrails** run on the response from the target API
-5. If `response_fields` is specified (e.g., `["results[*].text"]`), only those fields are evaluated. Otherwise, the entire response is checked.
+pass-through 엔드포인트에 가드레일이 구성되어 있으면 다음 순서로 동작합니다.
+1. **Pre-call guardrails**는 target API로 전달하기 전에 요청에서 실행됩니다
+2. `request_fields`가 지정된 경우(예: `["query"]`) 해당 필드만 가드레일로 전송됩니다. 지정하지 않으면 전체 요청 payload를 평가합니다.
+3. 가드레일을 통과한 경우에만 요청이 target API로 전달됩니다
+4. **Post-call guardrails**는 target API의 응답에서 실행됩니다
+5. `response_fields`가 지정된 경우(예: `["results[*].text"]`) 해당 필드만 평가합니다. 지정하지 않으면 전체 응답을 검사합니다.
 
 :::info
-If the `guardrails` block is omitted or empty in your pass-through endpoint config, the request skips the guardrail flow entirely and goes directly to the target API.
+pass-through 엔드포인트 config에서 `guardrails` 블록이 생략되었거나 비어 있으면 요청은 가드레일 흐름을 완전히 건너뛰고 target API로 바로 이동합니다.
 :::
 
 ```mermaid
@@ -141,9 +141,9 @@ sequenceDiagram
 
 ---
 
-## Field-Level Targeting
+## 필드 수준 타기팅
 
-Target specific JSON fields instead of the entire request/response payload.
+전체 요청/응답 payload 대신 특정 JSON 필드를 대상으로 지정합니다.
 
 ```yaml showLineNumbers title="config.yaml"
 guardrails:
@@ -174,27 +174,27 @@ general_settings:
           response_fields: ["results[*].text"]
 ```
 
-### Field Options
+### 필드 옵션
 
-| Field | Description |
+| 필드 | 설명 |
 |-------|-------------|
-| `request_fields` | JSONPath expressions for input (pre_call) |
-| `response_fields` | JSONPath expressions for output (post_call) |
-| Neither specified | Guardrail runs on entire payload |
+| `request_fields` | 입력(pre_call)에 사용할 JSONPath 표현식 |
+| `response_fields` | 출력(post_call)에 사용할 JSONPath 표현식 |
+| 둘 다 미지정 | 전체 payload에서 가드레일이 실행됩니다 |
 
-### JSONPath Examples
+### JSONPath 예제
 
-| Expression | Matches |
+| 표현식 | 일치 대상 |
 |------------|---------|
-| `query` | Single field named `query` |
-| `documents[*].text` | All `text` fields in `documents` array |
-| `messages[*].content` | All `content` fields in `messages` array |
+| `query` | 이름이 `query`인 단일 필드 |
+| `documents[*].text` | `documents` 배열의 모든 `text` 필드 |
+| `messages[*].content` | `messages` 배열의 모든 `content` 필드 |
 
 ---
 
-## Configuration Examples
+## 설정 예제
 
-### Single guardrail on entire payload
+### 전체 payload에 단일 가드레일 적용
 
 ```yaml showLineNumbers title="config.yaml"
 guardrails:
@@ -213,7 +213,7 @@ general_settings:
         pii-detection:
 ```
 
-### Multiple guardrails with mixed settings
+### 혼합 설정으로 여러 가드레일 적용
 
 ```yaml showLineNumbers title="config.yaml"
 guardrails:

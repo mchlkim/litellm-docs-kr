@@ -4,92 +4,92 @@ import TabItem from '@theme/TabItem';
 
 # Open WebUI
 
-This guide walks you through connecting Open WebUI to LiteLLM. Using LiteLLM with Open WebUI allows teams to 
-- Access 100+ LLMs on Open WebUI
-- Track Spend / Usage, Set Budget Limits 
-- Send Request/Response Logs to logging destinations like langfuse, s3, gcs buckets, etc.
-- Set access controls eg. Control what models Open WebUI can access.
+이 가이드는 Open WebUI를 LiteLLM에 연결하는 방법을 안내합니다. LiteLLM을 Open WebUI와 함께 사용하면 팀은 다음을 수행할 수 있습니다.
+- Open WebUI에서 100개 이상의 LLM에 접근
+- spend/사용량 추적 및 budget limit 설정
+- Request/Response 로그를 langfuse, s3, gcs buckets 같은 logging destination으로 전송
+- 접근 제어 설정. 예: Open WebUI가 접근할 수 있는 model 제어
 
-## Quickstart
+## 빠른 시작
 
-- Make sure to setup LiteLLM with the [LiteLLM Getting Started Guide](https://docs.litellm.ai/docs/proxy/docker_quick_start)
-
-
-## 1. Start LiteLLM & Open WebUI
-
-- Open WebUI starts running on [http://localhost:3000](http://localhost:3000)
-- LiteLLM starts running on [http://localhost:4000](http://localhost:4000)
+- [LiteLLM 시작하기 Guide](https://docs.litellm.ai/docs/proxy/docker_quick_start)에 따라 LiteLLM을 먼저 설정하세요.
 
 
-## 2. Create a Virtual Key on LiteLLM
+## 1. LiteLLM 및 Open WebUI 시작
 
-Virtual Keys are API Keys that allow you to authenticate to LiteLLM Proxy. We will create a Virtual Key that will allow Open WebUI to access LiteLLM.
+- Open WebUI는 [http://localhost:3000](http://localhost:3000)에서 실행됩니다.
+- LiteLLM은 [http://localhost:4000](http://localhost:4000)에서 실행됩니다.
 
-### 2.1 LiteLLM User Management Hierarchy
 
-On LiteLLM, you can create Organizations, Teams, Users and Virtual Keys. For this tutorial, we will create a Team and a Virtual Key.
+## 2. LiteLLM에서 Virtual Key 생성
 
-- `Organization` - An Organization is a group of Teams. (US Engineering, EU Developer Tools)
-- `Team` - A Team is a group of Users. (Open WebUI Team, Data Science Team, etc.)
-- `User` - A User is an individual user (employee, developer, eg. `krrish@litellm.ai`)
-- `Virtual Key` - A Virtual Key is an API Key that allows you to authenticate to LiteLLM Proxy. A Virtual Key is associated with a User or Team.
+Virtual Key는 LiteLLM Proxy에 인증할 수 있게 해 주는 API key입니다. 여기서는 Open WebUI가 LiteLLM에 접근할 수 있도록 Virtual Key를 생성합니다.
 
-Once the Team is created, you can invite Users to the Team. You can read more about LiteLLM's User Management [here](https://docs.litellm.ai/docs/proxy/user_management_heirarchy).
+### 2.1 LiteLLM User Management 계층
 
-### 2.2 Create a Team on LiteLLM
+LiteLLM에서는 Organizations, Teams, Users, Virtual Keys를 만들 수 있습니다. 이 튜토리얼에서는 Team과 Virtual Key를 생성합니다.
 
-Navigate to [http://localhost:4000/ui](http://localhost:4000/ui) and create a new team.
+- `Organization` - Team의 그룹입니다. 예: US Engineering, EU Developer Tools
+- `Team` - User의 그룹입니다. 예: Open WebUI Team, Data Science Team 등
+- `User` - 개별 사용자입니다. 예: 직원, 개발자, `krrish@litellm.ai`
+- `Virtual Key` - LiteLLM Proxy에 인증할 수 있게 해 주는 API key입니다. Virtual Key는 User 또는 Team에 연결됩니다.
+
+Team이 생성되면 User를 Team에 초대할 수 있습니다. LiteLLM User Management에 대한 자세한 내용은 [여기](https://docs.litellm.ai/docs/proxy/user_management_heirarchy)에서 확인할 수 있습니다.
+
+### 2.2 LiteLLM에서 Team 생성
+
+[http://localhost:4000/ui](http://localhost:4000/ui)로 이동해 새 team을 생성합니다.
 
 <Image img={require('../../img/litellm_create_team.gif')} />
 
-### 2.2 Create a Virtual Key on LiteLLM
+### 2.3 LiteLLM에서 Virtual Key 생성
 
-Navigate to [http://localhost:4000/ui](http://localhost:4000/ui) and create a new virtual Key. 
+[http://localhost:4000/ui](http://localhost:4000/ui)로 이동해 새 virtual key를 생성합니다.
 
-LiteLLM allows you to specify what models are available on Open WebUI (by specifying the models the key will have access to).
+LiteLLM에서는 key가 접근할 수 있는 model을 지정해 Open WebUI에서 사용할 수 있는 model을 제한할 수 있습니다.
 
 <Image img={require('../../img/create_key_in_team_oweb.gif')} />
 
-## 3. Connect Open WebUI to LiteLLM
+## 3. Open WebUI를 LiteLLM에 연결
 
-On Open WebUI, navigate to Settings -> Connections and create a new connection to LiteLLM
+Open WebUI에서 Settings -> Connections로 이동해 LiteLLM에 대한 새 connection을 생성합니다.
 
-Enter the following details:
-- URL: `http://localhost:4000` (your litellm proxy base url)
-- Key: `your-virtual-key` (the key you created in the previous step)
+다음 정보를 입력합니다.
+- URL: `http://localhost:4000`(LiteLLM proxy 기본 URL)
+- Key: `your-virtual-key`(이전 단계에서 생성한 key)
 
 <Image img={require('../../img/litellm_setup_openweb.gif')} />
 
-### 3.1 Test Request
+### 3.1 요청 테스트
 
-On the top left corner, select models you should only see the models you gave the key access to in Step 2.
+왼쪽 상단에서 model을 선택합니다. 2단계에서 key에 접근 권한을 부여한 model만 보여야 합니다.
 
-Once you selected a model, enter your message content and click on `Submit`
+model을 선택한 뒤 메시지 내용을 입력하고 `Submit`을 클릭합니다.
 
 <Image img={require('../../img/basic_litellm.gif')} />
 
-### 3.2 Tracking Usage & Spend
+### 3.2 사용량 및 Spend 추적
 
-#### Basic Tracking
+#### 기본 추적
 
-After making requests, navigate to the `Logs` section in the LiteLLM UI to view Model, Usage and Cost information.
+요청을 보낸 뒤 LiteLLM UI의 `로그` 섹션으로 이동하면 Model, 사용량, Cost 정보를 확인할 수 있습니다.
 
-#### Per-User Tracking
+#### 사용자별 추적 {#per-user-tracking}
 
-To track spend and usage for each Open WebUI user, configure both Open WebUI and LiteLLM:
+Open WebUI 사용자별 spend와 usage를 추적하려면 Open WebUI와 LiteLLM을 모두 설정합니다.
 
-1. **Enable User Info Headers in Open WebUI**
+1. **Open WebUI에서 User Info Headers 활성화**
    
-  Set the following environment variable for Open WebUI to enable user information in request headers:
+  Open WebUI가 request header에 사용자 정보를 포함하도록 다음 environment variable을 설정합니다.
   ```dotenv
   ENABLE_FORWARD_USER_INFO_HEADERS=True
   ```
 
-  For more details, see the [Environment Variable Configuration Guide](https://docs.openwebui.com/getting-started/env-configuration/#enable_forward_user_info_headers).
+  자세한 내용은 [Environment Variable 설정 Guide](https://docs.openwebui.com/getting-started/env-configuration/#enable_forward_user_info_headers)를 참고하세요.
 
-2. **Configure LiteLLM to Parse User Headers**
+2. **LiteLLM이 User Header를 파싱하도록 설정**
    
-  Add the following to your LiteLLM `config.yaml` to specify the request header mapping for user tracking:
+  사용자 추적용 request header mapping을 지정하려면 LiteLLM `config.yaml`에 다음을 추가합니다.
 
   ```yaml
   general_settings:
@@ -100,20 +100,20 @@ To track spend and usage for each Open WebUI user, configure both Open WebUI and
         litellm_user_role: customer
   ```
 
-  ⓘ Available tracking options
+  ⓘ 사용 가능한 추적 옵션
 
-  You can use any of the following headers in `header_name` in `user_header_mappings` :
+  `user_header_mappings`의 `header_name`에는 다음 header를 사용할 수 있습니다.
   - `X-OpenWebUI-User-Id`
   - `X-OpenWebUI-User-Email`
   - `X-OpenWebUI-User-Name`
   
-  These may offer better readability and easier mental attribution when hosting for a small group of users that you know well.
+  잘 아는 소규모 사용자 그룹을 호스팅하는 경우, 이 값들은 가독성과 사용자 귀속 판단을 더 쉽게 해 줄 수 있습니다.
 
-  Choose based on your needs, but note that in Open WebUI: 
-  - Users can modify their own usernames
-  - Administrators can modify both usernames and emails of any account
+  필요에 따라 선택하되, Open WebUI에서는 다음 사항에 유의하세요.
+  - 사용자는 자신의 username을 수정할 수 있습니다.
+  - 관리자는 모든 account의 username과 email을 모두 수정할 수 있습니다.
 
-This video walks through on how we can map the openweb ui headers to LiteLLM user roles 
+이 비디오는 Open WebUI header를 LiteLLM user role에 매핑하는 방법을 설명합니다.
 
 <iframe src="https://www.loom.com/embed/a1b6a4635fc0478ba4fd34cae16e2ffd?sid=791c2dcc-7e65-45be-bf7f-27d2601c123e" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen width="840" height="500"></iframe>
 
@@ -121,11 +121,11 @@ This video walks through on how we can map the openweb ui headers to LiteLLM use
 <br/>
 
 
-## Render `thinking` content on Open WebUI
+## Open WebUI에서 `thinking` content 렌더링 {#render-thinking-content-on-open-webui}
 
-Open WebUI requires reasoning/thinking content to be rendered with `<think></think>` tags. In order to render this for specific models, you can use the `merge_reasoning_content_in_choices` litellm parameter.
+Open WebUI는 reasoning/thinking content를 `<think></think>` tag로 렌더링해야 합니다. 특정 model에서 이를 렌더링하려면 `merge_reasoning_content_in_choices` LiteLLM 파라미터를 사용할 수 있습니다.
 
-Example litellm config.yaml:
+예제 litellm config.yaml:
 
 ```yaml
 model_list:
@@ -142,21 +142,21 @@ model_list:
       merge_reasoning_content_in_choices: true
 ```
 
-### Test it on Open WebUI
+### Open WebUI에서 테스트
 
-On the models dropdown select `thinking-anthropic-claude-3-7-sonnet`
+model dropdown에서 `thinking-anthropic-claude-3-7-sonnet`을 선택합니다.
 
 <Image img={require('../../img/litellm_thinking_openweb.gif')} />
 
-## Additional Resources
+## 추가 리소스
 
-- Running LiteLLM and Open WebUI on Windows Localhost: A Comprehensive Guide [https://www.tanyongsheng.com/note/running-litellm-and-openwebui-on-windows-localhost-a-comprehensive-guide/](https://www.tanyongsheng.com/note/running-litellm-and-openwebui-on-windows-localhost-a-comprehensive-guide/)
-- [Run Guardrails Based on User-Agent Header](../proxy/guardrails/quick_start#-tag-based-guardrail-modes)
+- Windows Localhost에서 LiteLLM 및 Open WebUI 실행: 종합 가이드 [https://www.tanyongsheng.com/note/running-litellm-and-openwebui-on-windows-localhost-a-comprehensive-guide/](https://www.tanyongsheng.com/note/running-litellm-and-openwebui-on-windows-localhost-a-comprehensive-guide/)
+- [User-Agent Header 기반으로 Guardrail 실행](../proxy/guardrails/quick_start#-tag-based-guardrail-modes)
 
 
-## Add Custom Headers to Spend Tracking
+## 비용 추적에 Custom Header 추가
 
-You can add custom headers to the request to track spend and usage.
+spend와 usage를 추적하려면 request에 custom header를 추가할 수 있습니다.
 
 ```yaml
 litellm_settings:
@@ -164,6 +164,6 @@ litellm_settings:
     - "x-custom-header"
 ```
 
-You can add custom headers to the request to track spend and usage.
+spend와 usage를 추적하려면 request에 custom header를 추가할 수 있습니다.
 
 <Image img={require('../../img/custom_tag_headers.png')} />

@@ -1,18 +1,18 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# OpenAI (Text Completion)
+# OpenAI (텍스트 완성) {#openai-text-completion}
 
-LiteLLM supports OpenAI text completion models
+LiteLLM은 OpenAI 텍스트 완성 모델을 지원합니다.
 
-### Required API Keys
+### 필수 API 키 {#required-api-keys}
 
 ```python
 import os 
 os.environ["OPENAI_API_KEY"] = "your-api-key"
 ```
 
-### Usage
+### 사용법 {#usage}
 ```python
 import os 
 from litellm import completion
@@ -26,17 +26,17 @@ response = completion(
 )
 ```
 
-### Usage - LiteLLM Proxy Server
+### 사용법 - LiteLLM Proxy Server {#usage-litellm-proxy-server}
 
-Here's how to call OpenAI models with the LiteLLM Proxy Server
+LiteLLM Proxy Server로 OpenAI 모델을 호출하는 방법은 다음과 같습니다.
 
-### 1. Save key in your environment
+### 1. 환경에 키 저장 {#1-save-key-in-your-environment}
 
 ```bash
 export OPENAI_API_KEY=""
 ```
 
-### 2. Start the proxy 
+### 2. 프록시 시작 {#2-start-the-proxy}
 
 <Tabs>
 <TabItem value="config" label="config.yaml">
@@ -55,8 +55,8 @@ model_list:
 </TabItem>
 <TabItem value="config-*" label="config.yaml - proxy all OpenAI models">
 
-Use this to add all openai models with one API Key. **WARNING: This will not do any load balancing**
-This means requests to `gpt-4`, `gpt-3.5-turbo` , `gpt-4-turbo-preview` will all go through this route 
+하나의 API Key로 모든 OpenAI 모델을 추가하려면 이것을 사용하세요. **경고: 이 방식은 로드 밸런싱을 수행하지 않습니다.**
+즉, `gpt-4`, `gpt-3.5-turbo`, `gpt-4-turbo-preview` 요청이 모두 이 경로를 통해 처리됩니다.
 
 ```yaml
 model_list:
@@ -77,7 +77,7 @@ $ litellm --model gpt-3.5-turbo-instruct
 
 </Tabs>
 
-### 3. Test it
+### 3. 테스트 {#3-test-it}
 
 
 <Tabs>
@@ -152,15 +152,15 @@ print(response)
 </Tabs>
 
 
-## OpenAI Text Completion Models / Instruct Models
+## OpenAI 텍스트 완성 모델 / Instruct 모델 {#openai-text-completion-models--instruct-models}
 
-| Model Name          | Function Call                                      |
+| 모델 이름          | 함수 호출                                      |
 |---------------------|----------------------------------------------------|
-| gpt-3.5-turbo-instruct | `response = completion(model="gpt-3.5-turbo-instruct", messages=messages)` |
-| gpt-3.5-turbo-instruct-0914 | `response = completion(model="gpt-3.5-turbo-instruct-0914", messages=messages)` |
-| text-davinci-003    | `response = completion(model="text-davinci-003", messages=messages)` |
-| ada-001             | `response = completion(model="ada-001", messages=messages)` |
-| curie-001           | `response = completion(model="curie-001", messages=messages)` |
-| babbage-001         | `response = completion(model="babbage-001", messages=messages)` |
-| babbage-002         | `response = completion(model="babbage-002", messages=messages)` |
-| davinci-002         | `response = completion(model="davinci-002", messages=messages)` |
+| `gpt-3.5-turbo-instruct` | `response = completion(model="gpt-3.5-turbo-instruct", messages=messages)` |
+| `gpt-3.5-turbo-instruct-0914` | `response = completion(model="gpt-3.5-turbo-instruct-0914", messages=messages)` |
+| `text-davinci-003`    | `response = completion(model="text-davinci-003", messages=messages)` |
+| `ada-001`             | `response = completion(model="ada-001", messages=messages)` |
+| `curie-001`           | `response = completion(model="curie-001", messages=messages)` |
+| `babbage-001`         | `response = completion(model="babbage-001", messages=messages)` |
+| `babbage-002`         | `response = completion(model="babbage-002", messages=messages)` |
+| `davinci-002`         | `response = completion(model="davinci-002", messages=messages)` |

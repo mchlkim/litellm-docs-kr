@@ -2,23 +2,23 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem'
 
 # AWS Sagemaker
-LiteLLM supports All Sagemaker Huggingface Jumpstart Models
+LiteLLM은 모든 Sagemaker Huggingface Jumpstart 모델을 지원합니다.
 
 :::tip
 
-**We support ALL Sagemaker models, just set `model=sagemaker/<any-model-on-sagemaker>` as a prefix when sending litellm requests**
+**모든 Sagemaker 모델을 지원합니다. litellm 요청을 보낼 때 `model=sagemaker/<any-model-on-sagemaker>`를 접두사로 설정하면 됩니다.**
 
 :::
 
 
-### API KEYS
+### API 키
 ```python
 os.environ["AWS_ACCESS_KEY_ID"] = ""
 os.environ["AWS_SECRET_ACCESS_KEY"] = ""
 os.environ["AWS_REGION_NAME"] = ""
 ```
 
-### Usage
+### 사용법
 ```python
 import os 
 from litellm import completion
@@ -35,8 +35,8 @@ response = completion(
         )
 ```
 
-### Usage - Streaming
-Sagemaker currently does not support streaming - LiteLLM fakes streaming by returning chunks of the response string
+### 사용법 - Streaming
+Sagemaker는 현재 streaming을 지원하지 않습니다. LiteLLM은 응답 문자열을 chunk로 나누어 반환하는 방식으로 streaming처럼 동작하게 합니다.
 
 ```python
 import os 
@@ -58,11 +58,11 @@ for chunk in response:
 ```
 
 
-## **LiteLLM Proxy Usage**
+## **LiteLLM Proxy 사용법**
 
-Here's how to call Sagemaker with the LiteLLM Proxy Server
+LiteLLM Proxy Server로 Sagemaker를 호출하는 방법입니다.
 
-### 1. Setup config.yaml
+### 1. config.yaml 설정
 
 ```yaml
 model_list:
@@ -74,7 +74,7 @@ model_list:
       aws_region_name: os.environ/CUSTOM_AWS_REGION_NAME
 ```
 
-All possible auth params: 
+사용 가능한 모든 인증 파라미터:
 
 ```
 aws_access_key_id: Optional[str],
@@ -87,12 +87,12 @@ aws_role_name: Optional[str],
 aws_web_identity_token: Optional[str],
 ```
 
-### 2. Start the proxy 
+### 2. 프록시 시작 
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
-### 3. Test it
+### 3. 테스트
 
 
 <Tabs>
@@ -165,7 +165,7 @@ print(response)
 </TabItem>
 </Tabs>
 
-## Set temperature, top p, etc.
+## temperature, top_p 등 설정
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -188,7 +188,7 @@ response = completion(
 </TabItem>
 <TabItem value="proxy" label="PROXY">
 
-**Set on yaml**
+**yaml에서 설정**
 
 ```yaml
 model_list:
@@ -199,7 +199,7 @@ model_list:
       top_p: <your-top-p>
 ```
 
-**Set on request**
+**요청에서 설정**
 
 ```python
 
@@ -227,11 +227,11 @@ print(response)
 </TabItem>
 </Tabs>
 
-## **Allow setting temperature=0** for Sagemaker
+## Sagemaker에서 **temperature=0 설정 허용**
 
-By default when `temperature=0` is sent in requests to LiteLLM, LiteLLM rounds up to `temperature=0.1` since Sagemaker fails most requests when `temperature=0`
+기본적으로 LiteLLM 요청에 `temperature=0`이 전달되면 LiteLLM은 이를 `temperature=0.1`로 올림 처리합니다. Sagemaker는 `temperature=0`일 때 대부분의 요청이 실패하기 때문입니다.
 
-If you want to send `temperature=0` for your model here's how to set it up (Since Sagemaker can host any kind of model, some models allow zero temperature)
+모델에 `temperature=0`을 그대로 보내고 싶다면 다음처럼 설정합니다. Sagemaker는 다양한 모델을 호스팅할 수 있으므로 일부 모델은 zero temperature를 허용합니다.
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -254,7 +254,7 @@ response = completion(
 </TabItem>
 <TabItem value="proxy" label="PROXY">
 
-**Set `aws_sagemaker_allow_zero_temp` on yaml**
+**yaml에서 `aws_sagemaker_allow_zero_temp` 설정**
 
 ```yaml
 model_list:
@@ -264,7 +264,7 @@ model_list:
       aws_sagemaker_allow_zero_temp: true
 ```
 
-**Set `temperature=0` on request**
+**요청에서 `temperature=0` 설정**
 
 ```python
 
@@ -291,9 +291,9 @@ print(response)
 </TabItem>
 </Tabs>
 
-## Pass provider-specific params 
+## provider별 파라미터 전달
 
-If you pass a non-openai param to litellm, we'll assume it's provider-specific and send it as a kwarg in the request body. [See more](../completion/input.md#provider-specific-params)
+OpenAI 표준이 아닌 파라미터를 litellm에 전달하면 provider별 파라미터로 간주하고 요청 본문에 kwarg로 보냅니다. [자세히 보기](../completion/input.md#provider-specific-params)
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -315,7 +315,7 @@ response = completion(
 </TabItem>
 <TabItem value="proxy" label="PROXY">
 
-**Set on yaml**
+**yaml에서 설정**
 
 ```yaml
 model_list:
@@ -325,7 +325,7 @@ model_list:
       top_k: 1 # 👈 PROVIDER-SPECIFIC PARAM
 ```
 
-**Set on request**
+**요청에서 설정**
 
 ```python
 
@@ -356,9 +356,9 @@ print(response)
 </Tabs>
 
 
-### Passing Inference Component Name
+### Inference Component 이름 전달
 
-If you have multiple models on an endpoint, you'll need to specify the individual model names, do this via `model_id`.  
+하나의 endpoint에 여러 모델이 있으면 개별 모델 이름을 지정해야 합니다. 이때 `model_id`를 사용합니다.
 
 ```python
 import os 
@@ -377,8 +377,8 @@ response = completion(
         )
 ```
 
-### Passing credentials as parameters - Completion()
-Pass AWS credentials as parameters to litellm.completion
+### 파라미터로 자격 증명 전달 - Completion()
+AWS 자격 증명을 `litellm.completion` 파라미터로 전달합니다.
 ```python
 import os 
 from litellm import completion
@@ -392,8 +392,8 @@ response = completion(
 )
 ```
 
-### Applying Prompt Templates
-To apply the correct prompt template for your sagemaker deployment, pass in it's hf model name as well. 
+### Prompt Template 적용
+Sagemaker deployment에 올바른 prompt template을 적용하려면 HF 모델 이름도 함께 전달합니다.
 
 ```python
 import os 
@@ -412,12 +412,12 @@ response = completion(
         )
 ```
 
-You can also pass in your own [custom prompt template](../completion/prompt_formatting.md#format-prompt-yourself)
+자체 [custom prompt template](../completion/prompt_formatting.md#format-prompt-yourself)을 전달할 수도 있습니다.
 
 
-## Sagemaker Messages API 
+## Sagemaker Messages API 사용
 
-Use route `sagemaker_chat/*` to route to Sagemaker Messages API
+Sagemaker Messages API로 라우팅하려면 `sagemaker_chat/*` route를 사용합니다.
 
 ```
 model: sagemaker_chat/<your-endpoint-name>
@@ -448,7 +448,7 @@ response = completion(
 </TabItem>
 <TabItem value="proxy" label="PROXY">
 
-#### 1. Setup config.yaml 
+#### 1. config.yaml 설정
 
 ```yaml
 model_list:
@@ -460,12 +460,12 @@ model_list:
       aws_region_name: os.environ/AWS_REGION_NAME
 ```
 
-#### 2. Start the proxy 
+#### 2. 프록시 시작 
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
-#### 3. Test it
+#### 3. 테스트
 
 
 ```shell
@@ -483,36 +483,36 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 '
 ```
 
-[**👉 See OpenAI SDK/Langchain/Llamaindex/etc. examples**](../proxy/user_keys.md#chatcompletions)
+[**👉 OpenAI SDK/Langchain/Llamaindex 등 예제 보기**](../proxy/user_keys.md#chatcompletions)
 
 </TabItem>
 </Tabs>
 
 
-## Completion Models 
+## Completion 모델 
 
 
 :::tip
 
-**We support ALL Sagemaker models, just set `model=sagemaker/<any-model-on-sagemaker>` as a prefix when sending litellm requests**
+**모든 Sagemaker 모델을 지원합니다. litellm 요청을 보낼 때 `model=sagemaker/<any-model-on-sagemaker>`를 접두사로 설정하면 됩니다.**
 
 :::
 
-Here's an example of using a sagemaker model with LiteLLM 
+LiteLLM에서 Sagemaker 모델을 사용하는 예시입니다.
 
-| Model Name                    | Function Call                                                                                       |
+| 모델 이름                    | 함수 호출                                                                                       |
 |-------------------------------|-------------------------------------------------------------------------------------------|
-| Your Custom Huggingface Model               | `completion(model='sagemaker/<your-deployment-name>', messages=messages)`        | `os.environ['AWS_ACCESS_KEY_ID']`, `os.environ['AWS_SECRET_ACCESS_KEY']`, `os.environ['AWS_REGION_NAME']`      
-| Meta Llama 2 7B               | `completion(model='sagemaker/jumpstart-dft-meta-textgeneration-llama-2-7b', messages=messages)`        | `os.environ['AWS_ACCESS_KEY_ID']`, `os.environ['AWS_SECRET_ACCESS_KEY']`, `os.environ['AWS_REGION_NAME']`              |
-| Meta Llama 2 7B (Chat/Fine-tuned)  | `completion(model='sagemaker/jumpstart-dft-meta-textgeneration-llama-2-7b-f', messages=messages)`      | `os.environ['AWS_ACCESS_KEY_ID']`, `os.environ['AWS_SECRET_ACCESS_KEY']`, `os.environ['AWS_REGION_NAME']`              |
-| Meta Llama 2 13B              | `completion(model='sagemaker/jumpstart-dft-meta-textgeneration-llama-2-13b', messages=messages)`       | `os.environ['AWS_ACCESS_KEY_ID']`, `os.environ['AWS_SECRET_ACCESS_KEY']`, `os.environ['AWS_REGION_NAME']`              |
-| Meta Llama 2 13B (Chat/Fine-tuned) | `completion(model='sagemaker/jumpstart-dft-meta-textgeneration-llama-2-13b-f', messages=messages)`     | `os.environ['AWS_ACCESS_KEY_ID']`, `os.environ['AWS_SECRET_ACCESS_KEY']`, `os.environ['AWS_REGION_NAME']`              |
-| Meta Llama 2 70B              | `completion(model='sagemaker/jumpstart-dft-meta-textgeneration-llama-2-70b', messages=messages)`       | `os.environ['AWS_ACCESS_KEY_ID']`, `os.environ['AWS_SECRET_ACCESS_KEY']`, `os.environ['AWS_REGION_NAME']`              |
-| Meta Llama 2 70B (Chat/Fine-tuned) | `completion(model='sagemaker/jumpstart-dft-meta-textgeneration-llama-2-70b-b-f', messages=messages)`   | `os.environ['AWS_ACCESS_KEY_ID']`, `os.environ['AWS_SECRET_ACCESS_KEY']`, `os.environ['AWS_REGION_NAME']`              |
+| 사용자 지정 Huggingface 모델               | `completion(model='sagemaker/<your-deployment-name>', messages=messages)`        | `os.environ['AWS_ACCESS_KEY_ID']`, `os.environ['AWS_SECRET_ACCESS_KEY']`, `os.environ['AWS_REGION_NAME']`      
+| `Meta Llama 2 7B`               | `completion(model='sagemaker/jumpstart-dft-meta-textgeneration-llama-2-7b', messages=messages)`        | `os.environ['AWS_ACCESS_KEY_ID']`, `os.environ['AWS_SECRET_ACCESS_KEY']`, `os.environ['AWS_REGION_NAME']`              |
+| `Meta Llama 2 7B (Chat/Fine-tuned)`  | `completion(model='sagemaker/jumpstart-dft-meta-textgeneration-llama-2-7b-f', messages=messages)`      | `os.environ['AWS_ACCESS_KEY_ID']`, `os.environ['AWS_SECRET_ACCESS_KEY']`, `os.environ['AWS_REGION_NAME']`              |
+| `Meta Llama 2 13B`              | `completion(model='sagemaker/jumpstart-dft-meta-textgeneration-llama-2-13b', messages=messages)`       | `os.environ['AWS_ACCESS_KEY_ID']`, `os.environ['AWS_SECRET_ACCESS_KEY']`, `os.environ['AWS_REGION_NAME']`              |
+| `Meta Llama 2 13B (Chat/Fine-tuned)` | `completion(model='sagemaker/jumpstart-dft-meta-textgeneration-llama-2-13b-f', messages=messages)`     | `os.environ['AWS_ACCESS_KEY_ID']`, `os.environ['AWS_SECRET_ACCESS_KEY']`, `os.environ['AWS_REGION_NAME']`              |
+| `Meta Llama 2 70B`              | `completion(model='sagemaker/jumpstart-dft-meta-textgeneration-llama-2-70b', messages=messages)`       | `os.environ['AWS_ACCESS_KEY_ID']`, `os.environ['AWS_SECRET_ACCESS_KEY']`, `os.environ['AWS_REGION_NAME']`              |
+| `Meta Llama 2 70B (Chat/Fine-tuned)` | `completion(model='sagemaker/jumpstart-dft-meta-textgeneration-llama-2-70b-b-f', messages=messages)`   | `os.environ['AWS_ACCESS_KEY_ID']`, `os.environ['AWS_SECRET_ACCESS_KEY']`, `os.environ['AWS_REGION_NAME']`              |
 
-## Embedding Models
+## Embedding 모델
 
-LiteLLM supports all Sagemaker Jumpstart Huggingface Embedding models. Here's how to call it: 
+LiteLLM은 모든 Sagemaker Jumpstart Huggingface Embedding 모델을 지원합니다. 호출 방법은 다음과 같습니다.
 
 ```python
 from litellm import completion
@@ -527,15 +527,15 @@ print(f"response: {response}")
 
 
 
-## Nova Models on SageMaker
+## Nova 모델 on SageMaker
 
-LiteLLM supports Amazon Nova models (Nova Micro, Nova Lite, Nova 2 Lite) deployed on SageMaker Inference real-time endpoints. These custom/fine-tuned Nova models use an OpenAI-compatible API format.
+LiteLLM은 SageMaker Inference real-time endpoint에 배포된 Amazon Nova 모델(Nova Micro, Nova Lite, Nova 2 Lite)을 지원합니다. 이러한 custom/fine-tuned Nova 모델은 OpenAI 호환 API 형식을 사용합니다.
 
-**Reference:** [AWS Blog - Amazon SageMaker Inference for Custom Amazon Nova Models](https://aws.amazon.com/blogs/aws/announcing-amazon-sagemaker-inference-for-custom-amazon-nova-models/)
+**Reference:** [AWS 블로그 - Amazon SageMaker Inference for Custom Amazon Nova 모델](https://aws.amazon.com/blogs/aws/announcing-amazon-sagemaker-inference-for-custom-amazon-nova-models/)
 
-### Usage
+### 사용법
 
-Use the `sagemaker_nova/` prefix with your SageMaker endpoint name:
+SageMaker endpoint 이름과 함께 `sagemaker_nova/` 접두사를 사용합니다.
 
 ```python
 import litellm
@@ -569,9 +569,9 @@ for chunk in response:
         print(chunk.choices[0].delta.content, end="")
 ```
 
-### Multimodal (Images)
+### 멀티모달(이미지)
 
-Nova models on SageMaker support image inputs using base64 data URIs:
+SageMaker의 Nova 모델은 base64 data URI를 사용한 이미지 입력을 지원합니다.
 
 ```python
 response = litellm.completion(
@@ -588,7 +588,7 @@ response = litellm.completion(
 )
 ```
 
-### Proxy Config
+### Proxy 설정
 
 ```yaml
 model_list:
@@ -600,16 +600,16 @@ model_list:
       aws_region_name: us-east-1
 ```
 
-### Supported Parameters
+### 지원 파라미터
 
-All standard OpenAI parameters are supported, plus these Nova-specific parameters:
+모든 표준 OpenAI 파라미터를 지원하며, 추가로 다음 Nova 전용 파라미터를 지원합니다.
 
-| Parameter | Type | Description |
+| Parameter | Type | 설명 |
 |-----------|------|-------------|
-| `top_k` | integer | Limits token selection to top K most likely tokens |
-| `reasoning_effort` | `"low"` \| `"high"` | Reasoning effort level (Nova 2 Lite custom models only) |
-| `allowed_token_ids` | array[int] | Restrict output to specified token IDs |
-| `truncate_prompt_tokens` | integer | Truncate prompt to N tokens if it exceeds limit |
+| `top_k` | integer | 토큰 선택을 가능성이 가장 높은 상위 K개 토큰으로 제한합니다. |
+| `reasoning_effort` | `"low"` \| `"high"` | reasoning effort 수준입니다. Nova 2 Lite custom 모델에서만 지원됩니다. |
+| `allowed_token_ids` | array[int] | 출력을 지정한 token ID로 제한합니다. |
+| `truncate_prompt_tokens` | integer | prompt가 제한을 초과하면 N개 token으로 자릅니다. |
 
 ```python
 response = litellm.completion(

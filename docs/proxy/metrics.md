@@ -1,6 +1,6 @@
-# 💸 GET Daily Spend, Usage Metrics
+# 💸 GET Daily Spend, 사용법 Metrics
 
-## Request Format
+## 요청 형식
 ```shell
 curl -X GET "http://0.0.0.0:4000/daily_metrics" -H "Authorization: Bearer sk-1234"
 ```

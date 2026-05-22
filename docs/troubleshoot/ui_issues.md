@@ -1,49 +1,49 @@
-# UI Troubleshooting
+# UI 문제 해결
 
-If you're experiencing issues with the LiteLLM Admin UI, please include the following information when reporting.
+LiteLLM 관리자 UI에서 문제가 발생한 경우, 보고할 때 다음 정보를 포함해 주세요.
 
-## 1. Steps to Reproduce
+## 1. 재현 단계 {#1-steps-to-reproduce}
 
-A clear, step-by-step description of how to trigger the issue (e.g., "Navigate to Settings → Team, click 'Create Team', fill in fields, click submit → error appears").
+문제를 발생시키는 방법을 단계별로 명확하게 설명해 주세요(예: "Settings → Team으로 이동, 'Create Team' 클릭, 필드 입력, 제출 클릭 → 오류 발생").
 
-## 2. LiteLLM Version
+## 2. LiteLLM 버전 {#2-litellm-version}
 
-The current version of LiteLLM you're running. Check via `litellm --version` or the UI's settings page.
+현재 실행 중인 LiteLLM 버전입니다. `litellm --version` 또는 UI의 설정 페이지에서 확인하세요.
 
-## 3. Architecture & Deployment Setup
+## 3. 아키텍처 및 배포 설정 {#3-아키텍처--deployment-setup}
 
-Distributed environments are a known source of UI issues. Please describe:
+분산 환경은 UI 문제의 알려진 원인입니다. 다음 내용을 설명해 주세요.
 
-- **Number of LiteLLM instances/replicas** and how they are deployed (e.g., Kubernetes, Docker Compose, ECS)
-- **Load balancer** type and configuration (e.g., ALB, Nginx, Cloudflare Tunnel) — include whether sticky sessions are enabled
-- **How the UI is accessed** — directly via LiteLLM, through a reverse proxy, or behind an ingress controller
-- **Any CDN or caching layers** between the user and the LiteLLM server
+- **LiteLLM instances/replicas 수**와 배포 방식(예: Kubernetes, Docker Compose, ECS)
+- **Load balancer** 유형과 구성(예: ALB, Nginx, Cloudflare Tunnel) - sticky sessions 활성화 여부 포함
+- **UI 접근 방식** - LiteLLM에 직접 접근하는지, reverse proxy를 통하는지, ingress controller 뒤에 있는지
+- 사용자와 LiteLLM 서버 사이의 **CDN 또는 caching layers**
 
-## 4. Network Tab Requests
+## 4. Network 탭 요청 {#4-network-tab-requests}
 
-Open your browser's Developer Tools (F12 → Network tab), reproduce the issue, and share:
+브라우저의 Developer Tools(F12 → Network tab)를 열고 문제를 재현한 뒤, 다음을 공유해 주세요.
 
-- The **failing request(s)** — URL, method, status code, and response body
-- **Screenshots or HAR export** of the relevant network activity
-- Any **CORS or mixed-content errors** shown in the Console tab
+- **실패한 request(s)** - URL, 메서드, 상태 코드, 응답 본문
+- 관련 network activity의 **screenshots 또는 HAR export**
+- Console tab에 표시되는 **CORS 또는 mixed-content errors**
 
-## 5. Environment Variables
+## 5. 환경 변수 {#5-environment-variables}
 
-Non-sensitive environment variables related to the UI and proxy setup, such as:
+UI 및 proxy 설정과 관련된 민감하지 않은 환경 변수입니다. 예시는 다음과 같습니다.
 
 - `LITELLM_MASTER_KEY`
 - `PROXY_BASE_URL` / `LITELLM_PROXY_BASE_URL`
 - `UI_BASE_PATH`
-- Any SSO-related variables (e.g., `GOOGLE_CLIENT_ID`, `MICROSOFT_TENANT`)
+- SSO 관련 변수(예: `GOOGLE_CLIENT_ID`, `MICROSOFT_TENANT`)
 
-Do **not** include passwords, secrets, or API keys.
+비밀번호, secrets, API keys는 **포함하지 마세요**.
 
-## 6. Browser & Access Details
+## 6. 브라우저 및 접근 정보 {#6-browser--access-details}
 
-- **Browser** and version (e.g., Chrome 120, Firefox 121)
-- **Access URL** used to reach the UI (redact sensitive parts)
-- Whether the issue occurs for **all users or specific roles** (Admin, Internal User, etc.)
+- **브라우저** 및 버전(예: Chrome 120, Firefox 121)
+- UI에 접근할 때 사용한 **Access URL**(민감한 부분은 마스킹)
+- 문제가 **모든 사용자 또는 특정 역할**에서 발생하는지 여부(Admin, Internal User 등)
 
-## 7. Screenshots or Screen Recordings
+## 7. 스크린샷 또는 화면 녹화 {#7-screenshots-or-screen-recordings}
 
-A screenshot or short screen recording of the issue is extremely helpful. Include any visible error messages, toasts, or unexpected behavior.
+문제의 스크린샷이나 짧은 화면 녹화가 있으면 매우 유용합니다. 표시되는 오류 메시지, 토스트 알림, 예상치 못한 동작을 포함해 주세요.

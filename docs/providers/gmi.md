@@ -1,36 +1,36 @@
 # GMI Cloud
 
-## Overview
+## 개요
 
-| Property | Details |
+| 속성 | 세부 정보 |
 |-------|-------|
-| Description | GMI Cloud is a GPU cloud infrastructure provider offering access to top AI models including Claude, GPT, DeepSeek, Gemini, and more through OpenAI-compatible APIs. |
-| Provider Route on LiteLLM | `gmi/` |
-| Link to Provider Doc | [GMI Cloud Docs ↗](https://docs.gmicloud.ai) |
+| 설명 | GMI Cloud는 OpenAI 호환 API를 통해 Claude, GPT, DeepSeek, Gemini 등 주요 AI 모델에 접근할 수 있게 해주는 GPU 클라우드 인프라 제공업체입니다. |
+| LiteLLM의 Provider Route | `gmi/` |
+| 제공업체 문서 링크 | [GMI Cloud 문서 ↗](https://docs.gmicloud.ai) |
 | Base URL | `https://api.gmi-serving.com/v1` |
-| Supported Operations | [`/chat/completions`](#sample-usage), [`/models`](#supported-models) |
+| 지원 작업 | [`/chat/completions`](#sample-usage), [`/models`](#supported-models) |
 
 <br />
 
-## What is GMI Cloud?
+## GMI Cloud란?
 
-GMI Cloud is a venture-backed digital infrastructure company ($82M+ funding) providing:
-- **Top-tier GPU Access**: NVIDIA H100 GPUs for AI workloads
-- **Multiple AI Models**: Claude, GPT, DeepSeek, Gemini, Kimi, Qwen, and more
-- **OpenAI-Compatible API**: Drop-in replacement for OpenAI SDK
-- **Global Infrastructure**: Data centers in US (Colorado) and APAC (Taiwan)
+GMI Cloud는 8200만 달러 이상 투자를 유치한 디지털 인프라 기업으로, 다음을 제공합니다.
+- **최상위 GPU 접근**: AI 워크로드용 NVIDIA H100 GPU
+- **여러 AI 모델**: Claude, GPT, DeepSeek, Gemini, Kimi, Qwen 등
+- **OpenAI 호환 API**: OpenAI SDK의 드롭인 대체재
+- **글로벌 인프라**: 미국(Colorado) 및 APAC(Taiwan) 데이터 센터
 
-## Required Variables
+## 필수 변수
 
 ```python showLineNumbers title="Environment Variables"
 os.environ["GMI_API_KEY"] = ""  # your GMI Cloud API key
 ```
 
-Get your GMI Cloud API key from [console.gmicloud.ai](https://console.gmicloud.ai).
+[console.gmicloud.ai](https://console.gmicloud.ai)에서 GMI Cloud API 키를 발급받으세요.
 
-## Usage - LiteLLM Python SDK
+## 사용법 - LiteLLM Python SDK {#sample-usage}
 
-### Non-streaming
+### 비스트리밍
 
 ```python showLineNumbers title="GMI Cloud Non-streaming Completion"
 import os
@@ -50,7 +50,7 @@ response = completion(
 print(response)
 ```
 
-### Streaming
+### 스트리밍
 
 ```python showLineNumbers title="GMI Cloud Streaming Completion"
 import os
@@ -72,15 +72,15 @@ for chunk in response:
     print(chunk)
 ```
 
-## Usage - LiteLLM Proxy Server
+## 사용법 - LiteLLM Proxy Server
 
-### 1. Save key in your environment
+### 1. 환경에 키 저장
 
 ```bash
 export GMI_API_KEY=""
 ```
 
-### 2. Start the proxy
+### 2. 프록시 시작
 
 ```yaml
 model_list:
@@ -94,9 +94,9 @@ model_list:
       api_key: os.environ/GMI_API_KEY
 ```
 
-## Supported Models
+## 지원 모델 {#supported-models}
 
-| Model | Model ID | Context Length |
+| 모델 | Model ID | 컨텍스트 길이 |
 |-------|----------|----------------|
 | Claude Opus 4.5 | `gmi/anthropic/claude-opus-4.5` | 409K |
 | Claude Sonnet 4.5 | `gmi/anthropic/claude-sonnet-4.5` | 409K |
@@ -116,25 +116,25 @@ model_list:
 | Qwen3-VL 235B | `gmi/Qwen/Qwen3-VL-235B-A22B-Instruct-FP8` | 262K |
 | GLM-4.7 | `gmi/zai-org/GLM-4.7-FP8` | 202K |
 
-## Supported OpenAI Parameters
+## 지원되는 OpenAI 파라미터
 
-GMI Cloud supports all standard OpenAI-compatible parameters:
+GMI Cloud는 모든 표준 OpenAI 호환 파라미터를 지원합니다.
 
-| Parameter | Type | Description |
+| 파라미터 | 타입 | 설명 |
 |-----------|------|-------------|
-| `messages` | array | **Required**. Array of message objects with 'role' and 'content' |
-| `model` | string | **Required**. Model ID from available models |
-| `stream` | boolean | Optional. Enable streaming responses |
-| `temperature` | float | Optional. Sampling temperature |
-| `top_p` | float | Optional. Nucleus sampling parameter |
-| `max_tokens` | integer | Optional. Maximum tokens to generate |
-| `frequency_penalty` | float | Optional. Penalize frequent tokens |
-| `presence_penalty` | float | Optional. Penalize tokens based on presence |
-| `stop` | string/array | Optional. Stop sequences |
-| `response_format` | object | Optional. JSON mode with `{"type": "json_object"}` |
+| `messages` | array | **필수**. 'role'과 'content'가 포함된 메시지 객체 배열 |
+| `model` | string | **필수**. 사용 가능한 모델의 Model ID |
+| `stream` | boolean | 선택 사항. 스트리밍 응답 활성화 |
+| `temperature` | float | 선택 사항. 샘플링 temperature |
+| `top_p` | float | 선택 사항. Nucleus sampling 파라미터 |
+| `max_tokens` | integer | 선택 사항. 생성할 최대 토큰 수 |
+| `frequency_penalty` | float | 선택 사항. 자주 등장하는 토큰에 페널티 적용 |
+| `presence_penalty` | float | 선택 사항. 존재 여부를 기준으로 토큰에 페널티 적용 |
+| `stop` | string/array | 선택 사항. 중지 시퀀스 |
+| `response_format` | object | 선택 사항. `{"type": "json_object"}`를 사용하는 JSON 모드 |
 
-## Additional Resources
+## 추가 자료
 
-- [GMI Cloud Website](https://www.gmicloud.ai)
-- [GMI Cloud Documentation](https://docs.gmicloud.ai)
+- [GMI Cloud 웹사이트](https://www.gmicloud.ai)
+- [GMI Cloud 문서](https://docs.gmicloud.ai)
 - [GMI Cloud Console](https://console.gmicloud.ai)

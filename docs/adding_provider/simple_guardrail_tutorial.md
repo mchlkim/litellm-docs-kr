@@ -1,13 +1,13 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Adding a New Guardrail Integration
+# 새 Guardrail 통합 추가 {#adding-a-new-guardrail-integration}
 
-You're going to create a class that checks text before it goes to the LLM or after it comes back. If it violates your rules, you block it.
+LLM으로 전송되기 전이나 응답이 돌아온 후 텍스트를 검사하는 클래스를 만듭니다. 규칙을 위반하면 해당 요청 또는 응답을 차단합니다.
 
-## How It Works
+## 작동 방식 {#how-it-works}
 
-Request with guardrail:
+guardrail을 포함한 요청:
 
 ```bash
 curl --location 'http://localhost:4000/chat/completions' \
@@ -20,26 +20,26 @@ curl --location 'http://localhost:4000/chat/completions' \
 }'
 ```
 
-Your guardrail checks input, then output. If something's wrong, raise an exception.
+guardrail은 입력을 검사한 다음 출력을 검사합니다. 문제가 있으면 예외를 발생시킵니다.
 
-## Build Your Guardrail
+## Guardrail 빌드 {#build-your-guardrail}
 
-### Create Your Directory
+### 디렉터리 생성 {#create-your-directory}
 
 ```bash
 mkdir -p litellm/proxy/guardrails/guardrail_hooks/my_guardrail
 cd litellm/proxy/guardrails/guardrail_hooks/my_guardrail
 ```
 
-Two files: `my_guardrail.py` (main class) and `__init__.py` (initialization).
+두 개의 파일을 만듭니다: `my_guardrail.py`(메인 클래스)와 `__init__.py`(초기화).
 
-### Write the Main Class
+### 메인 클래스 작성 {#write-the-main-class}
 
 `my_guardrail.py`:
 
-Follow from [Custom Guardrail](../proxy/guardrails/custom_guardrail#custom-guardrail) tutorial.
+[Custom Guardrail](../proxy/guardrails/custom_guardrail#custom-guardrail) 튜토리얼을 따르세요.
 
-### Create the Init File
+### Init 파일 생성 {#create-the-init-file}
 
 `__init__.py`:
 
@@ -78,9 +78,9 @@ guardrail_class_registry = {
 }
 ```
 
-### Register Your Guardrail Type
+### Guardrail Type 등록 {#register-your-guardrail-type}
 
-Add to `litellm/types/guardrails.py`:
+`litellm/types/guardrails.py`에 추가합니다:
 
 ```python
 class SupportedGuardrailIntegrations(str, Enum):
@@ -92,9 +92,9 @@ class SupportedGuardrailIntegrations(str, Enum):
     MY_GUARDRAIL = "my_guardrail"
 ```
 
-## Usage
+## 사용법 {#usage}
 
-### Config File
+### Config 파일 {#config-file}
 
 ```yaml
 model_list:
@@ -112,7 +112,7 @@ guardrails:
         api_base: https://api.myguardrail.com
 ```
 
-### Per-Request
+### 요청별 설정 {#per-request}
 
 ```bash
 curl --location 'http://localhost:4000/chat/completions' \
@@ -125,9 +125,8 @@ curl --location 'http://localhost:4000/chat/completions' \
 }'
 ```
 
-## Testing
+## 테스트 {#testing}
 
-Add unit tests inside `test_litellm/` folder.
-
+`test_litellm/` 폴더 안에 단위 테스트를 추가합니다.
 
 

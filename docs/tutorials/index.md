@@ -1,25 +1,25 @@
 ---
-title: Tutorials
-sidebar_label: Overview
+title: 튜토리얼
+sidebar_label: 개요
 ---
 
 import NavigationCards from '@site/src/components/NavigationCards';
 
-**Tutorials** are step-by-step walkthroughs for integrating LiteLLM with external tools, frameworks, and services — or building complete end-to-end workflows.
+**튜토리얼** are step-by-step walkthroughs for integrating LiteLLM with external tools, frameworks, and services — or building complete end-to-end workflows.
 
-> Need help choosing the right path before you start? See [Learn →](/docs/learn)
+> Need help choosing the right path before you start? See [학습 →](/docs/learn)
 
 ---
 
-## Getting Started
+## 시작하기
 
 <NavigationCards
 columns={2}
 items={[
   {
     icon: "⚡",
-    title: "Getting Started",
-    description: "Installation, playground, text completion, and mock completions.",
+    title: "시작하기",
+    description: "설치, playground, text completion, and mock completions.",
     to: "/docs/tutorials/getting_started",
   },
 ]}
@@ -34,7 +34,7 @@ columns={2}
 items={[
   {
     icon: "🤖",
-    title: "Agent SDKs & Frameworks",
+    title: "에이전트 SDK & Frameworks",
     description: "OpenAI Agents SDK, Claude Agent SDK, Google ADK, CopilotKit, Letta, LiveKit, Instructor.",
     to: "/docs/agent_sdks",
   },
@@ -52,7 +52,7 @@ items={[
   },
   {
     icon: "🔌",
-    title: "Provider Setup",
+    title: "프로바이더 설정",
     description: "Azure OpenAI, HuggingFace, TogetherAI, local models, and more.",
     to: "/docs/tutorials/provider_tutorials",
   },
@@ -83,14 +83,14 @@ items={[
 
 ---
 
-## Observability & Evaluation
+## 관측성 & Evaluation
 
 <NavigationCards
 columns={2}
 items={[
   {
     icon: "🔍",
-    title: "Observability & Evaluation",
+    title: "관측성 & Evaluation",
     description: "Logging to Elasticsearch, benchmarking, and evaluation suites.",
     to: "/docs/tutorials/observability_evaluation",
   },

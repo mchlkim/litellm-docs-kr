@@ -1,5 +1,5 @@
 ---
-title: "v1.79.0-stable - Search APIs"
+title: "v1.79.0-stable - 검색 API"
 slug: "v1-79-0"
 date: 2025-10-26T10:00:00
 authors:
@@ -18,7 +18,7 @@ import Image from '@theme/IdealImage';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-## Deploy this version
+## 이 버전 배포하기
 
 <Tabs>
 <TabItem value="docker" label="Docker">
@@ -43,280 +43,279 @@ pip install litellm==1.79.0
 
 ---
 
-## Major Changes
+## 주요 변경 사항
 
-- **Cohere models will now be routed to Cohere v2 API by default** - [PR #15722](https://github.com/BerriAI/litellm/pull/15722)
-
----
-
-## Key Highlights
-
-- **Search APIs** - Native `/v1/search` endpoint with support for Perplexity, Tavily, Parallel AI, Exa AI, DataforSEO, and Google PSE with cost tracking
-- **Vector Stores** - Vertex AI Search API integration as vector store through LiteLLM with passthrough endpoint support
-- **Guardrails Expansion** - Apply guardrails across Responses API, Image Gen, Text completions, Audio transcriptions, Audio Speech, Rerank, and Anthropic Messages API via unified `apply_guardrails` function
-- **New Guardrail Providers** - Gray Swan, Dynamo AI, IBM Guardrails, Lasso Security v3, and Bedrock Guardrail apply_guardrail endpoint support
-- **Video Generation API** - Native support for OpenAI Sora-2 and Azure Sora-2 (Pro, Pro-High-Res) with cost tracking and logging support
-- **Azure AI Speech (TTS)** - Native Azure AI Speech integration with cost tracking for standard and HD voices
+- **Cohere 모델은 이제 기본적으로 Cohere v2 API로 라우팅됩니다** - [PR #15722](https://github.com/BerriAI/litellm/pull/15722)
 
 ---
 
-## New Models / Updated Models
+## 주요 하이라이트
 
-#### New Model Support
+- **Search API** - 비용 추적과 함께 Perplexity, Tavily, Parallel AI, Exa AI, DataforSEO, Google PSE를 지원하는 네이티브 `/v1/search` 엔드포인트
+- **Vector Stores** - 패스스루 엔드포인트 지원과 함께 LiteLLM을 통해 Vertex AI Search API를 벡터 스토어로 통합
+- **가드레일 확장** - 통합 `apply_guardrails` 함수를 통해 Responses API, Image Gen, Text completions, Audio transcriptions, Audio Speech, Rerank, Anthropic Messages API 전반에 가드레일 적용
+- **새 가드레일 프로바이더** - Gray Swan, Dynamo AI, IBM 가드레일, Lasso Security v3, Bedrock Guardrail apply_guardrail 엔드포인트 지원
+- **Video Generation API** - 비용 추적 및 로깅 지원과 함께 OpenAI Sora-2 및 Azure Sora-2(Pro, Pro-High-Res)를 네이티브로 지원
+- **Azure AI Speech (TTS)** - 표준 및 HD 음성 비용 추적을 포함한 네이티브 Azure AI Speech 통합
 
-| Provider | Model | Context Window | Input ($/1M tokens) | Output ($/1M tokens) | Features |
+---
+
+## 새 모델 / 업데이트된 모델
+
+#### 새 모델 지원
+
+| 프로바이더 | 모델 | 컨텍스트 윈도우 | 입력 ($/1M tokens) | 출력 ($/1M tokens) | 기능 |
 | -------- | ----- | -------------- | ------------------- | -------------------- | -------- |
-| Bedrock | `anthropic.claude-3-7-sonnet-20240620-v1:0` | 200K | $3.60 | $18.00 | Chat, reasoning, vision, function calling, prompt caching, computer use |
-| Bedrock GovCloud | `us-gov-west-1/anthropic.claude-3-7-sonnet-20250219-v1:0` | 200K | $3.60 | $18.00 | Chat, reasoning, vision, function calling, prompt caching, computer use |
-| Vertex AI | `mistral-medium-3` | 128K | $0.40 | $2.00 | Chat, function calling, tool choice |
-| Vertex AI | `codestral-2` | 128K | $0.30 | $0.90 | Chat, function calling, tool choice |
-| Bedrock | `amazon.titan-image-generator-v1` | - | - | - | Image generation - $0.008/image, $0.01/premium image |
-| Bedrock | `amazon.titan-image-generator-v2` | - | - | - | Image generation - $0.008/image, $0.01/premium image |
-| OpenAI | `sora-2` | - | - | - | Video generation - $0.10/video/second |
-| Azure | `sora-2` | - | - | - | Video generation - $0.10/video/second |
-| Azure | `sora-2-pro` | - | - | - | Video generation - $0.30/video/second |
-| Azure | `sora-2-pro-high-res` | - | - | - | Video generation - $0.50/video/second |
+| Bedrock | `anthropic.claude-3-7-sonnet-20240620-v1:0` | 200K | $3.60 | $18.00 | 채팅, 추론, 비전, 함수 호출, 프롬프트 캐싱, 컴퓨터 사용 |
+| Bedrock GovCloud | `us-gov-west-1/anthropic.claude-3-7-sonnet-20250219-v1:0` | 200K | $3.60 | $18.00 | 채팅, 추론, 비전, 함수 호출, 프롬프트 캐싱, 컴퓨터 사용 |
+| Vertex AI | `mistral-medium-3` | 128K | $0.40 | $2.00 | 채팅, 함수 호출, 도구 선택 |
+| Vertex AI | `codestral-2` | 128K | $0.30 | $0.90 | 채팅, 함수 호출, 도구 선택 |
+| Bedrock | `amazon.titan-image-generator-v1` | - | - | - | 이미지 생성 - $0.008/image, $0.01/premium image |
+| Bedrock | `amazon.titan-image-generator-v2` | - | - | - | 이미지 생성 - $0.008/image, $0.01/premium image |
+| OpenAI | `sora-2` | - | - | - | 동영상 생성 - $0.10/video/second |
+| Azure | `sora-2` | - | - | - | 동영상 생성 - $0.10/video/second |
+| Azure | `sora-2-pro` | - | - | - | 동영상 생성 - $0.30/video/second |
+| Azure | `sora-2-pro-high-res` | - | - | - | 동영상 생성 - $0.50/video/second |
 
-#### Features
+#### 기능
 
 - **[Anthropic](../../docs/providers/anthropic)**
-    - Fix cache_control incorrectly applied to all content items instead of last item only - [PR #15699](https://github.com/BerriAI/litellm/pull/15699)
-    - Forward anthropic-beta headers to Bedrock, VertexAI - [PR #15700](https://github.com/BerriAI/litellm/pull/15700)
-    - Change max_tokens value to match max_output_tokens for claude sonnet - [PR #15715](https://github.com/BerriAI/litellm/pull/15715)
+    - 마지막 항목에만 적용되어야 하는 cache_control이 모든 콘텐츠 항목에 잘못 적용되던 문제 수정 - [PR #15699](https://github.com/BerriAI/litellm/pull/15699)
+    - anthropic-beta 헤더를 Bedrock, VertexAI로 전달 - [PR #15700](https://github.com/BerriAI/litellm/pull/15700)
+    - claude sonnet에서 max_tokens 값을 max_output_tokens와 일치하도록 변경 - [PR #15715](https://github.com/BerriAI/litellm/pull/15715)
 
 - **[Bedrock](../../docs/providers/bedrock)**
-    - Add AWS us-gov-west-1 Claude 3.7 Sonnet costs - [PR #15775](https://github.com/BerriAI/litellm/pull/15775)
-    - Fix the date for sonnet 3.7 in govcloud - [PR #15800](https://github.com/BerriAI/litellm/pull/15800)
-    - Use proper bedrock model name in health check - [PR #15808](https://github.com/BerriAI/litellm/pull/15808)
-    - Support for embeddings_by_type Response Format in Bedrock Cohere Embed v1 - [PR #15707](https://github.com/BerriAI/litellm/pull/15707)
-    - Add titan image generations with cost tracking - [PR #15916](https://github.com/BerriAI/litellm/pull/15916)
+    - AWS us-gov-west-1 Claude 3.7 Sonnet 비용 추가 - [PR #15775](https://github.com/BerriAI/litellm/pull/15775)
+    - govcloud의 sonnet 3.7 날짜 수정 - [PR #15800](https://github.com/BerriAI/litellm/pull/15800)
+    - 헬스 체크에서 올바른 bedrock 모델 이름 사용 - [PR #15808](https://github.com/BerriAI/litellm/pull/15808)
+    - Bedrock Cohere Embed v1에서 embeddings_by_type 응답 형식 지원 - [PR #15707](https://github.com/BerriAI/litellm/pull/15707)
+    - 비용 추적을 포함한 titan 이미지 생성 추가 - [PR #15916](https://github.com/BerriAI/litellm/pull/15916)
 
 - **[Gemini](../../docs/providers/gemini)**
-    - Add imageConfig parameter for gemini-2.5-flash-image - [PR #15530](https://github.com/BerriAI/litellm/pull/15530)
-    - Replace deprecated gemini-1.5-pro-preview-0514 - [PR #15852](https://github.com/BerriAI/litellm/pull/15852)
-    - Update vertex ai gemini costs - [PR #15911](https://github.com/BerriAI/litellm/pull/15911)
+    - gemini-2.5-flash-image용 imageConfig 파라미터 추가 - [PR #15530](https://github.com/BerriAI/litellm/pull/15530)
+    - 지원 중단된 gemini-1.5-pro-preview-0514 교체 - [PR #15852](https://github.com/BerriAI/litellm/pull/15852)
+    - vertex ai gemini 비용 업데이트 - [PR #15911](https://github.com/BerriAI/litellm/pull/15911)
 
 - **[Ollama](../../docs/providers/ollama)**
-    - Set 'think' to False when reasoning effort is minimal/none/disable - [PR #15763](https://github.com/BerriAI/litellm/pull/15763)
-    - Handle parsing ollama chunk error - [PR #15717](https://github.com/BerriAI/litellm/pull/15717)
+    - reasoning effort가 minimal/none/disable일 때 'think'를 False로 설정 - [PR #15763](https://github.com/BerriAI/litellm/pull/15763)
+    - ollama 청크 파싱 오류 처리 - [PR #15717](https://github.com/BerriAI/litellm/pull/15717)
 
 - **[Vertex AI](../../docs/providers/vertex)**
-    - Add mistral medium 3 and Codestral 2 on vertex - [PR #15887](https://github.com/BerriAI/litellm/pull/15887)
+    - vertex에 mistral medium 3 및 Codestral 2 추가 - [PR #15887](https://github.com/BerriAI/litellm/pull/15887)
 
 - **[Databricks](../../docs/providers/databricks)**
-    - Allow prompt caching to be used for Anthropic Claude on Databricks - [PR #15801](https://github.com/BerriAI/litellm/pull/15801)
+    - Databricks의 Anthropic Claude에서 프롬프트 캐싱 사용 허용 - [PR #15801](https://github.com/BerriAI/litellm/pull/15801)
 
 - **[Azure](../../docs/providers/azure)**
-    - Add Azure AVA TTS integration - [PR #15749](https://github.com/BerriAI/litellm/pull/15749)
-    - Add Azure AVA (Speech AI) Cost Tracking - [PR #15754](https://github.com/BerriAI/litellm/pull/15754)
-    - Azure AI Speech - Ensure `voice` is mapped from request body to SSML body, allow sending `role` and `style` - [PR #15810](https://github.com/BerriAI/litellm/pull/15810)
-    - Add Azure support for video generation functionality (Sora-2) - [PR #15901](https://github.com/BerriAI/litellm/pull/15901)
+    - Azure AVA TTS 통합 추가 - [PR #15749](https://github.com/BerriAI/litellm/pull/15749)
+    - Azure AVA(Speech AI) 비용 추적 추가 - [PR #15754](https://github.com/BerriAI/litellm/pull/15754)
+    - Azure AI Speech - `voice`가 요청 본문에서 SSML 본문으로 매핑되도록 보장하고 `role` 및 `style` 전송 허용 - [PR #15810](https://github.com/BerriAI/litellm/pull/15810)
+    - 동영상 생성 기능(Sora-2)에 대한 Azure 지원 추가 - [PR #15901](https://github.com/BerriAI/litellm/pull/15901)
 
 - **[OpenAI](../../docs/providers/openai)**
-    - OpenAI videos refactoring - [PR #15900](https://github.com/BerriAI/litellm/pull/15900)
+    - OpenAI videos 리팩터링 - [PR #15900](https://github.com/BerriAI/litellm/pull/15900)
 
-- **General**
-    - Read from custom-llm-provider header - [PR #15528](https://github.com/BerriAI/litellm/pull/15528)
+- **일반**
+    - custom-llm-provider 헤더에서 읽도록 변경 - [PR #15528](https://github.com/BerriAI/litellm/pull/15528)
 
 ---
 
-## LLM API Endpoints
+## LLM API 엔드포인트
 
-#### Features
+#### 기능
 
 - **[Responses API](../../docs/response_api)**
-    - Add gpt 4.1 pricing for response endpoint - [PR #15593](https://github.com/BerriAI/litellm/pull/15593)
-    - Fix Incorrect status value in responses api with gemini - [PR #15753](https://github.com/BerriAI/litellm/pull/15753)
-    - Simplify reasoning item handling for gpt-5-codex - [PR #15815](https://github.com/BerriAI/litellm/pull/15815)
-    - ErrorEvent ValidationError when OpenAI Responses API returns nested error structure - [PR #15804](https://github.com/BerriAI/litellm/pull/15804)
-    - Fix reasoning item ID auto-generation causing encrypted content verification errors - [PR #15782](https://github.com/BerriAI/litellm/pull/15782)
-    - Support tags in metadata - [PR #15867](https://github.com/BerriAI/litellm/pull/15867)
-    - Security: prevent User A from retrieving User B's response, if response.id is leaked - [PR #15757](https://github.com/BerriAI/litellm/pull/15757)
+    - response 엔드포인트에 gpt 4.1 가격 추가 - [PR #15593](https://github.com/BerriAI/litellm/pull/15593)
+    - gemini 사용 시 responses api의 잘못된 status 값 수정 - [PR #15753](https://github.com/BerriAI/litellm/pull/15753)
+    - gpt-5-codex의 reasoning item 처리 단순화 - [PR #15815](https://github.com/BerriAI/litellm/pull/15815)
+    - OpenAI Responses API가 중첩 오류 구조를 반환할 때 발생하는 ErrorEvent ValidationError 수정 - [PR #15804](https://github.com/BerriAI/litellm/pull/15804)
+    - reasoning item ID 자동 생성으로 암호화된 콘텐츠 검증 오류가 발생하던 문제 수정 - [PR #15782](https://github.com/BerriAI/litellm/pull/15782)
+    - metadata의 tags 지원 - [PR #15867](https://github.com/BerriAI/litellm/pull/15867)
+    - 보안: response.id가 유출된 경우 User A가 User B의 response를 조회하지 못하도록 방지 - [PR #15757](https://github.com/BerriAI/litellm/pull/15757)
 
 - **[Batch API](../../docs/batch_api)**
-    - Add pre and post call for list batches - [PR #15673](https://github.com/BerriAI/litellm/pull/15673)
-    - Add function responsible to call precall - [PR #15636](https://github.com/BerriAI/litellm/pull/15636)
-    - Fix "User default_user_id does not have access to the object" when object not in db - [PR #15873](https://github.com/BerriAI/litellm/pull/15873)
+    - list batches에 pre 및 post call 추가 - [PR #15673](https://github.com/BerriAI/litellm/pull/15673)
+    - precall 호출을 담당하는 함수 추가 - [PR #15636](https://github.com/BerriAI/litellm/pull/15636)
+    - 객체가 db에 없을 때 발생하는 "User default_user_id does not have access to the object" 수정 - [PR #15873](https://github.com/BerriAI/litellm/pull/15873)
 
 - **[OCR API](../../docs/ocr)**
-    - Add Azure AI - OCR to docs - [PR #15768](https://github.com/BerriAI/litellm/pull/15768)
-    - Add mode + Health check support for OCR models - [PR #15767](https://github.com/BerriAI/litellm/pull/15767)
+    - 문서에 Azure AI - OCR 추가 - [PR #15768](https://github.com/BerriAI/litellm/pull/15768)
+    - OCR 모델에 mode 및 헬스 체크 지원 추가 - [PR #15767](https://github.com/BerriAI/litellm/pull/15767)
 
 - **[Search API](../../docs/search_api)**
-    - Add def search() APIs for Web Search - Perplexity API - [PR #15769](https://github.com/BerriAI/litellm/pull/15769)
-    - Add Tavily Search API - [PR #15770](https://github.com/BerriAI/litellm/pull/15770)
-    - Add Parallel AI - Search API - [PR #15772](https://github.com/BerriAI/litellm/pull/15772)
-    - Add EXA AI Search API to LiteLLM - [PR #15774](https://github.com/BerriAI/litellm/pull/15774)
-    - Add /search endpoint on LiteLLM Gateway - [PR #15780](https://github.com/BerriAI/litellm/pull/15780)
-    - Add DataforSEO Search API - [PR #15817](https://github.com/BerriAI/litellm/pull/15817)
-    - Add Google PSE Search Provider - [PR #15816](https://github.com/BerriAI/litellm/pull/15816)
-    - Add cost tracking for Search API requests - Google PSE, Tavily, Parallel AI, Exa AI - [PR #15821](https://github.com/BerriAI/litellm/pull/15821)
-    - Backend: Allow storing configured Search APIs in DB - [PR #15862](https://github.com/BerriAI/litellm/pull/15862)
-    - Exa Search API - ensure request params are sent to Exa AI - [PR #15855](https://github.com/BerriAI/litellm/pull/15855)
+    - Web Search - Perplexity API용 def search() API 추가 - [PR #15769](https://github.com/BerriAI/litellm/pull/15769)
+    - Tavily Search API 추가 - [PR #15770](https://github.com/BerriAI/litellm/pull/15770)
+    - Parallel AI - Search API 추가 - [PR #15772](https://github.com/BerriAI/litellm/pull/15772)
+    - LiteLLM에 EXA AI Search API 추가 - [PR #15774](https://github.com/BerriAI/litellm/pull/15774)
+    - LiteLLM Gateway에 /search 엔드포인트 추가 - [PR #15780](https://github.com/BerriAI/litellm/pull/15780)
+    - DataforSEO Search API 추가 - [PR #15817](https://github.com/BerriAI/litellm/pull/15817)
+    - Google PSE Search Provider 추가 - [PR #15816](https://github.com/BerriAI/litellm/pull/15816)
+    - Search API 요청에 대한 비용 추적 추가 - Google PSE, Tavily, Parallel AI, Exa AI - [PR #15821](https://github.com/BerriAI/litellm/pull/15821)
+    - Backend: 구성된 Search API를 DB에 저장할 수 있도록 허용 - [PR #15862](https://github.com/BerriAI/litellm/pull/15862)
+    - Exa Search API - 요청 params가 Exa AI로 전송되도록 보장 - [PR #15855](https://github.com/BerriAI/litellm/pull/15855)
 
 - **[Vector Stores](../../docs/vector_stores)**
-    - Support Vertex AI Search API as vector store through LiteLLM - [PR #15781](https://github.com/BerriAI/litellm/pull/15781)
+    - LiteLLM을 통해 Vertex AI Search API를 벡터 스토어로 지원 - [PR #15781](https://github.com/BerriAI/litellm/pull/15781)
     - Azure AI - Search Vector Stores - [PR #15873](https://github.com/BerriAI/litellm/pull/15873)
-    - VertexAI Search Vector Store - Passthrough endpoint support + Vector store search Cost tracking support - [PR #15824](https://github.com/BerriAI/litellm/pull/15824)
-    - Don't raise error if managed object is not found - [PR #15873](https://github.com/BerriAI/litellm/pull/15873)
-    - Show config.yaml vector stores on UI - [PR #15873](https://github.com/BerriAI/litellm/pull/15873)
-    - Cost tracking for search spend - [PR #15859](https://github.com/BerriAI/litellm/pull/15859)
+    - VertexAI Search Vector Store - 패스스루 엔드포인트 지원 및 벡터 스토어 검색 비용 추적 지원 - [PR #15824](https://github.com/BerriAI/litellm/pull/15824)
+    - 관리 객체를 찾지 못해도 오류를 발생시키지 않도록 변경 - [PR #15873](https://github.com/BerriAI/litellm/pull/15873)
+    - UI에 config.yaml vector stores 표시 - [PR #15873](https://github.com/BerriAI/litellm/pull/15873)
+    - search spend 비용 추적 - [PR #15859](https://github.com/BerriAI/litellm/pull/15859)
 
 - **[Images API](../../docs/image_generation)**
-    - Pass user-defined headers and extra_headers to image-edit calls - [PR #15811](https://github.com/BerriAI/litellm/pull/15811)
+    - 사용자 정의 headers 및 extra_headers를 image-edit 호출에 전달 - [PR #15811](https://github.com/BerriAI/litellm/pull/15811)
 
 - **[Video Generation API](../../docs/video_generation)**
-    - Add Azure support for video generation functionality (Sora-2, Sora-2-Pro, Sora-2-Pro-High-Res) - [PR #15901](https://github.com/BerriAI/litellm/pull/15901)
-    - OpenAI video generation refactoring (Sora-2) - [PR #15900](https://github.com/BerriAI/litellm/pull/15900)
+    - 동영상 생성 기능(Sora-2, Sora-2-Pro, Sora-2-Pro-High-Res)에 대한 Azure 지원 추가 - [PR #15901](https://github.com/BerriAI/litellm/pull/15901)
+    - OpenAI 동영상 생성 리팩터링(Sora-2) - [PR #15900](https://github.com/BerriAI/litellm/pull/15900)
 
 - **[Bedrock /invoke](../../docs/bedrock_invoke)**
-    - Fix: Hooks broken on /bedrock passthrough due to missing metadata - [PR #15849](https://github.com/BerriAI/litellm/pull/15849)
+    - 수정: 누락된 metadata 때문에 /bedrock 패스스루에서 Hooks가 깨지던 문제 - [PR #15849](https://github.com/BerriAI/litellm/pull/15849)
 
 - **[Realtime API](../../docs/realtime_api)**
-    - Fix: OpenAI Realtime API integration fails due to websockets.exceptions.PayloadTooBig error - [PR #15751](https://github.com/BerriAI/litellm/pull/15751)
+    - 수정: websockets.exceptions.PayloadTooBig 오류로 OpenAI Realtime API 통합이 실패하던 문제 - [PR #15751](https://github.com/BerriAI/litellm/pull/15751)
 
 ---
 
-## Management Endpoints / UI
+## 관리 엔드포인트 / UI
 
-#### Features
+#### 기능
 
-- **Passthrough**
-    - Set auth on passthrough endpoints, on the UI - [PR #15778](https://github.com/BerriAI/litellm/pull/15778)
-    - Fix pass-through endpoint budget enforcement bug - [PR #15805](https://github.com/BerriAI/litellm/pull/15805)
+- **패스스루**
+    - UI에서 패스스루 엔드포인트에 auth 설정 - [PR #15778](https://github.com/BerriAI/litellm/pull/15778)
+    - pass-through 엔드포인트 budget enforcement 버그 수정 - [PR #15805](https://github.com/BerriAI/litellm/pull/15805)
 
-- **Organizations**
-    - Allow org admins to create teams on UI - [PR #15924](https://github.com/BerriAI/litellm/pull/15924)
+- **조직**
+    - org admin이 UI에서 team을 만들 수 있도록 허용 - [PR #15924](https://github.com/BerriAI/litellm/pull/15924)
 
-- **Search Tools**
-    - UI - Search Tools, allow adding search tools on UI + testing search - [PR #15871](https://github.com/BerriAI/litellm/pull/15871)
-    - UI - Add logos for search providers - [PR #15872](https://github.com/BerriAI/litellm/pull/15872)
+- **검색 도구**
+    - UI - Search Tools, UI에서 search tools 추가 및 search 테스트 허용 - [PR #15871](https://github.com/BerriAI/litellm/pull/15871)
+    - UI - search providers 로고 추가 - [PR #15872](https://github.com/BerriAI/litellm/pull/15872)
 
-- **General**
-    - Fix routing for custom server root path - [PR #15701](https://github.com/BerriAI/litellm/pull/15701)
+- **일반**
+    - custom server root path에 대한 라우팅 수정 - [PR #15701](https://github.com/BerriAI/litellm/pull/15701)
 
 ---
 
-## Logging / Guardrail / Prompt Management Integrations
+## 로깅 / 가드레일 / 프롬프트 관리 통합
 
-#### Features
+#### 기능
 
 - **[OpenTelemetry](../../docs/proxy/logging#opentelemetry)**
-    - Fix OpenTelemetry Logging functionality - [PR #15645](https://github.com/BerriAI/litellm/pull/15645)
-    - Fix issue where headers were not being split correctly - [PR #15916](https://github.com/BerriAI/litellm/pull/15916)
+    - OpenTelemetry Logging 기능 수정 - [PR #15645](https://github.com/BerriAI/litellm/pull/15645)
+    - headers가 올바르게 분할되지 않던 문제 수정 - [PR #15916](https://github.com/BerriAI/litellm/pull/15916)
 
 - **[Sentry](../../docs/proxy/logging#sentry)**
-    - Add SENTRY_ENVIRONMENT configuration for Sentry integration - [PR #15760](https://github.com/BerriAI/litellm/pull/15760)
+    - Sentry 통합을 위한 SENTRY_ENVIRONMENT 구성 추가 - [PR #15760](https://github.com/BerriAI/litellm/pull/15760)
 
 - **[Helicone](../../docs/proxy/logging#helicone)**
-    - Fix JSON serialization error in Helicone logging by removing OpenTelemetry span from metadata - [PR #15728](https://github.com/BerriAI/litellm/pull/15728)
+    - metadata에서 OpenTelemetry span을 제거하여 Helicone logging의 JSON 직렬화 오류 수정 - [PR #15728](https://github.com/BerriAI/litellm/pull/15728)
 
 - **[MLFlow](../../docs/proxy/logging#mlflow)**
-    - Fix MLFlow tags - split request_tags into (key, val) if request_tag has colon - [PR #15914](https://github.com/BerriAI/litellm/pull/15914)
+    - MLFlow tags 수정 - request_tag에 콜론이 있으면 request_tags를 (key, val)로 분할 - [PR #15914](https://github.com/BerriAI/litellm/pull/15914)
 
-- **General**
-    - Rename configured_cold_storage_logger to cold_storage_custom_logger - [PR #15798](https://github.com/BerriAI/litellm/pull/15798)
+- **일반**
+    - configured_cold_storage_logger를 cold_storage_custom_logger로 이름 변경 - [PR #15798](https://github.com/BerriAI/litellm/pull/15798)
 
-#### Guardrails
+#### 가드레일
 
 - **[Gray Swan](../../docs/proxy/guardrails)**
-    - Add GraySwan Guardrails support - [PR #15756](https://github.com/BerriAI/litellm/pull/15756)
-    - Rename GraySwan to Gray Swan - [PR #15771](https://github.com/BerriAI/litellm/pull/15771)
+    - GraySwan 가드레일 지원 추가 - [PR #15756](https://github.com/BerriAI/litellm/pull/15756)
+    - GraySwan을 Gray Swan으로 이름 변경 - [PR #15771](https://github.com/BerriAI/litellm/pull/15771)
 
 - **[Dynamo AI](../../docs/proxy/guardrails)**
-    - New Guardrail - Dynamo AI Guardrail - [PR #15920](https://github.com/BerriAI/litellm/pull/15920)
+    - 새 Guardrail - Dynamo AI Guardrail - [PR #15920](https://github.com/BerriAI/litellm/pull/15920)
 
-- **[IBM Guardrails](../../docs/proxy/guardrails)**
-    - IBM Guardrails integration - [PR #15924](https://github.com/BerriAI/litellm/pull/15924)
+- **[IBM 가드레일](../../docs/proxy/guardrails)**
+    - IBM 가드레일 통합 - [PR #15924](https://github.com/BerriAI/litellm/pull/15924)
 
 - **[Lasso Security](../../docs/proxy/guardrails)**
-    - Add v3 API Support - [PR #12452](https://github.com/BerriAI/litellm/pull/12452)
-    - Fixed lasso import config, redis cluster hash tags for test keys - [PR #15917](https://github.com/BerriAI/litellm/pull/15917)
+    - v3 API 지원 추가 - [PR #12452](https://github.com/BerriAI/litellm/pull/12452)
+    - lasso import config 및 테스트 키용 redis cluster hash tags 수정 - [PR #15917](https://github.com/BerriAI/litellm/pull/15917)
 
-- **[Bedrock Guardrails](../../docs/proxy/guardrails)**
-    - Implement Bedrock Guardrail apply_guardrail endpoint support - [PR #15892](https://github.com/BerriAI/litellm/pull/15892)
+- **[Bedrock 가드레일](../../docs/proxy/guardrails)**
+    - Bedrock Guardrail apply_guardrail 엔드포인트 지원 구현 - [PR #15892](https://github.com/BerriAI/litellm/pull/15892)
 
-- **General**
-    - Guardrails - Responses API, Image Gen, Text completions, Audio transcriptions, Audio Speech, Rerank, Anthropic Messages API support via the unified `apply_guardrails` function - [PR #15706](https://github.com/BerriAI/litellm/pull/15706)
+- **일반**
+    - 가드레일 - 통합 `apply_guardrails` 함수를 통해 Responses API, Image Gen, Text completions, Audio transcriptions, Audio Speech, Rerank, Anthropic Messages API 지원 - [PR #15706](https://github.com/BerriAI/litellm/pull/15706)
 
 ---
 
-## Spend Tracking, Budgets and Rate Limiting
+## 비용 추적, 예산 및 속도 제한
 
-- **Rate Limiting**
-    - Support absolute RPM/TPM in priority_reservation - [PR #15813](https://github.com/BerriAI/litellm/pull/15813)
-    - Org level tpm/rpm limits + Team tpm/rpm validation when assigned to org - [PR #15549](https://github.com/BerriAI/litellm/pull/15549)
+- **속도 제한**
+    - priority_reservation에서 절대 RPM/TPM 지원 - [PR #15813](https://github.com/BerriAI/litellm/pull/15813)
+    - org에 할당될 때 org 수준 tpm/rpm limits 및 Team tpm/rpm validation 추가 - [PR #15549](https://github.com/BerriAI/litellm/pull/15549)
 
 ---
 
 ## MCP Gateway
 
 - **OAuth**
-    - Auth Header Fix for MCP Tool Call - [PR #15736](https://github.com/BerriAI/litellm/pull/15736)
-    - Add response_type + PKCE parameters to OAuth authorization endpoint - [PR #15720](https://github.com/BerriAI/litellm/pull/15720)
+    - MCP Tool Call의 Auth Header 수정 - [PR #15736](https://github.com/BerriAI/litellm/pull/15736)
+    - OAuth authorization 엔드포인트에 response_type 및 PKCE 파라미터 추가 - [PR #15720](https://github.com/BerriAI/litellm/pull/15720)
 
 ---
 
-## Performance / Loadbalancing / Reliability improvements
+## 성능 / 로드밸런싱 / 안정성 개선
 
-- **Database**
-    - Minimize the occurrence of deadlocks - [PR #15281](https://github.com/BerriAI/litellm/pull/15281)
+- **데이터베이스**
+    - deadlock 발생 최소화 - [PR #15281](https://github.com/BerriAI/litellm/pull/15281)
 
 - **Redis**
-    - Apply max_connections configuration to Redis async client - [PR #15797](https://github.com/BerriAI/litellm/pull/15797)
+    - Redis async client에 max_connections 구성 적용 - [PR #15797](https://github.com/BerriAI/litellm/pull/15797)
 
-- **Caching**
-    - Add documentation for `enable_caching_on_provider_specific_optional_params` setting - [PR #15885](https://github.com/BerriAI/litellm/pull/15885)
-
----
-
-## Documentation Updates
-
-- **Provider Documentation**
-    - Update worker recommendation - [PR #15702](https://github.com/BerriAI/litellm/pull/15702)
-    - Fix the wrong request body in json mode doc - [PR #15729](https://github.com/BerriAI/litellm/pull/15729)
-    - Add details in docs - [PR #15721](https://github.com/BerriAI/litellm/pull/15721)
-    - Add responses api on openai docs - [PR #15866](https://github.com/BerriAI/litellm/pull/15866)
-    - Add OpenAI responses api - [PR #15868](https://github.com/BerriAI/litellm/pull/15868)
+- **캐싱**
+    - `enable_caching_on_provider_specific_optional_params` 설정 문서 추가 - [PR #15885](https://github.com/BerriAI/litellm/pull/15885)
 
 ---
 
-## New Contributors
+## 문서 업데이트
 
-* @tlecomte made their first contribution in [PR #15528](https://github.com/BerriAI/litellm/pull/15528)
-* @tomhaynes made their first contribution in [PR #15645](https://github.com/BerriAI/litellm/pull/15645)
-* @talalryz made their first contribution in [PR #15720](https://github.com/BerriAI/litellm/pull/15720)
-* @1vinodsingh1 made their first contribution in [PR #15736](https://github.com/BerriAI/litellm/pull/15736)
-* @nuernber made their first contribution in [PR #15775](https://github.com/BerriAI/litellm/pull/15775)
-* @Thomas-Mildner made their first contribution in [PR #15760](https://github.com/BerriAI/litellm/pull/15760)
-* @javiergarciapleo made their first contribution in [PR #15721](https://github.com/BerriAI/litellm/pull/15721)
-* @lshgdut made their first contribution in [PR #15717](https://github.com/BerriAI/litellm/pull/15717)
-* @kk-wangjifeng made their first contribution in [PR #15530](https://github.com/BerriAI/litellm/pull/15530)
-* @anthonyivn2 made their first contribution in [PR #15801](https://github.com/BerriAI/litellm/pull/15801)
-* @romanglo made their first contribution in [PR #15707](https://github.com/BerriAI/litellm/pull/15707)
-* @mythral made their first contribution in [PR #15859](https://github.com/BerriAI/litellm/pull/15859)
-* @mubashirosmani made their first contribution in [PR #15866](https://github.com/BerriAI/litellm/pull/15866)
-* @CAFxX made their first contribution in [PR #15281](https://github.com/BerriAI/litellm/pull/15281)
-* @reflection made their first contribution in [PR #15914](https://github.com/BerriAI/litellm/pull/15914)
-* @shadielfares made their first contribution in [PR #15917](https://github.com/BerriAI/litellm/pull/15917)
+- **프로바이더 문서**
+    - worker 권장 사항 업데이트 - [PR #15702](https://github.com/BerriAI/litellm/pull/15702)
+    - json mode 문서의 잘못된 request body 수정 - [PR #15729](https://github.com/BerriAI/litellm/pull/15729)
+    - 문서에 세부 정보 추가 - [PR #15721](https://github.com/BerriAI/litellm/pull/15721)
+    - openai 문서에 responses api 추가 - [PR #15866](https://github.com/BerriAI/litellm/pull/15866)
+    - OpenAI responses api 추가 - [PR #15868](https://github.com/BerriAI/litellm/pull/15868)
 
 ---
 
-## PR Count Summary
+## 새 기여자
+
+* @tlecomte가 [PR #15528](https://github.com/BerriAI/litellm/pull/15528)에서 첫 기여를 했습니다
+* @tomhaynes가 [PR #15645](https://github.com/BerriAI/litellm/pull/15645)에서 첫 기여를 했습니다
+* @talalryz가 [PR #15720](https://github.com/BerriAI/litellm/pull/15720)에서 첫 기여를 했습니다
+* @1vinodsingh1가 [PR #15736](https://github.com/BerriAI/litellm/pull/15736)에서 첫 기여를 했습니다
+* @nuernber가 [PR #15775](https://github.com/BerriAI/litellm/pull/15775)에서 첫 기여를 했습니다
+* @Thomas-Mildner가 [PR #15760](https://github.com/BerriAI/litellm/pull/15760)에서 첫 기여를 했습니다
+* @javiergarciapleo가 [PR #15721](https://github.com/BerriAI/litellm/pull/15721)에서 첫 기여를 했습니다
+* @lshgdut가 [PR #15717](https://github.com/BerriAI/litellm/pull/15717)에서 첫 기여를 했습니다
+* @kk-wangjifeng가 [PR #15530](https://github.com/BerriAI/litellm/pull/15530)에서 첫 기여를 했습니다
+* @anthonyivn2가 [PR #15801](https://github.com/BerriAI/litellm/pull/15801)에서 첫 기여를 했습니다
+* @romanglo가 [PR #15707](https://github.com/BerriAI/litellm/pull/15707)에서 첫 기여를 했습니다
+* @mythral가 [PR #15859](https://github.com/BerriAI/litellm/pull/15859)에서 첫 기여를 했습니다
+* @mubashirosmani가 [PR #15866](https://github.com/BerriAI/litellm/pull/15866)에서 첫 기여를 했습니다
+* @CAFxX가 [PR #15281](https://github.com/BerriAI/litellm/pull/15281)에서 첫 기여를 했습니다
+* @reflection이 [PR #15914](https://github.com/BerriAI/litellm/pull/15914)에서 첫 기여를 했습니다
+* @shadielfares가 [PR #15917](https://github.com/BerriAI/litellm/pull/15917)에서 첫 기여를 했습니다
+
+---
+
+## PR 수 요약
 
 ### 10/26/2025
-* New Models / Updated Models: 20
-* LLM API Endpoints: 29
-* Management Endpoints / UI: 5
-* Logging / Guardrail / Prompt Management Integrations: 10
-* Spend Tracking, Budgets and Rate Limiting: 2
+* 새 모델 / 업데이트된 모델: 20
+* LLM API 엔드포인트: 29
+* 관리 엔드포인트 / UI: 5
+* 로깅 / 가드레일 / 프롬프트 관리 통합: 10
+* 비용 추적, 예산 및 속도 제한: 2
 * MCP Gateway: 2
-* Performance / Loadbalancing / Reliability improvements: 3
-* Documentation Updates: 5
+* 성능 / 로드밸런싱 / 안정성 개선: 3
+* 문서 업데이트: 5
 
 ---
 
-## Full Changelog
+## 전체 변경 이력
 
-**[View complete changelog on GitHub](https://github.com/BerriAI/litellm/compare/v1.78.5-stable...v1.79.0-stable)**
-
+**[GitHub에서 전체 변경 이력 보기](https://github.com/BerriAI/litellm/compare/v1.78.5-stable...v1.79.0-stable)**

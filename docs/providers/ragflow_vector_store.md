@@ -2,19 +2,19 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Image from '@theme/IdealImage';
 
-# RAGFlow Vector Stores
+# RAGFlow 벡터 스토어
 
-Litellm support creation and management of datasets for document processing and knowledge base management in Ragflow.
+LiteLLM은 RAGFlow에서 문서 처리와 지식 베이스 관리를 위한 dataset 생성 및 관리를 지원합니다.
 
-| Property | Details |
+| 속성 | 세부 정보 |
 |----------|---------|
-| Description | RAGFlow datasets enable document processing, chunking, and knowledge base management for RAG applications. |
-| Provider Route on LiteLLM | `ragflow` in the litellm vector_store_registry |
-| Provider Doc | [RAGFlow API Documentation ↗](https://ragflow.io/docs) |
-| Supported Operations | Dataset Management (Create, List, Update, Delete) |
-| Search/Retrieval | ❌ Not supported (management only) |
+| 설명 | RAGFlow dataset은 RAG 애플리케이션을 위한 문서 처리, chunking, 지식 베이스 관리를 제공합니다. |
+| LiteLLM의 provider route | litellm `vector_store_registry`의 `ragflow` |
+| Provider 문서 | [RAGFlow API 문서 ↗](https://ragflow.io/docs) |
+| 지원 작업 | Dataset 관리(Create, List, Update, Delete) |
+| Search/Retrieval | ❌ 지원하지 않음(관리 전용) |
 
-## Quick Start
+## 빠른 시작
 
 ### LiteLLM Python SDK
 
@@ -43,7 +43,7 @@ print(f"Dataset name: {response.name}")
 
 ### LiteLLM Proxy
 
-#### 1. Configure your vector_store_registry
+#### 1. `vector_store_registry` 설정
 
 <Tabs>
 <TabItem value="config-yaml" label="config.yaml">
@@ -71,7 +71,7 @@ vector_store_registry:
 
 <TabItem value="litellm-ui" label="LiteLLM UI">
 
-On the LiteLLM UI, Navigate to Experimental > Vector Stores > Create Vector Store. On this page you can create a vector store with a name, vector store id and credentials.
+LiteLLM UI에서 Experimental > Vector Stores > Create Vector Store로 이동합니다. 이 페이지에서 이름, vector store id, 자격 증명을 지정해 vector store를 생성할 수 있습니다.
 
 <Image 
   img={require('../../img/kb_2.png')}
@@ -81,7 +81,7 @@ On the LiteLLM UI, Navigate to Experimental > Vector Stores > Create Vector Stor
 </TabItem>
 </Tabs>
 
-#### 2. Create a dataset via Proxy
+#### 2. Proxy로 dataset 생성
 
 <Tabs>
 <TabItem value="curl" label="Curl">
@@ -129,25 +129,25 @@ print(f"Created dataset: {response.id}")
 </TabItem>
 </Tabs>
 
-## Configuration
+## 설정
 
-### Environment Variables
+### 환경 변수
 
-RAGFlow vector stores support configuration via environment variables:
+RAGFlow vector store는 환경 변수를 통한 설정을 지원합니다.
 
-- `RAGFLOW_API_KEY` - Your RAGFlow API key (required)
-- `RAGFLOW_API_BASE` - RAGFlow API base URL (optional, defaults to `http://localhost:9380`)
+- `RAGFLOW_API_KEY` - RAGFlow API key(필수)
+- `RAGFLOW_API_BASE` - RAGFlow API base URL(선택 사항, 기본값 `http://localhost:9380`)
 
-### Parameters
+### 파라미터
 
-You can also pass these via `litellm_params`:
+다음 값은 `litellm_params`로도 전달할 수 있습니다.
 
-- `api_key` - RAGFlow API key (overrides `RAGFLOW_API_KEY` env var)
-- `api_base` - RAGFlow API base URL (overrides `RAGFLOW_API_BASE` env var)
+- `api_key` - RAGFlow API key(`RAGFLOW_API_KEY` 환경 변수보다 우선)
+- `api_base` - RAGFlow API base URL(`RAGFLOW_API_BASE` 환경 변수보다 우선)
 
-## Dataset Creation Options
+## Dataset 생성 옵션
 
-### Basic Dataset Creation
+### 기본 Dataset 생성
 
 ```python
 response = litellm.vector_stores.create(
@@ -156,9 +156,9 @@ response = litellm.vector_stores.create(
 )
 ```
 
-### Dataset with Chunk Method
+### Chunk Method를 사용하는 Dataset
 
-RAGFlow supports various chunk methods for different document types:
+RAGFlow는 문서 유형별로 여러 chunk method를 지원합니다.
 
 <Tabs>
 <TabItem value="naive" label="Naive (General)">
@@ -239,9 +239,9 @@ response = litellm.vector_stores.create(
 </TabItem>
 </Tabs>
 
-### Dataset with Ingestion Pipeline
+### Ingestion Pipeline을 사용하는 Dataset
 
-Instead of using a chunk method, you can use an ingestion pipeline:
+chunk method 대신 ingestion pipeline을 사용할 수 있습니다.
 
 ```python
 response = litellm.vector_stores.create(
@@ -254,9 +254,9 @@ response = litellm.vector_stores.create(
 )
 ```
 
-**Note**: `chunk_method` and `pipeline_id` are mutually exclusive. Use one or the other.
+**참고**: `chunk_method`와 `pipeline_id`는 함께 사용할 수 없습니다. 둘 중 하나만 사용하세요.
 
-### Advanced Parser Configuration
+### 고급 Parser 설정
 
 ```python
 response = litellm.vector_stores.create(
@@ -286,41 +286,41 @@ response = litellm.vector_stores.create(
 )
 ```
 
-## Supported Chunk Methods
+## 지원되는 Chunk Method
 
-RAGFlow supports the following chunk methods:
+RAGFlow는 다음 chunk method를 지원합니다.
 
-- `naive` - General purpose (default)
-- `book` - For book documents
-- `email` - For email documents
-- `laws` - For legal documents
-- `manual` - Manual chunking
-- `one` - Single chunk
-- `paper` - For academic papers
-- `picture` - For image documents
-- `presentation` - For presentation documents
-- `qa` - Q&A format
-- `table` - For table documents
-- `tag` - Tag-based chunking
+- `naive` - 범용(기본값)
+- `book` - 책 문서용
+- `email` - 이메일 문서용
+- `laws` - 법률 문서용
+- `manual` - 수동 chunking
+- `one` - 단일 chunk
+- `paper` - 학술 논문용
+- `picture` - 이미지 문서용
+- `presentation` - 프레젠테이션 문서용
+- `qa` - Q&A 형식
+- `table` - 표 문서용
+- `tag` - tag 기반 chunking
 
-## RAGFlow-Specific Parameters
+## RAGFlow 전용 파라미터
 
-All RAGFlow-specific parameters should be passed via the `metadata` field:
+모든 RAGFlow 전용 파라미터는 `metadata` 필드로 전달해야 합니다.
 
-| Parameter | Type | Description |
+| 파라미터 | 타입 | 설명 |
 |-----------|------|-------------|
-| `avatar` | string | Base64 encoding of the avatar (max 65535 chars) |
-| `description` | string | Brief description of the dataset (max 65535 chars) |
-| `embedding_model` | string | Embedding model name (e.g., "BAAI/bge-large-zh-v1.5@BAAI") |
-| `permission` | string | Access permission: "me" (default) or "team" |
-| `chunk_method` | string | Chunking method (see supported methods above) |
-| `parser_config` | object | Parser configuration (varies by chunk_method) |
-| `parse_type` | int | Number of parsers in pipeline (required with pipeline_id) |
-| `pipeline_id` | string | 32-character hex pipeline ID (required with parse_type) |
+| `avatar` | string | avatar의 Base64 인코딩(최대 65535자) |
+| `description` | string | dataset에 대한 짧은 설명(최대 65535자) |
+| `embedding_model` | string | Embedding model 이름(예: "BAAI/bge-large-zh-v1.5@BAAI") |
+| `permission` | string | 접근 권한: "me"(기본값) 또는 "team" |
+| `chunk_method` | string | Chunking method(위의 지원 method 참고) |
+| `parser_config` | object | Parser 설정(`chunk_method`에 따라 다름) |
+| `parse_type` | int | pipeline 내 parser 수(`pipeline_id`와 함께 필수) |
+| `pipeline_id` | string | 32자 hex pipeline ID(`parse_type`과 함께 필수) |
 
-## Error Handling
+## 오류 처리
 
-RAGFlow returns error responses in the following format:
+RAGFlow는 다음 형식으로 오류 응답을 반환합니다.
 
 ```json
 {
@@ -329,21 +329,20 @@ RAGFlow returns error responses in the following format:
 }
 ```
 
-LiteLLM automatically maps these to appropriate exceptions:
+LiteLLM은 이를 적절한 exception으로 자동 매핑합니다.
 
-- `code != 0` → Raises exception with the error message
-- Missing required fields → Raises `ValueError`
-- Mutually exclusive parameters → Raises `ValueError`
+- `code != 0` → 오류 메시지와 함께 exception 발생
+- 필수 필드 누락 → `ValueError` 발생
+- 함께 사용할 수 없는 파라미터 조합 → `ValueError` 발생
 
-## Limitations
+## 제한 사항
 
-- **Search/Retrieval**: RAGFlow vector stores support dataset management only. Search operations are not supported and will raise `NotImplementedError`.
-- **List/Update/Delete**: These operations are not yet implemented through the standard vector store API. Use RAGFlow's native API endpoints directly.
+- **Search/Retrieval**: RAGFlow vector store는 dataset 관리만 지원합니다. Search 작업은 지원하지 않으며 `NotImplementedError`가 발생합니다.
+- **List/Update/Delete**: 이 작업들은 아직 표준 vector store API를 통해 구현되지 않았습니다. RAGFlow native API endpoint를 직접 사용하세요.
 
-## Further Reading
+## 더 읽어보기
 
 Vector Stores:
-- [Vector Store Creation](../vector_stores/create.md)
-- [Using Vector Stores with Completions](../completion/knowledgebase.md)
-- [Vector Store Registry](../completion/knowledgebase.md#vectorstoreregistry)
-
+- [Vector Store 생성](../vector_stores/create.md)
+- [Completions에서 Vector Store 사용](../completion/knowledgebase.md)
+- [Vector Store 레지스트리](../completion/knowledgebase.md#vectorstoreregistry)

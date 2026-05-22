@@ -1,29 +1,29 @@
 # Stability AI
 https://stability.ai/
 
-## Overview
+## 개요
 
-| Property | Details |
+| 속성 | 세부 정보 |
 |-------|-------|
-| Description | Stability AI creates open AI models for image, video, audio, and 3D generation. Known for Stable Diffusion. |
-| Provider Route on LiteLLM | `stability/` |
-| Link to Provider Doc | [Stability AI API ↗](https://platform.stability.ai/docs/api-reference) |
-| Supported Operations | [`/images/generations`](#image-generation), [`/images/edits`](#image-editing) |
+| 설명 | Stability AI는 이미지, 비디오, 오디오, 3D 생성을 위한 오픈 AI 모델을 제공합니다. Stable Diffusion으로 잘 알려져 있습니다. |
+| LiteLLM 제공자 라우트 | `stability/` |
+| Provider 문서 링크 | [Stability AI API ↗](https://platform.stability.ai/docs/api-reference) |
+| 지원 작업 | [`/images/generations`](#image-generation), [`/images/edits`](#image-editing) |
 
-LiteLLM supports Stability AI Image Generation calls via the Stability AI REST API (not via Bedrock).
+LiteLLM은 Stability AI REST API를 통해 Stability AI 이미지 생성 호출을 지원합니다(Bedrock 경유 아님).
 
-## API Key
+## API 키
 
 ```python
 # env variable
 os.environ['STABILITY_API_KEY'] = "your-api-key"
 ```
 
-Get your API key from the [Stability AI Platform](https://platform.stability.ai/).
+[Stability AI Platform](https://platform.stability.ai/)에서 API key를 발급받으세요.
 
-## Image Generation
+## 이미지 생성 {#image-generation}
 
-### Usage - LiteLLM Python SDK
+### 사용법 - LiteLLM Python SDK
 
 ```python showLineNumbers
 from litellm import image_generation
@@ -39,9 +39,9 @@ response = image_generation(
 print(response)
 ```
 
-### Usage - LiteLLM Proxy Server
+### 사용법 - LiteLLM Proxy Server
 
-#### 1. Setup config.yaml
+#### 1. config.yaml 설정
 
 ```yaml showLineNumbers
 model_list:
@@ -56,7 +56,7 @@ general_settings:
   master_key: sk-1234
 ```
 
-#### 2. Start the proxy
+#### 2. 프록시 시작
 
 ```bash showLineNumbers
 litellm --config config.yaml
@@ -64,7 +64,7 @@ litellm --config config.yaml
 # RUNNING on http://0.0.0.0:4000
 ```
 
-#### 3. Test it
+#### 3. 테스트
 
 ```bash showLineNumbers
 curl --location 'http://0.0.0.0:4000/v1/images/generations' \
@@ -76,7 +76,7 @@ curl --location 'http://0.0.0.0:4000/v1/images/generations' \
 }'
 ```
 
-### Advanced Usage - With Additional Parameters
+### 고급 사용법 - 추가 파라미터 사용
 
 ```python showLineNumbers
 from litellm import image_generation
@@ -94,21 +94,21 @@ response = image_generation(
 print(response)
 ```
 
-### Supported Parameters
+### 지원 파라미터
 
-Stability AI supports the following OpenAI-compatible parameters:
+Stability AI는 다음 OpenAI 호환 파라미터를 지원합니다.
 
-| Parameter | Type | Description | Example |
+| 파라미터 | 타입 | 설명 | 예제 |
 |-----------|------|-------------|---------|
-| `size` | string | Image dimensions (mapped to aspect_ratio) | `"1024x1024"` |
-| `n` | integer | Number of images (note: Stability returns 1 per request) | `1` |
-| `response_format` | string | Format of response (`b64_json` only for Stability) | `"b64_json"` |
+| `size` | string | 이미지 크기(`aspect_ratio`로 매핑) | `"1024x1024"` |
+| `n` | integer | 이미지 수(참고: Stability는 요청당 1개 반환) | `1` |
+| `response_format` | string | 응답 형식(Stability는 `b64_json`만 지원) | `"b64_json"` |
 
-### Size to Aspect Ratio Mapping
+### Size와 Aspect Ratio 매핑 {#size-and-aspect-ratio-mapping}
 
-The `size` parameter is automatically mapped to Stability's `aspect_ratio`:
+`size` 파라미터는 Stability의 `aspect_ratio`로 자동 매핑됩니다.
 
-| OpenAI Size | Stability Aspect Ratio |
+| OpenAI size | Stability 비율 |
 |-------------|----------------------|
 | `1024x1024` | `1:1` |
 | `1792x1024` | `16:9` |
@@ -116,9 +116,9 @@ The `size` parameter is automatically mapped to Stability's `aspect_ratio`:
 | `512x512` | `1:1` |
 | `256x256` | `1:1` |
 
-### Using Stability-Specific Parameters
+### Stability 전용 파라미터 사용
 
-You can pass parameters that are specific to Stability AI directly in your request:
+Stability AI 전용 파라미터를 요청에 직접 전달할 수 있습니다.
 
 ```python showLineNumbers
 from litellm import image_generation
@@ -138,25 +138,25 @@ response = image_generation(
 print(response)
 ```
 
-### Supported Image Generation Models
+### 지원되는 이미지 생성 모델 {#supported-image-generation-models}
 
-| Model Name | Function Call | Description |
+| 모델명 | 함수 호출 | 설명 |
 |------------|---------------|-------------|
-| sd3 | `image_generation(model="stability/sd3", ...)` | Stable Diffusion 3 |
-| sd3-large | `image_generation(model="stability/sd3-large", ...)` | SD3 Large |
-| sd3-large-turbo | `image_generation(model="stability/sd3-large-turbo", ...)` | SD3 Large Turbo (faster) |
-| sd3-medium | `image_generation(model="stability/sd3-medium", ...)` | SD3 Medium |
-| sd3.5-large | `image_generation(model="stability/sd3.5-large", ...)` | SD 3.5 Large (recommended) |
-| sd3.5-large-turbo | `image_generation(model="stability/sd3.5-large-turbo", ...)` | SD 3.5 Large Turbo |
-| sd3.5-medium | `image_generation(model="stability/sd3.5-medium", ...)` | SD 3.5 Medium |
-| stable-image-ultra | `image_generation(model="stability/stable-image-ultra", ...)` | Stable Image Ultra |
-| stable-image-core | `image_generation(model="stability/stable-image-core", ...)` | Stable Image Core |
+| `sd3` | `image_generation(model="stability/sd3", ...)` | `Stable Diffusion 3` |
+| `sd3-large` | `image_generation(model="stability/sd3-large", ...)` | `SD3 Large` |
+| `sd3-large-turbo` | `image_generation(model="stability/sd3-large-turbo", ...)` | `SD3 Large Turbo`(더 빠름) |
+| `sd3-medium` | `image_generation(model="stability/sd3-medium", ...)` | `SD3 Medium` |
+| `sd3.5-large` | `image_generation(model="stability/sd3.5-large", ...)` | `SD 3.5 Large`(권장) |
+| `sd3.5-large-turbo` | `image_generation(model="stability/sd3.5-large-turbo", ...)` | `SD 3.5 Large Turbo` |
+| `sd3.5-medium` | `image_generation(model="stability/sd3.5-medium", ...)` | `SD 3.5 Medium` |
+| `stable-image-ultra` | `image_generation(model="stability/stable-image-ultra", ...)` | `Stable Image Ultra` |
+| `stable-image-core` | `image_generation(model="stability/stable-image-core", ...)` | `Stable Image Core` |
 
-For more details on available models and features, see: https://platform.stability.ai/docs/api-reference
+사용 가능한 모델과 기능에 대한 자세한 내용은 https://platform.stability.ai/docs/api-reference 를 참고하세요.
 
-## Response Format
+## 응답 형식
 
-Stability AI returns images in base64 format. The response is OpenAI-compatible:
+Stability AI는 이미지를 base64 형식으로 반환합니다. 응답은 OpenAI 호환 형식입니다.
 
 ```python
 {
@@ -169,21 +169,21 @@ Stability AI returns images in base64 format. The response is OpenAI-compatible:
 }
 ```
 
-## Image Editing
+## 이미지 편집 {#image-editing}
 
-Stability AI supports various image editing operations including inpainting, upscaling, outpainting, background removal, and more.
+Stability AI는 인페인팅, 업스케일링, 아웃페인팅, 배경 제거 등 다양한 이미지 편집 작업을 지원합니다.
 
-:::info Optional Parameters
-**Important:** Different Stability models have different parameter requirements:
-- Some models don't require a `prompt` (e.g., upscaling, background removal)
-- The `style-transfer` model uses `init_image` and `style_image` instead of `image`
-- The `outpaint` model requires numeric parameters (`left`, `right`, `up`, `down`)
-LiteLLM automatically handles these differences for you.
+:::info 선택적 파라미터
+**중요:** Stability 모델마다 파라미터 요구사항이 다릅니다.
+- 일부 모델은 `prompt`가 필요하지 않습니다(예: 업스케일링, 배경 제거).
+- `style-transfer` 모델은 `image` 대신 `init_image`와 `style_image`를 사용합니다.
+- `outpaint` 모델은 숫자 파라미터(`left`, `right`, `up`, `down`)가 필요합니다.
+LiteLLM은 이러한 차이를 자동으로 처리합니다.
 :::
 
-### Usage - LiteLLM Python SDK
+### 사용법 - LiteLLM Python SDK
 
-#### Inpainting (Edit with Mask)
+#### Inpainting(mask로 편집) {#inpainting-edit-with-mask}
 
 ```python showLineNumbers
 from litellm import image_edit
@@ -202,7 +202,7 @@ response = image_edit(
 print(response)
 ```
 
-#### Image Upscaling
+#### 이미지 업스케일링 {#image-upscaling}
 
 ```python showLineNumbers
 from litellm import image_edit
@@ -234,7 +234,7 @@ response = image_edit(
 print(response)
 ```
 
-#### Image Outpainting
+#### 이미지 아웃페인팅 {#image-outpainting}
 
 ```python showLineNumbers
 from litellm import image_edit
@@ -255,7 +255,7 @@ response = image_edit(
 print(response)
 ```
 
-#### Background Removal
+#### 배경 제거 {#background-removal}
 
 ```python showLineNumbers
 from litellm import image_edit
@@ -272,7 +272,7 @@ response = image_edit(
 print(response)
 ```
 
-#### Search and Replace
+#### 검색 및 교체 {#search-and-replace}
 
 ```python showLineNumbers
 from litellm import image_edit
@@ -298,7 +298,7 @@ response = image_edit(
 print(response)
 ```
 
-#### Image Control (Sketch/Structure)
+#### 이미지 제어(스케치/구조) {#image-control-sketchstructure}
 
 ```python showLineNumbers
 from litellm import image_edit
@@ -324,7 +324,7 @@ response = image_edit(
 print(response)
 ```
 
-#### Erase Objects
+#### 객체 지우기 {#object-erase}
 
 ```python showLineNumbers
 from litellm import image_edit
@@ -341,7 +341,7 @@ response = image_edit(
 )
 print(response)
 ```
-#### Style Transfer
+#### Style Transfer {#style-transfer}
 
 ```python showLineNumbers
 from litellm import image_edit
@@ -360,28 +360,29 @@ response = image_edit(
 )
 
 print(response)
+```
 
-### Supported Image Edit Models
+### 지원되는 이미지 편집 모델 {#supported-image-edit-models}
 
-| Model Name | Function Call | Description |
+| 모델명 | 함수 호출 | 설명 |
 |------------|---------------|-------------|
-| stable-image-inpaint-v1:0 | `image_edit(model="stability/stable-image-inpaint-v1:0", ...)` | Inpainting with mask |
-| stable-conservative-upscale-v1:0 | `image_edit(model="stability/stable-conservative-upscale-v1:0", ...)` | Conservative upscaling |
-| stable-creative-upscale-v1:0 | `image_edit(model="stability/stable-creative-upscale-v1:0", ...)` | Creative upscaling |
-| stable-fast-upscale-v1:0 | `image_edit(model="stability/stable-fast-upscale-v1:0", ...)` | Fast upscaling |
-| stable-outpaint-v1:0 | `image_edit(model="stability/stable-outpaint-v1:0", ...)` | Extend image borders |
-| stable-image-remove-background-v1:0 | `image_edit(model="stability/stable-image-remove-background-v1:0", ...)` | Remove background |
-| stable-image-search-replace-v1:0 | `image_edit(model="stability/stable-image-search-replace-v1:0", ...)` | Search and replace objects |
-| stable-image-search-recolor-v1:0 | `image_edit(model="stability/stable-image-search-recolor-v1:0", ...)` | Search and recolor |
-| stable-image-control-sketch-v1:0 | `image_edit(model="stability/stable-image-control-sketch-v1:0", ...)` | Control with sketch |
-| stable-image-control-structure-v1:0 | `image_edit(model="stability/stable-image-control-structure-v1:0", ...)` | Control with structure |
-| stable-image-erase-object-v1:0 | `image_edit(model="stability/stable-image-erase-object-v1:0", ...)` | Erase objects |
-| stable-image-style-guide-v1:0 | `image_edit(model="stability/stable-image-style-guide-v1:0", ...)` | Apply style guide |
-| stable-style-transfer-v1:0 | `image_edit(model="stability/stable-style-transfer-v1:0", ...)` | Transfer style |
+| `stable-image-inpaint-v1:0` | `image_edit(model="stability/stable-image-inpaint-v1:0", ...)` | mask를 사용한 인페인팅 |
+| `stable-conservative-upscale-v1:0` | `image_edit(model="stability/stable-conservative-upscale-v1:0", ...)` | 보수적 업스케일링 |
+| `stable-creative-upscale-v1:0` | `image_edit(model="stability/stable-creative-upscale-v1:0", ...)` | 창의적 업스케일링 |
+| `stable-fast-upscale-v1:0` | `image_edit(model="stability/stable-fast-upscale-v1:0", ...)` | 빠른 업스케일링 |
+| `stable-outpaint-v1:0` | `image_edit(model="stability/stable-outpaint-v1:0", ...)` | 이미지 경계 확장 |
+| `stable-image-remove-background-v1:0` | `image_edit(model="stability/stable-image-remove-background-v1:0", ...)` | 배경 제거 |
+| `stable-image-search-replace-v1:0` | `image_edit(model="stability/stable-image-search-replace-v1:0", ...)` | 객체 검색 및 교체 |
+| `stable-image-search-recolor-v1:0` | `image_edit(model="stability/stable-image-search-recolor-v1:0", ...)` | 검색 및 재색상화 |
+| `stable-image-control-sketch-v1:0` | `image_edit(model="stability/stable-image-control-sketch-v1:0", ...)` | 스케치로 제어 |
+| `stable-image-control-structure-v1:0` | `image_edit(model="stability/stable-image-control-structure-v1:0", ...)` | 구조로 제어 |
+| `stable-image-erase-object-v1:0` | `image_edit(model="stability/stable-image-erase-object-v1:0", ...)` | 객체 제거 |
+| `stable-image-style-guide-v1:0` | `image_edit(model="stability/stable-image-style-guide-v1:0", ...)` | style guide 적용 |
+| `stable-style-transfer-v1:0` | `image_edit(model="stability/stable-style-transfer-v1:0", ...)` | style transfer |
 
-### Usage - LiteLLM Proxy Server
+### 사용법 - LiteLLM Proxy Server
 
-#### 1. Setup config.yaml
+#### 1. config.yaml 설정
 
 ```yaml showLineNumbers
 model_list:
@@ -403,7 +404,7 @@ general_settings:
   master_key: sk-1234
 ```
 
-#### 2. Start the proxy
+#### 2. 프록시 시작
 
 ```bash showLineNumbers
 litellm --config config.yaml
@@ -411,7 +412,7 @@ litellm --config config.yaml
 # RUNNING on http://0.0.0.0:4000
 ```
 
-#### 3. Test it
+#### 3. 테스트
 
 ```bash showLineNumbers
 curl -X POST "http://0.0.0.0:4000/v1/images/edits" \
@@ -422,11 +423,11 @@ curl -X POST "http://0.0.0.0:4000/v1/images/edits" \
   -F "prompt=Add a beautiful garden in the masked area"
 ```
 
-## AWS Bedrock (Stability)
+## AWS Bedrock(Stability) 지원 {#aws-bedrock-stability}
 
-LiteLLM also supports Stability AI models via AWS Bedrock. This is useful if you're already using AWS infrastructure.
+LiteLLM은 AWS Bedrock을 통한 Stability AI 모델도 지원합니다. 이미 AWS 인프라를 사용 중이라면 유용합니다.
 
-### Usage - Bedrock Stability
+### 사용법 - Bedrock Stability
 
 ```python showLineNumbers
 from litellm import image_edit
@@ -446,6 +447,7 @@ response = image_edit(
 )
 print(response)
 ```
+```python showLineNumbers
 # Fast upscale without prompt
 response = image_edit(
     model="bedrock/stability.stable-fast-upscale-v1:0",
@@ -463,34 +465,35 @@ response = image_edit(
 )
 
 print(response)
+```
 
-### Supported Bedrock Stability Models
+### 지원되는 Bedrock Stability 모델
 
-All Stability AI image edit models are available via Bedrock with the `bedrock/` prefix:
+모든 Stability AI 이미지 편집 모델은 `bedrock/` prefix를 통해 Bedrock에서 사용할 수 있습니다.
 
-| Direct API Model | Bedrock Model | Description |
+| Direct API 모델 | Bedrock 모델 | 설명 |
 |------------------|---------------|-------------|
-| stability/stable-image-inpaint-v1:0 | bedrock/us.stability.stable-image-inpaint-v1:0 | Inpainting |
-| stability/stable-conservative-upscale-v1:0 | bedrock/stability.stable-conservative-upscale-v1:0 | Conservative upscaling |
-| stability/stable-creative-upscale-v1:0 | bedrock/stability.stable-creative-upscale-v1:0 | Creative upscaling |
-| stability/stable-fast-upscale-v1:0 | bedrock/stability.stable-fast-upscale-v1:0 | Fast upscaling |
-| stability/stable-outpaint-v1:0 | bedrock/stability.stable-outpaint-v1:0 | Outpainting |
-| stability/stable-image-remove-background-v1:0 | bedrock/stability.stable-image-remove-background-v1:0 | Remove background |
-| stability/stable-image-search-replace-v1:0 | bedrock/stability.stable-image-search-replace-v1:0 | Search and replace |
-| stability/stable-image-search-recolor-v1:0 | bedrock/stability.stable-image-search-recolor-v1:0 | Search and recolor |
-| stability/stable-image-control-sketch-v1:0 | bedrock/stability.stable-image-control-sketch-v1:0 | Control with sketch |
-| stability/stable-image-control-structure-v1:0 | bedrock/stability.stable-image-control-structure-v1:0 | Control with structure |
-| stability/stable-image-erase-object-v1:0 | bedrock/stability.stable-image-erase-object-v1:0 | Erase objects |
+| `stability/stable-image-inpaint-v1:0` | `bedrock/us.stability.stable-image-inpaint-v1:0` | 인페인팅 |
+| `stability/stable-conservative-upscale-v1:0` | `bedrock/stability.stable-conservative-upscale-v1:0` | 보수적 업스케일링 |
+| `stability/stable-creative-upscale-v1:0` | `bedrock/stability.stable-creative-upscale-v1:0` | 창의적 업스케일링 |
+| `stability/stable-fast-upscale-v1:0` | `bedrock/stability.stable-fast-upscale-v1:0` | 빠른 업스케일링 |
+| `stability/stable-outpaint-v1:0` | `bedrock/stability.stable-outpaint-v1:0` | 아웃페인팅 |
+| `stability/stable-image-remove-background-v1:0` | `bedrock/stability.stable-image-remove-background-v1:0` | 배경 제거 |
+| `stability/stable-image-search-replace-v1:0` | `bedrock/stability.stable-image-search-replace-v1:0` | 검색 및 교체 |
+| `stability/stable-image-search-recolor-v1:0` | `bedrock/stability.stable-image-search-recolor-v1:0` | 검색 및 재색상화 |
+| `stability/stable-image-control-sketch-v1:0` | `bedrock/stability.stable-image-control-sketch-v1:0` | 스케치로 제어 |
+| `stability/stable-image-control-structure-v1:0` | `bedrock/stability.stable-image-control-structure-v1:0` | 구조로 제어 |
+| `stability/stable-image-erase-object-v1:0` | `bedrock/stability.stable-image-erase-object-v1:0` | 객체 제거 |
 
-**Note:** Bedrock model IDs may use `us.stability.*` or `stability.*` prefix depending on the region and model.
+**참고:** Bedrock 모델 ID는 리전과 모델에 따라 `us.stability.*` 또는 `stability.*` prefix를 사용할 수 있습니다.
 
-## Comparing Routes
+## 라우트 비교 {#route-comparison}
 
-LiteLLM supports Stability AI models via two routes:
+LiteLLM은 두 가지 라우트로 Stability AI 모델을 지원합니다.
 
-| Route | Provider | Use Case | Image Generation | Image Editing |
+| 라우트 | Provider | 사용 사례 | Image Generation | Image Editing |
 |-------|----------|----------|------------------|---------------|
-| `stability/` | Stability AI Direct API | Direct access, all latest models | ✅ | ✅ |
-| `bedrock/stability.*` | AWS Bedrock | AWS integration, enterprise features | ✅ | ✅ |
+| `stability/` | Stability AI Direct API | 직접 접근, 최신 모델 전체 | ✅ | ✅ |
+| `bedrock/stability.*` | AWS Bedrock | AWS 통합, 엔터프라이즈 기능 | ✅ | ✅ |
 
-Use `stability/` for direct API access. Use `bedrock/stability.*` if you're already using AWS Bedrock.
+직접 API 접근에는 `stability/`를 사용하세요. 이미 AWS Bedrock을 사용 중이면 `bedrock/stability.*`를 사용하세요.

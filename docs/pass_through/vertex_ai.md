@@ -4,40 +4,40 @@ import TabItem from '@theme/TabItem';
 
 # Vertex AI SDK
 
-Pass-through endpoints for Vertex AI - call provider-specific endpoint, in native format (no translation).
+Vertex AI용 패스스루 엔드포인트입니다. 공급자별 엔드포인트를 네이티브 형식으로 호출합니다(변환 없음).
 
-| Feature | Supported | Notes | 
+| 기능 | 지원 여부 | 참고 | 
 |-------|-------|-------|
-| Cost Tracking | ✅ | supports all models on `/generateContent` endpoint |
-| Logging | ✅ | works across all integrations |
-| End-user Tracking | ❌ | [Tell us if you need this](https://github.com/BerriAI/litellm/issues/new) |
+| 비용 추적 | ✅ | `/generateContent` 엔드포인트의 모든 모델을 지원합니다 |
+| 로깅 | ✅ | 모든 통합에서 작동합니다 |
+| 최종 사용자 추적 | ❌ | [필요한 경우 알려주세요](https://github.com/BerriAI/litellm/issues/new) |
 | Streaming | ✅ | |
 
-## Supported Endpoints
+## 지원 엔드포인트
 
-LiteLLM supports 3 vertex ai passthrough routes:
+LiteLLM은 3개의 Vertex AI 패스스루 라우트를 지원합니다.
 
-1. `/vertex_ai` → routes to `https://{vertex_location}-aiplatform.googleapis.com/`
-2. `/vertex_ai/discovery` → routes to [`https://discoveryengine.googleapis.com`](https://discoveryengine.googleapis.com/) - [See Search Datastores Guide](./vertex_ai_search_datastores.md)
-3. `/vertex_ai/live` → upgrades to the Vertex AI Live API WebSocket (`google.cloud.aiplatform.v1.LlmBidiService/BidiGenerateContent`) - [See Live WebSocket Guide](./vertex_ai_live_websocket.md)
+1. `/vertex_ai` → `https://{vertex_location}-aiplatform.googleapis.com/`로 라우팅합니다
+2. `/vertex_ai/discovery` → [`https://discoveryengine.googleapis.com`](https://discoveryengine.googleapis.com/)로 라우팅합니다 - [Search Datastores 가이드 보기](./vertex_ai_search_datastores.md)
+3. `/vertex_ai/live` → Vertex AI Live API WebSocket(`google.cloud.aiplatform.v1.LlmBidiService/BidiGenerateContent`)으로 업그레이드합니다 - [Live WebSocket 가이드 보기](./vertex_ai_live_websocket.md)
 
-## How to use
+## 사용 방법
 
-Just replace `https://REGION-aiplatform.googleapis.com` with `LITELLM_PROXY_BASE_URL/vertex_ai`
+`https://REGION-aiplatform.googleapis.com`을 `LITELLM_PROXY_BASE_URL/vertex_ai`로 바꾸기만 하면 됩니다.
 
-LiteLLM supports 3 flows for calling Vertex AI endpoints via pass-through:
+LiteLLM은 패스스루로 Vertex AI 엔드포인트를 호출하는 3가지 흐름을 지원합니다.
 
-1. **Specific Credentials**: Admin sets passthrough credentials for a specific project/region.
+1. **특정 자격 증명**: 관리자가 특정 프로젝트/리전에 대한 패스스루 자격 증명을 설정합니다.
 
-2. **Default Credentials**: Admin sets default credentials.
+2. **기본 자격 증명**: 관리자가 기본 자격 증명을 설정합니다.
 
-3. **Client-Side Credentials**: User can send client-side credentials through to Vertex AI (default behavior - if no default or mapped credentials are found, the request is passed through directly).
+3. **클라이언트 측 자격 증명**: 사용자가 클라이언트 측 자격 증명을 Vertex AI로 전달할 수 있습니다(기본 동작 - 기본 또는 매핑된 자격 증명이 없으면 요청이 그대로 전달됩니다).
 
 
-## Example Usage
+## 예제 사용법
 
 <Tabs>
-<TabItem value="specific_credentials" label="Specific Project/Region">
+<TabItem value="specific_credentials" label="특정 프로젝트/리전">
 
 ```yaml
 model_list:
@@ -51,10 +51,10 @@ model_list:
 ```
 
 </TabItem>
-<TabItem value="default_credentials" label="Default Credentials">
+<TabItem value="default_credentials" label="기본 자격 증명">
 
 <Tabs>
-<TabItem value="yaml" label="Set in config.yaml">
+<TabItem value="yaml" label="config.yaml에서 설정">
 
 ```yaml
 default_vertex_config:
@@ -63,7 +63,7 @@ default_vertex_config:
   vertex_credentials: /path/to/credentials.json
 ```
 </TabItem>
-<TabItem value="env_var" label="Set in environment variables">
+<TabItem value="env_var" label="환경 변수에서 설정">
 
 ```bash
 export DEFAULT_VERTEXAI_PROJECT="adroit-crow-413218"
@@ -74,9 +74,9 @@ export DEFAULT_GOOGLE_APPLICATION_CREDENTIALS="/path/to/credentials.json"
 </TabItem>
 </Tabs>
 </TabItem>
-<TabItem value="client_credentials" label="Client Credentials">
+<TabItem value="client_credentials" label="클라이언트 자격 증명">
 
-Try Gemini 2.0 Flash (curl)
+Gemini 2.0 Flash를 사용해 봅니다(curl).
 
 ```
 MODEL_ID="gemini-2.0-flash-001"
@@ -111,7 +111,7 @@ curl \
 </Tabs>
 
 
-#### **Example Usage**
+#### **예제 사용법**
 
 <Tabs>
 <TabItem value="curl" label="curl">
@@ -171,13 +171,13 @@ generateContent();
 </Tabs>
 
 
-## Vertex AI Live API WebSocket
+## Vertex AI Live API WebSocket 사용
 
-LiteLLM can now proxy the Vertex AI Live API to help you experiment with streaming audio/text from Gemini Live models without exposing Google credentials to clients.
+이제 LiteLLM은 Vertex AI Live API를 프록시할 수 있으므로, Google 자격 증명을 클라이언트에 노출하지 않고 Gemini Live 모델의 오디오/텍스트 스트리밍을 실험할 수 있습니다.
 
-- Configure default Vertex credentials via `default_vertex_config` or environment variables (see examples above).
-- Connect to `wss://<PROXY_URL>/vertex_ai/live`. LiteLLM will exchange your saved credentials for a short-lived access token and forward messages bidirectionally.
-- Optional query params `vertex_project`, `vertex_location`, and `model` let you override defaults for multi-project setups or global-only models.
+- `default_vertex_config` 또는 환경 변수로 기본 Vertex 자격 증명을 구성합니다(위 예시 참고).
+- `wss://<PROXY_URL>/vertex_ai/live`에 연결합니다. LiteLLM은 저장된 자격 증명을 단기 액세스 토큰으로 교환하고 메시지를 양방향으로 전달합니다.
+- 선택적 쿼리 매개변수 `vertex_project`, `vertex_location`, `model`을 사용하면 멀티 프로젝트 설정이나 전역 전용 모델에서 기본값을 재정의할 수 있습니다.
 
 ```python title="client.py"
 import asyncio
@@ -215,11 +215,11 @@ if __name__ == "__main__":
 ```
 
 
-## Quick Start
+## 빠른 시작
 
-Let's call the Vertex AI [`/generateContent` endpoint](https://cloud.google.com/vertex-ai/generative-ai/docs/model-reference/inference)
+Vertex AI [`/generateContent` 엔드포인트](https://cloud.google.com/vertex-ai/generative-ai/docs/model-reference/inference)를 호출해 보겠습니다.
 
-1. Add Vertex AI Credentials to your environment 
+1. 환경에 Vertex AI 자격 증명을 추가합니다 
 
 ```bash
 export DEFAULT_VERTEXAI_PROJECT="" # "adroit-crow-413218"
@@ -227,7 +227,7 @@ export DEFAULT_VERTEXAI_LOCATION="" # "us-central1"
 export DEFAULT_GOOGLE_APPLICATION_CREDENTIALS="" # "/Users/Downloads/adroit-crow-413218-a956eef1a2a8.json"
 ```
 
-2. Start LiteLLM Proxy 
+2. LiteLLM Proxy를 시작합니다 
 
 ```bash
 litellm
@@ -235,9 +235,9 @@ litellm
 # RUNNING on http://0.0.0.0:4000
 ```
 
-3. Test it! 
+3. 테스트합니다! 
 
-Let's call the Google AI Studio token counting endpoint
+Google AI Studio 토큰 계산 엔드포인트를 호출해 보겠습니다.
 
 ```bash
 curl http://localhost:4000/vertex-ai/v1/projects/${PROJECT_ID}/locations/us-central1/publishers/google/models/gemini-1.0-pro:generateContent \
@@ -253,28 +253,28 @@ curl http://localhost:4000/vertex-ai/v1/projects/${PROJECT_ID}/locations/us-cent
 
 
 
-## Supported API Endpoints
+## 지원되는 API 엔드포인트 {#supported-api-endpoints}
 
 - Gemini API
 - Embeddings API
 - Imagen API
-- Code Completion API
-- Batch prediction API
+- 코드 완성 API
+- 배치 예측 API
 - Tuning API
 - CountTokens API
 
-#### Authentication to Vertex AI
+#### Vertex AI 인증
 
-LiteLLM Proxy Server supports two methods of authentication to Vertex AI:
+LiteLLM Proxy Server는 Vertex AI 인증을 위한 두 가지 방법을 지원합니다.
 
-1. Pass Vertex Credentials client side to proxy server
+1. 클라이언트 측 Vertex 자격 증명을 프록시 서버에 전달합니다
 
-2. Set Vertex AI credentials on proxy server
+2. 프록시 서버에 Vertex AI 자격 증명을 설정합니다
 
 
-## Usage Examples
+## 사용법 예제
 
-### Gemini API (Generate Content)
+### Gemini API (콘텐츠 생성)
 
 
 
@@ -318,7 +318,7 @@ curl http://localhost:4000/vertex_ai/v1/projects/${PROJECT_ID}/locations/us-cent
 ```
 ### Tuning API 
 
-Create Fine Tuning Job
+파인 튜닝 작업을 생성합니다.
 
 
 ```shell
@@ -333,16 +333,16 @@ curl http://localhost:4000/vertex_ai/v1/projects/${PROJECT_ID}/locations/us-cent
 }'
 ```
 
-## Advanced
+## 고급
 
-Pre-requisites
-- [Setup proxy with DB](../proxy/virtual_keys.md#setup)
+사전 요구 사항
+- [DB로 프록시 설정](../proxy/virtual_keys.md#setup)
 
-Use this, to avoid giving developers the raw Anthropic API key, but still letting them use Anthropic endpoints.
+개발자에게 원본 Anthropic API 키를 제공하지 않으면서 Anthropic 엔드포인트를 사용할 수 있게 하려면 이 방식을 사용합니다.
 
-### Use with Virtual Keys 
+### 가상 키와 함께 사용 
 
-1. Setup environment
+1. 환경을 설정합니다
 
 ```bash
 export DATABASE_URL=""
@@ -360,7 +360,7 @@ litellm
 # RUNNING on http://0.0.0.0:4000
 ```
 
-2. Generate virtual key 
+2. 가상 키를 생성합니다 
 
 ```bash
 curl -X POST 'http://0.0.0.0:4000/key/generate' \
@@ -369,7 +369,7 @@ curl -X POST 'http://0.0.0.0:4000/key/generate' \
 -d '{}'
 ```
 
-Expected Response 
+예상 응답 
 
 ```bash
 {
@@ -378,7 +378,7 @@ Expected Response
 }
 ```
 
-3. Test it! 
+3. 테스트합니다! 
 
 
 ```bash
@@ -393,11 +393,11 @@ curl http://localhost:4000/vertex_ai/v1/projects/${PROJECT_ID}/locations/us-cent
   }'
 ```
 
-### Send `tags` in request headers
+### 요청 헤더에 `tags` 보내기
 
-Use this if you wants `tags` to be tracked in the LiteLLM DB and on logging callbacks
+`tags`가 LiteLLM DB와 로깅 콜백에서 추적되도록 하려면 이 방식을 사용합니다.
 
-Pass `tags` in request headers as a comma separated list. In the example below the following tags will be tracked 
+요청 헤더의 `tags`를 쉼표로 구분된 목록으로 전달합니다. 아래 예시에서는 다음 태그가 추적됩니다.
 
 ```
 tags: ["vertex-js-sdk", "pass-through-endpoint"]
@@ -462,11 +462,11 @@ generateContent();
 </TabItem>
 </Tabs>
 
-### Using Anthropic Beta Features on Vertex AI
+### Vertex AI에서 Anthropic 베타 기능 사용
 
-When using Anthropic models via Vertex AI passthrough (e.g., Claude on Vertex), you can enable Anthropic beta features like extended context windows.
+Vertex AI 패스스루를 통해 Anthropic 모델을 사용할 때(예: Vertex의 Claude) 확장 컨텍스트 창과 같은 Anthropic 베타 기능을 활성화할 수 있습니다.
 
-The `anthropic-beta` header is automatically forwarded to Vertex AI when calling Anthropic models.
+Anthropic 모델을 호출하면 `anthropic-beta` 헤더가 Vertex AI로 자동 전달됩니다.
 
 ```bash
 curl http://localhost:4000/vertex_ai/v1/projects/${PROJECT_ID}/locations/us-east5/publishers/anthropic/models/claude-3-5-sonnet:rawPredict \
@@ -480,15 +480,15 @@ curl http://localhost:4000/vertex_ai/v1/projects/${PROJECT_ID}/locations/us-east
   }'
 ```
 
-### Forwarding Custom Headers with `x-pass-` Prefix
+### `x-pass-` 접두사로 커스텀 헤더 전달
 
-You can forward any custom header to the provider by prefixing it with `x-pass-`. The prefix is stripped before the header is sent to the provider.
+커스텀 헤더 앞에 `x-pass-`를 붙이면 해당 헤더를 공급자에게 전달할 수 있습니다. 공급자에게 헤더를 보내기 전에 이 접두사는 제거됩니다.
 
-For example:
-- `x-pass-anthropic-beta: value` becomes `anthropic-beta: value`
-- `x-pass-custom-header: value` becomes `custom-header: value`
+예:
+- `x-pass-anthropic-beta: value`는 `anthropic-beta: value`가 됩니다
+- `x-pass-custom-header: value`는 `custom-header: value`가 됩니다
 
-This is useful when you need to send provider-specific headers that aren't in the default allowlist.
+기본 허용 목록에 없는 공급자별 헤더를 보내야 할 때 유용합니다.
 
 ```bash
 curl http://localhost:4000/vertex_ai/v1/projects/${PROJECT_ID}/locations/us-east5/publishers/anthropic/models/claude-3-5-sonnet:rawPredict \
@@ -504,5 +504,5 @@ curl http://localhost:4000/vertex_ai/v1/projects/${PROJECT_ID}/locations/us-east
 ```
 
 :::info
-The `x-pass-` prefix works for all LLM pass-through endpoints, not just Vertex AI.
+`x-pass-` 접두사는 Vertex AI뿐 아니라 모든 LLM 패스스루 엔드포인트에서 작동합니다.
 :::

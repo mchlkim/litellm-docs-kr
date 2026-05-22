@@ -2,19 +2,19 @@ import Image from '@theme/IdealImage';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Google Cloud Model Armor
+# Google Cloud Model Armor 가드레일
 
-LiteLLM supports Google Cloud Model Armor guardrails via the [Model Armor API](https://cloud.google.com/security-command-center/docs/model-armor-overview). 
+LiteLLM은 [Model Armor API](https://cloud.google.com/security-command-center/docs/model-armor-overview)를 통해 Google Cloud Model Armor 가드레일을 지원합니다.
 
 
-## Supported Guardrails
+## 지원되는 가드레일 {#supported-가드레일}
 
-- [Model Armor Templates](https://cloud.google.com/security-command-center/docs/manage-model-armor-templates) - Content sanitization and blocking based on configured templates
+- [Model Armor Templates](https://cloud.google.com/security-command-center/docs/manage-model-armor-templates) - 설정된 템플릿을 기반으로 콘텐츠를 정제하고 차단합니다.
 
-## Quick Start
-### 1. Define Guardrails on your LiteLLM config.yaml 
+## 빠른 시작
+### 1. LiteLLM config.yaml에서 가드레일 정의 {#1-define-guardrails-on-your-litellm-configyaml}
 
-Define your guardrails under the `guardrails` section
+`guardrails` 섹션 아래에 가드레일을 정의합니다.
 
 ```yaml
 model_list:
@@ -38,22 +38,22 @@ guardrails:
       default_on: true                # Run by default for all requests
 ```
 
-#### Supported values for `mode`
+#### `mode`에서 지원되는 값 {#supported-values-for-mode}
 
-- `pre_call` Run **before** LLM call, on **input**
-- `during_call` Run **in parallel** with LLM call, on **input**
-- `post_call` Run **after** LLM call, on **output**
+- `pre_call` LLM 호출 **전**에 **입력**에 대해 실행합니다.
+- `during_call` LLM 호출과 **병렬**로 **입력**에 대해 실행합니다.
+- `post_call` LLM 호출 **후**에 **출력**에 대해 실행합니다.
 
-### 2. Start LiteLLM Gateway 
+### 2. LiteLLM Gateway 시작 {#2-start-litellm-gateway}
 
 
 ```shell
 litellm --config config.yaml --detailed_debug
 ```
 
-### 3. Test request 
+### 3. 요청 테스트 {#3-test-request}
 
-**[Langchain, OpenAI SDK Usage Examples](../proxy/user_keys#request-format)**
+**[Langchain, OpenAI SDK 사용법 예제](../proxy/user_keys#request-format)**
 
 ```shell
 curl -i http://localhost:4000/v1/chat/completions \
@@ -68,27 +68,27 @@ curl -i http://localhost:4000/v1/chat/completions \
   }'
 ```
 
-## Supported Params 
+## 지원되는 매개변수 {#supported-params}
 
-### Common Params
+### 공통 매개변수 {#common-params}
 
-- `api_key` - str - Google Cloud service account credentials (optional if using ADC)
-- `api_base` - str - Custom Model Armor API endpoint (optional)
-- `default_on` - bool - Whether to run the guardrail by default. Default is `false`.
-- `mode` - Union[str, list[str]] - Mode to run the guardrail. Supported values: `pre_call`, `during_call`, `post_call`. Default is `pre_call`.
+- `api_key` - str - Google Cloud 서비스 계정 사용자 인증 정보입니다. ADC를 사용하는 경우 선택 사항입니다.
+- `api_base` - str - 사용자 지정 Model Armor API 엔드포인트입니다. 선택 사항입니다.
+- `default_on` - bool - 기본적으로 가드레일을 실행할지 여부입니다. 기본값은 `false`입니다.
+- `mode` - Union[str, list[str]] - 가드레일을 실행할 모드입니다. 지원되는 값은 `pre_call`, `during_call`, `post_call`입니다. 기본값은 `pre_call`입니다.
 
-### Model Armor Specific
+### Model Armor 전용 {#model-armor-specific}
 
-- `template_id` - str - The ID of your Model Armor template (required)
-- `project_id` - str - Google Cloud project ID (defaults to credentials project)
-- `location` - str - Google Cloud location/region. Default is `us-central1`
-- `credentials` - Union[str, dict] - Path to service account JSON file or credentials dictionary
-- `api_endpoint` - str - Custom API endpoint for Model Armor (optional)
-- `fail_on_error` - bool - Whether to fail requests if Model Armor encounters errors. Default is `true`
-- `mask_request_content` - bool - Enable masking of sensitive content in requests. Default is `false`
-- `mask_response_content` - bool - Enable masking of sensitive content in responses. Default is `false`
+- `template_id` - str - Model Armor 템플릿의 ID입니다. 필수 항목입니다.
+- `project_id` - str - Google Cloud 프로젝트 ID입니다. 기본값은 사용자 인증 정보의 프로젝트입니다.
+- `location` - str - Google Cloud 위치/리전입니다. 기본값은 `us-central1`입니다.
+- `credentials` - Union[str, dict] - 서비스 계정 JSON 파일 경로 또는 사용자 인증 정보 딕셔너리입니다.
+- `api_endpoint` - str - Model Armor용 사용자 지정 API 엔드포인트입니다. 선택 사항입니다.
+- `fail_on_error` - bool - Model Armor에서 오류가 발생하면 요청을 실패로 처리할지 여부입니다. 기본값은 `true`입니다.
+- `mask_request_content` - bool - 요청의 민감한 콘텐츠 마스킹을 활성화합니다. 기본값은 `false`입니다.
+- `mask_response_content` - bool - 응답의 민감한 콘텐츠 마스킹을 활성화합니다. 기본값은 `false`입니다.
 
 
-## Further Reading
+## 추가 자료 {#further-reading}
 
-- [Control Guardrails per API Key](./quick_start#-control-guardrails-per-api-key)
+- [API Key별 가드레일 제어](./quick_start#-control-guardrails-per-api-key)

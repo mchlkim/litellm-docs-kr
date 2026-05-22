@@ -1,32 +1,32 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Letta Integration
+# Letta 통합
 
-[Letta](https://github.com/letta-ai/letta) (formerly MemGPT) is a framework for building stateful LLM agents with persistent memory. This guide shows how to integrate both LiteLLM SDK and LiteLLM Proxy with Letta to leverage multiple LLM providers while building memory-enabled agents.
+[Letta](https://github.com/letta-ai/letta)(이전 MemGPT)는 영구 메모리를 갖춘 상태 저장 LLM 에이전트를 구축하기 위한 프레임워크입니다. 이 가이드에서는 메모리 지원 에이전트를 구축하면서 여러 LLM provider를 활용할 수 있도록 LiteLLM SDK와 LiteLLM Proxy를 Letta와 통합하는 방법을 설명합니다.
 
-## What is Letta?
+## Letta란?
 
-Letta allows you to build LLM agents that can:
-- Maintain long-term memory across conversations
-- Use function calling for tool interactions
-- Handle large context windows efficiently
-- Persist agent state and memory
+Letta를 사용하면 다음을 수행할 수 있는 LLM 에이전트를 구축할 수 있습니다.
+- 대화 전반에 걸쳐 장기 메모리 유지
+- 도구 상호작용에 function calling 사용
+- 큰 context window를 효율적으로 처리
+- 에이전트 상태와 메모리 유지
 
-## Prerequisites
+## 사전 준비
 
 ```bash
 uv add letta litellm
 ```
 
-## Quick Start
+## 빠른 시작
 
 <Tabs>
 <TabItem value="proxy" label="LiteLLM Proxy">
 
-### 1. Start LiteLLM Proxy
+### 1. LiteLLM Proxy 시작
 
-First, create a configuration file for your LiteLLM proxy:
+먼저 LiteLLM proxy용 설정 파일을 만듭니다.
 
 ```yaml
 # config.yaml
@@ -49,15 +49,15 @@ model_list:
       api_version: "2023-07-01-preview"
 ```
 
-Start the proxy:
+프록시 시작:
 
 ```bash
 litellm --config config.yaml --port 4000
 ```
 
-### 2. Configure Letta with LiteLLM Proxy
+### 2. LiteLLM Proxy로 Letta 설정
 
-Configure Letta to use your LiteLLM proxy endpoint:
+Letta가 LiteLLM proxy endpoint를 사용하도록 설정합니다.
 
 ```python
 import letta
@@ -85,9 +85,9 @@ client.set_default_embedding_config(
 </TabItem>
 <TabItem value="sdk" label="LiteLLM SDK">
 
-### 1. Configure LiteLLM SDK
+### 1. LiteLLM SDK 설정
 
-Set up your API keys and configure LiteLLM:
+API key를 설정하고 LiteLLM을 구성합니다.
 
 ```python
 import os
@@ -101,9 +101,9 @@ os.environ["ANTHROPIC_API_KEY"] = "your-anthropic-key"
 litellm.set_verbose = True  # For debugging
 ```
 
-### 2. Create Custom LLM Wrapper for Letta
+### 2. Letta용 Custom LLM Wrapper 만들기
 
-Create a custom LLM wrapper that uses LiteLLM SDK:
+LiteLLM SDK를 사용하는 custom LLM wrapper를 만듭니다.
 
 ```python
 import letta
@@ -141,10 +141,10 @@ client.set_default_llm_config(llm_config)
 </TabItem>
 </Tabs>
 
-### 3. Create and Use a Letta Agent
+### 3. Letta Agent 만들기 및 사용
 
 <Tabs>
-<TabItem value="proxy" label="Using LiteLLM Proxy">
+<TabItem value="proxy" label="LiteLLM Proxy 사용">
 
 ```python
 import letta
@@ -179,7 +179,7 @@ print(f"Agent response: {response.messages[-1].text}")
 ```
 
 </TabItem>
-<TabItem value="sdk" label="Using LiteLLM SDK">
+<TabItem value="sdk" label="LiteLLM SDK 사용">
 
 ```python
 import letta
@@ -221,9 +221,9 @@ print(f"Agent response: {response.messages[-1].text}")
 </TabItem>
 </Tabs>
 
-## Advanced Configuration
+## 고급 설정
 
-### Using Different Models for Different Agents
+### 에이전트별로 다른 모델 사용
 
 <Tabs>
 <TabItem value="proxy" label="LiteLLM Proxy">
@@ -302,7 +302,7 @@ creative_agent = client.create_agent(
 </TabItem>
 </Tabs>
 
-### Function Calling with Tools
+### 도구와 함께 Function Calling 사용
 
 <Tabs>
 <TabItem value="proxy" label="LiteLLM Proxy">
@@ -379,12 +379,12 @@ response = client.user_message(
 </TabItem>
 </Tabs>
 
-## Authentication
+## 인증
 
 <Tabs>
-<TabItem value="proxy" label="LiteLLM Proxy Authentication">
+<TabItem value="proxy" label="LiteLLM Proxy 인증">
 
-If your LiteLLM proxy requires authentication:
+LiteLLM proxy에 인증이 필요한 경우:
 
 ```python
 import os
@@ -406,7 +406,7 @@ client = create_client()
 client.set_default_llm_config(llm_config)
 ```
 
-For proxy with authentication enabled:
+인증이 활성화된 proxy의 경우:
 
 ```yaml
 # config.yaml with auth
@@ -432,9 +432,9 @@ llm_config = LLMConfig(
 ```
 
 </TabItem>
-<TabItem value="sdk" label="LiteLLM SDK Authentication">
+<TabItem value="sdk" label="LiteLLM SDK 인증">
 
-With LiteLLM SDK, set up your provider API keys directly:
+LiteLLM SDK에서는 provider API key를 직접 설정합니다.
 
 ```python
 import os
@@ -471,12 +471,12 @@ azure_config = LLMConfig(
 </TabItem>
 </Tabs>
 
-## Load Balancing and Fallbacks
+## Load Balancing과 Fallback
 
 <Tabs>
-<TabItem value="proxy" label="LiteLLM Proxy Features">
+<TabItem value="proxy" label="LiteLLM Proxy 기능">
 
-LiteLLM proxy's load balancing and fallback features work seamlessly with Letta:
+LiteLLM proxy의 load balancing 및 fallback 기능은 Letta와 원활하게 동작합니다.
 
 ```yaml
 # config.yaml with fallbacks
@@ -502,12 +502,12 @@ router_settings:
   fallbacks: [{"gpt-4": ["azure/gpt-4"]}]
 ```
 
-The proxy handles all routing, load balancing, and fallbacks transparently for Letta.
+proxy는 Letta를 위해 모든 routing, load balancing, fallback을 투명하게 처리합니다.
 
 </TabItem>
 <TabItem value="sdk" label="LiteLLM SDK Router">
 
-With LiteLLM SDK, you can set up routing and fallbacks programmatically:
+LiteLLM SDK에서는 routing과 fallback을 프로그래밍 방식으로 설정할 수 있습니다.
 
 ```python
 import litellm
@@ -556,12 +556,12 @@ litellm.completion = custom_completion
 </TabItem>
 </Tabs>
 
-## Monitoring and Observability
+## Monitoring과 관측성
 
 <Tabs>
 <TabItem value="proxy" label="LiteLLM Proxy Monitoring">
 
-Enable logging to track your Letta agents' LLM usage through the proxy:
+proxy를 통한 Letta 에이전트의 LLM 사용량을 추적하려면 logging을 활성화합니다.
 
 ```yaml
 # config.yaml with logging
@@ -576,7 +576,7 @@ environment_variables:
   LANGFUSE_SECRET_KEY: "your-secret"
 ```
 
-View metrics in the proxy dashboard:
+proxy dashboard에서 metrics를 확인합니다.
 ```bash
 # Start proxy with UI
 litellm --config config.yaml --port 4000 --detailed_debug
@@ -585,7 +585,7 @@ litellm --config config.yaml --port 4000 --detailed_debug
 </TabItem>
 <TabItem value="sdk" label="LiteLLM SDK Monitoring">
 
-Set up observability directly in your SDK integration:
+SDK 통합에서 observability를 직접 설정합니다.
 
 ```python
 import litellm
@@ -624,10 +624,10 @@ litellm.completion = logged_completion
 </TabItem>
 </Tabs>
 
-## Example: Multi-Agent System
+## 예제: Multi-Agent System
 
 <Tabs>
-<TabItem value="proxy" label="Using LiteLLM Proxy">
+<TabItem value="proxy" label="LiteLLM Proxy 사용">
 
 ```python
 import letta
@@ -684,7 +684,7 @@ print(article)
 ```
 
 </TabItem>
-<TabItem value="sdk" label="Using LiteLLM SDK">
+<TabItem value="sdk" label="LiteLLM SDK 사용">
 
 ```python
 import letta
@@ -765,39 +765,39 @@ print(article)
 </TabItem>
 </Tabs>
 
-## Best Practices
+## 권장 사항
 
 <Tabs>
-<TabItem value="proxy" label="LiteLLM Proxy Best Practices">
+<TabItem value="proxy" label="LiteLLM Proxy 권장 사항">
 
-1. **Model Selection**: Use appropriate models for different tasks:
-   - Claude for analysis and reasoning
-   - GPT-4 for creative tasks
-   - GPT-3.5-turbo for simple interactions
+1. **Model Selection**: 작업별로 적절한 모델을 사용합니다.
+   - 분석과 추론에는 Claude 사용
+   - 창의적 작업에는 GPT-4 사용
+   - 단순한 상호작용에는 GPT-3.5-turbo 사용
 
-2. **Proxy Configuration**:
-   - Set appropriate rate limits and timeouts
-   - Use fallbacks for reliability
-   - Enable authentication for production
+2. **Proxy 설정**:
+   - 적절한 rate limit과 timeout 설정
+   - 안정성을 위해 fallback 사용
+   - production 환경에서는 인증 활성화
 
-3. **Memory Management**: Letta handles memory automatically, but monitor usage with large contexts
+3. **Memory Management**: Letta가 메모리를 자동으로 처리하지만, 큰 context를 사용할 때는 사용량을 모니터링합니다.
 
-4. **Cost Optimization**: 
-   - Use the proxy's budgeting features to control costs
-   - Set up rate limiting per user/team
-   - Monitor token usage through proxy dashboard
+4. **Cost Optimization**:
+   - 비용 제어를 위해 proxy의 budgeting 기능 사용
+   - 사용자/팀별 rate limiting 설정
+   - proxy dashboard에서 token 사용량 모니터링
 
-5. **Monitoring**: Enable observability to track agent performance and token usage
+5. **Monitoring**: 에이전트 성능과 token 사용량을 추적하려면 observability를 활성화합니다.
 
 </TabItem>
-<TabItem value="sdk" label="LiteLLM SDK Best Practices">
+<TabItem value="sdk" label="LiteLLM SDK 권장 사항">
 
-1. **Model Selection**: Choose models based on task requirements:
-   - Use `openai/gpt-4` for complex reasoning
-   - Use `anthropic/claude-3-sonnet-20240229` for analysis
-   - Use `openai/gpt-3.5-turbo` for cost-effective simple tasks
+1. **Model Selection**: 작업 요구사항에 따라 모델을 선택합니다.
+   - 복잡한 추론에는 `openai/gpt-4` 사용
+   - 분석에는 `anthropic/claude-3-sonnet-20240229` 사용
+   - 비용 효율적인 단순 작업에는 `openai/gpt-3.5-turbo` 사용
 
-2. **Error Handling**: Implement robust error handling with retries:
+2. **Error Handling**: retry를 포함한 견고한 error handling을 구현합니다.
    ```python
    import litellm
    from litellm import completion
@@ -817,29 +817,29 @@ print(article)
    ```
 
 3. **Cost Management**:
-   - Use cheaper models for non-critical tasks
-   - Implement token counting and budgets
-   - Cache responses when appropriate
+   - 중요도가 낮은 작업에는 더 저렴한 모델 사용
+   - token counting과 budget 구현
+   - 적절한 경우 response cache 사용
 
 4. **Performance**:
-   - Use async operations for concurrent requests
-   - Implement connection pooling
-   - Monitor response times
+   - 동시 요청에는 async operation 사용
+   - connection pooling 구현
+   - response time 모니터링
 
 5. **Security**:
-   - Store API keys securely (environment variables)
-   - Rotate keys regularly
-   - Implement rate limiting
+   - API key를 안전하게 저장(environment variable)
+   - key를 정기적으로 rotation
+   - rate limiting 구현
 
 </TabItem>
 </Tabs>
 
-## Troubleshooting
+## 문제 해결
 
 <Tabs>
-<TabItem value="proxy" label="LiteLLM Proxy Issues">
+<TabItem value="proxy" label="LiteLLM Proxy 문제">
 
-### Connection Issues
+### 연결 문제
 ```bash
 # Test your LiteLLM proxy
 curl -X POST http://localhost:4000/v1/chat/completions \
@@ -850,7 +850,7 @@ curl -X POST http://localhost:4000/v1/chat/completions \
   }'
 ```
 
-### Configuration Debugging
+### 설정 디버깅
 ```python
 # Enable verbose logging
 import logging
@@ -861,16 +861,16 @@ client = create_client()
 print(client.get_default_llm_config())
 ```
 
-### Common Proxy Issues
-- **Port conflicts**: Make sure port 4000 isn't in use
-- **Model not found**: Verify model names match your config.yaml
-- **Authentication errors**: Check master key configuration
-- **Rate limiting**: Monitor proxy logs for rate limit hits
+### 일반적인 Proxy 문제
+- **Port 충돌**: port 4000이 사용 중이 아닌지 확인합니다.
+- **모델을 찾을 수 없음**: model name이 config.yaml과 일치하는지 확인합니다.
+- **인증 오류**: master key 설정을 확인합니다.
+- **Rate limiting**: rate limit hit 여부를 proxy log에서 모니터링합니다.
 
 </TabItem>
-<TabItem value="sdk" label="LiteLLM SDK Issues">
+<TabItem value="sdk" label="LiteLLM SDK 문제">
 
-### API Key Issues
+### API Key 문제
 ```python
 import os
 import litellm
@@ -890,7 +890,7 @@ except Exception as e:
     print("LiteLLM error:", e)
 ```
 
-### Configuration Debugging
+### 설정 디버깅
 ```python
 # Enable verbose logging
 litellm.set_verbose = True
@@ -909,20 +909,20 @@ for model in models:
         print(f"✗ {model} failed: {e}")
 ```
 
-### Common SDK Issues
-- **Import errors**: Ensure `uv add litellm letta` is run
-- **Model format**: Use `provider/model` format (e.g., `openai/gpt-4`)
-- **API key format**: Different providers have different key formats
-- **Rate limits**: Implement exponential backoff for retries
+### 일반적인 SDK 문제
+- **Import 오류**: `uv add litellm letta`를 실행했는지 확인합니다.
+- **Model format**: `provider/model` 형식을 사용합니다(예: `openai/gpt-4`).
+- **API key format**: provider마다 key 형식이 다릅니다.
+- **Rate limit**: retry에 exponential backoff를 구현합니다.
 
 </TabItem>
 </Tabs>
 
-## Resources
+## 리소스
 
-- [Letta Documentation](https://docs.letta.com/)
-- [LiteLLM Proxy Documentation](/docs/simple_proxy)
-- [LiteLLM SDK Documentation](/docs/#litellm-python-sdk)
-- [Function Calling Guide](/docs/completion/function_call)
-- [Observability Setup](/docs/integrations/observability_integrations)
-- [Router Configuration](/docs/routing)
+- [Letta 문서](https://docs.letta.com/)
+- [LiteLLM Proxy 문서](/docs/simple_proxy)
+- [LiteLLM SDK 문서](/docs/#litellm-python-sdk)
+- [Function Calling 가이드](/docs/completion/function_call)
+- [관측성 설정](/docs/integrations/observability_integrations)
+- [Router 설정](/docs/routing)

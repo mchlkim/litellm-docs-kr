@@ -4,22 +4,22 @@ import TabItem from '@theme/TabItem';
 
 # OpenAI Moderation
 
-## Overview
+## 개요
 
-| Property | Details |
+| 속성 | 세부 정보 |
 |-------|-------|
-| Description | Use OpenAI's built-in Moderation API to detect and block harmful content including hate speech, harassment, self-harm, sexual content, and violence. |
+| 설명 | OpenAI의 기본 제공 Moderation API를 사용하여 혐오, 괴롭힘, 자해, 성적 콘텐츠, 폭력 등 유해 콘텐츠를 감지하고 차단합니다. |
 | Provider | [OpenAI Moderation API](https://platform.openai.com/docs/guides/moderation) |
-| Supported Actions | `BLOCK` (raises HTTP 400 exception when violations detected) |
-| Supported Modes | `pre_call`, `during_call`, `post_call` |
-| Streaming Support | ✅ Full support for streaming responses |
-| API Requirements | OpenAI API key |
+| 지원 작업 | `BLOCK` (위반이 감지되면 HTTP 400 예외 발생) |
+| 지원 모드 | `pre_call`, `during_call`, `post_call` |
+| 스트리밍 지원 | ✅ 스트리밍 응답 전체 지원 |
+| API 요구 사항 | OpenAI API key |
 
-## Quick Start
+## 빠른 시작
 
-### 1. Define Guardrails on your LiteLLM config.yaml 
+### 1. LiteLLM config.yaml에 가드레일 정의
 
-Define your guardrails under the `guardrails` section:
+`guardrails` 섹션 아래에 가드레일을 정의합니다.
 
 <Tabs>
 <TabItem value="config" label="Config.yaml">
@@ -41,22 +41,22 @@ guardrails:
       api_base: "https://api.openai.com/v1"  # Optional, defaults to OpenAI API
 ```
 
-#### Supported values for `mode`
+#### `mode` 지원 값
 
-- `pre_call` Run **before** LLM call, on **user input**
-- `during_call` Run **during** LLM call, on **user input**. Same as `pre_call` but runs in parallel as LLM call. Response not returned until guardrail check completes.
-- `post_call` Run **after** LLM call, on **LLM response**
+- `pre_call`: **사용자 입력**에 대해 LLM 호출 **전** 실행
+- `during_call`: **사용자 입력**에 대해 LLM 호출 **중** 실행. `pre_call`과 같지만 LLM 호출과 병렬로 실행됩니다. 가드레일 검사가 끝날 때까지 응답은 반환되지 않습니다.
+- `post_call`: **LLM 응답**에 대해 LLM 호출 **후** 실행
 
-#### Supported OpenAI Moderation Models
+#### 지원되는 OpenAI Moderation 모델
 
-- `omni-moderation-latest` (default) - Latest multimodal moderation model
-- `text-moderation-latest` - Latest text-only moderation model
+- `omni-moderation-latest` (기본값) - 최신 멀티모달 moderation 모델
+- `text-moderation-latest` - 최신 텍스트 전용 moderation 모델
 
 </TabItem>
 
 <TabItem value="env" label="Environment Variables">
 
-Set your OpenAI API key:
+OpenAI API key를 설정합니다.
 
 ```bash title="Setup Environment Variables"
 export OPENAI_API_KEY="your-openai-api-key"
@@ -65,18 +65,18 @@ export OPENAI_API_KEY="your-openai-api-key"
 </TabItem>
 </Tabs>
 
-### 2. Start LiteLLM Gateway 
+### 2. LiteLLM Gateway 시작
 
 ```shell
 litellm --config config.yaml --detailed_debug
 ```
 
-### 3. Test request 
+### 3. 요청 테스트
 
 <Tabs>
-<TabItem label="Blocked Request" value="blocked">
+<TabItem label="차단된 요청" value="blocked">
 
-Expect this to fail since the request contains harmful content:
+요청에 유해 콘텐츠가 포함되어 있으므로 실패해야 합니다.
 
 ```shell
 curl -i http://0.0.0.0:4000/v1/chat/completions \
@@ -91,7 +91,7 @@ curl -i http://0.0.0.0:4000/v1/chat/completions \
   }'
 ```
 
-Expected response on failure:
+실패 시 예상 응답:
 
 ```json
 {
@@ -118,7 +118,7 @@ Expected response on failure:
 
 </TabItem>
 
-<TabItem label="Successful Call" value="allowed">
+<TabItem label="성공한 호출" value="allowed">
 
 ```shell
 curl -i http://0.0.0.0:4000/v1/chat/completions \
@@ -133,7 +133,7 @@ curl -i http://0.0.0.0:4000/v1/chat/completions \
   }'
 ```
 
-Expected response:
+예상 응답:
 
 ```json
 {
@@ -162,11 +162,11 @@ Expected response:
 </TabItem>
 </Tabs>
 
-## Advanced Configuration
+## 고급 설정
 
-### Multiple Guardrails for Input and Output
+### 입력과 출력을 위한 여러 가드레일
 
-You can configure separate guardrails for user input and LLM responses:
+사용자 입력과 LLM 응답에 대해 별도 가드레일을 구성할 수 있습니다.
 
 ```yaml showLineNumbers title="Multiple Guardrails Config"
 guardrails:
@@ -183,9 +183,9 @@ guardrails:
       api_key: os.environ/OPENAI_API_KEY
 ```
 
-### Custom API Configuration
+### 사용자 지정 API 설정
 
-Configure custom OpenAI API endpoints or different models:
+사용자 지정 OpenAI API 엔드포인트 또는 다른 모델을 구성합니다.
 
 ```yaml showLineNumbers title="Custom API Config"
 guardrails:
@@ -198,15 +198,15 @@ guardrails:
       model: "text-moderation-latest"
 ```
 
-## Streaming Support
+## 스트리밍 지원
 
-The OpenAI Moderation guardrail fully supports streaming responses. When used in `post_call` mode, it will:
+OpenAI Moderation 가드레일은 스트리밍 응답을 완전히 지원합니다. `post_call` 모드에서 사용하면 다음과 같이 동작합니다.
 
-1. Collect all streaming chunks
-2. Assemble the complete response
-3. Apply moderation to the full content
-4. Block the entire stream if violations are detected
-5. Return the original stream if content is safe
+1. 모든 스트리밍 청크를 수집합니다.
+2. 전체 응답을 조립합니다.
+3. 전체 콘텐츠에 moderation을 적용합니다.
+4. 위반이 감지되면 전체 스트림을 차단합니다.
+5. 콘텐츠가 안전하면 원본 스트림을 반환합니다.
 
 ```yaml showLineNumbers title="Streaming Config"
 guardrails:
@@ -217,32 +217,32 @@ guardrails:
       api_key: os.environ/OPENAI_API_KEY
 ```
 
-## Content Categories
+## 콘텐츠 카테고리
 
-The OpenAI Moderation API detects the following categories of harmful content:
+OpenAI Moderation API는 다음 유해 콘텐츠 카테고리를 감지합니다.
 
-| Category | Description |
+| 카테고리 | 설명 |
 |----------|-------------|
-| `hate` | Content that expresses, incites, or promotes hate based on race, gender, ethnicity, religion, nationality, sexual orientation, disability status, or caste |
-| `harassment` | Content that harasses, bullies, or intimidates an individual |
-| `self-harm` | Content that promotes, encourages, or depicts acts of self-harm |
-| `sexual` | Content meant to arouse sexual excitement or promote sexual services |
-| `violence` | Content that depicts death, violence, or physical injury |
+| `hate` | 인종, 성별, 민족, 종교, 국적, 성적 지향, 장애 상태, 카스트에 기반한 혐오를 표현, 선동 또는 조장하는 콘텐츠 |
+| `harassment` | 개인을 괴롭히거나 따돌리거나 위협하는 콘텐츠 |
+| `self-harm` | 자해 행위를 조장, 장려 또는 묘사하는 콘텐츠 |
+| `sexual` | 성적 흥분을 유발하거나 성적 서비스를 홍보하려는 콘텐츠 |
+| `violence` | 사망, 폭력 또는 신체 상해를 묘사하는 콘텐츠 |
 
-Each category is evaluated with both a boolean flag and a confidence score (0.0 to 1.0).
+각 카테고리는 boolean 플래그와 신뢰도 점수(0.0~1.0)로 평가됩니다.
 
-## Error Handling
+## 오류 처리
 
-When content violates OpenAI's moderation policy:
+콘텐츠가 OpenAI moderation 정책을 위반하면 다음과 같이 처리됩니다.
 
-- **HTTP Status**: 400 Bad Request
-- **Error Type**: `HTTPException`
-- **Error Details**: Includes violated categories and confidence scores
-- **Behavior**: Request is immediately blocked
+- **HTTP 상태**: 400 Bad Request
+- **오류 유형**: `HTTPException`
+- **오류 세부 정보**: 위반 카테고리와 신뢰도 점수를 포함합니다.
+- **동작**: 요청이 즉시 차단됩니다.
 
-## Best Practices
+## 권장 사항
 
-### 1. Use Pre-call for User Input
+### 1. 사용자 입력에는 Pre-call 사용
 
 ```yaml
 guardrails:
@@ -252,7 +252,7 @@ guardrails:
       mode: "pre_call"  # Block harmful user inputs early
 ```
 
-### 2. Use Post-call for LLM Responses
+### 2. LLM 응답에는 Post-call 사용
 
 ```yaml
 guardrails:
@@ -262,7 +262,7 @@ guardrails:
       mode: "post_call"  # Ensure LLM responses are safe
 ```
 
-### 3. Combine with Other Guardrails
+### 3. 다른 가드레일과 조합
 
 ```yaml
 guardrails:
@@ -277,36 +277,36 @@ guardrails:
       mode: "pre_call"
 ```
 
-## Troubleshooting
+## 문제 해결
 
-### Common Issues
+### 자주 발생하는 문제
 
-1. **Invalid API Key**: Ensure your OpenAI API key is correctly set
+1. **Invalid API Key**: OpenAI API key가 올바르게 설정되었는지 확인합니다.
    ```bash
    export OPENAI_API_KEY="sk-your-actual-key"
    ```
 
-2. **Rate Limiting**: OpenAI Moderation API has rate limits. Monitor usage in high-volume scenarios.
+2. **Rate Limiting**: OpenAI Moderation API에는 rate limit이 있습니다. 트래픽이 많은 환경에서는 사용량을 모니터링합니다.
 
-3. **Network Issues**: Verify connectivity to OpenAI's API endpoints.
+3. **Network Issues**: OpenAI API 엔드포인트와의 연결을 확인합니다.
 
 ### Debug Mode
 
-Enable detailed logging to troubleshoot issues:
+문제를 해결하려면 상세 로깅을 활성화합니다.
 
 ```shell
 litellm --config config.yaml --detailed_debug
 ```
 
-Look for logs starting with `OpenAI Moderation:` to trace guardrail execution.
+가드레일 실행을 추적하려면 `OpenAI Moderation:`로 시작하는 로그를 확인합니다.
 
-## API Costs
+## API 비용
 
-The OpenAI Moderation API is **free to use** for content policy compliance. This makes it a cost-effective guardrail option compared to other commercial moderation services.
+OpenAI Moderation API는 콘텐츠 정책 준수 용도로 **무료로 사용할 수 있습니다**. 따라서 다른 상용 moderation 서비스와 비교해 비용 효율적인 가드레일 옵션입니다.
 
-## Need Help?
+## 도움이 필요하신가요?
 
-For additional support:
-- Check the [OpenAI Moderation API documentation](https://platform.openai.com/docs/guides/moderation)
-- Review [LiteLLM Guardrails documentation](./quick_start)
-- Join our [Discord community](https://discord.gg/wuPM9dRgDw) 
+추가 지원은 다음을 참고하세요.
+- [OpenAI Moderation API 문서](https://platform.openai.com/docs/guides/moderation)를 확인합니다.
+- [LiteLLM 가드레일 문서](./quick_start)를 검토합니다.
+- [Discord community](https://discord.gg/wuPM9dRgDw)에 참여합니다.

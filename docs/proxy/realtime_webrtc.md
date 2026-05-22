@@ -1,17 +1,17 @@
-# /realtime - WebRTC Support
+# /realtime - WebRTC 지원 {#realtime-webrtc-support}
 
-Connect to the Realtime API via WebRTC from browser/mobile clients. LiteLLM handles auth; audio streams directly to OpenAI/Azure.
+브라우저/모바일 클라이언트에서 WebRTC를 통해 Realtime API에 연결합니다. LiteLLM은 인증을 처리하고, 오디오는 OpenAI/Azure로 직접 스트리밍됩니다.
 
-**Providers:** OpenAI · Azure
+**제공자:** OpenAI · Azure
 
-:::info **WebRTC vs WebSocket**
-- **WebSocket** (`/v1/realtime`) — server-to-server
-- **WebRTC** (`/v1/realtime/client_secrets` + `/v1/realtime/calls`) — browser/mobile, lower latency
+:::info **WebRTC와 WebSocket**
+- **WebSocket** (`/v1/realtime`) - 서버 간 통신
+- **WebRTC** (`/v1/realtime/client_secrets` + `/v1/realtime/calls`) - 브라우저/모바일, 더 낮은 지연 시간
 :::
 
-## How it works
+## 동작 방식
 
-LiteLLM issues tokens and relays SDP; audio never passes through the proxy.
+LiteLLM은 토큰을 발급하고 SDP를 릴레이합니다. 오디오는 Proxy를 절대 거치지 않습니다.
 
 ```
 Browser                  LiteLLM Proxy              OpenAI/Azure
@@ -23,7 +23,7 @@ Browser                  LiteLLM Proxy              OpenAI/Azure
   |===== audio P2P direct ===============================>|
 ```
 
-## Proxy Setup
+## Proxy 설정 {#proxy-setup}
 
 ```yaml
 model_list:
@@ -41,11 +41,11 @@ model_list:
 litellm --config /path/to/config.yaml
 ```
 
-## Client Usage
+## 클라이언트 사용법 {#client-사용법}
 
-1. **Token** — `POST /v1/realtime/client_secrets` with LiteLLM key and `{ model }`.
-2. **WebRTC** — Create `RTCPeerConnection`, add mic, data channel `oai-events`, send SDP offer to `POST /v1/realtime/calls` with `Authorization: Bearer <token>`, `Content-Type: application/sdp`.
-3. **Events** — Use data channel for `session.update` and other events.
+1. **토큰** - LiteLLM 키와 `{ model }`을 사용해 `POST /v1/realtime/client_secrets`를 호출합니다.
+2. **WebRTC** - `RTCPeerConnection`을 만들고, 마이크와 데이터 채널 `oai-events`를 추가한 뒤, `Authorization: Bearer <token>` 및 `Content-Type: application/sdp`와 함께 SDP offer를 `POST /v1/realtime/calls`로 보냅니다.
+3. **이벤트** - `session.update`와 기타 이벤트에는 데이터 채널을 사용합니다.
 
 ```javascript
 const r = await fetch("http://proxy:4000/v1/realtime/client_secrets", {
@@ -75,10 +75,10 @@ await pc.setRemoteDescription({ type: "answer", sdp: await sdpRes.text() });
 dc.send(JSON.stringify({ type: "session.update", session: { instructions: "..." } }));
 ```
 
-## FAQ
+## 자주 묻는 질문 {#faq}
 
-- **401 Token expired** — Get a fresh token right before creating the WebRTC offer.
-- **Which key for `/calls`?** — Encrypted token from `client_secrets`, not raw key.
-- **Pass `model`?** — No. Token encodes routing.
-- **Azure `api-version`** — Set `api_version` in `litellm_params` and correct `api_base`.
-- **No audio** — Grant mic; ensure `pc.ontrack` sets autoplay audio; check firewall/WebRTC; inspect console.
+- **401 Token expired** - WebRTC offer를 만들기 직전에 새 토큰을 받으세요.
+- **`/calls`에는 어떤 키를 사용하나요?** - 원본 키가 아니라 `client_secrets`에서 받은 암호화된 토큰을 사용합니다.
+- **`model`을 전달하나요?** - 아니요. 토큰에 라우팅 정보가 인코딩됩니다.
+- **Azure `api-version`** - `litellm_params`에 `api_version`을 설정하고 올바른 `api_base`를 사용하세요.
+- **오디오가 없음** - 마이크 권한을 허용하고, `pc.ontrack`이 자동 재생 오디오를 설정하는지 확인하세요. 방화벽/WebRTC를 점검하고 콘솔을 확인하세요.

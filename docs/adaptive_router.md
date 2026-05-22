@@ -2,17 +2,17 @@
 
 :::info
 
-Beta feature. Share feedback on [Discord](https://discord.gg/wuPM9dRgDw) or [Slack](https://join.slack.com/t/litellmossslack/shared_invite/zt-3o7nkuyfr-p_kbNJj8taRfXGgQI1~YyA).
+베타 기능입니다. 피드백은 [Discord](https://discord.gg/wuPM9dRgDw) 또는 [Slack](https://join.slack.com/t/litellmossslack/shared_invite/zt-3o7nkuyfr-p_kbNJj8taRfXGgQI1~YyA)에서 공유해 주세요.
 
 :::
 
-**Requirements:** LiteLLM Proxy with a Postgres database. Quality estimates are stored in Postgres and loaded on startup — without a database the router works but forgets everything learned on restart.
+**요구 사항:** Postgres 데이터베이스가 연결된 LiteLLM Proxy가 필요합니다. 품질 추정치는 Postgres에 저장되고 시작 시 로드됩니다. 데이터베이스가 없으면 router는 동작하지만 재시작 시 학습한 내용을 모두 잊습니다.
 
-You have a cheap model and an expensive one. You want to use the cheap one when it's good enough, and the expensive one when it actually matters — without hardcoding rules you'll spend months tuning.
+저렴한 모델과 비싼 모델이 모두 있다고 가정해 보겠습니다. 충분히 좋은 경우에는 저렴한 모델을 쓰고, 정말 중요한 요청에는 비싼 모델을 쓰고 싶을 수 있습니다. 규칙을 하드코딩하면 튜닝에 몇 달이 걸릴 수 있습니다.
 
-The adaptive router does this automatically. It tracks which model performs best for each type of request (code, writing, analysis, etc.) and routes accordingly, balancing quality against cost based on weights you control.
+Adaptive Router는 이 작업을 자동으로 처리합니다. 요청 유형(코드, 글쓰기, 분석 등)별로 어떤 모델이 가장 잘 동작하는지 추적하고, 사용자가 제어하는 가중치에 따라 품질과 비용의 균형을 맞춰 routing합니다.
 
-## Quick start
+## 빠른 시작
 
 ```yaml
 model_list:
@@ -44,7 +44,7 @@ model_list:
           cost: 0.3      # must sum to 1.0 with quality
 ```
 
-Route to it by setting `model` to your adaptive router's name:
+`model`을 Adaptive Router 이름으로 설정해 해당 router로 routing합니다.
 
 ```bash
 curl -X POST {{baseURL}}/v1/chat/completions \
@@ -62,62 +62,62 @@ curl -X POST {{baseURL}}/v1/chat/completions \
   }'
 ```
 
-The response includes a header telling you which model was actually picked:
+응답에는 실제로 선택된 모델을 알려주는 헤더가 포함됩니다.
 
 ```
 x-litellm-adaptive-router-model: gpt-4o
 ```
 
-The "thanks!" turn in the example above fires a satisfaction signal — that's what moves the bandit.
+위 예제의 "thanks!" 턴은 만족도 신호를 발생시키며, 이 신호가 bandit을 조정합니다.
 
-## Tuning cost vs. quality
+## 비용과 품질 튜닝
 
-The `weights` are your main lever:
+`weights`가 주요 조정 수단입니다.
 
-| Goal | quality | cost |
+| 목표 | quality | cost |
 |---|---|---|
-| Minimize cost, quality is secondary | 0.3 | 0.7 |
-| Balanced | 0.5 | 0.5 |
-| Quality-first (default) | 0.7 | 0.3 |
-| Quality non-negotiable | 0.9 | 0.1 |
+| 비용 최소화, 품질은 보조 기준 | 0.3 | 0.7 |
+| 균형형 | 0.5 | 0.5 |
+| 품질 우선(기본값) | 0.7 | 0.3 |
+| 품질을 양보할 수 없음 | 0.9 | 0.1 |
 
-The router learns over time. For the first ~10 requests per model, it relies on the tiers you declared. After that, real performance data takes over.
+Router는 시간이 지나며 학습합니다. 모델별 처음 약 10개 요청에는 선언한 tier를 기준으로 동작하고, 이후에는 실제 성능 데이터가 반영됩니다.
 
-## Force a minimum quality tier per request
+## 요청별 최소 품질 tier 강제
 
-If a specific request needs a frontier model regardless of cost, pass this header:
+특정 요청에 비용과 무관하게 frontier 모델이 필요하다면 다음 헤더를 전달합니다.
 
 ```
 x-litellm-min-quality-tier: 3
 ```
 
-You can also pass `min_quality_tier` via request metadata instead of a header.
+헤더 대신 요청 metadata로 `min_quality_tier`를 전달할 수도 있습니다.
 
-## What's being learned
+## 학습되는 내용
 
-The router classifies each request into one of 7 types and tracks how each model performs on each independently. A model that's great at factual lookup but poor at code will win factual requests and lose code requests — even if it's cheaper overall.
+Router는 각 요청을 7가지 유형 중 하나로 분류하고, 각 모델이 유형별로 얼마나 잘 동작하는지 독립적으로 추적합니다. 사실 조회에는 뛰어나지만 코드에는 약한 모델은, 전체적으로 더 저렴하더라도 사실 조회 요청에서는 선택되고 코드 요청에서는 선택되지 않을 수 있습니다.
 
-| Type | Example |
+| 유형 | 예제 |
 |---|---|
-| `code_generation` | "write me a Python sort function" |
-| `code_understanding` | "explain what this function does" |
-| `technical_design` | "how should I design this API?" |
-| `analytical_reasoning` | "calculate the probability that..." |
-| `writing` | "draft an email to my team about..." |
-| `factual_lookup` | "what is the capital of France?" |
-| `general` | anything else |
+| `code_generation` | "Python sort 함수를 작성해 줘" |
+| `code_understanding` | "이 함수가 무엇을 하는지 설명해 줘" |
+| `technical_design` | "이 API를 어떻게 설계해야 할까?" |
+| `analytical_reasoning` | "확률을 계산해 줘..." |
+| `writing` | "팀에 보낼 이메일 초안을 작성해 줘..." |
+| `factual_lookup` | "프랑스의 수도는 어디야?" |
+| `general` | 그 외 모든 요청 |
 
-[**See classifier code**](https://github.com/BerriAI/litellm/blob/litellm_adaptive_routing/litellm/router_strategy/adaptive_router/classifier.py)
+[**classifier 코드 보기**](https://github.com/BerriAI/litellm/blob/litellm_adaptive_routing/litellm/router_strategy/adaptive_router/classifier.py)
 
-Learning signals are inspired by [Signals: Trajectory Sampling and Triage for Agentic Interactions](https://arxiv.org/pdf/2604.00356).
+학습 신호는 [Signals: Trajectory Sampling and Triage for Agentic Interactions](https://arxiv.org/pdf/2604.00356)에서 영감을 받았습니다.
 
-## Inspect the current state
+## 현재 상태 확인
 
 ```
 GET /adaptive_router/{router_name}/state
 ```
 
-Returns current quality estimates per model per request type. Useful for understanding why a model is or isn't being picked.
+요청 유형별, 모델별 현재 품질 추정치를 반환합니다. 특정 모델이 선택되거나 선택되지 않는 이유를 이해하는 데 유용합니다.
 
 ```json
 {
@@ -145,11 +145,11 @@ Returns current quality estimates per model per request type. Useful for underst
 }
 ```
 
-`quality_mean` is the key number — it's the router's current estimate of how well that model handles that request type. `samples` counts how many real observations have moved the prior (starts at 0; the cold-start prior mass is excluded).
+`quality_mean`은 핵심 값입니다. 해당 모델이 그 요청 유형을 얼마나 잘 처리하는지에 대한 router의 현재 추정치입니다. `samples`는 prior를 움직인 실제 관측 수를 나타냅니다. 0에서 시작하며 초기 prior mass는 제외됩니다.
 
-## Known limitations
+## 알려진 제한 사항
 
-- Latency isn't scored — a slow model can still win on quality + cost
-- Signals are regex-based and English-biased — no LLM judge
-- Hard cap of 200 observations per cell; no decay yet
-- Once a model is picked for a session, other models' turns in that session don't contribute to learning
+- Latency는 점수화되지 않습니다. 느린 모델도 품질과 비용 기준에서 선택될 수 있습니다.
+- 신호는 regex 기반이며 영어에 편향되어 있습니다. LLM judge는 사용하지 않습니다.
+- cell당 관측 수는 최대 200개로 제한되며, 아직 decay는 없습니다.
+- 세션에서 한 모델이 선택되면 해당 세션의 다른 모델 턴은 학습에 기여하지 않습니다.

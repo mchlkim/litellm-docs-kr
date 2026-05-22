@@ -2,25 +2,25 @@ import Image from '@theme/IdealImage';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Billing
+# 청구 {#billing}
 
-Bill internal teams, external customers for their usage
+내부 팀과 외부 고객에게 사용량 기준으로 청구합니다.
 
-**🚨 Requirements**
-- [Setup Lago](https://docs.getlago.com/guide/self-hosted/docker#run-the-app), for usage-based billing. We recommend following [their Stripe tutorial](https://docs.getlago.com/templates/per-transaction/stripe#step-1-create-billable-metrics-for-transaction)
+**🚨 요구 사항**
+- 사용량 기반 청구를 위해 [Lago 설정](https://docs.getlago.com/guide/self-hosted/docker#run-the-app)을 완료하세요. [Stripe 튜토리얼](https://docs.getlago.com/templates/per-transaction/stripe#step-1-create-billable-metrics-for-transaction)을 따르는 것을 권장합니다.
 
-Steps:
-- Connect the proxy to Lago
-- Set the id you want to bill for (customers, internal users, teams)
-- Start! 
+단계:
+- 프록시를 Lago에 연결합니다.
+- 청구할 ID를 설정합니다(고객, 내부 사용자, 팀).
+- 시작합니다!
 
-## Quick Start
+## 빠른 시작 {#quick-start}
 
-Bill internal teams for their usage
+내부 팀에게 사용량 기준으로 청구합니다.
 
-### 1. Connect proxy to Lago 
+### 1. 프록시를 Lago에 연결 {#1-connect-proxy-to-lago}
 
-Set 'lago' as a callback on your proxy config.yaml
+프록시 config.yaml에서 'lago'를 콜백으로 설정합니다.
 
 ```yaml
 model_list:
@@ -37,7 +37,7 @@ general_settings:
   master_key: sk-1234
 ```
 
-Add your Lago keys to the environment
+환경에 Lago 키를 추가합니다.
 
 ```bash
 export LAGO_API_BASE="http://localhost:3000" # self-host - https://docs.getlago.com/guide/self-hosted/docker#run-the-app
@@ -46,13 +46,13 @@ export LAGO_API_EVENT_CODE="openai_tokens" # name of lago billing code
 export LAGO_API_CHARGE_BY="team_id" # 👈 Charges 'team_id' attached to proxy key
 ```
 
-Start proxy 
+프록시를 시작합니다.
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-### 2. Create Key for Internal Team 
+### 2. 내부 팀용 키 생성 {#2-create-key-for-internal-team}
 
 ```bash
 curl 'http://0.0.0.0:4000/key/generate' \
@@ -61,7 +61,7 @@ curl 'http://0.0.0.0:4000/key/generate' \
 --data-raw '{"team_id": "my-unique-id"}' # 👈 Internal Team's ID
 ```
 
-Response Object:
+응답 객체:
 
 ```bash
 {
@@ -70,7 +70,7 @@ Response Object:
 ```
 
 
-### 3. Start billing! 
+### 3. 청구 시작 {#3-start-billing}
 
 <Tabs>
 <TabItem value="curl" label="Curl">
@@ -146,14 +146,14 @@ print(response)
 </TabItem>
 </Tabs>
 
-**See Results on Lago**
+**Lago에서 결과 확인**
 
 
 <Image img={require('../../img/lago_2.png')}  style={{ width: '500px', height: 'auto' }} />
 
-## Advanced - Lago Logging object 
+## 고급 - Lago 로깅 객체 {#advanced-lago-logging-object}
 
-This is what LiteLLM will log to Lagos
+LiteLLM이 Lago에 기록하는 내용은 다음과 같습니다.
 
 ```
 {
@@ -171,25 +171,25 @@ This is what LiteLLM will log to Lagos
 }
 ```
 
-## Advanced - Bill Customers, Internal Users 
+## 고급 - 고객 및 내부 사용자 청구 {#advanced-bill-customers-internal-users}
 
-For:
-- Customers (id passed via 'user' param in /chat/completion call) = 'end_user_id'
-- Internal Users (id set when [creating keys](https://docs.litellm.ai/docs/proxy/virtual_keys#advanced---spend-tracking)) = 'user_id' 
-- Teams (id set when [creating keys](https://docs.litellm.ai/docs/proxy/virtual_keys#advanced---spend-tracking)) = 'team_id' 
+대상:
+- 고객(/chat/completion 호출에서 'user' 매개변수로 전달되는 id) = 'end_user_id'
+- 내부 사용자([키 생성](https://docs.litellm.ai/docs/proxy/virtual_keys#advanced---spend-tracking) 시 설정되는 id) = 'user_id'
+- 팀([키 생성](https://docs.litellm.ai/docs/proxy/virtual_keys#advanced---spend-tracking) 시 설정되는 id) = 'team_id'
 
 
 
 <Tabs>
-<TabItem value="customers" label="Customer Billing">
+<TabItem value="customers" label="고객 청구">
 
-1. Set 'LAGO_API_CHARGE_BY' to 'end_user_id'
+1. 'LAGO_API_CHARGE_BY'를 'end_user_id'로 설정합니다.
 
   ```bash
   export LAGO_API_CHARGE_BY="end_user_id"
   ```
 
-2. Test it!
+2. 테스트합니다.
 
   <Tabs>
   <TabItem value="curl" label="Curl">
@@ -271,15 +271,15 @@ For:
   </Tabs>
 
 </TabItem>
-<TabItem value="users" label="Internal User Billing">
+<TabItem value="users" label="내부 사용자 청구">
 
-1. Set 'LAGO_API_CHARGE_BY' to 'user_id'
+1. 'LAGO_API_CHARGE_BY'를 'user_id'로 설정합니다.
 
 ```bash
 export LAGO_API_CHARGE_BY="user_id"
 ```
 
-2. Create a key for that user 
+2. 해당 사용자용 키를 생성합니다.
 
 ```bash
 curl 'http://0.0.0.0:4000/key/generate' \
@@ -288,7 +288,7 @@ curl 'http://0.0.0.0:4000/key/generate' \
 --data-raw '{"user_id": "my-unique-id"}' # 👈 Internal User's id
 ```
 
-Response Object:
+응답 객체:
 
 ```bash
 {
@@ -296,7 +296,7 @@ Response Object:
 }
 ```
 
-3. Make API Calls with that Key 
+3. 해당 키로 API 호출을 수행합니다.
 
 ```python
 import openai

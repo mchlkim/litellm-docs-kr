@@ -3,19 +3,19 @@ import TabItem from '@theme/TabItem';
 
 # /realtime
 
-Use this to loadbalance across Azure + OpenAI + xAI and more. 
+Azure, OpenAI, xAI 등 여러 provider 사이에서 realtime 요청을 load balance할 때 사용합니다. 
 
-Supported Providers:
+지원 프로바이더:
 - OpenAI
 - Azure
-- xAI ([see full docs](/docs/providers/xai_realtime))
-- Google AI Studio (Gemini)
+- xAI ([전체 문서 보기](/docs/providers/xai_realtime))
+- `Google AI Studio (Gemini)`
 - Vertex AI
 - Bedrock
 
-## Proxy Usage
+## Proxy 사용법
 
-### Add model to config 
+### config에 model 추가 {#add-model-to-config}
 
 
 <Tabs>
@@ -60,12 +60,12 @@ model_list:
       mode: realtime
 ```
 
-**[See full xAI Realtime documentation →](/docs/providers/xai_realtime)**
+**[전체 xAI Realtime 문서 보기 →](/docs/providers/xai_realtime)**
 
 </TabItem>
 </Tabs>
 
-### Start proxy 
+### proxy 시작 {#start-proxy}
 
 ```bash
 litellm --config /path/to/config.yaml 
@@ -73,9 +73,9 @@ litellm --config /path/to/config.yaml
 # RUNNING on http://0.0.0.0:8000
 ```
 
-### Test 
+### 테스트 {#test}
 
-Run this script using node - `node test.js`
+node로 이 script를 실행합니다: `node test.js`
 
 ```js
 // test.js
@@ -110,20 +110,20 @@ ws.on("error", function handleError(error) {
 });
 ```
 
-## Guardrails
+## 가드레일
 
-You can apply [LiteLLM guardrails](https://docs.litellm.ai/docs/proxy/guardrails/quick_start) to realtime sessions.
+realtime session에 [LiteLLM guardrail](https://docs.litellm.ai/docs/proxy/guardrails/quick_start)을 적용할 수 있습니다.
 
-### Set guardrails on a key or team
+### key 또는 team에 guardrail 설정 {#set-guardrails-on-a-key-or-team}
 
-The easiest production setup — attach guardrails to a virtual key or team so they always apply automatically, without any client-side changes.
+가장 쉬운 production 설정은 virtual key 또는 team에 guardrail을 연결하는 것입니다. 그러면 client-side 변경 없이 항상 자동 적용됩니다.
 
-See [Virtual Keys → Guardrails](https://docs.litellm.ai/docs/proxy/virtual_keys#guardrails) and [Teams → Guardrails](https://docs.litellm.ai/docs/proxy/team_budgets).
+[가상 키 → 가드레일](https://docs.litellm.ai/docs/proxy/virtual_keys#guardrails) 및 [Teams → 가드레일](https://docs.litellm.ai/docs/proxy/team_budgets)을 참고하세요.
 
-### Pass guardrails dynamically (easy testing)
+### guardrail 동적 전달(간단한 테스트) {#pass-guardrails-dynamically-easy-testing}
 
-Pass `guardrails` as a query param when opening the WebSocket.
-Useful for testing guardrails without modifying key/team config.
+WebSocket을 열 때 `guardrails`를 query param으로 전달합니다.
+key/team config를 수정하지 않고 guardrail을 테스트할 때 유용합니다.
 
 ```js
 // node test.js
@@ -156,7 +156,7 @@ ws.on("close", function close(code, reason) {
 });
 ```
 
-Or with Python:
+Python으로는 다음과 같이 실행합니다.
 
 ```python
 import asyncio
@@ -179,7 +179,7 @@ async def main():
 asyncio.run(main())
 ```
 
-When a guardrail blocks the request, the proxy sends an `error` event over the WebSocket and then closes the connection:
+guardrail이 request를 차단하면 proxy는 WebSocket으로 `error` event를 보낸 뒤 connection을 닫습니다.
 
 ```json
 {
@@ -191,15 +191,15 @@ When a guardrail blocks the request, the proxy sends an `error` event over the W
 }
 ```
 
-## Logging
+## 로깅 {#logging}
 
-To prevent requests from being dropped, by default LiteLLM just logs these event types:
+request drop을 방지하기 위해 LiteLLM은 기본적으로 다음 event type만 logging합니다.
 
 - `session.created`
 - `response.create`
 - `response.done`
 
-You can override this by setting the `logged_real_time_event_types` parameter in the config. For example:
+config에서 `logged_real_time_event_types` parameter를 설정해 이를 override할 수 있습니다. 예:
 
 ```yaml
 litellm_settings:

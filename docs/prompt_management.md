@@ -1,12 +1,12 @@
 ---
-title: Prompt Management with Responses API
+title: Responses API로 Prompt Management 사용
 ---
 
-# Prompt Management with Responses API
+# Responses API로 Prompt Management 사용 {#prompt-management-with-responses-api}
 
-Use LiteLLM Prompt Management with `/v1/responses` by passing `prompt_id` and optional `prompt_variables`.
+`prompt_id`와 선택 사항인 `prompt_variables`를 전달해 `/v1/responses`에서 LiteLLM Prompt Management를 사용할 수 있습니다.
 
-## Basic Usage
+## Basic 사용법
 
 ```bash
 curl -X POST "http://localhost:4000/v1/responses" \
@@ -20,9 +20,9 @@ curl -X POST "http://localhost:4000/v1/responses" \
   }'
 ```
 
-## Multi-turn Follow-up in `input`
+## `input`의 multi-turn follow-up {#multi-turn-follow-up-in-input}
 
-To send follow-up turns in one request, pass message history in `input`.
+하나의 요청에서 후속 turn을 보내려면 `input`에 message history를 전달합니다.
 
 ```bash
 curl -X POST "http://localhost:4000/v1/responses" \
@@ -40,9 +40,9 @@ curl -X POST "http://localhost:4000/v1/responses" \
   }'
 ```
 
-## Notes
+## 참고
 
-- Prompt template messages are merged with your `input` messages.
-- Prompt variable substitution applies to prompt message content.
-- Tool call payload fields are not substituted by prompt variables.
-- For follow-ups with `previous_response_id`, include `prompt_id` again if you want prompt management applied on that turn.
+- Prompt template message는 `input` message와 병합됩니다.
+- Prompt variable substitution은 prompt message content에 적용됩니다.
+- Tool call payload field는 prompt variable로 치환되지 않습니다.
+- `previous_response_id`를 사용하는 follow-up에서 해당 turn에도 prompt management를 적용하려면 `prompt_id`를 다시 포함하세요.

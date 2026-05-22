@@ -2,18 +2,18 @@
 import Image from '@theme/IdealImage';
 
 
-# SCIM with LiteLLM
+# LiteLLM에서 SCIM 사용하기
 
-✨ **Enterprise**: SCIM support requires a premium license.
+✨ **엔터프라이즈**: SCIM 지원에는 프리미엄 라이선스가 필요합니다.
 
-Enables identity providers (Okta, Azure AD, OneLogin, etc.) to automate user and team (group) provisioning, updates, and deprovisioning on LiteLLM.
+ID 공급자(identity provider: Okta, Azure AD, OneLogin 등)가 LiteLLM에서 사용자 및 팀(그룹) 프로비저닝, 업데이트, 프로비저닝 해제를 자동화할 수 있도록 합니다.
 
 
-This tutorial will walk you through the steps to connect your IDP to LiteLLM SCIM Endpoints.
+이 튜토리얼에서는 IDP를 LiteLLM SCIM Endpoints에 연결하는 단계를 안내합니다.
 
-### Supported SSO Providers for SCIM
-Below is a list of supported SSO providers for connecting to LiteLLM SCIM Endpoints.
-- Microsoft Entra ID (Azure AD)
+### SCIM에 지원되는 SSO Provider
+아래는 LiteLLM SCIM Endpoints에 연결할 수 있는 지원 SSO Provider 목록입니다.
+- `Microsoft Entra ID (Azure AD)`
 - Okta
 - Google Workspace
 - OneLogin
@@ -21,58 +21,55 @@ Below is a list of supported SSO providers for connecting to LiteLLM SCIM Endpoi
 - Auth0
 
 
-## 1. Get your SCIM Tenant URL and Bearer Token
+## 1. SCIM Tenant URL 및 Bearer Token 가져오기
 
-On LiteLLM, navigate to the Settings > Admin Settings > SCIM. On this page you will create a SCIM Token, this allows your IDP to authenticate to litellm `/scim` endpoints.
+LiteLLM에서 Settings > Admin Settings > SCIM으로 이동합니다. 이 페이지에서 SCIM Token을 생성합니다. 이 토큰을 통해 IDP가 litellm `/scim` endpoints에 인증할 수 있습니다.
 
 <Image img={require('../../img/scim_2.png')}  style={{ width: '800px', height: 'auto' }} />
 
-## 2. Connect your IDP to LiteLLM SCIM Endpoints
+## 2. IDP를 LiteLLM SCIM Endpoints에 연결하기
 
-On your IDP provider, navigate to your SSO application and select `Provisioning` > `New provisioning configuration`.
+IDP Provider에서 SSO 애플리케이션으로 이동한 뒤 `Provisioning` > `New provisioning configuration`을 선택합니다.
 
-On this page, paste in your litellm scim tenant url and bearer token.
+이 페이지에 litellm scim tenant url과 bearer token을 붙여넣습니다.
 
-Once this is pasted in, click on `Test Connection` to ensure your IDP can authenticate to the LiteLLM SCIM endpoints.
+붙여넣은 후 `Test Connection`을 클릭하여 IDP가 LiteLLM SCIM endpoints에 인증할 수 있는지 확인합니다.
 
 <Image img={require('../../img/scim_4.png')}  style={{ width: '800px', height: 'auto' }} />
 
 
-## 3. Test SCIM Connection
+## 3. SCIM 연결 테스트
 
-### 3.1 Assign the group to your LiteLLM Enterprise App
+### 3.1 그룹을 LiteLLM 엔터프라이즈 App에 할당하기
 
-On your IDP Portal, navigate to `Enterprise Applications` > Select your litellm app 
+IDP Portal에서 `엔터프라이즈 Applications`로 이동한 뒤 litellm 앱을 선택합니다.
 
 <Image img={require('../../img/msft_enterprise_app.png')}  style={{ width: '800px', height: 'auto' }} />
 
 <br />
 <br />
 
-Once you've selected your litellm app, click on `Users and Groups` > `Add user/group` 
+litellm 앱을 선택한 후 `Users and Groups` > `Add user/group`을 클릭합니다.
 
 <Image img={require('../../img/msft_enterprise_assign_group.png')}  style={{ width: '800px', height: 'auto' }} />
 
 <br />
 
-Now select the group you created in step 1.1. And add it to the LiteLLM Enterprise App. At this point we have added `Production LLM Evals Group` to the LiteLLM Enterprise App. The next step is having LiteLLM automatically create the `Production LLM Evals Group` on the LiteLLM DB when a new user signs in.
+이제 1.1단계에서 생성한 그룹을 선택하고 LiteLLM 엔터프라이즈 App에 추가합니다. 이 시점에서는 `Production LLM Evals Group`을 LiteLLM 엔터프라이즈 App에 추가한 상태입니다. 다음 단계는 새 사용자가 로그인할 때 LiteLLM이 LiteLLM DB에 `Production LLM Evals Group`을 자동으로 생성하도록 하는 것입니다.
 
 <Image img={require('../../img/msft_enterprise_select_group.png')}  style={{ width: '800px', height: 'auto' }} />
 
 
-### 3.2 Sign in to LiteLLM UI via SSO
+### 3.2 SSO를 통해 LiteLLM UI에 로그인하기
 
-Sign into the LiteLLM UI via SSO. You should be redirected to the Entra ID SSO page. This SSO sign in flow will trigger LiteLLM to fetch the latest Groups and Members from Azure Entra ID.
+SSO를 통해 LiteLLM UI에 로그인합니다. Entra ID SSO 페이지로 리디렉션되어야 합니다. 이 SSO 로그인 흐름은 LiteLLM이 Azure Entra ID에서 최신 Groups와 Members를 가져오도록 트리거합니다.
 
 <Image img={require('../../img/msft_sso_sign_in.png')}  style={{ width: '800px', height: 'auto' }} />
 
-### 3.3 Check the new team on LiteLLM UI
+### 3.3 LiteLLM UI에서 새 팀 확인하기
 
-On the LiteLLM UI, Navigate to `Teams`, You should see the new team `Production LLM Evals Group` auto-created on LiteLLM. 
+LiteLLM UI에서 `Teams`로 이동합니다. LiteLLM에 새 팀 `Production LLM Evals Group`이 자동 생성된 것을 확인할 수 있습니다.
 
 <Image img={require('../../img/msft_auto_team.png')}  style={{ width: '900px', height: 'auto' }} />
 
-> **Note:** When a user is removed from your organization via SCIM, all API keys and access tokens associated with that user will be automatically deleted from LiteLLM. This ensures that removed users lose all access immediately and securely.
-
-
-
+> **참고:** 사용자가 SCIM을 통해 조직에서 제거되면 해당 사용자와 연결된 모든 API keys 및 access tokens가 LiteLLM에서 자동으로 삭제됩니다. 이를 통해 제거된 사용자의 모든 접근 권한이 즉시 안전하게 해제됩니다.

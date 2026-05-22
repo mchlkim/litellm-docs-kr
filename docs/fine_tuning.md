@@ -6,21 +6,21 @@ import TabItem from '@theme/TabItem';
 
 :::info
 
-This is an Enterprise only endpoint [Get Started with Enterprise here](https://enterprise.litellm.ai/demo)
+이 엔드포인트는 엔터프라이즈 전용입니다. [여기에서 엔터프라이즈를 시작하세요](https://enterprise.litellm.ai/demo)
 
 :::
 
-| Feature | Supported | Notes | 
+| 기능 | 지원 여부 | 참고 | 
 |-------|-------|-------|
-| Supported Providers | OpenAI, Azure OpenAI, Vertex AI | - |
+| 지원 프로바이더 | OpenAI, Azure OpenAI, Vertex AI | - |
 
-#### ⚡️See an exhaustive list of supported models and providers at [models.litellm.ai](https://models.litellm.ai/)
-| Cost Tracking | 🟡 | [Let us know if you need this](https://github.com/BerriAI/litellm/issues) |
-| Logging | ✅ | Works across all logging integrations |
+#### ⚡️지원되는 모델과 프로바이더의 전체 목록은 [models.litellm.ai](https://models.litellm.ai/)에서 확인하세요.
+| 비용 추적 | 🟡 | [필요한 경우 알려주세요](https://github.com/BerriAI/litellm/issues) |
+| 로깅 | ✅ | 모든 로깅 통합에서 작동합니다 |
 
 
-Add `finetune_settings` and `files_settings` to your litellm config.yaml to use the fine-tuning endpoints.
-## Example config.yaml for `finetune_settings` and `files_settings`
+파인튜닝 엔드포인트를 사용하려면 litellm config.yaml에 `finetune_settings`와 `files_settings`를 추가하세요.
+## `finetune_settings` 및 `files_settings`용 config.yaml 예제
 ```yaml
 model_list:
   - model_name: gpt-4
@@ -52,7 +52,7 @@ files_settings:
     api_key: os.environ/OPENAI_API_KEY
 ```
 
-## Create File for fine-tuning
+## 파인튜닝용 파일 생성
 
 <Tabs>
 <TabItem value="openai" label="OpenAI Python SDK">
@@ -80,7 +80,7 @@ curl http://localhost:4000/v1/files \
 </TabItem>
 </Tabs>
 
-## Create fine-tuning job
+## 파인튜닝 작업 생성
 
 <Tabs>
 <TabItem value="azure" label="Azure OpenAI">
@@ -116,78 +116,78 @@ curl http://localhost:4000/v1/fine_tuning/jobs \
 
 </Tabs>
 
-### Request Body
+### 요청 본문
 
 <Tabs>
-<TabItem value="params" label="Supported Params">
+<TabItem value="params" label="지원 파라미터">
 
 * `model`
 
-    **Type:** string  
-    **Required:** Yes  
-    The name of the model to fine-tune
+    **유형:** string  
+    **필수:** 예  
+    파인튜닝할 모델의 이름
 
 * `custom_llm_provider`
 
-    **Type:** `Literal["azure", "openai", "vertex_ai"]`
+    **유형:** `Literal["azure", "openai", "vertex_ai"]`
 
-    **Required:** Yes
-    The name of the model to fine-tune. You can select one of the [**supported providers**](#supported-providers)
+    **필수:** 예
+    파인튜닝할 모델의 이름입니다. [**지원 프로바이더**](#supported-providers) 중 하나를 선택할 수 있습니다.
 
 * `training_file`
 
-    **Type:** string  
-    **Required:** Yes  
-    The ID of an uploaded file that contains training data.
-    - See **upload file** for how to upload a file.
-    - Your dataset must be formatted as a JSONL file.
+    **유형:** string  
+    **필수:** 예  
+    학습 데이터가 포함된 업로드된 파일의 ID입니다.
+    - 파일 업로드 방법은 **파일 업로드**를 참고하세요.
+    - 데이터셋은 JSONL 파일 형식이어야 합니다.
 
 * `hyperparameters`
 
-    **Type:** object  
-    **Required:** No  
-    The hyperparameters used for the fine-tuning job.
-    > #### Supported `hyperparameters`
+    **유형:** object  
+    **필수:** 아니요  
+    파인튜닝 작업에 사용되는 하이퍼파라미터입니다.
+    > #### 지원 `hyperparameters`
     > #### batch_size
-    **Type:** string or integer  
-    **Required:** No  
-    Number of examples in each batch. A larger batch size means that model parameters are updated less frequently, but with lower variance.
+    **유형:** string 또는 integer  
+    **필수:** 아니요  
+    각 배치의 예제 수입니다. 배치 크기가 클수록 모델 파라미터가 덜 자주 업데이트되지만 분산은 낮아집니다.
     > #### learning_rate_multiplier
-    **Type:** string or number  
-    **Required:** No  
-    Scaling factor for the learning rate. A smaller learning rate may be useful to avoid overfitting.
+    **유형:** string 또는 number  
+    **필수:** 아니요  
+    학습률의 스케일링 계수입니다. 더 작은 학습률은 과적합을 방지하는 데 유용할 수 있습니다.
 
     > #### n_epochs
-    **Type:** string or integer  
-    **Required:** No  
-    The number of epochs to train the model for. An epoch refers to one full cycle through the training dataset.
+    **유형:** string 또는 integer  
+    **필수:** 아니요  
+    모델을 학습할 epoch 수입니다. epoch는 학습 데이터셋을 한 번 완전히 순회하는 것을 의미합니다.
 
 * `suffix`
-    **Type:** string or null  
-    **Required:** No  
-    **Default:** null  
-    A string of up to 18 characters that will be added to your fine-tuned model name.
-    Example: A `suffix` of "custom-model-name" would produce a model name like `ft:gpt-4o-mini:openai:custom-model-name:7p4lURel`.
+    **유형:** string 또는 null  
+    **필수:** 아니요  
+    **기본값:** null  
+    파인튜닝된 모델 이름에 추가될 최대 18자의 문자열입니다.
+    예제: `suffix`가 "custom-model-name"이면 `ft:gpt-4o-mini:openai:custom-model-name:7p4lURel` 같은 모델 이름이 생성됩니다.
 
 * `validation_file`
-    **Type:** string or null  
-    **Required:** No  
-    The ID of an uploaded file that contains validation data.
-    - If provided, this data is used to generate validation metrics periodically during fine-tuning.
+    **유형:** string 또는 null  
+    **필수:** 아니요  
+    검증 데이터가 포함된 업로드된 파일의 ID입니다.
+    - 제공된 경우 이 데이터는 파인튜닝 중 주기적으로 검증 메트릭을 생성하는 데 사용됩니다.
 
 
 * `integrations`
-    **Type:** array or null  
-    **Required:** No  
-    A list of integrations to enable for your fine-tuning job.
+    **유형:** array 또는 null  
+    **필수:** 아니요  
+    파인튜닝 작업에 활성화할 통합 목록입니다.
 
 * `seed`
-    **Type:** integer or null  
-    **Required:** No  
-    The seed controls the reproducibility of the job. Passing in the same seed and job parameters should produce the same results, but may differ in rare cases. If a seed is not specified, one will be generated for you.
+    **유형:** integer 또는 null  
+    **필수:** 아니요  
+    seed는 작업의 재현성을 제어합니다. 동일한 seed와 작업 파라미터를 전달하면 같은 결과가 생성되어야 하지만, 드문 경우 달라질 수 있습니다. seed를 지정하지 않으면 자동으로 하나가 생성됩니다.
 
 </TabItem>
-<TabItem value="example" label="Example Request Body">
+<TabItem value="example" label="요청 본문 예제">
 
 ```json
 {
@@ -206,7 +206,7 @@ curl http://localhost:4000/v1/fine_tuning/jobs \
 </TabItem>
 </Tabs>
 
-## Cancel fine-tuning job
+## 파인튜닝 작업 취소
 
 <Tabs>
 <TabItem value="openai" label="OpenAI Python SDK">
@@ -234,7 +234,7 @@ curl -X POST http://localhost:4000/v1/fine_tuning/jobs/ftjob-abc123/cancel \
 
 </Tabs>
 
-## List fine-tuning jobs
+## 파인튜닝 작업 나열
 
 <Tabs>
 
@@ -263,4 +263,4 @@ curl -X GET 'http://localhost:4000/v1/fine_tuning/jobs' \
 
 
 
-## [👉 Proxy API Reference](https://litellm-api.up.railway.app/#/fine-tuning)
+## [👉 Proxy API 참조](https://litellm-api.up.railway.app/#/fine-tuning)

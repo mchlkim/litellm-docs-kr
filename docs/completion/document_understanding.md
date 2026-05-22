@@ -1,18 +1,18 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Using PDF Input
+# PDF 입력 사용 {#using-pdf-input}
 
-How to send / receive pdf's (other document types) to a `/chat/completions` endpoint
+PDF 및 기타 문서 유형을 `/chat/completions` 엔드포인트로 보내고 받는 방법입니다.
 
-Works for:
-- Vertex AI models (Gemini + Anthropic)
-- Bedrock Models
-- Anthropic API Models
-- OpenAI API Models
-- Mistral (Only using file ID of already uploaded file, similar to OpenAI file_id input)
+- 지원 대상:
+- Vertex AI 모델(Gemini + Anthropic)
+- Bedrock 모델
+- Anthropic API 모델
+- OpenAI API 모델
+- Mistral(OpenAI `file_id` 입력과 유사하게, 이미 업로드된 파일의 파일 ID만 사용)
 
-## Quick Start
+## 빠른 시작
 
 ### url 
 
@@ -57,7 +57,7 @@ assert response is not None
 </TabItem>
 <TabItem value="proxy" label="PROXY">
 
-1. Setup config.yaml
+1. config.yaml 설정
 
 ```yaml
 model_list:
@@ -69,13 +69,13 @@ model_list:
       aws_region_name: os.environ/AWS_REGION_NAME
 ```
 
-2. Start the proxy 
+2. 프록시 시작 
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-3. Test it! 
+3. 테스트
 
 ```bash
 curl -X POST 'http://0.0.0.0:4000/chat/completions' \
@@ -147,7 +147,7 @@ assert response is not None
 </TabItem>
 <TabItem value="proxy" label="PROXY">
 
-1. Setup config.yaml
+1. config.yaml 설정
 
 ```yaml
 model_list:
@@ -159,13 +159,13 @@ model_list:
       aws_region_name: os.environ/AWS_REGION_NAME
 ```
 
-2. Start the proxy 
+2. 프록시 시작 
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-3. Test it! 
+3. 테스트
 
 ```bash
 curl -X POST 'http://0.0.0.0:4000/chat/completions' \
@@ -189,9 +189,9 @@ curl -X POST 'http://0.0.0.0:4000/chat/completions' \
 </TabItem>
 </Tabs>
 
-## Specifying format 
+## 형식 지정 {#specifying-format}
 
-To specify the format of the document, you can use the `format` parameter. 
+문서 형식을 지정하려면 `format` 파라미터를 사용할 수 있습니다.
 
 
 <Tabs>
@@ -236,7 +236,7 @@ assert response is not None
 </TabItem>
 <TabItem value="proxy" label="PROXY">
 
-1. Setup config.yaml
+1. config.yaml 설정
 
 ```yaml
 model_list:
@@ -248,13 +248,13 @@ model_list:
       aws_region_name: os.environ/AWS_REGION_NAME
 ```
 
-2. Start the proxy 
+2. 프록시 시작 
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-3. Test it! 
+3. 테스트
 
 ```bash
 curl -X POST 'http://0.0.0.0:4000/chat/completions' \
@@ -280,9 +280,9 @@ curl -X POST 'http://0.0.0.0:4000/chat/completions' \
 </Tabs>
 
 
-## Mistral Example
+## Mistral 예제
 
-Here is a sample payload for using the Mistral model for document understanding:
+문서 이해에 Mistral 모델을 사용할 때의 샘플 페이로드입니다.
 
 
 <Tabs>
@@ -345,12 +345,12 @@ curl -X POST 'http://0.0.0.0:4000/chat/completions' \
 </TabItem>
 </Tabs>
 
-## Checking if a model supports pdf input
+## 모델이 PDF 입력을 지원하는지 확인 {#checking-if-a-model-supports-pdf-input}
 
 <Tabs>
 <TabItem label="SDK" value="sdk">
 
-Use `litellm.supports_pdf_input(model="bedrock/us.anthropic.claude-haiku-4-5-20251001-v1:0")` -> returns `True` if model can accept pdf input
+`litellm.supports_pdf_input(model="bedrock/us.anthropic.claude-haiku-4-5-20251001-v1:0")`를 사용하세요. 모델이 PDF 입력을 받을 수 있으면 `True`를 반환합니다.
 
 ```python
 assert litellm.supports_pdf_input(model="bedrock/us.anthropic.claude-haiku-4-5-20251001-v1:0") == True
@@ -359,7 +359,7 @@ assert litellm.supports_pdf_input(model="bedrock/us.anthropic.claude-haiku-4-5-2
 
 <TabItem label="PROXY" value="proxy">
 
-1. Define bedrock models on config.yaml
+1. config.yaml에 Bedrock 모델 정의
 
 ```yaml
 model_list:
@@ -373,13 +373,13 @@ model_list:
       supports_pdf_input: True
 ```
 
-2. Run proxy server
+2. 프록시 서버 실행
 
 ```bash
 litellm --config config.yaml
 ```
 
-3. Call `/model_group/info` to check if a model supports `pdf` input
+3. 모델이 `pdf` 입력을 지원하는지 확인하려면 `/model_group/info` 호출
 
 ```shell
 curl -X 'GET' \
@@ -388,7 +388,7 @@ curl -X 'GET' \
   -H 'x-api-key: sk-1234'
 ```
 
-Expected Response 
+예상 응답
 
 ```json
 {

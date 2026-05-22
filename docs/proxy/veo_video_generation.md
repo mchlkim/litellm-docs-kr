@@ -1,21 +1,21 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Veo Video Generation with Google AI Studio
+# Google AI Studio로 Veo 비디오 생성 {#veo-video-generation-with-google-ai-studio}
 
-Generate videos using Google's Veo model through LiteLLM's pass-through endpoints.
+LiteLLM의 pass-through 엔드포인트를 통해 Google의 Veo 모델로 비디오를 생성합니다.
 
-## Quick Start
+## 빠른 시작
 
-LiteLLM allows you to use Google AI Studio's Veo video generation API through pass-through routes with zero configuration.
+LiteLLM을 사용하면 별도 설정 없이 pass-through 라우트로 Google AI Studio의 Veo 비디오 생성 API를 사용할 수 있습니다.
 
-### 1. Add Google AI Studio API Key to your environment 
+### 1. 환경에 Google AI Studio API 키 추가 {#1-add-google-ai-studio-api-key-to-your-environment}
 
 ```bash
 export GEMINI_API_KEY="your_google_ai_studio_api_key"
 ```
 
-### 2. Start LiteLLM Proxy 
+### 2. LiteLLM Proxy 시작 {#2-start-litellm-proxy}
 
 ```bash
 litellm
@@ -23,7 +23,7 @@ litellm
 # RUNNING on http://0.0.0.0:4000
 ```
 
-### 3. Generate Video
+### 3. 비디오 생성 {#3-generate-video}
 
 <Tabs>
 <TabItem value="python" label="Python">
@@ -138,26 +138,25 @@ curl -X GET "http://localhost:4000/gemini/v1beta/files/VIDEO_ID:download?alt=med
 </TabItem>
 </Tabs>
 
-## Complete Example
+## 전체 예제 {#complete-예제}
 
-For a full working example with error handling and logging, see our [Veo Video Generation Cookbook](https://github.com/BerriAI/litellm/blob/main/cookbook/veo_video_generation.py).
+오류 처리와 로깅이 포함된 전체 동작 예제는 [Veo Video Generation Cookbook](https://github.com/BerriAI/litellm/blob/main/cookbook/veo_video_generation.py)을 참고하세요.
 
-## How It Works
+## 작동 방식 {#how-it-works}
 
-1. **Video Generation Request**: Send a prompt to Veo's `predictLongRunning` endpoint
-2. **Operation Polling**: Monitor the long-running operation until completion
-3. **File Download**: Download the generated video through LiteLLM's pass-through with automatic redirect handling
+1. **비디오 생성 요청**: Veo의 `predictLongRunning` 엔드포인트로 프롬프트를 보냅니다.
+2. **작업 폴링**: 장기 실행 작업이 완료될 때까지 상태를 확인합니다.
+3. **파일 다운로드**: 자동 리디렉션 처리가 적용된 LiteLLM pass-through를 통해 생성된 비디오를 다운로드합니다.
 
-LiteLLM handles:
-- ✅ Authentication with Google AI Studio
-- ✅ Request routing and proxying
-- ✅ Automatic redirect handling for file downloads
+LiteLLM은 다음을 처리합니다.
+- ✅ Google AI Studio 인증
+- ✅ 요청 라우팅 및 프록시
+- ✅ 파일 다운로드를 위한 자동 리디렉션 처리
 
-## Configuration Options
+## 설정 옵션 {#설정-options}
 
-### Environment Variables
+### 환경 변수 {#environment-variables}
 
 ```bash
 export GEMINI_API_KEY="your_google_ai_studio_api_key"
 ```
-

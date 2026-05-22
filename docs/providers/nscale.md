@@ -1,45 +1,45 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Nscale (EU Sovereign)
+# Nscale {#nscale-eu-sovereign}
 
 https://docs.nscale.com/docs/inference/chat
 
 :::tip
 
-**We support ALL Nscale models, just set `model=nscale/<any-model-on-nscale>` as a prefix when sending litellm requests**
+**모든 Nscale 모델을 지원합니다. litellm 요청을 보낼 때 `model=nscale/<any-model-on-nscale>`을 접두사로 설정하기만 하면 됩니다.**
 
 :::
 
-| Property | Details |
+| 속성 | 세부 정보 |
 |-------|-------|
-| Description | European-domiciled full-stack AI cloud platform for LLMs and image generation. |
-| Provider Route on LiteLLM | `nscale/` |
-| Supported Endpoints | `/chat/completions`, `/images/generations` |
-| API Reference | [Nscale docs](https://docs.nscale.com/docs/getting-started/overview) |
+| 설명 | LLM 및 이미지 생성을 위한 유럽 소재 풀스택 AI 클라우드 플랫폼입니다. |
+| LiteLLM의 Provider Route | `nscale/` |
+| 지원 엔드포인트 | `/chat/completions`, `/images/generations` |
+| API 참조 | [Nscale docs](https://docs.nscale.com/docs/getting-started/overview) |
 
-## Required Variables
+## 필수 변수 {#required-variables}
 
 ```python showLineNumbers title="Environment Variables"
 os.environ["NSCALE_API_KEY"] = ""  # your Nscale API key
 ```
 
-## Explore Available Models  
+## 사용 가능한 모델 살펴보기 {#explore-available-모델}
 
-Explore our full list of text and multimodal AI models — all available at highly competitive pricing:
-📚 [Full List of Models](https://docs.nscale.com/docs/inference/serverless-models/current)  
+경쟁력 높은 가격으로 제공되는 전체 텍스트 및 멀티모달 AI 모델 목록을 확인하세요.
+📚 [전체 모델 목록](https://docs.nscale.com/docs/inference/serverless-models/current)  
 
 
-## Key Features
-- **EU Sovereign**: Full data sovereignty and compliance with European regulations
-- **Ultra-Low Cost (starting at $0.01 / M tokens)**: Extremely competitive pricing for both text and image generation models
-- **Production Grade**: Reliable serverless deployments with full isolation
-- **No Setup Required**: Instant access to compute without infrastructure management
-- **Full Control**: Your data remains private and isolated
+## 주요 기능 {#key-features}
+- **EU Sovereign**: 완전한 데이터 주권과 유럽 규정 준수를 제공합니다.
+- **Ultra-Low Cost (starting at $0.01 / M tokens)**: 텍스트 및 이미지 생성 모델 모두에 매우 경쟁력 있는 가격을 제공합니다.
+- **Production Grade**: 완전한 격리를 갖춘 안정적인 서버리스 배포를 제공합니다.
+- **No Setup Required**: 인프라 관리 없이 컴퓨팅에 즉시 액세스할 수 있습니다.
+- **Full Control**: 데이터는 비공개로 유지되며 격리됩니다.
 
-## Usage - LiteLLM Python SDK
+## 사용법 - LiteLLM Python SDK
 
-### Text Generation
+### 텍스트 생성 {#text-generation}
 
 ```python showLineNumbers title="Nscale Text Generation"
 from litellm import completion
@@ -69,7 +69,7 @@ for chunk in stream:
         print(chunk.choices[0].delta.content, end="")
 ```
 
-### Image Generation
+### 이미지 생성 {#image-generation}
 
 ```python showLineNumbers title="Nscale Image Generation"
 from litellm import image_generation
@@ -85,9 +85,9 @@ response = image_generation(
 print(response)
 ```
 
-## Usage - LiteLLM Proxy
+## 사용법 - LiteLLM Proxy
 
-Add the following to your LiteLLM Proxy configuration file:
+LiteLLM Proxy 구성 파일에 다음을 추가하세요.
 
 ```yaml showLineNumbers title="config.yaml"
 model_list:
@@ -105,7 +105,7 @@ model_list:
       api_key: os.environ/NSCALE_API_KEY
 ```
 
-Start your LiteLLM Proxy server:
+LiteLLM Proxy 서버를 시작하세요.
 
 ```bash showLineNumbers title="Start LiteLLM Proxy"
 litellm --config config.yaml
@@ -169,12 +169,12 @@ curl http://localhost:4000/v1/chat/completions \
 </TabItem>
 </Tabs>
 
-## Getting Started
-1. Create an account at [console.nscale.com](https://console.nscale.com)
-2. Claim free credit
-3. Create an API key in settings
-4. Start making API calls using LiteLLM
+## 시작하기
+1. [console.nscale.com](https://console.nscale.com)에서 계정을 만듭니다.
+2. 무료 크레딧을 신청합니다.
+3. 설정에서 API 키를 만듭니다.
+4. LiteLLM을 사용해 API 호출을 시작합니다.
 
-## Additional Resources
-- [Nscale Documentation](https://docs.nscale.com/docs/getting-started/overview)
-- [Blog: Sovereign Serverless](https://www.nscale.com/blog/sovereign-serverless-how-we-designed-full-isolation-without-sacrificing-performance) 
+## 추가 리소스 {#additional-resources}
+- [Nscale 문서](https://docs.nscale.com/docs/getting-started/overview)
+- [블로그: Sovereign Serverless](https://www.nscale.com/blog/sovereign-serverless-how-we-designed-full-isolation-without-sacrificing-performance) 

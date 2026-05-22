@@ -2,9 +2,9 @@ import Image from '@theme/IdealImage';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Vertex AI Embedding
+# Vertex AI Embedding 가이드
 
-## Usage - Embedding
+## 사용법 - Embedding
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -26,7 +26,7 @@ print(response)
 <TabItem value="proxy" label="LiteLLM PROXY">
 
 
-1. Add model to config.yaml
+1. `config.yaml`에 모델을 추가합니다.
 ```yaml
 model_list:
   - model_name: snowflake-arctic-embed-m-long-1731622468876
@@ -40,13 +40,13 @@ litellm_settings:
   drop_params: True
 ```
 
-2. Start Proxy 
+2. Proxy를 시작합니다.
 
 ```
 $ litellm --config /path/to/config.yaml
 ```
 
-3. Make Request using OpenAI Python SDK, Langchain Python SDK
+3. OpenAI Python SDK 또는 Langchain Python SDK로 요청합니다.
 
 ```python
 import openai
@@ -65,33 +65,33 @@ print(response)
 </TabItem>
 </Tabs>
 
-#### Supported Embedding Models
-All models listed [here](https://github.com/BerriAI/litellm/blob/57f37f743886a0249f630a6792d49dffc2c5d9b7/model_prices_and_context_window.json#L835) are supported
+#### Supported Embedding 모델
+지원 모델 목록에 있는 모든 모델을 사용할 수 있습니다. 목록은 [여기](https://github.com/BerriAI/litellm/blob/57f37f743886a0249f630a6792d49dffc2c5d9b7/model_prices_and_context_window.json#L835)를 확인하세요.
 
-| Model Name               | Function Call                                                                                                                                                      |
+| 모델 이름               | 함수 호출                                                                                                                                                      |
 |--------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| text-embedding-004 | `embedding(model="vertex_ai/text-embedding-004", input)` | 
-| text-multilingual-embedding-002 | `embedding(model="vertex_ai/text-multilingual-embedding-002", input)` | 
-| textembedding-gecko | `embedding(model="vertex_ai/textembedding-gecko", input)` | 
-| textembedding-gecko-multilingual | `embedding(model="vertex_ai/textembedding-gecko-multilingual", input)` | 
-| textembedding-gecko-multilingual@001 | `embedding(model="vertex_ai/textembedding-gecko-multilingual@001", input)` | 
-| textembedding-gecko@001 | `embedding(model="vertex_ai/textembedding-gecko@001", input)` | 
-| textembedding-gecko@003 | `embedding(model="vertex_ai/textembedding-gecko@003", input)` | 
-| text-embedding-preview-0409 | `embedding(model="vertex_ai/text-embedding-preview-0409", input)` |
-| text-multilingual-embedding-preview-0409 | `embedding(model="vertex_ai/text-multilingual-embedding-preview-0409", input)` | 
-| gemini-embedding-2-preview | `embedding(model="vertex_ai/gemini-embedding-2-preview", input)` | [Multimodal docs](#gemini-embedding-2-preview-multimodal) |
-| gemini-embedding-2 *(GA)* | `embedding(model="vertex_ai/gemini-embedding-2", input)` | [Multimodal docs](#gemini-embedding-2-preview-multimodal) · [GA notes](/blog/gemini_embedding_2_ga) |
-| Fine-tuned OR Custom Embedding models | `embedding(model="vertex_ai/<your-model-id>", input)` | 
+| `text-embedding-004` | `embedding(model="vertex_ai/text-embedding-004", input)` | 
+| `text-multilingual-embedding-002` | `embedding(model="vertex_ai/text-multilingual-embedding-002", input)` | 
+| `textembedding-gecko` | `embedding(model="vertex_ai/textembedding-gecko", input)` | 
+| `textembedding-gecko-multilingual` | `embedding(model="vertex_ai/textembedding-gecko-multilingual", input)` | 
+| `textembedding-gecko-multilingual@001` | `embedding(model="vertex_ai/textembedding-gecko-multilingual@001", input)` | 
+| `textembedding-gecko@001` | `embedding(model="vertex_ai/textembedding-gecko@001", input)` | 
+| `textembedding-gecko@003` | `embedding(model="vertex_ai/textembedding-gecko@003", input)` | 
+| `text-embedding-preview-0409` | `embedding(model="vertex_ai/text-embedding-preview-0409", input)` |
+| `text-multilingual-embedding-preview-0409` | `embedding(model="vertex_ai/text-multilingual-embedding-preview-0409", input)` | 
+| `gemini-embedding-2-preview` | `embedding(model="vertex_ai/gemini-embedding-2-preview", input)` | [멀티모달 문서](#gemini-embedding-2-preview-multimodal) |
+| `gemini-embedding-2` *(GA)* | `embedding(model="vertex_ai/gemini-embedding-2", input)` | [멀티모달 문서](#gemini-embedding-2-preview-multimodal) · [GA 참고 사항](/blog/gemini_embedding_2_ga) |
+| 파인튜닝 또는 사용자 지정 Embedding 모델 | `embedding(model="vertex_ai/<your-model-id>", input)` | 
 
-### Supported OpenAI (Unified) Params
+### 지원되는 OpenAI(Unified) 파라미터
 
-| [param](../embedding/supported_embedding.md#input-params-for-litellmembedding) | type | [vertex equivalent](https://cloud.google.com/vertex-ai/generative-ai/docs/model-reference/text-embeddings-api) |
+| [파라미터](../embedding/supported_embedding.md#input-params-for-litellmembedding) | 타입 | [Vertex 대응값](https://cloud.google.com/vertex-ai/generative-ai/docs/model-reference/text-embeddings-api) |
 |-------|-------------|--------------------|
 | `input` | **string or List[string]** | `instances` |
 | `dimensions` | **int** | `output_dimensionality` |
 | `input_type` | **Literal["RETRIEVAL_QUERY","RETRIEVAL_DOCUMENT", "SEMANTIC_SIMILARITY", "CLASSIFICATION", "CLUSTERING", "QUESTION_ANSWERING", "FACT_VERIFICATION"]** | `task_type` |
 
-#### Usage with OpenAI (Unified) Params
+#### OpenAI(Unified) 파라미터 사용법
 
 
 <Tabs>
@@ -129,7 +129,7 @@ print(response)
 </Tabs>
 
 
-### Supported Vertex Specific Params
+### 지원되는 Vertex 전용 파라미터
 
 | param | type |
 |-------|-------------|
@@ -137,11 +137,11 @@ print(response)
 | `task_type` | **Literal["RETRIEVAL_QUERY","RETRIEVAL_DOCUMENT", "SEMANTIC_SIMILARITY", "CLASSIFICATION", "CLUSTERING", "QUESTION_ANSWERING", "FACT_VERIFICATION"]** |
 | `title` | **str** |
 
-#### Usage with Vertex Specific Params  (Use `task_type` and `title`)
+#### Vertex 전용 파라미터 사용법(`task_type` 및 `title` 사용)
 
-You can pass any vertex specific params to the embedding model. Just pass them to the embedding function like this: 
+Embedding 모델에 Vertex 전용 파라미터를 전달할 수 있습니다. 다음처럼 embedding 함수에 넘기면 됩니다.
 
-[Relevant Vertex AI doc with all embedding params](https://cloud.google.com/vertex-ai/generative-ai/docs/model-reference/text-embeddings-api#request_body)
+[모든 embedding 파라미터가 정리된 관련 Vertex AI 문서](https://cloud.google.com/vertex-ai/generative-ai/docs/model-reference/text-embeddings-api#request_body)
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -183,9 +183,9 @@ print(response)
 
 ## **BGE Embeddings**
 
-Use BGE (Baidu General Embedding) models deployed on Vertex AI.
+Vertex AI에 배포된 BGE(Baidu General Embedding) 모델을 사용합니다.
 
-### Usage
+### 사용법
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -207,7 +207,7 @@ print(response)
 
 <TabItem value="proxy" label="LiteLLM PROXY">
 
-1. Add model to config.yaml
+1. `config.yaml`에 모델을 추가합니다.
 ```yaml showLineNumbers title="config.yaml"
 model_list:
   - model_name: bge-embedding
@@ -221,13 +221,13 @@ litellm_settings:
   drop_params: True
 ```
 
-2. Start Proxy 
+2. Proxy를 시작합니다.
 
 ```bash
 $ litellm --config /path/to/config.yaml
 ```
 
-3. Make Request using OpenAI Python SDK
+3. OpenAI Python SDK로 요청합니다.
 
 ```python showLineNumbers title="Making requests to BGE"
 import openai
@@ -242,7 +242,7 @@ response = client.embeddings.create(
 print(response)
 ```
 
-Using a Private Service Connect (PSC) endpoint
+Private Service Connect(PSC) 엔드포인트 사용:
 
 ```yaml showLineNumbers title="config.yaml (PSC)"
 model_list:
@@ -257,26 +257,32 @@ model_list:
 </TabItem>
 </Tabs>
 
-## **Multi-Modal Embeddings**
+## **멀티모달 Embeddings**
 
-### Gemini Embedding 2 Preview (Multimodal)
+### Gemini Embedding 2 Preview(멀티모달)
 
-`gemini-embedding-2-preview` supports **unified multimodal embeddings**—text, images, audio, video, and PDF in a single request. See [blog post](/blog/gemini_embedding_2_multimodal) for details. The GA model id `gemini-embedding-2` exposes the same behavior—swap the model name in any example below. See [GA blog](/blog/gemini_embedding_2_ga) for cost-map coverage and pricing notes.
+`gemini-embedding-2-preview`는 텍스트, 이미지, 오디오, 비디오, PDF를 단일 요청에서 처리하는 **통합 멀티모달 embedding**을 지원합니다.
+자세한 내용은 [블로그 글](/blog/gemini_embedding_2_multimodal)을 확인하세요.
+GA 모델 ID인 `gemini-embedding-2`도 동일한 동작을 제공하므로, 아래 예제의 모델 이름만 교체하면 됩니다.
+비용 맵 적용 범위와 가격 참고 사항은 [GA 블로그](/blog/gemini_embedding_2_ga)를 확인하세요.
 
-:::warning Response shape — Vertex returns one combined vector
+:::warning 응답 형태 — Vertex는 결합된 벡터 하나를 반환합니다
 
-Vertex AI's Gemini embedding endpoint only exposes single-content `embedContent` (no `batchEmbedContents`), so passing `N` items in `input=[...]` returns **1 unified embedding** that fuses all parts—not N separate vectors. To get one vector per item, call `embedding(...)` once per input.
+Vertex AI의 Gemini embedding 엔드포인트는 단일 콘텐츠 `embedContent`만 노출하며 `batchEmbedContents`는 제공하지 않습니다.
+따라서 `input=[...]`에 `N`개 항목을 전달하면 각 항목별 벡터 N개가 아니라 모든 부분을 결합한 **통합 embedding 1개**가 반환됩니다.
+항목마다 하나의 벡터가 필요하면 입력마다 `embedding(...)`을 한 번씩 호출하세요.
 
-This differs from the Gemini API path (`gemini/gemini-embedding-2-preview`), which returns one embedding per input element (OpenAI-compatible). See [Gemini embedding docs](../embedding/supported_embedding#gemini-embedding-2-preview-multimodal).
+이는 입력 요소마다 하나의 embedding을 반환하는 Gemini API 경로(`gemini/gemini-embedding-2-preview`, OpenAI 호환)와 다릅니다.
+[Gemini embedding 문서](../embedding/supported_embedding#gemini-embedding-2-preview-multimodal)를 확인하세요.
 
 :::
 
 
-**Input formats:**
+**입력 형식:**
 - **Data URIs:** `data:image/png;base64,<encoded_data>`
-- **GCS URLs:** `gs://bucket/path/to/file.png` (MIME type inferred from extension)
+- **GCS URLs:** `gs://bucket/path/to/file.png`(확장자로 MIME 타입 추론)
 
-**Supported MIME types:** `image/png`, `image/jpeg`, `audio/mpeg`, `audio/wav`, `video/mp4`, `video/quicktime`, `application/pdf`
+**지원되는 MIME 타입:** `image/png`, `image/jpeg`, `audio/mpeg`, `audio/wav`, `video/mp4`, `video/quicktime`, `application/pdf`
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -332,18 +338,18 @@ curl -X POST http://localhost:4000/embeddings \
 </TabItem>
 </Tabs>
 
-### multimodalembedding@001 (Legacy)
+### multimodalembedding@001(레거시)
 
-Known Limitations:
-- Only supports 1 image / video / image per request
-- Only supports GCS or base64 encoded images / videos
+알려진 제한 사항:
+- 요청당 이미지/비디오/이미지 1개만 지원합니다.
+- GCS 또는 base64로 인코딩된 이미지/비디오만 지원합니다.
 
-### Usage
+### 사용법
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
 
-Using GCS Images
+GCS 이미지 사용:
 
 ```python
 response = await litellm.aembedding(
@@ -352,7 +358,7 @@ response = await litellm.aembedding(
 )
 ```
 
-Using base 64 encoded images
+base64로 인코딩된 이미지 사용:
 
 ```python
 response = await litellm.aembedding(
@@ -364,7 +370,7 @@ response = await litellm.aembedding(
 </TabItem>
 <TabItem value="proxy" label="LiteLLM PROXY (Unified Endpoint)">
 
-1. Add model to config.yaml
+1. `config.yaml`에 모델을 추가합니다.
 ```yaml
 model_list:
   - model_name: multimodalembedding@001
@@ -378,20 +384,20 @@ litellm_settings:
   drop_params: True
 ```
 
-2. Start Proxy 
+2. Proxy를 시작합니다.
 
 ```
 $ litellm --config /path/to/config.yaml
 ```
 
-3. Make Request use OpenAI Python SDK, Langchain Python SDK
+3. OpenAI Python SDK 또는 Langchain Python SDK로 요청합니다.
 
 
 <Tabs>
 
 <TabItem value="OpenAI SDK" label="OpenAI SDK">
 
-Requests with GCS Image / Video URI
+GCS 이미지/비디오 URI 요청:
 
 ```python
 import openai
@@ -407,7 +413,7 @@ response = client.embeddings.create(
 print(response)
 ```
 
-Requests with base64 encoded images
+base64로 인코딩된 이미지 요청:
 
 ```python
 import openai
@@ -427,7 +433,7 @@ print(response)
 
 <TabItem value="langchain" label="Langchain">
 
-Requests with GCS Image / Video URI
+GCS 이미지/비디오 URI 요청:
 ```python
 from langchain_openai import OpenAIEmbeddings
 
@@ -447,7 +453,7 @@ print(query_result)
 
 ```
 
-Requests with base64 encoded images
+base64로 인코딩된 이미지 요청:
 
 ```python
 from langchain_openai import OpenAIEmbeddings
@@ -476,7 +482,7 @@ print(query_result)
 
 <TabItem value="proxy-vtx" label="LiteLLM PROXY (Vertex SDK)">
 
-1. Add model to config.yaml
+1. `config.yaml`에 모델을 추가합니다.
 ```yaml
 default_vertex_config:
   vertex_project: "adroit-crow-413218"
@@ -484,13 +490,13 @@ default_vertex_config:
   vertex_credentials: adroit-crow-413218-a956eef1a2a8.json 
 ```
 
-2. Start Proxy 
+2. Proxy를 시작합니다.
 
 ```
 $ litellm --config /path/to/config.yaml
 ```
 
-3. Make Request use OpenAI Python SDK
+3. OpenAI Python SDK로 요청합니다.
 
 ```python
 import vertexai
@@ -554,12 +560,12 @@ print(f"Text Embedding: {embeddings.text_embedding}")
 </Tabs>
 
 
-### Text + Image + Video Embeddings
+### 텍스트 + 이미지 + 비디오 Embeddings
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
 
-Text + Image 
+텍스트 + 이미지
 
 ```python
 response = await litellm.aembedding(
@@ -568,7 +574,7 @@ response = await litellm.aembedding(
 )
 ```
 
-Text + Video 
+텍스트 + 비디오
 
 ```python
 response = await litellm.aembedding(
@@ -577,7 +583,7 @@ response = await litellm.aembedding(
 )
 ```
 
-Image + Video 
+이미지 + 비디오
 
 ```python
 response = await litellm.aembedding(
@@ -590,7 +596,7 @@ response = await litellm.aembedding(
 </TabItem>
 <TabItem value="proxy" label="LiteLLM PROXY (Unified Endpoint)">
 
-1. Add model to config.yaml
+1. `config.yaml`에 모델을 추가합니다.
 ```yaml
 model_list:
   - model_name: multimodalembedding@001
@@ -604,16 +610,16 @@ litellm_settings:
   drop_params: True
 ```
 
-2. Start Proxy 
+2. Proxy를 시작합니다.
 
 ```
 $ litellm --config /path/to/config.yaml
 ```
 
-3. Make Request use OpenAI Python SDK, Langchain Python SDK
+3. OpenAI Python SDK 또는 Langchain Python SDK로 요청합니다.
 
 
-Text + Image 
+텍스트 + 이미지
 
 ```python
 import openai
@@ -629,7 +635,7 @@ response = client.embeddings.create(
 print(response)
 ```
 
-Text + Video 
+텍스트 + 비디오
 ```python
 import openai
 
@@ -644,7 +650,7 @@ response = client.embeddings.create(
 print(response)
 ```
 
-Image + Video 
+이미지 + 비디오
 ```python
 import openai
 

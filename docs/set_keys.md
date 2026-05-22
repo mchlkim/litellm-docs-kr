@@ -1,6 +1,6 @@
-# Setting API Keys, Base, Version
+# API Keys, Base, Version 설정
 
-LiteLLM allows you to specify the following:
+LiteLLM에서는 다음 항목을 지정할 수 있습니다:
 * API Key
 * API Base
 * API Version
@@ -9,20 +9,20 @@ LiteLLM allows you to specify the following:
 * Location
 * Token
 
-Useful Helper functions: 
+유용한 Helper 함수:
 * [`check_valid_key()`](#check_valid_key)
 * [`get_valid_models()`](#get_valid_models)
 
-You can set the API configs using:
-* Environment Variables
+다음 방법으로 API configs를 설정할 수 있습니다:
+* 환경 변수
 * litellm variables `litellm.api_key`
-* Passing args to `completion()`
+* `completion()`에 args 전달
 
-## Environment Variables
+## 환경 변수
 
-### Setting API Keys
+### API Keys 설정
 
-Set the liteLLM API key or specific provider key:
+liteLLM API key 또는 특정 provider key를 설정합니다:
 
 ```python
 import os 
@@ -35,7 +35,7 @@ os.environ["REPLICATE_API_KEY"] = "Your API Key"
 os.environ["TOGETHERAI_API_KEY"] = "Your API Key"
 ```
 
-### Setting API Base, API Version, API Type
+### API Base, API Version, API Type 설정
 
 ```python
 # for azure openai
@@ -47,15 +47,15 @@ os.environ['AZURE_API_TYPE'] = "azure" # [OPTIONAL]
 os.environ['OPENAI_BASE_URL'] = "https://your_host/v1"
 ```
 
-### Setting Project, Location, Token
+### Project, Location, Token 설정
 
-For cloud providers:
+Cloud providers의 경우:
 - Azure
 - Bedrock
 - GCP
 - Watson AI 
 
-you might need to set additional parameters. LiteLLM provides a common set of params, that we map across all providers. 
+추가 parameters를 설정해야 할 수 있습니다. LiteLLM은 모든 providers에 매핑되는 공통 params 집합을 제공합니다.
 
 |      | LiteLLM param | Watson       | Vertex AI    | Azure        | Bedrock      |
 |------|--------------|--------------|--------------|--------------|--------------|
@@ -63,12 +63,12 @@ you might need to set additional parameters. LiteLLM provides a common set of pa
 | Region | region_name | watsonx_region_name | vertex_location | n/a | aws_region_name |
 | Token | token | watsonx_token or token | n/a | azure_ad_token | n/a |
 
-If you want, you can call them by their provider-specific params as well. 
+필요하다면 provider-specific params로도 호출할 수 있습니다.
 
-## litellm variables
+## litellm 변수
 
-### litellm.api_key
-This variable is checked for all providers
+### `litellm.api_key`
+이 변수는 모든 provider에 대해 확인됩니다.
 
 ```python
 import litellm
@@ -81,7 +81,7 @@ litellm.api_key = "sk-AnthropicKey"
 response = litellm.completion(messages=messages, model="claude-2")
 ```
 
-### litellm.provider_key (example litellm.openai_key)
+### `litellm.provider_key` (예: `litellm.openai_key`)
 
 ```python
 litellm.openai_key = "sk-OpenAIKey"
@@ -92,7 +92,7 @@ litellm.anthropic_key = "sk-AnthropicKey"
 response = litellm.completion(messages=messages, model="claude-2")
 ```
 
-### litellm.api_base
+### `litellm.api_base`
 
 ```python
 import litellm
@@ -100,7 +100,7 @@ litellm.api_base = "https://hosted-llm-api.co"
 response = litellm.completion(messages=messages, model="gpt-3.5-turbo")
 ```
 
-### litellm.api_version
+### `litellm.api_version`
 
 ```python
 import litellm
@@ -108,16 +108,16 @@ litellm.api_version = "2023-05-15"
 response = litellm.completion(messages=messages, model="gpt-3.5-turbo")
 ```
 
-### litellm.organization
+### `litellm.organization`
 ```python
 import litellm
 litellm.organization = "LiteLlmOrg"
 response = litellm.completion(messages=messages, model="gpt-3.5-turbo")
 ```
 
-## Passing Args to completion() (or any litellm endpoint - `transcription`, `embedding`, `text_completion`, etc)
+## completion()에 Args 전달 (또는 `transcription`, `embedding`, `text_completion` 등 모든 litellm endpoint)
 
-You can pass the API key within `completion()` call:
+`completion()` 호출 안에서 API key를 전달할 수 있습니다:
 
 ### api_key
 ```python
@@ -148,11 +148,11 @@ messages = [{ "content": "Hello, how are you?","role": "user"}]
 response = completion("command-nightly", messages, api_version="2023-02-15")
 ```
 
-## Helper Functions
+## Helper 함수
 
 ### `check_valid_key()`
 
-Check if a user submitted a valid key for the model they're trying to call. 
+사용자가 호출하려는 model에 대해 유효한 key를 제출했는지 확인합니다.
 
 ```python
 key = "bad-key"
@@ -162,7 +162,7 @@ assert(response == False)
 
 ### `get_valid_models()`
 
-This helper reads the .env and returns a list of supported llms for user
+이 helper는 .env를 읽고 사용자가 사용할 수 있는 supported llms 목록을 반환합니다.
 
 ```python
 old_environ = os.environ
@@ -182,19 +182,19 @@ os.environ = old_environ
 
 ### `get_valid_models(check_provider_endpoint: True)`
 
-This helper will check the provider's endpoint for valid models.
+이 helper는 유효한 models를 찾기 위해 provider의 endpoint를 확인합니다.
 
-Currently implemented for:
-- OpenAI (if OPENAI_API_KEY is set)
-- Fireworks AI (if FIREWORKS_AI_API_KEY is set)
-- LiteLLM Proxy (if LITELLM_PROXY_API_KEY is set)
-- Gemini (if GEMINI_API_KEY is set)
-- XAI (if XAI_API_KEY is set)   
-- Anthropic (if ANTHROPIC_API_KEY is set)
+현재 다음 항목에 대해 구현되어 있습니다:
+- OpenAI (OPENAI_API_KEY가 설정된 경우)
+- Fireworks AI (FIREWORKS_AI_API_KEY가 설정된 경우)
+- LiteLLM Proxy (LITELLM_PROXY_API_KEY가 설정된 경우)
+- Gemini (GEMINI_API_KEY가 설정된 경우)
+- XAI (XAI_API_KEY가 설정된 경우)   
+- Anthropic (ANTHROPIC_API_KEY가 설정된 경우)
 
-You can also specify a custom provider to check:
+확인할 custom provider를 지정할 수도 있습니다:
 
-**All providers**:
+**모든 providers**:
 ```python
 from litellm import get_valid_models
 
@@ -202,7 +202,7 @@ valid_models = get_valid_models(check_provider_endpoint=True)
 print(valid_models)
 ```
 
-**Specific provider**:
+**특정 provider**:
 ```python
 from litellm import get_valid_models
 
@@ -212,7 +212,7 @@ print(valid_models)
 
 ### `validate_environment(model: str)`
 
-This helper tells you if you have all the required environment variables for a model, and if not - what's missing. 
+이 helper는 model에 필요한 모든 환경 변수가 있는지, 없다면 무엇이 누락되었는지 알려줍니다.
 
 ```python
 from litellm import validate_environment

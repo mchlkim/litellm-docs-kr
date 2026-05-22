@@ -1,74 +1,74 @@
 ---
 slug: cve-2026-42208-litellm-proxy-sql-injection
-title: "Security Update: CVE-2026-42208 in LiteLLM Proxy"
+title: "보안 업데이트: LiteLLM Proxy의 CVE-2026-42208"
 date: 2026-04-29T12:00:00
 authors:
   - krrish
   - ishaan-alt
-description: "CVE-2026-42208 (SQL injection in LiteLLM Proxy's API key verification path) is fixed. Upgrade to v1.83.10-stable."
-tags: [security]
+description: "CVE-2026-42208(LiteLLM Proxy API 키 검증 경로의 SQL injection)가 수정되었습니다. v1.83.10-stable로 업그레이드하세요."
+tags: [보안]
 hide_table_of_contents: false
 ---
 
-We recently published a security advisory for LiteLLM Proxy.
+최근 LiteLLM Proxy에 대한 보안 권고를 게시했습니다.
 
-We received a report through our bug bounty program regarding a SQL injection vulnerability in LiteLLM Proxy's API key verification path, tracked as **CVE-2026-42208**.
+버그 바운티 프로그램을 통해 LiteLLM Proxy의 API 키 검증 경로에 있는 SQL injection 취약점 제보를 받았으며, 이 취약점은 **CVE-2026-42208**로 추적됩니다.
 
-The issue was reviewed by our team, fixed in a stable release, and then published as a GitHub Security Advisory.
+이 문제는 팀에서 검토했고 안정 릴리스에서 수정한 뒤 GitHub Security Advisory로 게시했습니다.
 
-* **Affected versions:** `v1.81.16` through `v1.83.6`
-* **Fixed versions:** `v1.83.7` and later
-* **Recommended version:** `v1.83.10-stable`
+* **영향받는 버전:** `v1.81.16`부터 `v1.83.6`까지
+* **수정된 버전:** `v1.83.7` 이상
+* **권장 버전:** `v1.83.10-stable`
 
-Stable release: https://github.com/BerriAI/litellm/releases/tag/v1.83.10-stable
+안정 릴리스: https://github.com/BerriAI/litellm/releases/tag/v1.83.10-stable
 
-Advisory: https://github.com/BerriAI/litellm/security/advisories/GHSA-r75f-5x8p-qvmc
+권고문: https://github.com/BerriAI/litellm/security/advisories/GHSA-r75f-5x8p-qvmc
 
 {/* truncate */}
 
-## TLDR;
+## 요약
 
-* This issue was reported through LiteLLM's bug bounty program.
-* We fixed the issue in a stable release before publishing the GitHub Security Advisory.
-* LiteLLM Proxy versions `v1.81.16` through `v1.83.6` are affected.
-* The fix is available in `v1.83.7` and later.
-* We recommend upgrading to `v1.83.10-stable`.
-* If your proxy was reachable from an untrusted network while running an affected version, we recommend reviewing Postgres query history using the helper query below.
+* 이 문제는 LiteLLM 버그 바운티 프로그램을 통해 제보되었습니다.
+* GitHub Security Advisory를 게시하기 전에 안정 릴리스에서 문제를 수정했습니다.
+* LiteLLM Proxy `v1.81.16`부터 `v1.83.6`까지가 영향을 받습니다.
+* 수정 사항은 `v1.83.7` 이상에서 사용할 수 있습니다.
+* `v1.83.10-stable`로 업그레이드하는 것을 권장합니다.
+* 영향받는 버전을 실행하는 동안 proxy가 신뢰할 수 없는 네트워크에서 접근 가능했다면, 아래 helper query로 Postgres query history를 검토하는 것을 권장합니다.
 
-## What was the issue?
+## 어떤 문제였나요?
 
-LiteLLM Proxy validates incoming requests by checking the `Authorization: Bearer` header during API key verification.
+LiteLLM Proxy는 API 키 검증 중 `Authorization: Bearer` header를 확인해 들어오는 요청을 검증합니다.
 
-In affected versions, an unauthenticated request with a crafted `Authorization: Bearer` header could, under certain conditions, reach a vulnerable database query path.
+영향받는 버전에서는 조작된 `Authorization: Bearer` header를 포함한 인증되지 않은 요청이 특정 조건에서 취약한 데이터베이스 query 경로에 도달할 수 있었습니다.
 
-This could potentially result in unintended database access. Practical impact depends on deployment configuration, network exposure, database permissions, and stored data.
+그 결과 의도하지 않은 데이터베이스 접근으로 이어질 가능성이 있었습니다. 실제 영향은 배포 설정, 네트워크 노출 범위, 데이터베이스 권한, 저장된 데이터에 따라 달라집니다.
 
-## Our security process
+## 보안 대응 절차
 
-This issue was reported through our bug bounty program. Our team reviewed the report, patched the vulnerable path, validated the fix, and released a stable build before publishing the GitHub Security Advisory.
+이 문제는 버그 바운티 프로그램을 통해 제보되었습니다. 팀은 제보 내용을 검토하고 취약한 경로를 패치했으며, 수정 사항을 검증한 뒤 GitHub Security Advisory 게시 전에 안정 빌드를 릴리스했습니다.
 
-We follow this process so users have a clear remediation path available at the time an advisory is published.
+권고문이 게시되는 시점에 사용자가 명확한 조치 경로를 확보할 수 있도록 이 절차를 따릅니다.
 
-## What you should do
+## 사용자가 해야 할 일
 
-### 1. Upgrade to `v1.83.10-stable`
+### 1. `v1.83.10-stable`로 업그레이드
 
-We recommend upgrading to the latest stable release:
+최신 안정 릴리스로 업그레이드하는 것을 권장합니다.
 
 https://github.com/BerriAI/litellm/releases/tag/v1.83.10-stable
 
-If you are unable to upgrade directly to `v1.83.10-stable`, upgrade to any version `v1.83.7` or later.
+`v1.83.10-stable`로 바로 업그레이드할 수 없다면 `v1.83.7` 이상 버전으로 업그레이드하세요.
 
-### 2. Review Postgres query history if applicable
+### 2. 해당되는 경우 Postgres query history 검토
 
-If your LiteLLM Proxy was reachable from an untrusted network while running an affected version, we recommend reviewing your Postgres query history using this helper query:
+영향받는 버전을 실행하는 동안 LiteLLM Proxy가 신뢰할 수 없는 네트워크에서 접근 가능했다면, 다음 helper query로 Postgres query history를 검토하는 것을 권장합니다.
 
 https://gist.github.com/ishaan-berri/6f31e56e878338eb4c01990bd08378ab
 
-If the query returns results you'd like us to review, send them over and we can help triage.
+query 결과를 저희가 함께 검토하길 원한다면 전달해 주세요. triage를 도울 수 있습니다.
 
-## Continuing to invest in security
+## 지속적인 보안 투자
 
-We will continue investing in our bug bounty program and coordinated disclosure process so issues can be identified, fixed, and communicated responsibly.
+문제를 책임 있게 식별하고 수정하며 전달할 수 있도록 버그 바운티 프로그램과 coordinated disclosure 절차에 계속 투자하겠습니다.
 
-If you find a security issue in LiteLLM, please report it through our [GitHub Security Advisory process or our bug bounty program](https://github.com/BerriAI/litellm/security).
+LiteLLM에서 보안 문제를 발견하면 [GitHub Security Advisory 절차 또는 버그 바운티 프로그램](https://github.com/BerriAI/litellm/security)을 통해 제보해 주세요.

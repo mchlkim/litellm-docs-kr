@@ -1,18 +1,18 @@
-# Custom HTTP Handler
+# 사용자 지정 HTTP 핸들러 {#custom-http-handler}
 
-Configure custom aiohttp sessions for better performance and control in LiteLLM completions.
+LiteLLM completion에서 더 나은 성능과 제어를 위해 사용자 지정 aiohttp 세션을 구성합니다.
 
-## Overview
+## 개요 {#overview}
 
-You can now inject custom `aiohttp.ClientSession` instances into LiteLLM for:
-- Custom connection pooling and timeouts
-- Corporate proxy and SSL configurations  
-- Performance optimization
-- Request monitoring
+이제 다음 용도로 사용자 지정 `aiohttp.ClientSession` 인스턴스를 LiteLLM에 주입할 수 있습니다.
+- 사용자 지정 연결 풀링 및 제한 시간
+- 기업 프록시 및 SSL 구성
+- 성능 최적화
+- 요청 모니터링
 
-## Basic Usage
+## 기본 사용법 {#basic-usage}
 
-### Default (No Changes Required)
+### 기본값(변경 필요 없음) {#default-no-changes-required}
 ```python
 import litellm
 
@@ -23,7 +23,7 @@ response = await litellm.acompletion(
 )
 ```
 
-### Custom Session
+### 사용자 지정 세션 {#custom-session}
 ```python
 import aiohttp
 import litellm
@@ -42,9 +42,9 @@ litellm.base_llm_aiohttp_handler = BaseLLMAIOHTTPHandler(client_session=session)
 response = await litellm.acompletion(model="gpt-3.5-turbo", messages=[...])
 ```
 
-## Common Patterns
+## 일반적인 패턴 {#common-patterns}
 
-### FastAPI Integration
+### FastAPI 통합 {#fastapi-integration}
 ```python
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
@@ -72,7 +72,7 @@ async def chat(messages: list[dict]):
     return await litellm.acompletion(model="gpt-3.5-turbo", messages=messages)
 ```
 
-### Corporate Proxy
+### 기업 프록시 {#corporate-proxy}
 ```python
 import ssl
 
@@ -89,7 +89,7 @@ session = aiohttp.ClientSession(
 litellm.base_llm_aiohttp_handler = BaseLLMAIOHTTPHandler(client_session=session)
 ```
 
-### High Performance
+### 고성능 {#high-performance}
 ```python
 # Optimized for high throughput
 session = aiohttp.ClientSession(
@@ -106,7 +106,7 @@ session = aiohttp.ClientSession(
 litellm.base_llm_aiohttp_handler = BaseLLMAIOHTTPHandler(client_session=session)
 ```
 
-## Constructor Options
+## 생성자 옵션 {#constructor-options}
 
 ```python
 BaseLLMAIOHTTPHandler(
@@ -116,15 +116,15 @@ BaseLLMAIOHTTPHandler(
 )
 ```
 
-## Resource Management
+## 리소스 관리 {#resource-management}
 
-- **User sessions**: You manage the lifecycle (call `await session.close()`)
-- **Auto-created sessions**: Automatically cleaned up by the handler
-- **100% backward compatible**: Existing code works unchanged
+- **사용자 세션**: 수명 주기는 사용자가 관리합니다(`await session.close()` 호출).
+- **자동 생성 세션**: 핸들러가 자동으로 정리합니다.
+- **100% 이전 버전과 호환**: 기존 코드는 변경 없이 작동합니다.
 
-## Configuration Tips
+## 설정 팁 {#configuration-tips}
 
-### Development
+### 개발 {#development}
 ```python
 session = aiohttp.ClientSession(
     timeout=aiohttp.ClientTimeout(total=60),
@@ -132,7 +132,7 @@ session = aiohttp.ClientSession(
 )
 ```
 
-### Production
+### 프로덕션 {#production}
 ```python
 session = aiohttp.ClientSession(
     timeout=aiohttp.ClientTimeout(total=300),

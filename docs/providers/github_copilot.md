@@ -7,28 +7,28 @@ https://docs.github.com/en/copilot
 
 :::tip
 
-**We support GitHub Copilot Chat API with automatic authentication handling**
+**자동 인증 처리를 포함한 GitHub Copilot Chat API를 지원합니다**
 
 :::
 
-| Property | Details |
+| 속성 | 세부 정보 |
 |-------|-------|
-| Description | GitHub Copilot Chat API provides access to GitHub's AI-powered coding assistant. |
-| Provider Route on LiteLLM | `github_copilot/` |
-| Supported Endpoints | `/chat/completions`, `/embeddings` |
-| API Reference | [GitHub Copilot docs](https://docs.github.com/en/copilot) |
+| 설명 | GitHub Copilot Chat API는 GitHub의 AI 기반 코딩 어시스턴트에 접근할 수 있게 해줍니다. |
+| LiteLLM의 Provider Route | `github_copilot/` |
+| 지원 엔드포인트 | `/chat/completions`, `/embeddings` |
+| API 참조 | [GitHub Copilot 문서](https://docs.github.com/en/copilot) |
 
-## Authentication
+## 인증
 
-GitHub Copilot uses OAuth device flow for authentication. On first use, you'll be prompted to authenticate via GitHub:
+GitHub Copilot은 인증에 OAuth device flow를 사용합니다. 처음 사용할 때 GitHub를 통해 인증하라는 메시지가 표시됩니다.
 
-1. LiteLLM will display a device code and verification URL
-2. Visit the URL and enter the code to authenticate
-3. Your credentials will be stored locally for future use
+1. LiteLLM이 device code와 verification URL을 표시합니다
+2. URL에 접속한 뒤 코드를 입력해 인증합니다
+3. 이후 사용할 수 있도록 자격 증명이 로컬에 저장됩니다
 
-## Usage - LiteLLM Python SDK
+## 사용법 - LiteLLM Python SDK
 
-### Chat Completion
+### 채팅 완료 {#chat-completion}
 
 ```python showLineNumbers title="GitHub Copilot Chat Completion"
 from litellm import completion
@@ -57,9 +57,9 @@ for chunk in stream:
         print(chunk.choices[0].delta.content, end="")
 ```
 
-### Responses
+### Responses {#responses}
 
-For GPT Codex models, only responses API is supported.
+GPT Codex 모델은 responses API만 지원합니다.
 
 ```python showLineNumbers title="GitHub Copilot Responses"
 import litellm
@@ -73,7 +73,7 @@ response = await litellm.aresponses(
 print(response)
 ```
 
-### Embedding
+### 임베딩 {#embedding}
 
 ```python showLineNumbers title="GitHub Copilot Embedding"
 import litellm
@@ -85,9 +85,9 @@ response = litellm.embedding(
 print(response)
 ```
 
-## Usage - LiteLLM Proxy
+## 사용법 - LiteLLM Proxy
 
-Add the following to your LiteLLM Proxy configuration file:
+LiteLLM Proxy 설정 파일에 다음 내용을 추가합니다.
 
 ```yaml showLineNumbers title="config.yaml"
 model_list:
@@ -106,7 +106,7 @@ model_list:
       model: github_copilot/text-embedding-ada-002
 ```
 
-Start your LiteLLM Proxy server:
+LiteLLM Proxy 서버를 시작합니다.
 
 ```bash showLineNumbers title="Start LiteLLM Proxy"
 litellm --config config.yaml
@@ -170,18 +170,18 @@ curl http://localhost:4000/v1/chat/completions \
 </TabItem>
 </Tabs>
 
-## Getting Started
+## 시작하기
 
-1. Ensure you have GitHub Copilot access (paid GitHub subscription required)
-2. Run your first LiteLLM request - you'll be prompted to authenticate
-3. Follow the device flow authentication process
-4. Start making requests to GitHub Copilot through LiteLLM
+1. GitHub Copilot 접근 권한이 있는지 확인합니다. 유료 GitHub 구독이 필요합니다
+2. 첫 LiteLLM 요청을 실행합니다. 인증하라는 메시지가 표시됩니다
+3. device flow 인증 절차를 따릅니다
+4. LiteLLM을 통해 GitHub Copilot에 요청을 보내기 시작합니다
 
-## Configuration
+## 설정
 
-### Environment Variables
+### 환경 변수 {#environment-variables}
 
-You can customize token storage locations:
+토큰 저장 위치를 사용자 지정할 수 있습니다.
 
 ```bash showLineNumbers title="Environment Variables"
 # Optional: Custom token directory
@@ -201,11 +201,11 @@ export GITHUB_COPILOT_ACCESS_TOKEN_URL="https://my-company.ghe.com/login/oauth/a
 export GITHUB_COPILOT_API_KEY_URL="https://my-company.ghe.com/api/v3/copilot_internal/v2/token"
 ```
 
-### Headers
+### 헤더 {#headers}
 
-LiteLLM automatically injects the required GitHub Copilot headers (simulating VSCode). You don't need to specify them manually.
+LiteLLM은 필요한 GitHub Copilot 헤더를 자동으로 삽입합니다. VSCode를 시뮬레이션하므로 수동으로 지정할 필요가 없습니다.
 
-If you want to override the defaults (e.g., to simulate a different editor), you can use `extra_headers`:
+기본값을 재정의하려는 경우, 예를 들어 다른 에디터를 시뮬레이션하려면 `extra_headers`를 사용할 수 있습니다.
 
 ```python showLineNumbers title="Custom Headers (Optional)"
 extra_headers = {
@@ -215,4 +215,3 @@ extra_headers = {
     "user-agent": "GithubCopilot/1.155.0"        # User agent
 }
 ```
-

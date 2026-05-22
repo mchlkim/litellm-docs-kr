@@ -1,17 +1,16 @@
 import Image from '@theme/IdealImage';
 
-# Comparing LLMs on a Test Set using LiteLLM
+# LiteLLM을 사용해 테스트 세트에서 LLM 비교하기 {#comparing-llms-on-a-test-set-using-litellm}
 
 
 <div class="cell markdown" id="L-W4C3SgClxl">
 
-LiteLLM allows you to use any LLM as a drop in replacement for
+LiteLLM을 사용하면 어떤 LLM이든 다음 모델의 드롭인 대체재로 사용할 수 있습니다.
 `gpt-3.5-turbo`
 
-This notebook walks through how you can compare GPT-4 vs Claude-2 on a
-given test set using litellm
+이 노트북에서는 litellm을 사용해 주어진 테스트 세트에서 GPT-4와 Claude-2를 비교하는 방법을 단계별로 설명합니다.
 
-## Output at the end of this tutorial:
+## 이 튜토리얼을 마친 뒤의 출력: {#output-at-the-end-of-this-tutorial}
 <Image img={require('../../img/compare_llms.png')} />
 <br></br>
 
@@ -65,9 +64,9 @@ os.environ['ANTHROPIC_API_KEY'] = ""
 
 <div class="cell markdown" id="Ktn25dfKEJF1">
 
-## Calling gpt-3.5-turbo and claude-2 on the same questions
+## 같은 질문으로 gpt-3.5-turbo와 claude-2 호출하기 {#calling-gpt-35-turbo-and-claude-2-on-the-same-questions}
 
-## LiteLLM `completion()` allows you to call all LLMs in the same format
+## LiteLLM `completion()`으로 모든 LLM을 같은 형식으로 호출할 수 있습니다 {#litellm-completion-allows-you-to-call-all-llms-in-the-same-format}
 
 </div>
 
@@ -100,7 +99,7 @@ for question in questions:
 
 <div class="cell markdown" id="RkEXhXxCDN77">
 
-## Visualizing Results
+## 결과 시각화하기 {#visualizing-results}
 
 </div>
 
@@ -117,7 +116,7 @@ df = pd.DataFrame(results, columns=columns)
 
 df
 ```
-## Output Table
+## 출력 테이블 {#output-table}
 <Image img={require('../../img/compare_llms.png')} />
 
 </div>

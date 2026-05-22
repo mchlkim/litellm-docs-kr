@@ -2,16 +2,16 @@ import Image from '@theme/IdealImage';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Lago - Usage Based Billing
+# Lago - 사용량 기반 과금 {#lago---usage-based-billing}
 
-[Lago](https://www.getlago.com/) offers a self-hosted and cloud, metering and usage-based billing solution.
+[Lago](https://www.getlago.com/)는 셀프 호스팅 및 클라우드 환경에서 사용할 수 있는 미터링 및 사용량 기반 과금 솔루션을 제공합니다.
 
 <Image img={require('../../img/lago.jpeg')} />
 
-## Quick Start
-Use just 1 lines of code, to instantly log your responses **across all providers** with Lago
+## 빠른 시작
+단 한 줄의 코드로 **모든 제공자**의 응답을 Lago에 즉시 로깅할 수 있습니다.
 
-Get your Lago [API Key](https://docs.getlago.com/guide/self-hosted/docker#find-your-api-key)
+Lago [API 키](https://docs.getlago.com/guide/self-hosted/docker#find-your-api-key)를 발급받으세요.
 
 ```python
 litellm.callbacks = ["lago"] # logs cost + usage of successful calls to lago
@@ -47,9 +47,9 @@ response = litellm.completion(
 ```
 
 </TabItem>
-<TabItem value="proxy" label="PROXY">
+<TabItem value="proxy" label="프록시">
 
-1. Add to Config.yaml
+1. Config.yaml에 추가합니다.
 ```yaml
 model_list:
 - litellm_params:
@@ -62,13 +62,13 @@ litellm_settings:
   callbacks: ["lago"] # 👈 KEY CHANGE
 ```
 
-2. Start Proxy
+2. Proxy를 시작합니다.
 
 ```
 litellm --config /path/to/config.yaml
 ```
 
-3. Test it! 
+3. 테스트합니다.
 
 <Tabs>
 <TabItem value="curl" label="Curl">
@@ -152,9 +152,9 @@ print(response)
 
 <Image img={require('../../img/lago_2.png')} />
 
-## Advanced - Lagos Logging object 
+## 고급 - Lago 로깅 객체 {#advanced---lagos-logging-object}
 
-This is what LiteLLM will log to Lagos
+LiteLLM이 Lago에 로깅하는 객체는 다음과 같습니다.
 
 ```
 {

@@ -1,43 +1,43 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Proxy - Load Balancing
-Load balance multiple instances of the same model
+# Proxy - 로드 밸런싱 {#proxy-load-balancing}
+같은 model의 여러 instance에 로드 밸런싱을 적용합니다.
 
-The proxy will handle routing requests (using LiteLLM's Router). **Set `rpm` in the config if you want maximize throughput**
+proxy는 LiteLLM Router를 사용해 request routing을 처리합니다. **처리량을 최대화하려면 config에서 `rpm`을 설정하세요.**
 
 
 :::info
 
-For more details on routing strategies / params, see [Routing](../routing.md)
+routing strategy / parameter에 대한 자세한 내용은 [Routing](../routing.md)을 참고하세요.
 
 :::
 
-## How Load Balancing Works
+## 로드 밸런싱 동작 방식 {#how-load-balancing-works}
 
-LiteLLM automatically distributes requests across multiple deployments of the same model using its built-in router. the proxy routes traffic to optimize performance and reliability.
+LiteLLM은 내장 router를 사용해 같은 model의 여러 deployment에 request를 자동으로 분산합니다. proxy는 성능과 안정성을 최적화하도록 traffic을 route합니다.
 
-"simple-shuffle" routing strategy is used by default
+기본 routing strategy는 "simple-shuffle"입니다.
 
-### Routing Strategies
+### Routing Strategy {#routing-strategy}
 
-| Strategy | Description | When to Use |
+| Strategy | 설명 | 사용 시점 |
 |----------|-------------|-------------|
-| **simple-shuffle** (recommended) | Randomly distributes requests | General purpose, good for even load distribution |
-| **least-busy** | Routes to deployment with fewest active requests | High concurrency scenarios |
-| **usage-based-routing** (bad for perf) | Routes to deployment with lowest current usage (RPM/TPM) | When you want to respect rate limits evenly |
-| **latency-based-routing** | Routes to fastest responding deployment | Latency-critical applications |
-| **cost-based-routing** | Routes to deployment with lowest cost | Cost-sensitive applications |
+| **simple-shuffle** (권장) | request를 무작위로 분산 | 일반 목적, 균등한 부하 분산에 적합 |
+| **least-busy** | active request가 가장 적은 deployment로 route | 동시성이 높은 시나리오 |
+| **usage-based-routing** (성능에 좋지 않음) | 현재 usage(RPM/TPM)가 가장 낮은 deployment로 route | rate limit을 균등하게 지키고 싶을 때 |
+| **latency-based-routing** | response가 가장 빠른 deployment로 route | 지연 시간에 민감한 application |
+| **cost-based-routing** | cost가 가장 낮은 deployment로 route | cost에 민감한 application |
 
-:::tip Deployment Priority
-Use the `order` parameter to prioritize specific deployments. [See Deployment Ordering](#deployment-ordering-priority) for details.
+:::tip Deployment 우선순위
+특정 deployment에 우선순위를 주려면 `order` parameter를 사용합니다. 자세한 내용은 [Deployment 순서 지정](#deployment-ordering-priority)을 참고하세요.
 :::
 
 
-## Quick Start - Load Balancing
-#### Step 1 - Set deployments on config
+## 빠른 시작 - 로드 밸런싱 {#quick-start-load-balancing}
+#### 1단계 - config에 deployment 설정 {#step-1-set-deployments-on-config}
 
-**Example config below**. Here requests with `model=gpt-3.5-turbo` will be routed across multiple instances of `azure/gpt-3.5-turbo`
+**아래는 예제 config입니다**. 여기서는 `model=gpt-3.5-turbo` request가 `azure/gpt-3.5-turbo`의 여러 instance로 route됩니다.
 ```yaml
 model_list:
   - model_name: gpt-3.5-turbo
@@ -69,15 +69,15 @@ router_settings:
   redis_port: 1992
 ```
 
-## Enforce Model Rate Limits
+## Model Rate Limit 강제 {#model-rate-limit-enforcement}
 
-Strictly enforce RPM/TPM limits set on deployments. When limits are exceeded, requests are blocked **before** reaching the LLM provider with a `429 Too Many Requests` error.
+deployment에 설정한 RPM/TPM limit을 엄격히 강제합니다. limit이 초과되면 request가 LLM provider에 도달하기 **전에** `429 Too Many Requests` 오류로 차단됩니다.
 
 :::info
-By default, `rpm` and `tpm` values are only used for **routing decisions** (picking deployments with capacity). With `enforce_model_rate_limits`, they become **hard limits**.
+기본적으로 `rpm`과 `tpm` 값은 **routing decision**(capacity가 있는 deployment 선택)에만 사용됩니다. `enforce_model_rate_limits`를 사용하면 이 값들이 **hard limit**이 됩니다.
 :::
 
-### Quick Start
+### 빠른 시작
 
 ```yaml
 model_list:
@@ -93,16 +93,16 @@ router_settings:
     - enforce_model_rate_limits  # 👈 Enables strict enforcement
 ```
 
-### How It Works
+### 동작 방식
 
-| Limit Type | Enforcement | Accuracy |
+| Limit 유형 | 강제 방식 | 정확도 |
 |------------|-------------|----------|
-| **RPM** | Hard limit - blocked at exact threshold | 100% accurate |
-| **TPM** | Best-effort - may slightly exceed | Blocked when already over limit |
+| **RPM** | hard limit - 정확한 threshold에서 차단 | 100% 정확 |
+| **TPM** | best-effort - 약간 초과할 수 있음 | 이미 limit을 넘은 경우 차단 |
 
-**Why TPM is best-effort:** Token count is unknown until the LLM responds. TPM is checked before each request (blocks if already over), and tracked after (adds actual tokens used).
+**TPM이 best-effort인 이유:** LLM이 response를 반환하기 전에는 token count를 알 수 없습니다. TPM은 각 request 전에 검사되어 이미 초과한 경우 차단되고, 이후 실제 사용 token을 더해 추적됩니다.
 
-### Error Response
+### 오류 Response {#error-response}
 
 ```json
 {
@@ -114,11 +114,11 @@ router_settings:
 }
 ```
 
-Response includes `retry-after: 60` header.
+response에는 `retry-after: 60` header가 포함됩니다.
 
-### Multi-Instance Deployment
+### 다중 Instance Deployment {#multi-instance-deployment}
 
-For multiple LiteLLM proxy instances, add Redis to share rate limit state:
+LiteLLM proxy instance가 여러 개인 경우 rate limit state를 공유하려면 Redis를 추가합니다.
 
 ```yaml
 router_settings:
@@ -131,22 +131,22 @@ router_settings:
 
 
 :::info
-Detailed information about [routing strategies can be found here](../routing)
+[routing strategy에 대한 자세한 정보는 여기](../routing)에서 확인할 수 있습니다.
 :::
 
-#### Step 2: Start Proxy with config
+#### 2단계: config로 Proxy 시작 {#step-2-start-the-proxy-with-config}
 
 ```shell
 $ litellm --config /path/to/config.yaml
 ```
 
-### Test - Simple Call
+### 테스트 - 단순 호출 {#test-simple-call}
 
-Here requests with model=gpt-3.5-turbo will be routed across multiple instances of azure/gpt-3.5-turbo
+여기서는 model=gpt-3.5-turbo request가 azure/gpt-3.5-turbo의 여러 instance로 route됩니다.
 
-👉 Key Change: `model="gpt-3.5-turbo"`
+👉 핵심 변경: `model="gpt-3.5-turbo"`
 
-**Check the `model_id` in Response Headers to make sure the requests are being load balanced**
+request가 load balanced되고 있는지 확인하려면 response header의 `model_id`를 확인하세요.
 
 <Tabs>
 
@@ -191,11 +191,11 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 </TabItem>
 
 </Tabs>
-### Test - Loadbalancing
+### 테스트 - 로드 밸런싱 {#test-load-balancing}
 
-In this request, the following will occur:
-1. A rate limit exception will be raised 
-2. LiteLLM proxy will retry the request on the model group (default retries are 3).
+이 request에서는 다음이 발생합니다.
+1. rate limit exception이 발생합니다.
+2. LiteLLM proxy가 model group에서 request를 retry합니다(기본 retry 횟수는 3).
 
 ```bash
 curl -X POST 'http://0.0.0.0:4000/chat/completions' \
@@ -210,14 +210,14 @@ curl -X POST 'http://0.0.0.0:4000/chat/completions' \
 }'
 ```
 
-[**See Code**](https://github.com/BerriAI/litellm/blob/6b8806b45f970cb2446654d2c379f8dcaa93ce3c/litellm/router.py#L2535)
+[**코드 보기**](https://github.com/BerriAI/litellm/blob/6b8806b45f970cb2446654d2c379f8dcaa93ce3c/litellm/router.py#L2535)
 
 
-## Load Balancing using multiple litellm instances (Kubernetes, Auto Scaling)
+## 여러 litellm instance로 로드 밸런싱(Kubernetes, Auto Scaling) {#load-balancing-with-multiple-litellm-instances-kubernetes-auto-scaling}
 
-LiteLLM Proxy supports sharing rpm/tpm shared across multiple litellm instances, pass `redis_host`, `redis_password` and `redis_port` to enable this. (LiteLLM will use Redis to track rpm/tpm usage )
+LiteLLM Proxy는 여러 litellm instance 간 rpm/tpm 공유를 지원합니다. 활성화하려면 `redis_host`, `redis_password`, `redis_port`를 전달하세요. LiteLLM은 Redis로 rpm/tpm usage를 추적합니다.
 
-Example config
+예제 config
 
 ```yaml
 model_list:
@@ -242,9 +242,9 @@ router_settings:
     max_connections: 100  # maximum Redis connections in the pool; tune based on expected concurrency/load
 ```
 
-## Router settings on config - routing_strategy, model_group_alias
+## config의 Router settings - routing_strategy, model_group_alias {#router-settings-in-config-routing_strategy-model_group_alias}
 
-Expose an 'alias' for a 'model_name' on the proxy server. 
+proxy server에서 'model_name'의 'alias'를 노출합니다.
 
 ```
 model_group_alias: {
@@ -252,15 +252,15 @@ model_group_alias: {
 }
 ```
 
-These aliases are shown on `/v1/models`, `/v1/model/info`, and `/v1/model_group/info` by default.
+이 alias는 기본적으로 `/v1/models`, `/v1/model/info`, `/v1/model_group/info`에 표시됩니다.
 
-litellm.Router() settings can be set under `router_settings`. You can set `model_group_alias`, `routing_strategy`, `num_retries`,`timeout` . See all Router supported params [here](https://github.com/BerriAI/litellm/blob/1b942568897a48f014fa44618ec3ce54d7570a46/litellm/router.py#L64)
+`litellm.Router()` 설정은 `router_settings` 아래에서 지정할 수 있습니다. `model_group_alias`, `routing_strategy`, `num_retries`, `timeout`을 설정할 수 있습니다. Router가 지원하는 모든 parameter는 [여기](https://github.com/BerriAI/litellm/blob/1b942568897a48f014fa44618ec3ce54d7570a46/litellm/router.py#L64)를 참고하세요.
 
 
 
-### Usage
+### 사용법
 
-Example config with `router_settings`
+`router_settings`가 있는 예제 config
 
 ```yaml
 model_list:
@@ -274,13 +274,13 @@ router_settings:
   model_group_alias: {"gpt-4": "gpt-3.5-turbo"} # all requests with `gpt-4` will be routed to models 
 ```
 
-### Hide Alias Models 
+### Alias model 숨기기 {#hide-alias-models}
 
-Use this if you want to set-up aliases for:
+다음 용도로 alias를 설정하려면 사용하세요.
 
-1. typos
-2. minor model version changes
-3. case sensitive changes between updates
+1. 오타
+2. minor model version 변경
+3. update 간 대소문자 차이
 
 ```yaml
 model_list:
@@ -297,7 +297,7 @@ router_settings:
       hidden: true             # Exclude from `/v1/models`, `/v1/model/info`, `/v1/model_group/info`
 ```
 
-### Complete Spec 
+### 전체 사양 {#full-spec}
 
 ```python
 model_group_alias: Optional[Dict[str, Union[str, RouterModelGroupAliasItem]]] = {}
@@ -308,9 +308,9 @@ class RouterModelGroupAliasItem(TypedDict):
     hidden: bool  # if 'True', don't return on `/v1/models`, `/v1/model/info`, `/v1/model_group/info`
 ```
 
-## Deployment Ordering (Priority)
+## Deployment 순서 지정(Priority) {#deployment-ordering-priority}
 
-Set `order` in `litellm_params` to prioritize deployments. Lower values = higher priority. When multiple deployments share the same `order`, the routing strategy picks among them.
+deployment에 우선순위를 주려면 `litellm_params`에 `order`를 설정합니다. 값이 낮을수록 우선순위가 높습니다. 여러 deployment가 같은 `order`를 공유하면 routing strategy가 그중 하나를 선택합니다.
 
 ```yaml
 model_list:
@@ -327,11 +327,11 @@ model_list:
       order: 2  # 👈 Used when order=1 fails
 ```
 
-### How order-based fallback works
+### order 기반 fallback 동작 방식 {#how-order-based-fallbacks-work}
 
-When a request to an `order=1` deployment fails (connection error, 404, 429, etc.), the router automatically tries `order=2` deployments, then `order=3`, and so on. Each order level gets its own set of retries before escalating to the next.
+`order=1` deployment에 대한 request가 실패하면(connection error, 404, 429 등) router는 자동으로 `order=2` deployment, 그다음 `order=3` deployment를 시도합니다. 각 order level은 다음 level로 넘어가기 전에 자체 retry set을 가집니다.
 
-If all order levels are exhausted, the router falls through to any configured [model-level fallbacks](#fallbacks).
+모든 order level이 소진되면 router는 설정된 [model-level fallback](#fallbacks)으로 넘어갑니다.
 
 ```yaml
 model_list:
@@ -358,42 +358,42 @@ router_settings:
         - gpt-4-fallback  # tried after all order levels fail
 ```
 
-The fallback chain for the above config: `order=1` → `order=2` → `gpt-4-fallback`.
+위 config의 fallback chain은 `order=1` → `order=2` → `gpt-4-fallback`입니다.
 
-For 429 (rate limit) errors specifically, the failed deployment is immediately placed on cooldown. If all `order=1` deployments are on cooldown, the router picks `order=2` deployments directly during retries without waiting for the fallback path.
+특히 429(rate limit) 오류의 경우 실패한 deployment는 즉시 cooldown 상태가 됩니다. 모든 `order=1` deployment가 cooldown 상태이면 router는 fallback path를 기다리지 않고 retry 중에 바로 `order=2` deployment를 선택합니다.
 
-### Team-scoped models and legacy `model_aliases` {#team-scoped-models-and-legacy-model_aliases}
+### Team-scoped model과 legacy `model_aliases` {#team-scoped-models-and-legacy-model_aliases}
 
-Team-scoped deployments are identified by `model_info.team_id` and `model_info.team_public_model_name`. Requests should use the **public** model name; the router resolves all sibling deployments (same public name, different `api_base` / `order`, etc.) for routing, failover, and deployment `order`.
+Team-scoped deployment는 `model_info.team_id`와 `model_info.team_public_model_name`으로 식별됩니다. request는 **public** model name을 사용해야 합니다. router는 routing, failover, deployment `order`를 위해 모든 sibling deployment(같은 public name, 다른 `api_base` / `order` 등)를 해석합니다.
 
-For router internals: when a `team_id` is in scope, optimized lookups key off `(team_id, team_public_model_name)`. If code passes an internal deployment id (e.g. `model_name_<team_id>_<uuid>`) instead of the public name, routing still works via the usual deployment-name paths, but the team-specific fast path applies only to the public name.
+router 내부 동작: `team_id`가 scope에 있으면 optimized lookup은 `(team_id, team_public_model_name)`을 key로 사용합니다. code가 public name 대신 internal deployment id(예: `model_name_<team_id>_<uuid>`)를 전달해도 일반 deployment-name path를 통해 routing은 계속 동작하지만, team-specific fast path는 public name에만 적용됩니다.
 
-**Legacy teams:** Older proxy versions could persist `model_aliases` on the team row mapping a public name to a single internal deployment id (`model_name_<team_id>_<uuid>`). On each request, pre-call logic may still rewrite `model` to that internal name **before** routing, which collapses to one deployment and can make newer sibling deployments unreachable.
+**Legacy team:** 이전 proxy version은 team row의 `model_aliases`에 public name을 단일 internal deployment id(`model_name_<team_id>_<uuid>`)로 매핑해 저장할 수 있었습니다. 각 request에서 pre-call logic이 routing **전에** 여전히 `model`을 internal name으로 rewrite할 수 있으며, 이 경우 하나의 deployment로 collapse되어 더 최신 sibling deployment에 접근하지 못할 수 있습니다.
 
-**Migration options:**
+**마이그레이션 옵션:**
 
-1. **Recommended for upgrades:** Set environment variable `LITELLM_ENABLE_TEAM_STALE_ALIAS_BYPASS=true` so that when sibling team deployments exist for the public name, the stale alias rewrite is skipped and team-scoped routing (including `order` and failover) applies. See the [Environment variables](./config_settings) table in the proxy settings doc.
-2. **Data cleanup:** Remove obsolete `model_aliases` entries for team public names from the team record in the database so only `team_public_model_name` + team model list drive access.
+1. **업그레이드 권장 방식:** environment variable `LITELLM_ENABLE_TEAM_STALE_ALIAS_BYPASS=true`를 설정합니다. 그러면 public name에 대한 sibling team deployment가 있을 때 stale alias rewrite를 건너뛰고, `order`와 failover를 포함한 team-scoped routing이 적용됩니다. proxy settings 문서의 [Environment variables](./config_settings) table을 참고하세요.
+2. **데이터 정리:** database의 team record에서 team public name에 대한 obsolete `model_aliases` entry를 제거해 `team_public_model_name` + team model list만 access를 결정하게 합니다.
 
-If a stale alias is detected and the bypass is **not** enabled, the proxy may emit a **one-time** warning in logs explaining that sibling deployments may be unreachable until the flag is set or aliases are cleaned up.
+stale alias가 감지되고 bypass가 활성화되어 있지 않으면 proxy가 log에 **one-time** warning을 emit할 수 있습니다. 이 warning은 flag를 설정하거나 alias를 정리하기 전까지 sibling deployment에 접근하지 못할 수 있음을 설명합니다.
 
-### When You'll See Load Balancing in Action
+### 로드 밸런싱이 동작하는 것을 볼 수 있는 경우 {#when-you-can-see-load-balancing-working}
 
-**Immediate Effects:**
+**즉시 보이는 효과:**
 
-- Different deployments serve subsequent requests (visible in logs)
-- Better response times during high traffic
+- 후속 request가 서로 다른 deployment에서 처리됩니다(log에서 확인 가능).
+- traffic이 많을 때 response time이 개선됩니다.
 
-**Observable Benefits:**
-- **Higher throughput**: More requests handled simultaneously across deployments
-- **Improved reliability**: If one deployment fails, traffic automatically routes to healthy ones
-- **Better resource utilization**: Load spread evenly across all available deployments
+**관측 가능한 이점:**
+- **처리량 향상**: deployment 전반에서 더 많은 request를 동시에 처리합니다.
+- **안정성 개선**: 하나의 deployment가 실패하면 traffic이 자동으로 healthy deployment로 route됩니다.
+- **리소스 활용도 개선**: 사용 가능한 모든 deployment에 load가 고르게 분산됩니다.
 
-## Special Considerations for Responses API
+## Responses API 특별 고려 사항 {#responses-api-special-considerations}
 
-When load balancing OpenAI's Responses API across deployments with **different API keys** (e.g., different Azure regions or organizations), encrypted content items (like `rs_...` reasoning items) can only be decrypted by the originating API key.
+**서로 다른 API key**를 가진 deployment 간에 OpenAI Responses API를 load balancing하는 경우(예: 서로 다른 Azure region 또는 organization), encrypted content item(`rs_...` reasoning item 등)은 원래 생성한 API key로만 decrypt할 수 있습니다.
 
-**Solution:** Use the `encrypted_content_affinity` pre-call check (requires LiteLLM >= 1.82.3) to automatically route follow-up requests containing encrypted items to the correct deployment:
+**해결 방법:** `encrypted_content_affinity` pre-call check를 사용하세요(LiteLLM >= 1.82.3 필요). 그러면 encrypted item을 포함하는 follow-up request가 올바른 deployment로 자동 route됩니다.
 
 ```yaml
 model_list:
@@ -418,6 +418,6 @@ router_settings:
     - encrypted_content_affinity  # 👈 Prevents invalid_encrypted_content errors
 ```
 
-This ensures requests containing encrypted content are routed to the deployment that created them, while other requests continue to load balance normally.
+이 설정은 encrypted content를 포함하는 request가 해당 content를 만든 deployment로 route되도록 보장하며, 다른 request는 계속 정상적으로 load balancing됩니다.
 
-**[Learn more about Encrypted Content Affinity →](../response_api.md#encrypted-content-affinity-multi-region-load-balancing)**
+**[Encrypted Content Affinity 자세히 알아보기 →](../response_api.md#encrypted-content-affinity-multi-region-load-balancing)**

@@ -1,25 +1,27 @@
 ---
-slug: welcome
-title: Welcome
-authors: [slorber, yangshun]
-tags: [facebook, hello, docusaurus]
+slug: /
+title: LiteLLM 한국어 문서
 ---
 
-[Docusaurus blogging features](https://docusaurus.io/docs/blog) are powered by the [blog plugin](https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-content-blog).
+# LiteLLM 한국어 문서
 
-Simply add Markdown files (or folders) to the `blog` directory.
+이 사이트는 공식 LiteLLM 문서 구조와 디자인을 유지하면서 한국어로 읽기 쉽게 정리한 로컬 문서입니다.
 
-Regular blog authors can be added to `authors.yml`.
+LiteLLM은 OpenAI 호환 형식으로 여러 LLM 프로바이더를 호출하고, Python SDK 또는 자체 호스팅 AI Gateway(Proxy)로 운영할 수 있게 해 줍니다.
 
-The blog post date can be extracted from filenames, such as:
+## 바로가기
 
-- `2019-05-30-welcome.md`
-- `2019-05-30-welcome/index.md`
+- [한국어 핵심 가이드](/docs/korean/)
+- [빠른 시작](/docs/)
+- [Python SDK](/docs/#litellm-python-sdk)
+- [AI Gateway / Proxy](/docs/simple_proxy)
+- [지원 모델 및 프로바이더](/docs/providers)
+- [라우팅 및 부하 분산](/docs/routing-load-balancing)
+- [통합](/docs/integrations)
+- [블로그](/blog)
+- [릴리즈 노트](/release_notes)
 
-A blog post folder can be convenient to co-locate blog post images:
+## 원본
 
-![Docusaurus Plushie](./docusaurus-plushie-banner.jpeg)
-
-The blog supports tags as well!
-
-**And if you don't want a blog**: just delete this directory, and use `blog: false` in your Docusaurus config.
+- 문서 원본: <https://github.com/BerriAI/litellm-docs>
+- 제품 저장소: <https://github.com/BerriAI/litellm>

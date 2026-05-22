@@ -1,19 +1,19 @@
-# Vertex AI Search Datastores
+# `Vertex AI Search Datastores` 패스스루 {#vertex-ai-search-datastores}
 
-Call Vertex AI Discovery Engine Search API through LiteLLM.
+LiteLLM을 통해 Vertex AI Discovery Engine Search API를 호출합니다.
 
-Provider Doc: https://cloud.google.com/generative-ai-app-builder/docs/reference/rest/v1/projects.locations.dataStores.servingConfigs/search
+Provider 문서: https://cloud.google.com/generative-ai-app-builder/docs/reference/rest/v1/projects.locations.dataStores.servingConfigs/search
 
-## What you get
+## 제공되는 기능 {#what-you-get}
 
-- Reference datastores by ID. LiteLLM finds the credentials.
-- No project/location in every request.
-- Configure credentials once, use everywhere.
-- Cost tracking works automatically.
+- datastore를 ID로 참조합니다. LiteLLM이 인증 정보를 찾습니다.
+- 모든 요청마다 project/location을 넣을 필요가 없습니다.
+- 인증 정보는 한 번만 구성하고 어디서든 사용합니다.
+- 비용 추적이 자동으로 동작합니다.
 
-## Quick Start
+## 빠른 시작
 
-**Step 1. Set credentials**
+**1단계. 인증 정보 설정**
 
 ```bash
 export DEFAULT_VERTEXAI_PROJECT="your-project-id"
@@ -21,13 +21,13 @@ export DEFAULT_VERTEXAI_LOCATION="us-central1"
 export DEFAULT_GOOGLE_APPLICATION_CREDENTIALS="/path/to/credentials.json"
 ```
 
-**Step 2. Start proxy**
+**2단계. 프록시 시작**
 
 ```bash
 litellm
 ```
 
-**Step 3. Search your datastore**
+**3단계. datastore 검색**
 
 ```bash
 curl -X POST \
@@ -40,11 +40,11 @@ curl -X POST \
   }'
 ```
 
-## Managed Vector Stores (Recommended)
+## Managed Vector Stores (권장) {#managed-vector-stores-recommended}
 
-Register your datastore once. Reference it by ID.
+datastore를 한 번 등록한 뒤 ID로 참조합니다.
 
-**In config.yaml:**
+**config.yaml에서:**
 
 ```yaml
 vector_store_registry:
@@ -60,19 +60,19 @@ vector_store_registry:
         source: "https://www.litellm.com/docs"
 ```
 
-**How it works:**
+**동작 방식:**
 
-LiteLLM sees `dataStores/my-datastore` in your URL. It looks up the vector store. Uses the right project and credentials automatically.
+LiteLLM은 URL에서 `dataStores/my-datastore`를 확인합니다. 그런 다음 vector store를 조회하고 올바른 project와 인증 정보를 자동으로 사용합니다.
 
-## Endpoint
+## 엔드포인트 {#endpoint}
 
 `{PROXY_BASE_URL}/vertex_ai/discovery/{endpoint:path}`
 
-Routes to `https://discoveryengine.googleapis.com`
+`https://discoveryengine.googleapis.com`로 라우팅합니다.
 
-## Examples
+## 예제
 
-### Basic Search
+### 기본 검색 {#basic-search}
 
 ```bash
 curl -X POST \
@@ -85,7 +85,7 @@ curl -X POST \
   }'
 ```
 
-### Search with Filters
+### 필터를 사용하는 검색 {#search-with-filters}
 
 ```bash
 curl -X POST \
@@ -120,7 +120,7 @@ for result in response.json().get("results", []):
     print(f"{data['title']}: {data['link']}")
 ```
 
-### Use with Chat Completion
+### Chat Completion과 함께 사용 {#use-with-chat-completion}
 
 ```bash
 curl http://localhost:4000/v1/chat/completions \

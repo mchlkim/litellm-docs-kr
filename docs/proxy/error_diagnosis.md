@@ -1,23 +1,23 @@
-# Diagnosing Errors - Provider vs Gateway
+# 오류 진단 - Provider와 Gateway 구분 {#diagnosing-errors---provider-vs-gateway}
 
-Having trouble diagnosing if an error is from the **LLM Provider** (OpenAI, Anthropic, etc.) or from the **LiteLLM AI Gateway** itself? Here's how to tell.
+오류가 **LLM Provider**(OpenAI, Anthropic 등)에서 발생했는지, 아니면 **LiteLLM AI Gateway** 자체에서 발생했는지 구분하기 어렵나요? 아래 기준으로 확인할 수 있습니다.
 
-## Quick Rule
+## 빠른 판단 기준 {#quick-rule}
 
-**If the error contains `<Provider>Exception`, it's from the provider.**
+**오류에 `<Provider>Exception`이 포함되어 있으면 provider에서 발생한 오류입니다.**
 
-| Error Contains | Error Source |
+| 오류에 포함된 값 | 오류 발생 위치 |
 |----------------|--------------|
 | `AnthropicException` | Anthropic |
 | `OpenAIException` | OpenAI |
 | `AzureException` | Azure |
 | `BedrockException` | AWS Bedrock |
 | `VertexAIException` | Google Vertex AI |
-| No provider name | LiteLLM AI Gateway |
+| provider 이름 없음 | LiteLLM AI Gateway |
 
-## Examples
+## 예제
 
-### Provider Error (from AWS Bedrock)
+### Provider 오류(AWS Bedrock에서 발생) {#provider-error-from-aws-bedrock}
 
 ```
 {
@@ -30,9 +30,9 @@ Having trouble diagnosing if an error is from the **LLM Provider** (OpenAI, Anth
 }
 ```
 
-This error is from **AWS Bedrock** (notice `BedrockException`). The Bedrock API is rejecting the request due to invalid message format - this is not a LiteLLM issue.
+이 오류는 **AWS Bedrock**에서 발생했습니다(`BedrockException` 확인). Bedrock API가 잘못된 메시지 형식 때문에 요청을 거부한 것이며, LiteLLM 문제가 아닙니다.
 
-### Provider Error (from OpenAI)
+### Provider 오류(OpenAI에서 발생) {#provider-error-from-openai}
 
 ```
 {
@@ -45,9 +45,9 @@ This error is from **AWS Bedrock** (notice `BedrockException`). The Bedrock API 
 }
 ```
 
-This error is from **OpenAI** (notice `OpenAIException`). The OpenAI API key configured in LiteLLM is invalid.
+이 오류는 **OpenAI**에서 발생했습니다(`OpenAIException` 확인). LiteLLM에 설정된 OpenAI API 키가 유효하지 않습니다.
 
-### Provider Error (from Anthropic)
+### Provider 오류(Anthropic에서 발생) {#provider-error-from-anthropic}
 
 ```
 {
@@ -60,9 +60,9 @@ This error is from **OpenAI** (notice `OpenAIException`). The OpenAI API key con
 }
 ```
 
-This error is from **Anthropic** (notice `AnthropicException`). The Anthropic API is overloaded - this is not a LiteLLM issue.
+이 오류는 **Anthropic**에서 발생했습니다(`AnthropicException` 확인). Anthropic API에 부하가 걸린 상태이며, LiteLLM 문제가 아닙니다.
 
-### Gateway Error (from LiteLLM)
+### Gateway 오류(LiteLLM에서 발생) {#gateway-error-from-litellm}
 
 ```
 {
@@ -75,16 +75,16 @@ This error is from **Anthropic** (notice `AnthropicException`). The Anthropic AP
 }
 ```
 
-This error is from the **LiteLLM AI Gateway** (no provider name). Your LiteLLM virtual key is invalid.
+이 오류는 **LiteLLM AI Gateway**에서 발생했습니다(provider 이름 없음). LiteLLM virtual key가 유효하지 않습니다.
 
-## What to do?
+## 어떻게 해야 하나요? {#what-to-do}
 
-| Error Source | Action |
+| 오류 발생 위치 | 조치 |
 |--------------|--------|
-| Provider Error | Check the provider's status page, adjust rate limits, or retry later |
-| Gateway Error | Check your LiteLLM configuration, API keys, or [open an issue](https://github.com/BerriAI/litellm/issues) |
+| Provider 오류 | provider 상태 페이지를 확인하고, rate limit을 조정하거나 나중에 다시 시도합니다 |
+| Gateway 오류 | LiteLLM 설정과 API 키를 확인하거나 [issue를 생성](https://github.com/BerriAI/litellm/issues)합니다 |
 
-## See Also
+## 함께 보기 {#see-also}
 
-- [Debugging](/docs/proxy/debugging) - Enable debug logs to see detailed request/response info
-- [Exception Mapping](/docs/exception_mapping) - Full list of LiteLLM exception types
+- [Debugging](/docs/proxy/debugging) - 자세한 요청/응답 정보를 확인할 수 있도록 debug log를 활성화합니다
+- [Exception Mapping](/docs/exception_mapping) - LiteLLM exception type 전체 목록입니다

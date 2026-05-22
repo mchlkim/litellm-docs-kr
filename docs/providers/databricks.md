@@ -3,21 +3,21 @@ import TabItem from '@theme/TabItem';
 
 # Databricks
 
-LiteLLM supports all models on Databricks
+LiteLLM은 Databricks의 모든 모델을 지원합니다.
 
 :::tip
 
-**We support ALL Databricks models, just set `model=databricks/<any-model-on-databricks>` as a prefix when sending litellm requests**
+**모든 Databricks 모델을 지원합니다. litellm 요청을 보낼 때 `model=databricks/<any-model-on-databricks>`를 접두사로 설정하기만 하면 됩니다.**
 
 :::
 
-## Authentication
+## 인증
 
-LiteLLM supports multiple authentication methods for Databricks, listed in order of preference:
+LiteLLM은 Databricks에 대해 여러 인증 방식을 지원하며, 권장 순서는 다음과 같습니다.
 
-### OAuth M2M (Recommended for Production)
+### OAuth M2M (프로덕션 권장)
 
-OAuth Machine-to-Machine authentication using Service Principal credentials is the **recommended method for production** deployments per Databricks Partner requirements.
+Service Principal 자격 증명을 사용하는 OAuth M2M 인증은 Databricks Partner 요구 사항에 따라 프로덕션 배포에 **권장되는 방식**입니다.
 
 ```python
 import os
@@ -34,9 +34,9 @@ response = completion(
 )
 ```
 
-### Personal Access Token (PAT)
+### 개인 액세스 토큰 (PAT)
 
-PAT authentication is supported for development and testing scenarios.
+PAT 인증은 개발 및 테스트 시나리오에서 지원됩니다.
 
 ```python
 import os
@@ -51,9 +51,9 @@ response = completion(
 )
 ```
 
-### Databricks SDK Authentication (Automatic)
+### Databricks SDK 인증 (자동)
 
-If no credentials are provided, LiteLLM will use the Databricks SDK for automatic authentication. This supports OAuth, Azure AD, and other unified auth methods configured in your environment.
+자격 증명이 제공되지 않으면 LiteLLM은 Databricks SDK를 사용해 자동으로 인증합니다. 이 방식은 환경에 구성된 OAuth, Azure AD 및 기타 통합 인증 방식을 지원합니다.
 
 ```python
 from litellm import completion
@@ -66,11 +66,11 @@ response = completion(
 )
 ```
 
-## Custom User-Agent for Partner Attribution
+## 파트너 기여 추적을 위한 Custom User-Agent
 
-If you're building a product on top of LiteLLM that integrates with Databricks, you can pass your own partner identifier for proper attribution in Databricks telemetry.
+Databricks와 통합되는 제품을 LiteLLM 위에서 빌드하는 경우, Databricks telemetry에서 올바르게 기여를 추적할 수 있도록 자체 파트너 식별자를 전달할 수 있습니다.
 
-The partner name will be prefixed to the LiteLLM user agent:
+파트너 이름은 LiteLLM user agent 앞에 접두사로 추가됩니다.
 
 ```python
 # Via parameter
@@ -86,25 +86,25 @@ os.environ["DATABRICKS_USER_AGENT"] = "mycompany/1.0.0"
 # Resulting User-Agent: mycompany_litellm/1.79.1
 ```
 
-| Input | Resulting User-Agent |
+| 입력 | 결과 User-Agent |
 |-------|---------------------|
 | (none) | `litellm/1.79.1` |
 | `mycompany/1.0.0` | `mycompany_litellm/1.79.1` |
 | `partner_product/2.5.0` | `partner_product_litellm/1.79.1` |
 | `acme` | `acme_litellm/1.79.1` |
 
-**Note:** The version from your custom user agent is ignored; LiteLLM's version is always used.
+**참고:** 사용자 지정 user agent의 버전은 무시되며, 항상 LiteLLM 버전이 사용됩니다.
 
-## Security
+## 보안
 
-LiteLLM automatically redacts sensitive information (tokens, secrets, API keys) from all debug logs to prevent credential leakage. This includes:
+LiteLLM은 자격 증명 유출을 방지하기 위해 모든 디버그 로그에서 민감한 정보(토큰, 시크릿, API 키)를 자동으로 마스킹합니다. 여기에 포함되는 항목은 다음과 같습니다.
 
-- Authorization headers
-- API keys and tokens
-- Client secrets
-- Personal access tokens (PATs)
+- Authorization 헤더
+- API 키 및 토큰
+- Client secret
+- 개인 액세스 토큰 (PAT)
 
-## Usage
+## 사용법
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -116,7 +116,7 @@ os.environ["DATABRICKS_API_KEY"] = ""
 os.environ["DATABRICKS_API_BASE"] = ""
 ```
 
-### Example Call
+### 예제 Call
 
 ```python
 from litellm import completion
@@ -135,7 +135,7 @@ response = completion(
 </TabItem>
 <TabItem value="proxy" label="PROXY">
 
-1. Add models to your config.yaml
+1. config.yaml에 모델을 추가합니다.
 
   ```yaml
   model_list:
@@ -149,13 +149,13 @@ response = completion(
 
 
 
-2. Start the proxy 
+2. 프록시 시작 
 
   ```bash
   $ litellm --config /path/to/config.yaml --debug
   ```
 
-3. Send Request to LiteLLM Proxy Server
+3. LiteLLM Proxy Server로 요청을 보냅니다.
 
   <Tabs>
 
@@ -216,8 +216,8 @@ response = completion(
 
 </Tabs>
 
-## Passing additional params - max_tokens, temperature 
-See all litellm.completion supported params [here](../completion/input.md#translated-openai-params)
+## 추가 파라미터 전달 - max_tokens, temperature 
+litellm.completion에서 지원하는 모든 파라미터는 [여기](../completion/input.md#translated-openai-params)를 참고하세요.
 
 ```python
 # !uv add litellm
@@ -236,7 +236,7 @@ response = completion(
 )
 ```
 
-**proxy**
+**프록시**
 
 ```yaml
   model_list:
@@ -249,9 +249,9 @@ response = completion(
 ```
 
 
-## Usage - Thinking / `reasoning_content`
+## 사용법 - Thinking / `reasoning_content` {#usage---thinking--reasoning_content}
 
-LiteLLM translates OpenAI's `reasoning_effort` to Anthropic's `thinking` parameter. [Code](https://github.com/BerriAI/litellm/blob/23051d89dd3611a81617d84277059cd88b2df511/litellm/llms/anthropic/chat/transformation.py#L298)
+LiteLLM은 OpenAI의 `reasoning_effort`를 Anthropic의 `thinking` 파라미터로 변환합니다. [Code](https://github.com/BerriAI/litellm/blob/23051d89dd3611a81617d84277059cd88b2df511/litellm/llms/anthropic/chat/transformation.py#L298)
 
 | reasoning_effort | thinking |
 | ---------------- | -------- |
@@ -260,8 +260,8 @@ LiteLLM translates OpenAI's `reasoning_effort` to Anthropic's `thinking` paramet
 | "high"           | "budget_tokens": 4096 |
 
 
-Known Limitations:
-- Support for passing thinking blocks back to Claude [Issue](https://github.com/BerriAI/litellm/issues/9790)
+알려진 제한 사항:
+- thinking block을 Claude로 다시 전달하는 기능 지원 [Issue](https://github.com/BerriAI/litellm/issues/9790)
  
 
 <Tabs>
@@ -287,7 +287,7 @@ resp = completion(
 
 <TabItem value="proxy" label="PROXY">
 
-1. Setup config.yaml
+1. config.yaml을 설정합니다.
 
 ```yaml
 - model_name: claude-3-7-sonnet
@@ -297,13 +297,13 @@ resp = completion(
     api_base: os.environ/DATABRICKS_API_BASE
 ```
 
-2. Start proxy
+2. 프록시를 시작합니다.
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-3. Test it! 
+3. 테스트합니다.
 
 ```bash
 curl http://0.0.0.0:4000/v1/chat/completions \
@@ -320,7 +320,7 @@ curl http://0.0.0.0:4000/v1/chat/completions \
 </Tabs>
 
 
-**Expected Response**
+**예상 응답**
 
 ```python
 ModelResponse(
@@ -376,17 +376,17 @@ ModelResponse(
 )
 ```
 
-### Citations
+### 인용
 
-Anthropic models served through Databricks can return citation metadata. LiteLLM
-exposes these via `response.choices[0].message.provider_specific_fields["citations"]`.
+Databricks를 통해 제공되는 Anthropic 모델은 인용 메타데이터를 반환할 수 있습니다. LiteLLM은 이를
+`response.choices[0].message.provider_specific_fields["citations"]`를 통해 노출합니다.
 
-### Pass `thinking` to Anthropic models
+### Anthropic 모델에 `thinking` 전달하기
 
-You can also pass the `thinking` parameter to Anthropic models.
+Anthropic 모델에 `thinking` 파라미터를 전달할 수도 있습니다.
 
 
-You can also pass the `thinking` parameter to Anthropic models.
+Anthropic 모델에 `thinking` 파라미터를 전달할 수도 있습니다.
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -427,33 +427,33 @@ curl http://0.0.0.0:4000/v1/chat/completions \
 
 
 
-## Supported Databricks Chat Completion Models 
+## 지원되는 Databricks Chat Completion 모델 
 
 :::tip
 
-**We support ALL Databricks models, just set `model=databricks/<any-model-on-databricks>` as a prefix when sending litellm requests**
+**모든 Databricks 모델을 지원합니다. litellm 요청을 보낼 때 `model=databricks/<any-model-on-databricks>`를 접두사로 설정하기만 하면 됩니다.**
 
 :::
 
 
-| Model Name                 | Command                                                          |
+| 모델 이름                 | 명령                                                          |
 |----------------------------|------------------------------------------------------------------|
-| databricks/databricks-claude-3-7-sonnet    | `completion(model='databricks/databricks/databricks-claude-3-7-sonnet', messages=messages)`   | 
-| databricks-meta-llama-3-1-70b-instruct    | `completion(model='databricks/databricks-meta-llama-3-1-70b-instruct', messages=messages)`   | 
-| databricks-meta-llama-3-1-405b-instruct    | `completion(model='databricks/databricks-meta-llama-3-1-405b-instruct', messages=messages)`   | 
-| databricks-dbrx-instruct    | `completion(model='databricks/databricks-dbrx-instruct', messages=messages)`   | 
-| databricks-meta-llama-3-70b-instruct    | `completion(model='databricks/databricks-meta-llama-3-70b-instruct', messages=messages)`   | 
-| databricks-llama-2-70b-chat    | `completion(model='databricks/databricks-llama-2-70b-chat', messages=messages)`   | 
-| databricks-mixtral-8x7b-instruct    | `completion(model='databricks/databricks-mixtral-8x7b-instruct', messages=messages)`   | 
-| databricks-mpt-30b-instruct    | `completion(model='databricks/databricks-mpt-30b-instruct', messages=messages)`   | 
-| databricks-mpt-7b-instruct    | `completion(model='databricks/databricks-mpt-7b-instruct', messages=messages)`   | 
+| `databricks/databricks-claude-3-7-sonnet`    | `completion(model='databricks/databricks/databricks-claude-3-7-sonnet', messages=messages)`   | 
+| `databricks-meta-llama-3-1-70b-instruct`    | `completion(model='databricks/databricks-meta-llama-3-1-70b-instruct', messages=messages)`   | 
+| `databricks-meta-llama-3-1-405b-instruct`    | `completion(model='databricks/databricks-meta-llama-3-1-405b-instruct', messages=messages)`   | 
+| `databricks-dbrx-instruct`    | `completion(model='databricks/databricks-dbrx-instruct', messages=messages)`   | 
+| `databricks-meta-llama-3-70b-instruct`    | `completion(model='databricks/databricks-meta-llama-3-70b-instruct', messages=messages)`   | 
+| `databricks-llama-2-70b-chat`    | `completion(model='databricks/databricks-llama-2-70b-chat', messages=messages)`   | 
+| `databricks-mixtral-8x7b-instruct`    | `completion(model='databricks/databricks-mixtral-8x7b-instruct', messages=messages)`   | 
+| `databricks-mpt-30b-instruct`    | `completion(model='databricks/databricks-mpt-30b-instruct', messages=messages)`   | 
+| `databricks-mpt-7b-instruct`    | `completion(model='databricks/databricks-mpt-7b-instruct', messages=messages)`   | 
 
 
-## Embedding Models
+## Embedding 모델
 
-### Passing Databricks specific params - 'instruction'
+### Databricks 전용 파라미터 전달 - 'instruction'
 
-For embedding models, databricks lets you pass in an additional param 'instruction'. [Full Spec](https://github.com/BerriAI/litellm/blob/43353c28b341df0d9992b45c6ce464222ebd7984/litellm/llms/databricks.py#L164)
+임베딩 모델의 경우 Databricks는 추가 파라미터 'instruction'을 전달할 수 있게 합니다. [전체 사양](https://github.com/BerriAI/litellm/blob/43353c28b341df0d9992b45c6ce464222ebd7984/litellm/llms/databricks.py#L164)
 
 
 ```python
@@ -472,7 +472,7 @@ response = litellm.embedding(
   )
 ```
 
-**proxy**
+**프록시**
 
 ```yaml
   model_list:
@@ -484,16 +484,16 @@ response = litellm.embedding(
         instruction: "Represent this sentence for searching relevant passages:"
 ```
 
-## Supported Databricks Embedding Models 
+## 지원되는 Databricks Embedding 모델 
 
 :::tip
 
-**We support ALL Databricks models, just set `model=databricks/<any-model-on-databricks>` as a prefix when sending litellm requests**
+**모든 Databricks 모델을 지원합니다. litellm 요청을 보낼 때 `model=databricks/<any-model-on-databricks>`를 접두사로 설정하기만 하면 됩니다.**
 
 :::
 
 
-| Model Name                 | Command                                                          |
+| 모델 이름                 | 명령                                                          |
 |----------------------------|------------------------------------------------------------------|
-| databricks-bge-large-en    | `embedding(model='databricks/databricks-bge-large-en', messages=messages)`   |
-| databricks-gte-large-en    | `embedding(model='databricks/databricks-gte-large-en', messages=messages)`   |
+| `databricks-bge-large-en`    | `embedding(model='databricks/databricks-bge-large-en', messages=messages)`   |
+| `databricks-gte-large-en`    | `embedding(model='databricks/databricks-gte-large-en', messages=messages)`   |

@@ -3,49 +3,49 @@ import TabItem from '@theme/TabItem';
 
 # /assistants
 
-:::warning Deprecation Notice
+:::warning 지원 종료 안내
 
-OpenAI has deprecated the Assistants API. It will shut down on **August 26, 2026**.
+OpenAI는 Assistants API를 지원 종료 대상으로 지정했습니다. **2026년 8월 26일**에 종료됩니다.
 
-Consider migrating to the [Responses API](/docs/response_api) instead. See [OpenAI's migration guide](https://platform.openai.com/docs/guides/responses-vs-assistants) for details.
+대신 [Responses API](/docs/response_api)로 마이그레이션하는 것을 고려하세요. 자세한 내용은 [OpenAI의 마이그레이션 가이드](https://platform.openai.com/docs/guides/responses-vs-assistants)를 참고하세요.
 
 :::
 
-Covers Threads, Messages, Assistants. 
+Threads, Messages, Assistants를 다룹니다.
 
-LiteLLM currently covers: 
-- Create Assistants 
-- Delete Assistants
-- Get Assistants
-- Create Thread
-- Get Thread
-- Add Messages
-- Get Messages
-- Run Thread
+LiteLLM은 현재 다음을 지원합니다:
+- Assistants 생성
+- Assistants 삭제
+- Assistants 조회
+- Thread 생성
+- Thread 조회
+- Messages 추가
+- Messages 조회
+- Thread 실행
 
 
-## **Supported Providers**:
+## **지원 프로바이더**:
 - [OpenAI](#quick-start)
 - [Azure OpenAI](#azure-openai)
-- [OpenAI-Compatible APIs](#openai-compatible-apis)
+- [OpenAI 호환 API](#openai-compatible-apis)
 
-## Quick Start 
+## 빠른 시작
 
-Call an existing Assistant. 
+기존 Assistant를 호출합니다.
 
-- Get the Assistant 
+- Assistant를 조회합니다.
 
-- Create a Thread when a user starts a conversation.
+- 사용자가 대화를 시작하면 Thread를 생성합니다.
 
-- Add Messages to the Thread as the user asks questions.
+- 사용자가 질문하면 Thread에 Messages를 추가합니다.
 
-- Run the Assistant on the Thread to generate a response by calling the model and the tools.
+- Thread에서 Assistant를 실행해 모델과 도구를 호출하고 응답을 생성합니다.
 
-### SDK + PROXY
+### SDK + 프록시 <a id="sdk--proxy"></a>
 <Tabs>
 <TabItem value="sdk" label="SDK">
 
-**Create an Assistant**
+**Assistant 생성**
 
 
 ```python
@@ -73,7 +73,7 @@ assistant = litellm.create_assistants(
 # )
 ```
 
-**Get the Assistant**
+**Assistant 조회**
 
 ```python
 from litellm import get_assistants, aget_assistants
@@ -88,7 +88,7 @@ assistants = get_assistants(custom_llm_provider="openai")
 # assistants = await aget_assistants(custom_llm_provider="openai")
 ```
 
-**Create a Thread**
+**Thread 생성**
 
 ```python
 from litellm import create_thread, acreate_thread
@@ -105,7 +105,7 @@ new_thread = create_thread(
 # new_thread = await acreate_thread(custom_llm_provider="openai",messages=[{"role": "user", "content": "Hey, how's it going?"}])
 ```
 
-**Add Messages to the Thread**
+**Thread에 Messages 추가**
 
 ```python
 from litellm import create_thread, get_thread, aget_thread, add_message, a_add_message
@@ -138,7 +138,7 @@ added_message = add_message(
 # added_message = await a_add_message(thread_id=_new_thread.id, custom_llm_provider="openai", **message)
 ```
 
-**Run the Assistant on the Thread**
+**Thread에서 Assistant 실행**
 
 ```python
 from litellm import get_assistants, create_thread, add_message, run_thread, arun_thread
@@ -173,7 +173,7 @@ response = run_thread(
 print(f"run_thread: {run_thread}")
 ```
 </TabItem>
-<TabItem value="proxy" label="PROXY">
+<TabItem value="proxy" label="프록시">
 
 ```yaml
 assistant_settings:
@@ -191,7 +191,7 @@ $ litellm --config /path/to/config.yaml
 ```
 
 
-**Create the Assistant**
+**Assistant 생성**
 
 ```bash
 curl "http://localhost:4000/v1/assistants" \
@@ -206,7 +206,7 @@ curl "http://localhost:4000/v1/assistants" \
 ```
 
 
-**Get the Assistant**
+**Assistant 조회**
 
 ```bash
 curl "http://0.0.0.0:4000/v1/assistants?order=desc&limit=20" \
@@ -214,7 +214,7 @@ curl "http://0.0.0.0:4000/v1/assistants?order=desc&limit=20" \
   -H "Authorization: Bearer sk-1234"
 ```
 
-**Create a Thread**
+**Thread 생성**
 
 ```bash
 curl http://0.0.0.0:4000/v1/threads \
@@ -223,7 +223,7 @@ curl http://0.0.0.0:4000/v1/threads \
   -d ''
 ```
 
-**Get a Thread**
+**Thread 조회**
 
 ```bash
 curl http://0.0.0.0:4000/v1/threads/{thread_id} \
@@ -231,7 +231,7 @@ curl http://0.0.0.0:4000/v1/threads/{thread_id} \
   -H "Authorization: Bearer sk-1234"
 ```
 
-**Add Messages to the Thread**
+**Thread에 Messages 추가**
 
 ```bash
 curl http://0.0.0.0:4000/v1/threads/{thread_id}/messages \
@@ -243,7 +243,7 @@ curl http://0.0.0.0:4000/v1/threads/{thread_id}/messages \
     }'
 ```
 
-**Run the Assistant on the Thread**
+**Thread에서 Assistant 실행**
 
 ```bash
 curl http://0.0.0.0:4000/v1/threads/thread_abc123/runs \
@@ -257,7 +257,7 @@ curl http://0.0.0.0:4000/v1/threads/thread_abc123/runs \
 </TabItem>
 </Tabs>
 
-## Streaming 
+## 스트리밍 <a id="streaming"></a>
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -281,7 +281,7 @@ with run as run:
 ```
 
 </TabItem>
-<TabItem value="proxy" label="PROXY">
+<TabItem value="proxy" label="프록시">
 
 ```bash
 curl -X POST 'http://0.0.0.0:4000/threads/{thread_id}/runs' \
@@ -296,12 +296,12 @@ curl -X POST 'http://0.0.0.0:4000/threads/{thread_id}/runs' \
 </TabItem>
 </Tabs>
 
-## [👉 Proxy API Reference](https://litellm-api.up.railway.app/#/assistants)
+## [👉 프록시 API 레퍼런스](https://litellm-api.up.railway.app/#/assistants) <a id="proxy-api-reference"></a>
 
 
 ## Azure OpenAI
 
-**config**
+**설정**
 ```yaml
 assistant_settings:
   custom_llm_provider: azure
@@ -324,12 +324,12 @@ curl -X POST "http://localhost:4000/v1/assistants" \
   }'
 ```
 
-## OpenAI-Compatible APIs 
+## OpenAI 호환 API <a id="openai-compatible-apis"></a>
 
-To call openai-compatible Assistants API's (eg. Astra Assistants API), just add `openai/` to the model name: 
+OpenAI 호환 Assistants API(예: Astra Assistants API)를 호출하려면 모델 이름에 `openai/`를 추가하면 됩니다.
 
 
-**config**
+**설정**
 ```yaml
 assistant_settings:
   custom_llm_provider: openai

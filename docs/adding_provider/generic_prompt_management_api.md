@@ -1,31 +1,31 @@
-# [BETA] Generic Prompt Management API - Integrate Without a PR
+# [BETA] Generic Prompt Management API - PR 없이 통합하기 {#beta-generic-prompt-management-api---integrate-without-a-pr}
 
-## The Problem
+## 문제
 
-As a prompt management provider, integrating with LiteLLM traditionally requires:
-- Making a PR to the LiteLLM repository
-- Waiting for review and merge
-- Maintaining provider-specific code in LiteLLM's codebase
-- Updating the integration for changes to your API
+prompt management provider가 LiteLLM과 통합하려면 기존에는 보통 다음 작업이 필요했습니다.
+- LiteLLM 저장소에 PR 생성
+- 검토 및 병합 대기
+- LiteLLM 코드베이스 안에서 provider별 코드 유지
+- API 변경에 맞춰 통합 업데이트
 
-## The Solution
+## 해결 방법
 
-The **Generic Prompt Management API** lets you integrate with LiteLLM **instantly** by implementing a simple API endpoint. No PR required.
+**Generic Prompt Management API**를 사용하면 간단한 API endpoint만 구현해 LiteLLM과 **즉시** 통합할 수 있습니다. PR은 필요하지 않습니다.
 
-### Key Benefits
+### 주요 장점
 
-1. **No PR Needed** - Deploy and integrate immediately
-3. **Simple Contract** - One GET endpoint, standard JSON response
-4. **Variable Substitution** - Support for prompt variables with `{variable}` syntax
-5. **Custom Parameters** - Pass provider-specific query params via config
-6. **Full Control** - You own and maintain your prompt management API
-7. **Model & Parameters Override** - Optionally override model and parameters from your prompts
+1. **PR 불필요** - 바로 배포하고 통합 가능
+3. **단순한 계약** - 하나의 GET endpoint와 표준 JSON 응답
+4. **변수 치환** - `{variable}` 문법으로 prompt variable 지원
+5. **Custom parameter** - config를 통해 provider별 query parameter 전달
+6. **완전한 제어권** - prompt management API를 직접 소유하고 유지
+7. **Model 및 parameter override** - prompt에서 model과 parameter를 선택적으로 override
 
-## Get Started in 3 Steps
+## 3단계로 시작하기 {#getting-started-in-3-steps}
 
-### Step 1: Configure LiteLLM
+### 1단계: LiteLLM 설정 {#step-1-configure-litellm}
 
-Add to your `config.yaml`:
+`config.yaml`에 다음을 추가합니다.
 
 ```yaml
 prompts:
@@ -36,7 +36,7 @@ prompts:
       api_key: os.environ/YOUR_API_KEY
 ```
 
-### Step 2: Implement Your API Endpoint
+### 2단계: API endpoint 구현 {#step-2-implement-your-api-endpoint}
 
 ```python
 from fastapi import FastAPI
@@ -57,7 +57,7 @@ async def get_prompt(prompt_id: str):
     }
 ```
 
-### Step 3: Use in Your App
+### 3단계: App에서 사용 {#step-3-use-in-your-app}
 
 ```python
 from litellm import completion
@@ -70,32 +70,32 @@ response = completion(
 )
 ```
 
-That's it! LiteLLM fetches your prompt, applies variables, and makes the request
+이제 끝입니다. LiteLLM이 prompt를 가져오고 variable을 적용한 뒤 request를 보냅니다.
 
-## API Contract
+## API 계약 {#api-contract}
 
 ### Endpoint
 
-Implement `GET /beta/litellm_prompt_management`
+`GET /beta/litellm_prompt_management`를 구현합니다.
 
-### Request Format
+### 요청 형식
 
-Your endpoint will receive a GET request with query parameters:
+endpoint는 query parameter가 포함된 GET request를 받습니다.
 
 ```
 GET /beta/litellm_prompt_management?prompt_id={prompt_id}&{custom_params}
 ```
 
-**Query Parameters:**
-- `prompt_id` (required): The ID of the prompt to fetch
-- Custom parameters: Any additional parameters you configured in `provider_specific_query_params`
+**Query parameter:**
+- `prompt_id` (필수): 가져올 prompt의 ID
+- Custom parameter: `provider_specific_query_params`에 구성한 추가 parameter
 
-**Example:**
+**예제:**
 ```
 GET /beta/litellm_prompt_management?prompt_id=hello-world-prompt-2bac&project_name=litellm&slug=hello-world-prompt-2bac
 ```
 
-### Response Format
+### 응답 형식
 
 ```json
 {
@@ -119,15 +119,15 @@ GET /beta/litellm_prompt_management?prompt_id=hello-world-prompt-2bac&project_na
 }
 ```
 
-**Response Fields:**
-- `prompt_id` (string, required): The ID of the prompt
-- `prompt_template` (array, required): Array of OpenAI-format messages with optional `{variable}` placeholders
-- `prompt_template_model` (string, optional): Model to use for this prompt (overrides client model unless `ignore_prompt_manager_model: true`)
-- `prompt_template_optional_params` (object, optional): Additional parameters like temperature, max_tokens, etc. (merged with client params unless `ignore_prompt_manager_optional_params: true`)
+**응답 필드:**
+- `prompt_id` (string, 필수): prompt ID
+- `prompt_template` (array, 필수): 선택적 `{variable}` placeholder가 포함된 OpenAI-format message 배열
+- `prompt_template_model` (string, 선택 사항): 이 prompt에 사용할 model(`ignore_prompt_manager_model: true`가 아니면 client model override)
+- `prompt_template_optional_params` (object, 선택 사항): temperature, max_tokens 등 추가 parameter(`ignore_prompt_manager_optional_params: true`가 아니면 client param과 merge)
 
-## LiteLLM Configuration
+## LiteLLM 설정
 
-Add to `config.yaml`:
+`config.yaml`에 다음을 추가합니다.
 
 ```yaml
 model_list:
@@ -149,20 +149,20 @@ prompts:
       ignore_prompt_manager_optional_params: true  # optional, don't merge prompt manager's params (e.g. temperature, max_tokens, etc.)
 ```
 
-### Configuration Parameters
+### 설정 parameter {#configuration-parameters}
 
-- `prompt_integration`: Must be `"generic_prompt_management"`
-- `provider_specific_query_params`: Custom query parameters sent to your API (optional)
-- `api_base`: Base URL of your prompt management API
-- `api_key`: Optional API key for authentication (sent as `Bearer` token)
-- `ignore_prompt_manager_model`: If `true`, use the model specified by client instead of prompt's model (default: `false`)
-- `ignore_prompt_manager_optional_params`: If `true`, don't merge prompt's optional params with client params (default: `false`)
+- `prompt_integration`: 반드시 `"generic_prompt_management"`여야 합니다.
+- `provider_specific_query_params`: API로 전송할 custom query parameter(optional)
+- `api_base`: prompt management API의 base URL
+- `api_key`: 인증용 optional API key(`Bearer` token으로 전송)
+- `ignore_prompt_manager_model`: `true`이면 prompt의 model 대신 client가 지정한 model 사용(default: `false`)
+- `ignore_prompt_manager_optional_params`: `true`이면 prompt의 optional param을 client param과 merge하지 않음(default: `false`)
 
-## Usage
+## 사용법
 
-### Using with LiteLLM SDK
+### LiteLLM SDK와 사용 {#using-with-litellm-sdk}
 
-**Basic usage with prompt ID:**
+**prompt ID를 사용하는 기본 예제:**
 
 ```python
 from litellm import completion
@@ -174,7 +174,7 @@ response = completion(
 )
 ```
 
-**With prompt variables:**
+**prompt variable 사용:**
 
 ```python
 response = completion(
@@ -188,17 +188,17 @@ response = completion(
 )
 ```
 
-The prompt template will have `{domain}` replaced with "data science" and `{task}` replaced with "analyzing customer churn".
+prompt template에서 `{domain}`은 "data science"로, `{task}`는 "analyzing customer churn"으로 대체됩니다.
 
-### Using with LiteLLM Proxy
+### LiteLLM Proxy와 사용 {#using-with-litellm-proxy}
 
-**1. Start the proxy with your config:**
+**1. 설정 파일로 프록시 시작:**
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-**2. Make requests with prompt_id:**
+**2. prompt_id로 request 보내기:**
 
 ```bash
 curl http://0.0.0.0:4000/v1/chat/completions \
@@ -217,7 +217,7 @@ curl http://0.0.0.0:4000/v1/chat/completions \
   }'
 ```
 
-**3. Using with OpenAI SDK:**
+**3. OpenAI SDK와 사용:**
 
 ```python
 from openai import OpenAI
@@ -242,11 +242,11 @@ response = client.chat.completions.create(
 )
 ```
 
-## Implementation Example
+## 구현 예제
 
-See [mock_prompt_management_server.py](https://github.com/BerriAI/litellm/blob/main/cookbook/mock_prompt_management_server/mock_prompt_management_server.py) for a complete reference implementation with multiple example prompts, authentication, and convenience endpoints.
+여러 예제 prompt, 인증, convenience endpoint를 포함한 전체 참조 구현은 [mock_prompt_management_server.py](https://github.com/BerriAI/litellm/blob/main/cookbook/mock_prompt_management_server/mock_prompt_management_server.py)를 참고하세요.
 
-**Minimal FastAPI example:**
+**최소 FastAPI 예제:**
 
 ```python
 from fastapi import FastAPI, HTTPException, Header
@@ -374,26 +374,26 @@ if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8080)
 ```
 
-### Running the Example Server
+### 예제 server 실행 {#running-the-example-server}
 
-1. Install dependencies:
+1. 의존성 설치:
 ```bash
 uv add fastapi uvicorn
 ```
 
-2. Save the code above to `prompt_server.py`
+2. 위 코드를 `prompt_server.py`로 저장합니다.
 
-3. Run the server:
+3. server를 실행합니다.
 ```bash
 python prompt_server.py
 ```
 
-4. Test the endpoint:
+4. endpoint를 test합니다.
 ```bash
 curl "http://localhost:8080/beta/litellm_prompt_management?prompt_id=hello-world-prompt&project_name=litellm&slug=hello-world-prompt-2bac"
 ```
 
-Expected response:
+예상 response:
 ```json
 {
   "prompt_id": "hello-world-prompt",
@@ -415,13 +415,13 @@ Expected response:
 }
 ```
 
-## Advanced Features
+## 고급 기능
 
-### Variable Substitution
+### 변수 치환 {#variable-substitution}
 
-LiteLLM automatically substitutes variables in your prompt templates using the `{variable}` syntax. Both `{variable}` and `{{variable}}` formats are supported.
+LiteLLM은 `{variable}` 문법을 사용해 prompt template의 variable을 자동으로 대체합니다. `{variable}`과 `{{variable}}` 형식을 모두 지원합니다.
 
-**Example prompt template:**
+**예제 prompt template:**
 ```json
 {
   "prompt_template": [
@@ -445,23 +445,23 @@ completion(
 )
 ```
 
-**Result:**
+**결과:**
 ```
 "You are an expert in machine learning with 10 years of experience."
 ```
 
-### Caching
+### 캐싱
 
-LiteLLM automatically caches fetched prompts in memory. The cache key includes:
+LiteLLM은 가져온 prompt를 memory에 자동 cache합니다. cache key에는 다음이 포함됩니다.
 - `prompt_id`
-- `prompt_label` (if provided)
-- `prompt_version` (if provided)
+- `prompt_label` (제공된 경우)
+- `prompt_version` (제공된 경우)
 
-This means your API endpoint is only called once per unique prompt configuration.
+즉, API endpoint는 고유한 prompt configuration마다 한 번만 호출됩니다.
 
-### Model Override Behavior
+### Model override 동작 {#model-override-behavior}
 
-**Default behavior (without `ignore_prompt_manager_model`):**
+**기본 동작(`ignore_prompt_manager_model` 없음):**
 ```yaml
 prompts:
   - prompt_id: "my_prompt"
@@ -470,9 +470,9 @@ prompts:
       api_base: http://localhost:8080
 ```
 
-If your API returns `"prompt_template_model": "gpt-4"`, LiteLLM will use `gpt-4` regardless of what the client specified.
+API가 `"prompt_template_model": "gpt-4"`를 반환하면 client가 무엇을 지정했는지와 관계없이 LiteLLM은 `gpt-4`를 사용합니다.
 
-**With `ignore_prompt_manager_model: true`:**
+**`ignore_prompt_manager_model: true` 사용:**
 ```yaml
 prompts:
   - prompt_id: "my_prompt"
@@ -482,95 +482,94 @@ prompts:
       ignore_prompt_manager_model: true
 ```
 
-LiteLLM will use the model specified by the client, ignoring the prompt's model.
+LiteLLM은 prompt의 model을 무시하고 client가 지정한 model을 사용합니다.
 
-### Parameter Merging Behavior
+### Parameter merge 동작 {#parameter-merge-behavior}
 
-**Default behavior (without `ignore_prompt_manager_optional_params`):**
+**기본 동작(`ignore_prompt_manager_optional_params` 없음):**
 
-Client params are merged with prompt params, with prompt params taking precedence:
+Client param은 prompt param과 merge되며, prompt param이 우선합니다.
 ```python
 # Prompt returns: {"temperature": 0.7, "max_tokens": 500}
 # Client sends: {"temperature": 0.9, "top_p": 0.95}
 # Final params: {"temperature": 0.7, "max_tokens": 500, "top_p": 0.95}
 ```
 
-**With `ignore_prompt_manager_optional_params: true`:**
+**`ignore_prompt_manager_optional_params: true` 사용:**
 
-Only client params are used:
+client param만 사용됩니다.
 ```python
 # Prompt returns: {"temperature": 0.7, "max_tokens": 500}
 # Client sends: {"temperature": 0.9, "top_p": 0.95}
 # Final params: {"temperature": 0.9, "top_p": 0.95}
 ```
 
-## Security Considerations
+## 보안 고려사항 {#security-considerations}
 
-1. **Authentication**: Use the `api_key` parameter to secure your prompt management API
-2. **Authorization**: Implement team/user-based access control using the custom query parameters
-3. **Rate Limiting**: Add rate limiting to prevent abuse of your API
-4. **Input Validation**: Validate all query parameters before processing
-5. **HTTPS**: Always use HTTPS in production for encrypted communication
-6. **Secrets**: Store API keys in environment variables, not in config files
+1. **인증**: `api_key` parameter로 prompt management API를 보호하세요.
+2. **Authorization**: custom query parameter를 사용해 team/user 기반 access control을 구현하세요.
+3. **Rate limiting**: API abuse를 방지하려면 rate limiting을 추가하세요.
+4. **Input validation**: 처리 전에 모든 query parameter를 검증하세요.
+5. **HTTPS**: production에서는 encrypted communication을 위해 항상 HTTPS를 사용하세요.
+6. **Secrets**: API key는 config file이 아니라 environment variable에 저장하세요.
 
-## Use Cases
+## 사용 사례 {#use-case}
 
-✅ **Use Generic Prompt Management API when:**
-- You want instant integration without waiting for PRs
-- You maintain your own prompt management service
-- You need full control over prompt versioning and updates
-- You want to build custom prompt management features
-- You need to integrate with your internal systems
+✅ **다음 경우 Generic Prompt Management API를 사용하세요.**
+- PR을 기다리지 않고 즉시 integration하고 싶은 경우
+- 자체 prompt management service를 유지하는 경우
+- prompt versioning과 update를 완전히 제어해야 하는 경우
+- custom prompt management feature를 만들고 싶은 경우
+- 내부 system과 integration해야 하는 경우
 
-✅ **Common scenarios:**
-- Internal prompt management system for your organization
-- Multi-tenant prompt management with team-based access control
-- A/B testing different prompt versions
-- Prompt experimentation and analytics
-- Integration with existing prompt engineering workflows
+✅ **일반적인 scenario:**
+- organization 내부 prompt management system
+- team 기반 access control을 갖춘 multi-tenant prompt management
+- 서로 다른 `prompt version` A/B 테스트
+- prompt experimentation 및 analytics
+- 기존 prompt engineering workflow와 integration
 
-## When to Use This
+## 사용 시점
 
-✅ **Use Generic Prompt Management API when:**
-- You want instant integration without waiting for PRs
-- You maintain your own prompt management service
-- You need full control over updates and features
-- You want custom prompt storage and versioning logic
+✅ **다음 경우 Generic Prompt Management API를 사용하세요.**
+- PR을 기다리지 않고 즉시 integration하고 싶은 경우
+- 자체 prompt management service를 유지하는 경우
+- update와 feature를 완전히 제어해야 하는 경우
+- custom prompt storage 및 versioning logic이 필요한 경우
 
-❌ **Make a PR when:**
-- You want deeper integration with LiteLLM internals
-- Your integration requires complex LiteLLM-specific logic
-- You want to be featured as a built-in provider
-- You're building a reusable integration for the community
+❌ **다음 경우 PR을 만드세요.**
+- LiteLLM 내부와 더 깊은 integration이 필요한 경우
+- integration에 복잡한 LiteLLM-specific logic이 필요한 경우
+- built-in provider로 노출되고 싶은 경우
+- community가 재사용할 수 있는 integration을 만드는 경우
 
-## Troubleshooting
+## 문제 해결
 
-### Prompt not found
-- Verify the `prompt_id` matches exactly (case-sensitive)
-- Check that your API endpoint is accessible from LiteLLM
-- Verify authentication if using `api_key`
+### Prompt를 찾을 수 없음 {#prompt-not-found}
+- `prompt_id`가 정확히 일치하는지 확인하세요(case-sensitive).
+- API endpoint가 LiteLLM에서 접근 가능한지 확인하세요.
+- `api_key`를 사용한다면 authentication을 확인하세요.
 
-### Variables not substituted
-- Ensure variables use `{variable}` or `{{variable}}` syntax
-- Check that variable names in `prompt_variables` match template exactly
-- Variables are case-sensitive
+### Variable이 대체되지 않음
+- variable이 `{variable}` 또는 `{{variable}}` syntax를 사용하는지 확인하세요.
+- `prompt_variables`의 variable name이 template과 정확히 일치하는지 확인하세요.
+- variable은 case-sensitive입니다.
 
-### Model not being overridden
-- Check if `ignore_prompt_manager_model: true` is set in config
-- Verify your API is returning `prompt_template_model` in the response
+### Model이 override되지 않음
+- config에 `ignore_prompt_manager_model: true`가 설정되어 있는지 확인하세요.
+- API가 response에서 `prompt_template_model`을 반환하는지 확인하세요.
 
-### Parameters not being applied
-- Check if `ignore_prompt_manager_optional_params: true` is set
-- Verify your API is returning `prompt_template_optional_params`
-- Ensure parameter names match OpenAI's parameter names
+### Parameter가 적용되지 않음
+- `ignore_prompt_manager_optional_params: true`가 설정되어 있는지 확인하세요.
+- API가 `prompt_template_optional_params`를 반환하는지 확인하세요.
+- parameter name이 OpenAI parameter name과 일치하는지 확인하세요.
 
-## Questions?
+## 질문
 
-This is a **beta API**. We're actively improving it based on feedback. Open an issue or PR if you need additional capabilities.
+이 기능은 **beta API**입니다. feedback을 기반으로 계속 개선하고 있습니다. 추가 기능이 필요하면 issue 또는 PR을 열어 주세요.
 
-## Related Documentation
+## 관련 문서
 
-- [Prompt Management Overview](../proxy/prompt_management.md)
-- [Generic Guardrail API](./generic_guardrail_api.md)
-- [LiteLLM Proxy Setup](../proxy/quick_start.md)
-
+- [Prompt Management 개요](../proxy/prompt_management.md)
+- [Generic Guardrail API 문서](./generic_guardrail_api.md)
+- [LiteLLM Proxy 설정](../proxy/quick_start.md)

@@ -1,19 +1,19 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Drop Unsupported Params 
+# 지원되지 않는 매개변수 제거 {#drop-unsupported-params}
 
-Drop unsupported OpenAI params by your LLM Provider.
+사용 중인 LLM Provider에서 지원하지 않는 OpenAI 매개변수를 제거합니다.
 
-## Default Behavior
+## 기본 동작 {#default-behavior}
 
-**By default, LiteLLM raises an exception** if you send a parameter to a model that doesn't support it. 
+**기본적으로 LiteLLM은 지원하지 않는 매개변수를 모델에 보내면 예외를 발생시킵니다.**
 
-For example, if you send `temperature=0.2` to a model that doesn't support the `temperature` parameter, LiteLLM will raise an exception.
+예를 들어 `temperature` 매개변수를 지원하지 않는 모델에 `temperature=0.2`를 보내면 LiteLLM은 예외를 발생시킵니다.
 
-**When `drop_params=True` is set**, LiteLLM will drop the unsupported parameter instead of raising an exception. This allows your code to work seamlessly across different providers without having to customize parameters for each one.
+**`drop_params=True`가 설정되면**, LiteLLM은 예외를 발생시키는 대신 지원되지 않는 매개변수를 제거합니다. 이렇게 하면 각 Provider마다 매개변수를 별도로 맞추지 않아도 여러 Provider에서 코드가 원활하게 동작할 수 있습니다.
 
-## Quick Start 
+## 빠른 시작 
 
 ```python 
 import litellm 
@@ -32,22 +32,22 @@ response = litellm.completion(
 ```
 
 
-LiteLLM maps all supported openai params by provider + model (e.g. function calling is supported by anthropic on bedrock but not titan). 
+LiteLLM은 provider + model별로 지원되는 모든 openai 매개변수를 매핑합니다(예: function calling은 bedrock의 anthropic에서는 지원되지만 titan에서는 지원되지 않습니다).
 
-See `litellm.get_supported_openai_params("command-r")` [**Code**](https://github.com/BerriAI/litellm/blob/main/litellm/utils.py#L3584)
+`litellm.get_supported_openai_params("command-r")` [**코드**](https://github.com/BerriAI/litellm/blob/main/litellm/utils.py#L3584)를 참고하세요.
 
-If a provider/model doesn't support a particular param, you can drop it. 
+provider/model이 특정 매개변수를 지원하지 않는 경우 해당 매개변수를 제거할 수 있습니다.
 
-## OpenAI Proxy Usage
+## OpenAI Proxy 사용법
 
 ```yaml
 litellm_settings:
     drop_params: true
 ```
 
-## Pass drop_params in `completion(..)`
+## `completion(..)`에서 drop_params 전달 {#pass-drop-params-in-completion}
 
-Just drop_params when calling specific models 
+특정 모델을 호출할 때만 drop_params를 적용합니다.
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -79,11 +79,11 @@ response = litellm.completion(
 </TabItem>
 </Tabs>
 
-## Specify params to drop 
+## 제거할 매개변수 지정 {#specify-params-to-drop}
 
-To drop specific params when calling a provider (E.g. 'logit_bias' for vllm)
+provider를 호출할 때 특정 매개변수를 제거하려면(예: vllm의 'logit_bias')
 
-Use `additional_drop_params`
+`additional_drop_params`를 사용합니다.
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -115,11 +115,11 @@ response = litellm.completion(
 </TabItem>
 </Tabs>
 
-**additional_drop_params**: List or null - Is a list of openai params you want to drop when making a call to the model.
+**additional_drop_params**: List 또는 null - 모델을 호출할 때 제거하려는 openai 매개변수 목록입니다.
 
-### Nested Field Removal
+### 중첩 필드 제거 {#nested-field-removal}
 
-Drop nested fields within complex objects using JSONPath-like notation:
+JSONPath와 유사한 표기법을 사용해 복잡한 객체 안의 중첩 필드를 제거합니다.
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -154,29 +154,29 @@ model_list:
 </TabItem>
 </Tabs>
 
-**Supported syntax:**
-- `field` - Top-level field
-- `parent.child` - Nested object field
-- `array[*]` - All array elements
-- `array[0]` - Specific array index
-- `tools[*].input_examples` - Field in all array elements
-- `tools[0].metadata.field` - Specific index + nested field
+**지원되는 문법:**
+- `field` - 최상위 필드
+- `parent.child` - 중첩 객체 필드
+- `array[*]` - 모든 배열 요소
+- `array[0]` - 특정 배열 인덱스
+- `tools[*].input_examples` - 모든 배열 요소의 필드
+- `tools[0].metadata.field` - 특정 인덱스 + 중첩 필드
 
-**Example use cases:**
-- Remove `input_examples` from tool definitions (Claude Code + AWS Bedrock)
-- Drop provider-specific fields from nested structures
-- Clean up nested parameters before sending to LLM
+**예제 사용 사례:**
+- 도구 정의에서 `input_examples` 제거(Claude Code + AWS Bedrock)
+- 중첩 구조에서 provider별 필드 제거
+- LLM으로 보내기 전에 중첩 매개변수 정리
 
-## Specify allowed openai params in a request
+## 요청에서 허용할 openai 매개변수 지정 {#specify-allowed-openai-params-in-a-request}
 
-Tell litellm to allow specific openai params in a request. Use this if you get a `litellm.UnsupportedParamsError` and want to allow a param. LiteLLM will pass the param as is to the model.
+요청에서 특정 openai 매개변수를 허용하도록 litellm에 지시합니다. `litellm.UnsupportedParamsError`가 발생했고 해당 매개변수를 허용하고 싶을 때 사용하세요. LiteLLM은 해당 매개변수를 그대로 모델에 전달합니다.
 
 
 
 <Tabs>
 <TabItem value="sdk" label="LiteLLM Python SDK">
 
-In this example we pass `allowed_openai_params=["tools"]` to allow the `tools` param.
+이 예제에서는 `tools` 매개변수를 허용하기 위해 `allowed_openai_params=["tools"]`를 전달합니다.
 
 ```python showLineNumbers title="Pass allowed_openai_params to LiteLLM Python SDK"
 await litellm.acompletion(
@@ -191,13 +191,13 @@ await litellm.acompletion(
 </TabItem>
 <TabItem value="proxy" label="LiteLLM Proxy">
 
-When using litellm proxy you can pass `allowed_openai_params` in two ways:
+litellm proxy를 사용할 때는 두 가지 방식으로 `allowed_openai_params`를 전달할 수 있습니다.
 
-1. Dynamically pass `allowed_openai_params` in a request
-2. Set `allowed_openai_params` on the config.yaml file for a specific model
+1. 요청에서 `allowed_openai_params`를 동적으로 전달
+2. 특정 모델의 config.yaml 파일에 `allowed_openai_params` 설정
 
-#### Dynamically pass allowed_openai_params in a request
-In this example we pass `allowed_openai_params=["tools"]` to allow the `tools` param for a request sent to the model set on the proxy.
+#### 요청에서 allowed_openai_params 동적 전달 {#dynamically-pass-allowed-openai-params-in-a-request}
+이 예제에서는 proxy에 설정된 모델로 보내는 요청에서 `tools` 매개변수를 허용하기 위해 `allowed_openai_params=["tools"]`를 전달합니다.
 
 ```python showLineNumbers title="Dynamically pass allowed_openai_params in a request"
 import openai
@@ -223,9 +223,9 @@ response = client.chat.completions.create(
 )
 ```
 
-#### Set allowed_openai_params on config.yaml
+#### config.yaml에 allowed_openai_params 설정 {#set-allowed-openai-params-on-config-yaml}
 
-You can also set `allowed_openai_params` on the config.yaml file for a specific model. This means that all requests to this deployment are allowed to pass in the `tools` param.
+특정 모델의 config.yaml 파일에 `allowed_openai_params`를 설정할 수도 있습니다. 이렇게 하면 이 배포로 보내는 모든 요청에서 `tools` 매개변수를 전달할 수 있습니다.
 
 ```yaml showLineNumbers title="Set allowed_openai_params on config.yaml"
 model_list:

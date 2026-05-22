@@ -1,10 +1,10 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Using Vision Models
+# Vision 모델 사용하기 {#using-vision}
 
-## Quick Start
-Example passing images to a model 
+## 빠른 시작
+모델에 이미지를 전달하는 예제입니다.
 
 
 <Tabs>
@@ -44,7 +44,7 @@ response = completion(
 </TabItem>
 <TabItem label="LiteLLM Proxy Server" value="proxy">
 
-1. Define vision models on config.yaml
+1. config.yaml에 vision 모델을 정의합니다.
 
 ```yaml
 model_list:
@@ -62,13 +62,13 @@ model_list:
 
 ```
 
-2. Run proxy server
+2. proxy server를 실행합니다.
 
 ```bash
 litellm --config config.yaml
 ```
 
-3. Test it using the OpenAI Python SDK
+3. OpenAI Python SDK로 테스트합니다.
 
 
 ```python
@@ -110,12 +110,12 @@ response = client.chat.completions.create(
 
 
 
-## Checking if a model supports `vision`
+## 모델이 `vision`을 지원하는지 확인하기 {#checking-if-a-model-supports-vision}
 
 <Tabs>
 <TabItem label="LiteLLM Python SDK" value="Python">
 
-Use `litellm.supports_vision(model="")` -> returns `True` if model supports `vision` and `False` if not
+`litellm.supports_vision(model="")`를 사용합니다. 모델이 `vision`을 지원하면 `True`를 반환하고, 지원하지 않으면 `False`를 반환합니다.
 
 ```python
 assert litellm.supports_vision(model="openai/gpt-4-vision-preview") == True
@@ -129,7 +129,7 @@ assert litellm.supports_vision(model="xai/grok-2-latest") == False
 <TabItem label="LiteLLM Proxy Server" value="proxy">
 
 
-1. Define vision models on config.yaml
+1. config.yaml에 vision 모델을 정의합니다.
 
 ```yaml
 model_list:
@@ -146,13 +146,13 @@ model_list:
       supports_vision: True        # set supports_vision to True so /model/info returns this attribute as True
 ```
 
-2. Run proxy server
+2. proxy server를 실행합니다.
 
 ```bash
 litellm --config config.yaml
 ```
 
-3. Call `/model_group/info` to check if your model supports `vision`
+3. 모델이 `vision`을 지원하는지 확인하려면 `/model_group/info`를 호출합니다.
 
 ```shell
 curl -X 'GET' \
@@ -161,7 +161,7 @@ curl -X 'GET' \
   -H 'x-api-key: sk-1234'
 ```
 
-Expected Response 
+예상 응답
 
 ```json
 {
@@ -192,9 +192,9 @@ Expected Response
 </Tabs>
 
 
-## Explicitly specify image type 
+## 이미지 유형 명시적으로 지정하기 {#explicitly-specify-image-type}
 
-If you have images without a mime-type, or if litellm is incorrectly inferring the mime type of your image (e.g. calling `gs://` url's with vertex ai), you can set this explicitly via the `format` param. 
+mime-type이 없는 이미지가 있거나 litellm이 이미지의 mime type을 잘못 추론하는 경우(예: vertex ai에서 `gs://` url을 호출하는 경우), `format` param으로 이를 명시적으로 설정할 수 있습니다.
 
 ```python
 "image_url": {
@@ -203,9 +203,9 @@ If you have images without a mime-type, or if litellm is incorrectly inferring t
 }
 ```
 
-LiteLLM will use this for any API endpoint, which supports specifying mime-type (e.g. anthropic/bedrock/vertex ai). 
+LiteLLM은 mime-type 지정을 지원하는 모든 API endpoint(예: anthropic/bedrock/vertex ai)에 이 값을 사용합니다.
 
-For others (e.g. openai), it will be ignored. 
+그 외의 경우(예: openai)에는 이 값이 무시됩니다.
 
 <Tabs>
 <TabItem label="SDK" value="sdk">
@@ -244,7 +244,7 @@ response = completion(
 </TabItem>
 <TabItem label="PROXY" value="proxy">
 
-1. Define vision models on config.yaml
+1. config.yaml에 vision 모델을 정의합니다.
 
 ```yaml
 model_list:
@@ -262,13 +262,13 @@ model_list:
 
 ```
 
-2. Run proxy server
+2. proxy server를 실행합니다.
 
 ```bash
 litellm --config config.yaml
 ```
 
-3. Test it using the OpenAI Python SDK
+3. OpenAI Python SDK로 테스트합니다.
 
 
 ```python
@@ -311,7 +311,7 @@ response = client.chat.completions.create(
 
 
 
-## Spec 
+## 사양 {#spec}
 
 ```
 "image_url": str

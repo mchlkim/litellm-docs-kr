@@ -1,36 +1,36 @@
-# [BETA] LiteLLM Managed Files with Batches
+# [BETA] LiteLLM Managed Files와 Batches
 
 :::info
 
-This is a free LiteLLM Enterprise feature.
+이 기능은 무료 LiteLLM 엔터프라이즈 기능입니다.
 
-Available via the `litellm[proxy]` package or any `litellm` docker image.
+`litellm[proxy]` 패키지 또는 모든 `litellm` docker image에서 사용할 수 있습니다.
 
 :::
 
 
-| Feature | Description | Comments |
+| 기능 | 설명 | 비고 |
 | --- | --- | --- |
 | Proxy | ✅ |  |
-| SDK | ❌ | Requires postgres DB for storing file ids |
-| Available across all [Batch providers](../batches#supported-providers) | ✅ |  |
+| SDK | ❌ | file id를 저장하려면 postgres DB가 필요합니다 |
+| 모든 [Batch providers](../batches#supported-providers)에서 사용 가능 | ✅ |  |
 
 
-## Overview
+## 개요
 
-Use this to:
+다음 용도로 사용합니다:
 
-- Loadbalance across multiple Azure Batch deployments
-- Control batch model access by key/user/team (same as chat completion models)
+- 여러 Azure Batch deployments 간에 로드 밸런싱
+- key/user/team별 batch model access 제어(chat completion models와 동일)
 
 
-## (Proxy Admin) Usage
+## (Proxy Admin) 사용법
 
-Here's how to give developers access to your Batch models.
+개발자에게 Batch 모델 접근 권한을 부여하는 방법입니다.
 
-### 1. Setup config.yaml
+### 1. config.yaml 설정
 
-- specify `mode: batch` for each model: Allows developers to know this is a batch model.
+- 각 모델에 `mode: batch`를 지정합니다. 개발자가 이 모델이 batch model임을 알 수 있습니다.
 
 ```yaml showLineNumbers title="litellm_config.yaml"
 model_list:
@@ -51,7 +51,7 @@ model_list:
 
 ```
 
-### 2. Create Virtual Key
+### 2. Virtual Key 생성
 
 ```bash showLineNumbers title="create_virtual_key.sh"
 curl -L -X POST 'https://{PROXY_BASE_URL}/key/generate' \
@@ -61,32 +61,32 @@ curl -L -X POST 'https://{PROXY_BASE_URL}/key/generate' \
 ```
 
 
-You can now use the virtual key to access the batch models (See Developer flow).
+이제 virtual key를 사용해 batch 모델에 접근할 수 있습니다(Developer flow 참조).
 
-## (Developer) Usage
+## (Developer) 사용법
 
-Here's how to create a LiteLLM managed file and execute Batch CRUD operations with the file. 
+LiteLLM managed file을 생성하고 해당 파일로 Batch CRUD operations를 실행하는 방법입니다.
 
-### 1. Create request.jsonl 
+### 1. request.jsonl 생성
 
-- Check models available via `/model_group/info`
-- See all models with `mode: batch`
-- Set `model` in .jsonl to the model from `/model_group/info`
+- `/model_group/info`를 통해 사용 가능한 모델을 확인합니다.
+- `mode: batch`가 있는 모든 모델을 확인합니다.
+- .jsonl의 `model`을 `/model_group/info`에서 가져온 모델로 설정합니다.
 
 ```json showLineNumbers title="request.jsonl"
 {"custom_id": "request-1", "method": "POST", "url": "/v1/chat/completions", "body": {"model": "gpt-4o-batch", "messages": [{"role": "system", "content": "You are a helpful assistant."},{"role": "user", "content": "Hello world!"}],"max_tokens": 1000}}
 {"custom_id": "request-2", "method": "POST", "url": "/v1/chat/completions", "body": {"model": "gpt-4o-batch", "messages": [{"role": "system", "content": "You are an unhelpful assistant."},{"role": "user", "content": "Hello world!"}],"max_tokens": 1000}}
 ```
 
-Expectation:
+예상 동작:
 
-- LiteLLM translates this to the azure deployment specific value (e.g. `gpt-4o-mini-general-deployment`)
+- LiteLLM은 이를 azure deployment별 값으로 변환합니다(예: `gpt-4o-mini-general-deployment`).
 
-### 2. Upload File 
+### 2. 파일 업로드
 
-Specify `target_model_names: "<model-name>"` to enable LiteLLM managed files and request validation.
+LiteLLM managed files와 요청 검증을 활성화하려면 `target_model_names: "<model-name>"`을 지정합니다.
 
-model-name should be the same as the model-name in the request.jsonl
+model-name은 request.jsonl의 model-name과 같아야 합니다.
 
 ```python showLineNumbers title="create_batch.py"
 from openai import OpenAI
@@ -106,11 +106,11 @@ print(batch_input_file)
 ```
 
 
-**Where is the file written?**:
+**파일은 어디에 기록되나요?**:
 
-All gpt-4o-batch deployments (gpt-4o-mini-general-deployment, gpt-4o-mini-special-deployment) will be written to. This enables loadbalancing across all gpt-4o-batch deployments in Step 3.
+모든 gpt-4o-batch deployments(gpt-4o-mini-general-deployment, gpt-4o-mini-special-deployment)에 기록됩니다. 이렇게 하면 3단계에서 모든 gpt-4o-batch deployments 간 로드 밸런싱이 가능합니다.
 
-### 3. Create + Retrieve the batch
+### 3. batch 생성 및 조회
 
 ```python showLineNumbers title="create_batch.py"
 ...
@@ -131,7 +131,7 @@ batch_response = client.batches.retrieve(
 status = batch_response.status
 ```
 
-### 4. Retrieve Batch Content 
+### 4. Batch Content 조회
 
 ```python showLineNumbers title="create_batch.py"
 ...
@@ -142,7 +142,7 @@ file_response = client.files.content(file_id)
 print(file_response.text)
 ```
 
-### 5. List batches
+### 5. batches 나열
 
 ```python showLineNumbers title="create_batch.py"
 ...
@@ -150,7 +150,7 @@ print(file_response.text)
 client.batches.list(limit=10, extra_query={"target_model_names": "gpt-4o-batch"})
 ```
 
-### [Coming Soon] Cancel a batch
+### [출시 예정] batch 취소
 
 ```python showLineNumbers title="create_batch.py"
 ...
@@ -160,7 +160,7 @@ client.batches.cancel(batch_id)
 
 
 
-## E2E Example
+## E2E 예제
 
 ```python showLineNumbers title="create_batch.py"
 import json
@@ -256,17 +256,15 @@ print(f"status: {status}")
 
 ## FAQ
 
-### Where are my files written?
+### 파일은 어디에 기록되나요?
 
-When a `target_model_names` is specified, the file is written to all deployments that match the `target_model_names`.
+`target_model_names`가 지정되면 파일은 `target_model_names`와 일치하는 모든 deployments에 기록됩니다.
 
-No additional infrastructure is required.
+추가 인프라는 필요하지 않습니다.
 
-## Could the batch be created at the eastus-01 deployment but a subsequent get of the batch could be routed to (a different) eastus2-01 deployment ?
+## batch가 eastus-01 deployment에서 생성되었지만 이후 batch get이 (다른) eastus2-01 deployment로 라우팅될 수 있나요?
 
-**A.** You can loadbalance b/w multiple models for the initial create batch. Once that's created - we return a file id, which encodes the model deployment used, so it's sticky and only sends any get/delete to that deployment. 
-
-
+**A.** 최초 batch 생성 시 여러 모델 간에 로드 밸런싱할 수 있습니다. 생성이 완료되면 사용된 model deployment가 인코딩된 file id를 반환하므로 sticky하게 동작하며, 모든 get/delete는 해당 deployment로만 전송됩니다.
 
 
 

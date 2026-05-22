@@ -3,16 +3,16 @@ import TabItem from '@theme/TabItem';
 
 # /interactions
 
-| Feature | Supported | Notes |
+| Feature | Supported | 참고 |
 |---------|-----------|-------|
-| Logging | ✅ | Works across all integrations |
+| 로깅 | ✅ | 모든 통합에서 동작 |
 | Streaming | ✅ | |
-| Loadbalancing | ✅ | Between supported models |
-| Supported LLM providers | **All LiteLLM supported CHAT COMPLETION providers** | `openai`, `anthropic`, `bedrock`, `vertex_ai`, `gemini`, `azure`, `azure_ai` etc. |
+| Loadbalancing | ✅ | 지원 모델 간 동작 |
+| 지원 LLM provider | **LiteLLM이 지원하는 모든 CHAT COMPLETION provider** | `openai`, `anthropic`, `bedrock`, `vertex_ai`, `gemini`, `azure`, `azure_ai` 등 |
 
-## **LiteLLM Python SDK Usage**
+## **LiteLLM Python SDK 사용법**
 
-### Quick Start
+### 빠른 시작
 
 ```python showLineNumbers title="Create Interaction"
 from litellm import create_interaction
@@ -28,7 +28,7 @@ response = create_interaction(
 print(response.outputs[-1].text)
 ```
 
-### Async Usage
+### Async 사용법
 
 ```python showLineNumbers title="Async Create Interaction"
 from litellm import acreate_interaction
@@ -65,11 +65,11 @@ for chunk in response:
     print(chunk)
 ```
 
-## **LiteLLM AI Gateway (Proxy) Usage**
+## **LiteLLM AI Gateway (Proxy) 사용법**
 
-### Setup
+### 설정
 
-Add this to your litellm proxy config.yaml:
+LiteLLM proxy `config.yaml`에 다음을 추가합니다.
 
 ```yaml showLineNumbers title="config.yaml"
 model_list:
@@ -79,7 +79,7 @@ model_list:
       api_key: os.environ/GEMINI_API_KEY
 ```
 
-Start litellm:
+LiteLLM을 시작합니다.
 
 ```bash
 litellm --config /path/to/config.yaml
@@ -87,7 +87,7 @@ litellm --config /path/to/config.yaml
 # RUNNING on http://0.0.0.0:4000
 ```
 
-### Test Request
+### 테스트 요청
 
 <Tabs>
 <TabItem value="curl" label="curl">
@@ -115,7 +115,7 @@ curl -N -X POST "http://localhost:4000/v1beta/interactions" \
   }'
 ```
 
-**Get Interaction:**
+**Interaction 조회:**
 
 ```bash showLineNumbers title="Get Interaction by ID"
 curl "http://localhost:4000/v1beta/interactions/{interaction_id}" \
@@ -126,7 +126,7 @@ curl "http://localhost:4000/v1beta/interactions/{interaction_id}" \
 
 <TabItem value="google-sdk" label="Google GenAI SDK">
 
-Point the Google GenAI SDK to LiteLLM Proxy:
+Google GenAI SDK가 LiteLLM Proxy를 바라보도록 설정합니다.
 
 ```python showLineNumbers title="Google GenAI SDK with LiteLLM Proxy"
 from google import genai
@@ -166,21 +166,21 @@ for chunk in client.interactions.create_stream(
 </TabItem>
 </Tabs>
 
-## **Request/Response Format**
+## **Request/응답 형식**
 
-### Request Parameters
+### 요청 파라미터
 
-| Parameter | Type | Required | Description |
+| 파라미터 | 타입 | 필수 여부 | 설명 |
 |-----------|------|----------|-------------|
-| `model` | string | Yes | Model to use (e.g., `gemini/gemini-2.5-flash`) |
-| `input` | string | Yes | The input text for the interaction |
-| `stream` | boolean | No | Enable streaming responses |
-| `tools` | array | No | Tools available to the model |
-| `system_instruction` | string | No | System instructions for the model |
-| `generation_config` | object | No | Generation configuration |
-| `previous_interaction_id` | string | No | ID of previous interaction for context |
+| `model` | string | 예 | 사용할 모델입니다(예: `gemini/gemini-2.5-flash`). |
+| `input` | string | 예 | interaction에 전달할 입력 텍스트입니다. |
+| `stream` | boolean | 아니요 | streaming 응답을 활성화합니다. |
+| `tools` | array | 아니요 | 모델이 사용할 수 있는 tools입니다. |
+| `system_instruction` | string | 아니요 | 모델에 전달할 system instruction입니다. |
+| `generation_config` | object | 아니요 | generation 설정입니다. |
+| `previous_interaction_id` | string | 아니요 | context로 사용할 이전 interaction ID입니다. |
 
-### Response Format
+### 응답 형식
 
 ```json
 {
@@ -205,11 +205,11 @@ for chunk in client.interactions.create_stream(
 }
 ```
 
-## **Calling non-Interactions API endpoints (`/interactions` to `/responses` Bridge)**
+## **non-Interactions API 엔드포인트 호출(`/interactions` to `/responses` Bridge) {#interactions-to-responses-bridge}**
 
-LiteLLM allows you to call non-Interactions API models via a bridge to LiteLLM's `/responses` endpoint. This is useful for calling OpenAI, Anthropic, and other providers that don't natively support the Interactions API.
+LiteLLM은 LiteLLM의 `/responses` 엔드포인트로 연결되는 bridge를 통해 non-Interactions API 모델을 호출할 수 있게 합니다. 이는 Interactions API를 native로 지원하지 않는 OpenAI, Anthropic 및 기타 provider를 호출할 때 유용합니다.
 
-#### Python SDK Usage
+#### Python SDK 사용법
 
 ```python showLineNumbers title="SDK Usage"
 import litellm
@@ -227,9 +227,9 @@ response = litellm.interactions.create(
 print(response.outputs[-1].text)
 ```
 
-#### LiteLLM Proxy Usage
+#### LiteLLM Proxy 사용법
 
-**Setup Config:**
+**Config 설정:**
 
 ```yaml showLineNumbers title="Example Configuration"
 model_list:
@@ -239,7 +239,7 @@ model_list:
     api_key: os.environ/OPENAI_API_KEY
 ```
 
-**Start Proxy:**
+**Proxy 시작:**
 
 ```bash showLineNumbers title="Start LiteLLM Proxy"
 litellm --config /path/to/config.yaml
@@ -247,7 +247,7 @@ litellm --config /path/to/config.yaml
 # RUNNING on http://0.0.0.0:4000
 ```
 
-**Make Request:**
+**요청 보내기:**
 
 ```bash showLineNumbers title="non-Interactions API Model Request"
 curl http://localhost:4000/v1beta/interactions \
@@ -259,9 +259,9 @@ curl http://localhost:4000/v1beta/interactions \
   }'
 ```
 
-## **Supported Providers**
+## **지원 프로바이더**
 
-| Provider | Link to Usage |
+| Provider | Link to 사용법 |
 |----------|---------------|
-| Google AI Studio | [Usage](#quick-start) |
-| All other LiteLLM providers | [Bridge Usage](#calling-non-interactions-api-endpoints-interactions-to-responses-bridge) |
+| Google AI Studio | [사용법](#quick-start) |
+| 기타 모든 LiteLLM provider | Bridge 사용법 |

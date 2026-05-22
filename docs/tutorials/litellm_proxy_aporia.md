@@ -2,39 +2,39 @@ import Image from '@theme/IdealImage';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Aporia Guardrails with LiteLLM Gateway
+# LiteLLM Gateway에서 Aporia 가드레일 사용하기 {#aporia-guardrails-with-litellm-gateway}
 
-In this tutorial we will use LiteLLM AI Gateway with Aporia to detect PII in requests and profanity in responses
+이 튜토리얼에서는 LiteLLM AI Gateway와 Aporia를 함께 사용하여 요청의 PII와 응답의 비속어를 감지합니다.
 
-## 1. Setup guardrails on Aporia
+## 1. Aporia에서 가드레일 설정하기 {#1-setup-guardrails-on-aporia}
 
-### Create Aporia Projects
+### Aporia 프로젝트 만들기 {#create-aporia-projects}
 
-Create two projects on [Aporia](https://guardrails.aporia.com/)
+[Aporia](https://guardrails.aporia.com/)에서 프로젝트 2개를 만듭니다.
 
-1. Pre LLM API Call - Set all the policies you want to run on pre LLM API call 
-2. Post LLM API Call - Set all the policies you want to run post LLM API call
+1. Pre LLM API Call - LLM API 호출 전에 실행할 정책을 모두 설정합니다.
+2. Post LLM API Call - LLM API 호출 후에 실행할 정책을 모두 설정합니다.
 
 
 <Image img={require('../../img/aporia_projs.png')} />
 
 
-### Pre-Call: Detect PII
+### Pre-Call: PII 감지 {#pre-call-detect-pii}
 
-Add the `PII - Prompt` to your Pre LLM API Call project
+Pre LLM API Call 프로젝트에 `PII - Prompt`를 추가합니다.
 
 <Image img={require('../../img/aporia_pre.png')} />
 
-### Post-Call: Detect Profanity in Responses
+### Post-Call: 응답의 비속어 감지 {#post-call-detect-profanity-in-responses}
 
-Add the `Toxicity - Response` to your Post LLM API Call project
+Post LLM API Call 프로젝트에 `Toxicity - Response`를 추가합니다.
 
 <Image img={require('../../img/aporia_post.png')} />
 
 
-## 2. Define Guardrails on your LiteLLM config.yaml 
+## 2. LiteLLM config.yaml에서 가드레일 정의하기 {#2-define-guardrails-on-your-litellm-configyaml}
 
-- Define your guardrails under the `guardrails` section and set `pre_call_guardrails` and `post_call_guardrails`
+- `guardrails` 섹션 아래에 가드레일을 정의하고 `pre_call_guardrails` 및 `post_call_guardrails`를 설정합니다.
 ```yaml
 model_list:
   - model_name: gpt-3.5-turbo
@@ -57,27 +57,27 @@ guardrails:
       api_base: os.environ/APORIA_API_BASE_2
 ```
 
-### Supported values for `mode`
+### `mode`에 지원되는 값 {#supported-values-for-mode}
 
-- `pre_call` Run **before** LLM call, on **input**
-- `post_call` Run **after** LLM call, on **input & output**
-- `during_call` Run **during** LLM call, on **input** Same as `pre_call` but runs in parallel as LLM call.  Response not returned until guardrail check completes
+- `pre_call`: LLM 호출 **전**에 **입력**에 대해 실행합니다.
+- `post_call`: LLM 호출 **후**에 **입력 및 출력**에 대해 실행합니다.
+- `during_call`: LLM 호출 **중**에 **입력**에 대해 실행합니다. `pre_call`과 같지만 LLM 호출과 병렬로 실행됩니다. 가드레일 검사가 완료될 때까지 응답이 반환되지 않습니다.
 
-## 3. Start LiteLLM Gateway 
+## 3. LiteLLM Gateway 시작하기 {#3-start-litellm-gateway}
 
 
 ```shell
 litellm --config config.yaml --detailed_debug
 ```
 
-## 4. Test request 
+## 4. 요청 테스트하기 {#4-test-request}
 
-**[Langchain, OpenAI SDK Usage Examples](../proxy/user_keys#request-format)**
+**[Langchain, OpenAI SDK 사용법 예제](../proxy/user_keys#request-format)**
 
 <Tabs>
 <TabItem label="Unsuccessful call" value = "not-allowed">
 
-Expect this to fail since since `ishaan@berri.ai` in the request is PII
+요청에 포함된 `ishaan@berri.ai`가 PII이므로 실패해야 합니다.
 
 ```shell
 curl -i http://localhost:4000/v1/chat/completions \
@@ -92,7 +92,7 @@ curl -i http://localhost:4000/v1/chat/completions \
   }'
 ```
 
-Expected response on failure
+실패 시 예상 응답은 다음과 같습니다.
 
 ```shell
 {
@@ -136,12 +136,12 @@ curl -i http://localhost:4000/v1/chat/completions \
 
 </Tabs>
 
-## 5. Control Guardrails per Project (API Key)
+## 5. 프로젝트(API Key)별 가드레일 제어하기 {#5-control-guardrails-per-project-api-key}
 
-Use this to control what guardrails run per project. In this tutorial we only want the following guardrails to run for 1 project (API Key)
+프로젝트별로 어떤 가드레일을 실행할지 제어할 때 사용합니다. 이 튜토리얼에서는 프로젝트(API Key) 1개에 대해 다음 가드레일만 실행하려고 합니다.
 - `guardrails`: ["aporia-pre-guard", "aporia-post-guard"]
 
-**Step 1** Create Key with guardrail settings
+**1단계** 가드레일 설정이 포함된 Key 만들기
 
 <Tabs>
 <TabItem value="/key/generate" label="/key/generate">
@@ -173,7 +173,7 @@ curl --location 'http://0.0.0.0:4000/key/update' \
 </TabItem>
 </Tabs>
 
-**Step 2** Test it with new key
+**2단계** 새 Key로 테스트하기
 
 ```shell
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -189,6 +189,5 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
     ]
 }'
 ```
-
 
 

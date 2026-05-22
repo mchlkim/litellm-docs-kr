@@ -1,10 +1,10 @@
 # Azure Model Router
 
-Azure Model Router is a feature in Azure AI Foundry that automatically routes your requests to the best available model based on your requirements. This allows you to use a single endpoint that intelligently selects the optimal model for each request.
+Azure Model Router는 요구사항에 따라 요청을 가장 적합한 사용 가능 모델로 자동 라우팅하는 Azure AI Foundry 기능입니다. 단일 endpoint를 사용하면서 각 요청에 맞는 최적 모델을 지능적으로 선택할 수 있습니다.
 
-## Quick Start
+## 빠른 시작
 
-**Model pattern**: `azure_ai/model_router/<deployment-name>`
+**모델 패턴**: `azure_ai/model_router/<deployment-name>`
 
 ```python
 import litellm
@@ -17,7 +17,7 @@ response = litellm.completion(
 )
 ```
 
-**Proxy config** (`config.yaml`):
+**Proxy 설정**(`config.yaml`):
 
 ```yaml
 model_list:
@@ -28,34 +28,34 @@ model_list:
       api_key: your-api-key
 ```
 
-## Key Features
+## 주요 기능
 
-- **Automatic Model Selection**: Azure Model Router dynamically selects the best model for your request
-- **Cost Tracking**: LiteLLM automatically tracks costs based on the actual model used (e.g., `gpt-4.1-nano`), plus the Model Router infrastructure fee
-- **Streaming Support**: Full support for streaming responses with accurate cost calculation
-- **Simple Configuration**: Easy to set up via UI or config file
+- **자동 모델 선택**: Azure Model Router가 요청에 가장 적합한 모델을 동적으로 선택합니다.
+- **비용 추적**: LiteLLM은 실제 사용된 모델(예: `gpt-4.1-nano`) 기준 비용과 Model Router 인프라 요금을 자동으로 추적합니다.
+- **Streaming 지원**: streaming 응답을 완전히 지원하며 비용도 정확히 계산합니다.
+- **간단한 설정**: UI 또는 config 파일로 쉽게 설정할 수 있습니다.
 
-## Model Naming Pattern
+## 모델 이름 패턴
 
-Use the pattern: `azure_ai/model_router/<deployment-name>`
+다음 패턴을 사용합니다. `azure_ai/model_router/<deployment-name>`
 
-**Components:**
-- `azure_ai` - The provider identifier
-- `model_router` - Indicates this is a Model Router deployment
-- `<deployment-name>` - Your actual deployment name from Azure AI Foundry (e.g., `azure-model-router`)
+**구성 요소:**
+- `azure_ai` - provider 식별자
+- `model_router` - Model Router 배포임을 나타냅니다.
+- `<deployment-name>` - Azure AI Foundry의 실제 deployment 이름(예: `azure-model-router`)
 
-**Example:** `azure_ai/model_router/azure-model-router`
+**예제:** `azure_ai/model_router/azure-model-router`
 
-**How it works:**
-- LiteLLM automatically strips the `model_router/` prefix when sending requests to Azure
-- Only your deployment name (e.g., `azure-model-router`) is sent to the Azure API
-- The full path is preserved in responses and logs for proper cost tracking
+**동작 방식:**
+- LiteLLM은 Azure로 요청을 보낼 때 `model_router/` prefix를 자동으로 제거합니다.
+- Azure API에는 deployment 이름(예: `azure-model-router`)만 전송됩니다.
+- 정확한 비용 추적을 위해 응답과 로그에는 전체 경로가 보존됩니다.
 
 ## LiteLLM Python SDK
 
-### Basic Usage
+### Basic 사용법
 
-Use the pattern `azure_ai/model_router/<deployment-name>` where `<deployment-name>` is your Azure deployment name:
+`<deployment-name>`에 Azure deployment 이름을 넣어 `azure_ai/model_router/<deployment-name>` 패턴을 사용합니다.
 
 ```python
 import litellm
@@ -71,14 +71,14 @@ response = litellm.completion(
 print(response)
 ```
 
-**Pattern Explanation:**
-- `azure_ai` - The provider
-- `model_router` - Indicates this is a model router deployment
-- `azure-model-router` - Your actual deployment name from Azure AI Foundry
+**패턴 설명:**
+- `azure_ai` - provider
+- `model_router` - model router 배포임을 나타냅니다.
+- `azure-model-router` - Azure AI Foundry의 실제 deployment 이름
 
-LiteLLM will automatically strip the `model_router/` prefix when sending the request to Azure, so only `azure-model-router` is sent to the API.
+LiteLLM은 Azure로 요청을 보낼 때 `model_router/` prefix를 자동으로 제거하므로, API에는 `azure-model-router`만 전송됩니다.
 
-### Streaming with Usage Tracking
+### 사용량 추적이 포함된 Streaming
 
 ```python
 import litellm
@@ -97,7 +97,7 @@ async for chunk in response:
     print(chunk)
 ```
 
-## LiteLLM Proxy (AI Gateway)
+## `LiteLLM Proxy`(`AI Gateway`)
 
 ### config.yaml
 
@@ -112,13 +112,13 @@ model_list:
 
 **Note:** Replace `azure-model-router` in the model path with your actual deployment name from Azure AI Foundry.
 
-### Start Proxy
+### Proxy 시작
 
 ```bash
 litellm --config config.yaml
 ```
 
-### Test Request
+### 테스트 요청
 
 ```bash
 curl -X POST http://localhost:4000/chat/completions \
@@ -130,90 +130,90 @@ curl -X POST http://localhost:4000/chat/completions \
   }'
 ```
 
-## Add Azure Model Router via LiteLLM UI
+## LiteLLM UI에서 Azure Model Router 추가하기
 
-This walkthrough shows how to add an Azure Model Router endpoint to LiteLLM using the Admin Dashboard.
+이 walkthrough는 Admin Dashboard를 사용해 LiteLLM에 Azure Model Router endpoint를 추가하는 방법을 설명합니다.
 
-### Quick Start
+### 빠른 시작
 
-1. Navigate to the **Models** page in the LiteLLM UI
-2. Select **"Azure AI Foundry (Studio)"** as the provider
-3. Enter your deployment name (e.g., `azure-model-router`)
-4. LiteLLM will automatically format it as `azure_ai/model_router/azure-model-router`
-5. Add your API base URL and API key
-6. Test and save
+1. LiteLLM UI의 **모델** 페이지로 이동합니다.
+2. provider로 **"Azure AI Foundry(Studio)"**를 선택합니다.
+3. deployment 이름(예: `azure-model-router`)을 입력합니다.
+4. LiteLLM이 이를 `azure_ai/model_router/azure-model-router` 형식으로 자동 변환합니다.
+5. API base URL과 API key를 추가합니다.
+6. 테스트한 뒤 저장합니다.
 
-### Detailed Walkthrough
+### 상세 Walkthrough
 
-#### Step 1: Select Provider
+#### Step 1: Provider 선택
 
-Navigate to the Models page and select "Azure AI Foundry (Studio)" as the provider.
+모델 페이지로 이동해 provider로 "Azure AI Foundry(Studio)"를 선택합니다.
 
-##### Navigate to Models Page
+##### 모델 페이지로 이동
 
-![Navigate to Models](./img/azure_model_router_01.jpeg)
+![Navigate to 모델](./img/azure_model_router_01.jpeg)
 
-##### Click Provider Dropdown
+##### Provider dropdown 클릭
 
 ![Click Provider](./img/azure_model_router_02.jpeg)
 
-##### Choose Azure AI Foundry
+##### Azure AI Foundry 선택
 
-![Select Azure AI Foundry](./img/azure_model_router_03.jpeg)
+![Azure AI Foundry 선택](./img/azure_model_router_03.jpeg)
 
-#### Step 2: Enter Deployment Name
+#### 2단계: Deployment 이름 입력하기
 
-**New Simplified Method:** Just enter your deployment name directly in the text field. If your deployment name contains "model-router" or "model_router", LiteLLM will automatically format it as `azure_ai/model_router/<deployment-name>`.
+**새로운 간소화 방식:** 텍스트 필드에 deployment 이름을 직접 입력하면 됩니다. deployment 이름에 "model-router" 또는 "model_router"가 포함되어 있으면 LiteLLM이 자동으로 `azure_ai/model_router/<deployment-name>` 형식으로 변환합니다.
 
-**Example:**
+**예제:**
 - Enter: `azure-model-router`
 - LiteLLM creates: `azure_ai/model_router/azure-model-router`
 
-##### Copy Deployment Name from Azure Portal
+##### Azure Portal에서 Deployment 이름 복사
 
-Switch to Azure AI Foundry and copy your model router deployment name.
+Azure AI Foundry로 전환한 뒤 model router 배포 이름을 복사합니다.
 
-![Azure Portal Model Name](./img/azure_model_router_09.jpeg)
+![Azure Portal 모델 이름](./img/azure_model_router_09.jpeg)
 
 ![Copy Model Name](./img/azure_model_router_10.jpeg)
 
-##### Enter Deployment Name in LiteLLM
+##### LiteLLM에 Deployment 이름 입력
 
-Paste your deployment name (e.g., `azure-model-router`) directly into the text field.
+deployment 이름(예: `azure-model-router`)을 텍스트 필드에 직접 붙여넣습니다.
 
-![Enter Deployment Name](./img/azure_model_router_04.jpeg)
+![Deployment 이름 입력](./img/azure_model_router_04.jpeg)
 
-**What happens behind the scenes:**
-- You enter: `azure-model-router`
-- LiteLLM automatically detects this is a model router deployment
-- The full model path becomes: `azure_ai/model_router/azure-model-router`
-- When making API calls, only `azure-model-router` is sent to Azure
+**내부 동작:**
+- 입력값: `azure-model-router`
+- LiteLLM이 model router 배포임을 자동으로 감지합니다.
+- 전체 model path는 `azure_ai/model_router/azure-model-router`가 됩니다.
+- API 호출 시 Azure에는 `azure-model-router`만 전송됩니다.
 
-#### Step 3: Configure API Base and Key
+#### Step 3: API Base와 Key 설정
 
-Copy the endpoint URL and API key from Azure portal.
+Azure portal에서 endpoint URL과 API key를 복사합니다.
 
-##### Copy API Base URL from Azure
+##### Azure에서 API Base URL 복사
 
 ![Copy API Base](./img/azure_model_router_12.jpeg)
 
-##### Enter API Base in LiteLLM
+##### LiteLLM에 API Base 입력
 
-![Click API Base Field](./img/azure_model_router_13.jpeg)
+![API Base 필드 클릭](./img/azure_model_router_13.jpeg)
 
 ![Paste API Base](./img/azure_model_router_14.jpeg)
 
-##### Copy API Key from Azure
+##### Azure에서 API Key 복사
 
 ![Copy API Key](./img/azure_model_router_15.jpeg)
 
-##### Enter API Key in LiteLLM
+##### LiteLLM에 API Key 입력
 
 ![Enter API Key](./img/azure_model_router_16.jpeg)
 
-#### Step 4: Test and Add Model
+#### Step 4: 테스트 후 모델 추가
 
-Verify your configuration works and save the model.
+설정이 동작하는지 확인하고 모델을 저장합니다.
 
 ##### Test Connection
 
@@ -227,9 +227,9 @@ Verify your configuration works and save the model.
 
 ![Add Model](./img/azure_model_router_19.jpeg)
 
-#### Step 5: Verify in Playground
+#### Step 5: Playground에서 확인
 
-Test your model and verify cost tracking is working.
+모델을 테스트하고 비용 추적이 동작하는지 확인합니다.
 
 ##### Open Playground
 
@@ -239,51 +239,51 @@ Test your model and verify cost tracking is working.
 
 ![Select Model](./img/azure_model_router_21.jpeg)
 
-##### Send Test Message
+##### 테스트 메시지 전송
 
 ![Send Message](./img/azure_model_router_22.jpeg)
 
-##### View Logs
+##### View 로그
 
-![View Logs](./img/azure_model_router_23.jpeg)
+![View 로그](./img/azure_model_router_23.jpeg)
 
-##### Verify Cost Tracking
+##### 비용 추적 확인
 
-Cost is tracked based on the actual model used (e.g., `gpt-4.1-nano`), plus a flat infrastructure cost of $0.14 per million input tokens for using the Model Router.
+비용은 실제 사용된 모델(예: `gpt-4.1-nano`) 기준 비용과 Model Router 사용에 대한 입력 토큰 100만 개당 $0.14의 고정 인프라 비용을 합산해 추적됩니다.
 
 ![Verify Cost](./img/azure_model_router_24.jpeg)
 
-## Cost Tracking
+## 비용 추적
 
-LiteLLM automatically handles cost tracking for Azure Model Router. Understanding how this works helps you interpret spend and debug billing.
+LiteLLM은 Azure Model Router의 비용 추적을 자동으로 처리합니다. 이 동작을 이해하면 지출을 해석하고 billing 문제를 디버깅하는 데 도움이 됩니다.
 
-### How LiteLLM Calculates Cost
+### LiteLLM 비용 계산 방식
 
-When you use Azure Model Router, LiteLLM computes **two cost components**:
+Azure Model Router를 사용하면 LiteLLM은 **두 가지 비용 구성 요소**를 계산합니다.
 
-| Component | Description | When Applied |
+| 구성 요소 | 설명 | 적용 시점 |
 |-----------|-------------|--------------|
-| **Model Cost** | Token-based cost for the actual model that handled the request (e.g., `gpt-5-nano`, `gpt-4.1-nano`) | Always, when Azure returns the model in the response |
-| **Router Flat Cost** | $0.14 per million input tokens (Azure AI Foundry infrastructure fee) | When the **request** was made via a model router endpoint |
+| **Model Cost** | 요청을 실제로 처리한 모델(예: `gpt-5-nano`, `gpt-4.1-nano`)의 토큰 기반 비용 | Azure가 응답에서 모델을 반환하면 항상 적용 |
+| **Router Flat Cost** | 입력 토큰 100만 개당 $0.14(Azure AI Foundry 인프라 요금) | **요청**이 model router endpoint를 통해 수행된 경우 |
 
-### Cost Calculation Flow
+### 비용 계산 흐름
 
-1. **Request model detection**: LiteLLM records the model you requested (e.g., `azure_ai/model_router/model-router`). If it contains `model_router` or `model-router`, the request is treated as a router request.
+1. **요청 모델 감지**: LiteLLM은 요청한 모델(예: `azure_ai/model_router/model-router`)을 기록합니다. `model_router` 또는 `model-router`가 포함되어 있으면 router 요청으로 처리합니다.
 
-2. **Response model extraction**: Azure returns the actual model used in the response (e.g., `gpt-5-nano-2025-08-07`). LiteLLM uses this for the model cost lookup.
+2. **응답 모델 추출**: Azure는 응답에서 실제 사용된 모델(예: `gpt-5-nano-2025-08-07`)을 반환합니다. LiteLLM은 이를 모델 비용 조회에 사용합니다.
 
-3. **Model cost**: LiteLLM looks up the response model in its pricing table and computes cost from prompt tokens and completion tokens.
+3. **Model cost**: LiteLLM은 pricing table에서 응답 모델을 조회하고 prompt token과 completion token으로 비용을 계산합니다.
 
-4. **Router flat cost**: Because the original request was to a model router, LiteLLM adds the flat cost ($0.14 per M input tokens) on top of the model cost.
+4. **Router flat cost**: 원래 요청이 model router로 전송되었으므로 LiteLLM은 모델 비용 위에 고정 비용(입력 토큰 100만 개당 $0.14)을 추가합니다.
 
 5. **Total cost**: `Total = Model Cost + Router Flat Cost`
 
-### Configuration Requirements
+### 설정 Requirements
 
-For cost tracking to work correctly:
+비용 추적이 올바르게 동작하려면 다음을 지켜야 합니다.
 
-- **Use the full pattern**: `azure_ai/model_router/<deployment-name>` (e.g., `azure_ai/model_router/model-router`)
-- **Proxy config**: When using the LiteLLM proxy, set `model` in `litellm_params` to the full pattern so the request model is correctly identified as a router
+- **전체 패턴 사용**: `azure_ai/model_router/<deployment-name>`(예: `azure_ai/model_router/model-router`)
+- **Proxy 설정**: LiteLLM proxy를 사용할 때 `litellm_params`의 `model`을 전체 패턴으로 설정해 요청 모델이 router로 정확히 식별되도록 합니다.
 
 ```yaml
 # proxy_server_config.yaml
@@ -295,14 +295,14 @@ model_list:
       api_key: your-api-key
 ```
 
-### Cost Breakdown
+### 비용 구성
 
-When you use Azure Model Router, the total cost includes:
+Azure Model Router를 사용할 때 총 비용에는 다음이 포함됩니다.
 
-- **Model Cost**: Based on the actual model that handled your request (e.g., `gpt-5-nano`, `gpt-4.1-nano`)
-- **Router Flat Cost**: $0.14 per million input tokens (Azure AI Foundry infrastructure fee)
+- **Model Cost**: 요청을 실제로 처리한 모델(예: `gpt-5-nano`, `gpt-4.1-nano`) 기준 비용
+- **Router Flat Cost**: 입력 토큰 100만 개당 $0.14(Azure AI Foundry 인프라 요금)
 
-### Example Response with Cost
+### 비용이 포함된 예제 Response
 
 ```python
 import litellm
@@ -327,13 +327,11 @@ if hasattr(response, '_hidden_params') and 'response_cost' in response._hidden_p
     print(f"Response cost: ${response._hidden_params['response_cost']}")
 ```
 
-### Viewing Cost Breakdown in UI
+### UI에서 비용 구성 확인
 
-When viewing logs in the LiteLLM UI, you'll see:
-- **Model Cost**: The cost for the actual model used
-- **Azure Model Router Flat Cost**: The $0.14/M input tokens infrastructure fee
-- **Total Cost**: Sum of both costs
+LiteLLM UI에서 로그를 볼 때 다음을 확인할 수 있습니다.
+- **Model Cost**: 실제 사용된 모델의 비용
+- **Azure Model Router Flat Cost**: 입력 토큰 100만 개당 $0.14 인프라 요금
+- **Total Cost**: 두 비용의 합계
 
-This breakdown helps you understand exactly what you're paying for when using the Model Router.
-
-
+이 구성 내역은 Model Router 사용 시 어떤 항목에 비용을 지불하는지 정확히 이해하는 데 도움이 됩니다.

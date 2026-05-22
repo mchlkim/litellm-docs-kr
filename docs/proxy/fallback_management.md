@@ -1,23 +1,23 @@
-# [New] Fallback Management Endpoints
+# [신규] Fallback 관리 엔드포인트
 
-Dedicated endpoints for managing model fallbacks separately from the general configuration.
+일반 설정과 분리해 모델 fallback을 관리하기 위한 전용 엔드포인트입니다.
 
-## Overview
+## 개요
 
-These endpoints allow you to configure, retrieve, and delete fallback models without modifying the entire proxy configuration. This provides a cleaner and safer way to manage fallbacks compared to using the `/config/update` endpoint.
+이 엔드포인트를 사용하면 전체 프록시 설정을 수정하지 않고 fallback 모델을 구성, 조회, 삭제할 수 있습니다. `/config/update` 엔드포인트를 사용하는 방식보다 더 명확하고 안전하게 fallback을 관리할 수 있습니다.
 
-## Prerequisites
+## 사전 준비
 
-- Database storage must be enabled: Set `STORE_MODEL_IN_DB=True` in your environment
-- Models must exist in the router before configuring fallbacks
+- 데이터베이스 저장소가 활성화되어 있어야 합니다. 환경에 `STORE_MODEL_IN_DB=True`를 설정하세요.
+- fallback을 구성하기 전에 모델이 router에 존재해야 합니다.
 
-## Endpoints
+## 엔드포인트
 
 ### POST /fallback
 
-Create or update fallbacks for a specific model.
+특정 모델의 fallback을 생성하거나 업데이트합니다.
 
-**Request Body:**
+**요청 본문:**
 ```json
 {
   "model": "gpt-3.5-turbo",
@@ -26,15 +26,15 @@ Create or update fallbacks for a specific model.
 }
 ```
 
-**Parameters:**
-- `model` (string, required): The primary model name to configure fallbacks for
-- `fallback_models` (array of strings, required): List of fallback model names in priority order
-- `fallback_type` (string, optional): Type of fallback. Options:
-  - `"general"` (default): Standard fallbacks for any error
-  - `"context_window"`: Fallbacks for context window exceeded errors
-  - `"content_policy"`: Fallbacks for content policy violations
+**파라미터:**
+- `model` (string, required): fallback을 구성할 기본 모델 이름
+- `fallback_models` (문자열 배열, 필수): 우선순위 순서의 fallback 모델 이름 목록
+- `fallback_type` (string, optional): fallback 유형. 옵션:
+  - `"general"` (기본값): 모든 오류에 대한 표준 fallback
+  - `"context_window"`: context window 초과 오류용 fallback
+  - `"content_policy"`: 콘텐츠 정책 위반용 fallback
 
-**Response:**
+**응답:**
 ```json
 {
   "model": "gpt-3.5-turbo",
@@ -44,7 +44,7 @@ Create or update fallbacks for a specific model.
 }
 ```
 
-**Example using cURL:**
+**cURL 사용 예제:**
 ```bash
 curl -X POST "http://localhost:4000/fallback" \
   -H "Authorization: Bearer sk-1234" \
@@ -56,7 +56,7 @@ curl -X POST "http://localhost:4000/fallback" \
   }'
 ```
 
-**Example using Python:**
+**Python 사용 예제:**
 ```python
 import requests
 
@@ -78,13 +78,13 @@ print(response.json())
 
 ### GET /fallback/\{model\}
 
-Get fallback configuration for a specific model.
+특정 모델의 fallback 구성을 가져옵니다.
 
-**Parameters:**
-- `model` (path parameter, required): The model name to get fallbacks for
-- `fallback_type` (query parameter, optional): Type of fallback to retrieve (default: "general")
+**파라미터:**
+- `model` (path parameter, required): fallback을 가져올 모델 이름
+- `fallback_type` (query parameter, optional): 조회할 fallback 유형(기본값: "general")
 
-**Response:**
+**응답:**
 ```json
 {
   "model": "gpt-3.5-turbo",
@@ -93,13 +93,13 @@ Get fallback configuration for a specific model.
 }
 ```
 
-**Example using cURL:**
+**cURL 사용 예제:**
 ```bash
 curl -X GET "http://localhost:4000/fallback/gpt-3.5-turbo?fallback_type=general" \
   -H "Authorization: Bearer sk-1234"
 ```
 
-**Example using Python:**
+**Python 사용 예제:**
 ```python
 import requests
 
@@ -114,13 +114,13 @@ print(response.json())
 
 ### DELETE /fallback/\{model\}
 
-Delete fallback configuration for a specific model.
+특정 모델의 fallback 구성을 삭제합니다.
 
-**Parameters:**
-- `model` (path parameter, required): The model name to delete fallbacks for
-- `fallback_type` (query parameter, optional): Type of fallback to delete (default: "general")
+**파라미터:**
+- `model` (path parameter, required): fallback을 삭제할 모델 이름
+- `fallback_type` (query parameter, optional): 삭제할 fallback 유형(기본값: "general")
 
-**Response:**
+**응답:**
 ```json
 {
   "model": "gpt-3.5-turbo",
@@ -129,13 +129,13 @@ Delete fallback configuration for a specific model.
 }
 ```
 
-**Example using cURL:**
+**cURL 사용 예제:**
 ```bash
 curl -X DELETE "http://localhost:4000/fallback/gpt-3.5-turbo?fallback_type=general" \
   -H "Authorization: Bearer sk-1234"
 ```
 
-**Example using Python:**
+**Python 사용 예제:**
 ```python
 import requests
 
@@ -148,7 +148,7 @@ response = requests.delete(
 print(response.json())
 ```
 
-### Test fallback
+### fallback 테스트
 
 ```bash
 curl -X POST 'http://0.0.0.0:4000/chat/completions' \
@@ -169,17 +169,17 @@ curl -X POST 'http://0.0.0.0:4000/chat/completions' \
 
 
 
-## Validation
+## 검증
 
-The endpoints perform the following validations:
+엔드포인트는 다음 검증을 수행합니다.
 
-1. **Model Existence**: Verifies that the primary model exists in the router
-2. **Fallback Model Existence**: Ensures all fallback models exist in the router
-3. **No Self-Fallback**: Prevents a model from being its own fallback
-4. **No Duplicates**: Ensures no duplicate models in the fallback list
-5. **Database Enabled**: Requires `STORE_MODEL_IN_DB=True` to be set
+1. **모델 존재 여부**: 기본 모델이 router에 존재하는지 확인합니다.
+2. **Fallback 모델 존재 여부**: 모든 fallback 모델이 router에 존재하는지 확인합니다.
+3. **자기 자신으로 fallback 금지**: 모델이 자기 자신을 fallback으로 사용하지 못하게 합니다.
+4. **중복 금지**: fallback 목록에 중복 모델이 없는지 확인합니다.
+5. **데이터베이스 활성화**: `STORE_MODEL_IN_DB=True` 설정이 필요합니다.
 
-## Error Responses
+## 오류 응답
 
 ### 400 Bad Request
 ```json
@@ -201,7 +201,7 @@ The endpoints perform the following validations:
 }
 ```
 
-### 500 Internal Server Error
+### 500 내부 서버 오류
 ```json
 {
   "detail": {
@@ -210,12 +210,12 @@ The endpoints perform the following validations:
 }
 ```
 
-## Fallback Types Explained
+## Fallback 유형 설명
 
-### General Fallbacks
-Used for any type of error that occurs during model invocation. This is the most common type of fallback.
+### General Fallback
+모델 호출 중 발생하는 모든 유형의 오류에 사용됩니다. 가장 일반적인 fallback 유형입니다.
 
-**Use Case:** When a model is unavailable, rate-limited, or returns an error.
+**사용 사례:** 모델을 사용할 수 없거나, rate limit에 걸렸거나, 오류를 반환하는 경우.
 
 ```json
 {
@@ -225,10 +225,10 @@ Used for any type of error that occurs during model invocation. This is the most
 }
 ```
 
-### Context Window Fallbacks
-Specifically triggered when a context window exceeded error occurs.
+### 컨텍스트 윈도 Fallback
+context window 초과 오류가 발생했을 때만 트리거됩니다.
 
-**Use Case:** When the input is too long for the primary model, fallback to a model with a larger context window.
+**사용 사례:** 입력이 기본 모델에 비해 너무 길 때 더 큰 context window를 가진 모델로 fallback합니다.
 
 ```json
 {
@@ -238,10 +238,10 @@ Specifically triggered when a context window exceeded error occurs.
 }
 ```
 
-### Content Policy Fallbacks
-Specifically triggered when content policy violations occur.
+### 콘텐츠 정책 Fallback
+콘텐츠 정책 위반이 발생했을 때만 트리거됩니다.
 
-**Use Case:** When the primary model rejects content due to safety filters, fallback to a model with different content policies.
+**사용 사례:** 기본 모델이 안전 필터 때문에 콘텐츠를 거부하면 다른 콘텐츠 정책을 가진 모델로 fallback합니다.
 
 ```json
 {
@@ -251,17 +251,17 @@ Specifically triggered when content policy violations occur.
 }
 ```
 
-## Benefits Over /config/update
+## /config/update 대비 장점
 
-1. **Safety**: Only modifies fallback configuration, won't accidentally change other settings
-2. **Simplicity**: Focused API with clear validation messages
-3. **Granularity**: Manage fallbacks per model and per type
-4. **Validation**: Comprehensive checks ensure configuration is valid before applying
-5. **Clarity**: Clear error messages with available models listed
+1. **안전성**: fallback 구성만 수정하므로 다른 설정을 실수로 바꾸지 않습니다.
+2. **단순성**: 명확한 검증 메시지를 제공하는 목적 중심 API입니다.
+3. **세분성**: 모델별, 유형별로 fallback을 관리합니다.
+4. **검증**: 적용 전에 포괄적인 검사로 구성이 유효한지 확인합니다.
+5. **명확성**: 사용 가능한 모델 목록을 포함한 명확한 오류 메시지를 제공합니다.
 
-## Notes
+## 참고
 
-- Fallbacks are triggered after the configured number of retries fails
-- Fallbacks are attempted in the order specified in `fallback_models`
-- The maximum number of fallbacks attempted is controlled by the router's `max_fallbacks` setting
-- Changes take effect immediately and are persisted to the database
+- 구성된 재시도 횟수가 모두 실패한 뒤 fallback이 트리거됩니다.
+- fallback은 `fallback_models`에 지정된 순서대로 시도됩니다.
+- 시도할 최대 fallback 수는 router의 `max_fallbacks` 설정으로 제어됩니다.
+- 변경 사항은 즉시 적용되며 데이터베이스에 저장됩니다.

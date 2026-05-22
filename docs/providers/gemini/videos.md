@@ -1,24 +1,24 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Gemini Video Generation (Veo)
+# Gemini Video 생성(Veo)
 
-LiteLLM supports Google's Veo video generation models through a unified API interface.
+LiteLLM은 통합 API interface를 통해 Google Veo video 생성 model을 지원합니다.
 
-| Property | Details |
+| 속성 | 세부 정보 |
 |-------|-------|
-| Description | Google's Veo AI video generation models |
-| Provider Route on LiteLLM | `gemini/` |
-| Supported Models | Veo 3.0 / 3.1 preview and production IDs (see table below), including **Veo 3.1 Lite** |
-| Cost Tracking | ✅ Duration-based pricing; optional **per-resolution** tiers where the catalog lists them (e.g. 720p vs 1080p) |
-| Logging Support | ✅ Full request/response logging |
-| Proxy Server Support | ✅ Full proxy integration with virtual keys |
-| Spend Management | ✅ Budget tracking and rate limiting |
-| Link to Provider Doc | [Google Veo Documentation ↗](https://ai.google.dev/gemini-api/docs/video) |
+| 설명 | Google Veo AI video 생성 model |
+| LiteLLM 제공자 라우트 | `gemini/` |
+| 지원 모델 | **Veo 3.1 Lite**를 포함한 Veo 3.0 / 3.1 preview 및 production ID(아래 표 참고) |
+| 비용 추적 | ✅ duration 기반 pricing. catalog에 있는 경우 선택적 **per-resolution** tier 지원(예: 720p vs 1080p) |
+| 로깅 지원 | ✅ 전체 request/response 로깅 |
+| Proxy Server 지원 | ✅ virtual key를 포함한 전체 proxy 통합 |
+| Spend 관리 | ✅ budget tracking 및 rate limiting |
+| 제공자 문서 링크 | [Google Veo 문서 ↗](https://ai.google.dev/gemini-api/docs/video) |
 
-## Quick Start
+## 빠른 시작
 
-### Required API Keys
+### 필요한 API Key
 
 ```python
 import os 
@@ -27,7 +27,7 @@ os.environ["GEMINI_API_KEY"] = "your-google-api-key"
 os.environ["GOOGLE_API_KEY"] = "your-google-api-key"
 ```
 
-### Basic Usage
+### Basic 사용법
 
 ```python
 from litellm import video_generation, video_status, video_content
@@ -73,63 +73,63 @@ with open("generated_video.mp4", "wb") as f:
 print("Video downloaded successfully!")
 ```
 
-## Supported Models
+## 지원 모델
 
-| Model Name | Description | Max Duration | Status |
+| 모델 이름 | 설명 | 최대 길이 | 상태 |
 |------------|-------------|--------------|--------|
-| veo-3.0-generate-preview | Veo 3.0 video generation | 8 seconds | Preview |
-| veo-3.1-generate-preview | Veo 3.1 video generation | 8 seconds | Preview |
-| veo-3.1-lite-generate-preview | Veo 3.1 **Lite** (cost-efficient; [Gemini pricing](https://ai.google.dev/gemini-api/docs/video)) | Per Google docs | Preview |
-| veo-3.1-fast-generate-preview / `…-001` | Faster / prod variants | Per Google docs | Preview / GA |
-| veo-3.1-generate-001 | Veo 3.1 production | Per Google docs | GA |
+| veo-3.0-generate-preview | Veo 3.0 video 생성 | 8초 | Preview |
+| veo-3.1-generate-preview | Veo 3.1 video 생성 | 8초 | Preview |
+| veo-3.1-lite-generate-preview | Veo 3.1 **Lite**(비용 효율형, [Gemini pricing](https://ai.google.dev/gemini-api/docs/video)) | Google docs 기준 | Preview |
+| veo-3.1-fast-generate-preview / `…-001` | 더 빠른 variant / prod variant | Google docs 기준 | Preview / GA |
+| veo-3.1-generate-001 | Veo 3.1 production | Google docs 기준 | GA |
 
-Use the full LiteLLM model id with the `gemini/` prefix (for example `gemini/veo-3.1-lite-generate-preview`).
+`gemini/` prefix를 포함한 전체 LiteLLM model id를 사용하세요(예: `gemini/veo-3.1-lite-generate-preview`).
 
-## Video Generation Parameters
+## Video 생성 Parameters {#video-generation-parameters}
 
-LiteLLM automatically maps OpenAI-style parameters to Veo's format:
+LiteLLM은 OpenAI 스타일 parameter를 Veo 형식으로 자동 mapping합니다.
 
-| OpenAI Parameter | Veo Parameter | Description | Example |
+| OpenAI Parameter | Veo Parameter | 설명 | 예제 |
 |------------------|---------------|-------------|---------|
-| `prompt` | `prompt` | Text description of the video | "A cat playing" |
-| `size` | `aspectRatio` and, when applicable, **`resolution`** | Standard widths/heights map to landscape/portrait **and** to `720p` or `1080p` for the API | See below |
-| `seconds` | `durationSeconds` | Duration in seconds | "8" → 8 |
-| `input_reference` | `image` | Reference image to animate | File object or path |
-| `model` | `model` | Model to use | "gemini/veo-3.0-generate-preview" |
+| `prompt` | `prompt` | video에 대한 text description | "A cat playing" |
+| `size` | `aspectRatio` 및, 적용 가능한 경우 **`resolution`** | 표준 width/height는 가로/세로 방향 및 API용 `720p` 또는 `1080p`로 mapping됩니다. | 아래 참고 |
+| `seconds` | `durationSeconds` | 초 단위 duration | "8" -> 8 |
+| `input_reference` | `image` | animation에 사용할 reference image | file object 또는 path |
+| `model` | `model` | 사용할 model | "gemini/veo-3.0-generate-preview" |
 
-### `size` and output resolution
+### `size`와 output resolution
 
-When you pass a **standard `size`** string, LiteLLM sets both:
+**표준 `size`** string을 전달하면 LiteLLM은 다음 두 값을 모두 설정합니다.
 
-- **Aspect ratio** (`16:9` or `9:16`) — same as before.
-- **Output resolution** (`720p` or `1080p`) when the height is clear from the preset, so the correct Veo tier is requested without extra fields.
+- **Aspect ratio**(`16:9` 또는 `9:16`) - 기존과 동일합니다.
+- **Output resolution**(`720p` 또는 `1080p`) - preset에서 height가 명확하면 추가 field 없이 올바른 Veo tier를 요청합니다.
 
-| `size` | Aspect ratio | Resolution sent to Veo |
+| `size` | Aspect ratio | Veo로 전송되는 resolution |
 |--------|----------------|-------------------------|
 | `1280x720`, `720x1280` | `16:9` / `9:16` | `720p` |
 | `1920x1080`, `1080x1920` | `16:9` / `9:16` | `1080p` |
 
-Other `size` values still map to an aspect ratio (defaulting to `16:9` when unknown); resolution is left to **Google’s default** unless you set it yourself.
+다른 `size` 값도 aspect ratio로 mapping됩니다(알 수 없으면 기본값 `16:9`). `resolution`은 직접 설정하지 않는 한 **Google 기본값**을 사용합니다.
 
-You can also pass Veo’s **`resolution`** (for example via `extra_body`) if you need an explicit value that does not match the presets above. If you set `resolution` yourself, it takes precedence over the value inferred from `size`.
+위 preset과 맞지 않는 명시적 값이 필요하면 Veo의 **`resolution`**을 전달할 수도 있습니다(예: `extra_body` 사용). `resolution`을 직접 설정하면 `size`에서 추론한 값보다 우선합니다.
 
-### Size to aspect ratio (reference)
+### Size에서 aspect ratio로의 변환(reference) {#size-to-aspect-ratio-reference}
 
 - `"1280x720"`, `"1920x1080"` → `"16:9"` (landscape)
 - `"720x1280"`, `"1080x1920"` → `"9:16"` (portrait)
 
-### Supported Veo Parameters
+### 지원 Veo Parameters
 
-Based on Veo's API:
-- **prompt** (required): Text description with optional audio cues
+Veo API 기준:
+- **prompt**(required): 선택적 audio cue를 포함한 text description
 - **aspectRatio**: `"16:9"` (default) or `"9:16"`
-- **resolution**: `"720p"` (default) or `"1080p"` (Veo 3.1 only, 16:9 aspect ratio only)
-- **durationSeconds**: Video length (max 8 seconds for most models)
-- **image**: Reference image for animation
-- **negativePrompt**: What to exclude from the video (Veo 3.1)
-- **referenceImages**: Style and content references (Veo 3.1 only)
+- **resolution**: `"720p"`(default) 또는 `"1080p"`(Veo 3.1 전용, 16:9 aspect ratio 전용)
+- **durationSeconds**: video 길이(대부분 model에서 최대 8초)
+- **image**: animation용 reference image
+- **negativePrompt**: video에서 제외할 내용(Veo 3.1)
+- **referenceImages**: style 및 content reference(Veo 3.1 only)
 
-## Complete Workflow Example
+## Complete Workflow 예제
 
 ```python
 import litellm
@@ -203,7 +203,7 @@ generate_and_download_veo_video(
 )
 ```
 
-## Async Usage
+## Async 사용법
 
 ```python
 from litellm import avideo_generation, avideo_status, avideo_content
@@ -233,11 +233,11 @@ async def async_video_workflow():
 asyncio.run(async_video_workflow())
 ```
 
-## LiteLLM Proxy Usage
+## LiteLLM Proxy 사용법
 
-### Configuration
+### 설정
 
-Add Veo models to your `config.yaml`:
+`config.yaml`에 Veo model을 추가합니다.
 
 ```yaml
 model_list:
@@ -247,14 +247,14 @@ model_list:
       api_key: os.environ/GEMINI_API_KEY
 ```
 
-Start the proxy:
+프록시 시작:
 
 ```bash
 litellm --config config.yaml
 # Server running on http://0.0.0.0:4000
 ```
 
-### Making Requests
+### Request 만들기
 
 <Tabs>
 <TabItem value="curl" label="Curl">
@@ -313,16 +313,16 @@ with open("video.mp4", "wb") as f:
 </TabItem>
 </Tabs>
 
-## Cost tracking and spend
+## Cost Tracking 및 Spend
 
-LiteLLM estimates **video spend** from:
+LiteLLM은 다음 기준으로 **video spend**를 추정합니다.
 
-1. **How long** the generated clip is billed for (seconds), and  
-2. **The per-second price** for that model in LiteLLM’s model catalog (aligned with [Google’s Gemini API video pricing](https://ai.google.dev/gemini-api/docs/video) where applicable).
+1. 생성된 clip이 과금되는 **길이**(초)
+2. LiteLLM model catalog의 해당 model **초당 가격**(가능한 경우 [Google Gemini API video pricing](https://ai.google.dev/gemini-api/docs/video)과 정렬)
 
-Some models charge **different per-second rates** for **720p** vs **1080p**. When you use the standard `size` presets above (or set `resolution` explicitly), LiteLLM uses the matching tier so **proxy spend, logs, and budgets** line up with the resolution you requested.
+일부 model은 **720p**와 **1080p**에 서로 다른 **초당 요금**을 적용합니다. 위 표준 `size` preset을 사용하거나 `resolution`을 명시하면 LiteLLM은 matching tier를 사용하므로 **proxy spend, logs, budgets**가 요청한 resolution과 맞춰집니다.
 
-LiteLLM automatically tracks costs for Veo video generation:
+LiteLLM은 Veo video 생성 비용을 자동 추적합니다.
 
 ```python
 response = litellm.video_generation(
@@ -336,17 +336,17 @@ response = litellm.video_generation(
 # Estimated cost: ~$0.50
 ```
 
-## Differences from OpenAI Video API
+## OpenAI Video API와의 차이
 
-| Feature | OpenAI (Sora) | Gemini (Veo) |
+| 기능 | OpenAI (Sora) | Gemini (Veo) |
 |---------|---------------|--------------|
-| Reference Images | ✅ Supported | ❌ Not supported |
-| Size / dimensions | ✅ Supported | ✅ Supported via `size` → aspect ratio + `720p`/`1080p` where preset |
-| Duration (`seconds`) | ✅ Supported | ✅ Supported (maps to `durationSeconds`; limits per Google docs) |
-| Video Remix/Edit | ✅ Supported | ❌ Not supported |
-| Video List | ✅ Supported | ❌ Not supported |
-| Prompt-based Generation | ✅ Supported | ✅ Supported |
-| Async Operations | ✅ Supported | ✅ Supported |
+| Reference Images | ✅ 지원 | ❌ 미지원 |
+| Size / dimensions | ✅ 지원 | ✅ `size`를 통해 지원. preset이 있으면 aspect ratio + `720p`/`1080p`로 mapping |
+| Duration (`seconds`) | ✅ 지원 | ✅ 지원(`durationSeconds`로 mapping, 제한은 Google docs 기준) |
+| Video Remix/Edit | ✅ 지원 | ❌ 미지원 |
+| Video List | ✅ 지원 | ❌ 미지원 |
+| Prompt 기반 생성 | ✅ 지원 | ✅ 지원 |
+| Async Operations | ✅ 지원 | ✅ 지원 |
 
 ## Error Handling
 
@@ -385,24 +385,24 @@ except Exception as e:
     print(f"Unexpected error: {e}")
 ```
 
-## Best Practices
+## 권장 사항
 
-1. **Always poll for completion**: Veo video generation is asynchronous and can take several minutes
-2. **Set reasonable timeouts**: Allow at least 5-10 minutes for video generation
-3. **Handle failures gracefully**: Check for `failed` status and implement retry logic
-4. **Use descriptive prompts**: More detailed prompts generally produce better results
-5. **Store video IDs**: Save the operation ID/video ID to resume polling if your application restarts
+1. **완료될 때까지 항상 polling**: Veo video 생성은 asynchronous 방식이며 몇 분이 걸릴 수 있습니다.
+2. **합리적인 timeout 설정**: video 생성에 최소 5-10분을 허용하세요.
+3. **실패를 graceful하게 처리**: `failed` status를 확인하고 retry logic을 구현하세요.
+4. **구체적인 prompt 사용**: 일반적으로 더 자세한 prompt가 더 좋은 결과를 만듭니다.
+5. **Video ID 저장**: application이 재시작되어도 polling을 재개할 수 있도록 operation ID/video ID를 저장하세요.
 
-## Troubleshooting
+## 문제 해결
 
-### Video generation times out
+### Video 생성 timeout 발생
 
 ```python
 # Increase polling timeout
 max_wait_time = 900  # 15 minutes instead of 10
 ```
 
-### Video not found when downloading
+### 다운로드 시 Video not found 발생
 
 ```python
 # Make sure video is completed before downloading
@@ -411,7 +411,7 @@ if status.status != "completed":
     print("Video not ready yet!")
 ```
 
-### API key errors
+### API key error
 
 ```python
 # Verify your API key is set
@@ -426,11 +426,10 @@ response = video_generation(
 )
 ```
 
-## See Also
+## 함께 보기
 
-- [OpenAI Video Generation](../openai/videos.md)
-- [Azure Video Generation](../azure/videos.md)
-- [Vertex AI Video Generation](../vertex_ai/videos.md)
-- [Video Generation API Reference](/docs/videos)
+- [OpenAI Video 생성](../openai/videos.md)
+- [Azure Video 생성](../azure/videos.md)
+- [Vertex AI Video 생성](../vertex_ai/videos.md)
+- [Video 생성 API Reference](/docs/videos)
 - [Veo Pass-through Endpoints](/docs/pass_through/google_ai_studio#example-4-video-generation-with-veo)
-

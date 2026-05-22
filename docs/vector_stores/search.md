@@ -1,29 +1,27 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# /vector_stores/search - Search Vector Store
+# /vector_stores/search - 벡터 스토어 검색
 
-Search a vector store for relevant chunks based on a query and file attributes filter. This is useful for retrieval-augmented generation (RAG) use cases.
+쿼리와 파일 속성 필터를 기준으로 벡터 스토어에서 관련 청크를 검색합니다. 검색 증강 생성(RAG) 사용 사례에 유용합니다.
 
-## Overview
+## 개요
 
-| Feature | Supported | Notes |
+| 기능 | 지원 | 참고 |
 |---------|-----------|-------|
-| Cost Tracking | ✅ | Tracked per search operation |
-| Logging | ✅ | Works across all integrations |
-| End-user Tracking | ✅ | |
-| Support LLM Providers | **OpenAI, Azure OpenAI, Bedrock, Vertex RAG Engine, Azure AI, Milvus, Gemini** | Full vector stores API support across providers |
+| 비용 추적 | ✅ | 검색 작업별로 추적됩니다 |
+| 로깅 | ✅ | 모든 통합에서 작동합니다 |
+| 최종 사용자 추적 | ✅ | |
+| 지원 LLM 제공자 | **OpenAI, Azure OpenAI, Bedrock, Vertex RAG Engine, Azure AI, Milvus, Gemini** | 제공자 전반에서 전체 벡터 스토어 API를 지원합니다 |
 
-For **retrieve, list, update, and delete** over HTTP (including `custom_llm_provider` / `model` routing), see [Create vector store](./create.md#vector-store-management-and-routing-on-the-proxy).
-
-## Usage
+## 사용법
 
 ### LiteLLM Python SDK
 
 <Tabs>
-<TabItem value="basic" label="Basic Usage">
+<TabItem value="basic" label="기본 사용법">
 
-#### Non-streaming example
+#### 비스트리밍 예제
 ```python showLineNumbers title="Search Vector Store - Basic"
 import litellm
 
@@ -34,7 +32,7 @@ response = await litellm.vector_stores.asearch(
 print(response)
 ```
 
-#### Synchronous example
+#### 동기 예제
 ```python showLineNumbers title="Search Vector Store - Sync"
 import litellm
 
@@ -47,9 +45,9 @@ print(response)
 
 </TabItem>
 
-<TabItem value="advanced" label="Advanced Configuration">
+<TabItem value="advanced" label="고급 설정">
 
-#### With filters and ranking options
+#### 필터와 순위 옵션 사용
 ```python showLineNumbers title="Search Vector Store - Advanced"
 import litellm
 
@@ -70,9 +68,9 @@ print(response)
 
 </TabItem>
 
-<TabItem value="multiple-queries" label="Multiple Queries">
+<TabItem value="multiple-queries" label="여러 쿼리">
 
-#### Searching with multiple queries
+#### 여러 쿼리로 검색
 ```python showLineNumbers title="Search Vector Store - Multiple Queries"
 import litellm
 
@@ -89,9 +87,9 @@ print(response)
 
 </TabItem>
 
-<TabItem value="openai-provider" label="OpenAI Provider">
+<TabItem value="openai-provider" label="OpenAI 제공자">
 
-#### Using OpenAI provider explicitly
+#### OpenAI 제공자를 명시적으로 사용
 ```python showLineNumbers title="Search Vector Store - OpenAI Provider"
 import litellm
 import os
@@ -109,9 +107,9 @@ print(response)
 
 </TabItem>
 
-<TabItem value="azure-ai-provider" label="Azure AI Provider">
+<TabItem value="azure-ai-provider" label="Azure AI 제공자">
 
-#### Using Azure AI Search
+#### Azure AI Search 사용
 ```python showLineNumbers title="Search Vector Store - Azure AI Provider"
 import litellm
 import os
@@ -134,13 +132,13 @@ response = await litellm.vector_stores.asearch(
 print(response)
 ```
 
-[See full Azure AI vector store documentation](../providers/azure_ai_vector_stores.md)
+[전체 Azure AI 벡터 스토어 문서 보기](../providers/azure_ai_vector_stores.md)
 
 </TabItem>
 
-<TabItem value="milvus-provider" label="Milvus Provider">
+<TabItem value="milvus-provider" label="Milvus 제공자">
 
-#### Using Milvus
+#### Milvus 사용
 ```python showLineNumbers title="Search Vector Store - Milvus Provider"
 import litellm
 import os
@@ -164,13 +162,13 @@ response = await litellm.vector_stores.asearch(
 print(response)
 ```
 
-[See full Milvus vector store documentation](../providers/milvus_vector_stores.md)
+[전체 Milvus 벡터 스토어 문서 보기](../providers/milvus_vector_stores.md)
 
 </TabItem>
 
-<TabItem value="gemini-provider" label="Gemini Provider">
+<TabItem value="gemini-provider" label="Gemini 제공자">
 
-#### Using Gemini File Search
+#### Gemini File Search 사용
 ```python showLineNumbers title="Search Vector Store - Gemini Provider"
 import litellm
 import os
@@ -187,7 +185,7 @@ response = await litellm.vector_stores.asearch(
 print(response)
 ```
 
-**With Metadata Filter:**
+**메타데이터 필터 사용:**
 ```python showLineNumbers title="Search with Metadata Filter"
 response = await litellm.vector_stores.asearch(
     vector_store_id="fileSearchStores/your-store-id",
@@ -199,17 +197,17 @@ response = await litellm.vector_stores.asearch(
 print(response)
 ```
 
-[See full Gemini File Search documentation](../providers/gemini_file_search.md)
+[전체 Gemini File Search 문서 보기](../providers/gemini_file_search.md)
 
 </TabItem>
 </Tabs>
 
-### LiteLLM Proxy Server
+### LiteLLM Proxy Server 사용 {#litellm-proxy-server}
 
 <Tabs>
-<TabItem value="proxy-setup" label="Setup & Usage">
+<TabItem value="proxy-setup" label="설정 및 사용법">
 
-1. Setup config.yaml
+1. config.yaml 설정
 
 ```yaml
 model_list:
@@ -222,13 +220,13 @@ general_settings:
   # Vector store settings can be added here if needed
 ```
 
-2. Start proxy 
+2. 프록시 시작
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-3. Test it with OpenAI SDK!
+3. OpenAI SDK로 테스트합니다
 
 ```python showLineNumbers title="OpenAI SDK via LiteLLM Proxy"
 from openai import OpenAI
@@ -271,14 +269,14 @@ curl -L -X POST 'http://0.0.0.0:4000/v1/vector_stores/vs_abc123/search' \
 </TabItem>
 </Tabs>
 
-## Setting Up Vector Stores
+## 벡터 스토어 설정
 
-To use vector store search, configure your vector stores in the `vector_store_registry`. See the [Vector Store Configuration Guide](../completion/knowledgebase.md) for:
+벡터 스토어 검색을 사용하려면 `vector_store_registry`에서 벡터 스토어를 구성합니다. 다음 내용은 [벡터 스토어 설정 가이드](../completion/knowledgebase.md)를 참고하세요.
 
-- Provider-specific configuration (Bedrock, OpenAI, Azure, Vertex AI, PG Vector)
-- Python SDK and Proxy setup examples  
-- Authentication and credential management
+- 제공자별 구성(Bedrock, OpenAI, Azure, Vertex AI, PG Vector)
+- Python SDK 및 Proxy 설정 예제
+- 인증 및 자격 증명 관리
 
-## Using Vector Stores with Chat Completions
+## Chat Completions에서 벡터 스토어 사용
 
-Pass `vector_store_ids` in chat completion requests to automatically retrieve relevant context. See [Using Vector Stores with Chat Completions](../completion/knowledgebase.md#2-make-a-request-with-vector_store_ids-parameter) for implementation details.
+<span>관련 컨텍스트를 자동으로 검색하려면 <code>vector_store_ids</code>를 Chat Completion 요청에 전달합니다. 구현 세부 정보는 <a href="../completion/knowledgebase.md#2-make-a-request-with-vector_store_ids-parameter">Chat Completions에서 벡터 스토어 사용</a>을 참고하세요.</span>

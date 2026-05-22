@@ -2,67 +2,67 @@ import Image from '@theme/IdealImage';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Claude Code Plugin Marketplace (Managed Skills)
+# Claude Code Plugin Marketplace(관리형 Skills)
 
-LiteLLM AI Gateway acts as a central registry for Claude Code plugins. Admins can govern which plugins are available across the organization, and engineers can discover and install approved plugins from a single source.
+LiteLLM AI Gateway는 Claude Code 플러그인의 중앙 레지스트리 역할을 합니다. 관리자는 조직 전체에서 사용할 수 있는 플러그인을 관리할 수 있고, 엔지니어는 승인된 플러그인을 단일 출처에서 찾아 설치할 수 있습니다.
 
-## Prerequisites
+## 사전 준비
 
-- LiteLLM Proxy running with database connected
-- Admin access to LiteLLM UI
-- Plugins hosted on GitHub, GitLab, or any git-accessible URL
+- 데이터베이스에 연결된 LiteLLM Proxy 실행 환경
+- LiteLLM UI 관리자 접근 권한
+- GitHub, GitLab 또는 git으로 접근 가능한 URL에 호스팅된 플러그인
 
-## Admin Guide: Managing the Marketplace
+## 관리자 가이드: Marketplace 관리
 
-### Step 1: Navigate to Claude Code Plugins
+### 1단계: Claude Code Plugins로 이동
 
-In the LiteLLM Admin UI, click on **Claude Code Plugins** in the left navigation menu.
+LiteLLM 관리자 UI의 왼쪽 탐색 메뉴에서 **Claude Code Plugins**를 클릭합니다.
 
 <Image img={require('../../img/claude_code_marketplace/step1_navigate_plugins.jpeg')} style={{ width: '800px', height: 'auto' }} />
 
-### Step 2: View the Plugins List
+### 2단계: 플러그인 목록 확인
 
-You'll see the list of all registered plugins. From here you can add, enable, disable, or delete plugins.
+등록된 모든 플러그인 목록이 표시됩니다. 여기에서 플러그인을 추가, 활성화, 비활성화하거나 삭제할 수 있습니다.
 
 <Image img={require('../../img/claude_code_marketplace/step3_plugins_list.jpeg')} style={{ width: '800px', height: 'auto' }} />
 
-### Step 3: Add a New Plugin
+### 3단계: 새 플러그인 추가
 
-Click **+ Add New Plugin** to register a plugin in your marketplace.
+Marketplace에 플러그인을 등록하려면 **+ Add New Plugin**을 클릭합니다.
 
 <Image img={require('../../img/claude_code_marketplace/step4_add_plugin.jpeg')} style={{ width: '800px', height: 'auto' }} />
 
-### Step 4: Fill in Plugin Details
+### 4단계: 플러그인 세부 정보 입력
 
-Enter the plugin information:
+플러그인 정보를 입력합니다.
 
-- **Name**: Plugin identifier (kebab-case, e.g., `my-plugin`)
-- **Source Type**: Choose GitHub, Git URL, or Git Subdir
-- **Repository/URL**: The git source (e.g., `org/repo` for GitHub)
-- **Version**: Semantic version (optional)
-- **Description**: What the plugin does
-- **Category**: Plugin category for organization
-- **Keywords**: Search terms
+- **Name**: 플러그인 식별자(kebab-case, 예: `my-plugin`)
+- **Source Type**: GitHub, Git URL 또는 Git Subdir 중에서 선택
+- **Repository/URL**: git 소스(GitHub의 경우 예: `org/repo`)
+- **Version**: 시맨틱 버전(선택 사항)
+- **Description**: 플러그인이 수행하는 작업
+- **Category**: 정리를 위한 플러그인 카테고리
+- **Keywords**: 검색어
 
 <Image img={require('../../img/claude_code_marketplace/step5_plugin_form.jpeg')} style={{ width: '800px', height: 'auto' }} />
 
-### Step 5: Submit the Plugin
+### 5단계: 플러그인 제출
 
-After filling in the details, click **Add Plugin** to register it.
+세부 정보를 입력한 후 **Add Plugin**을 클릭해 등록합니다.
 
 <Image img={require('../../img/claude_code_marketplace/step9_submit.jpeg')} style={{ width: '800px', height: 'auto' }} />
 
-### Step 6: Enable/Disable Plugins
+### 6단계: 플러그인 활성화/비활성화
 
-Toggle plugins on or off to control what appears in the public marketplace. Only **enabled** plugins are visible to engineers.
+공개 Marketplace에 표시할 항목을 제어하려면 플러그인을 켜거나 끕니다. **활성화된** 플러그인만 엔지니어에게 표시됩니다.
 
 <Image img={require('../../img/claude_code_marketplace/step11_enable_plugin.jpeg')} style={{ width: '800px', height: 'auto' }} />
 
-## Engineer Guide: Installing Plugins
+## 엔지니어 가이드: 플러그인 설치
 
-### Step 1: Add the LiteLLM Marketplace
+### 1단계: LiteLLM Marketplace 추가
 
-Add your company's LiteLLM marketplace to Claude Code:
+회사 LiteLLM Marketplace를 Claude Code에 추가합니다.
 
 ```bash
 claude plugin marketplace add http://your-litellm-proxy:4000/claude-code/marketplace.json
@@ -70,17 +70,17 @@ claude plugin marketplace add http://your-litellm-proxy:4000/claude-code/marketp
 
 <Image img={require('../../img/claude_code_marketplace/step12_cli_marketplace.jpeg')} style={{ width: '800px', height: 'auto' }} />
 
-### Step 2: Browse Available Plugins
+### 2단계: 사용 가능한 플러그인 탐색
 
-List all available plugins from the marketplace:
+Marketplace에서 사용 가능한 모든 플러그인을 나열합니다.
 
 ```bash
 claude plugin search @litellm
 ```
 
-### Step 3: Install a Plugin
+### 3단계: 플러그인 설치
 
-Install any plugin from the marketplace:
+Marketplace에서 원하는 플러그인을 설치합니다.
 
 ```bash
 claude plugin install my-plugin@litellm
@@ -88,25 +88,25 @@ claude plugin install my-plugin@litellm
 
 <Image img={require('../../img/claude_code_marketplace/step15_cli_paste.jpeg')} style={{ width: '800px', height: 'auto' }} />
 
-### Step 4: Verify Installation
+### 4단계: 설치 확인
 
-The plugin is now installed and ready to use:
+이제 플러그인이 설치되었으며 사용할 준비가 되었습니다.
 
 <Image img={require('../../img/claude_code_marketplace/step16_cli_complete.jpeg')} style={{ width: '800px', height: 'auto' }} />
 
-## API Reference
+## API 참조
 
-### Public Endpoint (No Auth Required)
+### 공개 엔드포인트(인증 불필요)
 
 #### GET `/claude-code/marketplace.json`
 
-Returns the marketplace catalog for Claude Code discovery.
+Claude Code 검색에 사용할 Marketplace 카탈로그를 반환합니다.
 
 ```bash
 curl http://localhost:4000/claude-code/marketplace.json
 ```
 
-**Response:**
+**응답:**
 ```json
 {
   "name": "litellm",
@@ -130,11 +130,11 @@ curl http://localhost:4000/claude-code/marketplace.json
 }
 ```
 
-### Admin Endpoints (Auth Required)
+### 관리자 엔드포인트(인증 필요)
 
 #### POST `/claude-code/plugins`
 
-Register a new plugin.
+새 플러그인을 등록합니다.
 
 ```bash
 curl -X POST http://localhost:4000/claude-code/plugins \
@@ -152,7 +152,7 @@ curl -X POST http://localhost:4000/claude-code/plugins \
 
 #### GET `/claude-code/plugins`
 
-List all registered plugins.
+등록된 모든 플러그인을 나열합니다.
 
 ```bash
 curl http://localhost:4000/claude-code/plugins \
@@ -161,7 +161,7 @@ curl http://localhost:4000/claude-code/plugins \
 
 #### POST `/claude-code/plugins/{name}/enable`
 
-Enable a plugin.
+플러그인을 활성화합니다.
 
 ```bash
 curl -X POST http://localhost:4000/claude-code/plugins/my-plugin/enable \
@@ -170,7 +170,7 @@ curl -X POST http://localhost:4000/claude-code/plugins/my-plugin/enable \
 
 #### POST `/claude-code/plugins/{name}/disable`
 
-Disable a plugin.
+플러그인을 비활성화합니다.
 
 ```bash
 curl -X POST http://localhost:4000/claude-code/plugins/my-plugin/disable \
@@ -179,14 +179,14 @@ curl -X POST http://localhost:4000/claude-code/plugins/my-plugin/disable \
 
 #### DELETE `/claude-code/plugins/{name}`
 
-Delete a plugin.
+플러그인을 삭제합니다.
 
 ```bash
 curl -X DELETE http://localhost:4000/claude-code/plugins/my-plugin \
   -H "Authorization: Bearer sk-..."
 ```
 
-## Plugin Source Formats
+## 플러그인 소스 형식
 
 <Tabs>
 <TabItem value="github" label="GitHub">
@@ -214,7 +214,7 @@ curl -X DELETE http://localhost:4000/claude-code/plugins/my-plugin \
 }
 ```
 
-Use this format for GitLab, Bitbucket, or self-hosted git repositories.
+GitLab, Bitbucket 또는 자체 호스팅 git 저장소에는 이 형식을 사용합니다.
 
 </TabItem>
 <TabItem value="git-subdir" label="Git Subdir">
@@ -230,16 +230,16 @@ Use this format for GitLab, Bitbucket, or self-hosted git repositories.
 }
 ```
 
-Use this format when your plugin lives in a subdirectory of a git repository. The `path` field must be a relative path of slash-separated segments (alphanumeric, dots, hyphens, underscores only).
+플러그인이 git 저장소의 하위 디렉터리에 있는 경우 이 형식을 사용합니다. `path` 필드는 슬래시로 구분된 세그먼트의 상대 경로여야 합니다(영숫자, 점, 하이픈, 밑줄만 허용).
 
 </TabItem>
 </Tabs>
 
-## Example: Setting Up an Internal Plugin Marketplace
+## 예제: 내부 플러그인 Marketplace 설정
 
-### 1. Create Internal Plugins
+### 1. 내부 플러그인 생성
 
-Structure your plugin repository:
+플러그인 저장소를 다음과 같이 구성합니다.
 
 ```
 my-company-plugin/
@@ -250,7 +250,7 @@ my-company-plugin/
 └── README.md
 ```
 
-### 2. Register Plugins via API
+### 2. API로 플러그인 등록
 
 ```bash
 # Register your internal tools plugin
@@ -268,9 +268,9 @@ curl -X POST http://localhost:4000/claude-code/plugins \
   }'
 ```
 
-### 3. Use in Claude Code
+### 3. Claude Code에서 사용
 
-Send engineers the marketplace URL:
+엔지니어에게 Marketplace URL을 전달합니다.
 
 ```bash
 # One-time setup for each engineer
@@ -280,16 +280,16 @@ claude plugin marketplace add http://litellm.internal.company.com/claude-code/ma
 claude plugin install internal-tools@litellm
 ```
 
-## Troubleshooting
+## 문제 해결
 
-**Plugin not appearing in marketplace:**
-- Verify the plugin is **enabled** in the admin UI
-- Check that the plugin has a valid `source` field
+**Marketplace에 플러그인이 표시되지 않음:**
+- 관리자 UI에서 플러그인이 **활성화**되어 있는지 확인합니다.
+- 플러그인에 유효한 `source` 필드가 있는지 확인합니다.
 
-**Installation fails:**
-- Ensure the git repository is accessible from the engineer's machine
-- For private repos, engineers need appropriate git credentials configured
+**설치 실패:**
+- 엔지니어의 머신에서 git 저장소에 접근할 수 있는지 확인합니다.
+- 비공개 저장소의 경우 엔지니어에게 적절한 git 자격 증명이 구성되어 있어야 합니다.
 
-**Database errors:**
-- Verify LiteLLM proxy is connected to the database
-- Check proxy logs for detailed error messages
+**데이터베이스 오류:**
+- LiteLLM proxy가 데이터베이스에 연결되어 있는지 확인합니다.
+- 자세한 오류 메시지는 proxy 로그에서 확인합니다.

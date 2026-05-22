@@ -1,31 +1,31 @@
 ---
 slug: video_characters_api
-title: "New Video Characters, Edit and Extension API support"
+title: "새 Video Characters, Edit, Extension API 지원"
 date: 2026-03-16T10:00:00
 authors:
   - sameer
   - krrish
   - ishaan-alt
-description: "LiteLLM now supports creating, retrieving, and managing reusable video characters across multiple video generations."
-tags: [videos, characters, proxy, routing]
+description: "LiteLLM은 이제 여러 video generation에서 재사용 가능한 video character 생성, 조회, 관리를 지원합니다."
+tags: [videos, characters, proxy, routing, video-api]
 hide_table_of_contents: false
 ---
 
-LiteLLM now supoports videos character, edit and extension apis.
+LiteLLM은 이제 video character, edit, extension API를 지원합니다.
 
 {/* truncate */}
 
-## What's New
+## 새로운 기능
 
-Four new endpoints for video character operations:
-- **Create character** - Upload a video to create a reusable asset
-- **Get character** - Retrieve character metadata
-- **Edit video** - Modify generated videos
-- **Extend video** - Continue clips with character consistency
+video character 작업을 위한 네 가지 endpoint가 추가되었습니다.
+- **Create character** - video를 업로드해 재사용 가능한 asset 생성
+- **Get character** - character metadata 조회
+- **Edit video** - 생성된 video 수정
+- **Extend video** - character consistency를 유지하며 clip 연장
 
-**Available from:** LiteLLM v1.83.0+
+**사용 가능 버전:** LiteLLM v1.83.0+
 
-## Quick Example
+## Quick 예제
 
 ```python
 import litellm
@@ -67,7 +67,7 @@ extended = litellm.avideo_extension(
 )
 ```
 
-## Via Proxy
+## Proxy 사용
 
 ```bash
 # Create character
@@ -100,11 +100,11 @@ curl -X POST "http://localhost:4000/v1/videos/extensions" \
   }'
 ```
 
-## Managed Character IDs
+## 관리형 Character ID
 
-LiteLLM automatically encodes provider and model metadata into character IDs:
+LiteLLM은 provider 및 model metadata를 character ID에 자동으로 encode합니다.
 
-**What happens:**
+**동작 방식:**
 ```
 Upload character "Luna" with model "sora-2" on OpenAI
   ↓
@@ -115,7 +115,7 @@ When you reference it later, LiteLLM decodes automatically
 Router knows exactly which deployment to use
 ```
 
-**Behind the scenes:**
-- Character ID format: `character_<base64_encoded_metadata>`
-- Metadata includes: provider, model_id, original_character_id
-- Transparent to you - just use the ID, LiteLLM handles routing
+**내부 동작:**
+- Character ID 형식: `character_<base64_encoded_metadata>`
+- Metadata 포함 항목: provider, model_id, original_character_id
+- 사용자에게는 투명하게 처리됩니다. ID만 사용하면 LiteLLM이 routing을 처리합니다.

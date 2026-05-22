@@ -1,31 +1,31 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Vertex AI - Self Deployed Models
+# Vertex AI - 자체 배포 모델 {#vertex-ai-self-deployed-model}
 
-Deploy and use your own models on Vertex AI through Model Garden or custom endpoints.
+Model Garden 또는 사용자 지정 엔드포인트를 통해 Vertex AI에 자체 모델을 배포하고 사용할 수 있습니다.
 
 ## Model Garden
 
 :::tip
 
-All OpenAI compatible models from Vertex Model Garden are supported. 
+Vertex Model Garden의 모든 OpenAI compatible 모델을 지원합니다.
 
 :::
 
-### Using Model Garden
+### Model Garden 사용하기 {#using-model-garden}
 
-**Almost all Vertex Model Garden models are OpenAI compatible.**
+**대부분의 Vertex Model Garden 모델은 OpenAI compatible 형식입니다.**
 
 <Tabs>
 
-<TabItem value="openai" label="OpenAI Compatible Models">
+<TabItem value="openai" label="OpenAI Compatible 모델">
 
-| Property | Details |
+| 속성 | 세부 정보 |
 |----------|---------|
-| Provider Route | `vertex_ai/openai/{MODEL_ID}` |
-| Vertex Documentation | [Model Garden LiteLLM Inference](https://github.com/GoogleCloudPlatform/generative-ai/blob/main/open-models/use-cases/model_garden_litellm_inference.ipynb), [Vertex Model Garden](https://cloud.google.com/model-garden?hl=en) |
-| Supported Operations | `/chat/completions`, `/embeddings` |
+| Provider route | `vertex_ai/openai/{MODEL_ID}` |
+| Vertex 문서 | [Model Garden LiteLLM Inference](https://github.com/GoogleCloudPlatform/generative-ai/blob/main/open-models/use-cases/model_garden_litellm_inference.ipynb), [Vertex Model Garden](https://cloud.google.com/model-garden?hl=en) |
+| 지원 작업 | `/chat/completions`, `/embeddings` |
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -49,7 +49,7 @@ response = completion(
 <TabItem value="proxy" label="Proxy">
 
 
-**1. Add to config**
+**1. config에 추가**
 
 ```yaml
 model_list:
@@ -60,7 +60,7 @@ model_list:
         vertex_ai_location: "us-east-1"
 ```
 
-**2. Start proxy**
+**2. proxy 시작**
 
 ```bash
 litellm --config /path/to/config.yaml
@@ -68,7 +68,7 @@ litellm --config /path/to/config.yaml
 # RUNNING at http://0.0.0.0:4000
 ```
 
-**3. Test it!**
+**3. 테스트**
 
 ```bash
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -94,7 +94,7 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 
 </TabItem>
 
-<TabItem value="non-openai" label="Non-OpenAI Compatible Models">
+<TabItem value="non-openai" label="Non-OpenAI Compatible 모델">
 
 ```python
 from litellm import completion
@@ -114,19 +114,19 @@ response = completion(
 
 </Tabs>
 
-## Gemma Models (Custom Endpoints)
+## Gemma 모델 (Custom Endpoints)
 
-Deploy Gemma models on custom Vertex AI prediction endpoints with OpenAI-compatible format.
+OpenAI-compatible 형식으로 사용자 지정 Vertex AI prediction endpoint에 Gemma 모델을 배포할 수 있습니다.
 
-| Property | Details |
+| 속성 | 세부 정보 |
 |----------|---------|
-| Provider Route | `vertex_ai/gemma/{MODEL_NAME}` |
-| Vertex Documentation | [Vertex AI Prediction](https://cloud.google.com/vertex-ai/docs/predictions/get-predictions) |
-| Required Parameter | `api_base` - Full prediction endpoint URL |
+| Provider route | `vertex_ai/gemma/{MODEL_NAME}` |
+| Vertex 문서 | [Vertex AI Prediction](https://cloud.google.com/vertex-ai/docs/predictions/get-predictions) |
+| 필수 파라미터 | `api_base` - 전체 prediction endpoint URL |
 
-**Proxy Usage:**
+**Proxy 사용법:**
 
-**1. Add to config.yaml**
+**1. config.yaml에 추가**
 
 ```yaml
 model_list:
@@ -138,13 +138,13 @@ model_list:
       vertex_location: "us-central1"
 ```
 
-**2. Start proxy**
+**2. proxy 시작**
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-**3. Test it**
+**3. 테스트**
 
 ```bash
 curl http://0.0.0.0:4000/v1/chat/completions \
@@ -157,7 +157,7 @@ curl http://0.0.0.0:4000/v1/chat/completions \
   }'
 ```
 
-**SDK Usage:**
+**SDK 사용법:**
 
 ```python
 from litellm import completion
@@ -171,19 +171,19 @@ response = completion(
 )
 ```
 
-## MedGemma Models (Custom Endpoints)
+## MedGemma 모델 (Custom Endpoints)
 
-Deploy MedGemma models on custom Vertex AI prediction endpoints with OpenAI-compatible format. MedGemma models use the same `vertex_ai/gemma/` route.
+OpenAI-compatible 형식으로 사용자 지정 Vertex AI prediction endpoint에 MedGemma 모델을 배포할 수 있습니다. MedGemma 모델은 동일한 `vertex_ai/gemma/` route를 사용합니다.
 
-| Property | Details |
+| 속성 | 세부 정보 |
 |----------|---------|
-| Provider Route | `vertex_ai/gemma/{MODEL_NAME}` |
-| Vertex Documentation | [Vertex AI Prediction](https://cloud.google.com/vertex-ai/docs/predictions/get-predictions) |
-| Required Parameter | `api_base` - Full prediction endpoint URL |
+| Provider route | `vertex_ai/gemma/{MODEL_NAME}` |
+| Vertex 문서 | [Vertex AI Prediction](https://cloud.google.com/vertex-ai/docs/predictions/get-predictions) |
+| 필수 파라미터 | `api_base` - 전체 prediction endpoint URL |
 
-**Proxy Usage:**
+**Proxy 사용법:**
 
-**1. Add to config.yaml**
+**1. config.yaml에 추가**
 
 ```yaml
 model_list:
@@ -195,13 +195,13 @@ model_list:
       vertex_location: "us-central1"
 ```
 
-**2. Start proxy**
+**2. proxy 시작**
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-**3. Test it**
+**3. 테스트**
 
 ```bash
 curl http://0.0.0.0:4000/v1/chat/completions \
@@ -214,7 +214,7 @@ curl http://0.0.0.0:4000/v1/chat/completions \
   }'
 ```
 
-**SDK Usage:**
+**SDK 사용법:**
 
 ```python
 from litellm import completion

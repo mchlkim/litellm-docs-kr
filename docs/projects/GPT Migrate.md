@@ -1,1 +1,1 @@
-Easily migrate your codebase from one framework or language to another.
+코드베이스를 한 프레임워크나 언어에서 다른 프레임워크나 언어로 쉽게 마이그레이션합니다.

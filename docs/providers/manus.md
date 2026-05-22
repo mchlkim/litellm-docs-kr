@@ -3,25 +3,25 @@ import TabItem from '@theme/TabItem';
 
 # Manus
 
-Use Manus AI agents through LiteLLM's OpenAI-compatible Responses API.
+LiteLLM의 OpenAI 호환 Responses API를 통해 Manus AI 에이전트를 사용합니다.
 
-| Property | Details |
+| 속성 | 세부 정보 |
 |----------|---------|
-| Description | Manus is an AI agent platform for complex reasoning tasks, document analysis, and multi-step workflows with asynchronous task execution. |
-| Provider Route on LiteLLM | `manus/{agent_profile}` |
-| Supported Operations | `/responses` (Responses API), `/files` (Files API) |
-| Provider Doc | [Manus API ↗](https://open.manus.im/docs/openai-compatibility) |
+| 설명 | Manus는 복잡한 추론 작업, 문서 분석, 다단계 워크플로를 비동기 작업 실행 방식으로 처리하는 AI 에이전트 플랫폼입니다. |
+| LiteLLM의 Provider Route | `manus/{agent_profile}` |
+| 지원 작업 | `/responses` (Responses API), `/files` (Files API) |
+| Provider 문서 | [Manus API ↗](https://open.manus.im/docs/openai-compatibility) |
 
-## Model Format
+## 모델 형식
 
 ```shell
 manus/{agent_profile}
 ```
 
-**Examples:**
-- `manus/manus-1.6` - General purpose agent
-- `manus/manus-1.6-lite` - Lightweight agent for simple tasks
-- `manus/manus-1.6-max` - Advanced agent for complex analysis
+**예제:**
+- `manus/manus-1.6` - 범용 에이전트
+- `manus/manus-1.6-lite` - 간단한 작업용 경량 에이전트
+- `manus/manus-1.6-max` - 복잡한 분석용 고급 에이전트
 
 ## LiteLLM Python SDK
 
@@ -61,7 +61,7 @@ if response.status == "completed":
 
 ## LiteLLM AI Gateway
 
-### Setup
+### 설정
 
 ```yaml showLineNumbers title="config.yaml"
 model_list:
@@ -75,7 +75,7 @@ model_list:
 litellm --config config.yaml
 ```
 
-### Usage
+### 사용법
 
 <Tabs>
 <TabItem value="curl" label="cURL">
@@ -160,37 +160,37 @@ if response.status == "completed":
 </TabItem>
 </Tabs>
 
-## How It Works
+## 작동 방식
 
-Manus operates as an **asynchronous agent API**:
+Manus는 **비동기 에이전트 API**로 작동합니다.
 
-1. **Create Task**: When you call `litellm.responses()`, Manus creates a task and returns immediately with `status: "running"`
-2. **Task Executes**: The agent works on your request in the background
-3. **Poll for Completion**: You must repeatedly call `litellm.get_response()` or `client.responses.retrieve()` until the status changes to `"completed"`
-4. **Get Results**: Once completed, the `output` field contains the full conversation
+1. **작업 생성**: `litellm.responses()`를 호출하면 Manus가 작업을 만들고 `status: "running"` 상태로 즉시 반환합니다.
+2. **작업 실행**: 에이전트가 백그라운드에서 요청을 처리합니다.
+3. **완료 여부 폴링**: 상태가 `"completed"`로 바뀔 때까지 `litellm.get_response()` 또는 `client.responses.retrieve()`를 반복 호출해야 합니다.
+4. **결과 가져오기**: 완료되면 `output` 필드에 전체 대화가 포함됩니다.
 
-**Task Statuses:**
-- `running` - Agent is actively working
-- `pending` - Agent is waiting for input
-- `completed` - Task finished successfully
-- `error` - Task failed
+**작업 상태:**
+- `running` - 에이전트가 작업 중입니다.
+- `pending` - 에이전트가 입력을 기다리고 있습니다.
+- `completed` - 작업이 성공적으로 완료되었습니다.
+- `error` - 작업이 실패했습니다.
 
-:::tip Production Usage
-For production applications, use [webhooks](https://open.manus.im/docs/webhooks) instead of polling to get notified when tasks complete.
+:::tip Production 사용법
+프로덕션 애플리케이션에서는 작업 완료 알림을 받기 위해 폴링 대신 [webhooks](https://open.manus.im/docs/webhooks)를 사용하세요.
 :::
 
-## Supported Parameters
+## 지원 파라미터
 
-| Parameter | Supported | Notes |
+| 파라미터 | 지원 여부 | 참고 |
 |-----------|-----------|-------|
-| `input` | ✅ | Text, images, or structured content |
-| `stream` | ✅ | Fake streaming (task runs async) |
-| `max_output_tokens` | ✅ | Limits response length |
-| `previous_response_id` | ✅ | For multi-turn conversations |
+| `input` | ✅ | 텍스트, 이미지 또는 구조화된 콘텐츠 |
+| `stream` | ✅ | 가짜 스트리밍(작업은 비동기로 실행됨) |
+| `max_output_tokens` | ✅ | 응답 길이를 제한합니다. |
+| `previous_response_id` | ✅ | 멀티턴 대화에 사용합니다. |
 
 ## Files API
 
-Manus supports file uploads for document analysis and processing. Files can be uploaded and then referenced in Responses API calls.
+Manus는 문서 분석과 처리를 위한 파일 업로드를 지원합니다. 파일을 업로드한 뒤 Responses API 호출에서 참조할 수 있습니다.
 
 ### LiteLLM Python SDK
 
@@ -362,8 +362,8 @@ print(f"Deleted: {deleted_file.deleted}")
 </TabItem>
 </Tabs>
 
-## Related Documentation
+## 관련 문서
 
 - [LiteLLM Responses API](/docs/response_api)
 - [LiteLLM Files API](/docs/proxy/litellm_managed_files)
-- [Manus OpenAI Compatibility](https://open.manus.im/docs/openai-compatibility)
+- [Manus OpenAI 호환성](https://open.manus.im/docs/openai-compatibility)

@@ -3,36 +3,36 @@ import TabItem from '@theme/TabItem';
 
 # /memory
 
-CRUD endpoints for storing and retrieving user/team-scoped memory entries on the LiteLLM proxy. Use these to persist conversation context, agent memory, team playbooks, or any key-value data scoped to users and teams.
+LiteLLM 프록시에서 사용자/팀 범위의 메모리 항목을 저장하고 조회하는 CRUD 엔드포인트입니다. 대화 컨텍스트, 에이전트 메모리, 팀 플레이북 또는 사용자와 팀에 연결된 임의의 키-값 데이터를 영속화할 때 사용합니다.
 
-## Overview
+## 개요
 
-| Feature | Supported | Notes |
+| 기능 | 지원 | 참고 |
 |---------|-----------|-------|
-| Create memory | ✅ | `POST /v1/memory` |
-| List memories | ✅ | `GET /v1/memory` with optional filtering |
-| Get memory by key | ✅ | `GET /v1/memory/{key}` |
-| Upsert memory | ✅ | `PUT /v1/memory/{key}` |
-| Delete memory | ✅ | `DELETE /v1/memory/{key}` |
-| User-scoped access | ✅ | Entries scoped to `user_id` |
-| Team-scoped access | ✅ | Entries scoped to `team_id` |
-| JSON metadata | ✅ | Arbitrary JSON metadata per entry |
-| Pagination | ✅ | Page-based with configurable page size |
-| Key prefix filtering | ✅ | Redis-style namespace scanning |
-| Audit trail | ✅ | `created_by`, `updated_by` with timestamps |
-| Supported LiteLLM Versions | `v1.83.10+` | |
+| 메모리 생성 | ✅ | `POST /v1/memory` |
+| 메모리 목록 조회 | ✅ | 선택적 필터링을 지원하는 `GET /v1/memory` |
+| 키로 메모리 조회 | ✅ | `GET /v1/memory/{key}` |
+| 메모리 upsert | ✅ | `PUT /v1/memory/{key}` |
+| 메모리 삭제 | ✅ | `DELETE /v1/memory/{key}` |
+| 사용자 범위 접근 | ✅ | `user_id` 범위에 속한 항목 |
+| 팀 범위 접근 | ✅ | `team_id` 범위에 속한 항목 |
+| JSON 메타데이터 | ✅ | 항목별 임의 JSON 메타데이터 |
+| 페이지네이션 | ✅ | 설정 가능한 페이지 크기의 페이지 기반 조회 |
+| 키 접두사 필터링 | ✅ | Redis 스타일 네임스페이스 스캔 |
+| 감사 추적 | ✅ | 타임스탬프가 포함된 `created_by`, `updated_by` |
+| 지원 LiteLLM 버전 | `v1.83.10+` | |
 
-## Prerequisites
+## 사전 준비
 
-- LiteLLM Proxy running with a **PostgreSQL** database connected
-- Database migrations applied (the `LiteLLM_MemoryTable` is created automatically)
-- Valid API key for authentication
+- **PostgreSQL** 데이터베이스가 연결된 상태로 실행 중인 LiteLLM Proxy
+- 데이터베이스 마이그레이션 적용 완료(`LiteLLM_MemoryTable`은 자동 생성됨)
+- 인증에 사용할 유효한 API 키
 
-No additional `config.yaml` entries required. Endpoints are available automatically once the proxy starts with a connected database.
+추가 `config.yaml` 항목은 필요하지 않습니다. 데이터베이스가 연결된 상태로 프록시가 시작되면 엔드포인트가 자동으로 제공됩니다.
 
-## Quick Start
+## 빠른 시작
 
-### Create a Memory Entry
+### 메모리 항목 생성
 
 <Tabs>
 <TabItem value="curl" label="curl">
@@ -70,7 +70,7 @@ print(response.json())
 </TabItem>
 </Tabs>
 
-**Response:**
+**응답:**
 
 ```json
 {
@@ -87,7 +87,7 @@ print(response.json())
 }
 ```
 
-### List Memories
+### 메모리 목록 조회
 
 <Tabs>
 <TabItem value="curl" label="curl">
@@ -127,7 +127,7 @@ print(response.json())
 </TabItem>
 </Tabs>
 
-**Response:**
+**응답:**
 
 ```json
 {
@@ -149,7 +149,7 @@ print(response.json())
 }
 ```
 
-### Get a Memory by Key
+### 키로 메모리 조회
 
 <Tabs>
 <TabItem value="curl" label="curl">
@@ -170,9 +170,9 @@ print(response.json())
 </TabItem>
 </Tabs>
 
-### Update (Upsert) a Memory
+### 메모리 업데이트(Upsert)
 
-If the key exists, updates it. If not, creates a new entry.
+키가 있으면 업데이트하고, 없으면 새 항목을 생성합니다.
 
 <Tabs>
 <TabItem value="curl" label="curl">
@@ -201,7 +201,7 @@ print(response.json())
 </TabItem>
 </Tabs>
 
-### Delete a Memory
+### 메모리 삭제
 
 <Tabs>
 <TabItem value="curl" label="curl">
@@ -222,7 +222,7 @@ print(response.json())
 </TabItem>
 </Tabs>
 
-**Response:**
+**응답:**
 
 ```json
 {
@@ -231,95 +231,95 @@ print(response.json())
 }
 ```
 
-## API Reference
+## API 레퍼런스
 
 ### POST `/v1/memory`
 
-Create a new memory entry.
+새 메모리 항목을 생성합니다.
 
-**Request Body:**
+**요청 본문:**
 
-| Parameter | Type | Required | Description |
+| 파라미터 | 타입 | 필수 | 설명 |
 |-----------|------|----------|-------------|
-| `key` | string | ✅ | Globally unique key. Use namespaced keys (e.g., `user:123:notes`). |
-| `value` | string | ✅ | Memory content. Typically markdown or plain text. |
-| `metadata` | any (JSON) | ❌ | Optional JSON metadata (dicts, lists, scalars). |
-| `user_id` | string | ❌ | Scope to a user. Defaults to caller's `user_id`. Admin-only override. |
-| `team_id` | string | ❌ | Scope to a team. Defaults to caller's `team_id`. Admin-only override. |
+| `key` | string | ✅ | 전역 고유 키입니다. 네임스페이스가 포함된 키를 사용하세요(예: `user:123:notes`). |
+| `value` | string | ✅ | 메모리 내용입니다. 일반적으로 markdown 또는 일반 텍스트입니다. |
+| `metadata` | any (JSON) | ❌ | 선택적 JSON 메타데이터입니다(딕셔너리, 목록, 스칼라). |
+| `user_id` | string | ❌ | 사용자 범위입니다. 기본값은 호출자의 `user_id`입니다. 관리자만 재정의할 수 있습니다. |
+| `team_id` | string | ❌ | 팀 범위입니다. 기본값은 호출자의 `team_id`입니다. 관리자만 재정의할 수 있습니다. |
 
-**Response:** `201` — Returns the created `LiteLLM_MemoryRow`.
+**응답:** `201` — 생성된 `LiteLLM_MemoryRow`를 반환합니다.
 
 ---
 
 ### GET `/v1/memory`
 
-List memory entries visible to the caller.
+호출자에게 보이는 메모리 항목 목록을 조회합니다.
 
-**Query Parameters:**
+**쿼리 파라미터:**
 
-| Parameter | Type | Default | Description |
+| 파라미터 | 타입 | 기본값 | 설명 |
 |-----------|------|---------|-------------|
-| `key` | string | — | Filter by exact key match. |
-| `key_prefix` | string | — | Filter by key prefix (e.g., `user:123:`). Takes precedence over `key`. |
-| `page` | int | 1 | Page number (1-indexed). |
-| `page_size` | int | 50 | Items per page (max 500). |
+| `key` | string | — | 정확히 일치하는 키로 필터링합니다. |
+| `key_prefix` | string | — | 키 접두사로 필터링합니다(예: `user:123:`). `key`보다 우선합니다. |
+| `page` | int | 1 | 페이지 번호입니다(1부터 시작). |
+| `page_size` | int | 50 | 페이지당 항목 수입니다(최대 500). |
 
-**Response:** `200` — Returns `MemoryListResponse` with `memories` array and `total` count.
+**응답:** `200` — `memories` 배열과 `total` 개수가 포함된 `MemoryListResponse`를 반환합니다.
 
 ---
 
 ### GET `/v1/memory/{key}`
 
-Get a single memory entry by key.
+키로 단일 메모리 항목을 조회합니다.
 
-**Path Parameters:**
+**경로 파라미터:**
 
-| Parameter | Type | Description |
+| 파라미터 | 타입 | 설명 |
 |-----------|------|-------------|
-| `key` | string | The memory key to retrieve. |
+| `key` | string | 조회할 메모리 키입니다. |
 
-**Response:** `200` — Returns the `LiteLLM_MemoryRow`.
+**응답:** `200` — `LiteLLM_MemoryRow`를 반환합니다.
 
 ---
 
 ### PUT `/v1/memory/{key}`
 
-Upsert a memory entry. Creates the entry if the key doesn't exist; updates it if it does.
+메모리 항목을 upsert합니다. 키가 없으면 항목을 생성하고, 있으면 업데이트합니다.
 
-**Path Parameters:**
+**경로 파라미터:**
 
-| Parameter | Type | Description |
+| 파라미터 | 타입 | 설명 |
 |-----------|------|-------------|
-| `key` | string | The memory key to create or update. |
+| `key` | string | 생성하거나 업데이트할 메모리 키입니다. |
 
-**Request Body:**
+**요청 본문:**
 
-| Parameter | Type | Required | Description |
+| 파라미터 | 타입 | 필수 | 설명 |
 |-----------|------|----------|-------------|
-| `value` | string | ✅ (on create) | Memory content. Required when creating, optional when updating. |
-| `metadata` | any (JSON) | ❌ | Updated metadata. Omit to preserve existing value. Set to `null` to clear. |
-| `user_id` | string | ❌ | Only used on create. Admin-only override. |
-| `team_id` | string | ❌ | Only used on create. Admin-only override. |
+| `value` | string | ✅ (생성 시) | 메모리 내용입니다. 생성할 때는 필수이고, 업데이트할 때는 선택 사항입니다. |
+| `metadata` | any (JSON) | ❌ | 업데이트할 메타데이터입니다. 생략하면 기존 값을 유지하고, `null`로 설정하면 지웁니다. |
+| `user_id` | string | ❌ | 생성 시에만 사용됩니다. 관리자만 재정의할 수 있습니다. |
+| `team_id` | string | ❌ | 생성 시에만 사용됩니다. 관리자만 재정의할 수 있습니다. |
 
-**Response:** `200` — Returns the created/updated `LiteLLM_MemoryRow`.
+**응답:** `200` — 생성/업데이트된 `LiteLLM_MemoryRow`를 반환합니다.
 
 ---
 
 ### DELETE `/v1/memory/{key}`
 
-Delete a memory entry by key.
+키로 메모리 항목을 삭제합니다.
 
-**Path Parameters:**
+**경로 파라미터:**
 
-| Parameter | Type | Description |
+| 파라미터 | 타입 | 설명 |
 |-----------|------|-------------|
-| `key` | string | The memory key to delete. |
+| `key` | string | 삭제할 메모리 키입니다. |
 
-**Response:** `200` — Returns `{"key": "...", "deleted": true}`.
+**응답:** `200` — `{"key": "...", "deleted": true}`를 반환합니다.
 
-## Response Object
+## 응답 객체
 
-All endpoints that return a memory entry use this schema:
+메모리 항목을 반환하는 모든 엔드포인트는 이 스키마를 사용합니다.
 
 ```json
 {
@@ -336,40 +336,40 @@ All endpoints that return a memory entry use this schema:
 }
 ```
 
-## Access Control
+## 접근 제어
 
-Memory entries are scoped by `user_id` and `team_id`, with role-based visibility and write access.
+메모리 항목은 `user_id`와 `team_id`로 범위가 지정되며, 역할 기반 조회 권한과 쓰기 권한을 사용합니다.
 
-### Visibility (Read)
+### 조회 가능 범위(Read)
 
-| Role | Can See |
+| 역할 | 볼 수 있는 항목 |
 |------|---------|
-| **Proxy Admin** | All memory entries |
-| **Regular User** | Entries where `user_id` matches their own OR `team_id` matches their own |
+| **Proxy Admin** | 모든 메모리 항목 |
+| **Regular User** | 자신의 `user_id`와 일치하거나 자신의 `team_id`와 일치하는 항목 |
 
-### Write Access (Update / Delete)
+### 쓰기 권한(Update / Delete)
 
-| Scenario | Who Can Write |
+| 시나리오 | 쓸 수 있는 주체 |
 |----------|---------------|
-| Entry has `user_id` matching caller | Owner can update/delete |
-| Entry is team-scoped only (no `user_id`) | Team admins and org admins only |
-| Any entry | Proxy admins |
+| 항목의 `user_id`가 호출자와 일치 | 소유자가 업데이트/삭제 가능 |
+| 항목이 팀 범위에만 속함(`user_id` 없음) | 팀 관리자와 조직 관리자만 가능 |
+| 모든 항목 | Proxy 관리자 |
 
 :::info
 
-Team members can **read** team-scoped entries but only **team admins** can modify or delete them. This prevents teammates from overwriting each other's entries.
+팀 멤버는 팀 범위 항목을 **읽을 수 있지만**, 수정하거나 삭제할 수 있는 주체는 **팀 관리자**뿐입니다. 이를 통해 팀원이 서로의 항목을 덮어쓰는 일을 방지합니다.
 
 :::
 
-### Scoping on Create
+### 생성 시 범위 지정
 
-- `user_id` and `team_id` default to the caller's identity from their API key
-- **Proxy admins** can override `user_id` / `team_id` to create entries for other users or teams
-- Non-admin callers cannot create entries without at least one of `user_id` or `team_id`
+- `user_id`와 `team_id`의 기본값은 호출자의 API 키에서 가져온 ID입니다.
+- **Proxy 관리자**는 `user_id` / `team_id`를 재정의해 다른 사용자 또는 팀의 항목을 생성할 수 있습니다.
+- 관리자가 아닌 호출자는 `user_id` 또는 `team_id` 중 하나 이상 없이 항목을 생성할 수 없습니다.
 
-## Key Naming Conventions
+## 키 명명 규칙
 
-Keys are globally unique. Use namespaced keys to organize entries:
+키는 전역적으로 고유합니다. 네임스페이스가 포함된 키를 사용해 항목을 정리하세요.
 
 ```
 user:{user_id}:preferences      # User preferences
@@ -379,7 +379,7 @@ agent:{agent_id}:memory         # Agent memory
 project:{project_id}:config     # Project configuration
 ```
 
-Use `key_prefix` in the list endpoint to scan all entries in a namespace:
+목록 조회 엔드포인트에서 `key_prefix`를 사용하면 네임스페이스의 모든 항목을 스캔할 수 있습니다.
 
 ```shell
 # Get all entries for a user
@@ -387,14 +387,14 @@ curl "http://localhost:4000/v1/memory?key_prefix=user:123:" \
   -H "Authorization: Bearer sk-1234"
 ```
 
-## Error Codes
+## 오류 코드
 
-| Status Code | Meaning |
+| 상태 코드 | 의미 |
 |-------------|---------|
-| `200` | Success (GET, PUT, DELETE) |
-| `201` | Created (POST) |
-| `400` | Invalid input (missing required fields, empty PUT body, orphan row) |
-| `403` | Permission denied (write access violation, scope override by non-admin) |
-| `404` | Key not found or not visible to caller |
-| `409` | Duplicate key on creation |
-| `500` | Internal server error (database issues) |
+| `200` | 성공(GET, PUT, DELETE) |
+| `201` | 생성됨(POST) |
+| `400` | 잘못된 입력(필수 필드 누락, 빈 PUT 본문, 고아 row) |
+| `403` | 권한 거부(쓰기 권한 위반, 비관리자의 범위 재정의) |
+| `404` | 키를 찾을 수 없거나 호출자에게 보이지 않음 |
+| `409` | 생성 시 중복 키 |
+| `500` | 내부 서버 오류(데이터베이스 문제) |

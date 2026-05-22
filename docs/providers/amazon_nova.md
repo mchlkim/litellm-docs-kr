@@ -3,23 +3,23 @@ import TabItem from '@theme/TabItem';
 
 # Amazon Nova
 
-| Property | Details |
+| 속성 | 상세 |
 |-------|-------|
-| Description | Amazon Nova is a family of foundation models built by Amazon that deliver frontier intelligence and industry-leading price performance. |
-| Provider Route on LiteLLM | `amazon_nova/` |
-| Provider Doc | [Amazon Nova ↗](https://docs.aws.amazon.com/nova/latest/userguide/what-is-nova.html) |
-| Supported OpenAI Endpoints | `/chat/completions`, `v1/responses` |
-| Other Supported Endpoints | `v1/messages`, `/generateContent` | 
+| 설명 | Amazon Nova는 Amazon이 구축한 foundation model 제품군으로, frontier intelligence와 업계 최고 수준의 가격 대비 성능을 제공합니다. |
+| LiteLLM Provider 경로 | `amazon_nova/` |
+| Provider 문서 | [Amazon Nova ↗](https://docs.aws.amazon.com/nova/latest/userguide/what-is-nova.html) |
+| 지원 OpenAI 엔드포인트 | `/chat/completions`, `v1/responses` |
+| 기타 지원 엔드포인트 | `v1/messages`, `/generateContent` | 
 
-## Authentication
+## 인증
 
-Amazon Nova uses API key authentication. You can obtain your API key from the [Amazon Nova developer console ↗](https://nova.amazon.com/dev/documentation).
+Amazon Nova는 API key 인증을 사용합니다. API key는 [Amazon Nova developer console ↗](https://nova.amazon.com/dev/documentation)에서 받을 수 있습니다.
 
 ```bash
 export AMAZON_NOVA_API_KEY="your-api-key"
 ```
 
-## Usage
+## 사용법
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -45,7 +45,7 @@ print(response)
 </TabItem>
 <TabItem value="proxy" label="PROXY">
 
-### 1. Setup config.yaml
+### 1. config.yaml 설정 {#1-setup-configyaml}
 
 ```yaml
 model_list:
@@ -54,12 +54,12 @@ model_list:
       model: amazon_nova/nova-micro-v1
       api_key: os.environ/AMAZON_NOVA_API_KEY
 ```
-### 2. Start the proxy
+### 2. 프록시 시작
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-### 3. Test it
+### 3. 테스트 {#3-test-it}
 
 ```bash
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -78,16 +78,16 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 </TabItem>
 </Tabs>
 
-## Supported Models
+## 지원 모델 {#supported-모델}
 
-| Model Name | Usage | Context Window |
+| 모델 이름 | 사용법 | 컨텍스트 윈도우 |
 |------------|-------|----------------|
-| Nova Micro | `completion(model="amazon_nova/nova-micro-v1", messages=messages)` | 128K tokens |
-| Nova Lite | `completion(model="amazon_nova/nova-lite-v1", messages=messages)` | 300K tokens |
-| Nova Pro | `completion(model="amazon_nova/nova-pro-v1", messages=messages)` | 300K tokens |
-| Nova Premier | `completion(model="amazon_nova/nova-premier-v1", messages=messages)` | 1M tokens |
+| Nova Micro | `completion(model="amazon_nova/nova-micro-v1", messages=messages)` | 128K 토큰 |
+| Nova Lite | `completion(model="amazon_nova/nova-lite-v1", messages=messages)` | 300K 토큰 |
+| Nova Pro | `completion(model="amazon_nova/nova-pro-v1", messages=messages)` | 300K 토큰 |
+| Nova Premier | `completion(model="amazon_nova/nova-premier-v1", messages=messages)` | 1M 토큰 |
 
-## Usage - Streaming
+## 사용법 - 스트리밍 {#사용법---streaming}
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -132,7 +132,7 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 </TabItem>
 </Tabs>
 
-## Usage - Function Calling / Tool Usage
+## 사용법 - 함수 호출 / 도구 사용 {#사용법---function-calling--tool-사용법}
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -213,7 +213,7 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 </TabItem>
 </Tabs>
 
-## Set temperature, top_p, etc.
+## temperature, top_p 등 설정 {#set-temperature-top_p-etc}
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -240,7 +240,7 @@ print(response)
 </TabItem>
 <TabItem value="proxy" label="PROXY">
 
-**Set on yaml**
+**yaml에서 설정**
 
 ```yaml
 model_list:
@@ -251,7 +251,7 @@ model_list:
       max_tokens: 500
       top_p: 0.9
 ```
-**Set on request**
+**요청에서 설정**
 ```bash
 curl --location 'http://0.0.0.0:4000/chat/completions' \
 --header 'Content-Type: application/json' \
@@ -272,20 +272,20 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 </TabItem>
 </Tabs>
 
-## Model Comparison
+## 모델 비교 {#model-comparison}
 
-| Model | Best For | Speed | Cost | Context |
+| 모델 | 적합한 용도 | 속도 | 비용 | 컨텍스트 |
 |-------|----------|-------|------|---------|
-| **Nova Micro** | Simple tasks, high throughput | Fastest | Lowest | 128K |
-| **Nova Lite** | Balanced performance | Fast | Low | 300K |
-| **Nova Pro** | Complex reasoning | Medium | Medium | 300K |
-| **Nova Premier** | Most advanced tasks | Slower | Higher | 1M |
+| **Nova Micro** | 단순 작업, 높은 처리량 | 가장 빠름 | 가장 낮음 | 128K |
+| **Nova Lite** | 균형 잡힌 성능 | 빠름 | 낮음 | 300K |
+| **Nova Pro** | 복잡한 추론 | 보통 | 보통 | 300K |
+| **Nova Premier** | 가장 고급 작업 | 느림 | 높음 | 1M |
 
-## Error Handling
+## 오류 처리 {#error-handling}
 
-Common error codes and their meanings:
+일반적인 오류 코드와 의미는 다음과 같습니다.
 
-- `401 Unauthorized`: Invalid API key
-- `429 Too Many Requests`: Rate limit exceeded
-- `400 Bad Request`: Invalid request format
-- `500 Internal Server Error`: Service temporarily unavailable
+- `401 Unauthorized`: 유효하지 않은 API key
+- `429 Too Many Requests`: rate limit 초과
+- `400 Bad Request`: 유효하지 않은 요청 형식
+- `500 Internal Server Error`: 서비스를 일시적으로 사용할 수 없음

@@ -3,9 +3,9 @@ import TabItem from '@theme/TabItem';
 
 # IBM watsonx.ai
 
-LiteLLM supports all IBM [watsonx.ai](https://watsonx.ai/) foundational models and embeddings.
+LiteLLM은 모든 IBM [watsonx.ai](https://watsonx.ai/) 파운데이션 모델과 임베딩을 지원합니다.
 
-## Environment Variables
+## 환경 변수 {#environment-variables}
 ```python
 os.environ["WATSONX_URL"] = ""  # (required) Base URL of your WatsonX instance
 # (required) either one of the following:
@@ -17,9 +17,9 @@ os.environ["WATSONX_DEPLOYMENT_SPACE_ID"] = "" # ID of your deployment space to 
 os.environ["WATSONX_ZENAPIKEY"] = "" # Zen API key (use for long-term api token)
 ```
 
-See [here](https://cloud.ibm.com/apidocs/watsonx-ai#api-authentication) for more information on how to get an access token to authenticate to watsonx.ai.
+watsonx.ai 인증에 사용할 액세스 토큰을 가져오는 방법은 [여기](https://cloud.ibm.com/apidocs/watsonx-ai#api-authentication)를 참고하세요.
 
-## Usage
+## 사용법
 
 <a target="_blank" href="https://colab.research.google.com/github/BerriAI/litellm/blob/main/cookbook/liteLLM_IBM_Watsonx.ipynb">
   <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
@@ -39,7 +39,7 @@ response = completion(
 )
 ```
 
-## Usage - Streaming
+## 스트리밍 사용법 {#사용법---streaming}
 ```python showLineNumbers title="Streaming"
 import os
 from litellm import completion
@@ -57,9 +57,9 @@ for chunk in response:
   print(chunk)
 ```
 
-## Usage - Models in deployment spaces
+## deployment space 모델 사용법 {#deployment-space-models}
 
-Models deployed to a deployment space (e.g.: tuned models) can be called using the `deployment/<deployment_id>` format.
+deployment space에 배포된 모델(예: 튜닝된 모델)은 `deployment/<deployment_id>` 형식으로 호출할 수 있습니다.
 
 ```python showLineNumbers title="Deployment Space"
 import litellm
@@ -71,7 +71,7 @@ response = litellm.completion(
 )
 ```
 
-## Usage - Embeddings
+## 임베딩 사용법 {#사용법---embeddings}
 
 ```python showLineNumbers title="Embeddings"
 from litellm import embedding
@@ -83,9 +83,9 @@ response = embedding(
 )
 ```
 
-## LiteLLM Proxy Usage 
+## LiteLLM Proxy 사용법 
 
-### 1. Save keys in your environment
+### 1. 환경에 키 저장 {#1-save-keys-in-your-environment}
 
 ```bash
 export WATSONX_URL=""
@@ -93,7 +93,7 @@ export WATSONX_APIKEY=""
 export WATSONX_PROJECT_ID=""
 ```
 
-### 2. Start the proxy 
+### 2. 프록시 시작 
 
 <Tabs>
 <TabItem value="cli" label="CLI">
@@ -115,7 +115,7 @@ model_list:
 </TabItem>
 </Tabs>
 
-### 3. Test it
+### 3. 테스트 {#3-test-it}
 
 
 <Tabs>
@@ -155,32 +155,32 @@ print(response)
 </Tabs>
 
 
-## Supported Models
+## 지원 모델 {#supported-모델}
 
-| Model Name                         | Command                                                                                  |
+| 모델 이름                          | 명령                                                                                     |
 |------------------------------------|------------------------------------------------------------------------------------------|
-| Llama 3.1 8B Instruct              | `completion(model="watsonx/meta-llama/llama-3-1-8b-instruct", messages=messages)`        |
-| Llama 2 70B Chat                   | `completion(model="watsonx/meta-llama/llama-2-70b-chat", messages=messages)`             |
-| Granite 13B Chat V2                | `completion(model="watsonx/ibm/granite-13b-chat-v2", messages=messages)`                 |
-| Mixtral 8X7B Instruct              | `completion(model="watsonx/ibm-mistralai/mixtral-8x7b-instruct-v01-q", messages=messages)` |
+| `Llama 3.1 8B Instruct`              | `completion(model="watsonx/meta-llama/llama-3-1-8b-instruct", messages=messages)`        |
+| `Llama 2 70B Chat`                   | `completion(model="watsonx/meta-llama/llama-2-70b-chat", messages=messages)`             |
+| `Granite 13B Chat V2`                | `completion(model="watsonx/ibm/granite-13b-chat-v2", messages=messages)`                 |
+| `Mixtral 8X7B Instruct`              | `completion(model="watsonx/ibm-mistralai/mixtral-8x7b-instruct-v01-q", messages=messages)` |
 
-For all available models, see [watsonx.ai documentation](https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/fm-models.html?context=wx).
+사용 가능한 모든 모델은 [watsonx.ai 문서](https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/fm-models.html?context=wx)를 참고하세요.
 
-## Supported Embedding Models
+## 지원 임베딩 모델 {#supported-embedding-모델}
 
-| Model Name | Function Call                                                          |
+| 모델 이름  | 함수 호출                                                              |
 |------------|------------------------------------------------------------------------|
 | Slate 30m  | `embedding(model="watsonx/ibm/slate-30m-english-rtrvr", input=input)`  |
 | Slate 125m | `embedding(model="watsonx/ibm/slate-125m-english-rtrvr", input=input)` |
 
-For all available embedding models, see [watsonx.ai embedding documentation](https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/fm-models-embed.html?context=wx).
+사용 가능한 모든 임베딩 모델은 [watsonx.ai embedding 문서](https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/fm-models-embed.html?context=wx)를 참고하세요.
 
 
-## Advanced
+## 고급 {#advanced}
 
-### Using Zen API Key
+### Zen API Key 사용 {#using-zen-api-key}
 
-You can use a Zen API key for long-term authentication instead of generating IAM tokens. Pass it either as an environment variable or as a parameter:
+IAM 토큰을 생성하는 대신 장기 인증용 Zen API key를 사용할 수 있습니다. 환경 변수 또는 파라미터로 전달하세요.
 
 ```python
 import os
@@ -204,7 +204,7 @@ response = completion(
 )
 ```
 
-**Using with LiteLLM Proxy via OpenAI client:**
+**OpenAI client를 통해 LiteLLM Proxy와 함께 사용:**
 
 ```python
 import openai
@@ -225,6 +225,4 @@ response = client.chat.completions.create(
 )
 ```
 
-See [IBM documentation](https://www.ibm.com/docs/en/watsonx/w-and-w/2.2.0?topic=keys-generating-zenapikey-authorization-tokens) for more information on generating Zen API keys.
-
-
+Zen API key 생성에 대한 자세한 내용은 [IBM 문서](https://www.ibm.com/docs/en/watsonx/w-and-w/2.2.0?topic=keys-generating-zenapikey-authorization-tokens)를 참고하세요.

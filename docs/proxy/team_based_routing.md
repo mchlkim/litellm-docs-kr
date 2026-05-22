@@ -1,18 +1,18 @@
-# [DEPRECATED] Team-based Routing
+# [DEPRECATED] Team 기반 Routing {#team-based-routing}
 
 :::info
 
-This is deprecated, please use [Tag Based Routing](./tag_routing.md) instead
+이 기능은 deprecated 상태입니다. 대신 [Tag Based Routing](./tag_routing.md)을 사용하세요.
 
 :::
 
 
-## Routing
-Route calls to different model groups based on the team-id
+## Routing {#routing}
+`team-id`를 기준으로 호출을 서로 다른 model group으로 route합니다.
 
-### Config with model group 
+### model group이 포함된 Config {#config-with-model-group}
 
-Create a config.yaml with 2 model groups + connected postgres db
+2개의 model group과 연결된 postgres db를 포함하는 `config.yaml`을 생성합니다.
 
 ```yaml
 model_list: 
@@ -34,13 +34,13 @@ general_settings:
     database_url: "postgresql://..." # 👈 Connect proxy to DB
 ```
 
-Start proxy
+프록시를 시작합니다.
 
 ```bash
 litellm --config /path/to/config.yaml
 ```
 
-### Create Team with Model Alias
+### Model Alias가 있는 Team 생성 {#create-team-with-model-alias}
 
 ```bash
 curl --location 'http://0.0.0.0:4000/team/new' \
@@ -54,7 +54,7 @@ curl --location 'http://0.0.0.0:4000/team/new' \
 # Returns team_id: my-team-id
 ```
 
-### Create Team Key 
+### Team Key 생성 {#create-team-key}
 
 ```bash 
 curl --location 'http://localhost:4000/key/generate' \
@@ -65,7 +65,7 @@ curl --location 'http://localhost:4000/key/generate' \
 }'
 ```
 
-### Call Model with alias 
+### alias로 Model 호출 {#call-model-with-alias}
 
 ```bash
 curl --location 'http://0.0.0.0:4000/v1/chat/completions' \
@@ -77,4 +77,3 @@ curl --location 'http://0.0.0.0:4000/v1/chat/completions' \
   "user": "usha"
 }'
 ```
-

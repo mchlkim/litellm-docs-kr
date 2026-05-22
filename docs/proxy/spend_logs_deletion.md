@@ -1,27 +1,27 @@
-# ✨ Maximum Retention Period for Spend Logs
+# ✨ 지출 로그 최대 보존 기간
 
-This walks through how to set the maximum retention period for spend logs. This helps manage database size by deleting old logs automatically.
+이 문서는 지출 로그의 최대 보존 기간을 설정하는 방법을 설명합니다. 오래된 로그를 자동으로 삭제하여 데이터베이스 크기를 관리하는 데 도움이 됩니다.
 
 :::info
 
-✨ This is on LiteLLM Enterprise
+✨ 이 기능은 LiteLLM 엔터프라이즈에서 제공됩니다
 
-[Enterprise Pricing](https://www.litellm.ai/#pricing)
+[엔터프라이즈 가격](https://www.litellm.ai/#pricing)
 
-[Get free 7-day trial key](https://www.litellm.ai/enterprise#trial)
+[무료 7일 평가판 키 받기](https://www.litellm.ai/enterprise#trial)
 
 :::
 
-### Requirements
+### 요구 사항
 
-- **Postgres** (for log storage)
-- **Redis** *(optional)* — required only if you're running multiple proxy instances and want to enable distributed locking
+- **Postgres** (로그 저장용)
+- **Redis** *(선택 사항)* — 여러 프록시 인스턴스를 실행하면서 분산 잠금을 활성화하려는 경우에만 필요합니다
 
-## Usage
+## 사용법
 
-### Setup
+### 설정
 
-Add this to your `proxy_config.yaml` under `general_settings`:
+`proxy_config.yaml`의 `general_settings` 아래에 다음을 추가하세요.
 
 ```yaml title="proxy_config.yaml"
 general_settings:
@@ -39,59 +39,59 @@ litellm_settings:
     type: redis
 ```
 
-### Configuration Options
+### 설정 옵션
 
-#### `maximum_spend_logs_retention_period` (required)
+#### `maximum_spend_logs_retention_period` (필수)
 
-How long logs should be kept before deletion. Supported formats:
+삭제 전 로그를 얼마나 오래 보관할지 지정합니다. 지원되는 형식은 다음과 같습니다.
 
-- `"7d"` – 7 days
-- `"24h"` – 24 hours
-- `"60m"` – 60 minutes
-- `"3600s"` – 3600 seconds
+- `"7d"` – 7일
+- `"24h"` – 24시간
+- `"60m"` – 60분
+- `"3600s"` – 3600초
 
-#### `maximum_spend_logs_retention_interval` (optional)
+#### `maximum_spend_logs_retention_interval` (선택 사항)
 
-How often the cleanup job should run. Uses the same format as above. If not set, cleanup will run every 24 hours if and only if `maximum_spend_logs_retention_period` is set.
+정리 작업을 얼마나 자주 실행할지 지정합니다. 위와 같은 형식을 사용합니다. 설정하지 않으면 `maximum_spend_logs_retention_period`가 설정된 경우에만 정리 작업이 24시간마다 실행됩니다.
 
-#### `maximum_spend_logs_cleanup_cron` (optional)
+#### `maximum_spend_logs_cleanup_cron` (선택 사항)
 
-Schedule the cleanup using standard cron syntax. This takes precedence over `maximum_spend_logs_retention_interval`.
+표준 cron 문법으로 정리 일정을 지정합니다. 이 설정은 `maximum_spend_logs_retention_interval`보다 우선합니다.
 
-Examples:
-- `"0 4 * * *"` – Run at 04:00 AM daily
-- `"0 0 * * 0"` – Run at midnight every Sunday
-- `"*/30 * * * *"` – Run every 30 minutes
+예제:
+- `"0 4 * * *"` – 매일 오전 04:00에 실행
+- `"0 0 * * 0"` – 매주 일요일 자정에 실행
+- `"*/30 * * * *"` – 30분마다 실행
 
-## How it works
+## 동작 방식
 
-### Step 1. Lock Acquisition (Optional with Redis)
+### 1단계. 잠금 획득 (Redis 사용 시 선택 사항)
 
-If Redis is enabled, LiteLLM uses it to make sure only one instance runs the cleanup at a time.
+Redis가 활성화되어 있으면 LiteLLM은 한 번에 하나의 인스턴스만 정리 작업을 실행하도록 Redis를 사용합니다.
 
-- If the lock is acquired:
-  - This instance proceeds with cleanup
-  - Others skip it
-- If no lock is present:
-  - Cleanup still runs (useful for single-node setups)
+- 잠금을 획득한 경우:
+  - 해당 인스턴스가 정리 작업을 진행합니다
+  - 다른 인스턴스는 건너뜁니다
+- 잠금이 없는 경우:
+  - 정리 작업은 계속 실행됩니다(단일 노드 설정에 유용)
 
-![Working of spend log deletions](../../img/spend_log_deletion_working.png)  
-*Working of spend log deletions*
+![지출 로그 삭제 동작 방식](../../img/spend_log_deletion_working.png)  
+*지출 로그 삭제 동작 방식*
 
-### Step 2. Batch Deletion
+### 2단계. 배치 삭제
 
-Once cleanup starts:
+정리 작업이 시작되면 다음 작업을 수행합니다.
 
-- It calculates the cutoff date using the configured retention period
-- Deletes logs older than the cutoff in batches (default size `1000`)
-- Adds a short delay between batches to avoid overloading the database
+- 설정된 보존 기간을 사용해 기준 날짜를 계산합니다
+- 기준 날짜보다 오래된 로그를 배치 단위로 삭제합니다(기본 크기 `1000`)
+- 데이터베이스 과부하를 방지하기 위해 배치 사이에 짧은 지연을 추가합니다
 
-### Default settings:
-- **Batch size**: 1000 logs (configurable via `SPEND_LOG_CLEANUP_BATCH_SIZE`)
-- **Max batches per run**: 500
-- **Max deletions per run**: 500,000 logs
+### 기본 설정:
+- **배치 크기**: 로그 1000개(`SPEND_LOG_CLEANUP_BATCH_SIZE`로 설정 가능)
+- **실행당 최대 배치 수**: 500
+- **실행당 최대 삭제 수**: 로그 500,000개
 
-You can change the cleanup parameters using environment variables:
+환경 변수를 사용해 정리 파라미터를 변경할 수 있습니다.
 
 ```bash
 SPEND_LOG_RUN_LOOPS=200
@@ -99,7 +99,7 @@ SPEND_LOG_RUN_LOOPS=200
 SPEND_LOG_CLEANUP_BATCH_SIZE=2000
 ```
 
-This would allow up to 200,000 logs to be deleted in one run.
+이렇게 하면 한 번의 실행에서 최대 200,000개의 로그를 삭제할 수 있습니다.
 
-![Batch deletion of old logs](../../img/spend_log_deletion_multi_pod.jpg)  
-*Batch deletion of old logs*
+![오래된 로그의 배치 삭제](../../img/spend_log_deletion_multi_pod.jpg)  
+*오래된 로그의 배치 삭제*

@@ -1,20 +1,24 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# LiteLLM - Getting Started
+:::note 보안 업데이트
+Trivy 공급망 침해는 차단되었습니다 :tada: . 영향을 받은 모든 패키지는 삭제되었으며, 현재 릴리스에는 손상된 코드/컴포넌트가 포함되어 있지 않습니다. 문제를 더 깊이 이해하려면 [Security Townhall](/blog/security-townhall-updates)을, 앞으로의 개선 방향은 [CI/CD v2](/blog/ci-cd-v2-improvements)를 참고하세요.
+:::
+
+# LiteLLM - 시작하기
 
 https://github.com/BerriAI/litellm
 
-## **Call 100+ LLMs using the OpenAI Input/Output Format**
+## **OpenAI 입력/출력 형식으로 100개 이상의 LLM 호출**
 
-- Translate inputs to provider's endpoints (`/chat/completions`, `/responses`, `/embeddings`, `/images`, `/audio`, `/batches`, and more)
-- [Consistent output](https://docs.litellm.ai/docs/supported_endpoints) - same response format regardless of which provider you use
-- Retry/fallback logic across multiple deployments (e.g. Azure/OpenAI) - [Router](https://docs.litellm.ai/docs/routing)
-- Track spend & set budgets per project [LiteLLM Proxy Server](https://docs.litellm.ai/docs/simple_proxy)
+- 입력을 공급자의 엔드포인트로 변환합니다(`/chat/completions`, `/responses`, `/embeddings`, `/images`, `/audio`, `/batches` 등)
+- [일관된 출력](https://docs.litellm.ai/docs/supported_endpoints) - 어떤 공급자를 사용하든 동일한 응답 형식
+- 여러 배포(예: Azure/OpenAI)에 걸친 재시도/fallback 로직 - [Router](https://docs.litellm.ai/docs/routing)
+- 프로젝트별 지출 추적 및 예산 설정 [LiteLLM Proxy Server](https://docs.litellm.ai/docs/simple_proxy)
 
-## How to use LiteLLM
+## LiteLLM 사용 방법
 
-You can use LiteLLM through either the Proxy Server or Python SDK. Both gives you a unified interface to access multiple LLMs (100+ LLMs). Choose the option that best fits your needs:
+LiteLLM은 Proxy Server 또는 Python SDK를 통해 사용할 수 있습니다. 두 방식 모두 여러 LLM(100개 이상)에 접근할 수 있는 통합 인터페이스를 제공합니다. 필요에 가장 적합한 옵션을 선택하세요.
 
 <table style={{width: '100%', tableLayout: 'fixed'}}>
 <thead>
@@ -26,29 +30,29 @@ You can use LiteLLM through either the Proxy Server or Python SDK. Both gives yo
 </thead>
 <tbody>
 <tr>
-<td style={{width: '14%'}}><strong>Use Case</strong></td>
-<td style={{width: '43%'}}>Central service (LLM Gateway) to access multiple LLMs</td>
-<td style={{width: '43%'}}>Use LiteLLM directly in your Python code</td>
+<td style={{width: '14%'}}><strong>사용 사례</strong></td>
+<td style={{width: '43%'}}>여러 LLM에 접근하기 위한 중앙 서비스(LLM Gateway)</td>
+<td style={{width: '43%'}}>Python 코드에서 LiteLLM을 직접 사용</td>
 </tr>
 <tr>
-<td style={{width: '14%'}}><strong>Who Uses It?</strong></td>
-<td style={{width: '43%'}}>Gen AI Enablement / ML Platform Teams</td>
-<td style={{width: '43%'}}>Developers building LLM projects</td>
+<td style={{width: '14%'}}><strong>사용 대상</strong></td>
+<td style={{width: '43%'}}>Gen AI Enablement / ML Platform 팀</td>
+<td style={{width: '43%'}}>LLM 프로젝트를 구축하는 개발자</td>
 </tr>
 <tr>
-<td style={{width: '14%'}}><strong>Key Features</strong></td>
-<td style={{width: '43%'}}>• Centralized API gateway with authentication & authorization<br />• Multi-tenant cost tracking and spend management per project/user<br />• Per-project customization (logging, guardrails, caching)<br />• Virtual keys for secure access control<br />• Admin dashboard UI for monitoring and management</td>
-<td style={{width: '43%'}}>• Direct Python library integration in your codebase<br />• Router with retry/fallback logic across multiple deployments (e.g. Azure/OpenAI) - <a href="https://docs.litellm.ai/docs/routing">Router</a><br />• Application-level load balancing and cost tracking<br />• Exception handling with OpenAI-compatible errors<br />• Observability callbacks (Lunary, MLflow, Langfuse, etc.)</td>
+<td style={{width: '14%'}}><strong>주요 기능</strong></td>
+<td style={{width: '43%'}}>• 인증 및 권한 부여를 포함한 중앙 집중식 API gateway<br />• 프로젝트/사용자별 multi-tenant 비용 추적 및 지출 관리<br />• 프로젝트별 사용자 지정(logging, guardrails, caching)<br />• 안전한 접근 제어를 위한 virtual key<br />• 모니터링 및 관리를 위한 admin dashboard UI</td>
+<td style={{width: '43%'}}>• 코드베이스에 Python 라이브러리 직접 통합<br />• 여러 배포(예: Azure/OpenAI)에 걸친 재시도/fallback 로직을 제공하는 Router - <a href="https://docs.litellm.ai/docs/routing">Router</a><br />• 애플리케이션 수준 load balancing 및 비용 추적<br />• OpenAI 호환 오류를 사용한 예외 처리<br />• Observability callback(Lunary, MLflow, Langfuse 등)</td>
 </tr>
 </tbody>
 </table>
 
 ## **LiteLLM Python SDK**
 
-### Basic usage 
+### 기본 사용법
 
 <a target="_blank" href="https://colab.research.google.com/github/BerriAI/litellm/blob/main/cookbook/liteLLM_Getting_Started.ipynb">
-  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
+  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Colab에서 열기"/>
 </a>
 
 ```shell
@@ -244,7 +248,7 @@ response = completion(
 
 </Tabs>
 
-### Response Format (OpenAI Chat Completions Format)
+### 응답 형식(OpenAI Chat Completions 형식)
 
 ```json
 {
@@ -282,7 +286,7 @@ response = completion(
 
 ### Responses API
 
-Use `litellm.responses()` for advanced models that support reasoning content like GPT-5, o3, etc.
+GPT-5, o3 등 reasoning content를 지원하는 고급 model에는 `litellm.responses()`를 사용하세요.
 
 <Tabs>
 <TabItem value="openai-responses" label="OpenAI">
@@ -366,8 +370,8 @@ print(response)
 
 </Tabs>
 
-### Streaming
-Set `stream=True` in the `completion` args. 
+### 스트리밍
+`completion` 인자에 `stream=True`를 설정하세요.
 
 <Tabs>
 <TabItem value="openai" label="OpenAI">
@@ -568,7 +572,7 @@ response = completion(
 
 </Tabs>
 
-### Streaming Response Format (OpenAI Format)
+### 스트리밍 응답 형식(OpenAI 형식)
 
 ```json
 {
@@ -594,9 +598,9 @@ response = completion(
 }
 ```
 
-### Exception handling 
+### 예외 처리
 
-LiteLLM maps exceptions across all supported providers to the OpenAI exceptions. All our exceptions inherit from OpenAI's exception types, so any error-handling you have for that, should work out of the box with LiteLLM.
+LiteLLM은 지원되는 모든 공급자의 예외를 OpenAI 예외에 매핑합니다. 모든 예외는 OpenAI의 예외 타입을 상속하므로, 해당 타입을 대상으로 작성한 오류 처리는 LiteLLM에서도 바로 동작합니다.
 
 ```python
 import litellm
@@ -617,8 +621,8 @@ except litellm.APIError as e:
     print(f"API error: {e}")
 ```
 
-### Logging Observability - Log LLM Input/Output ([Docs](https://docs.litellm.ai/docs/observability/callbacks))
-LiteLLM exposes pre defined callbacks to send data to MLflow, Lunary, Langfuse, Helicone, Promptlayer, Traceloop, Slack
+### Logging Observability - LLM 입력/출력 logging ([문서](https://docs.litellm.ai/docs/observability/callbacks))
+LiteLLM은 데이터를 MLflow, Lunary, Langfuse, Helicone, Promptlayer, Traceloop, Slack으로 보내기 위한 사전 정의 callback을 제공합니다.
 
 ```python
 from litellm import completion
@@ -638,8 +642,8 @@ litellm.success_callback = ["lunary", "mlflow", "langfuse", "helicone"] # log in
 response = completion(model="openai/gpt-5", messages=[{"role": "user", "content": "Hi 👋 - i'm openai"}])
 ```
 
-### Track Costs, Usage, Latency for streaming
-Use a callback function for this - more info on custom callbacks: https://docs.litellm.ai/docs/observability/custom_callback
+### 스트리밍 비용, 사용량, 지연 시간 추적
+이를 위해 callback 함수를 사용하세요. 맞춤 callback에 대한 자세한 정보: https://docs.litellm.ai/docs/observability/custom_callback
 
 ```python
 import litellm
@@ -673,28 +677,28 @@ response = completion(
 
 ## **LiteLLM Proxy Server (LLM Gateway)**
 
-Track spend across multiple projects/people
+여러 프로젝트/사용자에 걸친 지출 추적
 
 ![ui_3](https://github.com/BerriAI/litellm/assets/29436595/47c97d5e-b9be-4839-b28c-43d7f4f10033)
 
-The proxy provides:
+Proxy는 다음을 제공합니다.
 
-1. [Hooks for auth](https://docs.litellm.ai/docs/proxy/virtual_keys#custom-auth)
-2. [Hooks for logging](https://docs.litellm.ai/docs/proxy/logging#step-1---create-your-custom-litellm-callback-class)
-3. [Cost tracking](https://docs.litellm.ai/docs/proxy/virtual_keys#tracking-spend)
-4. [Rate Limiting](https://docs.litellm.ai/docs/proxy/users#set-rate-limits)
+1. [인증용 hook](https://docs.litellm.ai/docs/proxy/virtual_keys#custom-auth)
+2. [Logging용 hook](https://docs.litellm.ai/docs/proxy/logging#step-1---create-your-custom-litellm-callback-class)
+3. [비용 추적](https://docs.litellm.ai/docs/proxy/virtual_keys#tracking-spend)
+4. [요청 속도 제한](https://docs.litellm.ai/docs/proxy/users#set-rate-limits)
 
-### 📖 Proxy Endpoints - [Swagger Docs](https://litellm-api.up.railway.app/)
+### 📖 Proxy 엔드포인트 - [Swagger 문서](https://litellm-api.up.railway.app/)
 
-Go here for a complete tutorial with keys + rate limits - [**here**](./proxy/docker_quick_start.md)
+키와 요청 속도 제한을 포함한 전체 튜토리얼은 [**여기**](./proxy/docker_quick_start.md)를 참고하세요.
 
-### Quick Start Proxy - CLI
+### Proxy 빠른 시작 - CLI
 
 ```shell
 uv tool install 'litellm[proxy]'
 ```
 
-#### Step 1: Start litellm proxy
+#### 1단계: litellm proxy 시작
 
 <Tabs>
 
@@ -711,9 +715,9 @@ $ litellm --model huggingface/bigcode/starcoder
 <TabItem label="Docker container" value="docker">
 
 
-### Step 1. CREATE config.yaml 
+### 1단계. config.yaml 생성
 
-Example `litellm_config.yaml` 
+`litellm_config.yaml` 예시
 
 ```yaml
 model_list:
@@ -729,7 +733,7 @@ litellm_settings:
   database_url: postgres://
 ```
 
-### Step 2. RUN Docker Image
+### 2단계. Docker Image 실행
 
 ```shell
 docker run \
@@ -745,7 +749,7 @@ docker run \
 
 </Tabs>
 
-#### Step 2: Make ChatCompletions Request to Proxy
+#### 2단계: Proxy에 ChatCompletions 요청 보내기
 
 <Tabs>
 <TabItem value="chat-completions" label="Chat Completions">
@@ -786,8 +790,8 @@ print(response)
 </TabItem>
 </Tabs>
 
-## More details
+## 자세히 보기
 
-- [exception mapping](../../docs/exception_mapping)
-- [E2E Tutorial for LiteLLM Proxy Server](../../docs/proxy/docker_quick_start)
-- [proxy virtual keys & spend management](../../docs/proxy/virtual_keys)
+- [예외 매핑](../../docs/exception_mapping)
+- [LiteLLM Proxy Server E2E 튜토리얼](../../docs/proxy/docker_quick_start)
+- [proxy virtual key 및 지출 관리](../../docs/proxy/virtual_keys)

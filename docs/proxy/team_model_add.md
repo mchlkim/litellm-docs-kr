@@ -1,19 +1,19 @@
-# ✨ Allow Teams to Add Models
+# ✨ 팀의 모델 추가 허용
 
 :::info
 
-This is an Enterprise feature.
-[Enterprise Pricing](https://www.litellm.ai/#pricing)
+이 기능은 엔터프라이즈 기능입니다.
+[엔터프라이즈 가격](https://www.litellm.ai/#pricing)
 
-[Contact us here to get a free trial](https://enterprise.litellm.ai/demo)
+[무료 체험을 받으려면 여기로 문의하세요](https://enterprise.litellm.ai/demo)
 
 :::
 
-Allow team to add a their own models/key for that project - so any OpenAI call they make uses their OpenAI key.
+팀이 해당 프로젝트에 자체 모델/키를 추가할 수 있게 합니다. 그러면 팀이 수행하는 모든 OpenAI 호출은 팀의 OpenAI 키를 사용합니다.
 
-Useful for teams that want to call their own finetuned models.
+자체 파인튜닝 모델을 호출하려는 팀에 유용합니다.
 
-## Specify Team ID in `/model/add` endpoint
+## `/model/add` 엔드포인트에 Team ID 지정
 
 
 ```bash
@@ -36,7 +36,7 @@ curl -L -X POST 'http://0.0.0.0:4000/model/new' \
 
 ```
 
-## Test it! 
+## 테스트
 
 ```bash
 curl -L -X POST 'http://0.0.0.0:4000/v1/chat/completions' \
@@ -54,18 +54,18 @@ curl -L -X POST 'http://0.0.0.0:4000/v1/chat/completions' \
 
 ```
 
-## Debugging
+## 디버깅
 
-### 'model_name' not found 
+### 'model_name'을 찾을 수 없음
 
-Check if model alias exists in team table. 
+팀 테이블에 모델 별칭이 있는지 확인합니다.
 
 ```bash
 curl -L -X GET 'http://localhost:4000/team/info?team_id=e59e2671-a064-436a-a0fa-16ae96e5a0a1' \
 -H 'Authorization: Bearer sk-******2ql3-sm28WU0tTAmA' \
 ```
 
-**Expected Response:**
+**예상 응답:**
 
 ```json
 {
@@ -83,4 +83,3 @@ curl -L -X GET 'http://localhost:4000/team/info?team_id=e59e2671-a064-436a-a0fa-
     },
 }
 ```
-

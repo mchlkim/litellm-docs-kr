@@ -1,30 +1,30 @@
 ---
 slug: fastapi-middleware-performance
-title: "Your Middleware Could Be a Bottleneck"
+title: "미들웨어가 병목이 될 수 있습니다"
 date: 2026-02-07T10:00:00
 authors:
   - krrish
   - ishaan-alt
   - ryan
-description: "How we improved LiteLLM proxy latency and throughput by replacing a single middleware base class"
-tags: [performance, fastapi, middleware]
+description: "단일 미들웨어 base class를 교체해 LiteLLM proxy 지연 시간과 처리량을 개선한 과정"
+tags: [성능, fastapi, middleware]
 hide_table_of_contents: false
 ---
 
 import { BaseHTTPMiddlewareAnimation, PureASGIAnimation, BenchmarkVisualization } from '@site/src/components/MiddlewareDiagrams';
 
-> How we improved LiteLLM proxy latency and throughput by replacing a single, simple middleware base class
+> 단순한 미들웨어 base class 하나를 교체해 LiteLLM proxy의 지연 시간과 처리량을 개선한 과정입니다.
 
 ---
 
-## Our Setup
+## 기존 구성
 
-The LiteLLM proxy server has two middleware layers. The first is Starlette's `CORSMiddleware` (re-exported by FastAPI), which is a pure ASGI middleware. Then we have a simple BaseHTTPMiddleware called PrometheusAuthMiddleware.
+LiteLLM proxy server에는 두 개의 middleware layer가 있습니다. 첫 번째는 FastAPI가 다시 export하는 Starlette의 `CORSMiddleware`이며 pure ASGI middleware입니다. 그다음에는 `PrometheusAuthMiddleware`라는 단순한 `BaseHTTPMiddleware`가 있습니다.
 
-The job of `PrometheusAuthMiddleware` is to authenticate requests to the `/metrics` endpoint. It's not on by default, you enable it with a flag in your proxy config:
+`PrometheusAuthMiddleware`의 역할은 `/metrics` endpoint 요청을 인증하는 것입니다. 기본으로 켜져 있지는 않고, proxy config의 flag로 활성화합니다.
 
 <details>
-<summary>Proxy config flag</summary>
+<summary>Proxy config flag 설정</summary>
 
 ```yaml
 litellm_settings:
@@ -33,10 +33,10 @@ litellm_settings:
 
 </details>
 
-The middleware checks two things: is the request hitting `/metrics`, and is auth even enabled? If both checks fail, which they do for the vast majority of requests, it just passes the request through unchanged.
+이 middleware는 두 가지를 확인합니다. 요청이 `/metrics`를 향하는지, 그리고 인증이 활성화되어 있는지입니다. 대부분의 요청에서는 두 조건이 모두 성립하지 않으므로 요청을 그대로 통과시킵니다.
 
 <details>
-<summary>PrometheusAuthMiddleware source</summary>
+<summary>PrometheusAuthMiddleware 소스</summary>
 
 ```python
 class PrometheusAuthMiddleware(BaseHTTPMiddleware):
@@ -59,46 +59,46 @@ class PrometheusAuthMiddleware(BaseHTTPMiddleware):
 
 </details>
 
-Looks harmless. Subclass `BaseHTTPMiddleware`, implement `dispatch()`, done. This is what you will see in Starlette's documentation<sup>[1](#footnote-1)</sup>.
+겉으로는 문제없어 보입니다. `BaseHTTPMiddleware`를 subclass하고 `dispatch()`를 구현하면 끝입니다. Starlette 문서<sup>[1](#footnote-1)</sup>에서도 이런 패턴을 볼 수 있습니다.
 
 {/* truncate */}
 
 ---
 
-## What BaseHTTPMiddleware Actually Does
+## BaseHTTPMiddleware가 실제로 하는 일
 
-When you write a `dispatch()` method, you'd expect the request to flow straight through your function and out the other side. What actually happens is much more involved. 
+`dispatch()` method를 작성하면 요청이 함수 안으로 들어와 그대로 반대편으로 빠져나갈 것처럼 보입니다. 하지만 실제 동작은 훨씬 더 복잡합니다.
 
-On every request, even a pure passthrough (meaning nothing happens), `BaseHTTPMiddleware` creates **7 intermediate objects and tasks**:
+아무 작업도 하지 않는 pure passthrough 요청에서도 `BaseHTTPMiddleware`는 매번 **7개의 중간 객체와 task**를 만듭니다.
 
 <BaseHTTPMiddlewareAnimation />
 
-It wraps the request in a new object to track body state, creates a synchronization event, allocates an in-memory channel to pass messages between your middleware and the inner app, sets up a task group to manage the lifecycle, and then runs your actual route handler in a *separate background task* when you call `call_next()`. The response body then flows back through that in-memory channel, gets re-wrapped in a streaming response object, and finally reaches the caller. That's a lot.
+body state를 추적하기 위해 요청을 새 객체로 감싸고, synchronization event를 만들고, middleware와 내부 app 사이에서 message를 전달할 in-memory channel을 할당합니다. lifecycle 관리를 위한 task group도 만들고, `call_next()`를 호출하면 실제 route handler를 *별도 background task*에서 실행합니다. 이후 response body는 다시 그 in-memory channel을 거쳐 streaming response object로 감싸진 뒤 호출자에게 도달합니다. 단순 passthrough에는 과한 비용입니다.
 
-For a middleware that for us, does nothing on 99.9% of requests, paying this cost doesn't make sense.
+우리 경우처럼 99.9%의 요청에서 아무 일도 하지 않는 middleware라면 이 비용을 매번 지불할 이유가 없습니다.
 
-Compare that to a pure ASGI middleware, which we can have just check the request path and continue along. 
+반면 pure ASGI middleware는 request path만 확인하고 바로 다음 단계로 넘길 수 있습니다.
 
 <PureASGIAnimation />
 
-Our middleware is doing something really simple. For the vast majority of requests it doesn't need to do anything at all but just let the request pass through. It doesn't need task groups, memory streams, or cancel scopes. It needs a function call.
+이 middleware가 하는 일은 매우 단순합니다. 대부분의 요청에서는 아무 것도 하지 않고 그대로 통과시키면 됩니다. task group, memory stream, cancel scope가 필요한 일이 아니라 함수 호출 하나면 충분합니다.
 
 ---
 
-## Comparing Both
+## 두 방식 비교
 
-We replaced the `BaseHTTPMiddleware` subclass with a pure ASGI middleware. To benchmark the difference, we used Apache Bench<sup>[2](#footnote-2)</sup> to compare both configurations of LiteLLM's middleware stack: the old setup (1 pure ASGI + 1 `BaseHTTPMiddleware`) against the new setup (2 pure ASGI).
+`BaseHTTPMiddleware` subclass를 pure ASGI middleware로 교체했습니다. 차이를 측정하기 위해 Apache Bench<sup>[2](#footnote-2)</sup>로 LiteLLM middleware stack의 두 구성을 비교했습니다. 기존 구성은 pure ASGI 1개와 `BaseHTTPMiddleware` 1개였고, 새 구성은 pure ASGI 2개입니다.
 
-A minimal FastAPI app serves `GET /health` → `PlainTextResponse("ok")`. The endpoint does zero work to isolate the middleware overhead: any difference between configs is purely the cost of the middleware plumbing itself. Both middlewares are just calling the next layer. Same work, different base class.
+최소 FastAPI app은 `GET /health` 요청에 `PlainTextResponse("ok")`만 반환합니다. middleware overhead만 분리해서 보기 위해 endpoint는 아무 작업도 하지 않습니다. 구성 간 차이는 middleware plumbing 자체의 비용입니다. 두 middleware 모두 다음 layer를 호출할 뿐입니다. 하는 일은 같고 base class만 다릅니다.
 
-Apache Bench (`ab`) fires requests at the server with 1,000 concurrent connections and a single uvicorn worker. One worker means one event loop, so the benchmark directly measures how each middleware design handles concurrent load on a single thread.
+Apache Bench(`ab`)는 단일 uvicorn worker와 1,000개의 동시 connection으로 서버에 요청을 보냅니다. worker 하나는 event loop 하나를 의미하므로, 이 benchmark는 각 middleware 설계가 단일 thread에서 동시 부하를 어떻게 처리하는지 직접 측정합니다.
 
 <BenchmarkVisualization />
 
 <details>
-<summary>Try it yourself</summary>
+<summary>직접 실행해 보기</summary>
 
-Save the script below as `benchmark_middleware.py`, then run:
+아래 script를 `benchmark_middleware.py`로 저장한 뒤 실행합니다.
 
 ```bash
 # Terminal 1 — start the "before" server (1 ASGI + 1 BaseHTTPMiddleware)
@@ -169,9 +169,9 @@ if __name__ == "__main__":
 
 ---
 
-## Our Change
+## 변경 내용
 
-Here's what we replaced it with:
+교체한 구현은 다음과 같습니다.
 
 ```python
 class PrometheusAuthMiddleware:
@@ -196,16 +196,16 @@ class PrometheusAuthMiddleware:
         await self.app(scope, receive, send)
 ```
 
-For the 99.9% of requests that aren't hitting `/metrics`, the middleware is now one dict lookup, one string check, and one function call. No objects allocated, no tasks spawned. 
+`/metrics`를 향하지 않는 99.9%의 요청에서 middleware 작업은 이제 dict lookup 하나, string check 하나, function call 하나로 끝납니다. 객체를 할당하지 않고 task도 만들지 않습니다.
 
-It's important to evaluate if the tools you're using are the right fit for the job as your software grows and handles more responsiblity. We're now putting in a static analysis check to prevent this from happening again with any newly introduced middlewares. If we find the use case is necessary then that's okay and we'll reevalute but for everything LiteLLM needs to do at the moment it's not. 
+소프트웨어가 커지고 더 많은 책임을 맡게 될수록 지금 쓰는 도구가 그 작업에 맞는지 계속 평가해야 합니다. 새로 추가되는 middleware에서 같은 문제가 반복되지 않도록 static analysis check도 넣고 있습니다. 필요한 use case가 확인되면 다시 평가하겠지만, 현재 LiteLLM이 해야 하는 작업에는 이 비용이 필요하지 않았습니다.
 
-This middleware change was one part of a broader optimization effort on the LiteLLM proxy. Across all optimizations combined, we've measured about a **30% reduction in proxy overhead** over the past two weeks. 
+이번 middleware 변경은 LiteLLM proxy 최적화 작업의 한 부분입니다. 지난 2주 동안의 전체 최적화를 합산하면 proxy overhead가 약 **30% 감소**한 것으로 측정했습니다.
 
 ---
 
 <a id="footnote-1"></a>
-<sup>1</sup> [Starlette Middleware — BaseHTTPMiddleware](https://starlette.dev/middleware/#basehttpmiddleware)
+<sup>1</sup> [Starlette Middleware - BaseHTTPMiddleware](https://starlette.dev/middleware/#basehttpmiddleware)
 
 <a id="footnote-2"></a>
-<sup>2</sup> [Apache HTTP server benchmarking tool (`ab`)](https://httpd.apache.org/docs/2.4/programs/ab.html)
+<sup>2</sup> [Apache HTTP server benchmark 도구(`ab`)](https://httpd.apache.org/docs/2.4/programs/ab.html)

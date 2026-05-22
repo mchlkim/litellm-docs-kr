@@ -1,10 +1,10 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Model Management
-Add new models + Get model info without restarting proxy.
+# 모델 관리 {#model-management}
+proxy를 다시 시작하지 않고 새 모델을 추가하고 모델 정보를 가져옵니다.
 
-## In Config.yaml 
+## Config.yaml에서 {#in-configyaml}
 
 ```yaml
 model_list:
@@ -15,18 +15,21 @@ model_list:
       metadata: "here's additional metadata on the model" # returned via GET /model/info
 ```
 
-## Get Model Information - `/model/info`
+## 모델 정보 가져오기 - `/model/info` {#get-model-information---modelinfo}
 
-Retrieve detailed information about each model listed in the `/model/info` endpoint, including descriptions from the `config.yaml` file, and additional model info (e.g. max tokens, cost per input token, etc.) pulled from the model_info you set and the [litellm model cost map](https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json). Sensitive details like API keys are excluded for security purposes.
+`/model/info` 엔드포인트에 나열된 각 모델의 상세 정보를 가져옵니다. 여기에는 `config.yaml` 파일의 설명과, 사용자가 설정한 `model_info` 및 [litellm 모델 비용 맵](https://github.com/BerriAI/litellm/blob/main/model_prices_and_context_window.json)에서 가져온 추가 모델 정보(예: max tokens, input token당 비용 등)가 포함됩니다. 보안을 위해 API 키 같은 민감한 세부 정보는 제외됩니다.
 
-:::tip Sync Model Data
-Keep your model pricing data up to date by [syncing models from GitHub](sync_models_github.md).
+:::tip 모델 데이터 동기화
+[GitHub에서 모델 동기화](sync_models_github.md)를 사용해 모델 가격 데이터를 최신 상태로 유지하세요.
 :::
 
 <Tabs
   defaultValue="curl"
   values={[
-    { label: 'cURL', value: 'curl', },
+    {
+      label: 'cURL',
+      value: 'curl',
+    },
   ]}>
   <TabItem value="curl">
 
@@ -37,9 +40,9 @@ curl -X GET "http://0.0.0.0:4000/model/info" \
   </TabItem>
 </Tabs>
 
-## Add a New Model
+## 새 모델 추가 {#add-a-new-model}
 
-Add a new model to the proxy via the `/model/new` API, to add models without restarting the proxy.
+`/model/new` API를 통해 proxy에 새 모델을 추가하면 proxy를 다시 시작하지 않고 모델을 추가할 수 있습니다.
 
 <Tabs>
 <TabItem value="API">
@@ -69,15 +72,15 @@ model_list:
 </Tabs>
 
 
-### Model Parameters Structure
+### 모델 매개변수 구조 {#model-parameters-structure}
 
-When adding a new model, your JSON payload should conform to the following structure:
+새 모델을 추가할 때 JSON 페이로드는 다음 구조를 따라야 합니다.
 
-- `model_name`: The name of the new model (required).
-- `litellm_params`: A dictionary containing parameters specific to the Litellm setup (required).
-- `model_info`: An optional dictionary to provide additional information about the model.
+- `model_name`: 새 모델의 이름입니다(필수).
+- `litellm_params`: LiteLLM 설정에 특화된 매개변수를 포함하는 딕셔너리입니다(필수).
+- `model_info`: 모델에 대한 추가 정보를 제공하는 선택 사항 딕셔너리입니다.
 
-Here's an example of how to structure your `ModelParams`:
+다음은 `ModelParams` 구조를 구성하는 예시입니다.
 
 ```json
 {
@@ -95,31 +98,17 @@ Here's an example of how to structure your `ModelParams`:
 ```
 ---
 
-Keep in mind that as both endpoints are in [BETA], you may need to visit the associated GitHub issues linked in the API descriptions to check for updates or provide feedback:
+두 엔드포인트 모두 [BETA] 상태이므로, 업데이트를 확인하거나 피드백을 제공하려면 API 설명에 연결된 관련 GitHub 이슈를 방문해야 할 수 있습니다.
 
-- Get Model Information: [Issue #933](https://github.com/BerriAI/litellm/issues/933)
-- Add a New Model: [Issue #964](https://github.com/BerriAI/litellm/issues/964)
+- 모델 정보 가져오기: [Issue #933](https://github.com/BerriAI/litellm/issues/933)
+- 새 모델 추가: [Issue #964](https://github.com/BerriAI/litellm/issues/964)
 
-Feedback on the beta endpoints is valuable and helps improve the API for all users.
+beta 엔드포인트에 대한 피드백은 모든 사용자를 위한 API 개선에 도움이 됩니다.
 
 
-## Add Additional Model Information 
+## 추가 모델 정보 추가 {#add-additional-model-information}
 
-If you want the ability to add a display name, description, and labels for models, just use `model_info:` 
-
-```yaml
-model_list:
-  - model_name: "gpt-4"
-    litellm_params:
-      model: "gpt-4"
-      api_key: "os.environ/OPENAI_API_KEY"
-    model_info: # 👈 KEY CHANGE
-      my_custom_key: "my_custom_value"
-```
-
-### Usage
-
-1. Add additional information to model 
+모델에 표시 이름, 설명, 레이블을 추가하려면 `model_info:`를 사용하세요.
 
 ```yaml
 model_list:
@@ -131,23 +120,37 @@ model_list:
       my_custom_key: "my_custom_value"
 ```
 
-2. Call with `/model/info` 
+### 사용법
 
-Use a key with access to the model `gpt-4`.
+1. 모델에 추가 정보를 추가합니다.
+
+```yaml
+model_list:
+  - model_name: "gpt-4"
+    litellm_params:
+      model: "gpt-4"
+      api_key: "os.environ/OPENAI_API_KEY"
+    model_info: # 👈 KEY CHANGE
+      my_custom_key: "my_custom_value"
+```
+
+2. `/model/info`로 호출합니다.
+
+모델 `gpt-4`에 접근할 수 있는 키를 사용하세요.
 
 ```bash
 curl -L -X GET 'http://0.0.0.0:4000/v1/model/info' \
 -H 'Authorization: Bearer LITELLM_KEY' \
 ```
 
-3. **Expected Response**
+3. **예상 응답**
 
-Returned `model_info = Your custom model_info + (if exists) LITELLM MODEL INFO`
+반환되는 값은 `model_info = Your custom model_info + (if exists) LITELLM MODEL INFO`입니다.
 
 
-[**How LiteLLM Model Info is found**](https://github.com/BerriAI/litellm/blob/9b46ec05b02d36d6e4fb5c32321e51e7f56e4a6e/litellm/proxy/proxy_server.py#L7460) 
+[**LiteLLM Model Info를 찾는 방식**](https://github.com/BerriAI/litellm/blob/9b46ec05b02d36d6e4fb5c32321e51e7f56e4a6e/litellm/proxy/proxy_server.py#L7460)
 
-[Tell us how this can be improved!](https://github.com/BerriAI/litellm/issues)
+[개선할 수 있는 방법을 알려주세요!](https://github.com/BerriAI/litellm/issues)
 
 ```bash
 {

@@ -1,47 +1,46 @@
-# Data Retention Policy
+# 데이터 보존 정책
 
 ## LiteLLM Cloud
 
-### Purpose
-This policy outlines the requirements and controls/procedures LiteLLM Cloud has implemented to manage the retention and deletion of customer data.
+### 목적
+이 정책은 고객 데이터의 보존 및 삭제를 관리하기 위해 LiteLLM Cloud가 구현한 요구 사항과 통제/절차를 설명합니다.
 
-### Policy
+### 정책
 
-For Customers
-1. Active Accounts
+고객 대상
+1. 활성 계정
 
-- Customer data is retained for as long as the customer’s account is in active status. This includes data such as prompts, generated content, logs, and usage metrics. By default, we do not store the message / response content of your API requests or responses. Cloud users need to explicitly opt in to store the message / response content of your API requests or responses.
+- 고객 데이터는 고객 계정이 활성 상태인 동안 보존됩니다. 여기에는 프롬프트, 생성된 콘텐츠, 로그, 사용량 지표와 같은 데이터가 포함됩니다. 기본적으로 LiteLLM Cloud는 API 요청 또는 응답의 메시지 / 응답 콘텐츠를 저장하지 않습니다. LiteLLM Cloud 사용자가 API 요청 또는 응답의 메시지 / 응답 콘텐츠를 저장하려면 명시적으로 옵트인해야 합니다.
 
-2. Voluntary Account Closure
+2. 자발적 계정 종료
 
-- Data enters an “expired” state when the account is voluntarily closed.
-- Expired account data will be retained for 30 days (adjust as needed).
-- After this period, the account and all related data will be permanently removed from LiteLLM Cloud systems.
-- Customers who wish to voluntarily close their account should download or back up their data (manually or via available APIs) before initiating the closure process.
+- 계정이 자발적으로 종료되면 데이터는 “만료됨” 상태가 됩니다.
+- 만료된 계정 데이터는 30일 동안 보존됩니다(필요에 따라 조정).
+- 이 기간이 지나면 계정과 모든 관련 데이터가 LiteLLM Cloud 시스템에서 영구적으로 제거됩니다.
+- 계정을 자발적으로 종료하려는 고객은 종료 절차를 시작하기 전에 데이터를 다운로드하거나 백업해야 합니다(수동 또는 사용 가능한 APIs를 통해).
 
-3. Involuntary Suspension
+3. 비자발적 정지
 
-- If a customer account is involuntarily suspended (e.g., due to non-payment or violation of Terms of Service), there is a 14-day (adjust as needed) grace period during which the account will be inaccessible but can be reopened if the customer resolves the issues leading to suspension.
-- After the grace period, if the account remains unresolved, it will be closed and the data will enter the “expired” state.
-- Once data is in the “expired” state, it will be permanently removed 30 days (adjust as needed) thereafter, unless legal requirements dictate otherwise.
+- 고객 계정이 비자발적으로 정지된 경우(예: 미결제 또는 Terms of Service 위반), 14일(필요에 따라 조정)의 유예 기간이 제공됩니다. 이 기간 동안 계정에는 접근할 수 없지만, 고객이 정지 원인이 된 문제를 해결하면 계정을 다시 열 수 있습니다.
+- 유예 기간 이후에도 계정 문제가 해결되지 않으면 계정은 종료되고 데이터는 “만료됨” 상태가 됩니다.
+- 법적 요구 사항에서 달리 정하지 않는 한, 데이터가 “만료됨” 상태가 된 후 30일(필요에 따라 조정)이 지나면 영구적으로 제거됩니다.
 
-4. Manual Backup of Suspended Accounts
+4. 정지된 계정의 수동 백업
 
-- If a customer wishes to manually back up data contained in a suspended account, they must bring the account back to good standing (by resolving payment or policy violations) to regain interface/API access.
-- Data from a suspended account will not be accessible while the account is in suspension status.
-- After 14 days of suspension (adjust as needed), if no resolution is reached, the account is closed and data follows the standard “expired” data removal timeline stated above.
+- 고객이 정지된 계정에 포함된 데이터를 수동으로 백업하려면, 인터페이스/API 접근 권한을 다시 얻기 위해 계정을 정상 상태로 복구해야 합니다(결제 또는 정책 위반 문제 해결).
+- 정지된 계정의 데이터는 계정이 정지 상태인 동안 접근할 수 없습니다.
+- 정지 후 14일(필요에 따라 조정)이 지나도 해결되지 않으면 계정이 종료되고, 데이터는 위에 명시된 표준 “만료됨” 데이터 제거 일정에 따릅니다.
 
-5. Custom Retention Policies
+5. 맞춤 보존 정책
 
-- Enterprise customers can configure custom data retention periods based on their specific compliance and business requirements.
-- Available customization options include:
-  - Adjusting the retention period for active data (0-365 days)
-- Custom retention policies must be configured through the LiteLLM Cloud dashboard or via API
+- 엔터프라이즈 고객은 고유한 규정 준수 및 비즈니스 요구 사항에 따라 맞춤 데이터 보존 기간을 구성할 수 있습니다.
+- 사용 가능한 맞춤 설정 옵션은 다음과 같습니다.
+  - 활성 데이터의 보존 기간 조정(0-365일)
+- 맞춤 보존 정책은 LiteLLM Cloud 대시보드 또는 API를 통해 구성해야 합니다.
 
 
-### Protection of Records
+### 기록 보호
 
-- LiteLLM Cloud takes measures to ensure that all records under its control are protected against loss, destruction, falsification, and unauthorized access or disclosure. These measures are aligned with relevant legislative, regulatory, contractual, and business obligations.
-- When working with a third-party CSP, LiteLLM Cloud requests comprehensive information regarding the CSP’s security mechanisms to protect data, including records stored or processed on behalf of LiteLLM Cloud.
-- Cloud service providers engaged by LiteLLM Cloud must disclose their safeguarding practices for records they gather and store on LiteLLM Cloud’s behalf.
-
+- LiteLLM Cloud는 관리 대상인 모든 기록이 손실, 파기, 위조, 무단 접근 또는 공개로부터 보호되도록 조치를 취합니다. 이러한 조치는 관련 법률, 규제, 계약 및 비즈니스 의무에 부합합니다.
+- 타사 CSP와 협업할 때 LiteLLM Cloud는 LiteLLM Cloud를 대신해 저장 또는 처리되는 기록을 포함한 데이터를 보호하기 위한 CSP의 보안 메커니즘에 관한 종합적인 정보를 요청합니다.
+- LiteLLM Cloud가 이용하는 클라우드 서비스 제공업체는 LiteLLM Cloud를 대신해 수집하고 저장하는 기록에 대한 보호 관행을 공개해야 합니다.

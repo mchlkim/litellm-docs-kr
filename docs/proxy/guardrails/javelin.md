@@ -2,14 +2,14 @@ import Image from '@theme/IdealImage';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Javelin Guardrails
+# Javelin 가드레일
 
-Javelin provides AI safety and content moderation services with support for prompt injection detection, trust & safety violations, and language detection.
+Javelin은 프롬프트 인젝션 탐지, 신뢰 및 안전 위반, 언어 탐지를 지원하는 AI 안전 및 콘텐츠 모더레이션 서비스를 제공합니다.
 
-## Quick Start
-### 1. Define Guardrails on your LiteLLM config.yaml 
+## 빠른 시작
+### 1. LiteLLM config.yaml에 가드레일 정의
 
-Define your guardrails under the `guardrails` section
+`guardrails` 섹션 아래에 가드레일을 정의합니다.
 
 ```yaml showLineNumbers title="litellm config.yaml"
 model_list:
@@ -48,26 +48,26 @@ guardrails:
       api_version: "v1"
 ```
 
-#### Supported values for `mode`
+#### `mode`에서 지원되는 값
 
-- `pre_call` Run **before** LLM call, on **input**
-- `post_call` Run **after** LLM call, on **input & output**
-- `during_call` Run **during** LLM call, on **input** Same as `pre_call` but runs in parallel as LLM call. Response not returned until guardrail check completes
+- `pre_call`: LLM 호출 **전**에 **입력**에 대해 실행됩니다.
+- `post_call`: LLM 호출 **후**에 **입력 및 출력**에 대해 실행됩니다.
+- `during_call`: LLM 호출 **중**에 **입력**에 대해 실행됩니다. `pre_call`과 같지만 LLM 호출과 병렬로 실행됩니다. 가드레일 검사가 완료될 때까지 응답이 반환되지 않습니다.
 
-### 2. Start LiteLLM Gateway 
+### 2. LiteLLM Gateway 시작
 
 ```shell
 litellm --config config.yaml --detailed_debug
 ```
 
-### 3. Test request 
+### 3. 요청 테스트
 
-**[Langchain, OpenAI SDK Usage Examples](../proxy/user_keys#request-format)**
+**[Langchain, OpenAI SDK 사용법 예제](../proxy/user_keys#request-format)**
 
 <Tabs>
-<TabItem label="Prompt Injection Detection" value = "prompt-injection">
+<TabItem label="프롬프트 인젝션 탐지" value = "prompt-injection">
 
-This will be blocked due to prompt injection attempt
+프롬프트 인젝션 시도로 인해 차단됩니다.
 
 ```shell showLineNumbers title="Curl Request"
 curl -i http://localhost:4000/v1/chat/completions \
@@ -82,7 +82,7 @@ curl -i http://localhost:4000/v1/chat/completions \
   }'
 ```
 
-Expected response on failure - user message gets replaced with reject prompt
+실패 시 예상 응답입니다. 사용자 메시지가 거부 프롬프트로 대체됩니다.
 
 ```json
 {
@@ -94,9 +94,9 @@ Expected response on failure - user message gets replaced with reject prompt
 
 </TabItem>
 
-<TabItem label="Trust & Safety Violation" value = "trust-safety">
+<TabItem label="신뢰 및 안전 위반" value = "trust-safety">
 
-This will be blocked due to trust & safety violation
+신뢰 및 안전 위반으로 인해 차단됩니다.
 
 ```shell showLineNumbers title="Curl Request"
 curl -i http://localhost:4000/v1/chat/completions \
@@ -111,7 +111,7 @@ curl -i http://localhost:4000/v1/chat/completions \
   }'
 ```
 
-Expected response on failure
+실패 시 예상 응답입니다.
 
 ```json
 {
@@ -123,9 +123,9 @@ Expected response on failure
 
 </TabItem>
 
-<TabItem label="Language Detection" value = "language-detection">
+<TabItem label="언어 탐지" value = "language-detection">
 
-This will be blocked due to language policy violation
+언어 정책 위반으로 인해 차단됩니다.
 
 ```shell showLineNumbers title="Curl Request"
 curl -i http://localhost:4000/v1/chat/completions \
@@ -140,7 +140,7 @@ curl -i http://localhost:4000/v1/chat/completions \
   }'
 ```
 
-Expected response on failure
+실패 시 예상 응답입니다.
 
 ```json
 {
@@ -152,7 +152,7 @@ Expected response on failure
 
 </TabItem>
 
-<TabItem label="Successful Call" value = "allowed">
+<TabItem label="성공한 호출" value = "allowed">
 
 ```shell showLineNumbers title="Curl Request"
 curl -i http://localhost:4000/v1/chat/completions \
@@ -171,17 +171,17 @@ curl -i http://localhost:4000/v1/chat/completions \
 
 </Tabs>
 
-## Supported Guardrail Types
+## 지원되는 가드레일 유형 {#supported-guardrail-types}
 
-### 1. Prompt Injection Detection (`promptinjectiondetection`)
+### 1. 프롬프트 인젝션 탐지 (`promptinjectiondetection`) {#1-prompt-injection-detection-promptinjectiondetection}
 
-Detects and blocks prompt injection and jailbreak attempts.
+프롬프트 인젝션 및 탈옥(jailbreak) 시도를 탐지하고 차단합니다.
 
-**Categories:**
-- `prompt_injection`: Detects attempts to manipulate the AI system
-- `jailbreak`: Detects attempts to bypass safety measures
+**카테고리:**
+- `prompt_injection`: AI 시스템을 조작하려는 시도를 탐지합니다.
+- `jailbreak`: 안전 조치를 우회하려는 시도를 탐지합니다.
 
-**Example Response:**
+**예제 응답:**
 ```json
 {
   "assessments": [
@@ -205,19 +205,19 @@ Detects and blocks prompt injection and jailbreak attempts.
 }
 ```
 
-### 2. Trust & Safety (`trustsafety`)
+### 2. 신뢰 및 안전 (`trustsafety`) {#2-trust--safety-trustsafety}
 
-Detects harmful content across multiple categories.
+여러 카테고리에 걸쳐 유해 콘텐츠를 탐지합니다.
 
-**Categories:**
-- `violence`: Violence-related content
-- `weapons`: Weapon-related content
-- `hate_speech`: Hate speech and discriminatory content
-- `crime`: Criminal activity content
-- `sexual`: Sexual content
-- `profanity`: Profane language
+**카테고리:**
+- `violence`: 폭력 관련 콘텐츠
+- `weapons`: 무기 관련 콘텐츠
+- `hate_speech`: 혐오 발언 및 차별적 콘텐츠
+- `crime`: 범죄 활동 콘텐츠
+- `sexual`: 성적 콘텐츠
+- `profanity`: 욕설
 
-**Example Response:**
+**예제 응답:**
 ```json
 {
   "assessments": [
@@ -249,11 +249,11 @@ Detects harmful content across multiple categories.
 }
 ```
 
-### 3. Language Detection (`lang_detector`)
+### 3. 언어 탐지 (`lang_detector`) {#3-language-detection-lang_detector}
 
-Detects the language of input text and can enforce language policies.
+입력 텍스트의 언어를 탐지하고 언어 정책을 적용할 수 있습니다.
 
-**Example Response:**
+**예제 응답:**
 ```json
 {
   "assessments": [
@@ -271,7 +271,7 @@ Detects the language of input text and can enforce language policies.
 }
 ```
 
-## Supported Params 
+## 지원되는 파라미터 {#supported-params}
 
 ```yaml
 guardrails:
@@ -290,50 +290,50 @@ guardrails:
       # default_on: bool = True
 ```
 
-- `api_base`: (Optional[str]) The base URL of the Javelin API. Defaults to `https://api-dev.javelin.live`
-- `api_key`: (str) The API Key for the Javelin integration.
-- `guardrail_name`: (str) The type of guardrail to use. Supported values: `promptinjectiondetection`, `trustsafety`, `lang_detector`
-- `api_version`: (Optional[str]) The API version to use. Defaults to `v1`
-- `metadata`: (Optional[Dict]) Metadata tags can be attached to screening requests as an object that can contain any arbitrary key-value pairs.
-- `config`: (Optional[Dict]) Configuration parameters for the guardrail.
-- `application`: (Optional[str]) Application name for policy-specific guardrails.
-- `default_on`: (Optional[bool]) Whether the guardrail is enabled by default. Defaults to `True`
+- `api_base`: (Optional[str]) Javelin API의 기본 URL입니다. 기본값은 `https://api-dev.javelin.live`입니다.
+- `api_key`: (str) Javelin 통합에 사용할 API Key입니다.
+- `guardrail_name`: (str) 사용할 가드레일 유형입니다. 지원되는 값: `promptinjectiondetection`, `trustsafety`, `lang_detector`
+- `api_version`: (Optional[str]) 사용할 API 버전입니다. 기본값은 `v1`입니다.
+- `metadata`: (Optional[Dict]) 스크리닝 요청에 메타데이터 태그를 객체로 첨부할 수 있으며, 임의의 키-값 쌍을 포함할 수 있습니다.
+- `config`: (Optional[Dict]) 가드레일에 사용할 설정 파라미터입니다.
+- `application`: (Optional[str]) 정책별 가드레일에 사용할 애플리케이션 이름입니다.
+- `default_on`: (Optional[bool]) 가드레일을 기본으로 활성화할지 여부입니다. 기본값은 `True`입니다.
 
-## Environment Variables
+## 환경 변수 {#environment-variables}
 
-Set the following environment variables:
+다음 환경 변수를 설정합니다.
 
 ```bash
 export JAVELIN_API_KEY="your-javelin-api-key"
 export JAVELIN_API_BASE="https://api-dev.javelin.live"  # Optional, defaults to dev environment
 ```
 
-## Error Handling
+## 오류 처리 {#error-handling}
 
-When a guardrail detects a violation:
+가드레일이 위반을 탐지하면 다음과 같이 처리됩니다.
 
-1. The **last message content** is replaced with the appropriate reject prompt
-2. The message role remains unchanged
-3. The request continues with the modified message
-4. The original violation is logged for monitoring
+1. **마지막 메시지 콘텐츠**가 적절한 거부 프롬프트로 대체됩니다.
+2. 메시지 역할은 변경되지 않습니다.
+3. 수정된 메시지로 요청이 계속됩니다.
+4. 원래 위반 내용은 모니터링을 위해 기록됩니다.
 
-**How it works:**
-- Javelin guardrails check the last message for violations
-- If a violation is detected (`request_reject: true`), the content of the last message is replaced with the reject prompt
-- The message structure remains intact, only the content changes
+**동작 방식:**
+- Javelin 가드레일은 마지막 메시지에서 위반 여부를 확인합니다.
+- 위반이 탐지되면(`request_reject: true`) 마지막 메시지의 콘텐츠가 거부 프롬프트로 대체됩니다.
+- 메시지 구조는 그대로 유지되고 콘텐츠만 변경됩니다.
 
-**Reject Prompts:**
-Can be configured from javelin portal.
-- Prompt Injection: `"Unable to complete request, prompt injection/jailbreak detected"`
-- Trust & Safety: `"Unable to complete request, trust & safety violation detected"`
-- Language Detection: `"Unable to complete request, language violation detected"`
+**거부 프롬프트:**
+Javelin 포털에서 설정할 수 있습니다.
+- 프롬프트 인젝션: `"Unable to complete request, prompt injection/jailbreak detected"`
+- 신뢰 및 안전: `"Unable to complete request, trust & safety violation detected"`
+- 언어 탐지: `"Unable to complete request, language violation detected"`
 
-## Testing
+## 테스트 {#testing}
 
-You can test the Javelin guardrails using the provided test suite:
+제공된 테스트 스위트로 Javelin 가드레일을 테스트할 수 있습니다.
 
 ```bash
 pytest tests/guardrails_tests/test_javelin_guardrails.py -v
 ```
 
-The tests include mocked responses to avoid external API calls during testing.
+테스트 중 외부 API 호출을 피하기 위해 테스트에는 모의 응답이 포함되어 있습니다.
