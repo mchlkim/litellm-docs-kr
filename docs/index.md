@@ -402,7 +402,7 @@ print(response.choices[0].message.content)
 LiteLLM은 **LLM, agent, MCP**를 위한 통합 gateway입니다. 별도의 agent gateway나 MCP gateway가 필요 없고, 하나의 endpoint로 100개 이상의 모델, `A2A agent`, `MCP tool`을 사용할 수 있습니다.
 
 <NavigationCards
-columns={2}
+columns={3}
 items={[
 {
 icon: "🔗",
@@ -415,6 +415,12 @@ icon: "🛠️",
 title: "MCP Gateway",
 description: "key별 접근 제어가 포함된 중앙 MCP endpoint입니다.",
 to: "/litellm-docs-kr/docs/mcp",
+},
+{
+icon: "✨",
+title: "✨ 엔터프라이즈 빠른 시작",
+description: "빠른 시작 guide for trial customers — LLM, MCP, and Agent gateway.",
+to: "/docs/learn/enterprise_quickstart",
 },
 ]}
 />

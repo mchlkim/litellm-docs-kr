@@ -96,6 +96,7 @@ const sidebars = {
           "proxy/guardrails/zscaler_ai_guard",
           "proxy/guardrails/javelin",
           "proxy/guardrails/akto",
+          "proxy/guardrails/vigil_guard",
         ].sort(),
       ],
     },
@@ -153,6 +154,7 @@ const sidebars = {
             "tutorials/claude_non_anthropic_models",
             "tutorials/claude_code_plugin_marketplace",
             "tutorials/claude_code_beta_headers",
+            "claude_code_context_management",
           ]
         },
         "tutorials/claude_desktop_cowork",
@@ -329,6 +331,7 @@ const sidebars = {
               label: "A2A Agent Gateway",
               items: [
                 "a2a",
+                "a2a_agent_card",
                 "a2a_invoking_agents",
                 "a2a_agent_headers",
                 "a2a_cost_tracking",
@@ -342,6 +345,7 @@ const sidebars = {
               items: [
                 "mcp",
                 "mcp_usage",
+                "mcp_rest_api",
                 "mcp_openapi",
                 "mcp_oauth",
                 "mcp_obo_auth",
@@ -724,6 +728,7 @@ const sidebars = {
           items: [
             "mcp",
             "mcp_usage",
+            "mcp_rest_api",
             "mcp_openapi",
             "mcp_oauth",
             "mcp_obo_auth",
@@ -767,6 +772,7 @@ const sidebars = {
             "pass_through/langfuse",
             "pass_through/mistral",
             "pass_through/openai_passthrough",
+            "proxy/passthrough_managed_ids",
             {
               type: "category",
               label: "Vertex AI",
@@ -805,6 +811,7 @@ const sidebars = {
             "search/searxng",
             "search/linkup",
             "search/serper",
+            "search/apiserpent",
           ]
         },
         "skills",
@@ -1223,6 +1230,7 @@ const learnSidebar = {
       items: [
         "learn/sdk_quickstart",
         "learn/gateway_quickstart",
+        "learn/enterprise_quickstart",
       ],
     },
 

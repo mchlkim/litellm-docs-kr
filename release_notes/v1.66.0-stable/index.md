@@ -163,7 +163,7 @@ v1.66.0-stable이 공개되었습니다. 이번 릴리스의 주요 내용은 �
 - **Microsoft SSO 자동 동기화**
     1. 관리자가 SSO JWT 필드를 디버그할 수 있도록 debug route를 추가했습니다. [PR](https://github.com/BerriAI/litellm/pull/9835)
     2. MSFT Graph API를 사용해 사용자를 팀에 할당하는 기능을 추가했습니다. [PR](https://github.com/BerriAI/litellm/pull/9865)
-    3. litellm을 Azure Entra ID Enterprise Application에 연결했습니다. [PR](https://github.com/BerriAI/litellm/pull/9872)
+    3. litellm을 Azure Entra ID 엔터프라이즈 Application에 연결했습니다. [PR](https://github.com/BerriAI/litellm/pull/9872)
     4. litellm SSO가 기본 팀을 생성할 때 관리자가 `default_team_params`를 설정할 수 있게 했습니다. [PR](https://github.com/BerriAI/litellm/pull/9895)
     5. MSFT SSO가 사용자 이메일에 올바른 필드를 사용하도록 수정했습니다. [PR](https://github.com/BerriAI/litellm/pull/9886)
     6. litellm SSO가 팀을 자동 생성할 때 Default Team 설정을 지정하는 UI 지원을 추가했습니다. [PR](https://github.com/BerriAI/litellm/pull/9918)

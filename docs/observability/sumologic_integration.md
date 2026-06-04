@@ -19,10 +19,10 @@ https://www.sumologic.com/
 2. Sumo Logic에서 HTTP 로그 및 메트릭 Source를 설정합니다.
    - **Manage Data** > **Collection** > **Collection**으로 이동합니다.
    - Hosted Collector 옆의 **Add Source**를 클릭합니다.
-   - **HTTP Logs & Metrics**를 선택합니다.
+   - **HTTP 로그 & Metrics**를 선택합니다.
    - 생성된 URL을 복사합니다. 이 URL에는 인증 토큰이 포함되어 있습니다.
 
-자세한 내용은 [HTTP Logs & Metrics Source](https://www.sumologic.com/help/docs/send-data/hosted-collectors/http-source/logs-metrics/) 문서를 참고하세요.
+자세한 내용은 [HTTP 로그 & Metrics Source](https://www.sumologic.com/help/docs/send-data/hosted-collectors/http-source/logs-metrics/) 문서를 참고하세요.
 
 ```shell
 uv add litellm
@@ -288,7 +288,7 @@ Sumo Logic HTTP Source URL에는 인증 토큰이 포함되어 있으므로 `SUM
 1. [Sumo Logic](https://www.sumologic.com/)에 로그인합니다.
 2. **Manage Data** > **Collection** > **Collection**으로 이동합니다.
 3. Hosted Collector 옆의 **Add Source**를 클릭합니다.
-4. **HTTP Logs & Metrics**를 선택합니다.
+4. **HTTP 로그 & Metrics**를 선택합니다.
 5. 소스를 구성합니다.
    - **Name**: LiteLLM 로그
    - **Source Category**: litellm(선택 사항이지만 쿼리에 도움이 됩니다)

@@ -261,7 +261,7 @@ v1.73.0에서는 신규 사용자를 Default Teams에 할당할 수 있습니다
 
 ---
 
-## Logging / Guardrails 연동 {#logging--guardrail-integrations}
+## Logging / 가드레일 연동 {#logging--guardrail-integrations}
 
 #### 버그 {#bugs-2}
 - **[Prometheus](../../docs/observability/prometheus)**

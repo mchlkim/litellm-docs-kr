@@ -1,23 +1,23 @@
-# `Splunk Observability Cloud` (`OpenTelemetry`)
+# `Splunk 관측성 Cloud` (`OpenTelemetry`)
 
-기본 제공 **`otel`** 콜백과 표준 OpenTelemetry OTLP 환경 변수를 사용해 LiteLLM 트레이스를 [Splunk Observability Cloud](https://www.splunk.com/en_us/products/observability-cloud.html)로 보냅니다.
+기본 제공 **`otel`** 콜백과 표준 OpenTelemetry OTLP 환경 변수를 사용해 LiteLLM 트레이스를 [Splunk 관측성 Cloud](https://www.splunk.com/en_us/products/observability-cloud.html)로 보냅니다.
 
 LiteLLM은 [OpenTelemetry 통합](./opentelemetry_integration.md)과 동일한 OpenTelemetry 경로를 사용합니다. Splunk의 OTLP/HTTP 트레이스 수집 URL은 **`/v2/trace/otlp`**를 사용합니다(**`/v1/traces`**가 아님). LiteLLM은 일반 collector URL을 정규화하지만, 스팬이 Splunk에 올바르게 도달하도록 Splunk 방식의 `/v2/trace/otlp` 엔드포인트는 **그대로 유지**합니다.
 
 ## 비디오 안내 {#video-walkthrough}
 
-<iframe width="840" height="500" src="https://www.loom.com/embed/9dc21b753bbe4f6fb3c1b44c06e39c20" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen title="LiteLLM Splunk Observability Cloud OTEL demo"></iframe>
+<iframe width="840" height="500" src="https://www.loom.com/embed/9dc21b753bbe4f6fb3c1b44c06e39c20" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen title="LiteLLM Splunk 관측성 Cloud OTEL demo"></iframe>
 
 또는 [Loom에서 보기](https://www.loom.com/share/9dc21b753bbe4f6fb3c1b44c06e39c20)를 사용하세요.
 
 ## 사전 준비
 
-1. Splunk Observability Cloud 계정과 **수집 액세스 토큰**(`X-SF-Token`으로 사용).
-2. Splunk Observability Cloud UI 또는 문서에서 확인한 **realm**(예: `eu1`, `us0`).
+1. Splunk 관측성 Cloud 계정과 **수집 액세스 토큰**(`X-SF-Token`으로 사용).
+2. Splunk 관측성 Cloud UI 또는 문서에서 확인한 **realm**(예: `eu1`, `us0`).
 
 ## LiteLLM 프록시 {#litellm-proxy}
 
-[Datadog Logs](./datadog#datadog-logs) 같은 통합과 동일한 흐름입니다. **`config.yaml`**을 구성한 다음 환경 변수를 설정하고 프록시를 시작합니다.
+[Datadog 로그](./datadog#datadog-logs) 같은 통합과 동일한 흐름입니다. **`config.yaml`**을 구성한 다음 환경 변수를 설정하고 프록시를 시작합니다.
 
 **1단계:** `config.yaml`에서 OpenTelemetry 콜백을 활성화합니다.
 
@@ -54,11 +54,11 @@ litellm --config /path/to/config.yaml
 
 ## Trace 확인 {#verify-traces}
 
-1. Splunk Observability Cloud에서 **APM** / **Traces**를 엽니다(제품 이름은 버전에 따라 다를 수 있음).
+1. Splunk 관측성 Cloud에서 **APM** / **Traces**를 엽니다(제품 이름은 버전에 따라 다를 수 있음).
 2. 서비스 이름으로 필터링합니다(`OTEL_SERVICE_NAME`, 설정하지 않은 경우 기본값 `litellm`).
 3. 필요하면 LiteLLM 환경에서 `OTEL_DEBUG=True`를 설정해 exporter 문제를 로그에 표시합니다([OpenTelemetry 문제 해결](/litellm-docs-kr/docs/observability/opentelemetry_integration#not-seeing-traces-land-on-integration) 참고).
 
 ## 함께 보기 {#see-also}
 
 - [OpenTelemetry — LLM Trace 추적](./opentelemetry_integration.md)
-- [Splunk Observability Cloud — OTLP exporter](https://docs.splunk.com/observability/en/gdi/opentelemetry/opentelemetry.html)(공급업체 문서)
+- [Splunk 관측성 Cloud — OTLP exporter](https://docs.splunk.com/observability/en/gdi/opentelemetry/opentelemetry.html)(공급업체 문서)

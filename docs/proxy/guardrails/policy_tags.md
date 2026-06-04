@@ -14,9 +14,9 @@
 
 ![정책 이름과 선택적 설명을 입력하는 Create New Policy 모달](https://colony-recorder.s3.amazonaws.com/files/2026-02-11/18f1ff69-9b83-4a98-9aad-9892a104d3ff/ascreenshot_1c6b85231cad4ec695750b53bbbda52c_text_export.jpeg)
 
-**추가할 가드레일**(`Guardrails to Add`)까지 아래로 스크롤합니다. 드롭다운을 클릭하면 프록시에 구성된 사용 가능한 모든 가드레일이 표시됩니다. 이 정책에서 적용할 가드레일을 선택합니다.
+**추가할 가드레일**(`가드레일 to Add`)까지 아래로 스크롤합니다. 드롭다운을 클릭하면 프록시에 구성된 사용 가능한 모든 가드레일이 표시됩니다. 이 정책에서 적용할 가드레일을 선택합니다.
 
-![OAI-moderation, phi-pre-guard, pii-pre-guard 같은 사용 가능한 가드레일이 표시된 Guardrails to Add 드롭다운](https://colony-recorder.s3.amazonaws.com/files/2026-02-11/55cedad7-9939-44a1-8644-a184cde82ab7/ascreenshot_eab4e55b82b8411893eccb6234d60b82_text_export.jpeg)
+![OAI-moderation, phi-pre-guard, pii-pre-guard 같은 사용 가능한 가드레일이 표시된 가드레일 to Add 드롭다운](https://colony-recorder.s3.amazonaws.com/files/2026-02-11/55cedad7-9939-44a1-8644-a184cde82ab7/ascreenshot_eab4e55b82b8411893eccb6234d60b82_text_export.jpeg)
 
 가드레일을 선택하면 입력 필드에 칩으로 표시됩니다. 아래의 **Resolved 가드레일** 섹션에는 최종 적용될 가드레일 집합이 표시됩니다. 상위 정책에서 상속된 항목도 포함됩니다.
 

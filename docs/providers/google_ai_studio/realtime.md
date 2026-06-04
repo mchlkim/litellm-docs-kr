@@ -1,14 +1,14 @@
-# Gemini Realtime API - Google AI Studio 개요 {#gemini-realtime-api-google-ai-studio}
+# Gemini Realtime API - Google AI Studio
 
-| 기능 | 설명 | 비고 |
+| Feature | Description | Comments |
 | --- | --- | --- |
 | Proxy | ✅ |  |
-| SDK | ⌛️ | `litellm._arealtime`을 통한 실험적 액세스. |
+| SDK | ⌛️ | Experimental access via `litellm._arealtime`. |
 
 
-## Proxy 사용법 {#proxy-usage}
+## Proxy 사용법
 
-### config에 모델 추가 {#add-model-to-config}
+### Add model to config
 
 ```yaml
 model_list:
@@ -19,17 +19,17 @@ model_list:
       mode: realtime
 ```
 
-### proxy 시작 {#start-proxy}
+### Start proxy
 
 ```bash
-litellm --config /path/to/config.yaml 
+litellm --config /path/to/config.yaml
 
 # RUNNING on http://0.0.0.0:8000
 ```
 
-### 테스트 {#test}
+### Test
 
-node로 이 스크립트를 실행합니다 - `node test.js`
+Run this script using node - `node test.js`
 
 ```js
 // test.js
@@ -64,12 +64,156 @@ ws.on("error", function handleError(error) {
 });
 ```
 
-## 제한 사항 {#limitations}
 
-- 오디오 transcription을 지원하지 않습니다.
-- tool calling을 지원하지 않습니다.
+## 도구 호출
 
-## 지원되는 OpenAI Realtime Events {#supported-openai-realtime-events}
+```python
+import asyncio
+import json
+import websockets
+
+PROXY_URL = "ws://localhost:4000/v1/realtime?model=gemini-live"
+
+TOOLS = [
+    {
+        "type": "function",
+        "function": {
+            "name": "get_weather",
+            "description": "Get the current weather for a location.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "location": {"type": "string"},
+                    "unit": {"type": "string", "enum": ["fahrenheit", "celsius"]},
+                },
+                "required": ["location"],
+            },
+        },
+    }
+]
+
+
+def get_weather(location: str, unit: str = "fahrenheit") -> dict:
+    return {
+        "location": location,
+        "temperature": 72 if unit == "fahrenheit" else 22,
+        "unit": unit,
+        "conditions": "sunny",
+    }
+
+
+TOOL_FUNCTIONS = {"get_weather": get_weather}
+
+
+async def main():
+    async with websockets.connect(
+        PROXY_URL,
+        additional_headers={
+            "Authorization": "Bearer sk-1234",
+            "X-Serverless-Authorization": "Bearer sk-1234",
+        },
+    ) as ws:
+        _ = json.loads(await ws.recv())  # session.created
+
+        # Required for tool calling: send tools in session.update
+        await ws.send(
+            json.dumps(
+                {
+                    "type": "session.update",
+                    "session": {
+                        "instructions": "Use get_weather for weather questions.",
+                        "modalities": ["audio"],
+                        "tools": TOOLS,
+                    },
+                }
+            )
+        )
+
+        await ws.send(
+            json.dumps(
+                {
+                    "type": "conversation.item.create",
+                    "item": {
+                        "type": "message",
+                        "role": "user",
+                        "content": [
+                            {"type": "input_text", "text": "What's the weather in San Francisco?"}
+                        ],
+                    },
+                }
+            )
+        )
+        await ws.send(json.dumps({"type": "response.create"}))
+
+        async for raw in ws:
+            ev = json.loads(raw)
+            t = ev.get("type", "")
+
+            if t == "response.text.delta":
+                print(ev.get("delta", ""), end="", flush=True)
+            elif t == "response.function_call_arguments.done":
+                fn_name = ev.get("name", "")
+                call_id = ev.get("call_id", "")
+                args = json.loads(ev.get("arguments", "{}"))
+                result = TOOL_FUNCTIONS[fn_name](**args)
+
+                await ws.send(
+                    json.dumps(
+                        {
+                            "type": "conversation.item.create",
+                            "item": {
+                                "type": "function_call_output",
+                                "call_id": call_id,
+                                "output": json.dumps(result),
+                            },
+                        }
+                    )
+                )
+                await ws.send(json.dumps({"type": "response.create"}))
+            elif t == "response.done":
+                print("\n[done]")
+                break
+            elif t == "error":
+                print(ev)
+                break
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+### Config + run
+
+```yaml
+model_list:
+  - model_name: gemini-live
+    litellm_params:
+      model: gemini/gemini-2.5-flash-native-audio-latest
+      api_key: os.environ/GEMINI_API_KEY
+
+litellm_settings:
+  # Required for tool calling with Gemini Live:
+  # defer setup until client sends session.update (with tools)
+  gemini_live_defer_setup: true
+```
+
+```bash
+litellm --config config.yaml --port 4000
+python test_realtime_tool_calling.py
+```
+
+## Limitations
+
+- Does not support audio transcription.
+- Session config updates after the first `session.update` are ignored (Gemini setup is one-time per connection).
+
+## Precaution
+
+- Tool calling will not work unless you send `session.update` first with your `tools`.
+- Send it as the first config message for that websocket session.
+- `gemini_live_defer_setup` defaults to `false` for backward compatibility.
+
+## Supported OpenAI Realtime Events
 
 - `session.created`
 - `response.created`
@@ -86,7 +230,7 @@ ws.on("error", function handleError(error) {
 
 
 
-## [지원되는 Session Params](https://github.com/BerriAI/litellm/blob/e87b536d038f77c2a2206fd7433e275c487179ee/litellm/llms/gemini/realtime/transformation.py#L155) {#supported-session-params}
+## [Supported Session Params](https://github.com/BerriAI/litellm/blob/e87b536d038f77c2a2206fd7433e275c487179ee/litellm/llms/gemini/realtime/transformation.py#L155)
 
 ## 더 보기 예제
-### [오디오 입력/출력을 사용하는 Gemini Realtime API](../../../docs/tutorials/gemini_realtime_with_audio) {#gemini-realtime-api-with-audio-inputoutput}
+### [Gemini Realtime API with Audio Input/Output](../../../docs/tutorials/gemini_realtime_with_audio)

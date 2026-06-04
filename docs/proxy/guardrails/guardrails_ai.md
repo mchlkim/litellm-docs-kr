@@ -2,13 +2,13 @@ import Image from '@theme/IdealImage';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Guardrails AI
+# 가드레일 AI
 
-Guardrails AI([guardrailsai.com](https://www.guardrailsai.com/))를 사용해 LLM 출력에 검사를 추가합니다.
+가드레일 AI([guardrailsai.com](https://www.guardrailsai.com/))를 사용해 LLM 출력에 검사를 추가합니다.
 
 ## 사전 준비
 
-- Guardrails AI Server를 설정합니다. [빠른 시작](https://www.guardrailsai.com/docs/getting_started/guardrails_server)
+- 가드레일 AI Server를 설정합니다. [빠른 시작](https://www.guardrailsai.com/docs/getting_started/guardrails_server)
 
 ## 사용법
 

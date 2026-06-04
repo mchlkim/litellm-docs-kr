@@ -94,7 +94,7 @@ LiteLLM 내부 `ProxyDBManager`는 idempotent migration 처리를 자동으로 �
 
 - [ ] **Health 엔드포인트**: `/health` 엔드포인트가 `200 OK`를 반환하는지 확인합니다.
 - [ ] **로그 확인**: Prisma 오류가 없는지 확인합니다. 로그에서 `relation "..." does not exist`, `column "..." does not exist`, `prisma migrate` 실패를 찾습니다.
-- [ ] **비용 추적**: 테스트 completion을 실행하고 지출이 `LiteLLM_SpendLogs` 테이블에 기록되는지 확인합니다.
+- [ ] **비용 추적**: 테스트 completion을 실행하고 지출이 `LiteLLM_Spend로그` 테이블에 기록되는지 확인합니다.
 - [ ] **Billing(Lago)**: Lago를 billing에 사용한다면(예: Lago → Stripe), 프록시 로그에서 `Logged Lago Object`를 확인해 usage event가 전송되는지 검증합니다.
 - [ ] **상태 일관성**: Redis를 caching 또는 rate limiting에 사용하고 새 버전에서 cache key 구조가 변경되었다면 cache 삭제를 고려합니다.
 - [ ] **관리자 UI**: 관리자 UI가 로드되고 key와 team의 올바른 데이터를 표시하는지 확인합니다.

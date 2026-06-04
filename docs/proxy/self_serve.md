@@ -116,7 +116,7 @@ http://0.0.0.0:4000/ui/onboarding?id=a2f0918f-43b0-4770-a664-96ddd192966e
 
 :::info 
 
-LiteLLM Enterprise: [SSO login](./ui.md)을 활성화합니다.
+LiteLLM 엔터프라이즈: [SSO login](./ui.md)을 활성화합니다.
 
 :::
 
@@ -125,11 +125,11 @@ LiteLLM Enterprise: [SSO login](./ui.md)을 활성화합니다.
 
 <Image img={require('../../img/ui_self_serve_create_key.png')}  style={{ width: '800px', height: 'auto' }} />
 
-## 사용자가 Usage 및 Caching Analytics를 조회하도록 허용 {#allowing-users-to-view-usage-caching-analytics}
+## 사용자가 사용법 및 캐싱 Analytics를 조회하도록 허용 {#allowing-users-to-view-usage-caching-analytics}
 
 1. Internal Users -> +Invite User로 이동합니다.
 
-role을 `Admin Viewer`로 설정합니다. 이 role은 Usage와 Caching Analytics만 조회할 수 있습니다.
+role을 `Admin Viewer`로 설정합니다. 이 role은 사용법와 캐싱 Analytics만 조회할 수 있습니다.
 
 <Image img={require('../../img/ui_invite_user.png')}  style={{ width: '800px', height: 'auto' }} />
 <br />
@@ -145,7 +145,7 @@ role을 `Admin Viewer`로 설정합니다. 이 role은 Usage와 Caching Analytic
 <Image img={require('../../img/ui_clean_login.png')}  style={{ width: '500px', height: 'auto' }} />
 <br />
 
-4. 이제 사용자가 Usage와 Caching Analytics를 조회할 수 있습니다.
+4. 이제 사용자가 사용법와 캐싱 Analytics를 조회할 수 있습니다.
 
 <Image img={require('../../img/ui_usage.png')}  style={{ width: '800px', height: 'auto' }} />
 

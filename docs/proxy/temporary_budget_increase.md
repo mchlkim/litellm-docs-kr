@@ -12,9 +12,9 @@ LiteLLM Virtual Key에 임시 예산 증액을 설정합니다. 특정 키의 �
 
 :::note
 
-✨ 임시 예산 증액은 LiteLLM Enterprise 기능입니다.
+✨ 임시 예산 증액은 LiteLLM 엔터프라이즈 기능입니다.
 
-[Enterprise 가격](https://www.litellm.ai/#pricing)
+[엔터프라이즈 가격](https://www.litellm.ai/#pricing)
 
 [무료 7일 평가판 키 받기](https://www.litellm.ai/enterprise#trial)
 

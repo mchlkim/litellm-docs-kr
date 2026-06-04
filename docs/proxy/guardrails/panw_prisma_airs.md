@@ -228,7 +228,7 @@ guardrails:
 
 인증 및 configuration error(401, 403, invalid profile)는 항상 block됩니다. transient error(429, timeout, network)만 fail-open을 trigger합니다.
 
-fail-open이 trigger되면 응답에 tracking header가 포함됩니다: `X-LiteLLM-Applied-Guardrails: panw-airs:unscanned`
+fail-open이 trigger되면 응답에 tracking header가 포함됩니다: `X-LiteLLM-Applied-가드레일: panw-airs:unscanned`
 
 ### Custom Violation Message 설정 {#custom-violation-message}
 

@@ -4,11 +4,11 @@ import TabItem from '@theme/TabItem';
 
 # 가드레일 - 빠른 시작
 
-LiteLLM 프록시(AI 게이트웨이)에서 프롬프트 인젝션 탐지와 PII 마스킹을 설정합니다.
+Setup Prompt Injection Detection, PII Masking on LiteLLM Proxy (AI Gateway)
 
-## 1. LiteLLM 설정 파일에서 가드레일 정의
+## 1. Define guardrails on your LiteLLM config.yaml
 
-`guardrails` 섹션 아래에 가드레일을 설정합니다.
+Set your guardrails under the `guardrails` section
 
 ```yaml
 model_list:
@@ -20,12 +20,12 @@ model_list:
 guardrails:
   - guardrail_name: general-guard
     litellm_params:
-      guardrail: aim
+      guardrail: cato_networks
       mode: [pre_call, post_call]
-      api_key: os.environ/AIM_API_KEY
-      api_base: os.environ/AIM_API_BASE
+      api_key: os.environ/CATO_API_KEY
+      api_base: os.environ/CATO_API_BASE
       default_on: true # Optional
-  
+
   - guardrail_name: "aporia-pre-guard"
     litellm_params:
       guardrail: aporia  # supported values: "aporia", "lakera"
@@ -74,69 +74,69 @@ guardrails:
         plr_scanners: true
 ```
 
-Generic Guardrail API에서는 **정적 헤더**(`headers`: 모든 요청에 전송되는 key/value)와 **동적 헤더**(`extra_headers`: 전달할 클라이언트 헤더 이름 목록)도 설정할 수 있습니다. 자세한 내용은 [Generic Guardrail API - 정적 및 동적 헤더](/litellm-docs-kr/docs/adding_provider/generic_guardrail_api#static-and-dynamic-headers)를 참고하세요.
+For generic guardrail APIs you can also set **static headers** (`headers`: key/value sent on every request) and **dynamic headers** (`extra_headers`: list of client header names to forward). See [Generic Guardrail API - Static and dynamic headers](/docs/adding_provider/generic_guardrail_api#static-and-dynamic-headers).
 
-### `mode` 지원 값(Event Hooks)
+### Supported values for `mode` (Event Hooks)
 
-- `pre_call`: LLM 호출 **전**에 **입력**에 대해 실행합니다.
-- `post_call`: LLM 호출 **후**에 **입력 및 출력**에 대해 실행합니다.
-- `during_call`: LLM 호출 **중**에 **입력**에 대해 실행합니다. `pre_call`과 같지만 LLM 호출과 병렬로 실행됩니다. 가드레일 검사가 완료될 때까지 응답은 반환되지 않습니다.
-- 여러 모드를 실행하려면 위 값을 목록으로 지정합니다. 예: `mode: [pre_call, post_call]`
+- `pre_call` Run **before** LLM call, on **input**
+- `post_call` Run **after** LLM call, on **input & output**
+- `during_call` Run **during** LLM call, on **input** Same as `pre_call` but runs in parallel as LLM call.  Response not returned until guardrail check completes
+- A list of the above values to run multiple modes, e.g. `mode: [pre_call, post_call]`
 
-### 가드레일 평가에서 시스템 메시지 건너뛰기
+### Skip system messages in guardrail evaluation
 
-전체 `messages` 목록은 모델에 그대로 보내면서, **통합** 가드레일이 `role: system` 내용을 스캔하지 않도록 할 수 있습니다.
+You can stop **unified** guardrails from scanning `role: system` content while still sending the full `messages` list to the model.
 
-**전역** — `litellm_settings`에서 설정:
+**Global** — in `litellm_settings`:
 
 ```yaml
 litellm_settings:
   skip_system_message_in_guardrail: true
 ```
 
-**가드레일별** — 해당 가드레일의 `litellm_params` 아래에서 `skip_system_message_in_guardrail: true` 또는 `false`를 설정합니다. 생략하면 전역 `litellm_settings` 값을 사용합니다. 가드레일별 `false`는 전역 플래그가 `true`여도 시스템 메시지를 포함하도록 강제합니다.
+**Per guardrail** — under that guardrail’s `litellm_params`: set `skip_system_message_in_guardrail: true` or `false`. If omitted, the global `litellm_settings` value is used; per-guardrail `false` forces system messages to be included even when the global flag is `true`.
 
-**LiteLLM UI 사용** — LiteLLM Admin Dashboard에서 가드레일을 **생성**하거나 **편집**할 때 **Skip system messages in guardrail**을 설정합니다(생성 시 Basic Info 아래, 또는 편집/가드레일 설정 흐름).
+**Via LiteLLM UI** — when **creating** or **editing** a guardrail in the LiteLLM Admin Dashboard, set **Skip system messages in guardrail** (under Basic Info on create, or in the edit / guardrail settings flows):
 
 
-| UI 옵션                             | 효과                                                                                 |
+| UI option                             | Effect                                                                                 |
 | ------------------------------------- | -------------------------------------------------------------------------------------- |
-| **Use global default**                | 프록시 설정의 `litellm_settings.skip_system_message_in_guardrail`을 사용합니다.        |
-| **Yes — 가드레일 스캔에서 제외** | 가드레일별 `skip_system_message_in_guardrail: true`를 설정합니다.                            |
-| **No — 항상 스캔에 포함**       | 가드레일별 `skip_system_message_in_guardrail: false`를 설정합니다(전역 skip을 재정의). |
+| **Use global default**                | Uses `litellm_settings.skip_system_message_in_guardrail` from your proxy config        |
+| **Yes — exclude from guardrail scan** | Sets per-guardrail `skip_system_message_in_guardrail: true`                            |
+| **No — always include in scan**       | Sets per-guardrail `skip_system_message_in_guardrail: false` (overrides a global skip) |
 
 
 <Image
   img={require('../../../img/skip_system_message_guardrail_ui.png')}
-  alt="가드레일 생성: 전역 기본값 사용, 가드레일 스캔에서 제외, 항상 스캔에 포함 옵션이 있는 시스템 메시지 건너뛰기 드롭다운"
+  alt="Create guardrail: Skip system messages in guardrail dropdown with Use global default, Yes exclude from guardrail scan, and No always include in scan"
   style={{ width: '100%', maxWidth: '900px', height: 'auto' }}
 />
 
-**적용되는 위치:** **OpenAI Chat Completions**(`/v1/chat/completions`)와 **Anthropic Messages**(`/v1/messages`)에서 **통합** 가드레일 경로(`apply_guardrail`을 구현하고 LiteLLM의 메시지 변환 계층을 통과하는 공급자)에만 적용됩니다. 예로 Presidio, Bedrock guardrails, `litellm_content_filter`, OpenAI Moderation, Generic Guardrail API, `apply_guardrail`을 정의하는 custom code guardrails가 있습니다.
+**Where this applies:** Only the **unified** guardrail path (providers that implement `apply_guardrail` and run through LiteLLM’s message translation layer) on **OpenAI Chat Completions** (`/v1/chat/completions`) and **Anthropic Messages** (`/v1/messages`). 예제 include Presidio, Bedrock guardrails, `litellm_content_filter`, OpenAI Moderation, Generic Guardrail API, and custom code guardrails that define `apply_guardrail`.
 
-**적용되지 않는 위치:** 원시 요청에 대한 직접 hook으로만 실행되는 가드레일(예: Lakera v2, Aporia, DynamoAI, Javelin, Lasso, Pangea, Model Armor, Azure Content Safety hooks, Guardrails AI, AIM, tool permission, MCP security)에는 적용되지 않습니다. 다른 엔드포인트가 동일한 변환 계층을 사용하기 전까지는 다른 경로(예: Responses API, embeddings, speech)에도 적용되지 않습니다.
+**Where this does *not* apply:** 가드레일 that run only via direct hooks on the raw request (e.g. Lakera v2, Aporia, DynamoAI, Javelin, Lasso, Pangea, Model Armor, Azure Content Safety hooks, 가드레일 AI, AIM, Cato Networks, tool permission, MCP security). It also does not apply to other routes until those endpoints use the same translation layer (e.g. Responses API, embeddings, speech).
 
 ### Load Balancing 가드레일
 
-가드레일 요청을 여러 계정 또는 리전에 분산해야 하나요? 자세한 내용은 [가드레일 로드 밸런싱](./guardrail_load_balancing.md)을 참고하세요.
+Need to distribute guardrail requests across multiple accounts or regions? See [Guardrail Load Balancing](./guardrail_load_balancing.md) for details on:
 
-- 여러 AWS Bedrock 계정 간 로드 밸런싱(속도 제한 관리에 유용)
-- 가드레일 인스턴스 간 가중치 기반 분산
-- 멀티 리전 가드레일 배포
+- Load balancing across multiple AWS Bedrock accounts (useful for rate limit management)
+- Weighted distribution across guardrail instances
+- Multi-region guardrail deployments
 
-## 2. LiteLLM Gateway 시작
+## 2. Start LiteLLM Gateway
 
 ```shell
 litellm --config config.yaml --detailed_debug
 ```
 
-## 3. 요청 테스트
+## 3. Test request
 
 **[Langchain, OpenAI SDK 사용법 예제](../proxy/user_keys#request-format)**
 
 
 
-요청의 `ishaan@berri.ai`가 PII이므로 실패할 것으로 예상됩니다.
+Expect this to fail since since `ishaan@berri.ai` in the request is PII
 
 ```shell
 curl -i http://localhost:4000/v1/chat/completions \
@@ -151,7 +151,7 @@ curl -i http://localhost:4000/v1/chat/completions \
   }'
 ```
 
-실패 시 예상 응답
+Expected response on failure
 
 ```shell
 {
@@ -196,9 +196,9 @@ curl -i http://localhost:4000/v1/chat/completions \
 
 ## **Default On 가드레일**
 
-모든 요청에서 가드레일을 실행하려면 가드레일 설정에 `default_on: true`를 지정합니다. 사용자가 매번 지정하지 않아도 모든 요청에서 가드레일을 실행하고 싶을 때 유용합니다.
+Set `default_on: true` in your guardrail config to run the guardrail on every request. This is useful if you want to run a guardrail on every request without the user having to specify it.
 
-**참고:** 사용자가 다른 가드레일을 지정하거나 빈 guardrails 배열을 지정해도 실행됩니다.
+**Note:** These will run even if user specifies a different guardrail or empty guardrails array.
 
 ```yaml
 guardrails:
@@ -209,9 +209,9 @@ guardrails:
       default_on: true
 ```
 
-**테스트 요청**
+**Test Request**
 
-이 요청에서는 `default_on: true`가 설정되어 있으므로 `aporia-pre-guard` 가드레일이 모든 요청에서 실행됩니다.
+In this request, the guardrail `aporia-pre-guard` will run on every request because `default_on: true` is set.
 
 ```shell
 curl -i http://localhost:4000/v1/chat/completions \
@@ -225,9 +225,9 @@ curl -i http://localhost:4000/v1/chat/completions \
   }'
 ```
 
-**예상 응답**
+**Expected response**
 
-응답 헤더에는 적용된 가드레일을 나타내는 `x-litellm-applied-guardrails`가 포함됩니다.
+Your response headers will include `x-litellm-applied-guardrails` with the guardrail applied
 
 ```
 x-litellm-applied-guardrails: aporia-pre-guard
@@ -235,17 +235,17 @@ x-litellm-applied-guardrails: aporia-pre-guard
 
 ### Guardrail Policies
 
-더 세밀한 제어가 필요하면 [Guardrail Policies](./guardrail_policies.md)를 사용하세요.
+Need more control? Use [Guardrail Policies](./guardrail_policies.md) to:
 
-- 가드레일을 재사용 가능한 정책으로 그룹화
-- 특정 팀, 키 또는 모델에 대해 가드레일 활성화/비활성화
-- 기존 정책을 상속하고 특정 가드레일 재정의
+- Group guardrails into reusable policies
+- Enable/disable guardrails for specific teams, keys, or models
+- Inherit from existing policies and override specific guardrails
 
-## **클라이언트 측에서 가드레일 사용**
+## **Using 가드레일 Client Side**
 
-### 직접 테스트 **(OSS)**
+### Test yourself **(OSS)**
 
-테스트하려면 요청 본문에 `guardrails`를 전달합니다.
+Pass `guardrails` to your request body to test it
 
 ```shell
 curl -i http://localhost:4000/v1/chat/completions \
@@ -260,21 +260,21 @@ curl -i http://localhost:4000/v1/chat/completions \
   }'
 ```
 
-### 사용자에게 노출 **(엔터프라이즈)**
+### Expose to your users **(엔터프라이즈)**
 
-다음 간단한 흐름에 따라 가드레일을 구현하고 조정합니다.
+Follow this simple workflow to implement and tune guardrails:
 
-### 1. 사용 가능한 가드레일 보기
+### 1. View Available 가드레일
 
-먼저 사용할 수 있는 가드레일과 해당 파라미터를 확인합니다.
+First, check what guardrails are available and their parameters:
 
-`/guardrails/list`를 호출하면 사용 가능한 가드레일과 가드레일 정보(지원 파라미터, 설명 등)를 볼 수 있습니다.
+Call `/guardrails/list` to view available guardrails and the guardrail info (supported parameters, description, etc)
 
 ```shell
 curl -X GET 'http://0.0.0.0:4000/guardrails/list'
 ```
 
-예상 응답
+Expected response
 
 ```json
 {
@@ -301,7 +301,7 @@ curl -X GET 'http://0.0.0.0:4000/guardrails/list'
 
 
 
-이 설정은 위의 `/guardrails/list` 응답을 반환합니다. `guardrail_info` 필드는 선택 사항이며, 가드레일 사용자를 위해 info 아래에 원하는 필드를 추가할 수 있습니다.
+This config will return the `/guardrails/list` response above. The `guardrail_info` field is optional and you can add any fields under info for consumers of your guardrail
 
 
 
@@ -322,9 +322,9 @@ curl -X GET 'http://0.0.0.0:4000/guardrails/list'
           type: "boolean"
 ```
 
-### 2. 가드레일 적용
+### 2. Apply 가드레일
 
-선택한 가드레일을 chat completion 요청에 추가합니다.
+Add selected guardrails to your chat completion request:
 
 ```shell
 curl -i http://localhost:4000/v1/chat/completions \
@@ -336,9 +336,9 @@ curl -i http://localhost:4000/v1/chat/completions \
   }'
 ```
 
-### 3. Mock LLM 응답으로 테스트
+### 3. Test with Mock LLM completions
 
-LLM 호출 없이 가드레일을 테스트하려면 `mock_response`를 전송합니다. `mock_response`에 대한 자세한 내용은 [여기](../../completion/mock_requests)를 참고하세요.
+Send `mock_response` to test guardrails without making an LLM call. 더 보기 info on `mock_response` [here](../../completion/mock_requests)
 
 ```shell
 curl -i http://localhost:4000/v1/chat/completions \
@@ -354,23 +354,23 @@ curl -i http://localhost:4000/v1/chat/completions \
   }'
 ```
 
-### 4. ✨ 가드레일에 동적 파라미터 전달
+### 4. ✨ Pass Dynamic Parameters to Guardrail
 
 :::info
 
-✨ 이 기능은 엔터프라이즈 전용 기능입니다. [무료 체험 시작](https://www.litellm.ai/enterprise#trial)
+✨ This is an 엔터프라이즈 only feature [Get a free trial](https://www.litellm.ai/enterprise#trial)
 
 :::
 
-가드레일 API 호출에 추가 파라미터를 전달할 때 사용합니다. 예를 들어 success threshold 같은 값을 보낼 수 있습니다. **자세한 내용은 아래 `guardrails` 스펙을 참고하세요.**
+Use this to pass additional parameters to the guardrail API call. e.g. things like success threshold. **[See `guardrails` spec for more details](#spec-guardrails-parameter)**
 
 
 
 
 
-가드레일에 추가 파라미터를 전달하려면 `guardrails={"aporia-pre-guard": {"extra_body": {"success_threshold": 0.9}}}`를 설정합니다.
+Set `guardrails={"aporia-pre-guard": {"extra_body": {"success_threshold": 0.9}}}` to pass additional parameters to the guardrail
 
-이 예제에서는 `success_threshold=0.9`가 `aporia-pre-guard` 가드레일 요청 본문으로 전달됩니다.
+In this example `success_threshold=0.9` is passed to the `aporia-pre-guard` guardrail request body
 
 ```python
 import openai
@@ -431,41 +431,41 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 
 
 
-## **Proxy 관리자 제어**
+## **Proxy Admin Controls**
 
-### 가드레일 모니터링
+### Monitoring 가드레일
 
-어떤 가드레일이 실행되었고 통과/실패했는지 모니터링합니다. 예를 들어 의도하지 않은 요청 실패를 일으키는 가드레일을 찾을 때 유용합니다.
+Monitor which guardrails were executed and whether they passed or failed. e.g. guardrail going rogue and failing requests we don't intend to fail
 
 :::
 
-#### 설정
+#### Setup
 
-1. LiteLLM을 [지원되는 로깅 공급자](../logging)에 연결합니다.
-2. `guardrails` 파라미터가 포함된 요청을 보냅니다.
-3. 로깅 공급자에서 가드레일 trace를 확인합니다.
+1. Connect LiteLLM to a [supported logging provider](../logging)
+2. Make a request with a `guardrails` parameter
+3. Check your logging provider for the guardrail trace
 
-#### 추적된 가드레일 성공
+#### Traced Guardrail Success
 
 <Image img={require('../../../img/gd_success.png')} />
 
-#### 추적된 가드레일 실패
+#### Traced Guardrail Failure
 
 <Image img={require('../../../img/gd_fail.png')} />
 
-### ✨ API 키별 가드레일 제어
+### ✨ Control 가드레일 per API Key
 
 :::info
 
-✨ 이 기능은 엔터프라이즈 전용 기능입니다. [무료 체험 시작](https://www.litellm.ai/enterprise#trial)
+✨ This is an 엔터프라이즈 only feature [Get a free trial](https://www.litellm.ai/enterprise#trial)
 
 :::
 
-API 키별로 어떤 가드레일을 실행할지 제어할 때 사용합니다. 이 튜토리얼에서는 1개의 API 키에 대해 다음 가드레일만 실행되도록 설정합니다.
+Use this to control what guardrails run per API Key. In this tutorial we only want the following guardrails to run for 1 API Key
 
 - `guardrails`: ["aporia-pre-guard", "aporia-post-guard"]
 
-**1단계** 가드레일 설정이 포함된 키 생성
+**Step 1** Create Key with guardrail settings
 
 
 
@@ -492,7 +492,7 @@ curl --location 'http://0.0.0.0:4000/key/update' \
 
 
 
-**2단계** 새 키로 테스트
+**Step 2** Test it with new key
 
 ```shell
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -509,17 +509,17 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 }'
 ```
 
-### ✨ 태그 기반 가드레일 모드 {#-tag-based-guardrail-modes}
+### ✨ Tag-based Guardrail Modes
 
 :::info
 
-✨ 이 기능은 엔터프라이즈 전용 기능입니다. [무료 체험 시작](https://www.litellm.ai/enterprise#trial)
+✨ This is an 엔터프라이즈 only feature [Get a free trial](https://www.litellm.ai/enterprise#trial)
 
 :::
 
-user-agent 헤더를 기준으로 가드레일을 실행합니다. OpenWebUI에서는 pre-call 검사를 실행하고 Claude CLI에서는 로그 마스킹만 수행하려는 경우에 유용합니다.
+Run guardrails based on the user-agent header. This is useful for running pre-call checks on OpenWebUI but only masking in logs for Claude CLI.
 
-`default`와 태그 값은 모두 단일 모드 문자열 또는 모드 목록이 될 수 있습니다.
+Both `default` and tag values can be a single mode string or a list of modes.
 
 
 
@@ -589,7 +589,7 @@ guardrails:
 
 
 
-### ✨ Model-level 가드레일 {#model-level-guardrails}
+### ✨ Model-level 가드레일
 
 :::info
 
@@ -597,7 +597,7 @@ guardrails:
 
 :::
 
-온프레미스 모델과 호스팅 모델을 함께 사용하면서 호스팅 모델로 PII가 전송되는 것만 막고 싶을 때 유용합니다.
+This is great for cases when you have an on-prem and hosted model, and just want to run prevent sending PII to the hosted model.
 
 ```yaml
 model_list:
@@ -622,20 +622,20 @@ guardrails:
   - guardrail_name: azure-text-moderation
     litellm_params:
       guardrail: azure/text_moderations
-      mode: "post_call" 
+      mode: "post_call"
       api_key: os.environ/AZURE_GUARDRAIL_API_KEY
-      api_base: os.environ/AZURE_GUARDRAIL_API_BASE 
+      api_base: os.environ/AZURE_GUARDRAIL_API_BASE
 ```
 
-### ✨ 팀의 가드레일 켜기/끄기 비활성화
+### ✨ Disable team from turning on/off guardrails
 
 :::info
 
-✨ 이 기능은 엔터프라이즈 전용 기능입니다. [무료 체험 시작](https://www.litellm.ai/enterprise#trial)
+✨ This is an 엔터프라이즈 only feature [Get a free trial](https://www.litellm.ai/enterprise#trial)
 
 :::
 
-#### 1. 팀의 가드레일 수정 비활성화
+#### 1. Disable team from modifying guardrails
 
 ```bash
 curl -X POST 'http://0.0.0.0:4000/team/update' \
@@ -647,7 +647,7 @@ curl -X POST 'http://0.0.0.0:4000/team/update' \
 }'
 ```
 
-#### 2. 호출에서 가드레일 비활성화 시도
+#### 2. Try to disable guardrails for a call
 
 ```bash
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -665,7 +665,7 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 }'
 ```
 
-#### 3. 403 오류 확인
+#### 3. Get 403 Error
 
 ```
 {
@@ -680,15 +680,15 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 }
 ```
 
-callback의 서버 로그에서 `+1 412-612-9992`가 보이지 않아야 합니다.
+Expect to NOT see `+1 412-612-9992` in your server logs on your callback.
 
 :::info
-해당 API 키에 `"permissions": {"pii_masking": true}`가 있으므로 이 요청에서 `pii_masking` 가드레일이 실행되었습니다.
+The `pii_masking` guardrail ran on this request because api key=sk-jNm1Zar7XfNdZXp49Z1kSQ has `"permissions": {"pii_masking": true}`
 :::
 
-## 스펙
+## Specification
 
-### YAML의 `guardrails` 설정
+### `guardrails` 설정 on YAML
 
 ```yaml
 guardrails:
@@ -700,12 +700,12 @@ guardrails:
       api_base: string         # Optional: Base URL for the guardrail service
       default_on: boolean      # Optional: Default False. When set to True, will run on every request, does not need client to specify guardrail in request
     guardrail_info:            # Optional[Dict]: Additional information about the guardrail
-      
+
 ```
 
-Mode 스펙
+Mode Specification
 
-`default`와 태그 값은 모두 단일 문자열 또는 문자열 목록을 허용합니다.
+Both `default` and tag values accept either a single string or a list of strings.
 
 ```python
 from litellm.types.guardrails import Mode
@@ -729,13 +729,13 @@ mode = Mode(
 )
 ```
 
-### `guardrails` 요청 파라미터
+### `guardrails` Request Parameter
 
-`guardrails` 파라미터는 모든 LiteLLM Proxy 엔드포인트(`/chat/completions`, `/completions`, `/embeddings`)에 전달할 수 있습니다.
+The `guardrails` parameter can be passed to any LiteLLM Proxy endpoint (`/chat/completions`, `/completions`, `/embeddings`).
 
-#### 형식 옵션
+#### Format Options
 
-1. 단순 목록 형식:
+1. Simple List Format:
 
 ```python
 "guardrails": [
@@ -744,9 +744,9 @@ mode = Mode(
 ]
 ```
 
-1. 고급 딕셔너리 형식:
+1. Advanced Dictionary Format:
 
-이 형식에서는 딕셔너리 키가 실행하려는 `guardrail_name`입니다.
+In this format the dictionary key is `guardrail_name` you want to run
 
 ```python
 "guardrails": {

@@ -1,26 +1,27 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Oracle Cloud Infrastructure (OCI) 사용
-LiteLLM은 OCI 온디맨드 GenAI API에서 다음 모델을 지원합니다.
+# Oracle Cloud Infrastructure (OCI)
+LiteLLM supports the following models for OCI on-demand GenAI API.
 
-[OCI 모델 목록](https://docs.oracle.com/en-us/iaas/Content/generative-ai/pretrained-models.htm)에서 해당 모델이 사용 중인 리전에서 제공되는지 확인하세요.
+Check the [OCI 모델 List](https://docs.oracle.com/en-us/iaas/Content/generative-ai/pretrained-models.htm) to see if the model is available for your region.
 
 ## 지원 모델
 
-### 채팅 / 텍스트 생성
+For model lifecycle, retirement dates, and recommended replacements, see [OCI's on-demand model retirement page](https://docs.oracle.com/en-us/iaas/Content/generative-ai/deprecating-on-demand.htm) — Oracle is the authoritative source.
+
+### Chat / Text Generation
 
 #### Meta Llama 모델
-- `meta.llama-4-maverick-17b-128e-instruct-fp8`
-- `meta.llama-4-scout-17b-16e-instruct`
+- `meta.llama-4-maverick-17b-128e-instruct-fp8` (multimodal)
+- `meta.llama-4-scout-17b-16e-instruct` (multimodal)
 - `meta.llama-3.3-70b-instruct`
 - `meta.llama-3.3-70b-instruct-fp8-dynamic`
-- `meta.llama-3.2-90b-vision-instruct`
-- `meta.llama-3.2-11b-vision-instruct`
-- `meta.llama-3.1-405b-instruct`
-- `meta.llama-3.1-70b-instruct`
+- `meta.llama-3.2-90b-vision-instruct` (multimodal)
+- `meta.llama-3.2-11b-vision-instruct` (multimodal)
 
 #### xAI Grok 모델
+- `xai.grok-4.3`
 - `xai.grok-4.20`
 - `xai.grok-4.20-multi-agent`
 - `xai.grok-4`
@@ -36,61 +37,81 @@ LiteLLM은 OCI 온디맨드 GenAI API에서 다음 모델을 지원합니다.
 - `cohere.command-latest`
 - `cohere.command-a-03-2025`
 - `cohere.command-a-reasoning-08-2025`
-- `cohere.command-a-vision-07-2025`
+- `cohere.command-a-vision-07-2025` (multimodal)
 - `cohere.command-a-translate-08-2025`
 - `cohere.command-plus-latest`
-- `cohere.command-r-08-2024`
 - `cohere.command-r-plus-08-2024`
+- `cohere.command-r-08-2024`
 
-#### Google Gemini 모델(OCI 경유)
-- `google.gemini-2.5-pro`
-- `google.gemini-2.5-flash`
-- `google.gemini-2.5-flash-lite`
+#### Google Gemini 모델 (via OCI)
+- `google.gemini-2.5-pro` (multimodal)
+- `google.gemini-2.5-flash` (multimodal)
+- `google.gemini-2.5-flash-lite` (multimodal)
 
-### 임베딩 모델
-- `cohere.embed-english-v3.0`(1024차원)
-- `cohere.embed-english-light-v3.0`(384차원)
-- `cohere.embed-multilingual-v3.0`(1024차원)
-- `cohere.embed-multilingual-light-v3.0`(384차원)
-- `cohere.embed-english-image-v3.0`(1024차원, 멀티모달)
-- `cohere.embed-english-light-image-v3.0`(384차원, 멀티모달)
-- `cohere.embed-multilingual-light-image-v3.0`(384차원, 멀티모달)
-- `cohere.embed-v4.0`(1536차원, 멀티모달)
+#### OpenAI Open-Source 모델 (via OCI)
+- `openai.gpt-oss-120b`
+- `openai.gpt-oss-20b`
+
+### Embedding 모델
+- `cohere.embed-v4.0` (1536 dimensions, multimodal)
+- `cohere.embed-english-v3.0` (1024 dimensions)
+- `cohere.embed-english-light-v3.0` (384 dimensions)
+- `cohere.embed-multilingual-v3.0` (1024 dimensions)
+- `cohere.embed-multilingual-light-v3.0` (384 dimensions)
+- `cohere.embed-english-image-v3.0` (1024 dimensions, multimodal)
+- `cohere.embed-english-light-image-v3.0` (384 dimensions, multimodal)
+- `cohere.embed-multilingual-image-v3.0` (1024 dimensions, multimodal)
+- `cohere.embed-multilingual-light-image-v3.0` (384 dimensions, multimodal)
 
 ## 인증
 
-LiteLLM은 OCI에 대해 두 가지 인증 방식을 지원합니다.
+LiteLLM supports two authentication methods for OCI:
 
-### 방법 1: 수동 자격 증명
-개별 OCI 자격 증명을 LiteLLM에 직접 제공합니다. [Oracle 공식 튜토리얼](https://docs.oracle.com/en-us/iaas/Content/API/Concepts/apisigningkey.htm)에 따라 서명 키를 만들고 다음 매개변수를 확보하세요.
+### Method 1: Manual Credentials
+Provide individual OCI credentials directly to LiteLLM. Follow the [official Oracle tutorial](https://docs.oracle.com/en-us/iaas/Content/API/Concepts/apisigningkey.htm) to create a signing key and obtain the following parameters:
 
 - `user`
 - `fingerprint`
 - `tenancy`
 - `region`
-- `key_file` 또는 `key`
+- `key_file` or `key`
 - `compartment_id`
 
-LiteLLM AI Gateway(LLM Proxy)가 OCI GenAI 모델에 액세스할 때 사용하는 기본 방식입니다.
+This is the default method for LiteLLM AI Gateway (LLM Proxy) access to OCI GenAI models.
 
-### 방법 2: OCI SDK Signer
-인증에 OCI SDK `Signer` 객체를 사용합니다. 이 방식은 다음을 제공합니다.
-- 공식 [OCI SDK 서명 기능](https://docs.oracle.com/en-us/iaas/tools/python/latest/api/signing.html)을 활용합니다.
-- 추가 인증 방식(인스턴스 주체, 워크로드 ID 등)을 지원합니다.
+**Environment Variables**
 
-이 방식을 사용하려면 OCI SDK를 설치하세요.
+Instead of passing credentials in code, you can set the following environment variables — LiteLLM will read them automatically:
+
+```bash
+export OCI_REGION="us-chicago-1"
+export OCI_USER="ocid1.user.oc1.."
+export OCI_FINGERPRINT="xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx"
+export OCI_TENANCY="ocid1.tenancy.oc1.."
+export OCI_COMPARTMENT_ID="ocid1.compartment.oc1.."
+# Provide either the private key content OR the path to the key file:
+export OCI_KEY_FILE="/path/to/oci_api_key.pem"
+# export OCI_KEY="-----BEGIN PRIVATE KEY-----\n..."
+```
+
+### Method 2: OCI SDK Signer
+Use an OCI SDK `Signer` object for authentication. This method:
+- Leverages the official [OCI SDK for signing](https://docs.oracle.com/en-us/iaas/tools/python/latest/api/signing.html)
+- Supports additional authentication methods (instance principals, workload identity, etc.)
+
+To use this method, install the OCI SDK:
 ```bash
 uv add oci
 ```
 
-Oracle Cloud Infrastructure(인스턴스 또는 Oracle Kubernetes Engine)에서 LiteLLM SDK를 사용할 때 선택할 수 있는 대안 방식입니다.
+This method is an alternative when using the LiteLLM SDK on Oracle Cloud Infrastructure (instances or Oracle Kubernetes Engine).
 
 ## 사용법
 
 <Tabs>
-<TabItem value="manual" label="수동 자격 증명" default>
+<TabItem value="manual" label="Manual Credentials" default>
 
-OCI 서명 키 생성 과정에서 얻은 매개변수를 `completion` 함수에 입력합니다.
+Input the parameters obtained from the OCI signing key creation process into the `completion` function:
 
 ```python
 from litellm import completion
@@ -117,7 +138,7 @@ print(response)
 </TabItem>
 <TabItem value="oci-sdk" label="OCI SDK Signer">
 
-인증에 OCI SDK `Signer`를 사용합니다.
+Use the OCI SDK `Signer` for authentication:
 
 ```python
 from litellm import completion
@@ -144,9 +165,9 @@ response = completion(
 print(response)
 ```
 
-**대안: OCI 구성 파일 사용**
+**Alternative: Use OCI Config File**
 
-OCI SDK는 `~/.oci/config`에서 자격 증명을 자동으로 로드할 수 있습니다.
+The OCI SDK can automatically load credentials from `~/.oci/config`:
 
 ```python
 from litellm import completion
@@ -176,7 +197,7 @@ print(response)
 
 **Instance Principal 인증**
 
-OCI 컴퓨트 인스턴스에서 실행되는 애플리케이션의 경우:
+For applications running on OCI compute instances:
 
 ```python
 from litellm import completion
@@ -198,7 +219,7 @@ print(response)
 
 **Workload Identity 인증**
 
-Oracle Kubernetes Engine(OKE)에서 실행되는 애플리케이션의 경우:
+For applications running in Oracle Kubernetes Engine (OKE):
 
 ```python
 from litellm import completion
@@ -220,11 +241,97 @@ print(response)
 </TabItem>
 </Tabs>
 
-## 사용법 - 스트리밍
-completion 호출 시 `stream=True`만 설정하면 됩니다.
+## LiteLLM Proxy 사용법
+
+Here's how to call OCI GenAI through the LiteLLM Proxy Server.
+
+### 1. Setup config.yaml
+
+```yaml
+model_list:
+  - model_name: oci-grok-4
+    litellm_params:
+      model: oci/xai.grok-4
+      oci_region: os.environ/OCI_REGION
+      oci_user: os.environ/OCI_USER
+      oci_fingerprint: os.environ/OCI_FINGERPRINT
+      oci_tenancy: os.environ/OCI_TENANCY
+      oci_key_file: os.environ/OCI_KEY_FILE
+      oci_compartment_id: os.environ/OCI_COMPARTMENT_ID
+
+  - model_name: oci-cohere-command
+    litellm_params:
+      model: oci/cohere.command-latest
+      oci_region: os.environ/OCI_REGION
+      oci_user: os.environ/OCI_USER
+      oci_fingerprint: os.environ/OCI_FINGERPRINT
+      oci_tenancy: os.environ/OCI_TENANCY
+      oci_key_file: os.environ/OCI_KEY_FILE
+      oci_compartment_id: os.environ/OCI_COMPARTMENT_ID
+```
+
+All possible auth params:
+
+```
+oci_region: Optional[str],
+oci_user: Optional[str],
+oci_fingerprint: Optional[str],
+oci_tenancy: Optional[str],
+oci_key: Optional[str],          # private key content as string
+oci_key_file: Optional[str],     # path to .pem file
+oci_compartment_id: Optional[str],
+oci_serving_mode: Optional[str], # "ON_DEMAND" (default) or "DEDICATED"
+oci_endpoint_id: Optional[str],  # only used with DEDICATED
+```
+
+### 2. 프록시 시작
+
+```bash
+litellm --config /path/to/config.yaml
+```
+
+### 3. Test it
 
 <Tabs>
-<TabItem value="manual-stream" label="수동 자격 증명" default>
+<TabItem value="Curl" label="Curl Request">
+
+```shell
+curl --location 'http://0.0.0.0:4000/chat/completions' \
+--header 'Content-Type: application/json' \
+--data '{
+  "model": "oci-grok-4",
+  "messages": [
+    {"role": "user", "content": "what llm are you"}
+  ]
+}'
+```
+
+</TabItem>
+<TabItem value="openai" label="OpenAI v1.0.0+">
+
+```python
+import openai
+
+client = openai.OpenAI(
+    api_key="anything",
+    base_url="http://0.0.0.0:4000"
+)
+
+response = client.chat.completions.create(
+    model="oci-grok-4",
+    messages=[{"role": "user", "content": "write a short poem"}],
+)
+print(response)
+```
+
+</TabItem>
+</Tabs>
+
+## 사용법 - Streaming
+Just set `stream=True` when calling completion.
+
+<Tabs>
+<TabItem value="manual-stream" label="Manual Credentials" default>
 
 ```python
 from litellm import completion
@@ -280,12 +387,12 @@ for chunk in response:
 </TabItem>
 </Tabs>
 
-## 모델 유형별 사용 예제
+## 사용법 예제 by Model Type
 
-### Cohere 모델 사용
+### Using Cohere 모델
 
 <Tabs>
-<TabItem value="cohere-manual" label="수동 자격 증명" default>
+<TabItem value="cohere-manual" label="Manual Credentials" default>
 
 ```python
 from litellm import completion
@@ -332,12 +439,12 @@ print(response)
 </TabItem>
 </Tabs>
 
-## 전용 엔드포인트 사용
+## Using Dedicated Endpoints
 
-OCI는 모델 호스팅을 위한 전용 엔드포인트를 지원합니다. `oci_endpoint_id`와 함께 `oci_serving_mode="DEDICATED"` 매개변수를 사용해 엔드포인트 ID를 지정하세요.
+OCI supports dedicated endpoints for hosting models. Use the `oci_serving_mode="DEDICATED"` parameter along with `oci_endpoint_id` to specify the endpoint ID.
 
 <Tabs>
-<TabItem value="dedicated-manual" label="수동 자격 증명" default>
+<TabItem value="dedicated-manual" label="Manual Credentials" default>
 
 ```python
 from litellm import completion
@@ -388,13 +495,13 @@ print(response)
 </TabItem>
 </Tabs>
 
-**중요:** `oci_serving_mode="DEDICATED"`를 사용할 때:
-- `model` 매개변수는 **전용 엔드포인트에서 호스팅되는 모델 유형과 일치해야 합니다**(예: Cohere 모델은 `"oci/cohere.command-latest"`, Grok 모델은 `"oci/xai.grok-4"` 사용).
-- 모델 이름은 API 형식과 공급업체별 처리 방식(Cohere vs Generic)을 결정합니다.
-- `oci_endpoint_id` 매개변수는 전용 엔드포인트의 OCID를 지정합니다.
-- `oci_endpoint_id`를 제공하지 않으면 이전 버전과의 호환성을 위해 `model` 매개변수가 엔드포인트 ID로 사용됩니다.
+**Important:** When using `oci_serving_mode="DEDICATED"`:
+- The `model` parameter **must match the type of model hosted on your dedicated endpoint** (e.g., use `"oci/cohere.command-latest"` for Cohere models, `"oci/xai.grok-4"` for Grok models)
+- The model name determines the API format and vendor-specific handling (Cohere vs Generic)
+- The `oci_endpoint_id` parameter specifies your dedicated endpoint's OCID
+- If `oci_endpoint_id` is not provided, the `model` parameter will be used as the endpoint ID (for backward compatibility)
 
-**Cohere 전용 엔드포인트 예제:**
+**예제 with Cohere Dedicated Endpoint:**
 ```python
 # For a dedicated endpoint hosting a Cohere model
 response = completion(
@@ -411,27 +518,209 @@ response = completion(
 )
 ```
 
-## 선택적 매개변수
+## 사용법 - Function Calling / 도구 호출
 
-| 매개변수 | 유형 | 기본값 | 설명 |
-|-----------|------|---------|-------------|
-| `oci_region` | string | `us-ashburn-1` | GenAI 서비스가 배포된 OCI 리전 |
-| `oci_serving_mode` | string | `ON_DEMAND` | 서비스 모드: 관리형 모델은 `ON_DEMAND`, 전용 엔드포인트는 `DEDICATED` |
-| `oci_endpoint_id` | string | `model`과 동일 | (`DEDICATED` 모드용) 전용 엔드포인트의 OCID |
-| `oci_compartment_id` | string | **필수** | 리소스가 포함된 OCI 컴파트먼트의 OCID |
-| `oci_user` | string | - | (수동 인증) OCI 사용자의 OCID |
-| `oci_fingerprint` | string | - | (수동 인증) API 서명 키의 지문 |
-| `oci_tenancy` | string | - | (수동 인증) OCI 테넌시의 OCID |
-| `oci_key` | string | - | (수동 인증) 문자열 형태의 프라이빗 키 내용 |
-| `oci_key_file` | string | - | (수동 인증) 프라이빗 키 파일 경로 |
-| `oci_signer` | object | - | (SDK 인증) 인증용 OCI SDK Signer 객체 |
-
-## 임베딩
-
-LiteLLM은 OCI Generative AI 임베딩 모델을 지원합니다. 이러한 모델은 위에서 설명한 것과 동일한 인증 방식을 사용합니다.
+OCI GenAI supports OpenAI-compatible function calling. LiteLLM normalizes the request and response shape so the same code that targets OpenAI works with OCI Cohere and Generic (xAI Grok, Meta Llama, Google Gemini) models.
 
 <Tabs>
-<TabItem value="embed-manual" label="수동 자격 증명" default>
+<TabItem value="tool-sdk" label="SDK">
+
+```python
+from litellm import completion
+
+tools = [
+    {
+        "type": "function",
+        "function": {
+            "name": "get_current_weather",
+            "description": "Get the current weather in a given location",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "location": {
+                        "type": "string",
+                        "description": "The city and state, e.g. San Francisco, CA",
+                    },
+                    "unit": {"type": "string", "enum": ["celsius", "fahrenheit"]},
+                },
+                "required": ["location"],
+            },
+        },
+    }
+]
+
+response = completion(
+    model="oci/xai.grok-4",
+    messages=[{"role": "user", "content": "What's the weather in Boston today?"}],
+    tools=tools,
+    tool_choice="auto",
+    oci_region="us-chicago-1",
+    oci_user="<your_oci_user>",
+    oci_fingerprint="<your_oci_fingerprint>",
+    oci_tenancy="<your_oci_tenancy>",
+    oci_key_file="<path/to/oci_key.pem>",
+    oci_compartment_id="<oci_compartment_id>",
+)
+
+# Inspect the tool call
+print(response.choices[0].message.tool_calls)
+```
+
+</TabItem>
+<TabItem value="tool-proxy" label="PROXY">
+
+```python
+import openai
+
+client = openai.OpenAI(api_key="anything", base_url="http://0.0.0.0:4000")
+
+response = client.chat.completions.create(
+    model="oci-grok-4",
+    messages=[{"role": "user", "content": "What's the weather in Boston today?"}],
+    tools=[
+        {
+            "type": "function",
+            "function": {
+                "name": "get_current_weather",
+                "description": "Get the current weather in a given location",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "location": {"type": "string"},
+                        "unit": {"type": "string", "enum": ["celsius", "fahrenheit"]},
+                    },
+                    "required": ["location"],
+                },
+            },
+        }
+    ],
+    tool_choice="auto",
+)
+print(response.choices[0].message.tool_calls)
+```
+
+</TabItem>
+</Tabs>
+
+Tool calling works with both Cohere (`cohere.command-*`) and Generic (`xai.grok-*`, `meta.llama-*`, `google.gemini-*`) model families — LiteLLM adapts the OpenAI tool schema to each vendor's native format internally.
+
+## 사용법 - Vision / Multimodal
+
+OCI GenAI exposes vision-capable models that accept images alongside text. Pass images using the standard OpenAI `image_url` content block.
+
+```python
+from litellm import completion
+
+response = completion(
+    model="oci/meta.llama-4-maverick-17b-128e-instruct-fp8",
+    messages=[
+        {
+            "role": "user",
+            "content": [
+                {"type": "text", "text": "What is in this image?"},
+                {
+                    "type": "image_url",
+                    "image_url": {
+                        "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Gfp-wisconsin-madison-the-nature-boardwalk.jpg/2560px-Gfp-wisconsin-madison-the-nature-boardwalk.jpg"
+                    },
+                },
+            ],
+        }
+    ],
+    oci_region="us-chicago-1",
+    oci_user="<your_oci_user>",
+    oci_fingerprint="<your_oci_fingerprint>",
+    oci_tenancy="<your_oci_tenancy>",
+    oci_key_file="<path/to/oci_key.pem>",
+    oci_compartment_id="<oci_compartment_id>",
+)
+print(response.choices[0].message.content)
+```
+
+Vision-capable models on OCI include:
+
+- `meta.llama-4-maverick-17b-128e-instruct-fp8`
+- `meta.llama-4-scout-17b-16e-instruct`
+- `meta.llama-3.2-11b-vision-instruct`
+- `meta.llama-3.2-90b-vision-instruct`
+- `cohere.command-a-vision-07-2025`
+- `google.gemini-2.5-pro`, `google.gemini-2.5-flash`, `google.gemini-2.5-flash-lite`
+
+Both URL and base64-encoded data URIs are supported.
+
+## 사용법 - Reasoning / Thinking
+
+OCI Generic-vendor models (xAI Grok reasoning variants, Google Gemini, etc.) support a reasoning step. LiteLLM exposes this via the OpenAI-compatible `reasoning_effort` parameter — accepted values are `"low"`, `"medium"`, `"high"`, and `"disable"` (mapped to OCI's `NONE`).
+
+Returned reasoning tokens are surfaced on `usage.completion_tokens_details.reasoning_tokens`, matching the OpenAI shape.
+
+<Tabs>
+<TabItem value="reasoning-sdk" label="SDK">
+
+```python
+from litellm import completion
+
+response = completion(
+    model="oci/xai.grok-3-mini",
+    messages=[{"role": "user", "content": "If 3x + 7 = 22, what is x? Show your reasoning."}],
+    reasoning_effort="high",  # "low" | "medium" | "high" | "disable"
+    oci_region="us-chicago-1",
+    oci_user="<your_oci_user>",
+    oci_fingerprint="<your_oci_fingerprint>",
+    oci_tenancy="<your_oci_tenancy>",
+    oci_key_file="<path/to/oci_key.pem>",
+    oci_compartment_id="<oci_compartment_id>",
+)
+
+print(response.choices[0].message.content)
+print("Reasoning tokens:", response.usage.completion_tokens_details.reasoning_tokens)
+```
+
+</TabItem>
+<TabItem value="reasoning-proxy" label="PROXY">
+
+```python
+import openai
+
+client = openai.OpenAI(api_key="anything", base_url="http://0.0.0.0:4000")
+
+response = client.chat.completions.create(
+    model="oci-grok-mini",
+    messages=[{"role": "user", "content": "If 3x + 7 = 22, what is x?"}],
+    reasoning_effort="high",
+)
+print(response.choices[0].message.content)
+```
+
+</TabItem>
+</Tabs>
+
+:::note
+`reasoning_effort` is only honored on Generic-vendor reasoning models (e.g., `xai.grok-3-mini`, `xai.grok-4`, `google.gemini-2.5-pro`). It is silently ignored for OCI Cohere models, which are not reasoning models.
+:::
+
+## Optional Parameters
+
+| Parameter | Type | Default | Environment Variable | Description |
+|-----------|------|---------|----------------------|-------------|
+| `oci_region` | string | `us-ashburn-1` | `OCI_REGION` | OCI region where the GenAI service is deployed |
+| `oci_serving_mode` | string | `ON_DEMAND` | – | Service mode: `ON_DEMAND` for managed models or `DEDICATED` for dedicated endpoints |
+| `oci_endpoint_id` | string | Same as `model` | – | (For DEDICATED mode) The OCID of your dedicated endpoint |
+| `oci_compartment_id` | string | **Required** | `OCI_COMPARTMENT_ID` | The OCID of the OCI compartment containing your resources |
+| `oci_user` | string | – | `OCI_USER` | (Manual auth) The OCID of the OCI user |
+| `oci_fingerprint` | string | – | `OCI_FINGERPRINT` | (Manual auth) The fingerprint of the API signing key |
+| `oci_tenancy` | string | – | `OCI_TENANCY` | (Manual auth) The OCID of your OCI tenancy |
+| `oci_key` | string | – | `OCI_KEY` | (Manual auth) The private key content as a string |
+| `oci_key_file` | string | – | `OCI_KEY_FILE` | (Manual auth) Path to the private key file |
+| `oci_signer` | object | – | – | (SDK auth) OCI SDK Signer object for authentication |
+| `reasoning_effort` | string | – | – | Reasoning level for Generic-vendor reasoning models: `low`, `medium`, `high`, `disable` |
+
+## Embeddings
+
+LiteLLM supports OCI Generative AI embedding models. These models use the same authentication methods described above.
+
+<Tabs>
+<TabItem value="embed-manual" label="Manual Credentials" default>
 
 ```python
 from litellm import embedding
@@ -476,14 +765,14 @@ print(response)
 </TabItem>
 </Tabs>
 
-### 임베딩 선택적 매개변수
+### Embedding Optional Parameters
 
-| 매개변수 | 유형 | 기본값 | 설명 |
+| Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
-| `input_type` | string | - | 입력 유형: `search_document`, `search_query`, `classification`, `clustering` |
-| `truncate` | string | `END` | 입력이 최대 토큰 수를 초과할 때의 자르기 전략: `END` 또는 `START` |
+| `input_type` | string | - | The type of input: `search_document`, `search_query`, `classification`, `clustering` |
+| `truncate` | string | `END` | Truncation strategy when input exceeds max tokens: `END` or `START` |
 
-### 전용 임베딩 엔드포인트 사용
+### Using Dedicated Embedding Endpoints
 
 ```python
 response = embedding(

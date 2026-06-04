@@ -1,39 +1,39 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# OIDC - JWT 기반 인증 {#oidc-jwt-based-auth}
+# OIDC - JWT-based Auth
 
-JWT를 사용해 admin, user, project를 proxy에 인증합니다.
+Use JWT's to auth admins / users / projects into the proxy.
 
 :::info
 
-✨ JWT 기반 Auth는 LiteLLM 엔터프라이즈에서 제공됩니다.
+✨ JWT-based Auth  is on LiteLLM 엔터프라이즈
 
-[엔터프라이즈 요금제](https://www.litellm.ai/#pricing)
+[엔터프라이즈 Pricing](https://www.litellm.ai/#pricing)
 
-[무료 체험 문의하기](https://enterprise.litellm.ai/demo)
+[Contact us here to get a free trial](https://enterprise.litellm.ai/demo)
 
 :::
 
 
-:::tip JWT → Virtual Key 매핑
+:::tip JWT → Virtual Key Mapping
 
-API key를 배포하지 않고 사용자별 model 제한, spend limit, rate limit을 적용하려면 **[JWT → Virtual Key 매핑](./jwt_key_mapping.md)**을 참고하세요. JWT로 인증된 사용자(예: Claude Code + SSO)를 위한 엔터프라이즈급 세밀한 access control입니다.
+Want per-user model restrictions, spend limits, and rate limits without distributing API keys? See **[JWT → Virtual Key Mapping](./jwt_key_mapping.md)** — enterprise-grade granular access control for JWT-authenticated users (e.g. Claude Code + SSO).
 
 :::
 
 ## 사용법
 
-### 1단계. Proxy 설정 {#step-1-proxy-settings}
+### Step 1. Setup Proxy
 
-- `JWT_PUBLIC_KEY_URL`: OpenID provider의 public keys endpoint입니다. 일반적으로 `{openid-provider-base-url}/.well-known/openid-configuration/jwks`입니다. Keycloak에서는 `{keycloak_base_url}/realms/{your-realm}/protocol/openid-connect/certs`입니다.
-- `JWT_AUDIENCE`: JWT decode에 사용할 audience입니다. 설정하지 않으면 decode 단계에서 audience를 검증하지 않습니다.
+- `JWT_PUBLIC_KEY_URL`: This is the public keys endpoint of your OpenID provider. Typically it's `{openid-provider-base-url}/.well-known/openid-configuration/jwks`. For Keycloak it's `{keycloak_base_url}/realms/{your-realm}/protocol/openid-connect/certs`.
+- `JWT_AUDIENCE`: This is the audience used for decoding the JWT. If not set, the decode step will not verify the audience.
 
 ```bash
 export JWT_PUBLIC_KEY_URL="" # "https://demo.duendesoftware.com/.well-known/openid-configuration/jwks"
 ```
 
-- config의 `enable_jwt_auth`를 설정합니다. 그러면 proxy가 token이 JWT token인지 확인합니다.
+- `enable_jwt_auth` in your config. This will tell the proxy to check if a token is a jwt token.
 
 ```yaml
 general_settings:
@@ -41,7 +41,7 @@ general_settings:
   enable_jwt_auth: True
 
 model_list:
-- model_name: azure-gpt-3.5 
+- model_name: azure-gpt-3.5
   litellm_params:
       model: azure/<your-deployment-name>
       api_base: os.environ/AZURE_API_BASE
@@ -49,14 +49,14 @@ model_list:
       api_version: "2023-07-01-preview"
 ```
 
-### 2단계. scope가 포함된 JWT 생성 {#step-2-generate-a-jwt-with-a-scope}
+### Step 2. Create JWT with scopes
 
 <Tabs>
 <TabItem value="admin" label="admin">
 
-OpenID provider(예: Keycloak)에 `litellm_proxy_admin`이라는 client scope를 생성합니다.
+Create a client scope called `litellm_proxy_admin` in your OpenID provider (e.g. Keycloak).
 
-JWT를 생성할 때 사용자에게 `litellm_proxy_admin` scope를 부여합니다.
+Grant your user, `litellm_proxy_admin` scope when generating a JWT.
 
 ```bash
 curl --location ' 'https://demo.duendesoftware.com/connect/token'' \
@@ -71,7 +71,7 @@ curl --location ' 'https://demo.duendesoftware.com/connect/token'' \
 </TabItem>
 <TabItem value="project" label="project">
 
-OpenID provider(예: Keycloak)에서 project용 JWT를 생성합니다.
+Create a JWT for your project on your OpenID provider (e.g. Keycloak).
 
 ```bash
 curl --location ' 'https://demo.duendesoftware.com/connect/token'' \
@@ -84,7 +84,7 @@ curl --location ' 'https://demo.duendesoftware.com/connect/token'' \
 </TabItem>
 </Tabs>
 
-### 3단계. JWT 테스트 {#step-3-test-the-jwt}
+### Step 3. Test your JWT
 
 <Tabs>
 <TabItem value="key" label="/key/generate">
@@ -108,13 +108,13 @@ curl --location 'http://0.0.0.0:4000/v1/chat/completions' \
 </TabItem>
 </Tabs>
 
-## 고급 설정
+## Advanced
 
-### 여러 OIDC provider
+### Multiple OIDC providers
 
-LiteLLM이 여러 OIDC provider(예: Google Cloud, GitHub Auth)를 기준으로 JWT를 검증하도록 하려면 이 설정을 사용합니다.
+Use this if you want LiteLLM to validate your JWT against multiple OIDC providers (e.g. Google Cloud, GitHub Auth)
 
-환경의 `JWT_PUBLIC_KEY_URL`을 OIDC provider URL의 쉼표로 구분된 목록으로 설정합니다.
+Set `JWT_PUBLIC_KEY_URL` in your environment to a comma-separated list of URLs for your OIDC providers.
 
 ```bash
 export JWT_PUBLIC_KEY_URL="https://demo.duendesoftware.com/.well-known/openid-configuration/jwks,https://accounts.google.com/.well-known/openid-configuration/jwks"
@@ -122,16 +122,16 @@ export JWT_PUBLIC_KEY_URL="https://demo.duendesoftware.com/.well-known/openid-co
 
 ### Kubernetes ServiceAccount 인증
 
-Kubernetes ServiceAccount token을 사용해 cluster에서 실행되는 workload를 인증합니다. pod가 native Kubernetes identity로 LiteLLM에 인증해야 할 때 유용합니다.
+Use Kubernetes ServiceAccount tokens to authenticate workloads running in your cluster. This is useful when you want pods to authenticate to LiteLLM using their native Kubernetes identity.
 
 #### 사전 준비
 
-1. Kubernetes cluster에서 ServiceAccount token projection이 활성화되어 있어야 합니다(Kubernetes 1.20+ 기본값).
-2. cluster의 OIDC issuer에 접근할 수 있어야 합니다(EKS, GKE, AKS에서는 자동).
+1. Your Kubernetes cluster must have ServiceAccount token projection enabled (default in Kubernetes 1.20+)
+2. Your cluster's OIDC issuer must be accessible (for EKS, GKE, AKS this is automatic)
 
-#### 1단계: OIDC Discovery URL 구성 {#step-1-configure-the-oidc-discovery-url}
+#### Step 1: Configure the OIDC Discovery URL
 
-`JWT_PUBLIC_KEY_URL`을 cluster의 OIDC discovery endpoint로 설정합니다.
+Set `JWT_PUBLIC_KEY_URL` to your cluster's OIDC discovery endpoint:
 
 <Tabs>
 <TabItem value="eks" label="Amazon EKS">
@@ -175,21 +175,21 @@ export JWT_PUBLIC_KEY_URL="https://<api-server>/openid/v1/jwks"
 </TabItem>
 </Tabs>
 
-#### 2단계: LiteLLM 구성 {#step-2-configure-litellm}
+#### Step 2: Configure LiteLLM
 
-Kubernetes ServiceAccount token에서 identity 정보를 추출하도록 LiteLLM을 구성합니다.
+Configure LiteLLM to extract identity information from Kubernetes ServiceAccount tokens:
 
 ```yaml
 general_settings:
   enable_jwt_auth: True
-  litellm_jwtauth:  
+  litellm_jwtauth:
     # Use namespace as team identifier (resolves via team_alias in DB)
     team_alias_jwt_field: "kubernetes\.io.namespace"
 ```
 
-#### 3단계: ServiceAccount 생성 및 Pod 구성 {#step-3-create-serviceaccount-and-configure-pod}
+#### Step 3: Create ServiceAccount and Configure Pod
 
-연결된 secret이 있는 ServiceAccount를 만들고 pod가 해당 token을 사용하도록 구성합니다.
+Create a ServiceAccount with an associated secret and configure your pod to use the token:
 
 ```yaml
 apiVersion: v1
@@ -225,15 +225,15 @@ spec:
           key: token
 ```
 
-LiteLLM에서 예상 audience를 설정합니다.
+Set the expected audience in LiteLLM:
 
 ```bash
 export JWT_AUDIENCE="https://kubernetes.default.svc"
 ```
 
-#### 4단계: Namespace용 Team 생성 {#step-4-create-team-for-namespace}
+#### Step 4: Create Team for Namespace
 
-`team_alias`를 사용해 namespace와 일치하는 team을 LiteLLM에 생성합니다.
+Create a team in LiteLLM that matches the namespace (using `team_alias`):
 
 ```bash
 curl -X POST 'http://0.0.0.0:4000/team/new' \
@@ -246,9 +246,9 @@ curl -X POST 'http://0.0.0.0:4000/team/new' \
 }'
 ```
 
-#### 5단계: Token 사용 {#step-5-use-the-token}
+#### Step 5: Use the Token
 
-pod 내부에서는 `LITELLM_TOKEN` environment variable로 token을 사용할 수 있습니다.
+From within the pod, the token is available in the `LITELLM_TOKEN` environment variable:
 
 ```bash
 # Make a request to LiteLLM using the env var
@@ -261,9 +261,9 @@ curl -X POST 'http://0.0.0.0:4000/v1/chat/completions' \
 }'
 ```
 
-#### 예제: ServiceAccount Token 구조
+#### 예제: ServiceAccount Token Structure
 
-Kubernetes ServiceAccount token은 다음과 같은 형태입니다.
+A Kubernetes ServiceAccount token looks like this:
 
 ```json
 {
@@ -287,9 +287,9 @@ Kubernetes ServiceAccount token은 다음과 같은 형태입니다.
 }
 ```
 
-#### 고급: 이름 해석으로 Namespace를 Team에 매핑 {#advanced-map-namespace-to-team-with-name-resolution}
+#### Advanced: Map Namespace to Team Using Name Resolution
 
-`team_alias_jwt_field`를 사용하면 namespace를 team으로 자동 해석할 수 있습니다.
+Use the `team_alias_jwt_field` to automatically resolve namespaces to teams:
 
 ```yaml
 general_settings:
@@ -301,11 +301,11 @@ general_settings:
     user_id_upsert: true
 ```
 
-이렇게 하면 `production` namespace의 pod가 `team_alias: production`을 가진 team에 자동으로 연결됩니다.
+This way, pods in namespace `production` automatically get associated with the team that has `team_alias: production`.
 
-### 허용할 JWT Scope 이름 설정 
+### Set Accepted JWT Scope Names
 
-LiteLLM이 사용자의 admin access 여부를 판단할 때 확인하는 JWT `scopes` 문자열을 변경합니다.
+Change the string in JWT 'scopes', that litellm evaluates to see if a user has admin access.
 
 ```yaml
 general_settings:
@@ -315,11 +315,11 @@ general_settings:
     admin_jwt_scope: "litellm-proxy-admin"
 ```
 
-### End-User / Internal User / Team / Org 추적 {#end-user-internal-user-team-org-tracking}
+### Tracking End-Users / Internal Users / Team / Org
 
-JWT token에서 LiteLLM user, team, org에 대응하는 field를 설정합니다.
+Set the field in the jwt token, which corresponds to a litellm user / team / org.
 
-**참고:** 모든 JWT field는 nested claim 접근을 위해 dot notation을 지원합니다(예: `"user.sub"`, `"resource_access.client.roles"`).
+**Note:** All JWT fields support dot notation to access nested claims (e.g., `"user.sub"`, `"resource_access.client.roles"`).
 
 ```yaml
 general_settings:
@@ -333,7 +333,7 @@ general_settings:
     end_user_id_jwt_field: "customer_id" # 👈 CAN BE ANY FIELD (supports dot notation for nested claims)
 ```
 
-예상 JWT(flat structure): 
+Expected JWT (flat structure):
 
 ```json
 {
@@ -343,7 +343,7 @@ general_settings:
 }
 ```
 
-**또는 dot notation을 사용하는 nested structure:**
+**Or with nested structure using dot notation:**
 
 ```json
 {
@@ -360,7 +360,7 @@ general_settings:
 }
 ```
 
-**nested example용 설정:**
+**설정 for nested example:**
 
 ```yaml
 litellm_jwtauth:
@@ -370,13 +370,13 @@ litellm_jwtauth:
   org_id_jwt_field: "organization.id"
 ```
 
-이제 LiteLLM은 각 call마다 user/team/org의 spend를 db에서 자동으로 update합니다. 
+Now litellm will automatically update the spend for the user/team/org in the db for each call.
 
-### ID 대신 이름(Alias)으로 해석 {#resolve-by-name-alias-instead-of-id}
+### Resolve by Name (Alias) Instead of ID
 
-JWT token에 database ID 대신 사람이 읽을 수 있는 name이 들어 있는 경우가 있습니다. LiteLLM은 database에서 해당 name을 조회해 ID로 해석할 수 있습니다.
+Sometimes your JWT token contains human-readable names instead of database IDs. LiteLLM can resolve these names to IDs by looking them up in the database.
 
-**사용 사례:** IDP는 JWT에 team/org name을 제공하지만, LiteLLM은 spend tracking과 access control을 위해 실제 database ID가 필요한 경우입니다.
+**Use Case:** Your IDP provides team/org names in the JWT, but LiteLLM needs the actual database IDs for spend tracking and access control.
 
 ```yaml
 general_settings:
@@ -388,7 +388,7 @@ general_settings:
     org_alias_jwt_field: "org_alias"         # Resolves org by organization_alias in DB
 ```
 
-**예상 JWT:**
+**Expected JWT:**
 
 ```json
 {
@@ -398,15 +398,15 @@ general_settings:
 }
 ```
 
-**동작 방식:**
+**How It Works:**
 
-1. LiteLLM이 구성된 JWT field에서 name을 추출합니다
-2. alias field로 database에서 entity를 조회합니다:
-   - Teams: `LiteLLM_TeamTable`의 `team_alias` column
-   - Organizations: `LiteLLM_OrganizationTable`의 `organization_alias` column
-3. 해석된 ID를 spend tracking과 access control에 사용합니다
+1. LiteLLM extracts the name from the configured JWT field
+2. Looks up the entity in the database by its alias field:
+   - Teams: `team_alias` column in `LiteLLM_TeamTable`
+   - Organizations: `organization_alias` column in `LiteLLM_OrganizationTable`
+3. Uses the resolved ID for spend tracking and access control
 
-**우선순위:** ID field는 항상 name field보다 우선합니다. `team_id_jwt_field`와 `team_alias_jwt_field`가 모두 구성되어 있고 JWT에 두 값이 모두 있으면 ID가 사용됩니다.
+**Precedence:** ID fields always take precedence over name fields. If both `team_id_jwt_field` and `team_alias_jwt_field` are configured and both values exist in the JWT, the ID will be used.
 
 ```yaml
 # Example: ID takes precedence
@@ -415,7 +415,7 @@ litellm_jwtauth:
   team_alias_jwt_field: "team_alias"   # Fallback if team_id not present
 ```
 
-**Nested Fields:** name field도 nested claim을 위한 dot notation을 지원합니다.
+**Nested Fields:** Name fields also support dot notation for nested claims:
 
 ```yaml
 litellm_jwtauth:
@@ -423,41 +423,41 @@ litellm_jwtauth:
   org_alias_jwt_field: "company.name"
 ```
 
-**중요 참고:**
-- entity(team/org)는 일치하는 alias와 함께 database에 이미 존재해야 합니다
-- alias는 unique해야 합니다. 여러 entity가 같은 alias를 공유하면 error가 반환됩니다
-- name resolution은 database lookup을 추가하므로 ID를 직접 사용하는 것이 약간 더 성능이 좋습니다
+**Important 참고:**
+- The entity (team/org) must already exist in the database with the matching alias
+- Aliases should be unique - if multiple entities share the same alias, an error will be returned
+- Name resolution adds a database lookup, so using IDs directly is slightly more performant
 
-### JWT Scope {#jwt-scopes}
+### JWT Scopes
 
-JWT-Auth token의 scope는 다음과 같은 형태입니다
+Here's what scopes on JWT-Auth tokens look like
 
-**list일 수 있습니다**
+**Can be a list**
 ```
 scope: ["litellm-proxy-admin",...]
 ```
 
-**공백으로 구분된 string일 수 있습니다**
+**Can be a space-separated string**
 ```
 scope: "litellm-proxy-admin ..."
 ```
 
-### Team으로 model access 제어
+### Control model access with Teams
 
 
-1. 사용자가 속한 team id가 들어 있는 JWT field를 지정합니다. 
+1. Specify the JWT field that contains the team ids, that the user belongs to.
 
 ```yaml
 general_settings:
   enable_jwt_auth: True
   litellm_jwtauth:
     user_id_jwt_field: "sub"
-    team_ids_jwt_field: "groups" 
+    team_ids_jwt_field: "groups"
     user_id_upsert: true # add user_id to the db if they don't exist
     enforce_team_based_model_access: true # don't allow users to access models unless the team has access
 ```
 
-token이 다음과 같은 형태라고 가정합니다.
+This is assuming your token looks like this:
 ```
 {
   ...,
@@ -466,7 +466,7 @@ token이 다음과 같은 형태라고 가정합니다.
 }
 ```
 
-2. LiteLLM에 team을 생성합니다 
+2. Create the teams on LiteLLM
 
 ```bash
 curl -X POST '<PROXY_BASE_URL>/team/new' \
@@ -478,23 +478,23 @@ curl -X POST '<PROXY_BASE_URL>/team/new' \
 }'
 ```
 
-3. flow 테스트
+3. Test the flow
 
-UI용 SSO: [**Walkthrough 보기**](https://www.loom.com/share/8959be458edf41fd85937452c29a33f3?sid=7ebd6d37-569a-4023-866e-e0cde67cb23e)
+SSO for UI: [**See Walkthrough**](https://www.loom.com/share/8959be458edf41fd85937452c29a33f3?sid=7ebd6d37-569a-4023-866e-e0cde67cb23e)
 
-API용 OIDC Auth: [**Walkthrough 보기**](https://www.loom.com/share/00fe2deab59a426183a46b1e2b522200?sid=4ed6d497-ead6-47f9-80c0-ca1c4b6b4814)
+OIDC Auth for API: [**See Walkthrough**](https://www.loom.com/share/00fe2deab59a426183a46b1e2b522200?sid=4ed6d497-ead6-47f9-80c0-ca1c4b6b4814)
 
 
-### 흐름 {#flow}
+### Flow
 
-- user id가 DB(`LiteLLM_UserTable`)에 있는지 검증합니다
-- group 중 하나라도 DB(`LiteLLM_TeamTable`)에 있는지 검증합니다
-- group 중 하나라도 model access를 가지는지 검증합니다
-- 모든 check가 통과하면 request를 허용합니다
+- Validate if user id is in the DB (LiteLLM_UserTable)
+- Validate if any of the groups are in the DB (LiteLLM_TeamTable)
+- Validate if any group has model access
+- If all checks pass, allow the request
 
-### Request Header로 Team 선택 {#select-team-with-request-header}
+### Select Team via Request Header
 
-JWT token에 `team_ids_jwt_field`를 통해 여러 team이 포함되어 있으면 `x-litellm-team-id` header를 전달해 request에 사용할 team을 명시적으로 선택할 수 있습니다.
+When a JWT token contains multiple teams (via `team_ids_jwt_field`), you can explicitly select which team to use for a request by passing the `x-litellm-team-id` header.
 
 ```bash
 curl -X POST 'http://0.0.0.0:4000/v1/chat/completions' \
@@ -507,17 +507,17 @@ curl -X POST 'http://0.0.0.0:4000/v1/chat/completions' \
 }'
 ```
 
-**검증:**
-- header의 team ID는 JWT의 `team_ids_jwt_field` list에 있거나 `team_id_jwt_field`와 일치해야 합니다
-- 유효하지 않은 team이 지정되면 403 error가 반환됩니다
-- header가 제공되지 않으면 LiteLLM은 요청된 model에 access가 있는 첫 번째 team을 자동 선택합니다
+**Validation:**
+- The team ID in the header must exist in the JWT's `team_ids_jwt_field` list or match `team_id_jwt_field`
+- If an invalid team is specified, a 403 error is returned
+- If no header is provided, LiteLLM auto-selects the first team with access to the requested model
 
 
-### Custom JWT 검증 {#custom-jwt-validate}
+### Custom JWT Validate
 
-LiteLLM Proxy에서 token 유효성을 추가 방식으로 확인해야 한다면 custom logic으로 JWT Token을 검증할 수 있습니다.
+Validate a JWT Token using custom logic, if you need an extra way to verify if tokens are valid for LiteLLM Proxy.
 
-#### 1. custom validate function 설정
+#### 1. Setup custom validate function
 
 ```python
 from typing import Literal
@@ -536,7 +536,7 @@ def my_custom_validate(token: str) -> Literal[True]:
   return True
 ```
 
-#### 2. config.yaml 설정
+#### 2. Setup config.yaml
 
 ```yaml
 general_settings:
@@ -549,9 +549,9 @@ general_settings:
     custom_validate: custom_validate.my_custom_validate # 👈 custom validate function
 ```
 
-#### 3. flow 테스트
+#### 3. Test the flow
 
-**예상 JWT**
+**Expected JWT**
 
 ```
 {
@@ -561,7 +561,7 @@ general_settings:
 }
 ```
 
-**예상 Response**
+**Expected Response**
 
 ```
 {
@@ -571,18 +571,18 @@ general_settings:
 
 
 
-### 허용 Route {#allowed-routes}
+### Allowed Routes
 
-JWT가 access할 수 있는 route를 config로 구성합니다.
+Configure which routes a JWT can access via the config.
 
-기본값: 
+By default:
 
-- Admin은 management route에만 access할 수 있습니다(`/team/*`, `/key/*`, `/user/*`)
-- Team은 openai route에만 access할 수 있습니다(`/chat/completions`, etc.) + info route(`/*/info`)
+- Admins: can access only management routes (`/team/*`, `/key/*`, `/user/*`)
+- Teams: can access only openai routes (`/chat/completions`, etc.)+ info routes (`/*/info`)
 
-[**Code 보기**](https://github.com/BerriAI/litellm/blob/b204f0c01c703317d812a1553363ab0cb989d5b6/litellm/proxy/_types.py#L95)
+[**See Code**](https://github.com/BerriAI/litellm/blob/b204f0c01c703317d812a1553363ab0cb989d5b6/litellm/proxy/_types.py#L95)
 
-**Admin Route**
+**Admin Routes**
 ```yaml
 general_settings:
   master_key: sk-1234
@@ -592,7 +592,7 @@ general_settings:
     admin_allowed_routes: ["/v1/embeddings"]
 ```
 
-**Team Route**
+**Team Routes**
 ```yaml
 general_settings:
   master_key: sk-1234
@@ -603,38 +603,38 @@ general_settings:
     team_allowed_routes: ["/v1/chat/completions"] # 👈 Set accepted routes
 ```
 
-### Team에 다른 provider route 허용
+### Allowing other provider routes for Teams
 
-team JWT token이 `/v1/messages` 같은 Anthropic-style endpoint에 access할 수 있게 하려면 `litellm_jwtauth` 구성의 `team_allowed_routes`를 update합니다. `team_allowed_routes`는 다음 값을 지원합니다:
+To enable team JWT tokens to access Anthropic-style endpoints such as `/v1/messages`, update `team_allowed_routes` in your `litellm_jwtauth` configuration. `team_allowed_routes` supports the following values:
 
-- `LiteLLMRoutes`의 named route group(예: `openai_routes`, `anthropic_routes`, `info_routes`, `mapped_pass_through_routes`).
+- Named route groups from `LiteLLMRoutes` (e.g., `openai_routes`, `anthropic_routes`, `info_routes`, `mapped_pass_through_routes`).
 
-사용할 수 있는 route group과 각 group의 대표 route 예시는 아래 quick reference를 참고하세요. 전체 목록이 필요하면 authoritative list인 `litellm/proxy/_types.py`의 `LiteLLMRoutes` enum을 확인하세요.
+Below is a quick reference for the route groups you can use and example representative routes from each group. If you need the exhaustive list, see the `LiteLLMRoutes` enum in `litellm/proxy/_types.py` for the authoritative list.
 
-| Route Group | 포함 내용 | 대표 route |
+| Route Group | What it contains | Representative routes |
 |-------------|------------------|-----------------------|
-| `openai_routes` | OpenAI-compatible REST endpoint(chat, completion, embeddings, images, responses, models 등) | `/v1/chat/completions`, `/v1/completions`, `/v1/embeddings`, `/v1/images/generations`, `/v1/models` |
-| `anthropic_routes` | Anthropic-style endpoint(`/v1/messages` 및 관련 route) | `/v1/messages`, `/v1/messages/count_tokens`, `/v1/skills` |
-| `mapped_pass_through_routes` | provider별 pass-through route prefix(예: `/anthropic`으로 proxy되는 Anthropic). provider wildcard mapping에는 `mapped_pass_through_routes`와 함께 사용 | `/anthropic/*`, `/vertex-ai/*`, `/bedrock/*` |
-| `passthrough_routes_wildcard` | provider용 wildcard mapping(예: `/anthropic/*`) - proxy가 사용하는 사전 계산된 wildcard list | `/anthropic/*`, `/vllm/*` |
-| `google_routes` | Google-specific endpoint(예: Vertex / Batching endpoint) | `/v1beta/models/{model_name}:generateContent` |
-| `mcp_routes` | 내부 MCP management endpoint | `/mcp/tools`, `/mcp/tools/call` |
-| `info_routes` | UI가 사용하는 read-only 및 info endpoint | `/key/info`, `/team/info`, `/v1/models` |
-| `management_routes` | Admin 전용 management endpoint(user/team/model create/update/delete) | `/team/new`, `/key/generate`, `/model/new` |
-| `spend_tracking_routes` | Budget/spend 관련 endpoint | `/spend/logs`, `/spend/keys` |
-| `public_routes` | Public 및 unauthenticated endpoint | `/`, `/routes`, `/.well-known/litellm-ui-config` |
+| `openai_routes` | OpenAI-compatible REST endpoints (chat, completion, embeddings, images, responses, models, etc.) | `/v1/chat/completions`, `/v1/completions`, `/v1/embeddings`, `/v1/images/generations`, `/v1/models` |
+| `anthropic_routes` | Anthropic-style endpoints (`/v1/messages` and related) | `/v1/messages`, `/v1/messages/count_tokens`, `/v1/skills` |
+| `mapped_pass_through_routes` | Provider-specific pass-through route prefixes (e.g., Anthropic when proxied via `/anthropic`). Use with `mapped_pass_through_routes` for provider wildcard mapping | `/anthropic/*`, `/vertex-ai/*`, `/bedrock/*` |
+| `passthrough_routes_wildcard` | Wildcard mapping for providers (e.g., `/anthropic/*`) - precomputed wildcard list used by the proxy | `/anthropic/*`, `/vllm/*` |
+| `google_routes` | Google-specific (e.g., Vertex / Batching endpoints) | `/v1beta/models/{model_name}:generateContent` |
+| `mcp_routes` | Internal MCP management endpoints | `/mcp/tools`, `/mcp/tools/call` |
+| `info_routes` | Read-only & info endpoints used by the UI | `/key/info`, `/team/info`, `/v1/models` |
+| `management_routes` | Admin-only management endpoints (create/update/delete user/team/model) | `/team/new`, `/key/generate`, `/model/new` |
+| `spend_tracking_routes` | Budget/spend related endpoints | `/spend/logs`, `/spend/keys`, `/spend/users` |
+| `public_routes` | Public and unauthenticated endpoints | `/`, `/routes`, `/.well-known/litellm-ui-config` |
 
-참고: `llm_api_routes`는 OpenAI, Anthropic, Google, pass-through 및 기타 LLM route의 union입니다 (`openai_routes + anthropic_routes + google_routes + mapped_pass_through_routes + passthrough_routes_wildcard + apply_guardrail_routes + mcp_routes + litellm_native_routes`).
+Note: `llm_api_routes` is the union of OpenAI, Anthropic, Google, pass-through and other LLM routes (`openai_routes + anthropic_routes + google_routes + mapped_pass_through_routes + passthrough_routes_wildcard + apply_guardrail_routes + mcp_routes + litellm_native_routes`).
 
-기본값(`litellm_jwtauth`에서 override하지 않으면 proxy가 사용하는 값):
+Defaults (what the proxy uses if you don't override them in `litellm_jwtauth`):
 
 - `admin_jwt_scope`: `litellm_proxy_admin`
-- `admin_allowed_routes`(default): `management_routes`, `spend_tracking_routes`, `global_spend_tracking_routes`, `info_routes` 
-- `team_allowed_routes`(default): `openai_routes`, `info_routes` 
-- `public_allowed_routes`(default): `public_routes`
+- `admin_allowed_routes` (default): `management_routes`, `spend_tracking_routes`, `global_spend_tracking_routes`, `info_routes`
+- `team_allowed_routes` (default): `openai_routes`, `info_routes`
+- `public_allowed_routes` (default): `public_routes`
 
 
-예제: team JWT가 Anthropic `/v1/messages`를 호출하도록 허용(route group 또는 명시적 route string 사용):
+예제: Allow team JWTs to call Anthropic `/v1/messages` (either by route group or by explicit route string):
 
 ```yaml
 general_settings:
@@ -644,7 +644,7 @@ general_settings:
     team_allowed_routes: ["openai_routes", "info_routes", "anthropic_routes"]
 ```
 
-또는 정확한 Anthropic message endpoint만 선택적으로 허용합니다:
+Or selectively allow the exact Anthropic message endpoint only:
 
 ```yaml
 general_settings:
@@ -655,9 +655,9 @@ general_settings:
 ```
 
 
-### Public Key 캐싱 {#public-key-caching}
+### 캐싱 Public Keys
 
-public key를 cache할 시간(초)을 제어합니다.
+Control how long public keys are cached for (in seconds).
 
 ```yaml
 general_settings:
@@ -669,9 +669,9 @@ general_settings:
     public_key_ttl: 600 # 👈 KEY CHANGE
 ```
 
-### Custom JWT Field {#custom-jwt-field}
+### Custom JWT Field
 
-team_id가 들어 있는 custom field를 설정합니다. 기본적으로 `client_id` field를 확인합니다. 
+Set a custom field in which the team_id exists. By default, the 'client_id' field is checked.
 
 ```yaml
 general_settings:
@@ -681,11 +681,11 @@ general_settings:
     team_id_jwt_field: "client_id" # 👈 KEY CHANGE
 ```
 
-### Team 차단 
+### Block Teams
 
-특정 team id의 모든 request를 차단하려면 `/team/block`을 사용합니다
+To block all requests for a certain team id, use `/team/block`
 
-**Team 차단**
+**Block Team**
 
 ```bash
 curl --location 'http://0.0.0.0:4000/team/block' \
@@ -696,7 +696,7 @@ curl --location 'http://0.0.0.0:4000/team/block' \
 }'
 ```
 
-**Team 차단 해제**
+**Unblock Team**
 
 ```bash
 curl --location 'http://0.0.0.0:4000/team/unblock' \
@@ -708,12 +708,12 @@ curl --location 'http://0.0.0.0:4000/team/unblock' \
 ```
 
 
-### User Upsert + 허용 Email Domain {#user-upsert-allowed-email-domain}
+### Upsert Users + Allowed Email Domains
 
-특정 email domain에 속한 user에게 proxy 자동 access를 허용합니다.
+Allow users who belong to a specific email domain, automatic access to the proxy.
 
-**참고:** `user_allowed_email_domain`은 선택 사항입니다. 지정하지 않으면 email domain과 관계없이 모든 user가 허용됩니다.
- 
+**Note:** `user_allowed_email_domain` is optional. If not specified, all users will be allowed regardless of their email domain.
+
 ```yaml
 general_settings:
   master_key: sk-1234
@@ -724,15 +724,15 @@ general_settings:
     user_id_upsert: true # 👈 upserts the user to db, if valid email but not in db
 ```
 
-## OIDC UserInfo 엔드포인트 {#oidc-userinfo-endpoint}
+## OIDC UserInfo Endpoint
 
-JWT/access token에 user-identifying information이 없을 때 사용합니다. LiteLLM은 identity provider의 UserInfo endpoint를 호출해 user detail을 가져옵니다.
+Use this when your JWT/access token doesn't contain user-identifying information. LiteLLM will call your identity provider's UserInfo endpoint to fetch user details.
 
-### 사용 시점
+### When to Use
 
-- JWT가 opaque(self-contained가 아님)이거나 user claim이 없습니다
-- identity provider에서 최신 user information을 가져와야 합니다
-- access token에 email, role 또는 기타 identifying data가 포함되어 있지 않습니다
+- Your JWT is opaque (not self-contained) or lacks user claims
+- You need to fetch fresh user information from your identity provider
+- Your access tokens don't include email, roles, or other identifying data
 
 ### 설정
 
@@ -744,14 +744,14 @@ general_settings:
     oidc_userinfo_enabled: true
     oidc_userinfo_endpoint: "https://your-idp.com/oauth2/userinfo"
     oidc_userinfo_cache_ttl: 300  # Cache for 5 minutes (default: 300)
-    
+
     # Map fields from UserInfo response
     user_id_jwt_field: "sub"
     user_email_jwt_field: "email"
     user_roles_jwt_field: "roles"
 ```
 
-### Flow Diagram {#flow-diagram}
+### Flow Diagram
 
 ```mermaid
 sequenceDiagram
@@ -761,12 +761,12 @@ sequenceDiagram
 
     Client->>LiteLLM: Request with Bearer token
     Note over LiteLLM: Check cache for UserInfo
-    
+
     LiteLLM->>IdP: GET /userinfo (if not cached)<br/>Authorization: Bearer {token}
     IdP-->>LiteLLM: User data (sub, email, roles)
-    
+
     Note over LiteLLM: Cache response (TTL: 5min)<br/>Extract user_id, email, roles<br/>Perform RBAC checks
-    
+
     LiteLLM-->>Client: Authorized/Denied
 ```
 
@@ -790,15 +790,15 @@ litellm_jwtauth:
   user_roles_jwt_field: "resource_access.your-client.roles"
 ```
 
-## JWT 형태 Machine Token을 OAuth2로 Route {#route-jwt-shaped-machine-tokens-to-oauth2}
+## Route JWT-Shaped Machine Tokens to OAuth2
 
-다음 경우에 사용합니다:
-- standard JWT validation에 `enable_jwt_auth: true`를 사용합니다
-- machine token이 JWT 형태이고 claim을 기준으로 OAuth2에 route되어야 합니다
+Use this when:
+- `enable_jwt_auth: true` for standard JWT validation
+- machine tokens are JWT-shaped and should be routed to OAuth2 based on claims
 
-`routing_overrides`는 두 가지 operating mode를 지원합니다:
-- **선택 모드**: `enable_oauth2_auth: false`를 설정하면 LLM + info route에서 matching JWT만 OAuth2로 보냅니다
-- **전역 모드**: `enable_oauth2_auth: true`를 설정하면 LLM + info route에서도 OAuth2를 활성화합니다
+`routing_overrides` supports two operating modes:
+- **Selective mode**: set `enable_oauth2_auth: false` to send only matching JWTs to OAuth2 on LLM + info routes
+- **Global mode**: set `enable_oauth2_auth: true` to also enable OAuth2 on LLM + info routes
 
 ```yaml title="config.yaml"
 general_settings:
@@ -812,14 +812,30 @@ general_settings:
         path: "oauth2"
 ```
 
-### 매칭 동작 {#matching-behavior}
+### Matching behavior
 
-- 구성된 selector가 모두 token claim과 match되면 rule이 match됩니다
-- 지원 selector: `iss`(required), `client_id`(optional), `aud`(optional)
-- selector value는 string과 list form을 모두 지원합니다
-- rule이 match되지 않으면 LiteLLM은 standard JWT validation을 계속합니다
+- A rule matches when **all** configured selectors match the corresponding token claims (AND semantics).
+- Supported selectors: `iss` (required), `client_id` (optional), `scope` (optional), `aud` (optional).
+- Selector values can be a single string or a list of strings (the claim must match at least one entry, using the rules below).
+- **Wildcards:** selectors may use shell-style `*` and `?`. Matching is **case-sensitive**—use the same casing your IdP emits in JWT claims.
+- **`scope` claim as a space-delimited string:** OAuth/OIDC often sends `scope` as one string (e.g. `openid profile App:LiteLLM`). LiteLLM splits that string **only when matching the `scope` selector**, so a configured value like `App:LiteLLM` can match. **`iss`, `aud`, and `client_id` are never split on spaces**; the full claim string is used (routing uses unverified claims only for path selection; final auth still validates the token).
+- If no rule matches, LiteLLM continues with standard JWT validation.
 
-### List 기반 override 예제
+### 예제: `scope` and wildcard `client_id`
+
+```yaml title="config.yaml"
+general_settings:
+  enable_jwt_auth: true
+  enable_oauth2_auth: false
+  litellm_jwtauth:
+    routing_overrides:
+      - iss: "machine-issuer.example.com"
+        scope: "App:LiteLLM"
+        client_id: "*MID_LITELLM"
+        path: "oauth2"
+```
+
+### List-based override example
 
 ```yaml title="config.yaml"
 general_settings:
@@ -833,16 +849,16 @@ general_settings:
         path: "oauth2"
 ```
 
-## [BETA] OIDC Role로 Access 제어 {#beta-control-access-with-oidc-roles}
+## [BETA] Control Access with OIDC Roles
 
-지원 role이 있는 JWT token이 proxy에 access할 수 있도록 허용합니다.
+Allow JWT tokens with supported roles to access the proxy.
 
-user와 team을 DB에 추가하지 않고도 proxy에 access할 수 있게 합니다.
+Let users and teams access the proxy, without needing to add them to the DB.
 
 
-중요: RBAC system이 활성화되도록 `enforce_rbac: true`를 설정하세요.
+Very important, set `enforce_rbac: true` to ensure that the RBAC system is enabled.
 
-**참고:** 이 기능은 beta이며 예고 없이 변경될 수 있습니다.
+**Note:** This is in beta and might change unexpectedly.
 
 ```yaml
 general_settings:
@@ -855,7 +871,7 @@ general_settings:
         internal_role: "team"
     enforce_rbac: true # 👈 VERY IMPORTANT
 
-  role_permissions: # default model + endpoint permissions for a role. 
+  role_permissions: # default model + endpoint permissions for a role.
     - role: team
       models: ["anthropic-claude"]
       routes: ["/v1/chat/completions"]
@@ -864,47 +880,47 @@ environment_variables:
   JWT_AUDIENCE: "api://LiteLLM_Proxy" # ensures audience is validated
 ```
 
-- `object_id_jwt_field`: JWT token에서 object ID를 담은 field입니다. 이 ID는 user ID 또는 team ID일 수 있습니다. `user_id_jwt_field`와 `team_id_jwt_field` 대신 사용하세요. 같은 field가 둘 다 될 수 있는 경우에도 사용할 수 있습니다. nested claim에는 **dot notation을 지원합니다**(예: `"profile.object_id"`).
+- `object_id_jwt_field`: The field in the JWT token that contains the object id. This id can be either a user id or a team id. Use this instead of `user_id_jwt_field` and `team_id_jwt_field`. If the same field could be both. **Supports dot notation** for nested claims (e.g., `"profile.object_id"`).
 
-- `roles_jwt_field`: JWT token에서 role을 담은 field입니다. 이 field는 user가 가진 role list입니다. nested field에는 **dot notation을 지원합니다**(예: `resource_access.litellm-test-client-id.roles`).
+- `roles_jwt_field`: The field in the JWT token that contains the roles. This field is a list of roles that the user has. **Supports dot notation** for nested fields - e.g., `resource_access.litellm-test-client-id.roles`.
 
-**추가 JWT Field 설정 옵션:**
+**Additional JWT Field 설정 Options:**
 
-- `team_ids_jwt_field`: team ID를 담은 field(list). **dot notation을 지원합니다**(예: `"groups"`, `"teams.ids"`).
-- `user_email_jwt_field`: user email을 담은 field. **dot notation을 지원합니다**(예: `"email"`, `"user.email"`).
-- `end_user_id_jwt_field`: cost tracking용 end-user ID를 담은 field. **dot notation을 지원합니다**(예: `"customer_id"`, `"customer.id"`).
+- `team_ids_jwt_field`: Field containing team IDs (as a list). **Supports dot notation** (e.g., `"groups"`, `"teams.ids"`).
+- `user_email_jwt_field`: Field containing user email. **Supports dot notation** (e.g., `"email"`, `"user.email"`).
+- `end_user_id_jwt_field`: Field containing end-user ID for cost tracking. **Supports dot notation** (e.g., `"customer_id"`, `"customer.id"`).
 
-- `role_mappings`: JWT token에서 받은 role을 LiteLLM 내부 role에 매핑하는 role mapping list입니다.
+- `role_mappings`: A list of role mappings. Map the received role in the JWT token to an internal role on LiteLLM.
 
-- `JWT_AUDIENCE`: JWT token의 audience입니다. JWT token의 audience를 validate하는 데 사용합니다. environment variable로 설정합니다.
+- `JWT_AUDIENCE`: The audience of the JWT token. This is used to validate the audience of the JWT token. Set via an environment variable.
 
-### 예제 Token 
+### 예제 Token
 
 ```bash
 {
   "aud": "api://LiteLLM_Proxy",
   "oid": "eec236bd-0135-4b28-9354-8fc4032d543e",
-  "roles": ["litellm.api.consumer"] 
+  "roles": ["litellm.api.consumer"]
 }
 ```
 
-### Role Mapping Spec {#role-mapping-spec}
+### Role Mapping Spec
 
-- `role`: JWT token에서 기대하는 role입니다. 
-- `internal_role`: access control에 사용할 LiteLLM 내부 role입니다. 
+- `role`: The expected role in the JWT token.
+- `internal_role`: The internal role on LiteLLM that will be used to control access.
 
-지원 internal role:
-- `team`: Team object가 RBAC spend tracking에 사용됩니다. `use case`의 spend tracking에 사용하세요. 
-- `internal_user`: User object가 RBAC spend tracking에 사용됩니다. `individual user`의 spend tracking에 사용하세요.
-- `proxy_admin`: Proxy admin이 RBAC spend tracking에 사용됩니다. token에 admin access를 부여할 때 사용하세요.
+Supported internal roles:
+- `team`: Team object will be used for RBAC spend tracking. Use this for tracking spend for a 'use case'.
+- `internal_user`: User object will be used for RBAC spend tracking. Use this for tracking spend for an 'individual user'.
+- `proxy_admin`: Proxy admin will be used for RBAC spend tracking. Use this for granting admin access to a token.
 
 ### [아키텍처 Diagram (Control Model Access)](./jwt_auth_arch)
 
-## [BETA] Scope로 Model Access 제어 {#beta-control-model-access-with-scopes}
+## [BETA] Control Model Access with Scopes
 
-JWT가 access할 수 있는 model을 제어합니다. scope 기반 access control을 강제하려면 `enforce_scope_based_access: true`를 설정하세요.
+Control which models a JWT can access. Set `enforce_scope_based_access: true` to enforce scope-based access control.
 
-### 1. scope mapping으로 config.yaml 설정
+### 1. Setup config.yaml with scope mappings.
 
 
 ```yaml
@@ -932,14 +948,14 @@ general_settings:
     enforce_rbac: true # 👈 enforces only a Team/User/ProxyAdmin can access the proxy.
 ```
 
-#### Scope Mapping Spec {#scope-mapping-spec}
+#### Scope Mapping Spec
 
-- `scope`: JWT token에 사용할 scope입니다.
-- `models`: JWT token이 access할 수 있는 model입니다. 값은 `model_list`의 `model_name`입니다. 참고: wildcard route는 현재 지원되지 않습니다.
+- `scope`: The scope to be used for the JWT token.
+- `models`: The models that the JWT token can access. Value is the `model_name` in `model_list`. Note: Wildcard routes are not currently supported.
 
-### 2. 올바른 scope가 포함된 JWT 생성
+### 2. Create a JWT with the correct scopes.
 
-예상 Token:
+Expected Token:
 
 ```bash
 {
@@ -947,7 +963,7 @@ general_settings:
 }
 ```
 
-### 3. flow 테스트.
+### 3. Test the flow.
 
 ```bash
 curl -L -X POST 'http://0.0.0.0:4000/v1/chat/completions' \
@@ -964,23 +980,23 @@ curl -L -X POST 'http://0.0.0.0:4000/v1/chat/completions' \
 }'
 ```
 
-## [BETA] IDP와 User Role 및 Team Sync {#beta-sync-user-roles-and-teams-with-idp}
+## [BETA] Sync User Roles and Teams with IDP
 
-Identity Provider(IDP)의 user role과 team membership을 LiteLLM database로 자동 sync합니다. 이를 통해 LiteLLM의 user permission과 team membership이 IDP와 동기화됩니다.
+Automatically sync user roles and team memberships from your Identity Provider (IDP) to LiteLLM's database. This ensures that user permissions and team memberships in LiteLLM stay in sync with your IDP.
 
-**참고:** 이 기능은 beta이며 예고 없이 변경될 수 있습니다.
+**Note:** This is in beta and might change unexpectedly.
 
-### 사용 사례 {#use-case}
+### Use Cases
 
-- **Role 동기화**: IDP에서 role이 변경되면 LiteLLM의 user role을 자동 update합니다
-- **Team Membership 동기화**: IDP와 LiteLLM 사이의 team membership을 동기화합니다
-- **중앙 집중식 Access 관리**: LiteLLM functionality를 유지하면서 모든 user permission을 IDP에서 관리합니다
+- **Role Synchronization**: Automatically update user roles in LiteLLM when they change in your IDP
+- **Team Membership Sync**: Keep team memberships in sync between your IDP and LiteLLM
+- **Centralized Access Management**: Manage all user permissions through your IDP while maintaining LiteLLM functionality
 
-### 설정
+### Setup
 
-#### 1. JWT Role Mapping 구성
+#### 1. Configure JWT Role Mapping
 
-JWT token의 role을 LiteLLM user role에 매핑합니다:
+Map roles from your JWT token to LiteLLM user roles:
 
 ```yaml
 general_settings:
@@ -1000,15 +1016,15 @@ general_settings:
         litellm_role: "internal_user"
 ```
 
-#### 2. JWT Role 매핑 사양 {#jwt-role-mapping-spec}
+#### 2. JWT Role Mapping Spec
 
-- `jwt_role`: JWT token에 나타나는 role name입니다. `fnmatch`를 사용하는 wildcard pattern을 지원합니다(예: `"ADMIN_*"`는 `"ADMIN_READ"`, `"ADMIN_WRITE"` 등에 match됩니다).
-- `litellm_role`: 대응하는 LiteLLM user role
+- `jwt_role`: The role name as it appears in your JWT token. Supports wildcard patterns using `fnmatch` (e.g., `"ADMIN_*"` matches `"ADMIN_READ"`, `"ADMIN_WRITE"`, etc.)
+- `litellm_role`: The corresponding LiteLLM user role
 
-**지원 LiteLLM Role:**
-- `proxy_admin`: 전체 administrative access
-- `internal_user`: standard user access를 제공합니다
-- `internal_user_view_only`: read-only access
+**Supported LiteLLM Roles:**
+- `proxy_admin`: Full administrative access
+- `internal_user`: Standard user access
+- `internal_user_view_only`: Read-only access
 
 #### 3. 예제 JWT Token
 
@@ -1022,25 +1038,25 @@ general_settings:
 }
 ```
 
-### 동작 방식
+### How It Works
 
-user가 JWT token으로 request를 보내면:
+When a user makes a request with a JWT token:
 
-1. **Role Sync**: 
-   - LiteLLM은 JWT의 user role이 database의 role과 일치하는지 확인합니다
-   - 다르면 LiteLLM database에서 user role을 update합니다
-   - `jwt_litellm_role_map`을 사용해 JWT role을 LiteLLM role로 변환합니다
+1. **Role Sync**:
+   - LiteLLM checks if the user's role in the JWT matches their role in the database
+   - If different, the user's role is updated in LiteLLM's database
+   - Uses the `jwt_litellm_role_map` to convert JWT roles to LiteLLM roles
 
-2. **Team Membership 동기화**:
-   - JWT token의 team membership을 LiteLLM의 현재 user team과 비교합니다
-   - JWT에서 발견한 새 team에 user를 추가합니다
-   - JWT에 없는 team에서 user를 제거합니다
+2. **Team Membership Sync**:
+   - Compares team memberships from the JWT token with the user's current teams in LiteLLM
+   - Adds the user to new teams found in the JWT
+   - Removes the user from teams not present in the JWT
 
 3. **Database Updates**:
-   - authentication process 중 update가 자동으로 수행됩니다
-   - manual intervention이 필요 없습니다
+   - Updates happen automatically during the authentication process
+   - No manual intervention required
 
-### 설정 옵션 {#configuration-options}
+### 설정 Options
 
 ```yaml
 general_settings:
@@ -1050,11 +1066,11 @@ general_settings:
     user_id_jwt_field: "sub"
     team_ids_jwt_field: "groups"
     roles_jwt_field: "roles"
-    
+
     # Sync configuration
     sync_user_role_and_teams: true
     user_id_upsert: true
-    
+
     # Role mapping
     jwt_litellm_role_map:
       - jwt_role: "AI_ADMIN_*"  # Wildcard pattern
@@ -1063,16 +1079,16 @@ general_settings:
         litellm_role: "internal_user"
 ```
 
-### 중요 참고
+### Important 참고
 
-- **성능**: sync operation은 authentication 중 수행되므로 약간의 latency가 추가될 수 있습니다
-- **Database Access**: user와 team update를 위해 database access가 필요합니다
-- **Team 생성**: sync가 user를 할당하려면 JWT token에 언급된 team이 LiteLLM에 먼저 존재해야 합니다
-- **Wildcard 지원**: JWT role pattern은 `fnmatch`를 사용하는 wildcard matching을 지원합니다
+- **Performance**: Sync operations happen during authentication, which may add slight latency
+- **Database Access**: Requires database access for user and team updates
+- **Team Creation**: Teams mentioned in JWT tokens must exist in LiteLLM before sync can assign users to them
+- **Wildcard Support**: JWT role patterns support wildcard matching using `fnmatch`
 
-### Sync Feature 테스트 {#testing-the-sync-feature}
+### Testing the Sync Feature
 
-1. **initial role이 있는 test user 생성**:
+1. **Create a test user with initial role**:
 
 ```bash
 curl -X POST 'http://0.0.0.0:4000/user/new' \
@@ -1084,7 +1100,7 @@ curl -X POST 'http://0.0.0.0:4000/user/new' \
 }'
 ```
 
-2. **다른 role을 포함한 JWT로 request 전송**:
+2. **Make a request with JWT containing different role**:
 
 ```bash
 curl -X POST 'http://0.0.0.0:4000/v1/chat/completions' \
@@ -1096,22 +1112,22 @@ curl -X POST 'http://0.0.0.0:4000/v1/chat/completions' \
 }'
 ```
 
-3. **role이 update되었는지 검증**:
+3. **Verify the role was updated**:
 
 ```bash
 curl -X GET 'http://0.0.0.0:4000/user/info?user_id=user-123' \
 -H 'Authorization: Bearer <PROXY_MASTER_KEY>'
 ```
 
-## [BETA] JWT → Virtual Key 매핑 {#beta-jwt-to-virtual-key-mapping}
+## [BETA] JWT-to-Virtual-Key Mapping
 
-JWT identity를 LiteLLM virtual key에 매핑해 JWT 인증 user에게 사용자별 budget, rate limit, model access control, spend tracking을 적용합니다.
+Map JWT identities to LiteLLM virtual keys so that JWT-authenticated users get per-user budgets, rate limits, model access controls, and spend tracking.
 
-JWT가 들어오면 LiteLLM은 구성된 claim(예: `email`, `sub`)을 mapping table에서 조회합니다. mapping이 있으면 해당 virtual key로 들어온 request처럼 처리되며 모든 virtual key feature가 적용됩니다.
+When a JWT comes in, LiteLLM looks up a configured claim (e.g. `email`, `sub`) in a mapping table. If a mapping exists, the request is treated as if it arrived with the corresponding virtual key — all virtual key features apply.
 
-### 설정
+### Setup
 
-JWT auth config에 `virtual_key_claim_field`를 추가합니다:
+Add `virtual_key_claim_field` to your JWT auth config:
 
 ```yaml
 general_settings:
@@ -1121,11 +1137,11 @@ general_settings:
     virtual_key_mapping_cache_ttl: 300       # Cache TTL in seconds (default: 300)
 ```
 
-### Mapping 관리
+### Managing Mappings
 
-모든 endpoint에는 admin auth가 필요합니다 (`Authorization: Bearer <master_key>`).
+All endpoints require admin auth (`Authorization: Bearer <master_key>`).
 
-**mapping 생성** - JWT claim value를 existing virtual key에 연결합니다:
+**Create a mapping** — link a JWT claim value to an existing virtual key:
 
 ```bash
 curl -X POST http://localhost:4000/jwt/key/mapping/new \
@@ -1138,21 +1154,21 @@ curl -X POST http://localhost:4000/jwt/key/mapping/new \
   }'
 ```
 
-**mapping list 조회**(paginated):
+**List mappings** (paginated):
 
 ```bash
 curl http://localhost:4000/jwt/key/mapping/list?page=1&size=50 \
   -H "Authorization: Bearer sk-1234"
 ```
 
-**특정 mapping 조회:**
+**Get a specific mapping:**
 
 ```bash
 curl "http://localhost:4000/jwt/key/mapping/info?id=<mapping-id>" \
   -H "Authorization: Bearer sk-1234"
 ```
 
-**mapping update:**
+**Update a mapping:**
 
 ```bash
 curl -X POST http://localhost:4000/jwt/key/mapping/update \
@@ -1165,7 +1181,7 @@ curl -X POST http://localhost:4000/jwt/key/mapping/update \
   }'
 ```
 
-**mapping delete:**
+**Delete a mapping:**
 
 ```bash
 curl -X POST http://localhost:4000/jwt/key/mapping/delete \
@@ -1174,24 +1190,24 @@ curl -X POST http://localhost:4000/jwt/key/mapping/delete \
   -d '{"id": "<mapping-id>"}'
 ```
 
-### 동작 방식
+### How It Works
 
-1. JWT bearer token이 포함된 request가 도착합니다
-2. LiteLLM이 JWT signature를 validate합니다
-3. 구성된 claim을 추출합니다(예: `email` → `user@example.com`)
-4. `LiteLLM_JWTKeyMapping` table에서 claim value를 조회합니다
-5. mapping이 있으면 mapped virtual key가 사용된 것처럼 request가 진행됩니다. budget, rate limit, model access, spend tracking이 모두 적용됩니다
-6. mapping이 없으면 standard JWT auth(team-level control)로 fallback합니다
+1. A request arrives with a JWT bearer token
+2. LiteLLM validates the JWT signature
+3. Extracts the configured claim (e.g. `email` → `user@example.com`)
+4. Looks up the claim value in the `LiteLLM_JWTKeyMapping` table
+5. If a mapping exists, the request proceeds as if the mapped virtual key was used — budgets, rate limits, model access, and spend tracking all apply
+6. If no mapping exists, falls back to standard JWT auth (team-level controls)
 
-### Error Code {#error-code}
+### Error Codes
 
-| Code | 의미 |
+| Code | Meaning |
 |------|---------|
-| 409 | Duplicate mapping - 해당 claim name + value의 mapping이 이미 존재합니다 |
-| 400 | 제공된 key가 existing virtual key와 일치하지 않습니다 |
-| 404 | mapping을 찾을 수 없습니다(update/delete/info) |
-| 403 | non-admin user가 mapping operation을 시도했습니다 |
+| 409 | Duplicate mapping — a mapping for that claim name + value already exists |
+| 400 | The provided key does not match an existing virtual key |
+| 404 | Mapping not found (for update/delete/info) |
+| 403 | Non-admin user attempted a mapping operation |
 
-## 전체 JWT Param
+## All JWT Params
 
-[**Code 보기**](https://github.com/BerriAI/litellm/blob/b204f0c01c703317d812a1553363ab0cb989d5b6/litellm/proxy/_types.py#L95)
+[**See Code**](https://github.com/BerriAI/litellm/blob/b204f0c01c703317d812a1553363ab0cb989d5b6/litellm/proxy/_types.py#L95)

@@ -30,7 +30,7 @@ GitHub Copilot을 LiteLLM과 함께 사용하면 다음과 같은 이점이 있�
 ## 사전 준비
 
 시작하기 전에 다음을 준비했는지 확인하세요.
-- GitHub Copilot 구독(Individual, Business 또는 Enterprise)
+- GitHub Copilot 구독(Individual, Business 또는 엔터프라이즈)
 - 실행 중인 LiteLLM Proxy 인스턴스
 - 유효한 LiteLLM Proxy API 키
 - GitHub Copilot 확장 프로그램이 설치된 VS Code 또는 호환 IDE

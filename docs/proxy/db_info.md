@@ -1,7 +1,7 @@
 # DB에 저장되는 항목
 
 LiteLLM Proxy는 PostgreSQL database를 사용해 여러 정보를 저장합니다. DB가 사용되는 주요 기능은 다음과 같습니다.
-- 가상 키, 조직, 팀, 사용자, 예산 등(`Virtual Keys`, `Organizations`, `Teams`, `Users`, `Budgets`)
+- 가상 키, 조직, 팀, 사용자, 예산 등(`가상 키`, `Organizations`, `Teams`, `Users`, `Budgets`)
 - 요청별 사용량 추적
 
 ## DB Schema 링크
@@ -46,10 +46,10 @@ LiteLLM Proxy는 PostgreSQL database를 사용해 여러 정보를 저장합니�
 
 | 테이블 이름 | 설명 | 행 삽입 빈도 |
 |------------|-------------|---------------------|
-| LiteLLM_SpendLogs | 모든 API request의 상세 로그입니다. Token usage, spend, timing 정보를 기록하고 어떤 model과 key가 사용되었는지 추적합니다. | **Medium - 일정 주기로 실행되는 batch process** |
+| LiteLLM_Spend로그 | 모든 API request의 상세 로그입니다. Token usage, spend, timing 정보를 기록하고 어떤 model과 key가 사용되었는지 추적합니다. | **Medium - 일정 주기로 실행되는 batch process** |
 | LiteLLM_AuditLog | System configuration 변경 사항을 추적합니다. 누가 무엇을 변경했는지 기록하고 teams, users, models 업데이트 이력을 유지합니다. | **기본값 Off**, **High - entity가 변경될 때마다 실행** |
 
-## `LiteLLM_SpendLogs` 비활성화
+## `LiteLLM_Spend로그` 비활성화
 
 `proxy_config.yaml` 파일의 `general_settings` 섹션에서 `disable_spend_logs`와 `disable_error_logs`를 `True`로 설정하면 spend_logs와 error_logs를 비활성화할 수 있습니다.
 
@@ -85,5 +85,5 @@ Database를 마이그레이션해야 하는 경우 서비스 연속성과 무중
 | LiteLLM_OrganizationTable | DB에서 Organizations를 사용하는 경우에만 마이그레이션하는 **선택 항목** |
 | LiteLLM_OrganizationMembership | DB에서 Organizations를 사용하는 경우에만 마이그레이션하는 **선택 항목** | 
 | LiteLLM_ProxyModelTable | LLM을 DB에 저장하는 경우(즉 `STORE_MODEL_IN_DB=True`를 설정한 경우)에만 마이그레이션하는 **선택 항목** |
-| LiteLLM_SpendLogs | LiteLLM UI에서 historical data가 필요한 경우에만 마이그레이션하는 **선택 항목** |
-| LiteLLM_ErrorLogs | LiteLLM UI에서 historical data가 필요한 경우에만 마이그레이션하는 **선택 항목** |
+| LiteLLM_Spend로그 | LiteLLM UI에서 historical data가 필요한 경우에만 마이그레이션하는 **선택 항목** |
+| LiteLLM_Error로그 | LiteLLM UI에서 historical data가 필요한 경우에만 마이그레이션하는 **선택 항목** |

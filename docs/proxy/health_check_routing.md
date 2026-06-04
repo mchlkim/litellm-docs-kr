@@ -278,7 +278,7 @@ router_settings:
 
 | Field | 오류 유형 | HTTP status |
 |---|---|---|
-| `AuthenticationErrorAllowedFails` | 잘못된 API key | 401 |
+| `인증ErrorAllowedFails` | 잘못된 API key | 401 |
 | `TimeoutErrorAllowedFails` | 요청 timeout | 408 |
 | `RateLimitErrorAllowedFails` | rate limit 초과 | 429 |
 | `BadRequestErrorAllowedFails` | 잘못된 형식의 요청 | 400 |

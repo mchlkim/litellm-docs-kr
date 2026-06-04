@@ -27,7 +27,7 @@ Virtual Key는 LiteLLM Proxy에 인증할 수 있게 해 주는 API key입니다
 
 ### 2.1 LiteLLM User Management 계층
 
-LiteLLM에서는 Organizations, Teams, Users, Virtual Keys를 만들 수 있습니다. 이 튜토리얼에서는 Team과 Virtual Key를 생성합니다.
+LiteLLM에서는 Organizations, Teams, Users, 가상 키를 만들 수 있습니다. 이 튜토리얼에서는 Team과 Virtual Key를 생성합니다.
 
 - `Organization` - Team의 그룹입니다. 예: US Engineering, EU Developer Tools
 - `Team` - User의 그룹입니다. 예: Open WebUI Team, Data Science Team 등

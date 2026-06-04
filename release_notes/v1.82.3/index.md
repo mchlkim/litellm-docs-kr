@@ -412,7 +412,7 @@ pip install litellm==1.82.3
     - 실패한 요청에서 추적이 누락되던 실패 경로 kwargs 불일치 수정 - [PR #22390](https://github.com/BerriAI/litellm/pull/22390)
 
 - **[Vantage](https://vantage.sh)**
-    - FOCUS 1.2 CSV 내보내기용 Vantage 통합 추가 — LiteLLM 프록시 사용액 데이터를 FinOps Open Cost & Usage Specification 보고서로 내보내고, 덮어쓰기 방지를 위해 시간 창 기반 파일 이름을 사용합니다. - [PR #23333](https://github.com/BerriAI/litellm/pull/23333)
+    - FOCUS 1.2 CSV 내보내기용 Vantage 통합 추가 — LiteLLM 프록시 사용액 데이터를 FinOps Open Cost & 사용법 Specification 보고서로 내보내고, 덮어쓰기 방지를 위해 시간 창 기반 파일 이름을 사용합니다. - [PR #23333](https://github.com/BerriAI/litellm/pull/23333)
 
 - **일반**
     - 실험 간 지표 충돌을 만들던 조용한 지표 경쟁 상태 수정 - [PR #23542](https://github.com/BerriAI/litellm/pull/23542)

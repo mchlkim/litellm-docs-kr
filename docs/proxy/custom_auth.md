@@ -1,32 +1,32 @@
 # Custom Auth
 
-기본 API key 인증을 override할 수 있습니다.
+You can now override the default api key auth.
 
 ## 사용법
 
-#### 1. custom auth 파일 생성
+#### 1. Create a custom auth file.
 
-응답 타입이 `UserAPIKeyAuth` pydantic 객체를 따르도록 하세요. 이 객체는 해당 user key별 사용량 로깅에 사용됩니다.
+Make sure the response type follows the `UserAPIKeyAuth` pydantic object. This is used by for logging usage specific to that user key.
 
 ```python
 from fastapi import Request
 from litellm.proxy._types import UserAPIKeyAuth
 
-async def user_api_key_auth(request: Request, api_key: str) -> UserAPIKeyAuth: 
-    try: 
+async def user_api_key_auth(request: Request, api_key: str) -> UserAPIKeyAuth:
+    try:
         modified_master_key = "sk-my-master-key"
         if api_key == modified_master_key:
             return UserAPIKeyAuth(api_key=api_key)
         raise Exception
-    except: 
+    except:
         raise Exception
 ```
 
-## UserAPIKeyAuth 필드 참조
+## UserAPIKeyAuth Fields Reference
 
-`UserAPIKeyAuth` 객체는 포괄적인 인증 설정을 위해 다음 필드를 지원합니다.
+The `UserAPIKeyAuth` object supports the following fields for comprehensive auth configuration:
 
-### 핵심 인증 필드
+### Core 인증 Fields
 ```python
 UserAPIKeyAuth(
     # Basic auth fields
@@ -34,12 +34,12 @@ UserAPIKeyAuth(
     token: Optional[str] = None,                      # Hashed token for internal use
     key_name: Optional[str] = None,                   # Human-readable key name
     key_alias: Optional[str] = None,                  # Key alias for identification
-    
+
     # User identification
     user_id: Optional[str] = None,                    # Unique user identifier
     user_email: Optional[str] = None,                 # User email address
     user_role: Optional[LitellmUserRoles] = None,     # User role (PROXY_ADMIN, INTERNAL_USER, etc.)
-    
+
     # Team/Organization
     team_id: Optional[str] = None,                    # Team identifier
     team_alias: Optional[str] = None,                 # Team display name
@@ -47,7 +47,7 @@ UserAPIKeyAuth(
 )
 ```
 
-### 예산과 비용 추적
+### Budget and 비용 추적
 ```python
 UserAPIKeyAuth(
     # User budgets
@@ -56,12 +56,12 @@ UserAPIKeyAuth(
     soft_budget: Optional[float] = None,              # Soft budget limit (warnings)
     model_max_budget: Dict = {},                      # Per-model budget limits
     model_spend: Dict = {},                           # Per-model spend tracking
-    
+
     # Team budgets
     team_max_budget: Optional[float] = None,          # Team's maximum budget
     team_spend: Optional[float] = None,               # Team's current spend
     team_member_spend: Optional[float] = None,        # This user's spend within the team
-    
+
     # Budget timing
     budget_duration: Optional[str] = None,            # Budget reset period
     budget_reset_at: Optional[datetime] = None,       # When budget resets
@@ -76,20 +76,20 @@ UserAPIKeyAuth(
     rpm_limit: Optional[int] = None,                  # Requests per minute limit
     user_tpm_limit: Optional[int] = None,             # User-specific TPM limit
     user_rpm_limit: Optional[int] = None,             # User-specific RPM limit
-    
+
     # Team limits
     team_tpm_limit: Optional[int] = None,             # Team TPM limit
     team_rpm_limit: Optional[int] = None,             # Team RPM limit
     team_member_tpm_limit: Optional[int] = None,      # Per-member TPM limit
     team_member_rpm_limit: Optional[int] = None,      # Per-member RPM limit
-    
+
     # Per-model limits
     rpm_limit_per_model: Optional[Dict[str, int]] = None,  # RPM limits by model
     tpm_limit_per_model: Optional[Dict[str, int]] = None,  # TPM limits by model
 )
 ```
 
-### 최종 사용자 추적
+### End User Tracking
 ```python
 UserAPIKeyAuth(
     # End user identification and limits
@@ -100,14 +100,14 @@ UserAPIKeyAuth(
 )
 ```
 
-### 모델 및 라우트 접근
+### Model and Route Access
 ```python
 UserAPIKeyAuth(
     # Model access control
-    models: List = [],                                # Allowed models list
+    models: List = [],                                # Allowed models list (enforced when custom_auth_run_common_checks: true)
     team_models: List = [],                           # Team's allowed models
     aliases: Dict = {},                               # Model aliases
-    
+
     # Route permissions
     allowed_routes: Optional[list] = [],              # Allowed API routes
     allowed_cache_controls: Optional[list] = [],      # Cache control permissions
@@ -115,7 +115,7 @@ UserAPIKeyAuth(
 )
 ```
 
-### Object Permission 예제(MCP, agents 등)
+### Object Permission 예제 (MCP, agents, etc.)
 
 ```python
 from litellm.proxy._experimental.mcp_server.mcp_server_manager import (
@@ -138,29 +138,29 @@ UserAPIKeyAuth(
 )
 ```
 
-### 고급 설정
+### Advanced 설정
 ```python
 UserAPIKeyAuth(
     # Request handling
     max_parallel_requests: Optional[int] = None,      # Concurrent request limit
     allowed_model_region: Optional[AllowedModelRegion] = None,  # Geographic restrictions
-    
+
     # Expiration and status
     expires: Optional[Union[str, datetime]] = None,   # Key expiration
     blocked: Optional[bool] = None,                   # Whether key is blocked
-    
+
     # Metadata and configuration
     metadata: Dict = {},                              # Custom metadata
     config: Dict = {},                               # Configuration settings
     team_metadata: Optional[Dict] = None,             # Team metadata
-    
+
     # Internal tracking
     request_route: Optional[str] = None,              # Current request route
     last_refreshed_at: Optional[float] = None,        # Cache refresh timestamp
 )
 ```
 
-### 전체 예제
+### Complete 예제
 
 ```python
 from fastapi import Request
@@ -209,15 +209,15 @@ async def user_api_key_auth(request: Request, api_key: str) -> UserAPIKeyAuth:
         raise Exception("Authentication failed")
 ```
 
-#### 2. 파일 경로 전달(`config.yaml` 기준 상대 경로)
+#### 2. Pass the filepath (relative to the config.yaml)
 
-`config.yaml`에 파일 경로를 전달합니다.
+Pass the filepath to the config.yaml
 
-예를 들어 `./config.yaml`과 `./custom_auth.py`가 같은 디렉터리에 있다면 다음과 같이 설정합니다.
-```yaml 
-model_list: 
+e.g. if they're both in the same dir - `./config.yaml` and `./custom_auth.py`, this is what it looks like:
+```yaml
+model_list:
   - model_name: "openai-model"
-    litellm_params: 
+    litellm_params:
       model: "gpt-3.5-turbo"
 
 litellm_settings:
@@ -228,29 +228,88 @@ general_settings:
   custom_auth: custom_auth.user_api_key_auth
 ```
 
-[**구현 코드**](https://github.com/BerriAI/litellm/blob/caf2a6b279ddbe89ebd1d8f4499f65715d684851/litellm/proxy/utils.py#L122)
+[**Implementation Code**](https://github.com/BerriAI/litellm/blob/caf2a6b279ddbe89ebd1d8f4499f65715d684851/litellm/proxy/utils.py#L122)
 
 #### 3. 프록시 시작
 ```shell
-$ litellm --config /path/to/config.yaml 
+$ litellm --config /path/to/config.yaml
 ```
 
-## LiteLLM 가상 키 + Custom Auth 지원
+## Enforce model access, budgets, and team/project checks
 
-v1.72.2 이상에서 지원됩니다.
+By default, LiteLLM **does not** run standard proxy auth checks (model allowlists, budgets, team/project restrictions) after your custom auth handler returns a `UserAPIKeyAuth` object. Setting `models=[...]` on the returned object only **records** the allowlist for logging — it does **not** block requests unless you opt in.
 
-:::info 
+To enforce LiteLLM's built-in checks alongside custom auth, set:
 
-Custom Auth + LiteLLM 가상 키 지원은 LiteLLM 엔터프라이즈 기능입니다.
+```yaml
+general_settings:
+  custom_auth: custom_auth.user_api_key_auth
+  custom_auth_run_common_checks: true
+```
 
-[엔터프라이즈 가격](https://www.litellm.ai/#pricing)
+When `custom_auth_run_common_checks: true`, LiteLLM runs the same validation used for virtual keys, including:
 
-[무료 7일 trial key 받기](https://www.litellm.ai/enterprise#trial)
+- **Key-level model access** — the `models` list on your returned `UserAPIKeyAuth`
+- **Team / user / project model access** — loaded from LiteLLM's DB using `team_id`, `user_id`, and `project_id` on the token
+- **Budget and rate limits** — key, team, user, project, and end-user budgets where configured
+
+### 예제: restrict models in custom auth
+
+```python
+async def user_api_key_auth(request: Request, api_key: str) -> UserAPIKeyAuth:
+    # ... validate api_key and load project_context from your system ...
+    return UserAPIKeyAuth(
+        api_key=api_key,
+        user_id=user_id,
+        team_id=project_context.team_id,
+        project_id=project_context.project_id,
+        models=project_context.models,  # e.g. ["gpt-4o-mini", "claude-3-haiku"]
+    )
+```
+
+```yaml
+general_settings:
+  custom_auth: my_auth.user_api_key_auth
+  custom_auth_run_common_checks: true
+```
+
+Without `custom_auth_run_common_checks: true`, a client can call any model the proxy has configured (for example `gpt-4o`) even if it is not in your `models` list.
+
+### Key `models` vs project `models`
+
+These are separate controls:
+
+| Field | Where it is enforced | Source of truth |
+| --- | --- | --- |
+| `models` on `UserAPIKeyAuth` | Key-level allowlist | Value you return from custom auth |
+| `project_id` on `UserAPIKeyAuth` | Project-level allowlist | `models` on the **project record in LiteLLM's DB** |
+
+If you set `project_id`, also create/update the project in LiteLLM (via `/project/new` or the UI) with the correct `models` list. See [Project Management](./project_management).
+
+**참고:**
+
+- An empty `models` list (`[]`) means **no restriction** (all models allowed) for that scope.
+- Model names must match the model group name in your proxy config, or use wildcard patterns where supported.
+- Fallback models in the request body are also validated against the key allowlist when common checks are enabled.
+
+See also: [`custom_auth_run_common_checks` in Config Settings](./config_settings#all-settings).
+
+## ✨ Support LiteLLM 가상 키 + Custom Auth
+
+Supported from v1.72.2+
+
+:::info
+
+✨ Supporting Custom Auth + LiteLLM 가상 키 is on LiteLLM 엔터프라이즈
+
+[엔터프라이즈 Pricing](https://www.litellm.ai/#pricing)
+
+[Get free 7-day trial key](https://www.litellm.ai/enterprise#trial)
 :::
 
 ### 사용법
 
-1. custom auth 파일을 설정합니다.
+1. Setup custom auth file
 
 ```python
 """
@@ -278,14 +337,14 @@ async def user_api_key_auth(
 
 ```
 
-2. `config.yaml`을 설정합니다.
+2. Setup config.yaml
 
-핵심 변경은 `mode: auto` 설정입니다. 이 모드는 LiteLLM api key auth와 custom auth를 모두 확인합니다.
+Key change set `mode: auto`. This will check both litellm api key auth + custom auth.
 
 ```yaml
-model_list: 
+model_list:
   - model_name: "openai-model"
-    litellm_params: 
+    litellm_params:
       model: "gpt-3.5-turbo"
       api_key: os.environ/OPENAI_API_KEY
 
@@ -295,13 +354,13 @@ general_settings:
     mode: "auto" # can be 'on', 'off', 'auto' - 'auto' checks both litellm api key auth + custom auth
 ```
 
-흐름:
-1. 먼저 custom auth를 확인합니다.
-2. custom auth가 실패하면 LiteLLM api key auth를 확인합니다.
-3. 둘 다 실패하면 401을 반환합니다.
+Flow:
+1. Checks custom auth first
+2. If custom auth fails, checks litellm api key auth
+3. If both fail, returns 401
 
 
-3. 테스트합니다.
+3. Test it!
 
 ```bash
 curl -L -X POST 'http://0.0.0.0:4000/v1/chat/completions' \
@@ -321,9 +380,9 @@ curl -L -X POST 'http://0.0.0.0:4000/v1/chat/completions' \
 
 
 
-#### custom exception 전달
+#### Bubble up custom exceptions
 
-custom exception을 클라이언트로 전달하려면 `ProxyException`을 raise하면 됩니다.
+If you want to bubble up custom exceptions, you can do so by raising a `ProxyException`.
 
 ```python
 """

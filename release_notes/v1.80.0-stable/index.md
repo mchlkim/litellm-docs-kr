@@ -124,7 +124,7 @@ curl --location 'http://localhost:4000/v1/videos' \
 
 ### Prometheus Metrics - 오픈 소스 {#prometheus-metrics---open-source}
 
-이제 LiteLLM의 오픈 소스 버전에서 Prometheus metrics를 사용할 수 있습니다. Enterprise 라이선스 없이도 AI Gateway에 대한 포괄적인 관측성을 제공합니다.
+이제 LiteLLM의 오픈 소스 버전에서 Prometheus metrics를 사용할 수 있습니다. 엔터프라이즈 라이선스 없이도 AI Gateway에 대한 포괄적인 관측성을 제공합니다.
 
 **빠른 시작:**
 

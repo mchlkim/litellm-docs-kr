@@ -309,7 +309,7 @@ SigNoz에서 트레이스를 클릭하면 관련된 모든 span과 해당 이벤
 
 ![LiteLLM SDK 상세 트레이스 보기](https://signoz.io/img/docs/llm/litellm/litellmsdk-detailed-traces.webp)
 
-Signoz Cloud의 logs 탭에서 로그를 볼 수 있습니다. 트레이스 보기에서 “Related Logs” 버튼을 클릭해 연관된 로그를 볼 수도 있습니다.
+Signoz Cloud의 logs 탭에서 로그를 볼 수 있습니다. 트레이스 보기에서 “Related 로그” 버튼을 클릭해 연관된 로그를 볼 수도 있습니다.
 
 ![LiteLLM SDK 로그 보기](https://signoz.io/img/docs/llm/litellm/litellmsdk-logs.webp)
 

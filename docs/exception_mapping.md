@@ -14,7 +14,7 @@ LiteLLM은 모든 provider의 exception을 대응되는 OpenAI exception으로 �
 | 400         | `ContentPolicyViolationError`| `litellm.BadRequestError` | content policy violation error message용 특수 error type입니다. content policy fallback을 활성화합니다. |
 | 400         | `ImageFetchError` | `litellm.BadRequestError` | image fetch 또는 processing 중 error가 발생할 때 발생 |
 | 400 | `InvalidRequestError` | `openai.BadRequestError` | Deprecated error입니다. 대신 `BadRequestError`를 사용하세요. |
-| 401         | `AuthenticationError`      | `openai.AuthenticationError` |
+| 401         | `인증Error`      | `openai.인증Error` |
 | 403         | `PermissionDeniedError`    | `openai.PermissionDeniedError` |
 | 404         | `NotFoundError`            | `openai.NotFoundError` | 잘못된 model이 전달될 때 발생합니다. 예: `gpt-8` |
 | 408 | `Timeout` | `openai.APITimeoutError` | timeout 발생 시 발생 |
@@ -205,7 +205,7 @@ exception mapping을 개선하고 싶다면 [issue를 생성](https://github.com
 
 기본 case에서는 `litellm.APIConnectionError` exception을 반환합니다. 이 exception은 OpenAI의 `APIConnectionError` exception을 상속합니다.
 
-| `custom_llm_provider`        | `Timeout` | `ContextWindowExceededError` | `BadRequestError` | `NotFoundError` | `ContentPolicyViolationError` | `AuthenticationError` | `APIError` | `RateLimitError` | `ServiceUnavailableError` | `PermissionDeniedError` | `UnprocessableEntityError` |
+| `custom_llm_provider`        | `Timeout` | `ContextWindowExceededError` | `BadRequestError` | `NotFoundError` | `ContentPolicyViolationError` | `인증Error` | `APIError` | `RateLimitError` | `ServiceUnavailableError` | `PermissionDeniedError` | `UnprocessableEntityError` |
 |----------------------------|---------|----------------------------|------------------|---------------|-----------------------------|---------------------|----------|----------------|-------------------------|-----------------------|-------------------------|
 | `openai`                     | ✓       | ✓                          | ✓                |               | ✓                           | ✓                   |          |                |                         |                       |                           |
 | `watsonx`                     |       | | | | | | |✓| | | |

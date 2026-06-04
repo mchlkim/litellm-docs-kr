@@ -1,32 +1,32 @@
-# `Vertex AI Gemini Live - Realtime API`
+# Vertex AI Gemini Live - Realtime API
 
-OpenAI Realtime 프로토콜을 사용하는 LiteLLM의 통합 `/realtime` 엔드포인트를 통해 Vertex AI의 Gemini Live API(`BidiGenerateContent`)를 사용할 수 있습니다.
+Use Vertex AI's Gemini Live API (BidiGenerateContent) through LiteLLM's unified `/realtime` endpoint, which speaks the OpenAI Realtime protocol.
 
-| 기능 | 지원 여부 |
+| Feature | Supported |
 |---------|-----------|
 | Proxy (`/realtime`) | ✅ |
-| 음성 입력 / 음성 출력 | ✅ |
-| 텍스트 입력 / 텍스트 출력 | ✅ |
+| Voice in / Voice out | ✅ |
+| Text in / Text out | ✅ |
 | Server VAD | ✅ |
-| 출력 전사 | ✅ |
+| Output transcription | ✅ |
 
-## 설정
+## Setup
 
-### 1. 인증
+### 1. Auth
 
-LiteLLM은 API 키가 아니라 Google Cloud 자격 증명(OAuth2 Bearer token)을 사용합니다.
+LiteLLM uses your Google Cloud credentials (OAuth2 Bearer token), not an API key.
 
 ```bash
 gcloud auth application-default login
 ```
 
-또는 서비스 계정 키 파일을 설정합니다.
+Or set a service-account key file:
 
 ```bash
 export GOOGLE_APPLICATION_CREDENTIALS=/path/to/sa-key.json
 ```
 
-### 2. 프록시 설정
+### 2. Proxy config
 
 ```yaml
 model_list:
@@ -48,7 +48,7 @@ litellm --config config.yaml --port 4000
 
 ## 사용법
 
-### Python (`websockets`)
+### Python (websockets)
 
 ```python
 import asyncio
@@ -118,7 +118,7 @@ ws.on("message", (data) => {
 });
 ```
 
-### `OpenAI SDK` (Python) {#openai-sdk-python}
+### OpenAI SDK (Python)
 
 ```python
 import asyncio
@@ -153,14 +153,14 @@ async def main():
 asyncio.run(main())
 ```
 
-## 음성 입력 / 음성 출력
+## Voice in / Voice out
 
-전체 음성 예제는 [`voice_realtime_test.py`](https://github.com/BerriAI/litellm/blob/main/voice_realtime_test.py)를 참고하세요.
+For a complete voice example see [`voice_realtime_test.py`](https://github.com/BerriAI/litellm/blob/main/voice_realtime_test.py).
 
-오디오의 핵심 설정은 다음과 같습니다.
-- 마이크 입력: **16 kHz** PCM16(`audio/pcm;rate=16000`)
-- 스피커 출력: **24 kHz** PCM16(Vertex AI는 24 kHz 오디오를 반환)
-- Server VAD는 기본적으로 활성화되며 무음 임계값은 800ms입니다.
+Key settings for audio:
+- Microphone input: **16 kHz** PCM16 (`audio/pcm;rate=16000`)
+- Speaker output: **24 kHz** PCM16 (Vertex AI returns audio at 24 kHz)
+- Server VAD is enabled by default with 800 ms silence threshold
 
 ```python
 # session.update with server VAD — the proxy ignores this for Vertex AI
@@ -174,30 +174,173 @@ await ws.send(json.dumps({
 }))
 ```
 
-## 지원되는 OpenAI Realtime 이벤트
+## 도구 호출
+
+```python
+import asyncio
+import json
+import websockets
+
+PROXY_URL = "ws://localhost:4000/v1/realtime?model=vertex-gemini-live"
+
+TOOLS = [
+    {
+        "type": "function",
+        "function": {
+            "name": "get_weather",
+            "description": "Get the current weather for a location.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "location": {"type": "string"},
+                    "unit": {"type": "string", "enum": ["fahrenheit", "celsius"]},
+                },
+                "required": ["location"],
+            },
+        },
+    }
+]
+
+
+def get_weather(location: str, unit: str = "fahrenheit") -> dict:
+    return {
+        "location": location,
+        "temperature": 72 if unit == "fahrenheit" else 22,
+        "unit": unit,
+        "conditions": "sunny",
+    }
+
+
+TOOL_FUNCTIONS = {"get_weather": get_weather}
+
+
+async def main():
+    async with websockets.connect(
+        PROXY_URL,
+        additional_headers={
+            "Authorization": "Bearer sk-1234",
+            "X-Serverless-Authorization": "Bearer sk-1234",
+        },
+    ) as ws:
+        _ = json.loads(await ws.recv())  # session.created
+
+        # Required for tool calling: send tools in session.update
+        await ws.send(
+            json.dumps(
+                {
+                    "type": "session.update",
+                    "session": {
+                        "instructions": "Use get_weather for weather questions.",
+                        "modalities": ["audio"],
+                        "tools": TOOLS,
+                    },
+                }
+            )
+        )
+
+        await ws.send(
+            json.dumps(
+                {
+                    "type": "conversation.item.create",
+                    "item": {
+                        "type": "message",
+                        "role": "user",
+                        "content": [
+                            {"type": "input_text", "text": "What's the weather in San Francisco?"}
+                        ],
+                    },
+                }
+            )
+        )
+        await ws.send(json.dumps({"type": "response.create"}))
+
+        async for raw in ws:
+            ev = json.loads(raw)
+            t = ev.get("type", "")
+
+            if t == "response.text.delta":
+                print(ev.get("delta", ""), end="", flush=True)
+            elif t == "response.function_call_arguments.done":
+                fn_name = ev.get("name", "")
+                call_id = ev.get("call_id", "")
+                args = json.loads(ev.get("arguments", "{}"))
+                result = TOOL_FUNCTIONS[fn_name](**args)
+
+                await ws.send(
+                    json.dumps(
+                        {
+                            "type": "conversation.item.create",
+                            "item": {
+                                "type": "function_call_output",
+                                "call_id": call_id,
+                                "output": json.dumps(result),
+                            },
+                        }
+                    )
+                )
+                await ws.send(json.dumps({"type": "response.create"}))
+            elif t == "response.done":
+                print("\n[done]")
+                break
+            elif t == "error":
+                print(ev)
+                break
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+### Config + run
+
+```yaml
+model_list:
+  - model_name: vertex-gemini-live
+    litellm_params:
+      model: vertex_ai/gemini-live-2.5-flash-native-audio
+      vertex_project: your-gcp-project-id
+      vertex_location: us-central1
+
+litellm_settings:
+  # Required for tool calling with Gemini/Vertex Live:
+  # defer setup until client sends session.update (with tools)
+  gemini_live_defer_setup: true
+```
+
+```bash
+litellm --config config.yaml --port 4000
+python test_realtime_tool_calling.py
+```
+
+## Supported OpenAI Realtime Events
 
 **Client → Proxy (→ Vertex AI)**
 
-| OpenAI 이벤트 | 참고 |
+| OpenAI event | 참고 |
 |---|---|
-| `input_audio_buffer.append` | `realtime_input.audio`로 전달됩니다. |
-| `conversation.item.create` | `realtime_input.text`로 전달됩니다. |
-| `session.update` | 조용히 무시됩니다. Vertex AI는 세션 중간 재구성을 지원하지 않습니다. |
-| `response.create` | 조용히 무시됩니다. Vertex AI는 각 턴 이후 자동으로 응답합니다. |
+| `input_audio_buffer.append` | Forwarded as `realtime_input.audio` |
+| `conversation.item.create` | Forwarded as `realtime_input.text` |
+| `session.update` | Silently ignored — Vertex AI does not support mid-session reconfiguration |
+| `response.create` | Silently ignored — Vertex AI responds automatically after each turn |
 
 **Vertex AI → Proxy (→ Client)**
 
-| 발생하는 OpenAI 이벤트 | Vertex AI 소스 |
+| OpenAI event emitted | Vertex AI source |
 |---|---|
-| `session.created` | `setupComplete` 이후 생성됩니다. |
+| `session.created` | Synthesized after `setupComplete` |
 | `response.text.delta` | `serverContent.modelTurn.parts[].text` |
 | `response.audio.delta` | `serverContent.modelTurn.parts[].inlineData` |
 | `response.audio_transcript.delta` | `serverContent.outputTranscription.text` |
 | `conversation.item.input_audio_transcription.completed` | `serverContent.inputTranscription.text` |
 | `response.done` | `serverContent.turnComplete` |
 
-## 제한 사항
+## Limitations
 
-- `session.update`는 전달되지 않습니다(Vertex AI는 연결당 하나의 설정 메시지만 허용).
-- 도구 호출 / 함수 호출은 아직 지원되지 않습니다.
-- 오디오 전사를 사용하려면 초기 설정에 `outputAudioTranscription: {}`가 설정되어야 합니다(LiteLLM이 자동으로 처리).
+- `session.update` is not forwarded (Vertex AI only accepts one setup message per connection).
+- Audio transcription requires `outputAudioTranscription: {}` to be set in the initial setup (done automatically by LiteLLM).
+
+## Precaution
+
+- Tool calling depends on `session.update` with `tools`.
+- If you skip `session.update`, tool calls will not be triggered.
+- `gemini_live_defer_setup` defaults to `false` for backward compatibility.

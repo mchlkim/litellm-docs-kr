@@ -10,9 +10,9 @@ v1.76.0부터 SSO는 최대 5명의 user까지 무료입니다.
 
 :::info
 
-✨ SSO는 LiteLLM Enterprise에서 제공됩니다.
+✨ SSO는 LiteLLM 엔터프라이즈에서 제공됩니다.
 
-[Enterprise 가격](https://www.litellm.ai/#pricing)
+[엔터프라이즈 가격](https://www.litellm.ai/#pricing)
 
 [무료 7일 체험 key 받기](https://www.litellm.ai/enterprise#trial)
 
@@ -273,6 +273,8 @@ SSO token의 어떤 attribute에 user role이 들어 있는지 지정하려면 `
 **추가 SSO Field 캡처**
 
 표준 user attribute(id, email, name 등) 외에 SSO provider response에서 추가 field를 추출하려면 `GENERIC_USER_EXTRA_ATTRIBUTES`를 사용합니다. [custom SSO handler](./custom_sso.md)에서 조직별 custom data(예: department, employee ID, groups)에 접근해야 할 때 유용합니다.
+
+For **CLI SSO**, you can map the same (or other) claims into user `metadata` and return scalars to the CLI via `CLI_SSO_CLAIM_MAP` — see [CLI 인증](./cli_sso.md#attribution-metadata-oidc-claims).
 
 ```shell
 # Comma-separated list of field names to extract

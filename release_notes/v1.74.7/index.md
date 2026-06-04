@@ -231,15 +231,15 @@ v1.74.7-stable에서는 UI에 사용자 일괄 편집 기능이 도입되었습�
 - **모델**
     - Wildcard 모델 filter 지원 - [PR #12597](https://github.com/BerriAI/litellm/pull/12597)
     - UI에서 team only 모델을 처리하는 방식 수정 - [PR #12632](https://github.com/BerriAI/litellm/pull/12632)
-- **Usage 페이지**
+- **사용법 페이지**
     - Spend per Tag 차트의 Y축 labels 겹침 수정 - [PR #12754](https://github.com/BerriAI/litellm/pull/12754)
 - **Teams**
     - custom key duration 설정 허용 및 key creation stats 표시 - [PR #12722](https://github.com/BerriAI/litellm/pull/12722)
     - team admins가 member roles를 업데이트할 수 있도록 활성화 - [PR #12629](https://github.com/BerriAI/litellm/pull/12629)
 - **사용자**
     - 새 `/user/bulk_update` endpoint - [PR #12720](https://github.com/BerriAI/litellm/pull/12720)
-- **Logs 페이지**
-    - UI Logs Page에 `end_user` filter 추가 - [PR #12663](https://github.com/BerriAI/litellm/pull/12663)
+- **로그 페이지**
+    - UI 로그 Page에 `end_user` filter 추가 - [PR #12663](https://github.com/BerriAI/litellm/pull/12663)
 - **MCP Servers**
     - MCP Server name 복사 기능 - [PR #12760](https://github.com/BerriAI/litellm/pull/12760)
 - **Vector Stores**

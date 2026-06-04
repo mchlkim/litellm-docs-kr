@@ -2,10 +2,10 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Image from '@theme/IdealImage';
 
-# ⚡ Production 권장 사항
+# ⚡ 권장 사항 for Production
 
-## 1. 이 config.yaml 사용
-Production에서는 자체 LLM 설정과 함께 이 `config.yaml`을 사용하세요.
+## 1. Use this config.yaml
+Use this config.yaml in production (with your own LLMs)
 
 ```yaml
 model_list:
@@ -35,79 +35,145 @@ litellm_settings:
   json_logs: true         # Get debug logs in json format
 ```
 
-환경 변수에 Slack webhook URL을 설정합니다.
+Set slack webhook url in your env
 ```shell
 export SLACK_WEBHOOK_URL="example-slack-webhook-url"
 ```
 
-FASTAPI의 기본 info log를 끕니다.
+Turn off FASTAPI's default info logs
 ```bash
 export LITELLM_LOG="ERROR"
 ```
 
 :::info
 
-도움이 필요하거나 전담 지원을 원한다면 [여기](https://enterprise.litellm.ai/demo)에서 founder에게 문의하세요.
+Need Help or want dedicated support ? Talk to a founder [here]: (https://enterprise.litellm.ai/demo)
 
 :::
 
 
-## 2. 권장 머신 사양
+## 2. Recommended Machine Specifications
 
-Production에서 최적의 성능을 위해 다음 최소 머신 사양을 권장합니다.
+For optimal performance in production, we recommend the following resource configuration.
 
-| 리소스 | 권장 값 |
-|----------|------------------|
-| CPU      | 4 vCPU           |
-| Memory   | 8 GB RAM         |
+**1. Memory `requests` and `limits`**
 
-이 사양은 다음을 제공합니다.
-- 동시 요청을 처리하기에 충분한 compute 성능
-- 요청 처리와 caching에 필요한 적절한 메모리
-
-
-## 3. Kubernetes에서 Uvicorn Worker 수를 CPU 수와 맞추기 [권장 CMD]
-
-다음 Docker `CMD`를 사용하세요. Uvicorn worker 수를 pod의 CPU 수에 자동으로 맞춰 각 worker가 하나의 core를 효율적으로 사용하게 하며, 더 나은 throughput과 안정적인 latency를 제공합니다.
-
-```shell
-CMD ["--port", "4000", "--config", "./proxy_server_config.yaml", "--num_workers", "$(nproc)"]
+```yaml
+resources:
+  requests:
+    cpu: "1" # should be 1*num_workers
+    memory: "4Gi" # should be 4*num_workers
+  limits:
+    cpu: "1"
+    memory: "4Gi"
 ```
 
-> **선택 사항:** 지속 부하에서 메모리가 점진적으로 증가한다면, 일정 요청 수 이후 worker를 재시작해 leak 영향을 줄이는 방안을 고려하세요.
-> CLI 또는 환경 변수로 설정할 수 있습니다.
+**2. HPA thresholds**
+
+```yaml
+targetCPUUtilizationPercentage: 60
+targetMemoryUtilizationPercentage: 80
+```
+
+
+## 3. Choose your server: Uvicorn vs. Gunicorn
+
+LiteLLM Proxy runs on [Uvicorn](https://www.uvicorn.org/) by default. Passing `--run_gunicorn` instead starts [Gunicorn](https://docs.gunicorn.org/en/stable/) as a process manager that supervises [Uvicorn worker processes](https://www.uvicorn.org/deployment/#gunicorn) (`uvicorn.workers.UvicornWorker`). In both cases your application code still runs on Uvicorn; the difference is which process manages and recycles the workers.
+
+| | Uvicorn (default) | Gunicorn (`--run_gunicorn`) |
+|---|---|---|
+| **When to use** | Recommended for almost all deployments, especially Kubernetes with one worker per pod. | Choose when you run **multiple workers in a single container** and want a mature process manager to supervise and recycle them. |
+| **Worker recycling** | Uvicorn's [`limit_max_requests`](https://www.uvicorn.org/settings/#resource-limits). | Gunicorn's [`max_requests`](https://docs.gunicorn.org/en/stable/settings.html#max-requests), the battle-tested mechanism Gunicorn has shipped for years. |
+| **Process supervision** | Uvicorn's built-in multiprocess manager. | Gunicorn's [arbiter](https://docs.gunicorn.org/en/stable/design.html), which restarts workers one at a time as they exit. |
+
+:::tip Recommendation
+
+On Kubernetes, run **one Uvicorn worker per pod** and scale **horizontally** (more pods) rather than vertically (more workers per pod). One process per pod keeps latency predictable under load, lets the Horizontal Pod Autoscaler use the [thresholds above](#2-recommended-machine-specifications) accurately, and makes rolling restarts hitless because Kubernetes drains one pod at a time. Reach for Gunicorn only when you must pack multiple workers into one container.
+
+:::
+
+### 3a. Recommended: one Uvicorn worker per pod
+
+This is the default server, so you only need to set `--num_workers 1` (the default is already `1`):
+
+```shell
+CMD ["--port", "4000", "--config", "./proxy_server_config.yaml", "--num_workers", "1"]
+```
+
+### 3b. Recycle workers with `--max_requests_before_restart`
+
+If you observe gradual memory growth under sustained load, recycle each worker after a fixed number of requests to bound memory usage. `--max_requests_before_restart` maps to Uvicorn's [`limit_max_requests`](https://www.uvicorn.org/settings/#resource-limits) (default server) and to Gunicorn's [`max_requests`](https://docs.gunicorn.org/en/stable/settings.html#max-requests) under `--run_gunicorn`. Configure it via CLI flag or environment variable:
 
 ```shell
 # CLI
-CMD ["--port", "4000", "--config", "./proxy_server_config.yaml", "--num_workers", "$(nproc)", "--max_requests_before_restart", "10000"]
+CMD ["--port", "4000", "--config", "./proxy_server_config.yaml", "--num_workers", "1", "--max_requests_before_restart", "10000"]
 
 # or ENV (for deployment manifests / containers)
 export MAX_REQUESTS_BEFORE_RESTART=10000
 ```
 
-> **팁:** `--max_requests_before_restart`를 사용할 때는 `--run_gunicorn` flag가 더 안정적이고 성숙한 선택입니다. Uvicorn 구현 대신 Gunicorn의 검증된 worker recycling 메커니즘을 사용하기 때문입니다.
+:::tip
+
+When you run **multiple workers in one container** and rely on `--max_requests_before_restart`, prefer `--run_gunicorn`. Gunicorn's [`max_requests`](https://docs.gunicorn.org/en/stable/settings.html#max-requests) recycling is more mature than Uvicorn's, and its [arbiter](https://docs.gunicorn.org/en/stable/design.html) restarts workers one at a time so the pod keeps serving traffic while a worker is replaced.
+
+:::
 
 ```shell
-# Use Gunicorn for more stable worker recycling
-CMD ["--port", "4000", "--config", "./proxy_server_config.yaml", "--num_workers", "$(nproc)", "--run_gunicorn", "--max_requests_before_restart", "10000"]
+# Multiple workers in one container, with Gunicorn-managed recycling
+CMD ["--port", "4000", "--config", "./proxy_server_config.yaml", "--num_workers", "4", "--run_gunicorn", "--max_requests_before_restart", "10000"]
+```
+
+### 3c. Keep restarts hitless
+
+A restart is "hitless" when in-flight requests finish before the process exits, so no client sees a dropped connection. Two cases matter in production:
+
+**Worker recycling (from `--max_requests_before_restart`).** Both servers stop accepting new connections on the recycled worker and let outstanding requests drain before it exits, then a replacement worker starts. Gunicorn additionally guarantees in-flight requests up to its [`graceful_timeout`](https://docs.gunicorn.org/en/stable/settings.html#graceful-timeout) (30s by default) on [`SIGTERM`](https://docs.gunicorn.org/en/stable/signals.html). With one worker per pod, recycling briefly reduces that pod's capacity, which is why we recommend scaling horizontally so the load balancer can route around it.
+
+**Rolling deploys and pod restarts (Kubernetes).** Make restarts hitless at the orchestration layer rather than relying on the server alone:
+
+- Use a [`RollingUpdate`](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) strategy (the Deployment default) so new pods become Ready before old pods are terminated.
+- Keep a [readiness probe](https://kubernetes.io/docs/concepts/configuration/liveness-readiness-startup-probes/) on `/health/readiness` so Kubernetes only sends traffic to pods that can serve it, and stops routing to a pod as soon as termination begins.
+- Set [`terminationGracePeriodSeconds`](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#pod-termination) to comfortably exceed your longest expected request (LiteLLM's request timeout defaults to 600s; see [Section 1](#1-use-this-configyaml)). On termination Kubernetes sends `SIGTERM`, and both Uvicorn and Gunicorn shut down [gracefully](https://www.uvicorn.org/deployment/) by draining in-flight requests before exiting.
+- Optionally add a small [`preStop` hook](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/#container-hooks) (for example `sleep 5`) to give the load balancer time to deregister the pod before the server begins shutting down, eliminating the brief window where traffic can still arrive at a terminating pod.
+
+```yaml title="Kubernetes Deployment snippet for hitless rolling restarts"
+spec:
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0   # never drop below desired replica count
+      maxSurge: 1         # add one new pod at a time
+  template:
+    spec:
+      terminationGracePeriodSeconds: 620   # > your longest request (request_timeout: 600)
+      containers:
+        - name: litellm
+          readinessProbe:
+            httpGet:
+              path: /health/readiness
+              port: 4000
+          lifecycle:
+            preStop:
+              exec:
+                command: ["sh", "-c", "sleep 5"]
 ```
 
 
-## 4. Redis는 `redis_url`이 아니라 `port`, `host`, `password` 사용
+## 4. Use Redis 'port','host', 'password'. NOT 'redis_url'
 
-Redis를 사용한다면 `redis_url`을 사용하지 마세요. Redis port, host, password 파라미터 사용을 권장합니다.
+If you decide to use Redis, DO NOT use 'redis_url'. We recommend using redis port, host, and password params.
 
-`redis_url`은 80 RPS 더 느립니다.
+`redis_url`is 80 RPS slower
 
-이 문제는 아직 조사 중입니다. 진행 상황은 [여기](https://github.com/BerriAI/litellm/issues/3188)에서 확인할 수 있습니다.
+This is still something we're investigating. Keep track of it [here](https://github.com/BerriAI/litellm/issues/3188)
 
-### Redis 버전 요구 사항
+### Redis Version Requirement
 
-| 구성 요소 | 최소 버전 |
+| Component | Minimum Version |
 |-----------|-----------------|
 | Redis     | 7.0+            |
 
-Production에서는 다음 설정을 권장합니다.
+Recommended to do this for prod:
 
 ```yaml
 router_settings:
@@ -127,20 +193,20 @@ litellm_settings:
 ```
 
 > **WARNING**
-**사용량 기반 routing은 성능 영향 때문에 production에 권장하지 않습니다.** 트래픽이 많은 환경에서는 최적의 성능을 위해 `simple-shuffle`(기본값)을 사용하세요.
+**사용법-based routing is not recommended for production due to performance impacts.** Use `simple-shuffle` (default) for optimal performance in high-traffic scenarios.
 
 ## 5. Disable 'load_dotenv'
 
-`export LITELLM_MODE="PRODUCTION"`을 설정합니다.
+Set `export LITELLM_MODE="PRODUCTION"`
 
-이 설정은 로컬 `.env`에서 환경 자격 증명을 자동으로 로드하는 `load_dotenv()` 기능을 비활성화합니다.
+This disables the load_dotenv() functionality, which will automatically load your environment credentials from the local `.env`.
 
-## 6. VPC에서 LiteLLM 실행 시 DB 사용 불가 상태를 graceful하게 처리
+## 6. If running LiteLLM on VPC, gracefully handle DB unavailability
 
-LiteLLM을 VPC에서 실행하고 public internet에서 접근할 수 없는 경우, database가 일시적으로 사용할 수 없더라도 요청 처리가 계속되도록 graceful degradation을 활성화할 수 있습니다.
+When running LiteLLM on a VPC (and inaccessible from the public internet), you can enable graceful degradation so that request processing continues even if the database is temporarily unavailable.
 
 
-**WARNING: public internet에서 접근할 수 없는 VPC에서 LiteLLM을 실행하는 경우에만 이 설정을 사용하세요.**
+**WARNING: Only do this if you're running LiteLLM on VPC, that cannot be accessed from the public internet.**
 
 #### 설정
 
@@ -149,31 +215,31 @@ general_settings:
   allow_requests_on_db_unavailable: True
 ```
 
-#### 예상 동작
+#### Expected Behavior
 
-`allow_requests_on_db_unavailable`이 `true`로 설정되면 LiteLLM은 오류를 다음과 같이 처리합니다.
+When `allow_requests_on_db_unavailable` is set to `true`, LiteLLM will handle errors as follows:
 
-| 오류 유형 | 예상 동작 | 세부 정보 |
+| Type of Error | Expected Behavior | Details |
 |---------------|-------------------|----------------|
-| Prisma Errors | ✅ 요청 허용 | LiteLLM이 사용하는 ORM인 Prisma를 통해 발생하는 DB connection reset 또는 DB rejection 같은 문제를 포함합니다. |
-| Httpx Errors | ✅ 요청 허용 | database에 접근할 수 없을 때 발생하며, DB 장애 중에도 요청이 계속 진행되도록 합니다. |
-| Pod Startup Behavior | ✅ Pod가 그대로 시작됨 | database가 중단되었거나 접근할 수 없어도 LiteLLM Pod가 시작되어 배포의 uptime 보장을 높입니다. |
-| Health/Readiness Check | ✅ 항상 200 OK 반환 | database를 사용할 수 없어도 pod가 운영 상태를 유지하도록 `/health/readiness` endpoint가 200 OK status를 반환합니다. |
-| LiteLLM Budget Errors 또는 Model Errors | ❌ 요청 차단 | DB에는 접근 가능하지만 authentication token이 유효하지 않거나, 접근 권한이 없거나, budget limit을 초과한 경우 발생합니다. |
+| Prisma Errors | ✅ Request will be allowed | Covers issues like DB connection resets or rejections from the DB via Prisma, the ORM used by LiteLLM. |
+| Httpx Errors | ✅ Request will be allowed | Occurs when the database is unreachable, allowing the request to proceed despite the DB outage. |
+| Pod Startup Behavior | ✅ Pods start regardless | LiteLLM Pods will start even if the database is down or unreachable, ensuring higher uptime guarantees for deployments. |
+| Health/Readiness Check | ✅ Always returns 200 OK | The /health/readiness endpoint returns a 200 OK status to ensure that pods remain operational even when the database is unavailable.
+| LiteLLM Budget Errors or Model Errors | ❌ Request will be blocked | Triggered when the DB is reachable but the authentication token is invalid, lacks access, or exceeds budget limits. |
 
 
-[Database가 어디에 사용되는지 더 보기](db_info)
+[더 보기 information about what the Database is used for here](db_info)
 
-## 7. Database Migration에 Helm PreSync Hook 사용 [BETA] {#7-use-helm-presync-hook-for-database-migrations-beta}
+## 7. Use Helm PreSync Hook for Database Migrations [BETA]
 
-하나의 service만 database migration을 관리하도록 [Database Migrations용 Helm PreSync hook](https://github.com/BerriAI/litellm/blob/main/deploy/charts/litellm-helm/templates/migrations-job.yaml)을 사용하세요. 이 방식은 `helm upgrade` 또는 `helm install` 중 migration이 처리되도록 하고, LiteLLM pod에서는 migration을 명시적으로 비활성화합니다.
+To ensure only one service manages database migrations, use our [Helm PreSync hook for Database Migrations](https://github.com/BerriAI/litellm/blob/main/deploy/charts/litellm-helm/templates/migrations-job.yaml). This ensures migrations are handled during `helm upgrade` or `helm install`, while LiteLLM pods explicitly disable migrations.
 
 
 1. **Helm PreSync Hook**:
-   - Helm PreSync hook은 배포 중 database migration을 실행하도록 chart에 구성되어 있습니다.
-   - hook은 항상 `DISABLE_SCHEMA_UPDATE=false`를 설정해 migration이 안정적으로 실행되도록 합니다.
-  
-  ArgoCD에서 `values.yaml`에 설정할 reference 설정입니다.
+   - The Helm PreSync hook is configured in the chart to run database migrations during deployments.
+   - The hook always sets `DISABLE_SCHEMA_UPDATE=false`, ensuring migrations are executed reliably.
+
+  Reference Settings to set on ArgoCD for `values.yaml`
 
   ```yaml
   db:
@@ -182,9 +248,9 @@ general_settings:
   ```
 
 2. **LiteLLM Pods**:
-   - LiteLLM pod configuration에서 `DISABLE_SCHEMA_UPDATE=true`를 설정해 pod가 migration을 실행하지 않도록 합니다.
-   
-   LiteLLM pod configuration 예시:
+   - Set `DISABLE_SCHEMA_UPDATE=true` in LiteLLM pod configurations to prevent them from running migrations.
+
+   예제 configuration for LiteLLM pod:
    ```yaml
    env:
      - name: DISABLE_SCHEMA_UPDATE
@@ -192,13 +258,13 @@ general_settings:
    ```
 
 
-## 8. LiteLLM Salt Key 설정 {#8-set-litellm-salt-key}
+## 8. Set LiteLLM Salt Key
 
-DB를 사용할 계획이라면 DB 내 변수의 암호화/복호화를 위한 salt key를 설정하세요.
+If you plan on using the DB, set a salt key for encrypting/decrypting variables in the DB.
 
-모델을 추가한 뒤에는 이 값을 변경하지 마세요. LLM API Key 자격 증명을 암호화/복호화하는 데 사용됩니다.
+Do not change this after adding a model. It is used to encrypt / decrypt your LLM API Key credentials
 
-LiteLLM salt key에 사용할 random hash는 https://1password.com/password-generator/ password generator로 생성하는 것을 권장합니다.
+We recommend - https://1password.com/password-generator/ password generator to get a random hash for litellm salt key.
 
 ```bash
 export LITELLM_SALT_KEY="sk-1234"
@@ -207,9 +273,9 @@ export LITELLM_SALT_KEY="sk-1234"
 [**See Code**](https://github.com/BerriAI/litellm/blob/036a6821d588bd36d170713dcf5a72791a694178/litellm/proxy/common_utils/encrypt_decrypt_utils.py#L15)
 
 
-## 9. `prisma migrate deploy` 사용 {#9-use-prisma-migrate-deploy}
+## 9. Use `prisma migrate deploy`
 
-Production에서 LiteLLM 버전 간 DB migration을 처리할 때 사용하세요.
+Use this to handle db migrations across LiteLLM versions in production
 
 <Tabs>
 <TabItem value="env" label="ENV">
@@ -229,43 +295,43 @@ litellm
 </TabItem>
 </Tabs>
 
-장점:
+Benefits:
 
-`migrate deploy` command는 다음과 같이 동작합니다.
+The migrate deploy command:
 
-- 이미 적용된 migration이 migration history에서 누락되어도 warning을 발생시키지 **않습니다**.
-- drift를 감지하지 **않습니다**. 예: hotfix 때문에 production database schema가 migration history의 최종 상태와 다른 경우.
-- database를 reset하거나 Prisma Client 같은 artifact를 생성하지 **않습니다**.
-- shadow database에 의존하지 **않습니다**.
-
-
-### LiteLLM은 production에서 DB migration을 어떻게 처리하나요?
-
-1. 새 migration file이 `litellm-proxy-extras` package에 작성됩니다. [전체 보기](https://github.com/BerriAI/litellm/tree/main/litellm-proxy-extras/litellm_proxy_extras/migrations)
-
-2. core `litellm` pip package가 새 `litellm-proxy-extras` package를 가리키도록 업데이트됩니다. 이를 통해 이전 버전의 LiteLLM은 계속 이전 migration을 사용합니다. [코드 보기](https://github.com/BerriAI/litellm/blob/52b35cd8093b9ad833987b24f494586a1e923209/pyproject.toml#L58)
-
-3. LiteLLM을 새 버전으로 업그레이드하면 migration file이 database에 적용됩니다. [코드 보기](https://github.com/BerriAI/litellm/blob/52b35cd8093b9ad833987b24f494586a1e923209/litellm-proxy-extras/litellm_proxy_extras/utils.py#L42)
+- **Does not** issue a warning if an already applied migration is missing from migration history
+- **Does not** detect drift (production database schema differs from migration history end state - for example, due to a hotfix)
+- **Does not** reset the database or generate artifacts (such as Prisma Client)
+- **Does not** rely on a shadow database
 
 
-### 읽기 전용 파일 시스템 {#read-only-file-system}
+### How does LiteLLM handle DB migrations in production?
 
-`readOnlyRootFilesystem: true`로 LiteLLM을 실행하는 것은 container process가 root filesystem에 쓰지 못하게 하는 Kubernetes 보안 best practice입니다. LiteLLM은 이 구성을 완전히 지원합니다.
+1. A new migration file is written to our `litellm-proxy-extras` package. [See all](https://github.com/BerriAI/litellm/tree/main/litellm-proxy-extras/litellm_proxy_extras/migrations)
 
-#### Permission Error 빠른 해결
+2. The core litellm pip package is bumped to point to the new `litellm-proxy-extras` package. This ensures, older versions of LiteLLM will continue to use the old migrations. [See code](https://github.com/BerriAI/litellm/blob/52b35cd8093b9ad833987b24f494586a1e923209/pyproject.toml#L58)
 
-`Permission denied` error가 보인다면 LiteLLM pod가 read-only file system으로 실행 중이라는 뜻입니다. LiteLLM에는 다음 writable directory가 필요합니다.
-- **Database migrations**: `LITELLM_MIGRATION_DIR="/path/to/writable/directory"` 설정
-- **관리자 UI**: `LITELLM_UI_PATH="/path/to/writable/directory"` 설정
-- **UI assets/logos**: `LITELLM_ASSETS_PATH="/path/to/writable/directory"` 설정
+3. When you upgrade to a new version of LiteLLM, the migration file is applied to the database. [See code](https://github.com/BerriAI/litellm/blob/52b35cd8093b9ad833987b24f494586a1e923209/litellm-proxy-extras/litellm_proxy_extras/utils.py#L42)
 
-#### 완전한 Read-Only Filesystem 설정(Kubernetes)
 
-보안을 강화한 production 배포에는 다음 구성을 사용하세요.
+### Read-only File System
 
-**옵션 1: InitContainer와 EmptyDir Volume 사용(권장)**
+Running LiteLLM with `readOnlyRootFilesystem: true` is a Kubernetes security best practice that prevents container processes from writing to the root filesystem. LiteLLM fully supports this configuration.
 
-이 방식은 pod 시작 시 Docker image 안의 pre-built UI를 writable emptyDir volume으로 복사합니다.
+#### Quick Fix for Permission Errors
+
+If you see a `Permission denied` error, it means the LiteLLM pod is running with a read-only file system. LiteLLM needs writable directories for:
+- **Database migrations**: Set `LITELLM_MIGRATION_DIR="/path/to/writable/directory"`
+- **관리자 UI**: Set `LITELLM_UI_PATH="/path/to/writable/directory"`
+- **UI assets/logos**: Set `LITELLM_ASSETS_PATH="/path/to/writable/directory"`
+
+#### Complete Read-Only Filesystem Setup (Kubernetes)
+
+For production deployments with enhanced security, use this configuration:
+
+**Option 1: Using EmptyDir Volumes with InitContainer (Recommended)**
+
+This approach copies the pre-built UI from the Docker image to writable emptyDir volumes at pod startup.
 
 ```yaml
 apiVersion: apps/v1
@@ -345,9 +411,9 @@ spec:
             sizeLimit: 64Mi
 ```
 
-**옵션 2: UI 없이 실행(API-only 배포)**
+**Option 2: Without UI (API-only deployment)**
 
-Admin UI가 필요 없다면 최소 구성으로 실행할 수 있습니다.
+If you don't need the admin UI, you can run with minimal configuration:
 
 ```yaml
 env:
@@ -359,33 +425,33 @@ securityContext:
   readOnlyRootFilesystem: true
 ```
 
-Proxy는 UI 관련 warning을 log로 남기지만 API endpoint는 정상 동작합니다.
+The proxy will log a warning about the UI but API endpoints will work normally.
 
-#### Read-Only Filesystem용 환경 변수
+#### Environment Variables for Read-Only Filesystems
 
-| 변수 | 목적 | 기본값 |
+| Variable | Purpose | Default |
 |----------|---------|---------|
 | `LITELLM_UI_PATH` | 관리자 UI directory | `/var/lib/litellm/ui` (Docker) |
 | `LITELLM_ASSETS_PATH` | UI assets/logos | `/var/lib/litellm/assets` (Docker) |
-| `LITELLM_MIGRATION_DIR` | DB migration | package directory |
-| `PRISMA_BINARY_CACHE_DIR` | Prisma 바이너리 cache | system default |
-| `XDG_CACHE_HOME` | 일반 cache directory | system default |
+| `LITELLM_MIGRATION_DIR` | Database migrations | Package directory |
+| `PRISMA_BINARY_CACHE_DIR` | Prisma binary cache | System default |
+| `XDG_CACHE_HOME` | General cache directory | System default |
 
-#### 중요 참고 사항
+#### Important 참고
 
-1. **Migrations**: 항상 `LITELLM_MIGRATION_DIR`을 writable emptyDir path로 설정하세요.
-2. **Prisma Cache**: `PRISMA_BINARY_CACHE_DIR`와 `XDG_CACHE_HOME`을 writable path로 설정하세요.
-3. **Server Root Path**: custom `server_root_path`를 사용하는 경우, read-only filesystem에서는 proxy가 runtime에 file을 수정할 수 없으므로 Dockerfile에서 UI file을 미리 처리해야 합니다.
-4. **Automatic Detection**: UI에 `.litellm_ui_ready` marker file(공식 Docker image가 생성)이 있으면 pre-restructured 상태로 자동 감지됩니다.
+1. **Migrations**: Always set `LITELLM_MIGRATION_DIR` to a writable emptyDir path
+2. **Prisma Cache**: Set `PRISMA_BINARY_CACHE_DIR` and `XDG_CACHE_HOME` to writable paths
+3. **Server Root Path**: If using a custom `server_root_path`, you must pre-process UI files in your Dockerfile as the proxy cannot modify files at runtime with read-only filesystem
+4. **Automatic Detection**: The UI is automatically detected as pre-restructured if it contains a `.litellm_ui_ready` marker file (created by the official Docker images)
 
 ## 기타
-### Production 예상 성능
+### Expected Performance in Production
 
-Benchmark는 [여기](../benchmarks#performance-metrics)에서 확인하세요.
+See benchmarks [here](../benchmarks#performance-metrics)
 
-### Debugging log가 꺼져 있는지 확인
+### Verifying Debugging logs are off
 
-Proxy server log에는 다음 수준의 세부 정보만 보여야 합니다.
+You should only see the following level of details in logs on the proxy server
 ```shell
 # INFO:     192.168.2.205:11774 - "POST /chat/completions HTTP/1.1" 200 OK
 # INFO:     192.168.2.205:34717 - "POST /chat/completions HTTP/1.1" 200 OK

@@ -3,26 +3,26 @@ import TabItem from '@theme/TabItem';
 
 # LangGraph
 
-OpenAI chat completions 형식을 사용해 LiteLLM에서 LangGraph 에이전트를 호출합니다.
+Call LangGraph agents through LiteLLM using the OpenAI chat completions format.
 
-| 속성 | 세부 정보 |
+| Property | Details |
 |----------|---------|
-| 설명 | LangGraph는 LLM으로 상태 저장형 다중 행위자 애플리케이션을 빌드하기 위한 프레임워크입니다. LiteLLM은 스트리밍 및 비스트리밍 엔드포인트를 통한 LangGraph 에이전트 호출을 지원합니다. |
-| LiteLLM의 공급자 경로 | `langgraph/{agent_id}` |
-| 공급자 문서 | [LangGraph Platform ↗](https://langchain-ai.github.io/langgraph/cloud/quick_start/) |
+| Description | LangGraph is a framework for building stateful, multi-actor applications with LLMs. LiteLLM supports calling LangGraph agents via their streaming and non-streaming endpoints. |
+| Provider Route on LiteLLM | `langgraph/{agent_id}` |
+| Provider Doc | [LangGraph Platform ↗](https://langchain-ai.github.io/langgraph/cloud/quick_start/) |
 
-**사전 준비:** 실행 중인 LangGraph 서버가 필요합니다. 아래의 [로컬 LangGraph 서버 설정](#setting-up-a-local-langgraph-server)을 참고하세요.
+**사전 준비:** You need a running LangGraph server. See [Setting Up a Local LangGraph Server](#setting-up-a-local-langgraph-server) below.
 
 ## 빠른 시작
 
-### 모델 형식 {#model-format}
+### Model Format
 
 ```shell showLineNumbers title="Model Format"
 langgraph/{agent_id}
 ```
 
 **예제:**
-- `langgraph/agent` - 기본 에이전트를 호출합니다.
+- `langgraph/agent` - calls the default agent
 
 ### LiteLLM Python SDK
 
@@ -59,7 +59,7 @@ for chunk in response:
 
 ### LiteLLM Proxy
 
-#### 1. config.yaml에서 모델 구성 {#1-configure-your-model-in-configyaml}
+#### 1. Configure your model in config.yaml
 
 <Tabs>
 <TabItem value="config-yaml" label="config.yaml">
@@ -75,13 +75,13 @@ model_list:
 </TabItem>
 </Tabs>
 
-#### 2. LiteLLM Proxy 시작 {#2-start-the-litellm-proxy}
+#### 2. Start the LiteLLM Proxy
 
 ```bash showLineNumbers title="Start LiteLLM Proxy"
 litellm --config config.yaml
 ```
 
-#### 3. LangGraph 에이전트에 요청 보내기 {#3-make-requests-to-your-langgraph-agent}
+#### 3. Make requests to your LangGraph agent
 
 <Tabs>
 <TabItem value="curl" label="Curl">
@@ -157,67 +157,67 @@ for chunk in stream:
 </TabItem>
 </Tabs>
 
-## 환경 변수 {#environment-variables}
+## Environment Variables
 
-| 변수 | 설명 |
+| Variable | Description |
 |----------|-------------|
-| `LANGGRAPH_API_BASE` | LangGraph 서버의 기본 URL(기본값: `http://localhost:2024`) |
-| `LANGGRAPH_API_KEY` | 인증에 사용할 선택적 API 키 |
+| `LANGGRAPH_API_BASE` | Base URL of your LangGraph server (default: `http://localhost:2024`) |
+| `LANGGRAPH_API_KEY` | Optional API key for authentication |
 
 ## 지원 파라미터
 
-| 파라미터 | 타입 | 설명 |
+| Parameter | Type | Description |
 |-----------|------|-------------|
-| `model` | string | `langgraph/{agent_id}` 형식의 에이전트 ID |
-| `messages` | array | OpenAI 형식의 채팅 메시지 |
-| `stream` | boolean | 스트리밍 응답 활성화 |
-| `api_base` | string | LangGraph 서버 URL |
-| `api_key` | string | 선택적 API 키 |
+| `model` | string | The agent ID in format `langgraph/{agent_id}` |
+| `messages` | array | Chat messages in OpenAI format |
+| `stream` | boolean | Enable streaming responses |
+| `api_base` | string | LangGraph server URL |
+| `api_key` | string | Optional API key |
 
 
-## 로컬 LangGraph 서버 설정 {#setting-up-a-local-langgraph-server}
+## Setting Up a Local LangGraph Server
 
-LiteLLM에서 LangGraph를 사용하기 전에 실행 중인 LangGraph 서버가 필요합니다.
+Before using LiteLLM with LangGraph, you need a running LangGraph server.
 
 ### 사전 준비
 
 - Python 3.11+
-- LLM API 키(OpenAI 또는 Google Gemini)
+- An LLM API key (OpenAI or Google Gemini)
 
-### 1. LangGraph CLI 설치 {#1-install-the-langgraph-cli}
+### 1. Install the LangGraph CLI
 
 ```bash
 uv add "langgraph-cli[inmem]"
 ```
 
-### 2. 새 LangGraph 프로젝트 생성 {#2-create-a-new-langgraph-project}
+### 2. Create a new LangGraph project
 
 ```bash
 langgraph new my-agent --template new-langgraph-project-python
 cd my-agent
 ```
 
-### 3. 의존성 설치 {#3-install-dependencies}
+### 3. Install dependencies
 
 ```bash
 uv add -e .
 ```
 
-### 4. API 키 설정 {#4-set-your-api-key}
+### 4. Set your API key
 
 ```bash
 echo "OPENAI_API_KEY=your_key_here" > .env
 ```
 
-### 5. 서버 시작 {#5-start-the-server}
+### 5. Start the server
 
 ```bash
 langgraph dev
 ```
 
-서버는 `http://localhost:2024`에서 시작됩니다.
+The server will start at `http://localhost:2024`.
 
-### 서버 실행 상태 확인 {#verify-the-server-is-running}
+### Verify the server is running
 
 ```bash
 curl -s --request POST \
@@ -233,64 +233,125 @@ curl -s --request POST \
 
 
 
-## LiteLLM A2A 게이트웨이 사용 {#litellm-a2a-gateway}
+## LiteLLM A2A Gateway
 
-LiteLLM의 A2A 게이트웨이 UI를 통해서도 LangGraph 에이전트에 연결할 수 있습니다. 코드를 작성하지 않고 에이전트를 등록하고 테스트할 수 있는 시각적 방법을 제공합니다.
+You can register LangGraph agents in LiteLLM's [A2A (Agent-to-Agent) Gateway](../a2a.md), discover their upstream agent card, curate skills and capabilities, and invoke them through the LiteLLM proxy.
 
-### 1. Agents로 이동 {#1-navigate-to-agents}
+### 1. Navigate to Agents
 
-사이드바에서 "Agents"를 클릭해 에이전트 관리 페이지를 연 다음, "+ Add New Agent"를 클릭합니다.
+From the sidebar, click "Agents" to open the agent management page, then click "+ Add New Agent".
 
-![Agents로 이동](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-13/27429cae-f743-440a-a6aa-29fa7ee013db/ascreenshot.jpeg?tl_px=0,0&br_px=2201,1230&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=211,114)
+![Navigate to Agents](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-13/27429cae-f743-440a-a6aa-29fa7ee013db/ascreenshot.jpeg?tl_px=0,0&br_px=2201,1230&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=211,114)
 
-### 2. LangGraph 에이전트 타입 선택 {#2-select-langgraph-agent-type}
+### 2. Select LangGraph Agent Type
 
-"A2A Standard"를 클릭해 사용 가능한 에이전트 타입을 확인한 다음, "langgraph"를 검색하고 LangGraph Platform API 연결 옵션을 선택합니다.
+Click "A2A Standard" to see available agent types, then search for "langgraph" and select "Connect to LangGraph agents via the LangGraph Platform API".
 
-![A2A Standard 선택](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-13/4add4088-683d-49ca-9374-23fd65dddf8e/ascreenshot.jpeg?tl_px=0,0&br_px=2201,1230&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=511,139)
+![Select A2A Standard](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-13/4add4088-683d-49ca-9374-23fd65dddf8e/ascreenshot.jpeg?tl_px=0,0&br_px=2201,1230&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=511,139)
 
-![LangGraph 선택](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-13/fd197907-47c7-4e05-959c-c0d42264263c/ascreenshot.jpeg?tl_px=0,0&br_px=2201,1230&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=431,246)
+![Select LangGraph](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-13/fd197907-47c7-4e05-959c-c0d42264263c/ascreenshot.jpeg?tl_px=0,0&br_px=2201,1230&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=431,246)
 
-### 3. 에이전트 구성 {#3-configure-the-agent}
+### 3. Configure the Agent
 
-다음 필드를 입력합니다.
+Fill in the following fields:
 
-- **Agent Name** - 고유 식별자(예: `lan-agent`)
-- **LangGraph API Base** - LangGraph 서버 URL입니다. 일반적으로 `http://127.0.0.1:2024/`를 사용합니다.
-- **API Key** - 선택 사항입니다. LangGraph는 기본적으로 API 키를 요구하지 않습니다.
-- **Assistant ID** - LangGraph에서 사용하지 않으므로, 원하는 문자열을 입력할 수 있습니다.
+- **Agent Name** - A unique identifier (e.g., `lan-agent`)
+- **LangGraph API Base** - Your LangGraph server URL, typically `http://127.0.0.1:2024/`
+- **API Key** - Optional. LangGraph doesn't require an API key by default
+- **Assistant ID** - Not used by LangGraph, you can enter any string here
 
-![에이전트 이름 입력](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-13/adce3df9-a67c-4d23-b2b5-05120738bc46/ascreenshot.jpeg?tl_px=0,0&br_px=2617,1463&force_format=jpeg&q=100&width=1120.0)
+![Enter Agent Name](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-13/adce3df9-a67c-4d23-b2b5-05120738bc46/ascreenshot.jpeg?tl_px=0,0&br_px=2617,1463&force_format=jpeg&q=100&width=1120.0)
 
-![API Base 입력](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-13/6a6a03a7-f235-41db-b4ba-d32ced330f25/ascreenshot.jpeg?tl_px=0,251&br_px=2617,1714&force_format=jpeg&q=100&width=1120.0)
+![Enter API Base](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-13/6a6a03a7-f235-41db-b4ba-d32ced330f25/ascreenshot.jpeg?tl_px=0,251&br_px=2617,1714&force_format=jpeg&q=100&width=1120.0)
 
-"Create Agent"를 클릭해 저장합니다.
+### 4: Discover the agent card
 
-![에이전트 생성](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-13/ddee4295-9a32-4cda-8e3f-543e5047eb6a/ascreenshot.jpeg?tl_px=416,653&br_px=2618,1883&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=686,316)
+Discovery runs automatically once the base URL and assistant ID are filled in. You can also trigger it manually from the discovery panel.
 
-### 4. Playground에서 테스트 {#4-test-in-playground}
+The preview is a form. You can:
 
-사이드바의 "Playground"로 이동해 에이전트를 테스트합니다. 엔드포인트 타입을 `/v1/a2a/message/send`로 변경합니다.
+- **Edit** the name, description, provider, icon URL, and documentation URL.
+- **Add, remove, or reorder skills**, and edit each skill's name, description, tags, examples, and input/output modes.
+- **Toggle capabilities** that LiteLLM supports.
 
-![Playground로 이동](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-13/c4262189-95ac-4fbc-b5af-8aba8126e4f7/ascreenshot.jpeg?tl_px=0,0&br_px=2201,1230&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=41,104)
+Select or deselect skills and capabilities before saving. LiteLLM only persists what you keep in the form.
 
-![A2A 엔드포인트 선택](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-13/6cbc8e93-7d0c-47fc-9ad4-562663f759d5/ascreenshot.jpeg?tl_px=0,0&br_px=2201,1230&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=324,265)
+Fields LiteLLM does not proxy are not shown. For the full support matrix, see [Agent card support](../a2a_agent_card.md#agent-card-support).
 
-### 5. 에이전트 선택 및 메시지 전송 {#5-select-your-agent-and-send-a-message}
+![Agent Card Fields on UI](../../img/providers/langgraph/agent-card-fields-on-ui.png)
 
-드롭다운에서 LangGraph 에이전트를 선택하고 테스트 메시지를 보냅니다.
+### 5: Save the agent
 
-![에이전트 선택](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-13/d01da2f1-3b89-47d7-ba95-de2dd8efbc1e/ascreenshot.jpeg?tl_px=0,92&br_px=2201,1323&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=348,277)
+Click on Next to save. And complete the rest of the steps
 
-![메시지 전송](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-13/79db724e-a99e-493a-9747-dc91cb398370/ascreenshot.jpeg?tl_px=51,653&br_px=2252,1883&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=524,444)
+![Click on Next](../../img/providers/langgraph/click-on-next.png)
 
-에이전트가 자신의 기능으로 응답합니다. 이제 A2A 프로토콜을 통해 LangGraph 에이전트와 상호작용할 수 있습니다.
+### 6: Verify the served card
 
-![에이전트 응답](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-13/82aa546a-0eb5-4836-b986-9aefcfe09e10/ascreenshot.jpeg?tl_px=295,28&br_px=2496,1259&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=524,277)
+From your terminal, fetch the agent card LiteLLM is serving:
 
-## 추가 자료 {#further-reading}
+```bash
+curl -H "Authorization: Bearer sk-1234" \
+  http://localhost:4000/a2a/{agent_id}/.well-known/agent.json | jq
+```
 
-- [LangGraph Platform 문서](https://langchain-ai.github.io/langgraph/cloud/quick_start/)
+You should see the card you saved, with:
+
+- `supportedInterfaces[0].url` pointing at LiteLLM, not the upstream
+- `securitySchemes` showing `LiteLLMKey` (HTTP bearer)
+- The skills you kept during registration
+
+### 7. Test in Playground
+Go to "Playground" in the sidebar to test your agent. Change the endpoint type to `/v1/a2a/message/send`.
+
+![Go to Playground](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-13/c4262189-95ac-4fbc-b5af-8aba8126e4f7/ascreenshot.jpeg?tl_px=0,0&br_px=2201,1230&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=41,104)
+
+![Select A2A Endpoint](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-13/6cbc8e93-7d0c-47fc-9ad4-562663f759d5/ascreenshot.jpeg?tl_px=0,0&br_px=2201,1230&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=324,265)
+
+### 8. Select Your Agent and Send a Message
+Pick your LangGraph agent from the dropdown and send a test message.
+
+![Select Agent](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-13/d01da2f1-3b89-47d7-ba95-de2dd8efbc1e/ascreenshot.jpeg?tl_px=0,92&br_px=2201,1323&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=348,277)
+
+![Send Message](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-13/79db724e-a99e-493a-9747-dc91cb398370/ascreenshot.jpeg?tl_px=51,653&br_px=2252,1883&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=524,444)
+
+![Agent Response](https://ajeuwbhvhr.cloudimg.io/https://colony-recorder.s3.amazonaws.com/files/2025-12-13/82aa546a-0eb5-4836-b986-9aefcfe09e10/ascreenshot.jpeg?tl_px=295,28&br_px=2496,1259&force_format=jpeg&q=100&width=1120.0&wat=1&wat_opacity=0.7&wat_gravity=northwest&wat_url=https://colony-recorder.s3.us-west-1.amazonaws.com/images/watermarks/FB923C_standard.png&wat_pad=524,277)
+
+### 9: Invoke the agent manually
+
+Send an A2A `message/send` request to the LiteLLM proxy URL:
+
+```bash
+curl -X POST http://localhost:4000/a2a/{agent_id} \
+  -H "Authorization: Bearer sk-1234" \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json" \
+  -d '{
+    "jsonrpc": "2.0",
+    "id": "req-1",
+    "method": "message/send",
+    "params": {
+      "message": {
+        "messageId": "msg-001",
+        "role": "user",
+        "parts": [{"kind": "text", "text": "My order is urgent and still not delivered"}],
+        "metadata": {"skillId": "triage_ticket"}
+      }
+    }
+  }'
+```
+
+For streaming, use `message/stream` and add `-N -H "Accept: text/event-stream"` to the curl.
+
+See also [Invoking A2A Agents](../a2a_invoking_agents.md) for SDK examples.
+
+
+## Further Reading
+
+- [LangGraph Platform Documentation](https://langchain-ai.github.io/langgraph/cloud/quick_start/)
+- [LangGraph A2A endpoint docs](https://docs.langchain.com/langsmith/server-a2a)
 - [LangGraph GitHub](https://github.com/langchain-ai/langgraph)
-- [A2A 에이전트 게이트웨이](../a2a.md)
-- [A2A 비용 추적](../a2a_cost_tracking.md)
+- [A2A Agent Gateway](../a2a.md)
+- [A2A Agent Card on LiteLLM](../a2a_agent_card.md)
+- [A2A Cost Tracking](../a2a_cost_tracking.md)
+- [A2A Protocol Specification](https://a2a-protocol.org/latest/specification/)

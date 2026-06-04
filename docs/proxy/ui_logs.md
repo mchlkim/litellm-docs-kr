@@ -23,11 +23,11 @@ LiteLLM으로 들어오는 각 요청의 spend, token usage, key, team name을 �
 
 **기본적으로 LiteLLM은 요청과 응답 본문을 추적하지 않습니다.**
 
-## Logs 페이지에서 Request / Response Content 추적하기
+## 로그 페이지에서 Request / Response Content 추적하기
 
 LiteLLM 로그에서 요청과 응답 본문을 확인하려면 다음 중 하나의 위치에서 활성화할 수 있습니다.
 
-- **UI에서 설정(재시작 없음):** [UI Spend Log Settings](./ui_spend_log_settings.md)를 사용합니다. Logs -> Settings를 열고 프롬프트 저장 옵션을 활성화한 뒤 Save를 누릅니다. 즉시 적용되며 config보다 우선합니다.
+- **UI에서 설정(재시작 없음):** [UI Spend Log Settings](./ui_spend_log_settings.md)를 사용합니다. 로그 -> Settings를 열고 프롬프트 저장 옵션을 활성화한 뒤 Save를 누릅니다. 즉시 적용되며 config보다 우선합니다.
 - **config에서 설정:** `proxy_config.yaml`에 다음을 추가합니다. 재시작이 필요합니다.
 
 ```yaml
@@ -70,7 +70,7 @@ curl -X POST 'http://localhost:4000/chat/completions' \
   }'
 ```
 
-Logs 페이지에서 제공된 모든 도구와 실제 호출된 도구를 확인합니다.
+로그 페이지에서 제공된 모든 도구와 실제 호출된 도구를 확인합니다.
 
 ## DB에 Error 로그 저장 중지
 
@@ -96,7 +96,7 @@ spend logs를 저장한다면 데이터베이스 성능을 유지하기 위해 �
 
 보존 기간은 다음 중 하나의 위치에서 설정할 수 있습니다.
 
-- **UI에서 설정(재시작 없음):** [UI Spend Log Settings](./ui_spend_log_settings.md)에서 Logs -> Settings로 이동해 Retention Period를 설정하고 Save를 누릅니다.
+- **UI에서 설정(재시작 없음):** [UI Spend Log Settings](./ui_spend_log_settings.md)에서 로그 -> Settings로 이동해 Retention Period를 설정하고 Save를 누릅니다.
 - **config에서 설정:** `proxy_config.yaml`에 다음을 추가합니다. 재시작이 필요합니다.
 
 ```yaml
