@@ -18,7 +18,7 @@ authors:
 hide_table_of_contents: false
 ---
 
-## Deploy this version
+## 이 버전 배포
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -43,12 +43,12 @@ pip install litellm==1.86.1
 </TabItem>
 </Tabs>
 
-`v1.86.1` is a Dockerfile-only patch on top of [`v1.86.0`](/release_notes/v1.86.0/v1-86-0). The application code is unchanged.
+`v1.86.1` is a Dockerfile-only patch 기반 [`v1.86.0`](/release_notes/v1.86.0/v1-86-0). The application code is unchanged.
 
 ### Infrastructure
 
 - **Docker**
-    - Restore `npm` to the `Dockerfile.non_root` builder stage so `prisma-python` resolves Node and no longer falls back to a `nodeenv`-bootstrapped runtime - [PR #28519](https://github.com/BerriAI/litellm/pull/28519)
+    - Restore `npm` to the `Dockerfile.non_root` builder stage 따라서 `prisma-python` resolves Node 및 no longer falls back to a `nodeenv`-bootstrapped runtime - [PR #28519](https://github.com/BerriAI/litellm/pull/28519)
 
 ## Full 변경 이력
 

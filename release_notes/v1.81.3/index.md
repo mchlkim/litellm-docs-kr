@@ -47,7 +47,7 @@ pip install litellm==1.81.3.rc.2
 
 ### 새 모델 지원 {#new-model-support}
 
-| Provider | Model | Context Window | Input ($/1M tokens) | Output ($/1M tokens) | Deprecation Date |
+| Provider | Model | 컨텍스트 윈도우 | Input ($/1M tokens) | Output ($/1M tokens) | Deprecation Date |
 | -------- | ----- | -------------- | ------------------- | -------------------- | ---------------- |
 | OpenAI | `gpt-audio`, `gpt-audio-2025-08-28` | 128K | $32/1M audio tokens, $2.5/1M text tokens | $64/1M audio tokens, $10/1M text tokens | - | 
 | OpenAI | `gpt-audio-mini`, `gpt-audio-mini-2025-08-28` | 128K | $10/1M audio tokens, $0.6/1M text tokens | $20/1M audio tokens, $2.4/1M text tokens | - |
@@ -60,10 +60,10 @@ pip install litellm==1.81.3.rc.2
 | Azure AI | `claude-opus-4-5` | $6.25/1M cache read, 1시간 초과 cache read $10/1M, text token $0.5/1M | $25/1M output tokens | - |
 | Azure AI | `claude-opus-4-1` | $18.75/1M cache read, 1시간 초과 cache read $30/1M, text token $1.5/1M | $75/1M output tokens | - |
 
-### Features
+### 기능
 
 - **[OpenAI](../../docs/providers/openai)**
-    - Add gpt-audio and gpt-audio-mini models to pricing - [PR #19509](https://github.com/BerriAI/litellm/pull/19509)
+    - gpt-audio 및 gpt-audio-mini models to pricing 추가 - [PR #19509](https://github.com/BerriAI/litellm/pull/19509)
     - correct audio token costs for gpt-4o-audio-preview models - [PR #19500](https://github.com/BerriAI/litellm/pull/19500)
     - Limit stop sequence as per openai spec (ensures JetBrains IDE compatibility) - [PR #19562](https://github.com/BerriAI/litellm/pull/19562)
 
@@ -71,7 +71,7 @@ pip install litellm==1.81.3.rc.2
     - 문서 - Google Workload Identity Federation (WIF) support - [PR #19320](https://github.com/BerriAI/litellm/pull/19320)
 
 - **[Agentcore](../../docs/providers/bedrock_agentcore)**
-    - Fixes streaming issues with AWS Bedrock AgentCore where responses would stop after the first chunk, particularly affecting OAuth-enabled agents - [PR #17141](https://github.com/BerriAI/litellm/pull/17141)
+    - Fixes streaming issues with AWS Bedrock AgentCore where responses would stop 후 the first chunk, particularly affecting OAuth-enabled agents - [PR #17141](https://github.com/BerriAI/litellm/pull/17141)
 
 - **[Chatgpt](../../docs/providers/chatgpt)**
     - Adds support for calling chatgpt subscription via LiteLLM - [PR #19030](https://github.com/BerriAI/litellm/pull/19030)
@@ -81,95 +81,95 @@ pip install litellm==1.81.3.rc.2
     - support for output format for bedrock invoke via v1/messages - [PR #19560](https://github.com/BerriAI/litellm/pull/19560)
     
 - **[Azure](../../docs/providers/azure/azure)**
-    - Add support for Azure OpenAI v1 API - [PR #19313](https://github.com/BerriAI/litellm/pull/19313)
+    - support for Azure OpenAI v1 API 추가 - [PR #19313](https://github.com/BerriAI/litellm/pull/19313)
     - preserve content_policy_violation details for images (#19328) - [PR #19372](https://github.com/BerriAI/litellm/pull/19372)
-    - Support OpenAI-format nested tool definitions for Responses API - [PR #19526](https://github.com/BerriAI/litellm/pull/19526)
+    - OpenAI-format nested tool definitions for Responses API 지원 - [PR #19526](https://github.com/BerriAI/litellm/pull/19526)
 
 - **Gemini([Vertex AI](../../docs/providers/vertex), [Google AI Studio](../../docs/providers/gemini))**
     - use responseJsonSchema for Gemini 2.0+ models - [PR #19314](https://github.com/BerriAI/litellm/pull/19314)
 
 - **[Volcengine](../../docs/providers/volcano)**
-    - Support Volcengine responses api - [PR #18508](https://github.com/BerriAI/litellm/pull/18508)
+    - Volcengine responses api 지원 - [PR #18508](https://github.com/BerriAI/litellm/pull/18508)
 
 - **[Anthropic](../../docs/providers/anthropic)**
-    - Add Support for calling Claude Code Max subscriptions via LiteLLM - [PR #19453](https://github.com/BerriAI/litellm/pull/19453)
-    - Add Structured output for /v1/messages with Anthropic API, Azure Anthropic API, Bedrock Converse - [PR #19545](https://github.com/BerriAI/litellm/pull/19545)
+    - for calling Claude Code Max subscriptions via LiteLLM 추가 지원 - [PR #19453](https://github.com/BerriAI/litellm/pull/19453)
+    - Structured output for /v1/messages with Anthropic API, Azure Anthropic API, Bedrock Converse 추가 - [PR #19545](https://github.com/BerriAI/litellm/pull/19545)
 
 - **[Brave Search](../../docs/search/brave)**
     - New Search provider - [PR #19433](https://github.com/BerriAI/litellm/pull/19433)
 
 - **Sarvam ai**
-    - Add support for new sarvam models  - [PR #19479](https://github.com/BerriAI/litellm/pull/19479)
+    - support for new sarvam models 추가  - [PR #19479](https://github.com/BerriAI/litellm/pull/19479)
 
 - **[GMI](../../docs/providers/gmi)**
     - add GMI Cloud provider support - [PR #19376](https://github.com/BerriAI/litellm/pull/19376)
 
 
-### Bug Fixes
+### 버그 수정
 
 - **[Anthropic](../../docs/providers/anthropic)**
-    - Fix anthropic-beta sent client side being overridden instead of appended to - [PR #19343](https://github.com/BerriAI/litellm/pull/19343)
+    - anthropic-beta sent client side being overridden instead of appended to 수정 - [PR #19343](https://github.com/BerriAI/litellm/pull/19343)
     - Filter out unsupported fields from JSON schema for Anthropic's output_format API - [PR #19482](https://github.com/BerriAI/litellm/pull/19482)
 
 - **[Bedrock](../../docs/providers/bedrock)**
-    - Expose stability models via /image_edits endpoint and ensure proper request transformation - [PR #19323](https://github.com/BerriAI/litellm/pull/19323)
+    - stability models via /image_edits endpoint 및 ensure proper request transformation 노출 - [PR #19323](https://github.com/BerriAI/litellm/pull/19323)
     - Claude Code x Bedrock Invoke fails with advanced-tool-use-2025-11-20 - [PR #19373](https://github.com/BerriAI/litellm/pull/19373)
     - deduplicate tool calls in assistant history - [PR #19324](https://github.com/BerriAI/litellm/pull/19324)
     - fix: correct us.anthropic.claude-opus-4-5 In-region pricing - [PR #19310](https://github.com/BerriAI/litellm/pull/19310)
-    - Fix request validation errors when using Claude 4 via bedrock invoke - [PR #19381](https://github.com/BerriAI/litellm/pull/19381)
+    - request validation errors 때 사용해 Claude 4 via bedrock invoke 수정 - [PR #19381](https://github.com/BerriAI/litellm/pull/19381)
     - Handle thinking with tool calls for Claude 4 models - [PR #19506](https://github.com/BerriAI/litellm/pull/19506)
     - correct streaming choice index for tool calls - [PR #19506](https://github.com/BerriAI/litellm/pull/19506)
 
 - **[Ollama](../../docs/providers/ollama)**
-    - Fix tool call errors due with improved message extraction - [PR #19369](https://github.com/BerriAI/litellm/pull/19369)
+    - tool call errors due with improved message extraction 수정 - [PR #19369](https://github.com/BerriAI/litellm/pull/19369)
 
 - **[VertexAI](../../docs/providers/vertex)**
-    - Removed optional vertex_count_tokens_location param before request is sent to vertex - [PR #19359](https://github.com/BerriAI/litellm/pull/19359)
+    - Removed optional vertex_count_tokens_location param 전에 request is sent to vertex - [PR #19359](https://github.com/BerriAI/litellm/pull/19359)
 
 - **Gemini([Vertex AI](../../docs/providers/vertex), [Google AI Studio](../../docs/providers/gemini))**
-    - Supports setting media_resolution and fps parameters on each video file, when using Gemini video understanding - [PR #19273](https://github.com/BerriAI/litellm/pull/19273)
+    - setting media_resolution 및 fps parameters on each video file, 때 사용해 Gemini video understanding 지원 - [PR #19273](https://github.com/BerriAI/litellm/pull/19273)
     - handle reasoning_effort as dict from OpenAI Agents SDK - [PR #19419](https://github.com/BerriAI/litellm/pull/19419)
     - add file content support in tool results - [PR #19416](https://github.com/BerriAI/litellm/pull/19416)
 
 - **[Azure](../../docs/providers/azure_ai)**
-    - Fix Azure AI costs for Anthropic models - [PR #19530](https://github.com/BerriAI/litellm/pull/19530)
+    - Azure AI costs for Anthropic models 수정 - [PR #19530](https://github.com/BerriAI/litellm/pull/19530)
 
 - **[Giga Chat](../../docs/providers/gigachat)**
-    - Add tool choice mapping - [PR #19645](https://github.com/BerriAI/litellm/pull/19645)
+    - tool choice mapping 추가 - [PR #19645](https://github.com/BerriAI/litellm/pull/19645)
 ---
 
 ## LLM, MCP, Agent용 AI API {#ai-api-endpoints-llms-mcp-agents}
 
-### Features
+### 기능
 
 - **[Files API](../../docs/files_endpoints)**
-    - Add managed files support when load_balancing is True - [PR #19338](https://github.com/BerriAI/litellm/pull/19338)
+    - managed files support 때 load_balancing is True 추가 - [PR #19338](https://github.com/BerriAI/litellm/pull/19338)
 
 - **[Claude Plugin Marketplace](../../docs/tutorials/claude_code_plugin_marketplace)**
-    - Add self hosted Claude Code Plugin Marketplace - [PR #19378](https://github.com/BerriAI/litellm/pull/19378)
+    - self hosted Claude Code Plugin Marketplace 추가 - [PR #19378](https://github.com/BerriAI/litellm/pull/19378)
 
 - **[MCP](../../docs/mcp)**
-    - Add MCP Protocol version 2025-11-25 support - [PR #19379](https://github.com/BerriAI/litellm/pull/19379)
-    - Log MCP tool calls and list tools in the LiteLLM Spend 로그 table for easier debugging - [PR #19469](https://github.com/BerriAI/litellm/pull/19469)
+    - MCP Protocol version 2025-11-25 support 추가 - [PR #19379](https://github.com/BerriAI/litellm/pull/19379)
+    - Log MCP tool calls 및 list tools in the LiteLLM Spend 로그 table for easier debugging - [PR #19469](https://github.com/BerriAI/litellm/pull/19469)
 
 - **[Vertex AI](../../docs/providers/vertex)**
     - Ensure only anthropic betas are forwarded down to LLM API (by default) - [PR #19542](https://github.com/BerriAI/litellm/pull/19542)
-    - Allow overriding to support forwarding incoming headers are forwarded down to target - [PR #19524](https://github.com/BerriAI/litellm/pull/19524)
+    - overriding to support forwarding incoming headers are forwarded down to target 허용 - [PR #19524](https://github.com/BerriAI/litellm/pull/19524)
 
 - **[Chat/Completions](../../docs/completion/input)**
-    - Add MCP tools response to chat completions - [PR #19552](https://github.com/BerriAI/litellm/pull/19552)
-    - Add custom vertex ai finish reasons to the output - [PR #19558](https://github.com/BerriAI/litellm/pull/19558)
-    - Return MCP execution in /chat/completions before model output during streaming - [PR #19623](https://github.com/BerriAI/litellm/pull/19623)
+    - MCP tools response to chat completions 추가 - [PR #19552](https://github.com/BerriAI/litellm/pull/19552)
+    - custom vertex ai finish reasons to the output 추가 - [PR #19558](https://github.com/BerriAI/litellm/pull/19558)
+    - MCP execution in /chat/completions 전에 model output during streaming 반환 - [PR #19623](https://github.com/BerriAI/litellm/pull/19623)
 
-### Bugs
+### 버그
 
 - **[Responses API](../../docs/response_api)**
-    - Fix duplicate messages during MCP streaming tool execution - [PR #19317](https://github.com/BerriAI/litellm/pull/19317)
-    - Fix pickle error when using OpenAI's Responses API with stream=True and tool_choice of type allowed_tools (an OpenAI-native parameter) - [PR #17205](https://github.com/BerriAI/litellm/pull/17205)
+    - duplicate messages during MCP streaming tool execution 수정 - [PR #19317](https://github.com/BerriAI/litellm/pull/19317)
+    - pickle error 때 사용해 OpenAI's Responses API with stream=True 및 tool_choice of type allowed_tools (an OpenAI-native parameter) 수정 - [PR #17205](https://github.com/BerriAI/litellm/pull/17205)
     - stream tool call events for non-openai models - [PR #19368](https://github.com/BerriAI/litellm/pull/19368)
     - preserve tool output ordering for gemini in responses bridge - [PR #19360](https://github.com/BerriAI/litellm/pull/19360)
-    - Add ID caching to prevent ID mismatch text-start and text-delta - [PR #19390](https://github.com/BerriAI/litellm/pull/19390)
-    - Include output_item, reasoning_summary_Text_done and reasoning_summary_part_done events for non-openai models - [PR #19472](https://github.com/BerriAI/litellm/pull/19472) 
+    - ID caching to prevent ID mismatch text-start 및 text-delta 추가 - [PR #19390](https://github.com/BerriAI/litellm/pull/19390)
+    - output_item, reasoning_summary_Text_done 및 reasoning_summary_part_done events for non-openai models 포함 - [PR #19472](https://github.com/BerriAI/litellm/pull/19472)
 
 - **[Chat/Completions](../../docs/completion/input)**
     - fix: drop_params not dropping prompt_cache_key for non-OpenAI providers - [PR #19346](https://github.com/BerriAI/litellm/pull/19346)
@@ -178,7 +178,7 @@ pip install litellm==1.81.3.rc.2
     - disable SSL for ws:// WebSocket connections - [PR #19345](https://github.com/BerriAI/litellm/pull/19345)
 
 - **[Generate Content](../../docs/generateContent)**
-    - Log actual user input when google genai/vertex endpoints are called client-side - [PR #19156](https://github.com/BerriAI/litellm/pull/19156)
+    - Log actual user input 때 google genai/vertex endpoints are called client-side - [PR #19156](https://github.com/BerriAI/litellm/pull/19156)
 
 - **[/messages/count_tokens Anthropic Token Counting](../../docs/anthropic_count_tokens)**
     - ensure it works for Anthropic, Azure AI Anthropic on AI Gateway - [PR #19432](https://github.com/BerriAI/litellm/pull/19432)
@@ -195,19 +195,19 @@ pip install litellm==1.81.3.rc.2
 
 ## 관리 endpoint / UI {#management-endpoints--ui}
 
-### Features
+### 기능
 
 - **Cost Estimator**
-    - Fix model dropdown - [PR #19529](https://github.com/BerriAI/litellm/pull/19529)
+    - model dropdown 수정 - [PR #19529](https://github.com/BerriAI/litellm/pull/19529)
 
 - **Claude Code plugin**
-    - Allow Adding Claude Code Plugins via UI - [PR #19387](https://github.com/BerriAI/litellm/pull/19387)
+    - Adding Claude Code Plugins via UI 허용 - [PR #19387](https://github.com/BerriAI/litellm/pull/19387)
 
 - **가드레일**
     - New Policy management UI - [PR #19668](https://github.com/BerriAI/litellm/pull/19668)
-    - Allow adding policies on Keys/Teams + Viewing on Info panels - [PR #19688](https://github.com/BerriAI/litellm/pull/19688)
+    - adding policies on Keys/Teams + Viewing on Info panels 허용 - [PR #19688](https://github.com/BerriAI/litellm/pull/19688)
 
-- **General**
+- **일반**
     - respects custom authentication header override - [PR #19276](https://github.com/BerriAI/litellm/pull/19276)
 
 - **Playground**
@@ -219,7 +219,7 @@ pip install litellm==1.81.3.rc.2
     - All Model Tab Pagination - [PR #19525](https://github.com/BerriAI/litellm/pull/19525)
     - Adding Optional scope Param to /models - [PR #19539](https://github.com/BerriAI/litellm/pull/19539)
     - Model Search - [PR #19622](https://github.com/BerriAI/litellm/pull/19622)
-    - Filter by Model ID and Team ID - [PR #19713](https://github.com/BerriAI/litellm/pull/19713)
+    - Filter by Model ID 및 Team ID - [PR #19713](https://github.com/BerriAI/litellm/pull/19713)
 
 - **MCP Servers**
     - MCP Tools Tab Resetting to 개요 - [PR #19468](https://github.com/BerriAI/litellm/pull/19468)
@@ -233,13 +233,13 @@ pip install litellm==1.81.3.rc.2
     - [Fix] Team Update with Organization having All Proxy 모델 - [PR #19604](https://github.com/BerriAI/litellm/pull/19604)
 
 - **로그**
-    - Include tool arguments in spend logs table - [PR #19640](https://github.com/BerriAI/litellm/pull/19640)
+    - tool arguments in spend logs table 포함 - [PR #19640](https://github.com/BerriAI/litellm/pull/19640)
 
 - **Fallback 및 load balancing**
     - New fallbacks modal - [PR #19673](https://github.com/BerriAI/litellm/pull/19673)
     - Set fallbacks/loadbalancing by team/key - [PR #19686](https://github.com/BerriAI/litellm/pull/19686)
 
-### Bugs
+### 버그
 
 - **Playground**
     - increase model selector width in playground Compare view - [PR #19423](https://github.com/BerriAI/litellm/pull/19423)
@@ -247,38 +247,38 @@ pip install litellm==1.81.3.rc.2
 - **가상 키**
     - Sorting Shows Incorrect Entries - [PR #19534](https://github.com/BerriAI/litellm/pull/19534)
 
-- **General**
-    - UI 404 error when SERVER_ROOT_PATH is set - [PR #19467](https://github.com/BerriAI/litellm/pull/19467)
+- **일반**
+    - UI 404 error 때 SERVER_ROOT_PATH is set - [PR #19467](https://github.com/BerriAI/litellm/pull/19467)
     - Redirect to ui/login on expired JWT - [PR #19687](https://github.com/BerriAI/litellm/pull/19687)
 
 - **SSO**
-    - Fix SSO user roles not updating for existing users - [PR #19621](https://github.com/BerriAI/litellm/pull/19621)
+    - SSO user roles not updating for existing users 수정 - [PR #19621](https://github.com/BerriAI/litellm/pull/19621)
 
 - **가드레일**
-    - ensure guardrail patterns persist on edit and mode toggle - [PR #19265](https://github.com/BerriAI/litellm/pull/19265)
+    - ensure guardrail patterns persist on edit 및 mode toggle - [PR #19265](https://github.com/BerriAI/litellm/pull/19265)
 ---
 
-## AI Integrations
+## AI 통합
 
-### Logging
+### 로깅
 
-- **General Logging**
+- **일반 Logging**
     - prevent printing duplicate StandardLoggingPayload logs - [PR #19325](https://github.com/BerriAI/litellm/pull/19325)
-    - Fix: log duplication when json_logs is enabled - [PR #19705](https://github.com/BerriAI/litellm/pull/19705)
+    - Fix: log duplication 때 json_logs is enabled - [PR #19705](https://github.com/BerriAI/litellm/pull/19705)
 - **Langfuse OTEL**
-    - ignore service logs and fix callback shadowing - [PR #19298](https://github.com/BerriAI/litellm/pull/19298)
+    - ignore service logs 및 fix callback shadowing - [PR #19298](https://github.com/BerriAI/litellm/pull/19298)
 - **Langfuse**
     - Send litellm_trace_id - [PR #19528](https://github.com/BerriAI/litellm/pull/19528)
-    - Add Langfuse mock mode for testing without API calls - [PR #19676](https://github.com/BerriAI/litellm/pull/19676)
+    - Langfuse mock mode for testing without API calls 추가 - [PR #19676](https://github.com/BerriAI/litellm/pull/19676)
 - **GCS Bucket**
     - prevent unbounded queue growth due to slow API calls - [PR #19297](https://github.com/BerriAI/litellm/pull/19297)
-    - Add GCS mock mode for testing without API calls - [PR #19683](https://github.com/BerriAI/litellm/pull/19683)
+    - GCS mock mode for testing without API calls 추가 - [PR #19683](https://github.com/BerriAI/litellm/pull/19683)
 - **Responses API 로깅**
-    - Fix pydantic serialization error - [PR #19486](https://github.com/BerriAI/litellm/pull/19486)
+    - pydantic serialization error 수정 - [PR #19486](https://github.com/BerriAI/litellm/pull/19486)
 - **Arize Phoenix**
     - add openinference span kinds to arize phoenix - [PR #19267](https://github.com/BerriAI/litellm/pull/19267)
 - **Prometheus**
-    - Added new prometheus metrics for user count and team count - [PR #19520](https://github.com/BerriAI/litellm/pull/19520)
+    - Added new prometheus metrics for user count 및 team count - [PR #19520](https://github.com/BerriAI/litellm/pull/19520)
 
 ### 가드레일
 
@@ -287,18 +287,18 @@ pip install litellm==1.81.3.rc.2
 - **Prompt Security**
     - fixing prompt-security's guardrail implementation - [PR #19374](https://github.com/BerriAI/litellm/pull/19374)
 - **Presidio**
-    - Fixes crash in Presidio Guardrail when running in background threads (logging_hook) - [PR #19714](https://github.com/BerriAI/litellm/pull/19714)
+    - Fixes crash in Presidio Guardrail 때 running in background threads (logging_hook) - [PR #19714](https://github.com/BerriAI/litellm/pull/19714)
 - **Pillar Security**
-    - Migrate Pillar Security to Generic Guardrail API - [PR #19364](https://github.com/BerriAI/litellm/pull/19364)
+    - Pillar Security to Generic Guardrail API 마이그레이션 - [PR #19364](https://github.com/BerriAI/litellm/pull/19364)
 - **Policy Engine**
     - New LiteLLM Policy engine - create policies to manage guardrails, conditions - permissions per Key, Team - [PR #19612](https://github.com/BerriAI/litellm/pull/19612)
-- **General**
-    - add case-insensitive support for guardrail mode and actions - [PR #19480](https://github.com/BerriAI/litellm/pull/19480)
+- **일반**
+    - add case-insensitive support for guardrail mode 및 actions - [PR #19480](https://github.com/BerriAI/litellm/pull/19480)
 
 ### Prompt Management
 
-- **General**
-    - fix prompt info lookup and delete using correct IDs - [PR #19358](https://github.com/BerriAI/litellm/pull/19358)
+- **일반**
+    - fix prompt info lookup 및 delete 사용해 correct IDs - [PR #19358](https://github.com/BerriAI/litellm/pull/19358)
 
 ### Secret Manager
 
@@ -312,34 +312,34 @@ pip install litellm==1.81.3.rc.2
 ## 비용 추적, budget 및 rate limit {#cost-tracking-budgets-and-rate-limiting}
 
 - **Pricing Updates**
-    - Add openai/dall-e base pricing entries - [PR #19133](https://github.com/BerriAI/litellm/pull/19133)
-    - Add `input_cost_per_video_per_second` in ModelInfoBase - [PR #19398](https://github.com/BerriAI/litellm/pull/19398)
+    - openai/dall-e base pricing entries 추가 - [PR #19133](https://github.com/BerriAI/litellm/pull/19133)
+    - `input_cost_per_video_per_second` in ModelInfoBase 추가 - [PR #19398](https://github.com/BerriAI/litellm/pull/19398)
 
 ---
 
 ## 성능 / load balancing / 안정성 개선 {#performance--loadbalancing--reliability-improvements}
 
 
-- **General**
-    - Fix date overflow/division by zero in proxy utils - [PR #19527](https://github.com/BerriAI/litellm/pull/19527)
-    - Fix in-flight request termination on SIGTERM when health-check runs in a separate process - [PR #19427](https://github.com/BerriAI/litellm/pull/19427)
-    - Fix Pass through routes to work with server root path - [PR #19383](https://github.com/BerriAI/litellm/pull/19383)
-    - Fix logging error for stop iteration - [PR #19649](https://github.com/BerriAI/litellm/pull/19649)
+- **일반**
+    - date overflow/division by zero in proxy utils 수정 - [PR #19527](https://github.com/BerriAI/litellm/pull/19527)
+    - in-flight request termination on SIGTERM 때 health-check runs in a separate process 수정 - [PR #19427](https://github.com/BerriAI/litellm/pull/19427)
+    - Pass 통해 routes to work with server root path 수정 - [PR #19383](https://github.com/BerriAI/litellm/pull/19383)
+    - logging error for stop iteration 수정 - [PR #19649](https://github.com/BerriAI/litellm/pull/19649)
     - prevent retrying 4xx client errors - [PR #19275](https://github.com/BerriAI/litellm/pull/19275)
     - add better error handling for misconfig on health check - [PR #19441](https://github.com/BerriAI/litellm/pull/19441)
 
 - **Router**
-    - Fix Azure RPM calculation formula - [PR #19513](https://github.com/BerriAI/litellm/pull/19513)
+    - Azure RPM calculation formula 수정 - [PR #19513](https://github.com/BerriAI/litellm/pull/19513)
     - Persist scheduler request queue to redis - [PR #19304](https://github.com/BerriAI/litellm/pull/19304)
     - pass search_tools to Router during DB-triggered initialization - [PR #19388](https://github.com/BerriAI/litellm/pull/19388)
     - Fixed Prompt캐싱Cache to correctly handle messages where cache_control is a sibling key of string content - [PR #19266](https://github.com/BerriAI/litellm/pull/19266)
 
 - **Memory Leaks/OOM**
     - prevent OOM with nested $defs in tool schemas - [PR #19112](https://github.com/BerriAI/litellm/pull/19112)
-    - fix: HTTP client memory leaks in Presidio, OpenAI, and Gemini - [PR #19190](https://github.com/BerriAI/litellm/pull/19190)
+    - fix: HTTP client memory leaks in Presidio, OpenAI, 및 Gemini - [PR #19190](https://github.com/BerriAI/litellm/pull/19190)
 
 - **Non root**
-    - fix logfile and pidfile of supervisor for non root environment - [PR #17267](https://github.com/BerriAI/litellm/pull/17267)
+    - fix logfile 및 pidfile of supervisor for non root environment - [PR #17267](https://github.com/BerriAI/litellm/pull/17267)
     - resolve Read-only file system error in non-root images - [PR #19449](https://github.com/BerriAI/litellm/pull/19449)
 
 - **Dockerfile**
@@ -356,9 +356,9 @@ pip install litellm==1.81.3.rc.2
     - Field-Existence Checks to Type Classes to Prevent Attribute Errors - [PR #18321](https://github.com/BerriAI/litellm/pull/18321)
     - add google-cloud-aiplatform as optional dependency with clear error message - [PR #19437](https://github.com/BerriAI/litellm/pull/19437)
     - Make grpc dependency optional - [PR #19447](https://github.com/BerriAI/litellm/pull/19447)
-    - Add support for retry policies - [PR #19645](https://github.com/BerriAI/litellm/pull/19645)
+    - support for retry policies 추가 - [PR #19645](https://github.com/BerriAI/litellm/pull/19645)
 
-- **Performance**
+- **성능**
     - Cut chat_completion latency by ~21% by reducing pre-call processing time - [PR #19535](https://github.com/BerriAI/litellm/pull/19535)
     - Optimize strip_trailing_slash with O(1) index check - [PR #19679](https://github.com/BerriAI/litellm/pull/19679)
     - Optimize use_custom_pricing_for_model with set intersection - [PR #19677](https://github.com/BerriAI/litellm/pull/19677)
@@ -372,24 +372,24 @@ pip install litellm==1.81.3.rc.2
 ### Doc Improvements
     - new tutorial for adding MCPs to Cursor via LiteLLM - [PR #19317](https://github.com/BerriAI/litellm/pull/19317)
     - fix vertex_region to vertex_location in Vertex AI pass-through docs - [PR #19380](https://github.com/BerriAI/litellm/pull/19380)
-    - clarify Gemini and Vertex AI model prefix in json file - [PR #19443](https://github.com/BerriAI/litellm/pull/19443)
+    - clarify Gemini 및 Vertex AI model prefix in json file - [PR #19443](https://github.com/BerriAI/litellm/pull/19443)
     - update Claude Code integration guides - [PR #19415](https://github.com/BerriAI/litellm/pull/19415)
     - adjust opencode tutorial - [PR #19605](https://github.com/BerriAI/litellm/pull/19605)
     - add spend-queue-troubleshooting docs - [PR #19659](https://github.com/BerriAI/litellm/pull/19659)
     - docs: add litellm-enterprise requirement for managed files - [PR #19689](https://github.com/BerriAI/litellm/pull/19689)
 
 ### Helm
-    - Add support for keda in helm chart - [PR #19337](https://github.com/BerriAI/litellm/pull/19337)
+    - support for keda in helm chart 추가 - [PR #19337](https://github.com/BerriAI/litellm/pull/19337)
     - sync Helm chart version with LiteLLM release version - [PR #19438](https://github.com/BerriAI/litellm/pull/19438)
     - Enable PreStop hook configuration in values.yaml - [PR #19613](https://github.com/BerriAI/litellm/pull/19613)
 
-### General
-    - Add health check scripts and parallel execution support - [PR #19295](https://github.com/BerriAI/litellm/pull/19295)
+### 일반
+    - health check scripts 및 parallel execution support 추가 - [PR #19295](https://github.com/BerriAI/litellm/pull/19295)
 
 
 ---
 
-## New Contributors
+## 새 기여자
 
 
 * @dushyantzz made their first contribution in [PR #19158](https://github.com/BerriAI/litellm/pull/19158)

@@ -120,7 +120,7 @@ v1.74.3-stable은 개발자에게 proxy에서 사용 가능한 모델을 알려�
 
 #### 가격 / context window 업데이트 {#pricing-context-window-updates}
 
-| Provider    | Model                                  | Context Window | Input($/1M tokens) | Output($/1M tokens) | 유형 |
+| Provider    | Model                                  | 컨텍스트 윈도우 | Input($/1M tokens) | Output($/1M tokens) | 유형 |
 | ----------- | -------------------------------------- | -------------- | ------------------- | -------------------- | ---- |
 | Xai | `xai/grok-4` | 256k | $3.00 | $15.00 | 신규 |
 | Xai | `xai/grok-4-0709` | 256k | $3.00 | $15.00 | 신규 |
@@ -153,7 +153,7 @@ v1.74.3-stable은 개발자에게 proxy에서 사용 가능한 모델을 알려�
 
 ## LLM API endpoints {#llm-api-endpoints}
 
-#### Features
+#### 기능
 - **[/completions](../../docs/text_completion)**
     - streaming에서 `reasoning_content` 반환 - [PR](https://github.com/BerriAI/litellm/pull/12377)
 - **[/chat/completions](../../docs/completion/input)** 
@@ -171,7 +171,7 @@ v1.74.3-stable은 개발자에게 proxy에서 사용 가능한 모델을 알려�
   style={{width: '100%', display: 'block', margin: '2rem auto'}}
 />
 
-#### Features
+#### 기능
 - **[Cost Tracking](../../docs/mcp#-mcp-cost-tracking)**
     - Cost Tracking 추가 - [PR](https://github.com/BerriAI/litellm/pull/12385)
     - usage tracking 추가 - [PR](https://github.com/BerriAI/litellm/pull/12397)
@@ -184,8 +184,8 @@ v1.74.3-stable은 개발자에게 proxy에서 사용 가능한 모델을 알려�
 - **[MCP Server](../../docs/mcp#adding-your-mcp)**
     - LiteLLM에서 stdio MCP 사용 허용(Circle CI MCP를 LiteLLM과 함께 사용 가능) - [PR](https://github.com/BerriAI/litellm/pull/12530), [시작하기](../../docs/mcp#adding-a-stdio-mcp-server)
 
-#### Bugs
-- **General**
+#### 버그
+- **일반**
     - task group is not initialized 오류 수정 - [PR](https://github.com/BerriAI/litellm/pull/12411) s/o [@juancarlosm](https://github.com/juancarlosm)
 - **[MCP Server](../../docs/mcp#adding-your-mcp)**
     - Claude code에서 동작하도록 mcp tool separator 수정 - [PR](https://github.com/BerriAI/litellm/pull/12430), [시작하기](../../docs/mcp#adding-your-mcp)
@@ -202,7 +202,7 @@ v1.74.3-stable은 개발자에게 proxy에서 사용 가능한 모델을 알려�
   style={{width: '100%', display: 'block', margin: '2rem auto'}}
 />
 
-#### Features
+#### 기능
 - **Model Hub**
     - 새 model hub table view - [PR](https://github.com/BerriAI/litellm/pull/12468)
     - 새 /public/model_hub endpoint - [PR](https://github.com/BerriAI/litellm/pull/12468)
@@ -227,12 +227,12 @@ v1.74.3-stable은 개발자에게 proxy에서 사용 가능한 모델을 알려�
     - 사용자가 custom sso login handler를 실행할 수 있도록 허용 - [PR](https://github.com/BerriAI/litellm/pull/12465)
 - **Navbar**
     - premium badge와 더 깔끔한 layout으로 user dropdown UI 개선 - [PR](https://github.com/BerriAI/litellm/pull/12502)
-- **General**
+- **일반**
     - 모든 page에서 Create 및 Back button layout 일관화 - [PR](https://github.com/BerriAI/litellm/pull/12542)
     - Show Password를 checkbox와 정렬 - [PR](https://github.com/BerriAI/litellm/pull/12538)
     - default user setting update를 yaml에 쓰지 않도록 방지(non-root env에서 오류 유발) - [PR](https://github.com/BerriAI/litellm/pull/12533)
 
-#### Bugs
+#### 버그
 - **Model Hub**
     - /model_group/info의 중복 수정 - [PR](https://github.com/BerriAI/litellm/pull/12468)
 - **MCP**
@@ -242,7 +242,7 @@ v1.74.3-stable은 개발자에게 proxy에서 사용 가능한 모델을 알려�
 
 ## Logging / Guardrail 통합 {#logging-guardrail-integrations}
 
-#### Features
+#### 기능
 - **[Langfuse](../../docs/observability/langfuse_integration)**
     - version bump - [PR](https://github.com/BerriAI/litellm/pull/12376)
     - LANGFUSE_TRACING_ENVIRONMENT 지원 - [PR](https://github.com/BerriAI/litellm/pull/12376)
@@ -261,7 +261,7 @@ v1.74.3-stable은 개발자에게 proxy에서 사용 가능한 모델을 알려�
 - **[Datadog LLM 관측성](../../docs/observability/datadog)**
     - DataDog LLM observability metric에서 비용을 추적하기 위한 `total_cost` field 추가 - [PR](https://github.com/BerriAI/litellm/pull/12467)
 
-#### Bugs
+#### 버그
 - **[Prometheus](../../docs/proxy/prometheus)**
     - experimental `_by_tag` metric 제거(cardinality 문제 수정) - [PR](https://github.com/BerriAI/litellm/pull/12395)
 - **[Slack Alerting](../../docs/proxy/alerting)**
@@ -271,7 +271,7 @@ v1.74.3-stable은 개발자에게 proxy에서 사용 가능한 모델을 알려�
 
 ## 성능 / load balancing / 안정성 개선 {#performance-loadbalancing-reliability-improvements}
 
-#### Bugs
+#### 버그
 - **[Responses API Bridge](../../docs/response_api#calling-non-responses-api-endpoints-responses-to-chatcompletions-bridge)**
     - Chat Completions로 fallback할 때 Responses API image 지원 추가 - [PR](https://github.com/BerriAI/litellm/pull/12204) s/o [@ryan-castner](https://github.com/ryan-castner)
 - **aiohttp**
@@ -284,7 +284,7 @@ v1.74.3-stable은 개발자에게 proxy에서 사용 가능한 모델을 알려�
 
 ## 일반 proxy 개선 {#general-proxy-improvements}
 
-#### Bugs
+#### 버그
 - **S3**
   - s3 config.yaml file에서 yaml safe load 사용 보장 - [PR](https://github.com/BerriAI/litellm/pull/12373)
 - **Audit 로그**
@@ -298,7 +298,7 @@ v1.74.3-stable은 개발자에게 proxy에서 사용 가능한 모델을 알려�
 - **Security**
   - 실제 값 대신 prefix가 포함된 hashed jwt 기록 - [PR](https://github.com/BerriAI/litellm/pull/12524)
 
-#### Features
+#### 기능
 - **MCP**
     - docker image의 mcp version 상향 - [PR](https://github.com/BerriAI/litellm/pull/12362)
 - **Request Headers**

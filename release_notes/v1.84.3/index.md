@@ -18,7 +18,7 @@ authors:
 hide_table_of_contents: false
 ---
 
-## Deploy this version
+## 이 버전 배포
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -43,7 +43,7 @@ pip install litellm==1.84.3
 </TabItem>
 </Tabs>
 
-`v1.84.3` is a Dockerfile-only re-cut of [`v1.84.2`](/release_notes/v1.84.2/v1-84-2); the application code is identical. It restores `npm` to the `Dockerfile.non_root` builder stage so the `litellm-non_root:1.84.3` image builds, which the `1.84.2` image did not.
+`v1.84.3` is a Dockerfile-only re-cut of [`v1.84.2`](/release_notes/v1.84.2/v1-84-2); the application code is identical. It restores `npm` to the `Dockerfile.non_root` builder stage 따라서 the `litellm-non_root:1.84.3` image builds, which the `1.84.2` image did not.
 
 If you are upgrading from [`v1.84.1`](/release_notes/v1.84.1/v1-84-1), see the [`v1.84.2`](/release_notes/v1.84.2/v1-84-2) notes for the underlying code changes; in particular the path-handling hardening covered in the [host-header authentication bypass advisory](/blog/host-header-auth-bypass).
 

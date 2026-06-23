@@ -63,7 +63,7 @@ pip install litellm==1.80.15
 
 LiteLLM은 provider configuration resolution에서 순차 `if`/`elif` 체인을 O(1) dictionary lookup으로 대체해 이제 LLM provider에 2.5배 더 많은 request를 보냅니다(92.7% 개선). 이 최적화는 proxy server로 들어오는 모든 HTTP request마다 호출되는 client decorator 내부에서 실행되므로 영향이 큽니다.
 
-### 이전 {#before}
+### 이전 {#전에}
 
 > **참고:** 여기서는 provider metric이 더 나빠 보이는 것이 좋은 신호입니다. request가 LiteLLM 내부에서 쓰는 시간이 줄었다는 뜻입니다.
 
@@ -87,7 +87,7 @@ Status Codes:
    200: 6000
 ```
 
-### 이후 {#after}
+### 이후 {#후}
 
 ```
 ============================================================
@@ -156,7 +156,7 @@ style={{width: '100%', display: 'block', margin: '2rem auto'}}
 
 #### 신규 model 지원(100개 이상) {#new-model-support-100-new-models}
 
-| Provider | Model | Context Window | Input($/1M tokens) | Output($/1M tokens) | 기능 |
+| Provider | Model | 컨텍스트 윈도우 | Input($/1M tokens) | Output($/1M tokens) | 기능 |
 | -------- | ----- | -------------- | ------------------- | -------------------- | -------- |
 | Azure | `azure/gpt-5.2` | 400K | $1.75 | $14.00 | 추론, vision, caching |
 | Azure | `azure/gpt-5.2-chat` | 128K | $1.75 | $14.00 | reasoning, vision |
@@ -232,7 +232,7 @@ style={{width: '100%', display: 'block', margin: '2rem auto'}}
     - Ollama용 data URL에서 순수 base64 data 추출 - [PR #18465](https://github.com/BerriAI/litellm/pull/18465)
 - **[Watsonx](../../docs/providers/watsonx/index)**
     - Watsonx field 지원 추가 - [PR #18569](https://github.com/BerriAI/litellm/pull/18569)
-    - Watsonx Audio Transcription 수정: model field filter - [PR #18810](https://github.com/BerriAI/litellm/pull/18810)
+    - Watsonx 음성 전사 수정: model field filter - [PR #18810](https://github.com/BerriAI/litellm/pull/18810)
 - **[SAP](../../docs/providers/sap)**
     - proxy UI의 list에 SAP credential 추가 - [PR #18375](https://github.com/BerriAI/litellm/pull/18375)
     - `allowed_openai_params`의 extra param을 pass-through - [PR #18432](https://github.com/BerriAI/litellm/pull/18432)
@@ -402,7 +402,7 @@ style={{width: '100%', display: 'block', margin: '2rem auto'}}
 | [Qualifire](../../docs/proxy/guardrails/qualifire) | 가드레일 | Qualifire guardrail 및 eval webhook - [PR #18594](https://github.com/BerriAI/litellm/pull/18594) |
 | [Levo AI](../../docs/observability/levo_integration) | 가드레일 | security용 Levo AI integration - [PR #18529](https://github.com/BerriAI/litellm/pull/18529) |
 
-### Logging {#logging}
+### 로깅 {#logging}
 
 - **[DataDog](../../docs/proxy/logging#datadog)**
     - `parent_id`가 없을 때 span kind fallback 수정 - [PR #18418](https://github.com/BerriAI/litellm/pull/18418)

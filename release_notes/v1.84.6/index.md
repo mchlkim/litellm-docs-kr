@@ -18,7 +18,7 @@ authors:
 hide_table_of_contents: false
 ---
 
-## Deploy this version
+## 이 버전 배포
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -43,12 +43,12 @@ pip install litellm==1.84.6
 </TabItem>
 </Tabs>
 
-`v1.84.6` is a patch release on top of [`v1.84.5`](/release_notes/v1.84.5/v1-84-5). It backports CrowdStrike AIDR user and model metadata capture, plus a follow-up fix so identity is read from both metadata bags rather than being dropped when a request carries `litellm_metadata`.
+`v1.84.6` 는 다음 버전을 기반으로 한 패치 릴리스입니다: [`v1.84.5`](/release_notes/v1.84.5/v1-84-5). 이 릴리스는 다음 수정 사항을 백포트합니다: CrowdStrike AIDR user 및 model metadata capture, 추가로 a follow-up fix 따라서 identity is read from both metadata bags 대신 being dropped 때 a request carries `litellm_metadata`.
 
-### What's Changed
+### 변경 사항
 
-- feat(guardrails): capture CrowdStrike AIDR user and model metadata - [PR #29517](https://github.com/BerriAI/litellm/pull/29517)
-- fix(guardrails): read CrowdStrike AIDR identity from both metadata bags - [PR #29991](https://github.com/BerriAI/litellm/pull/29991)
+- feat(guardrails): CrowdStrike AIDR 사용자 및 모델 메타데이터 수집 - [PR #29517](https://github.com/BerriAI/litellm/pull/29517)
+- fix(guardrails): 두 metadata bag 모두에서 CrowdStrike AIDR identity를 읽도록 수정 - [PR #29991](https://github.com/BerriAI/litellm/pull/29991)
 
 ## Full 변경 이력
 

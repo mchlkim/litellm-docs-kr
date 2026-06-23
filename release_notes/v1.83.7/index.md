@@ -71,7 +71,7 @@ pip install litellm==1.83.7
 
 #### 신규 모델 지원 (신규 모델 14개)
 
-| Provider | Model | Context Window | Input ($/1M tokens) | Output ($/1M tokens) | 기능 |
+| Provider | Model | 컨텍스트 윈도우 | Input ($/1M tokens) | Output ($/1M tokens) | 기능 |
 | -------- | ----- | -------------- | ------------------- | -------------------- | -------- |
 | AWS Bedrock (GovCloud) 지원 | `bedrock/us-gov-east-1/anthropic.claude-sonnet-4-5-20250929-v1:0` | 200K | $3.30 | $16.50 | Chat, vision, 도구 사용, prompt caching, reasoning 지원 |
 | AWS Bedrock (GovCloud) 지원 | `bedrock/us-gov-west-1/anthropic.claude-sonnet-4-5-20250929-v1:0` | 200K | $3.30 | $16.50 | Chat, vision, 도구 사용, prompt caching, reasoning 지원 |
@@ -111,7 +111,7 @@ pip install litellm==1.83.7
 - **[OpenAI](../../docs/providers/openai)**
     - tests 안정화를 위해 `test_completion_fine_tuned_model`에서 headers를 mock 처리했습니다 - [PR #25444](https://github.com/BerriAI/litellm/pull/25444)
 
-## LLM API Endpoints
+## LLM API 엔드포인트
 
 #### 기능
 
@@ -131,7 +131,7 @@ pip install litellm==1.83.7
 - **Router**
     - prefix가 없는 model names에 대해 `custom_llm_provider`를 `get_llm_provider`로 전달합니다 - [PR #25334](https://github.com/BerriAI/litellm/pull/25334)
     - `encrypted_content_affinity`가 활성화된 경우 tag-based routing을 수정했습니다 - [PR #25347](https://github.com/BerriAI/litellm/pull/25347)
-- **General**
+- **일반**
     - web-search interception에서 `stream=True`일 때 spend/cost logging이 실행되도록 보장했습니다 - [PR #25424](https://github.com/BerriAI/litellm/pull/25424)
 
 ## 관리 Endpoints / UI
@@ -160,9 +160,9 @@ pip install litellm==1.83.7
 - management endpoints의 input validation을 개선했습니다 - [PR #25445](https://github.com/BerriAI/litellm/pull/25445)
 - skill archive extraction의 file path resolution을 강화했습니다 - [PR #25475](https://github.com/BerriAI/litellm/pull/25475)
 
-## AI Integrations
+## AI 통합
 
-### Logging
+### 로깅
 
 - **[Ramp](../../docs/proxy/logging)**
     - Ramp를 built-in success callback으로 추가했습니다 - [PR #23769](https://github.com/BerriAI/litellm/pull/23769)
@@ -170,7 +170,7 @@ pip install litellm==1.83.7
     - `/v1/messages` Langfuse traces에서 proxy key-auth metadata를 보존합니다 - [PR #25448](https://github.com/BerriAI/litellm/pull/25448)
 - **[Prometheus](../../docs/proxy/logging#prometheus)**
     - 기본 `LATENCY_BUCKETS`를 35개에서 18개 경계로 줄였습니다 (위 호환성 변경 참고) - [PR #25527](https://github.com/BerriAI/litellm/pull/25527)
-- **General**
+- **일반**
     - S3 logging: 일시적 503/500 errors에 대해 exponential backoff로 retry합니다 - [PR #25530](https://github.com/BerriAI/litellm/pull/25530)
 
 ### 가드레일
@@ -191,7 +191,7 @@ pip install litellm==1.83.7
 - 저장된 per-user token이 없을 때 PKCE-triggering 401을 복원했습니다 - [commit e0d5c28](https://github.com/BerriAI/litellm/commit/e0d5c28db02b3219dbd944666a55f49732197922)
 - `config_settings`에 누락된 MCP per-user token environment variables를 문서화했습니다 - [PR #25471](https://github.com/BerriAI/litellm/pull/25471)
 
-## 성능 / Loadbalancing / Reliability 개선
+## 성능 / 부하 분산 / 안정성 개선
 
 - Prometheus latency histogram cardinality를 줄였습니다 (기본 buckets 35 → 18) - [PR #25527](https://github.com/BerriAI/litellm/pull/25527)
 - 일시적 errors에 대해 exponential backoff를 사용하는 S3 retry를 추가했습니다 - [PR #25530](https://github.com/BerriAI/litellm/pull/25530)

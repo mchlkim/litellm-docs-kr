@@ -52,7 +52,7 @@ pip install litellm==1.72.6.post2
     - 속도 제한: output token 전용 rate limiting을 지원합니다.
 * **읽어야 할 대상**
     - `/v1/messages` API(Claude Code)를 사용하는 팀
-    - Teams using **MCP**
+    - Teams 사용해 **MCP**
     - self-hosted model 접근 권한을 제공하고 rate limit을 설정하는 팀
 * **업그레이드 위험도**
     - **낮음**
@@ -99,9 +99,9 @@ LiteLLM이 `o3-pro`를 포함한 모든 Responses API model을 `/chat/completion
 
 ## New / Updated 모델
 
-### 가격 / Context Window 업데이트 {#pricing--context-window-updates}
+### 가격 / 컨텍스트 윈도우 업데이트 {#pricing--context-window-updates}
 
-| Provider    | Model                                  | Context Window | Input ($/1M tokens) | Output ($/1M tokens) | 유형 |
+| Provider    | Model                                  | 컨텍스트 윈도우 | Input ($/1M tokens) | Output ($/1M tokens) | 유형 |
 | ----------- | -------------------------------------- | -------------- | ------------------- | -------------------- | -------------------- |
 | VertexAI   | `vertex_ai/claude-opus-4`               | 200K           | $15.00              | $75.00               | 신규 |
 | OpenAI   | `gpt-4o-audio-preview-2025-06-03`             | 128k           | $2.5 (text), $40 (audio)              | $10 (text), $80 (audio)               | 신규 |
@@ -116,7 +116,7 @@ LiteLLM이 `o3-pro`를 포함한 모든 Responses API model을 `/chat/completion
 - Deepgram: `nova-3` 초당 비용 가격 책정을 [이제 지원합니다](https://github.com/BerriAI/litellm/pull/11634).
 
 ### Updated 모델
-#### Bugs
+#### 버그
 - **[Watsonx](../../docs/providers/watsonx)**
     - Watsonx deployments에서 JSON error를 일으키던 space id 무시 - [PR](https://github.com/BerriAI/litellm/pull/11527)
 - **[Ollama](../../docs/providers/ollama)**
@@ -134,7 +134,7 @@ LiteLLM이 `o3-pro`를 포함한 모든 Responses API model을 `/chat/completion
 - **[Anthropic](../../docs/providers/anthropic)**
     - prefix가 설정된 경우 assistant content 시작 부분에 추가 - [PR](https://github.com/BerriAI/litellm/pull/11719)
 
-#### Features
+#### 기능
 - **[VertexAI](../../docs/providers/vertex)**
     - passthrough에서 env var로 설정한 vertex credentials 지원 - [PR](https://github.com/BerriAI/litellm/pull/11527)
     - 모델이 해당 위치에서만 제공될 때 `global` region 선택 지원 - [PR](https://github.com/BerriAI/litellm/pull/11566)
@@ -154,12 +154,12 @@ LiteLLM이 `o3-pro`를 포함한 모든 Responses API model을 `/chat/completion
     - content safety filter results 반환 - [PR](https://github.com/BerriAI/litellm/pull/11655)
 ---
 
-## LLM API Endpoints {#llm-api-endpoints}
+## LLM API 엔드포인트 {#llm-api-endpoints}
 
-#### Bugs
+#### 버그
 - **[Chat Completion](../../docs/completion/input)**
     - Streaming - chunks 전반에서 일관된 `created` 보장 - [PR](https://github.com/BerriAI/litellm/pull/11528)
-#### Features
+#### 기능
 - **MCP**
     - MCP Permission Management controls 추가 - [PR](https://github.com/BerriAI/litellm/pull/11598), [문서](../../docs/mcp#-mcp-permission-management)
     - MCP List 및 Call Tool operations용 permission management 추가 - [PR](https://github.com/BerriAI/litellm/pull/11682), [문서](../../docs/mcp#-mcp-permission-management)
@@ -177,7 +177,7 @@ LiteLLM이 `o3-pro`를 포함한 모든 Responses API model을 `/chat/completion
 
 ## 비용 추적
 
-#### Bugs
+#### 버그
 - **[End Users](../../docs/proxy/customers)**
     - budget duration 기준으로 enduser spend 및 budget reset date 업데이트 - [PR](https://github.com/BerriAI/litellm/pull/8460) (s/o [laurien16](https://github.com/laurien16))
 - **[Custom Pricing](../../docs/proxy/custom_pricing)**
@@ -187,7 +187,7 @@ LiteLLM이 `o3-pro`를 포함한 모든 Responses API model을 `/chat/completion
 
 ## 관리 엔드포인트 / UI {#management-endpoints--ui}
 
-#### Bugs
+#### 버그
 - **[Users](../../docs/proxy/users)**
     - `/user/info` - user id에 `+`가 있는 user 전달 수정
     - admin 주도 password reset flow 추가 - [PR](https://github.com/BerriAI/litellm/pull/11618)
@@ -195,7 +195,7 @@ LiteLLM이 `o3-pro`를 포함한 모든 Responses API model을 `/chat/completion
 - **[Budgets](../../docs/proxy/users)**
     - 새 user budget 생성 시 success message 수정 - [PR](https://github.com/BerriAI/litellm/pull/11608)
 
-#### Features
+#### 기능
 - **Leftnav**
     - UI에 남은 enterprise users 표시
 - **MCP**
@@ -214,13 +214,13 @@ LiteLLM이 `o3-pro`를 포함한 모든 Responses API model을 `/chat/completion
 
 ## Logging / 가드레일 Integrations
 
-#### Bugs
+#### 버그
 - **[Arize](../../docs/observability/arize_integration)**
     - space_key header를 space_id로 변경 - [PR](https://github.com/BerriAI/litellm/pull/11595) (s/o [vanities](https://github.com/vanities))
 - **[Prometheus](../../docs/proxy/prometheus)**
     - total requests increment 수정 - [PR](https://github.com/BerriAI/litellm/pull/11718)
 
-#### Features
+#### 기능
 - **[Lasso 가드레일](../../docs/proxy/guardrails/lasso_security)**
     - [신규] Lasso 가드레일 지원 - [PR](https://github.com/BerriAI/litellm/pull/11565)
 - **[Users](../../docs/proxy/users)**
@@ -229,13 +229,13 @@ LiteLLM이 `o3-pro`를 포함한 모든 Responses API model을 `/chat/completion
 
 ---
 
-## Performance / Reliability 개선 {#performance--reliability-improvements}
+## 성능 / 안정성 개선 {#performance--reliability-improvements}
 
-#### Bugs
+#### 버그
 - **[Tag based routing](../../docs/proxy/tag_routing)**
     - request가 tag를 지정한 경우 `default` models를 고려하지 않음 - [PR](https://github.com/BerriAI/litellm/pull/11454) (s/o [thiagosalvatore](https://github.com/thiagosalvatore))
 
-#### Features
+#### 기능
 - **[캐싱](../../docs/caching/all_caches)**
     - disk cache dependencies 추가를 위한 새 optional `litellm[caching]` pip install - [PR](https://github.com/BerriAI/litellm/pull/11600)
 
@@ -243,11 +243,11 @@ LiteLLM이 `o3-pro`를 포함한 모든 Responses API model을 `/chat/completion
 
 ## 일반 Proxy 개선 {#general-proxy-improvements}
 
-#### Bugs
+#### 버그
 - **aiohttp**
     - aiohttp transport의 transfer encoding error 수정 - [PR](https://github.com/BerriAI/litellm/pull/11561)
 
-#### Features
+#### 기능
 - **aiohttp**
     - aiohttp transport용 System Proxy Support 활성화 - [PR](https://github.com/BerriAI/litellm/pull/11616) (s/o [idootop](https://github.com/idootop))
 - **CLI**

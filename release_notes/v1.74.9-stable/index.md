@@ -168,7 +168,7 @@ v1.74.9-stable에서는 LiteLLM을 통해 MCP 서버별 인증 헤더를 전달�
 
 ---
 
-## LLM API Endpoints
+## LLM API 엔드포인트
 
 #### 기능
 

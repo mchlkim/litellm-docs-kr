@@ -57,11 +57,11 @@ pip install litellm==1.73.0.post1
 * **업그레이드 이유**
     - 사용자 관리: 신규 사용자의 기본 팀을 설정할 수 있습니다. 모든 사용자에게 탐색용 $10 API key를 제공할 수 있습니다.
     - Passthrough Endpoints v2: passthrough endpoints의 하위 경로와 사용자 지정 비용 추적 지원이 강화되었습니다.
-    - Health Check Dashboard: 모델 상태와 status를 모니터링하는 새 frontend UI입니다.
+    - Health Check 대시보드: 모델 상태와 status를 모니터링하는 새 frontend UI입니다.
 * **읽어야 하는 대상**
     - **Passthrough Endpoints**를 사용하는 팀
     - LiteLLM에서 **User Management**를 사용하는 팀
-    - 모델용 **Health Check Dashboard**를 사용하는 팀
+    - 모델용 **Health Check 대시보드**를 사용하는 팀
     - LiteLLM과 함께 **Claude Code**를 사용하는 팀
 * **업그레이드 위험도**
     - **낮음**
@@ -125,9 +125,9 @@ v1.73.0에서는 신규 사용자를 Default Teams에 할당할 수 있습니다
 
 ## 신규 / 업데이트된 모델 {#new--updated-model}
 
-### 가격 / Context Window 업데이트 {#pricing--context-window-updates}
+### 가격 / 컨텍스트 윈도우 업데이트 {#pricing--context-window-updates}
 
-| Provider    | 모델                                  | Context Window | Input ($/1M tokens) | Output ($/1M tokens) | Type |
+| Provider    | 모델                                  | 컨텍스트 윈도우 | Input ($/1M tokens) | Output ($/1M tokens) | Type |
 | ----------- | -------------------------------------- | -------------- | ------------------- | -------------------- | ---- |
 | Google VertexAI | `vertex_ai/imagen-4` | N/A | Image Generation | Image Generation | New |
 | Google VertexAI | `vertex_ai/imagen-4-preview` | N/A | Image Generation | Image Generation | New |
@@ -251,7 +251,7 @@ v1.73.0에서는 신규 사용자를 Default Teams에 할당할 수 있습니다
 - **[SCIM](../../docs/proxy/scim)**
     - SCIM의 existing user에 대한 error handling 추가 - [PR](https://github.com/BerriAI/litellm/pull/11862)
     - users용 SCIM PATCH 및 PUT operations 추가 - [PR](https://github.com/BerriAI/litellm/pull/11863)
-- **Health Check Dashboard 개선**
+- **Health Check 대시보드 개선**
     - health check backend API 및 storage functionality 구현 - [PR](https://github.com/BerriAI/litellm/pull/11852)
     - database schema에 LiteLLM_HealthCheckTable 추가 - [PR](https://github.com/BerriAI/litellm/pull/11677)
     - health check frontend UI components 및 dashboard integration 구현 - [PR](https://github.com/BerriAI/litellm/pull/11679)
@@ -289,7 +289,7 @@ v1.73.0에서는 신규 사용자를 Default Teams에 할당할 수 있습니다
 ## 일반 Proxy 개선 사항 {#general-proxy-improvements}
 
 #### 기능 {#features-4}
-- **[Deployment](../../docs/proxy/deploy)**
+- **[배포](../../docs/proxy/deploy)**
     - Kubernetes용 deployment annotations 추가 - [PR](https://github.com/BerriAI/litellm/pull/11849)
     - command에 ciphers를 추가하고 proxy용 hypercorn에 전달 - [PR](https://github.com/BerriAI/litellm/pull/11916)
 - **[Custom Root Path](../../docs/proxy/deploy)**

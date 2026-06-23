@@ -70,7 +70,7 @@ pip install litellm==1.76.1
 
 #### 새 모델 지원
 
-| Provider    | Model                                  | Context Window | Input ($/1M tokens) | Output ($/1M tokens) | 기능 |
+| Provider    | Model                                  | 컨텍스트 윈도우 | Input ($/1M tokens) | Output ($/1M tokens) | 기능 |
 | ----------- | -------------------------------------- | -------------- | ------------------- | -------------------- | -------- |
 | Google | `gemini-2.5-flash-image-preview` | 1M | $0.30 | $2.50 | Chat completions + 이미지 생성($0.039/image) |
 | X.AI | `xai/grok-code-fast` | 256K | $0.20 | $1.50 | 코드 생성 |
@@ -125,7 +125,7 @@ pip install litellm==1.76.1
 
 ---
 
-## LLM API Endpoints
+## LLM API 엔드포인트
 
 #### 기능
 
@@ -140,7 +140,7 @@ pip install litellm==1.76.1
 
 #### 버그
 
-- **General**
+- **일반**
     - batch 요청에서 None metadata 처리 수정 - [PR #13996](https://github.com/BerriAI/litellm/pull/13996)
     - special token input을 사용하는 token_counter 수정 - [PR #13374](https://github.com/BerriAI/litellm/pull/13374)
     - azure/gpt-4.1 family에 대한 잘못된 web search 지원 제거 - [PR #13566](https://github.com/BerriAI/litellm/pull/13566)
@@ -165,7 +165,7 @@ pip install litellm==1.76.1
 - **Team Management**
     - team 생성 시 Team Member RPM/TPM 제한 설정 허용 - [PR #13943](https://github.com/BerriAI/litellm/pull/13943)
 - **UI Improvements**
-    - UI Dashboard의 Next.js Security Vulnerabilities 수정 - [PR #14084](https://github.com/BerriAI/litellm/pull/14084)
+    - UI 대시보드의 Next.js Security Vulnerabilities 수정 - [PR #14084](https://github.com/BerriAI/litellm/pull/14084)
     - 접을 수 있는 navbar 디자인 수정 - [PR #14075](https://github.com/BerriAI/litellm/pull/14075)
 
 #### 버그
@@ -196,7 +196,7 @@ pip install litellm==1.76.1
 
 ---
 
-## 성능 / Loadbalancing / Reliability 개선
+## 성능 / 부하 분산 / 안정성 개선
 
 #### 기능
 

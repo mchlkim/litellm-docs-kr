@@ -119,7 +119,7 @@ style={{width: '100%', display: 'block', margin: '2rem auto'}}
 
 #### 신규 모델 지원 (신규 모델 270개 이상) {#new-model-support-270-new-models}
 
-| Provider | Model | Context Window | Input ($/1M tokens) | Output ($/1M tokens) | 기능 |
+| Provider | Model | 컨텍스트 윈도우 | Input ($/1M tokens) | Output ($/1M tokens) | 기능 |
 | -------- | ----- | -------------- | ------------------- | -------------------- | -------- |
 | OpenAI | `gpt-5.2` | 400K | $1.75 | $14.00 | 추론, vision, PDF, 캐싱 |
 | OpenAI | `gpt-5.2-pro` | 400K | $21.00 | $168.00 | 추론, web search, vision |
@@ -195,7 +195,7 @@ style={{width: '100%', display: 'block', margin: '2rem auto'}}
 - **[Azure AI](../../docs/providers/azure_ai)**
     - model map에서 azure_ai의 LLM provider 수정 - [PR #17805](https://github.com/BerriAI/litellm/pull/17805)
 - **[Watsonx](../../docs/providers/watsonx)**
-    - Watsonx Audio Transcription이 API에 지원되는 param만 보내도록 수정 - [PR #17840](https://github.com/BerriAI/litellm/pull/17840)
+    - Watsonx 음성 전사이 API에 지원되는 param만 보내도록 수정 - [PR #17840](https://github.com/BerriAI/litellm/pull/17840)
 - **[Router](../../docs/routing)**
     - completion request에서 tools=None 처리 - [PR #17684](https://github.com/BerriAI/litellm/pull/17684)
     - error rate cooldown을 위한 minimum request threshold 추가 - [PR #17464](https://github.com/BerriAI/litellm/pull/17464)
@@ -228,7 +228,7 @@ style={{width: '100%', display: 'block', margin: '2rem auto'}}
     - v0 target storage 지원 추가 - Azure AI storage에 파일을 저장하고 chat completions API와 함께 사용 - [PR #17758](https://github.com/BerriAI/litellm/pull/17758)
 - **[generateContent API](../../docs/providers/gemini)**
     - Gemini generateContent endpoint에서 slash가 포함된 model name 지원 - [PR #17743](https://github.com/BerriAI/litellm/pull/17743)
-- **General**
+- **일반**
     - caching에 audio content 사용 - [PR #17651](https://github.com/BerriAI/litellm/pull/17651)
     - GET responses API 호출 시 403 exception 반환 - [PR #17629](https://github.com/BerriAI/litellm/pull/17629)
     - additional_drop_params에 nested field removal 지원 추가 - [PR #17711](https://github.com/BerriAI/litellm/pull/17711)
@@ -236,7 +236,7 @@ style={{width: '100%', display: 'block', margin: '2rem auto'}}
 
 #### 버그 {#bugs}
 
-- **General**
+- **일반**
     - is_cached_message에서 string content 처리 수정 - [PR #17853](https://github.com/BerriAI/litellm/pull/17853)
 
 ---
@@ -280,7 +280,7 @@ style={{width: '100%', display: 'block', margin: '2rem auto'}}
     - UpdateMCPServerRequest에 extra_headers 및 allowed_tools 추가 - [PR #17940](https://github.com/BerriAI/litellm/pull/17940)
 - **Notifications**
     - Notifications에 progress 표시 및 hover 시 pause 추가 - [PR #17942](https://github.com/BerriAI/litellm/pull/17942)
-- **General**
+- **일반**
     - 문서가 Root Path에 없을 때 Root Path redirect 허용 - [PR #16843](https://github.com/BerriAI/litellm/pull/16843)
     - logo 근처 좌측 상단에 UI version number 표시 - [PR #17891](https://github.com/BerriAI/litellm/pull/17891)
     - root의 올바른 category 및 agent로 left navigation 재구성 - [PR #17890](https://github.com/BerriAI/litellm/pull/17890)
@@ -326,7 +326,7 @@ style={{width: '100%', display: 'block', margin: '2rem auto'}}
     - prometheus logger에 'exception_status' 추가 - [PR #17847](https://github.com/BerriAI/litellm/pull/17847)
 - **[OpenTelemetry](../../docs/proxy/logging#otel)**
     - OTEL payload에 latency metric(TTFT, TPOT, Total Generation Time) 추가 - [PR #17888](https://github.com/BerriAI/litellm/pull/17888)
-- **General**
+- **일반**
     - async logging용 cache 기반 polling feature 추가 - [PR #16862](https://github.com/BerriAI/litellm/pull/16862)
 
 ### 가드레일 {#가드레일}
@@ -348,7 +348,7 @@ style={{width: '100%', display: 'block', margin: '2rem auto'}}
 
 ### Prompt Management {#prompt-management}
 
-- **General**
+- **일반**
     - prompt management provider 통합용 신규 API - [PR #17829](https://github.com/BerriAI/litellm/pull/17829)
 
 ---
@@ -385,7 +385,7 @@ style={{width: '100%', display: 'block', margin: '2rem auto'}}
 
 ---
 
-## 성능 / Loadbalancing / Reliability 개선 {#performance--loadbalancing--reliability-improvements}
+## 성능 / 부하 분산 / 안정성 개선 {#performance--loadbalancing--reliability-improvements}
 
 - **Memory Leak Fix** - memory leak 절반 감소 - [PR #17784](https://github.com/BerriAI/litellm/pull/17784)
 - **Spend 로그 Memory** - spend_logs의 memory accumulation 감소 - [PR #17742](https://github.com/BerriAI/litellm/pull/17742)

@@ -160,7 +160,7 @@ export LITELLM_RATE_LIMIT_ACCURACY=true
 - **[Langsmith](../../docs/observability/langsmith_integration)**
     - [langsmith_batch_size](../../docs/observability/langsmith_integration#local-testing---control-batch-size) param 준수 [PR](https://github.com/BerriAI/litellm/pull/10411)
 
-## 성능 / Loadbalancing / 안정성 개선 {#performance--loadbalancing--reliability-improvements}
+## 성능 / 부하 분산 / 안정성 개선 {#performance--loadbalancing--reliability-improvements}
 - **[Redis](../../docs/proxy/caching)**
     - 모든 redis queue가 주기적으로 flush되도록 보장합니다. request tag를 사용할 때 redis queue size가 무기한 증가하던 문제를 수정합니다. [PR](https://github.com/BerriAI/litellm/pull/10393)
 - **[Rate Limits](../../docs/proxy/users#set-rate-limit)**

@@ -171,7 +171,7 @@ v1.73.6에서는 [LiteLLM Managed Batch API](../../docs/proxy/managed_batches) �
 ## 관리 엔드포인트 / UI {#management-endpoints-ui}
 
 #### 버그 {#bugs-1}
-    - **General UI**
+    - **일반 UI**
         - dashboard components의 today selector date mutation 수정 - [PR](https://github.com/BerriAI/litellm/pull/12042)
     - **사용법**
         - paginated endpoint의 모든 페이지에 걸쳐 usage data 집계 - [PR](https://github.com/BerriAI/litellm/pull/12033)
@@ -227,7 +227,7 @@ v1.73.6에서는 [LiteLLM Managed Batch API](../../docs/proxy/managed_batches) �
 #### 버그 {#bugs-3}
     - **Team-only models**
         - non-team calls의 routing logic에서 team-only models 필터링
-    - **Context Window Exceeded 오류**
+    - **컨텍스트 윈도우 Exceeded 오류**
         - anthropic exceptions 포착 - [PR](https://github.com/BerriAI/litellm/pull/12113)
 #### 기능 {#features-5}
     - **Router**

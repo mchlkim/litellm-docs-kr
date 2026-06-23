@@ -73,7 +73,7 @@ pip install litellm==1.83.10
   ```
   — [PR #25905](https://github.com/BerriAI/litellm/pull/25905)
 
-- **영향을 받는 대상:** tag-based cost tracking, tag budget, tag-based routing을 위해 client가 request body 또는 `x-litellm-tags` header로 `tags`를 전달하는 방식에 의존하던 모든 deployment입니다. upgrade 후 해당 tag는 조용히 기본 bucket / 기본 deployment로 fall through되며, tag별 spend report는 비어 있는 것처럼 보입니다.
+- **영향을 받는 대상:** tag-based cost tracking, tag budget, tag-based routing을 위해 client가 request body 또는 `x-litellm-tags` header로 `tags`를 전달하는 방식에 의존하던 모든 deployment입니다. upgrade 후 해당 tag는 조용히 기본 bucket / 기본 deployment로 fall 통해되며, tag별 spend report는 비어 있는 것처럼 보입니다.
 
 - **기존 동작 복원:** 영향을 받는 key(또는 해당 key를 소유한 team)의 metadata에 `allow_client_tags: true`를 설정하세요. 둘 중 하나만 있어도 충분합니다. key 또는 상위 team에 이 flag가 있으면 caller가 제공한 tag가 통과합니다.
   ```bash
@@ -98,7 +98,7 @@ pip install litellm==1.83.10
 
 #### 신규 모델 지원(신규 모델 10개) {#new-model-support-10-new-models}
 
-| Provider | Model | Context Window | Input ($/1M tokens) | Output ($/1M tokens) | 기능 |
+| Provider | Model | 컨텍스트 윈도우 | Input ($/1M tokens) | Output ($/1M tokens) | 기능 |
 | -------- | ----- | -------------- | ------------------- | -------------------- | -------- |
 | Anthropic | `claude-opus-4-7`, `claude-opus-4-7-20260416` | 1M | $5.00 | $25.00 | 채팅, 추론, 비전, 컴퓨터 사용, prompt caching, PDF 입력, xhigh reasoning effort |
 | AWS Bedrock | `anthropic.claude-opus-4-7`, `us.anthropic.claude-opus-4-7`, `eu.anthropic.claude-opus-4-7`, `au.anthropic.claude-opus-4-7`, `global.anthropic.claude-opus-4-7` | 1M | $5.50 | $27.50 | 채팅, 추론, 비전, 컴퓨터 사용, prompt caching, PDF 입력, native structured output |
@@ -165,12 +165,12 @@ pip install litellm==1.83.10
     - 항상 200을 반환하는 대신 `/v1/messages/count_tokens`에서 실제 upstream status code 반환 - [PR #21352](https://github.com/BerriAI/litellm/pull/21352)
 
 - **[Vertex AI](../../docs/providers/vertex)**
-    - Gemini `finish_reason` enum 정규화(위 Features 참고) - [PR #25337](https://github.com/BerriAI/litellm/pull/25337)
+    - Gemini `finish_reason` enum 정규화(위 기능 참고) - [PR #25337](https://github.com/BerriAI/litellm/pull/25337)
 
 - **[Embeddings API](../../docs/embedding/supported_embedding)**
     - downstream regression 이후 null `encoding_format` 생략 변경 revert - [PR #25698](https://github.com/BerriAI/litellm/pull/25698)
 
-- **General**
+- **일반**
     - docs banner에 표시되는 `version` 수정 - [PR #25875](https://github.com/BerriAI/litellm/pull/25875)
 
 ## LLM API 엔드포인트 {#llm-api-endpoints}
@@ -198,12 +198,12 @@ pip install litellm==1.83.10
 - **[Video Generation](../../docs/proxy/veo_video_generation)**
     - Veo 3.1 Lite의 resolution-aware tiered cost tracking - [PR #25348](https://github.com/BerriAI/litellm/pull/25348)
 
-- **General — `litellm.compress()`**
+- **일반 — `litellm.compress()`**
     - model invocation 전에 긴 prompt를 줄일 수 있도록 `litellm.compress()`로 노출되는 retrieval tool 포함 신규 BM25 기반 [prompt compression API](../../docs/completion/prompt_compression) - [PR #25637](https://github.com/BerriAI/litellm/pull/25637)
 
 #### 버그 {#bugs}
 
-- **General**
+- **일반**
     - credential validation에서 `api_key` value check 강화 - [PR #25917](https://github.com/BerriAI/litellm/pull/25917)
     - request parameter의 environment-reference handling 강화 - [PR #25592](https://github.com/BerriAI/litellm/pull/25592)
     - request parameter handling 강화 - [PR #25827](https://github.com/BerriAI/litellm/pull/25827)
@@ -259,7 +259,7 @@ pip install litellm==1.83.10
 
 - **모델 + 엔드포인트**
     - UI Settings에서 Claude Code BYOK 지원 - [PR #25998](https://github.com/BerriAI/litellm/pull/25998)
-    - Add Model flow용 E2E test - [PR #25590](https://github.com/BerriAI/litellm/pull/25590)
+    - Model flow용 E2E test 추가 - [PR #25590](https://github.com/BerriAI/litellm/pull/25590)
     - boolean guardrail provider field에 backend default 사전 선택 - [PR #25700](https://github.com/BerriAI/litellm/pull/25700)
     - guardrail `optional_params` bool default를 `Select`에 render - [PR #25806](https://github.com/BerriAI/litellm/pull/25806)
     - MCP `ToolTestPanel` boolean input에 AntD `Select` 사용 - [PR #25809](https://github.com/BerriAI/litellm/pull/25809)
@@ -305,7 +305,7 @@ pip install litellm==1.83.10
 - **[Azure Pass-Through](../../docs/pass_through/azure_passthrough)**
     - logging hook을 통해 `standard_logging_object` 채우기 - [PR #25679](https://github.com/BerriAI/litellm/pull/25679)
 
-- **General**
+- **일반**
     - `StandardLoggingPayload`에서 provider response header 보존 - [PR #25807](https://github.com/BerriAI/litellm/pull/25807)
 
 ### 가드레일
@@ -319,7 +319,7 @@ pip install litellm==1.83.10
 - **[Presidio](../../docs/proxy/guardrails/pii_masking_v2)**
     - `anonymize_text`에서 올바른 text position 사용 - [PR #24998](https://github.com/BerriAI/litellm/pull/24998)
 
-- **General**
+- **일반**
     - 특정 global guardrail에 대한 team별 opt-out - [PR #25575](https://github.com/BerriAI/litellm/pull/25575)
     - UI: boolean guardrail provider field에 backend default 사전 선택 - [PR #25700](https://github.com/BerriAI/litellm/pull/25700)
     - UI: guardrail `optional_params` boolean default를 `Select`에 render - [PR #25806](https://github.com/BerriAI/litellm/pull/25806)
@@ -365,7 +365,7 @@ pip install litellm==1.83.10
 - UI: MCP `ToolTestPanel` boolean input에 AntD `Select` 사용 - [PR #25809](https://github.com/BerriAI/litellm/pull/25809)
 - UI: MCP server edit 시 `extra_headers` 유지 - [PR #26003](https://github.com/BerriAI/litellm/pull/26003)
 
-## 성능 / Loadbalancing / 신뢰성 개선 {#performance--loadbalancing--reliability-improvements}
+## 성능 / 부하 분산 / 신뢰성 개선 {#performance--loadbalancing--reliability-improvements}
 
 - Prometheus exporter 성능 개선 - [PR #25934](https://github.com/BerriAI/litellm/pull/25934)
 - health check 중 OOM을 방지하도록 DB query 최적화 - [PR #25732](https://github.com/BerriAI/litellm/pull/25732)
@@ -426,5 +426,5 @@ pip install litellm==1.83.10
 * AI 통합(로깅 / 가드레일 / 캐싱 / Prompt): 16
 * 비용 추적, 예산 및 Rate Limiting: 13
 * MCP Gateway: 6
-* 성능 / Loadbalancing / 신뢰성 개선: 17
+* 성능 / 부하 분산 / 신뢰성 개선: 17
 * 문서 업데이트: 11

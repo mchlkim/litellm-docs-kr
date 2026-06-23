@@ -161,7 +161,7 @@ pip install litellm==1.67.4.post1
 - **토큰 만료**: 로그인 페이지로 다시 라우팅하여 토큰 갱신을 지원합니다. 만료된 토큰 때문에 빈 페이지가 표시되던 문제를 수정합니다. [PR](https://github.com/BerriAI/litellm/pull/10250)
 
 #### UI 일반 수정 {#ui-general-fixes}
-- **UI 깜빡임 수정**: Dashboard의 UI 깜빡임 문제를 해결했습니다. [PR](https://github.com/BerriAI/litellm/pull/10261)
+- **UI 깜빡임 수정**: 대시보드의 UI 깜빡임 문제를 해결했습니다. [PR](https://github.com/BerriAI/litellm/pull/10261)
 - **용어 개선**: Keys 및 Tools 페이지의 로딩 상태와 데이터 없음 상태 문구를 개선했습니다. [PR](https://github.com/BerriAI/litellm/pull/10253)
 - **Azure 모델 지원**: Azure 공개 모델명 편집과 생성 후 모델명 변경 문제를 수정했습니다. [PR](https://github.com/BerriAI/litellm/pull/10249)
 - **팀 모델 선택기**: 팀 모델 선택 버그를 수정했습니다. [PR](https://github.com/BerriAI/litellm/pull/10171)

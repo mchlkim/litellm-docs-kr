@@ -87,7 +87,7 @@ response = client.send_message(
 )
 ```
 
-Agent Gateway 시작하기: [Agent Gateway Documentation](../../docs/a2a)
+Agent Gateway 시작하기: [Agent Gateway 문서](../../docs/a2a)
 
 ---
 
@@ -132,7 +132,7 @@ style={{width: '100%', display: 'block', margin: '2rem auto'}}
 
 #### 새 모델 지원 (신규 33개) {#new-model-support-33-new-models}
 
-| Provider | Model | Context Window | Input ($/1M tokens) | Output ($/1M tokens) | Features |
+| Provider | Model | 컨텍스트 윈도우 | Input ($/1M tokens) | Output ($/1M tokens) | 기능 |
 | -------- | ----- | -------------- | ------------------- | -------------------- | -------- |
 | OpenAI | `gpt-5.1-codex-max` | 400K | $1.25 | $10.00 | 추론, 비전, PDF 입력, responses API |
 | Azure | `azure/gpt-5.1-codex-max` | 400K | $1.25 | $10.00 | 추론, 비전, PDF 입력, responses API |
@@ -233,7 +233,7 @@ style={{width: '100%', display: 'block', margin: '2rem auto'}}
 
 - **[WatsonX](../../docs/providers/watsonx/index)**
     - zen_api_key를 동적으로 전달할 수 있게 했습니다 - [PR #16655](https://github.com/BerriAI/litellm/pull/16655)
-    - Watsonx Audio Transcription API를 수정했습니다 - [PR #17326](https://github.com/BerriAI/litellm/pull/17326)
+    - Watsonx 음성 전사 API를 수정했습니다 - [PR #17326](https://github.com/BerriAI/litellm/pull/17326)
     - audio transcription을 수정하고 요청 header에서 content type을 강제하지 않도록 했습니다 - [PR #17546](https://github.com/BerriAI/litellm/pull/17546)
 
 - **[Fireworks AI](../../docs/providers/fireworks_ai)**
@@ -274,7 +274,7 @@ style={{width: '100%', display: 'block', margin: '2rem auto'}}
 - **[SambaNova](../../docs/providers/sambanova)**
     - SambaNova 모델에서 acompletion이 오류를 발생시키는 문제를 수정했습니다 - [PR #17217](https://github.com/BerriAI/litellm/pull/17217)
 
-- **General**
+- **일반**
     - 요청 body에서 metadata가 null일 때 발생하는 AttributeError를 수정했습니다 - [PR #17306](https://github.com/BerriAI/litellm/pull/17306)
     - malformed request의 500 오류를 수정했습니다 - [PR #17291](https://github.com/BerriAI/litellm/pull/17291)
     - header의 custom LLM provider를 존중하도록 했습니다 - [PR #17290](https://github.com/BerriAI/litellm/pull/17290)
@@ -302,12 +302,12 @@ style={{width: '100%', display: 'block', margin: '2rem auto'}}
 - **[OCR API](../../docs/ocr)**
     - CallTypes enum에 누락된 OCR 및 aOCR을 추가했습니다 - [PR #17435](https://github.com/BerriAI/litellm/pull/17435)
 
-- **General**
+- **일반**
     - websearch를 지원하는 배포에만 routing하도록 지원했습니다 - [PR #17500](https://github.com/BerriAI/litellm/pull/17500)
 
 #### 버그 {#bugs}
 
-- **General**
+- **일반**
     - streaming error validation을 수정했습니다 - [PR #17242](https://github.com/BerriAI/litellm/pull/17242)
     - delta의 빈 tool_calls에 대한 길이 validation을 추가했습니다 - [PR #17523](https://github.com/BerriAI/litellm/pull/17523)
 
@@ -385,7 +385,7 @@ style={{width: '100%', display: 'block', margin: '2rem auto'}}
 
 ## AI Integration (신규 2개) {#ai-integrations-2-new-integrations}
 
-### Logging (신규 1개) {#logging-1-new-integration}
+### 로깅 (신규 1개) {#logging-1-new-integration}
 
 #### 새 Integration {#new-integration}
 
@@ -406,7 +406,7 @@ style={{width: '100%', display: 'block', margin: '2rem auto'}}
 - **[Langfuse](../../docs/proxy/logging#langfuse)**
     - Langfuse logger test mock setup을 수정했습니다 - [PR #17591](https://github.com/BerriAI/litellm/pull/17591)
 
-- **General**
+- **일반**
     - logging callback의 PII anonymization 처리를 개선했습니다 - [PR #17207](https://github.com/BerriAI/litellm/pull/17207)
 
 ### 가드레일 (신규 1개) {#guardrails-1-new-integration}
@@ -441,7 +441,7 @@ style={{width: '100%', display: 'block', margin: '2rem auto'}}
 - **[Bedrock 가드레일](../../docs/proxy/guardrails/bedrock)**
     - Bedrock Guardrail indent 및 import를 수정했습니다 - [PR #17378](https://github.com/BerriAI/litellm/pull/17378)
 
-- **General 가드레일**
+- **일반 가드레일**
     - content filter에서 일치하는 모든 keyword를 마스킹합니다 - [PR #17521](https://github.com/BerriAI/litellm/pull/17521)
     - request_data에서 guardrail metadata가 보존되도록 보장했습니다 - [PR #17593](https://github.com/BerriAI/litellm/pull/17593)
     - apply_guardrail method를 수정하고 test isolation을 개선했습니다 - [PR #17555](https://github.com/BerriAI/litellm/pull/17555)
@@ -451,7 +451,7 @@ style={{width: '100%', display: 'block', margin: '2rem auto'}}
 - **[CyberArk](../../docs/secret_managers/cyberark)**
     - SSL verify를 false로 설정할 수 있게 했습니다 - [PR #17433](https://github.com/BerriAI/litellm/pull/17433)
 
-- **General**
+- **일반**
     - key management hook에서 email 및 secret manager operation이 독립적으로 동작하도록 했습니다 - [PR #17551](https://github.com/BerriAI/litellm/pull/17551)
 
 ---
@@ -498,7 +498,7 @@ style={{width: '100%', display: 'block', margin: '2rem auto'}}
 
 ---
 
-## 성능 / Loadbalancing / 안정성 개선 {#performance--loadbalancing--reliability-improvements}
+## 성능 / 부하 분산 / 안정성 개선 {#performance--loadbalancing--reliability-improvements}
 
 - **Audio/Speech 성능**
     - `shared_sessions`를 사용해 `/audio/speech` 성능을 수정했습니다 - [PR #16739](https://github.com/BerriAI/litellm/pull/16739)

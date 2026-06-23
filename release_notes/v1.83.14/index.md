@@ -140,7 +140,7 @@ pip install litellm==1.83.14
 
 ## LLM API 엔드포인트 {#llm-api-endpoints}
 
-#### Features
+#### 기능
 
 - **[Responses API](../../docs/response_api)**
     - Responses API와 Chat Completions 브리지 간 공유 형식 매핑 추출 - [PR #24417](https://github.com/BerriAI/litellm/pull/24417)
@@ -178,7 +178,7 @@ pip install litellm==1.83.14
 
 ## 관리 엔드포인트 / UI {#management-endpoints--ui}
 
-#### Features
+#### 기능
 
 - **가상 키 / Auth**
     - `POST /model/update` 후 라우터 새로고침 - [PR #26427](https://github.com/BerriAI/litellm/pull/26427)
@@ -194,7 +194,7 @@ pip install litellm==1.83.14
 - **리팩터링**
     - 프로젝트 관리를 enterprise 패키지로 이동 - [PR #25677](https://github.com/BerriAI/litellm/pull/25677)
 
-#### Bugs
+#### 버그
 
 - **가상 키 / Auth**
     - 권한 우회를 막기 위해 `common_checks` 중앙화 - [PR #26279](https://github.com/BerriAI/litellm/pull/26279)
@@ -216,9 +216,9 @@ pip install litellm==1.83.14
 
 ## AI 통합 {#ai-integrations}
 
-### Logging
+### 로깅
 
-- **General**
+- **일반**
     - `StandardLoggingPayload` 및 OTel span에 `litellm_call_id` 추가 - [PR #26133](https://github.com/BerriAI/litellm/pull/26133)
 - **[Vertex AI Passthrough](../../docs/pass_through/vertex_ai)**
     - `:embedContent` 및 `:batchEmbedContents` 응답 로깅 - [PR #26146](https://github.com/BerriAI/litellm/pull/26146)
@@ -244,11 +244,11 @@ pip install litellm==1.83.14
 - **Per-member budgets**
     - Individual team-member budgets - [PR #26208](https://github.com/BerriAI/litellm/pull/26208)
     - Track per-member total spend on team memberships - [PR #26195](https://github.com/BerriAI/litellm/pull/26195)
-    - Fix per-team member budget bypass - [PR #26204](https://github.com/BerriAI/litellm/pull/26204)
+    - per-team member budget bypass 수정 - [PR #26204](https://github.com/BerriAI/litellm/pull/26204)
 - **Rate limiting**
     - Reseed enforcement read path from DB on counter miss - [PR #26459](https://github.com/BerriAI/litellm/pull/26459)
 - **Budgets**
-    - Align user and org budget spend checks with the atomic counter pattern - [PR #26182](https://github.com/BerriAI/litellm/pull/26182)
+    - Align user 및 org budget spend checks with the atomic counter pattern - [PR #26182](https://github.com/BerriAI/litellm/pull/26182)
     - Reset budget windows failing due to Prisma `Json?` null filter - [PR #26346](https://github.com/BerriAI/litellm/pull/26346)
 
 ---
@@ -261,22 +261,22 @@ pip install litellm==1.83.14
     - Align MCP OAuth proxy endpoints with per-server access policy - [PR #26516](https://github.com/BerriAI/litellm/pull/26516)
     - MCP broker OAuth endpoint access controls - [PR #26142](https://github.com/BerriAI/litellm/pull/26142)
 - **권한 / routing**
-    - Resolve team/key MCP permissions by name or alias - [PR #26338](https://github.com/BerriAI/litellm/pull/26338)
+    - team/key MCP permissions by name or alias 해석 - [PR #26338](https://github.com/BerriAI/litellm/pull/26338)
     - Split MCP routes into inference vs. management (unblocks 관리자 UI on `DISABLE_LLM_API_ENDPOINTS` nodes) - [PR #26367](https://github.com/BerriAI/litellm/pull/26367)
 - **Tool filtering**
     - Match tools with client-side namespace prefix in `mcp_semantic_tool_filter` - [PR #26117](https://github.com/BerriAI/litellm/pull/26117)
 
 ---
 
-## Performance / Loadbalancing / Reliability 개선 {#performance-loadbalancing-reliability-improvements}
+## 성능 / 부하 분산 / 안정성 개선 {#performance-loadbalancing-reliability-improvements}
 
 - **Routing**
     - Adaptive routing - [PR #26049](https://github.com/BerriAI/litellm/pull/26049)
     - Wildcard order fallback to higher-order deployments - [PR #25772](https://github.com/BerriAI/litellm/pull/25772)
 - **Prompt Compression**
     - First-class server-side prompt compression callback - [PR #25729](https://github.com/BerriAI/litellm/pull/25729)
-- **Reliability**
-    - Fix `/health/readiness` 503 loop when DB is unreachable - [PR #26134](https://github.com/BerriAI/litellm/pull/26134)
+- **안정성**
+    - `/health/readiness` 503 loop 때 DB is unreachable 수정 - [PR #26134](https://github.com/BerriAI/litellm/pull/26134)
 - **개발자 ergonomics**
     - `--reload` flag for uvicorn hot reload (dev only) - [PR #25901](https://github.com/BerriAI/litellm/pull/25901)
 
@@ -286,21 +286,21 @@ pip install litellm==1.83.14
 
 - **Build / Docker**
     - Streamline `Dockerfile.non_root` build time - [PR #26055](https://github.com/BerriAI/litellm/pull/26055)
-    - Use numeric UID 65534 in `docker.non_root` for K8s `runAsNonRoot` - [PR #26268](https://github.com/BerriAI/litellm/pull/26268)
+    - numeric UID 65534 in `docker.non_root` for K8s `runAsNonRoot` 사용 - [PR #26268](https://github.com/BerriAI/litellm/pull/26268)
     - Restore pre-uv Prisma cache path - [PR #26201](https://github.com/BerriAI/litellm/pull/26201)
 - **Migrations**
     - Opt-in v2 migration resolver - [PR #26194](https://github.com/BerriAI/litellm/pull/26194)
-    - Freshness and destructive guards on migration workflow - [PR #26185](https://github.com/BerriAI/litellm/pull/26185)
+    - Freshness 및 destructive guards on migration workflow - [PR #26185](https://github.com/BerriAI/litellm/pull/26185)
 - **CI / Infra**
-    - Migrate more CI jobs from CircleCI to GitHub Actions - [PR #26261](https://github.com/BerriAI/litellm/pull/26261)
+    - more CI jobs from CircleCI to GitHub Actions 마이그레이션 - [PR #26261](https://github.com/BerriAI/litellm/pull/26261)
     - CCI: cache, cleanup, anchors, install-path parity, Python 3.12, Ruby/Node pins - [PR #26286](https://github.com/BerriAI/litellm/pull/26286)
-    - CircleCI config cleanup and consolidation - [PR #26226](https://github.com/BerriAI/litellm/pull/26226)
-    - Speed up proxy unit tests and split `proxy-utils` into its own matrix entry - [PR #26150](https://github.com/BerriAI/litellm/pull/26150)
-    - Remove CCI/GHA test duplication and semantically shard proxy DB tests - [PR #26356](https://github.com/BerriAI/litellm/pull/26356)
+    - CircleCI config cleanup 및 consolidation - [PR #26226](https://github.com/BerriAI/litellm/pull/26226)
+    - Speed up proxy unit tests 및 split `proxy-utils` into its own matrix entry - [PR #26150](https://github.com/BerriAI/litellm/pull/26150)
+    - CCI/GHA test duplication 및 semantically shard proxy DB tests 제거 - [PR #26356](https://github.com/BerriAI/litellm/pull/26356)
     - Standalone `create-release-branch` workflow + `contents:write` permission - [PR #26342](https://github.com/BerriAI/litellm/pull/26342), [PR #26359](https://github.com/BerriAI/litellm/pull/26359)
     - Supply-chain guard to block fork PRs that modify dependencies - [PR #26511](https://github.com/BerriAI/litellm/pull/26511)
-    - Use Postgres sidecar instead of shared DB for `auth_ui_unit_tests` - [PR #26141](https://github.com/BerriAI/litellm/pull/26141)
-    - Fix `e2e_ui_testing` stale-bundle issue on Ubuntu (`cp -r` merge semantics) - [PR #26047](https://github.com/BerriAI/litellm/pull/26047)
+    - Postgres sidecar instead of shared DB for `auth_ui_unit_tests` 사용 - [PR #26141](https://github.com/BerriAI/litellm/pull/26141)
+    - `e2e_ui_testing` stale-bundle issue on Ubuntu (`cp -r` merge semantics) 수정 - [PR #26047](https://github.com/BerriAI/litellm/pull/26047)
     - Apply black formatting to fix CI lint failures - [PR #26140](https://github.com/BerriAI/litellm/pull/26140)
 - **Test stability**
     - Stabilize spend-accuracy tests + patch Redis buffer data-loss path - [PR #26270](https://github.com/BerriAI/litellm/pull/26270)
@@ -309,12 +309,12 @@ pip install litellm==1.83.14
     - Drain logging worker in `test_router_caching_ttl` to fix flakiness - [PR #26355](https://github.com/BerriAI/litellm/pull/26355)
     - Isolate `master_key`/`prisma_client` module globals between proxy tests - [PR #26362](https://github.com/BerriAI/litellm/pull/26362)
 - **Packaging / dependencies 관리**
-    - Bump vulnerable dependencies - [PR #26365](https://github.com/BerriAI/litellm/pull/26365)
+    - vulnerable dependencies 업데이트 - [PR #26365](https://github.com/BerriAI/litellm/pull/26365)
     - Declare MIT license in `litellm-proxy-extras` metadata - [PR #26369](https://github.com/BerriAI/litellm/pull/26369)
     - Declare proprietary license in `litellm-enterprise` metadata - [PR #26457](https://github.com/BerriAI/litellm/pull/26457)
 - **UI**
     - Fetch button ignores active filters on Request 로그 page - [PR #25788](https://github.com/BerriAI/litellm/pull/25788)
-    - Stale filters applied after sort/page/time change on Request 로그 - [PR #25789](https://github.com/BerriAI/litellm/pull/25789)
+    - Stale filters applied 후 sort/page/time change on Request 로그 - [PR #25789](https://github.com/BerriAI/litellm/pull/25789)
 - **Misc**
     - Replace substring check with `startswith` in `is_model_gpt_5_model` - [PR #25793](https://github.com/BerriAI/litellm/pull/25793)
 
@@ -322,16 +322,16 @@ pip install litellm==1.83.14
 
 ## 문서 업데이트 {#documentation-updates}
 
-- Add missing observability integrations to View All page - [PR #24420](https://github.com/BerriAI/litellm/pull/24420)
+- missing observability integrations to View All page 추가 - [PR #24420](https://github.com/BerriAI/litellm/pull/24420)
 - Clarify `x-litellm-model-group` vs. provider model id in proxy docs - [PR #25497](https://github.com/BerriAI/litellm/pull/25497)
-- Gemini 3 thinking_level defaults and release note - [PR #25842](https://github.com/BerriAI/litellm/pull/25842)
-- Align fenced code block padding on blog and doc pages - [PR #25932](https://github.com/BerriAI/litellm/pull/25932)
-- Add supported providers to prompt caching doc - [PR #26124](https://github.com/BerriAI/litellm/pull/26124)
-- Remove `docs/my-website`, point contributors to `BerriAI/litellm-docs` - [PR #26454](https://github.com/BerriAI/litellm/pull/26454)
+- Gemini 3 thinking_level defaults 및 release note - [PR #25842](https://github.com/BerriAI/litellm/pull/25842)
+- Align fenced code block padding on blog 및 doc pages - [PR #25932](https://github.com/BerriAI/litellm/pull/25932)
+- supported providers to prompt caching doc 추가 - [PR #26124](https://github.com/BerriAI/litellm/pull/26124)
+- `docs/my-website`, point contributors to `BerriAI/litellm-docs` 제거 - [PR #26454](https://github.com/BerriAI/litellm/pull/26454)
 
 ---
 
-## New Contributors
+## 새 기여자
 
 - @dongyu-turo made their first contribution in [#24164](https://github.com/BerriAI/litellm/pull/24164)
 - @Alpha-Zark made their first contribution in [#25672](https://github.com/BerriAI/litellm/pull/25672)
@@ -354,8 +354,8 @@ pip install litellm==1.83.14
 * LLM API Endpoints: 18
 * Management Endpoints / UI: 23
 * AI Integrations (Logging / 가드레일): 11
-* 비용 추적, Budgets and Rate Limiting: 6
+* 비용 추적, Budgets 및 Rate Limiting: 6
 * MCP Gateway: 8
-* Performance / Loadbalancing / Reliability improvements: 5
-* General Proxy Improvements: 27
-* Documentation Updates: 6
+* 성능 / 부하 분산 / 안정성 improvements: 5
+* 일반 Proxy Improvements: 27
+* 문서 업데이트: 6

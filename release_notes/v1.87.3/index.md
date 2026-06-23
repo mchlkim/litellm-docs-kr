@@ -18,7 +18,7 @@ authors:
 hide_table_of_contents: false
 ---
 
-## Deploy this version
+## 이 버전 배포
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -43,18 +43,18 @@ pip install litellm==1.87.3
 </TabItem>
 </Tabs>
 
-`v1.87.3` is a patch release on top of [`v1.87.2`](/release_notes/v1.87.2/v1-87-2). It brings the 1.84.8 database-resilience set onto the 1.87 line, adds the budget-reservation toggle, hardens Anthropic streaming logging, and refreshes dependencies.
+`v1.87.3` 는 다음 버전을 기반으로 한 패치 릴리스입니다: [`v1.87.2`](/release_notes/v1.87.2/v1-87-2). 이 릴리스는 다음 항목을 반영합니다: the 1.84.8 database-resilience set onto the 1.87 line, adds the budget-reservation toggle, hardens Anthropic streaming logging, 및 refreshes dependencies.
 
-### What's Changed
+### 변경 사항
 
-- feat(proxy): add `disable_budget_reservation` general setting - [PR #29493](https://github.com/BerriAI/litellm/pull/29493)
-- fix(proxy): recover from cached-plan errors by reconnecting the Prisma client - [PR #29983](https://github.com/BerriAI/litellm/pull/29983)
-- feat(proxy): add option to disable server-side prepared statements for DB lookups - [PR #29984](https://github.com/BerriAI/litellm/pull/29984)
-- fix(proxy): return 5xx on DB infra errors during auth; reserve 401 for genuine auth failures - [PR #29986](https://github.com/BerriAI/litellm/pull/29986)
-- fix(passthrough): resolve costing model when body model is unknown - [PR #30160](https://github.com/BerriAI/litellm/pull/30160)
-- fix(passthrough): skip `[DONE]` sentinels and non-JSON SSE frames in Anthropic streaming logging - [PR #30202](https://github.com/BerriAI/litellm/pull/30202)
-- fix(proxy): return deprecated-key lookup result directly in get_data combined view - [PR #30327](https://github.com/BerriAI/litellm/pull/30327)
-- chore(deps): bump pypdf, tornado, the aiohttp constraint, vitest, and brace-expansion - [PR #30220](https://github.com/BerriAI/litellm/pull/30220)
+- feat(proxy): `disable_budget_reservation` general setting 추가 - [PR #29493](https://github.com/BerriAI/litellm/pull/29493)
+- fix(proxy): Prisma client를 재연결해 cached-plan 오류에서 복구 - [PR #29983](https://github.com/BerriAI/litellm/pull/29983)
+- feat(proxy): DB 조회에서 서버 측 prepared statement를 비활성화하는 옵션 추가 - [PR #29984](https://github.com/BerriAI/litellm/pull/29984)
+- fix(proxy): 인증 중 DB 인프라 오류는 5xx로 반환하고, 실제 인증 실패에만 401 사용 - [PR #29986](https://github.com/BerriAI/litellm/pull/29986)
+- fix(passthrough): body model을 알 수 없을 때 비용 계산 모델 해석 - [PR #30160](https://github.com/BerriAI/litellm/pull/30160)
+- fix(passthrough): Anthropic streaming logging에서 `[DONE]` sentinel과 non-JSON SSE frame 건너뛰기 - [PR #30202](https://github.com/BerriAI/litellm/pull/30202)
+- fix(proxy): get_data combined view에서 deprecated-key 조회 결과를 직접 반환 - [PR #30327](https://github.com/BerriAI/litellm/pull/30327)
+- chore(deps): pypdf, tornado, aiohttp constraint, vitest, brace-expansion 업데이트 - [PR #30220](https://github.com/BerriAI/litellm/pull/30220)
 
 ## Full 변경 이력
 

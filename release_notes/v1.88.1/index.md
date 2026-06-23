@@ -18,7 +18,7 @@ authors:
 hide_table_of_contents: false
 ---
 
-## Deploy this version
+## 이 버전 배포
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -43,11 +43,11 @@ pip install litellm==1.88.1
 </TabItem>
 </Tabs>
 
-`v1.88.1` is a patch release on top of [`v1.88.0`](/release_notes/v1.88.0/v1-88-0). It bumps PyJWT and the `ws` override to clear dependency advisories on the 1.88 line.
+`v1.88.1` 는 다음 버전을 기반으로 한 패치 릴리스입니다: [`v1.88.0`](/release_notes/v1.88.0/v1-88-0). 이 릴리스는 다음 의존성을 업데이트합니다: PyJWT 및 the `ws` override to clear dependency advisories on the 1.88 line.
 
-### What's Changed
+### 변경 사항
 
-- build(deps): bump PyJWT to 2.13.0 and the `ws` override to 8.20.1 - [PR #29987](https://github.com/BerriAI/litellm/pull/29987)
+- build(deps): PyJWT를 2.13.0으로, `ws` override를 8.20.1로 업데이트 - [PR #29987](https://github.com/BerriAI/litellm/pull/29987)
 
 ## Full 변경 이력
 

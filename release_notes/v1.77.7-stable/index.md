@@ -120,7 +120,7 @@ pip install litellm==1.77.7.rc.1
 
 #### 신규 모델 지원 {#new-model-support}
 
-| Provider | Model | Context Window | 입력 ($/1M tokens) | 출력 ($/1M tokens) | 기능 |
+| Provider | Model | 컨텍스트 윈도우 | 입력 ($/1M tokens) | 출력 ($/1M tokens) | 기능 |
 | -------- | ----- | -------------- | ------------------- | -------------------- | -------- |
 | Anthropic | `claude-sonnet-4-5` | 200K | $3.00 | $15.00 | `Chat`, `reasoning`, `vision`, `function calling`, `prompt caching` |
 | Anthropic | `claude-sonnet-4-5-20250929` | 200K | $3.00 | $15.00 | `Chat`, `reasoning`, `vision`, `function calling`, `prompt caching` |
@@ -184,7 +184,7 @@ pip install litellm==1.77.7.rc.1
 
 ---
 
-## LLM API Endpoints {#llm-api-endpoints}
+## LLM API 엔드포인트 {#llm-api-endpoints}
 
 #### 기능 {#features-1}
 
@@ -214,7 +214,7 @@ pip install litellm==1.77.7.rc.1
 #### 기능 {#features-2}
 
 - **가상 키**
-    - LLM_API_KEYs가 pass through routes에 접근할 수 있도록 보장 - [PR #15115](https://github.com/BerriAI/litellm/pull/15115)
+    - LLM_API_KEYs가 pass 통해 routes에 접근할 수 있도록 보장 - [PR #15115](https://github.com/BerriAI/litellm/pull/15115)
     - team에 속한 keys에 limits를 설정할 때 'guaranteed_throughput' 지원 - [PR #15120](https://github.com/BerriAI/litellm/pull/15120)
     
 - **모델 + Endpoints**
@@ -251,7 +251,7 @@ pip install litellm==1.77.7.rc.1
 - **Test key**
     - key 변경 시 selected model 업데이트 - [PR #15197](https://github.com/BerriAI/litellm/pull/15197)
 
-- **Dashboard**
+- **대시보드**
     - dashboard overview의 LiteLLM model name fallback 수정 - [PR #14998](https://github.com/BerriAI/litellm/pull/14998)
 
 
@@ -310,7 +310,7 @@ pip install litellm==1.77.7.rc.1
 
 ---
 
-## Performance / Loadbalancing / Reliability 개선 {#performance--loadbalancing--reliability-improvements}
+## 성능 / 부하 분산 / 안정성 개선 {#performance--loadbalancing--reliability-improvements}
 
 - **Router 최적화**
     - **P99 Latency +62.5% 개선** - router 비효율 제거(O(M*N)에서 O(1)로 개선) - [PR #15046](https://github.com/BerriAI/litellm/pull/15046)
@@ -330,7 +330,7 @@ pip install litellm==1.77.7.rc.1
 
 ## 문서 업데이트 {#documentation-updates}
 
-- **Provider Documentation 업데이트** 
+- **Provider 문서 업데이트**
     - 최신 릴리스 기준으로 litellm docs 업데이트 - [PR #15004](https://github.com/BerriAI/litellm/pull/15004)
     - 누락된 api_key parameter 추가 - [PR #15058](https://github.com/BerriAI/litellm/pull/15058)
 - **일반 문서** 

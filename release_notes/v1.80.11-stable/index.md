@@ -102,7 +102,7 @@ style={{width: '100%', display: 'block', margin: '2rem auto'}}
 
 #### 신규 모델 지원(55개 이상) {#new-model-support-55-new-models}
 
-| Provider | Model | Context Window | Input($/1M tokens) | Output($/1M tokens) | 기능 |
+| Provider | Model | 컨텍스트 윈도우 | Input($/1M tokens) | Output($/1M tokens) | 기능 |
 | -------- | ----- | -------------- | ------------------- | -------------------- | -------- |
 | Gemini | `gemini/gemini-3-flash-preview` | 1M | $0.50 | $3.00 | Reasoning, vision, audio, video, PDF 지원 |
 | Vertex AI | `vertex_ai/gemini-3-flash-preview` | 1M | $0.50 | $3.00 | Reasoning, vision, audio, video, PDF 지원 |
@@ -133,186 +133,186 @@ style={{width: '100%', display: 'block', margin: '2rem auto'}}
 #### 기능 {#features}
 
 - **[Gemini](../../docs/providers/gemini)**
-    - Add Gemini 3 Flash Preview day 0 support with reasoning - [PR #18135](https://github.com/BerriAI/litellm/pull/18135)
-    - Support extra_headers in batch embeddings - [PR #18004](https://github.com/BerriAI/litellm/pull/18004)
-    - Propagate token usage when generating images - [PR #17987](https://github.com/BerriAI/litellm/pull/17987)
-    - Use JSON instead of form-data for image edit requests - [PR #18012](https://github.com/BerriAI/litellm/pull/18012)
-    - Fix web search requests count - [PR #17921](https://github.com/BerriAI/litellm/pull/17921)
+    - Gemini 3 Flash Preview day 0 support with reasoning 추가 - [PR #18135](https://github.com/BerriAI/litellm/pull/18135)
+    - extra_headers in batch embeddings 지원 - [PR #18004](https://github.com/BerriAI/litellm/pull/18004)
+    - Propagate token usage 때 generating images - [PR #17987](https://github.com/BerriAI/litellm/pull/17987)
+    - JSON instead of form-data for image edit requests 사용 - [PR #18012](https://github.com/BerriAI/litellm/pull/18012)
+    - web search requests count 수정 - [PR #17921](https://github.com/BerriAI/litellm/pull/17921)
 - **[Anthropic](../../docs/providers/anthropic)**
-    - Use dynamic max_tokens based on model - [PR #17900](https://github.com/BerriAI/litellm/pull/17900)
-    - Fix claude-3-7-sonnet max_tokens to 64K default - [PR #17979](https://github.com/BerriAI/litellm/pull/17979)
-    - Add OpenAI-compatible API with modify_params=True - [PR #17106](https://github.com/BerriAI/litellm/pull/17106)
+    - dynamic max_tokens based on model 사용 - [PR #17900](https://github.com/BerriAI/litellm/pull/17900)
+    - claude-3-7-sonnet max_tokens to 64K default 수정 - [PR #17979](https://github.com/BerriAI/litellm/pull/17979)
+    - OpenAI-compatible API with modify_params=True 추가 - [PR #17106](https://github.com/BerriAI/litellm/pull/17106)
 - **[Vertex AI](../../docs/providers/vertex)**
-    - Add Gemini 3 Flash Preview support - [PR #18164](https://github.com/BerriAI/litellm/pull/18164)
-    - Add reasoning support for gemini-3-flash-preview - [PR #18175](https://github.com/BerriAI/litellm/pull/18175)
-    - Fix image edit credential source - [PR #18121](https://github.com/BerriAI/litellm/pull/18121)
+    - Gemini 3 Flash Preview support 추가 - [PR #18164](https://github.com/BerriAI/litellm/pull/18164)
+    - reasoning support for gemini-3-flash-preview 추가 - [PR #18175](https://github.com/BerriAI/litellm/pull/18175)
+    - image edit credential source 수정 - [PR #18121](https://github.com/BerriAI/litellm/pull/18121)
     - Pass credentials to PredictionServiceClient for custom endpoints - [PR #17757](https://github.com/BerriAI/litellm/pull/17757)
-    - Fix multimodal embeddings for text + base64 image combinations - [PR #18172](https://github.com/BerriAI/litellm/pull/18172)
-    - Add OCR support for DeepSeek model - [PR #17971](https://github.com/BerriAI/litellm/pull/17971)
+    - multimodal embeddings for text + base64 image combinations 수정 - [PR #18172](https://github.com/BerriAI/litellm/pull/18172)
+    - OCR support for DeepSeek model 추가 - [PR #17971](https://github.com/BerriAI/litellm/pull/17971)
 - **[Azure AI](../../docs/providers/azure_ai)**
-    - Add Azure Cohere 4 reranking models - [PR #17961](https://github.com/BerriAI/litellm/pull/17961)
-    - Add Azure DeepSeek V3.2 versions - [PR #18019](https://github.com/BerriAI/litellm/pull/18019)
-    - Return AzureAnthropicConfig for Claude models in get_provider_chat_config - [PR #18086](https://github.com/BerriAI/litellm/pull/18086)
+    - Azure Cohere 4 reranking models 추가 - [PR #17961](https://github.com/BerriAI/litellm/pull/17961)
+    - Azure DeepSeek V3.2 versions 추가 - [PR #18019](https://github.com/BerriAI/litellm/pull/18019)
+    - AzureAnthropicConfig for Claude models in get_provider_chat_config 반환 - [PR #18086](https://github.com/BerriAI/litellm/pull/18086)
 - **[Fireworks AI](../../docs/providers/fireworks_ai)**
-    - Add reasoning param support for Fireworks AI models - [PR #17967](https://github.com/BerriAI/litellm/pull/17967)
+    - reasoning param support for Fireworks AI models 추가 - [PR #17967](https://github.com/BerriAI/litellm/pull/17967)
 - **[Bedrock](../../docs/providers/bedrock)**
-    - Add Qwen 2 and Qwen 3 to get_bedrock_model_id - [PR #18100](https://github.com/BerriAI/litellm/pull/18100)
-    - Remove ttl field when routing to bedrock - [PR #18049](https://github.com/BerriAI/litellm/pull/18049)
-    - Add Bedrock Stability image edit models - [PR #18254](https://github.com/BerriAI/litellm/pull/18254)
+    - Qwen 2 및 Qwen 3 to get_bedrock_model_id 추가 - [PR #18100](https://github.com/BerriAI/litellm/pull/18100)
+    - ttl field 때 routing to bedrock 제거 - [PR #18049](https://github.com/BerriAI/litellm/pull/18049)
+    - Bedrock Stability image edit models 추가 - [PR #18254](https://github.com/BerriAI/litellm/pull/18254)
 - **[Perplexity](../../docs/providers/perplexity)**
-    - Use API-provided cost instead of manual calculation - [PR #17887](https://github.com/BerriAI/litellm/pull/17887)
+    - API-provided cost instead of manual calculation 사용 - [PR #17887](https://github.com/BerriAI/litellm/pull/17887)
 - **[OpenAI](../../docs/providers/openai)**
-    - Add diarize model for audio transcription - [PR #18117](https://github.com/BerriAI/litellm/pull/18117)
-    - Add gpt-image-1.5-2025-12-16 in model cost map - [PR #18107](https://github.com/BerriAI/litellm/pull/18107)
-    - Fix cost calculation of gpt-image-1 model - [PR #17966](https://github.com/BerriAI/litellm/pull/17966)
+    - diarize model for audio transcription 추가 - [PR #18117](https://github.com/BerriAI/litellm/pull/18117)
+    - gpt-image-1.5-2025-12-16 in model cost map 추가 - [PR #18107](https://github.com/BerriAI/litellm/pull/18107)
+    - cost calculation of gpt-image-1 model 수정 - [PR #17966](https://github.com/BerriAI/litellm/pull/17966)
 - **[GitHub Copilot](../../docs/providers/github_copilot)**
-    - Add github_copilot model info - [PR #17858](https://github.com/BerriAI/litellm/pull/17858)
+    - github_copilot model info 추가 - [PR #17858](https://github.com/BerriAI/litellm/pull/17858)
 - **[Custom LLM](../../docs/providers/custom_llm_server)**
-    - Add image_edit and aimage_edit support - [PR #17999](https://github.com/BerriAI/litellm/pull/17999)
+    - image_edit 및 aimage_edit support 추가 - [PR #17999](https://github.com/BerriAI/litellm/pull/17999)
 
-### Bug Fixes
+### 버그 수정
 
 - **[Gemini](../../docs/providers/gemini)**
-    - Fix pricing for Gemini 3 Flash on Vertex AI - [PR #18202](https://github.com/BerriAI/litellm/pull/18202)
-    - Add output_cost_per_image_token for gemini-2.5-flash-image models - [PR #18156](https://github.com/BerriAI/litellm/pull/18156)
-    - Fix properties should be non-empty for OBJECT type - [PR #18237](https://github.com/BerriAI/litellm/pull/18237)
+    - pricing for Gemini 3 Flash on Vertex AI 수정 - [PR #18202](https://github.com/BerriAI/litellm/pull/18202)
+    - output_cost_per_image_token for gemini-2.5-flash-image models 추가 - [PR #18156](https://github.com/BerriAI/litellm/pull/18156)
+    - properties should be non-empty for OBJECT type 수정 - [PR #18237](https://github.com/BerriAI/litellm/pull/18237)
 - **[Qwen](../../docs/providers/fireworks_ai)**
-    - Add qwen3-embedding-8b input per token price - [PR #18018](https://github.com/BerriAI/litellm/pull/18018)
-- **General**
-    - Fix image URL handling - [PR #18139](https://github.com/BerriAI/litellm/pull/18139)
-    - Support Signed URLs with Query Parameters in Image Processing - [PR #17976](https://github.com/BerriAI/litellm/pull/17976)
-    - Add none to encoding_format instead of omitting it - [PR #18042](https://github.com/BerriAI/litellm/pull/18042)
+    - qwen3-embedding-8b input per token price 추가 - [PR #18018](https://github.com/BerriAI/litellm/pull/18018)
+- **일반**
+    - image URL handling 수정 - [PR #18139](https://github.com/BerriAI/litellm/pull/18139)
+    - Signed URLs with Query Parameters in Image Processing 지원 - [PR #17976](https://github.com/BerriAI/litellm/pull/17976)
+    - none to encoding_format instead of omitting it 추가 - [PR #18042](https://github.com/BerriAI/litellm/pull/18042)
 
 ---
 
-## LLM API Endpoints
+## LLM API 엔드포인트
 
-#### Features
+#### 기능
 
 - **[Responses API](../../docs/response_api)**
-    - Add provider specific tools support - [PR #17980](https://github.com/BerriAI/litellm/pull/17980)
-    - Add custom headers support - [PR #18036](https://github.com/BerriAI/litellm/pull/18036)
-    - Fix tool calls transformation in completion bridge - [PR #18226](https://github.com/BerriAI/litellm/pull/18226)
-    - Use list format with input_text for tool results - [PR #18257](https://github.com/BerriAI/litellm/pull/18257)
-    - Add cost tracking in background mode - [PR #18236](https://github.com/BerriAI/litellm/pull/18236)
-    - Fix Claude code responses API bridge errors - [PR #18194](https://github.com/BerriAI/litellm/pull/18194)
+    - provider specific tools support 추가 - [PR #17980](https://github.com/BerriAI/litellm/pull/17980)
+    - custom headers support 추가 - [PR #18036](https://github.com/BerriAI/litellm/pull/18036)
+    - tool calls transformation in completion bridge 수정 - [PR #18226](https://github.com/BerriAI/litellm/pull/18226)
+    - list format with input_text for tool results 사용 - [PR #18257](https://github.com/BerriAI/litellm/pull/18257)
+    - cost tracking in background mode 추가 - [PR #18236](https://github.com/BerriAI/litellm/pull/18236)
+    - Claude code responses API bridge errors 수정 - [PR #18194](https://github.com/BerriAI/litellm/pull/18194)
 - **[Chat Completions API](../../docs/completion/input)**
-    - Add support for agent skills - [PR #18031](https://github.com/BerriAI/litellm/pull/18031)
+    - support for agent skills 추가 - [PR #18031](https://github.com/BerriAI/litellm/pull/18031)
 - **[Skills API](../../docs/skills)**
     - Unified Skills API works across Anthropic, Vertex, Azure, Bedrock - [PR #18232](https://github.com/BerriAI/litellm/pull/18232)
 - **[Search API](../../docs/search/index)**
-    - Add new RAG Search API with rerankers - [PR #18217](https://github.com/BerriAI/litellm/pull/18217)
+    - new RAG Search API with rerankers 추가 - [PR #18217](https://github.com/BerriAI/litellm/pull/18217)
 - **[Interactions API](../../docs/interactions)**
-    - Add Google Interactions API on SDK and AI Gateway - [PR #18079](https://github.com/BerriAI/litellm/pull/18079), [PR #18081](https://github.com/BerriAI/litellm/pull/18081)
+    - Google Interactions API on SDK 및 AI Gateway 추가 - [PR #18079](https://github.com/BerriAI/litellm/pull/18079), [PR #18081](https://github.com/BerriAI/litellm/pull/18081)
 - **[Image Edit API](../../docs/image_edits)**
-    - Add drop_params support and fix Vertex AI config - [PR #18077](https://github.com/BerriAI/litellm/pull/18077)
-- **General**
+    - drop_params support 및 fix Vertex AI config 추가 - [PR #18077](https://github.com/BerriAI/litellm/pull/18077)
+- **일반**
     - Skip adding beta headers for Vertex AI as it is not supported - [PR #18037](https://github.com/BerriAI/litellm/pull/18037)
-    - Fix managed files endpoint - [PR #18046](https://github.com/BerriAI/litellm/pull/18046)
-    - Allow base_model for non-Azure providers in proxy - [PR #18038](https://github.com/BerriAI/litellm/pull/18038)
+    - managed files endpoint 수정 - [PR #18046](https://github.com/BerriAI/litellm/pull/18046)
+    - base_model for non-Azure providers in proxy 허용 - [PR #18038](https://github.com/BerriAI/litellm/pull/18038)
 
-#### Bugs
+#### 버그
 
-- **General**
-    - Fix basemodel import in guardrail translation - [PR #17977](https://github.com/BerriAI/litellm/pull/17977)
-    - Fix No module named 'fastapi' error - [PR #18239](https://github.com/BerriAI/litellm/pull/18239)
+- **일반**
+    - basemodel import in guardrail translation 수정 - [PR #17977](https://github.com/BerriAI/litellm/pull/17977)
+    - No module named 'fastapi' error 수정 - [PR #18239](https://github.com/BerriAI/litellm/pull/18239)
 
 ---
 
 ## 관리 endpoint / UI {#management-endpoints-ui}
 
-#### Features
+#### 기능
 
 - **가상 키**
-    - Add master key rotation for credentials table - [PR #17952](https://github.com/BerriAI/litellm/pull/17952)
-    - Fix tag management to preserve encrypted fields in litellm_params - [PR #17484](https://github.com/BerriAI/litellm/pull/17484)
-    - Fix key delete and regenerate permissions - [PR #18214](https://github.com/BerriAI/litellm/pull/18214)
+    - master key rotation for credentials table 추가 - [PR #17952](https://github.com/BerriAI/litellm/pull/17952)
+    - tag management to preserve encrypted fields in litellm_params 수정 - [PR #17484](https://github.com/BerriAI/litellm/pull/17484)
+    - key delete 및 regenerate permissions 수정 - [PR #18214](https://github.com/BerriAI/litellm/pull/18214)
 - **모델 + Endpoints**
-    - Add 모델 Conditional Rendering in UI - [PR #18071](https://github.com/BerriAI/litellm/pull/18071)
-    - Add Health Check Model for Wildcard Model in UI - [PR #18269](https://github.com/BerriAI/litellm/pull/18269)
+    - 모델 Conditional Rendering in UI 추가 - [PR #18071](https://github.com/BerriAI/litellm/pull/18071)
+    - Health Check Model for Wildcard Model in UI 추가 - [PR #18269](https://github.com/BerriAI/litellm/pull/18269)
     - Auto Resolve Vector Store Embedding Model Config - [PR #18167](https://github.com/BerriAI/litellm/pull/18167)
 - **Vector Stores**
-    - Add Milvus Vector Store UI support - [PR #18030](https://github.com/BerriAI/litellm/pull/18030)
+    - Milvus Vector Store UI support 추가 - [PR #18030](https://github.com/BerriAI/litellm/pull/18030)
     - Persist Vector Store Settings in Team Update - [PR #18274](https://github.com/BerriAI/litellm/pull/18274)
 - **로그 & Spend**
-    - Add LiteLLM Overhead to 로그 - [PR #18033](https://github.com/BerriAI/litellm/pull/18033)
+    - LiteLLM Overhead to 로그 추가 - [PR #18033](https://github.com/BerriAI/litellm/pull/18033)
     - Show LiteLLM Overhead in 로그 UI - [PR #18034](https://github.com/BerriAI/litellm/pull/18034)
-    - Resolve Team ID to Team Alias in 사용법 Page - [PR #18275](https://github.com/BerriAI/litellm/pull/18275)
-    - Fix 사용법 Page Top Key View Button Visibility - [PR #18203](https://github.com/BerriAI/litellm/pull/18203)
+    - Team ID to Team Alias in 사용법 Page 해석 - [PR #18275](https://github.com/BerriAI/litellm/pull/18275)
+    - 사용법 Page Top Key View Button Visibility 수정 - [PR #18203](https://github.com/BerriAI/litellm/pull/18203)
 - **SSO & Health**
-    - Add SSO Readiness Health Check - [PR #18078](https://github.com/BerriAI/litellm/pull/18078)
-    - Fix /health/test_connection to resolve env variables like /chat/completions - [PR #17752](https://github.com/BerriAI/litellm/pull/17752)
+    - SSO Readiness Health Check 추가 - [PR #18078](https://github.com/BerriAI/litellm/pull/18078)
+    - /health/test_connection to resolve env variables like /chat/completions 수정 - [PR #17752](https://github.com/BerriAI/litellm/pull/17752)
 - **CloudZero**
-    - Add CloudZero Cost Tracking UI - [PR #18163](https://github.com/BerriAI/litellm/pull/18163)
-    - Add Delete CloudZero Settings Route and UI - [PR #18168](https://github.com/BerriAI/litellm/pull/18168), [PR #18170](https://github.com/BerriAI/litellm/pull/18170)
-- **General**
+    - CloudZero Cost Tracking UI 추가 - [PR #18163](https://github.com/BerriAI/litellm/pull/18163)
+    - Delete CloudZero Settings Route 및 UI 추가 - [PR #18168](https://github.com/BerriAI/litellm/pull/18168), [PR #18170](https://github.com/BerriAI/litellm/pull/18170)
+- **일반**
     - Update UI path handling for non-root Docker - [PR #17989](https://github.com/BerriAI/litellm/pull/17989)
 
-#### Bugs
+#### 버그
 
 - **UI Fixes**
-    - Fix Login Page Failed To Parse JSON Error - [PR #18159](https://github.com/BerriAI/litellm/pull/18159)
-    - Fix new user route user_id collision handling - [PR #17559](https://github.com/BerriAI/litellm/pull/17559)
-    - Fix Callback Environment Variables Casing - [PR #17912](https://github.com/BerriAI/litellm/pull/17912)
+    - Login Page Failed To Parse JSON Error 수정 - [PR #18159](https://github.com/BerriAI/litellm/pull/18159)
+    - new user route user_id collision handling 수정 - [PR #17559](https://github.com/BerriAI/litellm/pull/17559)
+    - Callback Environment Variables Casing 수정 - [PR #17912](https://github.com/BerriAI/litellm/pull/17912)
 
 ---
 
-## AI Integrations
+## AI 통합
 
-### Logging
+### 로깅
 
 - **[Azure Sentinel](../../docs/observability/azure_sentinel)**
-    - Add new Azure Sentinel Logger integration - [PR #18146](https://github.com/BerriAI/litellm/pull/18146)
+    - new Azure Sentinel Logger integration 추가 - [PR #18146](https://github.com/BerriAI/litellm/pull/18146)
 - **[Prometheus](../../docs/proxy/logging#prometheus)**
-    - Add extraction of top level metadata for custom labels - [PR #18087](https://github.com/BerriAI/litellm/pull/18087)
+    - extraction of top level metadata for custom labels 추가 - [PR #18087](https://github.com/BerriAI/litellm/pull/18087)
 - **[Langfuse](../../docs/proxy/logging#langfuse)**
-    - Fix not working log_failure_event - [PR #18234](https://github.com/BerriAI/litellm/pull/18234)
+    - not working log_failure_event 수정 - [PR #18234](https://github.com/BerriAI/litellm/pull/18234)
 - **[Arize Phoenix](../../docs/observability/phoenix_integration)**
-    - Fix nested spans - [PR #18102](https://github.com/BerriAI/litellm/pull/18102)
-- **General**
+    - nested spans 수정 - [PR #18102](https://github.com/BerriAI/litellm/pull/18102)
+- **일반**
     - Change extra_headers to additional_headers - [PR #17950](https://github.com/BerriAI/litellm/pull/17950)
 
 ### 가드레일
 
 - **[LiteLLM Content Filter](../../docs/proxy/guardrails/litellm_content_filter)**
-    - Add built-in guardrails for harmful content, bias, etc. - [PR #18029](https://github.com/BerriAI/litellm/pull/18029)
-    - Add support for running content filters on images - [PR #18044](https://github.com/BerriAI/litellm/pull/18044)
-    - Add support for Brazil PII field - [PR #18076](https://github.com/BerriAI/litellm/pull/18076)
-    - Add configurable guardrail options for content filtering - [PR #18007](https://github.com/BerriAI/litellm/pull/18007)
+    - built-in guardrails for harmful content, bias, etc. 추가 - [PR #18029](https://github.com/BerriAI/litellm/pull/18029)
+    - support for running content filters on images 추가 - [PR #18044](https://github.com/BerriAI/litellm/pull/18044)
+    - support for Brazil PII field 추가 - [PR #18076](https://github.com/BerriAI/litellm/pull/18076)
+    - configurable guardrail options for content filtering 추가 - [PR #18007](https://github.com/BerriAI/litellm/pull/18007)
 - **[가드레일 API](../../docs/adding_provider/generic_guardrail_api)**
-    - Support LLM tool call response checks on `/chat/completions`, `/v1/responses`, `/v1/messages` - [PR #17619](https://github.com/BerriAI/litellm/pull/17619)
-    - Add guardrails load balancing - [PR #18181](https://github.com/BerriAI/litellm/pull/18181)
-    - Fix guardrails for passthrough endpoint - [PR #18109](https://github.com/BerriAI/litellm/pull/18109)
-    - Add headers to metadata for guardrails on pass-through endpoints - [PR #17992](https://github.com/BerriAI/litellm/pull/17992)
+    - LLM tool call response checks on `/chat/completions`, `/v1/responses`, `/v1/messages` 지원 - [PR #17619](https://github.com/BerriAI/litellm/pull/17619)
+    - guardrails load balancing 추가 - [PR #18181](https://github.com/BerriAI/litellm/pull/18181)
+    - guardrails for passthrough endpoint 수정 - [PR #18109](https://github.com/BerriAI/litellm/pull/18109)
+    - headers to metadata for guardrails on pass-through endpoints 추가 - [PR #17992](https://github.com/BerriAI/litellm/pull/17992)
     - Various fixes for guardrail on OpenRouter models - [PR #18085](https://github.com/BerriAI/litellm/pull/18085)
 - **[Lakera](../../docs/proxy/guardrails/lakera_ai)**
-    - Add monitor mode for Lakera - [PR #18084](https://github.com/BerriAI/litellm/pull/18084)
+    - monitor mode for Lakera 추가 - [PR #18084](https://github.com/BerriAI/litellm/pull/18084)
 - **[Pillar Security](../../docs/proxy/guardrails/pillar_security)**
-    - Add masking support and MCP call support - [PR #17959](https://github.com/BerriAI/litellm/pull/17959)
+    - masking support 및 MCP call support 추가 - [PR #17959](https://github.com/BerriAI/litellm/pull/17959)
 - **[Bedrock 가드레일](../../docs/proxy/guardrails/bedrock)**
-    - Add support for Bedrock image guardrails - [PR #18115](https://github.com/BerriAI/litellm/pull/18115)
+    - support for Bedrock image guardrails 추가 - [PR #18115](https://github.com/BerriAI/litellm/pull/18115)
     - 가드레일 block action takes precedence over masking - [PR #17968](https://github.com/BerriAI/litellm/pull/17968)
 
 ### Secret Managers
 
 - **[HashiCorp Vault](../../docs/secret_managers/hashicorp_vault)**
-    - Add documentation for configurable Vault mount - [PR #18082](https://github.com/BerriAI/litellm/pull/18082)
-    - Add per-team Vault configuration - [PR #18150](https://github.com/BerriAI/litellm/pull/18150)
+    - documentation for configurable Vault mount 추가 - [PR #18082](https://github.com/BerriAI/litellm/pull/18082)
+    - per-team Vault configuration 추가 - [PR #18150](https://github.com/BerriAI/litellm/pull/18150)
 - **UI**
-    - Add secret manager settings controls to team management UI - [PR #18149](https://github.com/BerriAI/litellm/pull/18149)
+    - secret manager settings controls to team management UI 추가 - [PR #18149](https://github.com/BerriAI/litellm/pull/18149)
 
 ---
 
 ## 비용 추적, budget 및 rate limiting {#cost-tracking-budgets-and-rate-limiting}
 
-- **Email Budget Alerts** - Send email notifications when budgets are reached - [PR #17995](https://github.com/BerriAI/litellm/pull/17995)
+- **Email Budget Alerts** - Send email notifications 때 budgets are reached - [PR #17995](https://github.com/BerriAI/litellm/pull/17995)
 
 ---
 
 ## MCP Gateway
 
 - **Auth Header Propagation** - Add MCP auth header propagation - [PR #17963](https://github.com/BerriAI/litellm/pull/17963)
-- **Fix deepcopy error** - Fix MCP tool call deepcopy error when processing requests - [PR #18010](https://github.com/BerriAI/litellm/pull/18010)
+- **Fix deepcopy error** - Fix MCP tool call deepcopy error 때 processing requests - [PR #18010](https://github.com/BerriAI/litellm/pull/18010)
 - **Fix list tool** - Fix MCP list_tools not working without database connection - [PR #18161](https://github.com/BerriAI/litellm/pull/18161)
 
 ---
@@ -327,7 +327,7 @@ style={{width: '100%', display: 'block', margin: '2rem auto'}}
 
 ## 성능 / load balancing / reliability 개선 {#performance-loadbalancing-reliability-improvements}
 
-- **Lazy Imports** - Use per-attribute lazy imports and extract shared constants - [PR #17994](https://github.com/BerriAI/litellm/pull/17994)
+- **Lazy Imports** - Use per-attribute lazy imports 및 extract shared constants - [PR #17994](https://github.com/BerriAI/litellm/pull/17994)
 - **Lazy Load HTTP Handlers** - Lazy load http handlers - [PR #17997](https://github.com/BerriAI/litellm/pull/17997)
 - **Lazy Load Caches** - Lazy load caches - [PR #18001](https://github.com/BerriAI/litellm/pull/18001)
 - **Lazy Load Types** - Lazy load bedrock types, .types.utils, GuardrailItem - [PR #18053](https://github.com/BerriAI/litellm/pull/18053), [PR #18054](https://github.com/BerriAI/litellm/pull/18054), [PR #18072](https://github.com/BerriAI/litellm/pull/18072)
@@ -342,13 +342,13 @@ style={{width: '100%', display: 'block', margin: '2rem auto'}}
 ## 문서 업데이트 {#documentation-updates}
 
 - **SAP 문서** - Update SAP documentation - [PR #17974](https://github.com/BerriAI/litellm/pull/17974)
-- **Pydantic AI Agents** - Add docs on using pydantic ai agents with LiteLLM A2A gateway - [PR #18026](https://github.com/BerriAI/litellm/pull/18026)
+- **Pydantic AI Agents** - Add docs on 사용해 pydantic ai agents with LiteLLM A2A gateway - [PR #18026](https://github.com/BerriAI/litellm/pull/18026)
 - **Vertex AI Agent Engine** - Add Vertex AI Agent Engine documentation - [PR #18027](https://github.com/BerriAI/litellm/pull/18027)
 - **Router Order** - Add router order parameter documentation - [PR #18045](https://github.com/BerriAI/litellm/pull/18045)
 - **Secret Manager Settings** - Improve secret manager settings documentation - [PR #18235](https://github.com/BerriAI/litellm/pull/18235)
 - **Gemini 3 Flash** - Add version requirement in Gemini 3 Flash blog - [PR #18227](https://github.com/BerriAI/litellm/pull/18227)
-- **README** - Expand Responses API section and update endpoints - [PR #17354](https://github.com/BerriAI/litellm/pull/17354)
-- **Amazon Nova** - Add Amazon Nova to sidebar and supported models - [PR #18220](https://github.com/BerriAI/litellm/pull/18220)
+- **README** - Expand Responses API section 및 update endpoints - [PR #17354](https://github.com/BerriAI/litellm/pull/17354)
+- **Amazon Nova** - Add Amazon Nova to sidebar 및 supported models - [PR #18220](https://github.com/BerriAI/litellm/pull/18220)
 - **벤치마크** - Add infrastructure recommendations to benchmarks documentation - [PR #18264](https://github.com/BerriAI/litellm/pull/18264)
 - **Broken Links** - Fix broken link corrections - [PR #18104](https://github.com/BerriAI/litellm/pull/18104)
 - **README Fixes** - Various README improvements - [PR #18206](https://github.com/BerriAI/litellm/pull/18206)
@@ -357,14 +357,14 @@ style={{width: '100%', display: 'block', margin: '2rem auto'}}
 
 ## 인프라 / CI/CD {#infrastructure-cicd}
 
-- **PR Templates** - Add LiteLLM team PR template and CI/CD rules - [PR #17983](https://github.com/BerriAI/litellm/pull/17983), [PR #17985](https://github.com/BerriAI/litellm/pull/17985)
-- **Issue Labeling** - Improve issue labeling with component dropdown and more provider keywords - [PR #17957](https://github.com/BerriAI/litellm/pull/17957)
+- **PR Templates** - Add LiteLLM team PR template 및 CI/CD rules - [PR #17983](https://github.com/BerriAI/litellm/pull/17983), [PR #17985](https://github.com/BerriAI/litellm/pull/17985)
+- **Issue Labeling** - Improve issue labeling with component dropdown 및 more provider keywords - [PR #17957](https://github.com/BerriAI/litellm/pull/17957)
 - **PR Template Cleanup** - Remove redundant fields from PR template - [PR #17956](https://github.com/BerriAI/litellm/pull/17956)
 - **Dependencies** - Bump altcha-lib from 1.3.0 to 1.4.1 - [PR #18017](https://github.com/BerriAI/litellm/pull/18017)
 
 ---
 
-## New Contributors
+## 새 기여자
 
 * @dongbin-lunark made their first contribution in [PR #17757](https://github.com/BerriAI/litellm/pull/17757)
 * @qdrddr made their first contribution in [PR #18004](https://github.com/BerriAI/litellm/pull/18004)

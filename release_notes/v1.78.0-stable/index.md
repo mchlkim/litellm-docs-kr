@@ -192,15 +192,15 @@ aiohttp의 공유 세션 지원을 추가했습니다. 이제 모든 호출에�
     - Watsonx - openai/gpt-oss model family에 올바른 prompt template을 적용했습니다 - [PR #15341](https://github.com/BerriAI/litellm/pull/15341)
 
 - **[OpenRouter](../../docs/providers/openrouter)**
-    - Fix - (openrouter): claude/gemini에서 cache_control을 content block으로 이동했습니다 - [PR #15345](https://github.com/BerriAI/litellm/pull/15345)
-    - Fix - OpenRouter cache_control이 마지막 content block에만 적용되도록 했습니다 - [PR #15395](https://github.com/BerriAI/litellm/pull/15395)
+    - - (openrouter): claude/gemini에서 cache_control을 content block으로 이동했습니다 수정 - [PR #15345](https://github.com/BerriAI/litellm/pull/15345)
+    - - OpenRouter cache_control이 마지막 content block에만 적용되도록 했습니다 수정 - [PR #15395](https://github.com/BerriAI/litellm/pull/15395)
 
 - **[Together AI](../../docs/providers/togetherai)**
     - 새 together 모델을 추가했습니다 - [PR #15383](https://github.com/BerriAI/litellm/pull/15383)
 
 ### 버그 수정 {#bug-fixes}
 
-- **General**
+- **일반**
     - 버그 수정: gpt-5-chat-latest의 max_input_tokens 값이 잘못된 문제를 수정했습니다 - [PR #15116](https://github.com/BerriAI/litellm/pull/15116)
     - reasoning response ID를 수정했습니다 - [PR #15265](https://github.com/BerriAI/litellm/pull/15265)
     - assistant messages 파싱 문제를 수정했습니다 - [PR #15320](https://github.com/BerriAI/litellm/pull/15320)
@@ -229,7 +229,7 @@ aiohttp의 공유 세션 지원을 추가했습니다. 이제 모든 호출에�
 
 #### 버그 {#bugs}
 
-- **General**
+- **일반**
     - cache hit 시 x-litellm-cache-key 헤더가 반환되지 않는 문제를 수정했습니다 - [PR #15348](https://github.com/BerriAI/litellm/pull/15348)
 
 ---
@@ -250,7 +250,7 @@ aiohttp의 공유 세션 지원을 추가했습니다. 이제 모든 호출에�
 
 - **Teams**
     - Teams 페이지: teams 테이블에 새 "Your Role" 열을 추가했습니다 - [PR #15384](https://github.com/BerriAI/litellm/pull/15384)
-    - LiteLLM Dashboard Teams UI를 리팩터링했습니다 - [PR #15418](https://github.com/BerriAI/litellm/pull/15418)
+    - LiteLLM 대시보드 Teams UI를 리팩터링했습니다 - [PR #15418](https://github.com/BerriAI/litellm/pull/15418)
 
 - **UI 인프라**
     - frontend 자동 포매팅을 위해 prettier를 추가했습니다 - [PR #15215](https://github.com/BerriAI/litellm/pull/15215)
@@ -323,14 +323,14 @@ aiohttp의 공유 세션 지원을 추가했습니다. 이제 모든 호출에�
 ## 성능 / 부하 분산 / 안정성 개선 {#performance--loadbalancing--reliability-improvements}
 
 - **Router 최적화**
-    - Fix - Router: O(1) deployment 조회를 위해 model_name index를 추가했습니다 - [PR #15113](https://github.com/BerriAI/litellm/pull/15113)
+    - - Router: O(1) deployment 조회를 위해 model_name index를 추가했습니다 수정 - [PR #15113](https://github.com/BerriAI/litellm/pull/15113)
     - Refactor Utils: client에서 내부 함수를 추출했습니다 - [PR #15234](https://github.com/BerriAI/litellm/pull/15234)
-    - Fix Networking: 제한 사항을 제거했습니다 - [PR #15302](https://github.com/BerriAI/litellm/pull/15302)
+    - Networking: 제한 사항을 제거했습니다 수정 - [PR #15302](https://github.com/BerriAI/litellm/pull/15302)
 
 - **세션 관리**
-    - Fix - Sessions가 공유되지 않던 문제를 수정했습니다 - [PR #15388](https://github.com/BerriAI/litellm/pull/15388)
+    - - Sessions가 공유되지 않던 문제를 수정했습니다 수정 - [PR #15388](https://github.com/BerriAI/litellm/pull/15388)
     - Fix: hot path에서 panic을 제거했습니다 - [PR #15396](https://github.com/BerriAI/litellm/pull/15396)
-    - Fix - shared session 파싱 및 사용 문제를 수정했습니다 - [PR #15440](https://github.com/BerriAI/litellm/pull/15440)
+    - - shared session 파싱 및 사용 문제를 수정했습니다 수정 - [PR #15440](https://github.com/BerriAI/litellm/pull/15440)
     - Fix: 닫힌 aiohttp sessions를 처리합니다 - [PR #15442](https://github.com/BerriAI/litellm/pull/15442)
     - Fix: aiohttp sessions를 재생성할 때 session leak을 방지합니다 - [PR #15443](https://github.com/BerriAI/litellm/pull/15443)
 
@@ -341,7 +341,7 @@ aiohttp의 공유 세션 지원을 추가했습니다. 이제 모든 호출에�
     - tenacity 버전을 8.5.0으로 업그레이드했습니다 - [PR #15303](https://github.com/BerriAI/litellm/pull/15303)
 
 - **데이터 마스킹**
-    - Fix - SensitiveDataMasker가 list를 string으로 변환하던 문제를 수정했습니다 - [PR #15420](https://github.com/BerriAI/litellm/pull/15420)
+    - - SensitiveDataMasker가 list를 string으로 변환하던 문제를 수정했습니다 수정 - [PR #15420](https://github.com/BerriAI/litellm/pull/15420)
 
 ---
 

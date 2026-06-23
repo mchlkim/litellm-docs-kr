@@ -18,7 +18,7 @@ authors:
 hide_table_of_contents: false
 ---
 
-## Deploy this version
+## 이 버전 배포
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -43,15 +43,15 @@ pip install litellm==1.85.3
 </TabItem>
 </Tabs>
 
-`v1.85.3` is a patch release on top of [`v1.85.2`](/release_notes/v1.85.2/v1-85-2). It cherry-picks fixes for duplicate Claude Code traces, Bearer-prefix hashing, budget-reset writes, and two flag-leak corrections in the rate limiter and the provider request body.
+`v1.85.3` 는 다음 버전을 기반으로 한 패치 릴리스입니다: [`v1.85.2`](/release_notes/v1.85.2/v1-85-2). 이 릴리스는 다음 수정 사항을 선별 반영합니다: duplicate Claude Code traces, Bearer-prefix hashing, budget-reset writes, 및 two flag-leak corrections in the rate limiter 및 the provider request body.
 
-### What's Changed
+### 변경 사항
 
-- fix(logging): stop duplicate Claude Code traces (internal copy of #29089) - [PR #29311](https://github.com/BerriAI/litellm/pull/29311)
-- fix(proxy): normalize the Bearer prefix in the safe-hash helper - [PR #29343](https://github.com/BerriAI/litellm/pull/29343)
-- fix(budget): reset_budget writes only `{spend, budget_reset_at}` and no longer pre-zeroes the counter - [PR #29358](https://github.com/BerriAI/litellm/pull/29358)
-- fix(rate-limit): stop the v3 limiter from leaking internal stash to the provider body - [PR #27913](https://github.com/BerriAI/litellm/pull/27913)
-- fix(proxy): stop the `use_chat_completions_api` flag from leaking into the provider request body - [PR #29447](https://github.com/BerriAI/litellm/pull/29447)
+- fix(logging): Claude Code trace 중복 생성 중지(#29089 내부 반영) - [PR #29311](https://github.com/BerriAI/litellm/pull/29311)
+- fix(proxy): safe-hash helper에서 Bearer prefix 정규화 - [PR #29343](https://github.com/BerriAI/litellm/pull/29343)
+- fix(budget): reset_budget이 `{spend, budget_reset_at}`만 기록하고 counter를 미리 0으로 만들지 않도록 수정 - [PR #29358](https://github.com/BerriAI/litellm/pull/29358)
+- fix(rate-limit): v3 limiter의 internal stash가 provider body로 유출되지 않도록 수정 - [PR #27913](https://github.com/BerriAI/litellm/pull/27913)
+- fix(proxy): `use_chat_completions_api` flag가 provider request body로 유출되지 않도록 수정 - [PR #29447](https://github.com/BerriAI/litellm/pull/29447)
 
 ## Full 변경 이력
 

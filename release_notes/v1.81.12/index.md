@@ -40,21 +40,21 @@ pip install litellm==1.81.12
 </TabItem>
 </Tabs>
 
-## Key Highlights
+## 주요 변경 사항
 
-- **Policy Templates** - [Pre-configured guardrail policy templates for common safety and compliance use-cases (including NSFW, toxic content, and child safety)](../../docs/proxy/guardrails/policy_templates)
-- **Guardrail Action Builder** - [Build and customize guardrail policy flows with the new action-builder UI and conditional execution support](../../docs/proxy/guardrails/policy_templates)
-- **MCP OAuth2 M2M + Tracing** - [Add machine-to-machine OAuth2 support for MCP servers and OpenTelemetry tracing for MCP calls through AI Gateway](../../docs/mcp)
-- **Responses API `shell` Tool & `context_management` support** - [Server-side context management (compaction) and Shell tool support for the OpenAI Responses API](../../docs/response_api)
-- **Access Groups** - [Create access groups to manage model, MCP server, and agent access across teams and keys](../../docs/proxy/access_groups)
+- **Policy Templates** - [Pre-configured guardrail policy templates for common safety 및 compliance use-cases (including NSFW, toxic content, 및 child safety)](../../docs/proxy/guardrails/policy_templates)
+- **Guardrail Action Builder** - [Build 및 customize guardrail policy flows with the new action-builder UI 및 conditional execution support](../../docs/proxy/guardrails/policy_templates)
+- **MCP OAuth2 M2M + Tracing** - [Add machine-to-machine OAuth2 support for MCP servers 및 OpenTelemetry tracing for MCP calls 통해 AI Gateway](../../docs/mcp)
+- **Responses API `shell` Tool & `context_management` support** - [Server-side context management (compaction) 및 Shell tool support for the OpenAI Responses API](../../docs/response_api)
+- **Access Groups** - [Create access groups to manage model, MCP server, 및 agent access across teams 및 keys](../../docs/proxy/access_groups)
 - **50개 이상의 새 Bedrock 지역별 모델 항목** - 여러 region에 걸쳐 DeepSeek V3.2, MiniMax M2.1, Kimi K2.5, Qwen3 Coder Next, NVIDIA Nemotron Nano 추가
-- **Add Semgrep & fix OOMs** - [Static analysis rules and out-of-memory fixes](#add-semgrep--fix-ooms) - [PR #20912](https://github.com/BerriAI/litellm/pull/20912)
+- **Add Semgrep & fix OOMs** - [Static analysis rules 및 out-of-memory fixes](#add-semgrep--fix-ooms) - [PR #20912](https://github.com/BerriAI/litellm/pull/20912)
 
 ---
 
 ## Semgrep 추가 및 OOM 수정 {#add-semgrep--fix-ooms}
 
-This release fixes out-of-memory (OOM) risks from unbounded `asyncio.Queue()` usage. Log queues (e.g. GCS bucket) and DB spend-update queues were previously unbounded and could grow without limit under load. They now use a configurable max size (`LITELLM_ASYNCIO_QUEUE_MAXSIZE`, default 1000); when full, queues flush immediately to make room instead of growing memory. A Semgrep rule (`.semgrep/rules/python/unbounded-memory.yml`) was added to flag similar unbounded-memory patterns in future code. [PR #20912](https://github.com/BerriAI/litellm/pull/20912)
+This release fixes out-of-memory (OOM) risks from unbounded `asyncio.Queue()` usage. Log queues (e.g. GCS bucket) 및 DB spend-update queues were previously unbounded 및 could grow without limit under load. They now use a configurable max size (`LITELLM_ASYNCIO_QUEUE_MAXSIZE`, default 1000); 때 full, queues flush immediately to make room instead of growing memory. A Semgrep rule (`.semgrep/rules/python/unbounded-memory.yml`) was added to flag similar unbounded-memory patterns in future code. [PR #20912](https://github.com/BerriAI/litellm/pull/20912)
 
 ---
 
@@ -77,7 +77,7 @@ Access Groups는 조직 전반의 리소스 접근 정의를 단순화합니다.
 | Provider | 지원되는 LiteLLM 엔드포인트 | 설명 |
 | -------- | --------------------------- | ----------- |
 | [Scaleway](../../docs/providers/scaleway) | `/chat/completions` | Scaleway Generative APIs for chat completions |
-| [Sarvam AI](../../docs/providers/sarvam) | `/chat/completions`, `/audio/transcriptions`, `/audio/speech` | Sarvam AI STT and TTS support for Indian languages |
+| [Sarvam AI](../../docs/providers/sarvam) | `/chat/completions`, `/audio/transcriptions`, `/audio/speech` | Sarvam AI STT 및 TTS support for Indian languages |
 
 ---
 
@@ -85,7 +85,7 @@ Access Groups는 조직 전반의 리소스 접근 정의를 단순화합니다.
 
 #### 새 모델 지원(주요 모델 19개)
 
-| Provider | Model | Context Window | Input ($/1M tokens) | Output ($/1M tokens) |
+| Provider | Model | 컨텍스트 윈도우 | Input ($/1M tokens) | Output ($/1M tokens) |
 | -------- | ----- | -------------- | ------------------- | -------------------- |
 | AWS Bedrock | `deepseek.v3.2` | 164K | $0.62 | $1.85 |
 | AWS Bedrock | `minimax.minimax-m2.1` | 196K | $0.30 | $1.20 |
@@ -109,139 +109,139 @@ Access Groups는 조직 전반의 리소스 접근 정의를 단순화합니다.
 
 *Note: AWS Bedrock models are available across multiple regions (us-east-1, us-east-2, us-west-2, eu-central-1, eu-north-1, ap-northeast-1, ap-south-1, ap-southeast-3, sa-east-1). 54 regional model entries were added in total.*
 
-#### Features
+#### 기능
 
 - **[Anthropic](../../docs/providers/anthropic)**
-    - Enable non-tool structured outputs on Claude Opus 4.5 and 4.6 using `output_format` param - [PR #20548](https://github.com/BerriAI/litellm/pull/20548)
-    - Add support for `anthropic_messages` call type in prompt caching - [PR #19233](https://github.com/BerriAI/litellm/pull/19233)
+    - Enable non-tool structured outputs on Claude Opus 4.5 및 4.6 사용해 `output_format` param - [PR #20548](https://github.com/BerriAI/litellm/pull/20548)
+    - support for `anthropic_messages` call type in prompt caching 추가 - [PR #19233](https://github.com/BerriAI/litellm/pull/19233)
     - Managing Anthropic Beta Headers with remote URL fetching - [PR #20935](https://github.com/BerriAI/litellm/pull/20935), [PR #21110](https://github.com/BerriAI/litellm/pull/21110)
-    - Remove `x-anthropic-billing` block - [PR #20951](https://github.com/BerriAI/litellm/pull/20951)
-    - Use Authorization Bearer for OAuth tokens instead of x-api-key - [PR #21039](https://github.com/BerriAI/litellm/pull/21039)
+    - `x-anthropic-billing` block 제거 - [PR #20951](https://github.com/BerriAI/litellm/pull/20951)
+    - Authorization Bearer for OAuth tokens instead of x-api-key 사용 - [PR #21039](https://github.com/BerriAI/litellm/pull/21039)
     - Filter unsupported JSON schema constraints for structured outputs - [PR #20813](https://github.com/BerriAI/litellm/pull/20813)
     - New Claude Opus 4.6 features for `/v1/messages` - [PR #20733](https://github.com/BerriAI/litellm/pull/20733)
-    - Fix `reasoning_effort=None` and `"none"` should return None for Opus 4.6 - [PR #20800](https://github.com/BerriAI/litellm/pull/20800)
+    - `reasoning_effort=None` 및 `"none"` should return None for Opus 4.6 수정 - [PR #20800](https://github.com/BerriAI/litellm/pull/20800)
 
 - **[AWS Bedrock](../../docs/providers/bedrock)**
     - Extend model support with 4 new beta models - [PR #21035](https://github.com/BerriAI/litellm/pull/21035)
-    - Add Claude Opus 4.6 to `_supports_tool_search_on_bedrock` - [PR #21017](https://github.com/BerriAI/litellm/pull/21017)
-    - Correct Bedrock Claude Opus 4.6 model IDs (remove `:0` suffix) - [PR #20564](https://github.com/BerriAI/litellm/pull/20564), [PR #20671](https://github.com/BerriAI/litellm/pull/20671)
-    - Add `output_config` as supported param - [PR #20748](https://github.com/BerriAI/litellm/pull/20748)
+    - Claude Opus 4.6 to `_supports_tool_search_on_bedrock` 추가 - [PR #21017](https://github.com/BerriAI/litellm/pull/21017)
+    - Bedrock Claude Opus 4.6 model IDs (remove `:0` suffix) 수정 - [PR #20564](https://github.com/BerriAI/litellm/pull/20564), [PR #20671](https://github.com/BerriAI/litellm/pull/20671)
+    - `output_config` as supported param 추가 - [PR #20748](https://github.com/BerriAI/litellm/pull/20748)
 
 - **[Vertex AI](../../docs/providers/vertex)**
-    - Add Vertex GLM-5 model support - [PR #21053](https://github.com/BerriAI/litellm/pull/21053)
+    - Vertex GLM-5 model support 추가 - [PR #21053](https://github.com/BerriAI/litellm/pull/21053)
     - Propagate `extra_headers` anthropic-beta to request body - [PR #20666](https://github.com/BerriAI/litellm/pull/20666)
-    - Preserve `usageMetadata` in `_hidden_params` - [PR #20559](https://github.com/BerriAI/litellm/pull/20559)
-    - Map `IMAGE_PROHIBITED_CONTENT` to `content_filter` - [PR #20524](https://github.com/BerriAI/litellm/pull/20524)
-    - Add RAG ingest for Vertex AI - [PR #21120](https://github.com/BerriAI/litellm/pull/21120)
+    - `usageMetadata` in `_hidden_params` 보존 - [PR #20559](https://github.com/BerriAI/litellm/pull/20559)
+    - `IMAGE_PROHIBITED_CONTENT` to `content_filter` 매핑 - [PR #20524](https://github.com/BerriAI/litellm/pull/20524)
+    - RAG ingest for Vertex AI 추가 - [PR #21120](https://github.com/BerriAI/litellm/pull/21120)
 
 - **[OCI / Cohere](../../docs/providers/cohere)**
     - OCI Cohere responseFormat/Pydantic support - [PR #20663](https://github.com/BerriAI/litellm/pull/20663)
-    - Fix OCI Cohere system messages by populating `preambleOverride` - [PR #20958](https://github.com/BerriAI/litellm/pull/20958)
+    - OCI Cohere system messages by populating `preambleOverride` 수정 - [PR #20958](https://github.com/BerriAI/litellm/pull/20958)
 
 - **[Perplexity](../../docs/providers/perplexity)**
     - Perplexity Research API support with preset search - [PR #20860](https://github.com/BerriAI/litellm/pull/20860)
 
 - **[MiniMax](../../docs/providers/minimax)**
-    - Add MiniMax-M2.5 and MiniMax-M2.5-lightning models - [PR #21054](https://github.com/BerriAI/litellm/pull/21054)
+    - MiniMax-M2.5 및 MiniMax-M2.5-lightning models 추가 - [PR #21054](https://github.com/BerriAI/litellm/pull/21054)
 
 - **[Kimi / Moonshot](../../docs/providers/moonshot)**
-    - Add Kimi model pricing by region - [PR #20855](https://github.com/BerriAI/litellm/pull/20855)
-    - Add `moonshotai.kimi-k2.5` - [PR #20863](https://github.com/BerriAI/litellm/pull/20863)
+    - Kimi model pricing by region 추가 - [PR #20855](https://github.com/BerriAI/litellm/pull/20855)
+    - `moonshotai.kimi-k2.5` 추가 - [PR #20863](https://github.com/BerriAI/litellm/pull/20863)
 
 - **[Dashscope](../../docs/providers/dashscope)**
-    - Add `dashscope/qwen3-max` model with tiered pricing - [PR #20919](https://github.com/BerriAI/litellm/pull/20919)
+    - `dashscope/qwen3-max` model with tiered pricing 추가 - [PR #20919](https://github.com/BerriAI/litellm/pull/20919)
 
 - **[Vercel AI Gateway](../../docs/providers/vercel_ai_gateway)**
-    - Add new Vercel AI Anthropic models - [PR #20745](https://github.com/BerriAI/litellm/pull/20745)
+    - new Vercel AI Anthropic models 추가 - [PR #20745](https://github.com/BerriAI/litellm/pull/20745)
 
 - **[Azure AI](../../docs/providers/azure_ai)**
-    - Add `azure_ai/kimi-k2.5` to Azure model DB - [PR #20896](https://github.com/BerriAI/litellm/pull/20896)
-    - Support Azure AD token auth for non-Claude azure_ai models - [PR #20981](https://github.com/BerriAI/litellm/pull/20981)
-    - Fix Azure batches issues - [PR #21092](https://github.com/BerriAI/litellm/pull/21092)
+    - `azure_ai/kimi-k2.5` to Azure model DB 추가 - [PR #20896](https://github.com/BerriAI/litellm/pull/20896)
+    - Azure AD token auth for non-Claude azure_ai models 지원 - [PR #20981](https://github.com/BerriAI/litellm/pull/20981)
+    - Azure batches issues 수정 - [PR #21092](https://github.com/BerriAI/litellm/pull/21092)
 
 - **[DeepSeek](../../docs/providers/deepseek)**
-    - Sync DeepSeek model metadata and add bare-name fallback - [PR #20938](https://github.com/BerriAI/litellm/pull/20938)
+    - DeepSeek model metadata 및 add bare-name fallback 동기화 - [PR #20938](https://github.com/BerriAI/litellm/pull/20938)
 
 - **[Gemini](../../docs/providers/gemini)**
     - Handle image in assistant message for Gemini - [PR #20845](https://github.com/BerriAI/litellm/pull/20845)
-    - Add missing tpm/rpm for Gemini models - [PR #21175](https://github.com/BerriAI/litellm/pull/21175)
+    - missing tpm/rpm for Gemini models 추가 - [PR #21175](https://github.com/BerriAI/litellm/pull/21175)
 
-- **General**
-    - Add 30 missing models to pricing JSON - [PR #20797](https://github.com/BerriAI/litellm/pull/20797)
+- **일반**
+    - 30 missing models to pricing JSON 추가 - [PR #20797](https://github.com/BerriAI/litellm/pull/20797)
     - Cleanup 39 deprecated OpenRouter models - [PR #20786](https://github.com/BerriAI/litellm/pull/20786)
     - Standardize endpoint `display_name` naming convention - [PR #20791](https://github.com/BerriAI/litellm/pull/20791)
-    - Fix and stabilize model cost map formatting - [PR #20895](https://github.com/BerriAI/litellm/pull/20895)
-    - Export `PermissionDeniedError` from `litellm.__init__` - [PR #20960](https://github.com/BerriAI/litellm/pull/20960)
+    - 및 stabilize model cost map formatting 수정 - [PR #20895](https://github.com/BerriAI/litellm/pull/20895)
+    - `PermissionDeniedError` from `litellm.__init__` export - [PR #20960](https://github.com/BerriAI/litellm/pull/20960)
 
-### Bug Fixes
+### 버그 수정
 
 - **[Anthropic](../../docs/providers/anthropic)**
-    - Fix `get_supported_anthropic_messages_params` - [PR #20752](https://github.com/BerriAI/litellm/pull/20752)
-    - Fix `base_model` name for body and deployment name in URL - [PR #20747](https://github.com/BerriAI/litellm/pull/20747)
+    - `get_supported_anthropic_messages_params` 수정 - [PR #20752](https://github.com/BerriAI/litellm/pull/20752)
+    - `base_model` name for body 및 deployment name in URL 수정 - [PR #20747](https://github.com/BerriAI/litellm/pull/20747)
 
 - **[Azure](../../docs/providers/azure/azure)**
-    - Preserve `content_policy_violation` error details from Azure OpenAI - [PR #20883](https://github.com/BerriAI/litellm/pull/20883)
+    - `content_policy_violation` error details from Azure OpenAI 보존 - [PR #20883](https://github.com/BerriAI/litellm/pull/20883)
 
 - **[Vertex AI](../../docs/providers/vertex)**
-    - Fix Gemini multi-turn tool calling message formatting (added and reverted) - [PR #20569](https://github.com/BerriAI/litellm/pull/20569), [PR #21051](https://github.com/BerriAI/litellm/pull/21051)
+    - Gemini multi-turn tool calling message formatting (added 및 reverted) 수정 - [PR #20569](https://github.com/BerriAI/litellm/pull/20569), [PR #21051](https://github.com/BerriAI/litellm/pull/21051)
 
 ---
 
-## LLM API Endpoints
+## LLM API 엔드포인트
 
-#### Features
+#### 기능
 
 - **[Responses API](../../docs/response_api)**
-    - Add server-side context management (compaction) support - [PR #21058](https://github.com/BerriAI/litellm/pull/21058)
-    - Add Shell tool support for OpenAI Responses API - [PR #21063](https://github.com/BerriAI/litellm/pull/21063)
-    - Preserve tool call argument deltas when streaming id is omitted - [PR #20712](https://github.com/BerriAI/litellm/pull/20712)
-    - Preserve interleaved thinking/redacted_thinking blocks during streaming - [PR #20702](https://github.com/BerriAI/litellm/pull/20702)
+    - server-side context management (compaction) support 추가 - [PR #21058](https://github.com/BerriAI/litellm/pull/21058)
+    - Shell tool support for OpenAI Responses API 추가 - [PR #21063](https://github.com/BerriAI/litellm/pull/21063)
+    - tool call argument deltas 때 streaming id is omitted 보존 - [PR #20712](https://github.com/BerriAI/litellm/pull/20712)
+    - interleaved thinking/redacted_thinking blocks during streaming 보존 - [PR #20702](https://github.com/BerriAI/litellm/pull/20702)
 
 - **[Chat Completions](../../docs/completion/input)**
-    - Add Web Search support using LiteLLM `/search` (web search interception hook) - [PR #20483](https://github.com/BerriAI/litellm/pull/20483)
+    - Web Search support 사용해 LiteLLM `/search` (web search interception hook) 추가 - [PR #20483](https://github.com/BerriAI/litellm/pull/20483)
     - Preserved nullable object fields by carrying schema properties - [PR #19132](https://github.com/BerriAI/litellm/pull/19132)
-    - Support `prompt_cache_key` for OpenAI and Azure chat completions - [PR #20989](https://github.com/BerriAI/litellm/pull/20989)
+    - `prompt_cache_key` for OpenAI 및 Azure chat completions 지원 - [PR #20989](https://github.com/BerriAI/litellm/pull/20989)
 
 - **[Pass-Through Endpoints](../../docs/pass_through/bedrock)**
-    - Add support for `langchain_aws` via LiteLLM passthrough - [PR #20843](https://github.com/BerriAI/litellm/pull/20843)
-    - Add `custom_body` parameter to `endpoint_func` in `create_pass_through_route` - [PR #20849](https://github.com/BerriAI/litellm/pull/20849)
+    - support for `langchain_aws` via LiteLLM passthrough 추가 - [PR #20843](https://github.com/BerriAI/litellm/pull/20843)
+    - `custom_body` parameter to `endpoint_func` in `create_pass_through_route` 추가 - [PR #20849](https://github.com/BerriAI/litellm/pull/20849)
 
 - **[Vector Stores](../../docs/providers/openai)**
-    - Add `target_model_names` for vector store endpoints - [PR #21089](https://github.com/BerriAI/litellm/pull/21089)
+    - `target_model_names` for vector store endpoints 추가 - [PR #21089](https://github.com/BerriAI/litellm/pull/21089)
 
-- **General**
-    - Add `output_config` as supported param - [PR #20748](https://github.com/BerriAI/litellm/pull/20748)
-    - Add managed error file support - [PR #20838](https://github.com/BerriAI/litellm/pull/20838)
+- **일반**
+    - `output_config` as supported param 추가 - [PR #20748](https://github.com/BerriAI/litellm/pull/20748)
+    - managed error file support 추가 - [PR #20838](https://github.com/BerriAI/litellm/pull/20838)
 
-#### Bugs
+#### 버그
 
-- **General**
-    - Stop leaking Python tracebacks in streaming SSE error responses - [PR #20850](https://github.com/BerriAI/litellm/pull/20850)
-    - Fix video list pagination cursors not encoded with provider metadata - [PR #20710](https://github.com/BerriAI/litellm/pull/20710)
+- **일반**
+    - leaking Python tracebacks in streaming SSE error responses 중지 - [PR #20850](https://github.com/BerriAI/litellm/pull/20850)
+    - video list pagination cursors not encoded with provider metadata 수정 - [PR #20710](https://github.com/BerriAI/litellm/pull/20710)
     - Handle `metadata=None` in SDK path retry/error logic - [PR #20873](https://github.com/BerriAI/litellm/pull/20873)
-    - Fix Spend logs pickle error with Pydantic models and redaction - [PR #20685](https://github.com/BerriAI/litellm/pull/20685)
-    - Remove duplicate `PerplexityResponsesConfig` from `LLM_CONFIG_NAMES` - [PR #21105](https://github.com/BerriAI/litellm/pull/21105)
+    - Spend logs pickle error with Pydantic models 및 redaction 수정 - [PR #20685](https://github.com/BerriAI/litellm/pull/20685)
+    - duplicate `PerplexityResponsesConfig` from `LLM_CONFIG_NAMES` 제거 - [PR #21105](https://github.com/BerriAI/litellm/pull/21105)
 
 ---
 
 ## 관리 엔드포인트 / UI
 
-#### Features
+#### 기능
 
 - **Access Groups**
-    - New Access Groups feature for managing model, MCP server, and agent access - [PR #21022](https://github.com/BerriAI/litellm/pull/21022)
-    - Access Groups table and details page UI - [PR #21165](https://github.com/BerriAI/litellm/pull/21165)
+    - New Access Groups feature for managing model, MCP server, 및 agent access - [PR #21022](https://github.com/BerriAI/litellm/pull/21022)
+    - Access Groups table 및 details page UI - [PR #21165](https://github.com/BerriAI/litellm/pull/21165)
     - Refactor `model_ids` to `model_names` for backwards compatibility - [PR #21166](https://github.com/BerriAI/litellm/pull/21166)
 
 - **Policies**
-    - Allow connecting Policies to Tags, simulating Policies, viewing key/team counts - [PR #20904](https://github.com/BerriAI/litellm/pull/20904)
+    - connecting Policies to Tags, simulating Policies, viewing key/team counts 허용 - [PR #20904](https://github.com/BerriAI/litellm/pull/20904)
     - Guardrail pipeline support for conditional sequential execution - [PR #21177](https://github.com/BerriAI/litellm/pull/21177)
     - Pipeline flow builder UI for guardrail policies - [PR #21188](https://github.com/BerriAI/litellm/pull/21188)
 
 - **SSO / Auth**
     - New Login With SSO Button - [PR #20908](https://github.com/BerriAI/litellm/pull/20908)
     - M2M OAuth2 UI Flow - [PR #20794](https://github.com/BerriAI/litellm/pull/20794)
-    - Allow Organization and Team Admins to call `/invitation/new` - [PR #20987](https://github.com/BerriAI/litellm/pull/20987)
+    - Organization 및 Team Admins to call `/invitation/new` 허용 - [PR #20987](https://github.com/BerriAI/litellm/pull/20987)
     - Invite User: Email Integration Alert - [PR #20790](https://github.com/BerriAI/litellm/pull/20790)
     - Populate identity fields in proxy admin JWT early-return path - [PR #21169](https://github.com/BerriAI/litellm/pull/21169)
 
@@ -249,45 +249,45 @@ Access Groups는 조직 전반의 리소스 접근 정의를 단순화합니다.
     - Show predefined error codes in filter with user definable fallback - [PR #20773](https://github.com/BerriAI/litellm/pull/20773)
     - Paginated searchable model select - [PR #20892](https://github.com/BerriAI/litellm/pull/20892)
     - Sorting columns support - [PR #21143](https://github.com/BerriAI/litellm/pull/21143)
-    - Allow sorting on `/spend/logs/ui` - [PR #20991](https://github.com/BerriAI/litellm/pull/20991)
+    - sorting on `/spend/logs/ui` 허용 - [PR #20991](https://github.com/BerriAI/litellm/pull/20991)
 
 - **UI Improvements**
     - Navbar: Option to hide 사용법 Popup - [PR #20910](https://github.com/BerriAI/litellm/pull/20910)
     - Model Page: Improve Credentials Messaging - [PR #21076](https://github.com/BerriAI/litellm/pull/21076)
     - Fallbacks: Default configurable to 10 models - [PR #21144](https://github.com/BerriAI/litellm/pull/21144)
-    - Fallback display with arrows and card structure - [PR #20922](https://github.com/BerriAI/litellm/pull/20922)
+    - Fallback display with arrows 및 card structure - [PR #20922](https://github.com/BerriAI/litellm/pull/20922)
     - Team Info: Migrate to AntD Tabs + Table - [PR #20785](https://github.com/BerriAI/litellm/pull/20785)
-    - AntD refactoring and 0 cost models fix - [PR #20687](https://github.com/BerriAI/litellm/pull/20687)
+    - AntD refactoring 및 0 cost models fix - [PR #20687](https://github.com/BerriAI/litellm/pull/20687)
     - Zscaler AI Guard UI - [PR #21077](https://github.com/BerriAI/litellm/pull/21077)
-    - Include Config Defined Pass Through Endpoints - [PR #20898](https://github.com/BerriAI/litellm/pull/20898)
+    - Config Defined Pass Through Endpoints 포함 - [PR #20898](https://github.com/BerriAI/litellm/pull/20898)
     - Rename "HTTP" to "Streamable HTTP (Recommended)" in MCP server page - [PR #21000](https://github.com/BerriAI/litellm/pull/21000)
     - MCP server discovery UI - [PR #21079](https://github.com/BerriAI/litellm/pull/21079)
 
 - **가상 키**
-    - Allow Management keys to access `user/daily/activity` and team - [PR #20124](https://github.com/BerriAI/litellm/pull/20124)
+    - Management keys to access `user/daily/activity` 및 team 허용 - [PR #20124](https://github.com/BerriAI/litellm/pull/20124)
     - Skip premium check for empty metadata fields on team/key update - [PR #20598](https://github.com/BerriAI/litellm/pull/20598)
 
-#### Bugs
+#### 버그
 
-- 로그: Fix Input and Output Copying - [PR #20657](https://github.com/BerriAI/litellm/pull/20657)
+- 로그: Fix Input 및 Output Copying - [PR #20657](https://github.com/BerriAI/litellm/pull/20657)
 - Teams: Fix Available Teams - [PR #20682](https://github.com/BerriAI/litellm/pull/20682)
 - Spend 로그: Reset Filters Resets Custom Date Range - [PR #21149](https://github.com/BerriAI/litellm/pull/21149)
 - 사용법: Request Chart stack variant fix - [PR #20894](https://github.com/BerriAI/litellm/pull/20894)
-- Add Auto Router: Description Text Input Focus - [PR #21004](https://github.com/BerriAI/litellm/pull/21004)
+- Auto Router: 설명 Text Input Focus 추가 - [PR #21004](https://github.com/BerriAI/litellm/pull/21004)
 - Guardrail Edit: LiteLLM Content Filter Categories - [PR #21002](https://github.com/BerriAI/litellm/pull/21002)
-- Add null guard for models in API keys table - [PR #20655](https://github.com/BerriAI/litellm/pull/20655)
+- null guard for models in API keys table 추가 - [PR #20655](https://github.com/BerriAI/litellm/pull/20655)
 - Show error details instead of 'Data Not Available' for failed requests - [PR #20656](https://github.com/BerriAI/litellm/pull/20656)
-- Fix Spend Management Tests - [PR #21088](https://github.com/BerriAI/litellm/pull/21088)
-- Fix JWT email domain validation error message - [PR #21212](https://github.com/BerriAI/litellm/pull/21212)
+- Spend Management Tests 수정 - [PR #21088](https://github.com/BerriAI/litellm/pull/21088)
+- JWT email domain validation error message 수정 - [PR #21212](https://github.com/BerriAI/litellm/pull/21212)
 
 ---
 
-## AI Integrations
+## AI 통합
 
-### Logging
+### 로깅
 
 - **[PostHog](../../docs/observability/posthog_integration)**
-    - Fix JSON serialization error for non-serializable objects - [PR #20668](https://github.com/BerriAI/litellm/pull/20668)
+    - JSON serialization error for non-serializable objects 수정 - [PR #20668](https://github.com/BerriAI/litellm/pull/20668)
 
 - **[Prometheus](../../docs/proxy/logging#prometheus)**
     - Sanitize label values to prevent metric scrape failures - [PR #20600](https://github.com/BerriAI/litellm/pull/20600)
@@ -296,15 +296,15 @@ Access Groups는 조직 전반의 리소스 접근 정의를 단순화합니다.
     - Prevent empty proxy request spans from being sent to Langfuse - [PR #19935](https://github.com/BerriAI/litellm/pull/19935)
 
 - **[OpenTelemetry](../../docs/proxy/logging#otel)**
-    - Auto-infer `otlp_http` exporter when endpoint is configured - [PR #20438](https://github.com/BerriAI/litellm/pull/20438)
+    - Auto-infer `otlp_http` exporter 때 endpoint is configured - [PR #20438](https://github.com/BerriAI/litellm/pull/20438)
 
 - **[CloudZero](../../docs/proxy/logging)**
     - Update CBF field mappings per LIT-1907 - [PR #20906](https://github.com/BerriAI/litellm/pull/20906)
 
-- **General**
-    - Allow `MAX_CALLBACKS` override via env var - [PR #20781](https://github.com/BerriAI/litellm/pull/20781)
-    - Add `standard_logging_payload_excluded_fields` config option - [PR #20831](https://github.com/BerriAI/litellm/pull/20831)
-    - Enable `verbose_logger` when `LITELLM_LOG=DEBUG` - [PR #20496](https://github.com/BerriAI/litellm/pull/20496)
+- **일반**
+    - `MAX_CALLBACKS` override via env var 허용 - [PR #20781](https://github.com/BerriAI/litellm/pull/20781)
+    - `standard_logging_payload_excluded_fields` config option 추가 - [PR #20831](https://github.com/BerriAI/litellm/pull/20831)
+    - Enable `verbose_logger` 때 `LITELLM_LOG=DEBUG` - [PR #20496](https://github.com/BerriAI/litellm/pull/20496)
     - Guard against None `litellm_metadata` in batch logging path - [PR #20832](https://github.com/BerriAI/litellm/pull/20832)
     - Propagate model-level tags from config to Spend로그 - [PR #20769](https://github.com/BerriAI/litellm/pull/20769)
 
@@ -312,28 +312,28 @@ Access Groups는 조직 전반의 리소스 접근 정의를 단순화합니다.
 
 - **Policy Templates**
     - New Policy Templates: pre-configured guardrail combinations for specific use-cases - [PR #21025](https://github.com/BerriAI/litellm/pull/21025)
-    - Add NSFW policy template, toxic keywords in multiple languages, child safety content filter, JSON content viewer - [PR #21205](https://github.com/BerriAI/litellm/pull/21205)
-    - Add toxic/abusive content filter guardrails - [PR #20934](https://github.com/BerriAI/litellm/pull/20934)
+    - NSFW policy template, toxic keywords in multiple languages, child safety content filter, JSON content viewer 추가 - [PR #21205](https://github.com/BerriAI/litellm/pull/21205)
+    - toxic/abusive content filter guardrails 추가 - [PR #20934](https://github.com/BerriAI/litellm/pull/20934)
 
 - **Pipeline Execution**
-    - Add guardrail pipeline support for conditional sequential execution - [PR #21177](https://github.com/BerriAI/litellm/pull/21177)
+    - guardrail pipeline support for conditional sequential execution 추가 - [PR #21177](https://github.com/BerriAI/litellm/pull/21177)
     - Agent 가드레일 on streaming output - [PR #21206](https://github.com/BerriAI/litellm/pull/21206)
     - Pipeline flow builder UI - [PR #21188](https://github.com/BerriAI/litellm/pull/21188)
 
 - **[Zscaler AI Guard](../../docs/apply_guardrail)**
-    - Zscaler AI Guard bug fixes and support during post-call - [PR #20801](https://github.com/BerriAI/litellm/pull/20801)
+    - Zscaler AI Guard bug fixes 및 support during post-call - [PR #20801](https://github.com/BerriAI/litellm/pull/20801)
     - Zscaler AI Guard UI - [PR #21077](https://github.com/BerriAI/litellm/pull/21077)
 
 - **[ZGuard](../../docs/apply_guardrail)**
-    - Add team policy mapping for ZGuard - [PR #20608](https://github.com/BerriAI/litellm/pull/20608)
+    - team policy mapping for ZGuard 추가 - [PR #20608](https://github.com/BerriAI/litellm/pull/20608)
 
-- **General**
-    - Add logging to all unified guardrails + link to custom code guardrail templates - [PR #20900](https://github.com/BerriAI/litellm/pull/20900)
+- **일반**
+    - logging to all unified guardrails + link to custom code guardrail templates 추가 - [PR #20900](https://github.com/BerriAI/litellm/pull/20900)
     - Forward request headers + `litellm_version` to generic guardrails - [PR #20729](https://github.com/BerriAI/litellm/pull/20729)
     - Empty `guardrails`/`policies` arrays should not trigger enterprise license check - [PR #20567](https://github.com/BerriAI/litellm/pull/20567)
-    - Fix OpenAI moderation guardrails - [PR #20718](https://github.com/BerriAI/litellm/pull/20718)
-    - Fix `/v2/guardrails/list` returning sensitive values - [PR #20796](https://github.com/BerriAI/litellm/pull/20796)
-    - Fix guardrail status error - [PR #20972](https://github.com/BerriAI/litellm/pull/20972)
+    - OpenAI moderation guardrails 수정 - [PR #20718](https://github.com/BerriAI/litellm/pull/20718)
+    - `/v2/guardrails/list` returning sensitive values 수정 - [PR #20796](https://github.com/BerriAI/litellm/pull/20796)
+    - guardrail status error 수정 - [PR #20972](https://github.com/BerriAI/litellm/pull/20972)
     - Reuse `get_instance_fn` in `initialize_custom_guardrail` - [PR #20917](https://github.com/BerriAI/litellm/pull/20917)
 
 ---
@@ -348,16 +348,16 @@ Access Groups는 조직 전반의 리소스 접근 정의를 단순화합니다.
 ## MCP Gateway(업데이트 12개)
 
 - **MCP M2M OAuth2 Support** - Add support for machine-to-machine OAuth2 for MCP servers - [PR #20788](https://github.com/BerriAI/litellm/pull/20788)
-- **MCP Server Discovery UI** - Browse and discover available MCP servers from the UI - [PR #21079](https://github.com/BerriAI/litellm/pull/21079)
-- **MCP Tracing** - Add OpenTelemetry tracing for MCP calls running through AI Gateway - [PR #21018](https://github.com/BerriAI/litellm/pull/21018)
+- **MCP Server Discovery UI** - Browse 및 discover available MCP servers from the UI - [PR #21079](https://github.com/BerriAI/litellm/pull/21079)
+- **MCP Tracing** - Add OpenTelemetry tracing for MCP calls running 통해 AI Gateway - [PR #21018](https://github.com/BerriAI/litellm/pull/21018)
 - **MCP OAuth2 Debug Headers** - Client-side debug headers for OAuth2 troubleshooting - [PR #21151](https://github.com/BerriAI/litellm/pull/21151)
 - **Fix MCP "Session not found" errors** - Resolve session persistence issues - [PR #21040](https://github.com/BerriAI/litellm/pull/21040)
 - **Fix MCP OAuth2 root endpoints** returning "MCP server not found" - [PR #20784](https://github.com/BerriAI/litellm/pull/20784)
-- **Fix MCP OAuth2 query param merging** when `authorization_url` already contains params - [PR #20968](https://github.com/BerriAI/litellm/pull/20968)
+- **Fix MCP OAuth2 query param merging** 때 `authorization_url` already contains params - [PR #20968](https://github.com/BerriAI/litellm/pull/20968)
 - **Fix MCP SCOPES on Atlassian** issue - [PR #21150](https://github.com/BerriAI/litellm/pull/21150)
 - **Fix MCP StreamableHTTP backend** - Use `anyio.fail_after` instead of `asyncio.wait_for` - [PR #20891](https://github.com/BerriAI/litellm/pull/20891)
 - **Inject `NPM_CONFIG_CACHE`** into STDIO MCP subprocess env - [PR #21069](https://github.com/BerriAI/litellm/pull/21069)
-- **Block spaces and hyphens** in MCP server names and aliases - [PR #21074](https://github.com/BerriAI/litellm/pull/21074)
+- **Block spaces 및 hyphens** in MCP server names 및 aliases - [PR #21074](https://github.com/BerriAI/litellm/pull/21074)
 
 ---
 
@@ -366,8 +366,8 @@ Access Groups는 조직 전반의 리소스 접근 정의를 단순화합니다.
 - **Remove orphan entries from queue** - Fix memory leak in scheduler queue - [PR #20866](https://github.com/BerriAI/litellm/pull/20866)
 - **Remove repeated provider parsing** in budget limiter hot path - [PR #21043](https://github.com/BerriAI/litellm/pull/21043)
 - **Use current retry exception** for retry backoff instead of stale exception - [PR #20725](https://github.com/BerriAI/litellm/pull/20725)
-- **Add Semgrep & fix OOMs** - Static analysis rules and out-of-memory fixes - [PR #20912](https://github.com/BerriAI/litellm/pull/20912)
-- **Add Pyroscope** for continuous profiling and observability - [PR #21167](https://github.com/BerriAI/litellm/pull/21167)
+- **Add Semgrep & fix OOMs** - Static analysis rules 및 out-of-memory fixes - [PR #20912](https://github.com/BerriAI/litellm/pull/20912)
+- **Add Pyroscope** for continuous profiling 및 observability - [PR #21167](https://github.com/BerriAI/litellm/pull/21167)
 - **Respect `ssl_verify`** with shared aiohttp sessions - [PR #20349](https://github.com/BerriAI/litellm/pull/20349)
 - **Fix shared health check serialization** - [PR #21119](https://github.com/BerriAI/litellm/pull/21119)
 - **Change model mismatch logs** from WARNING to DEBUG - [PR #20994](https://github.com/BerriAI/litellm/pull/20994)
@@ -378,11 +378,11 @@ Access Groups는 조직 전반의 리소스 접근 정의를 단순화합니다.
 
 ### Schema Updates
 
-| Table | Change Type | Description | PR | Migration |
+| Table | Change Type | 설명 | PR | Migration |
 | ----- | ----------- | ----------- | -- | --------- |
-| `LiteLLM_VerificationToken` | New Indexes | Added indexes on `user_id`+`team_id`, `team_id`, and `budget_reset_at`+`expires` | [PR #20736](https://github.com/BerriAI/litellm/pull/20736) | [Migration](https://github.com/BerriAI/litellm/blob/main/litellm-proxy-extras/litellm_proxy_extras/migrations/20260209085821_add_verificationtoken_indexes/migration.sql) |
+| `LiteLLM_VerificationToken` | New Indexes | Added indexes on `user_id`+`team_id`, `team_id`, 및 `budget_reset_at`+`expires` | [PR #20736](https://github.com/BerriAI/litellm/pull/20736) | [Migration](https://github.com/BerriAI/litellm/blob/main/litellm-proxy-extras/litellm_proxy_extras/migrations/20260209085821_add_verificationtoken_indexes/migration.sql) |
 | `LiteLLM_PolicyAttachmentTable` | New Column | Added `tags` text array for policy-to-tag connections | [PR #21061](https://github.com/BerriAI/litellm/pull/21061) | [Migration](https://github.com/BerriAI/litellm/blob/main/litellm-proxy-extras/litellm_proxy_extras/migrations/20260212103349_adjust_tags_policy_table/migration.sql) |
-| `LiteLLM_AccessGroupTable` | New Table | Access groups for managing model, MCP server, and agent access | [PR #21022](https://github.com/BerriAI/litellm/pull/21022) | [Migration](https://github.com/BerriAI/litellm/blob/main/litellm-proxy-extras/litellm_proxy_extras/migrations/20260212143306_add_access_group_table/migration.sql) |
+| `LiteLLM_AccessGroupTable` | New Table | Access groups for managing model, MCP server, 및 agent access | [PR #21022](https://github.com/BerriAI/litellm/pull/21022) | [Migration](https://github.com/BerriAI/litellm/blob/main/litellm-proxy-extras/litellm_proxy_extras/migrations/20260212143306_add_access_group_table/migration.sql) |
 | `LiteLLM_AccessGroupTable` | Column Change | Renamed `access_model_ids` to `access_model_names` | [PR #21166](https://github.com/BerriAI/litellm/pull/21166) | [Migration](https://github.com/BerriAI/litellm/blob/main/litellm-proxy-extras/litellm_proxy_extras/migrations/20260213170952_access_group_change_to_model_name/migration.sql) |
 | `LiteLLM_ManagedVectorStoreTable` | New Table | Managed vector store tracking with model mappings | - | [Migration](https://github.com/BerriAI/litellm/blob/main/litellm-proxy-extras/litellm_proxy_extras/migrations/20260213105436_add_managed_vector_store_table/migration.sql) |
 | `LiteLLM_TeamTable`, `LiteLLM_VerificationToken` | New Column | Added `access_group_ids` text array | [PR #21022](https://github.com/BerriAI/litellm/pull/21022) | [Migration](https://github.com/BerriAI/litellm/blob/main/litellm-proxy-extras/litellm_proxy_extras/migrations/20260212143306_add_access_group_table/migration.sql) |
@@ -396,20 +396,20 @@ Access Groups는 조직 전반의 리소스 접근 정의를 단순화합니다.
 - Callback registration optimization added to release notes - [PR #20681](https://github.com/BerriAI/litellm/pull/20681)
 - Middleware performance blog post - [PR #20677](https://github.com/BerriAI/litellm/pull/20677)
 - UI Team Soft Budget documentation - [PR #20669](https://github.com/BerriAI/litellm/pull/20669)
-- UI 기여하기 and 문제 해결 guide - [PR #20674](https://github.com/BerriAI/litellm/pull/20674)
+- UI 기여하기 및 문제 해결 guide - [PR #20674](https://github.com/BerriAI/litellm/pull/20674)
 - Reorganize 관리자 UI subsection - [PR #20676](https://github.com/BerriAI/litellm/pull/20676)
 - SDK proxy authentication (OAuth2/JWT auto-refresh) - [PR #20680](https://github.com/BerriAI/litellm/pull/20680)
 - Forward client headers to LLM API documentation fix - [PR #20768](https://github.com/BerriAI/litellm/pull/20768)
-- Add docs guide for using policies - [PR #20914](https://github.com/BerriAI/litellm/pull/20914)
-- Add native thinking param examples for Claude Opus 4.6 - [PR #20799](https://github.com/BerriAI/litellm/pull/20799)
-- Fix Claude Code MCP tutorial - [PR #21145](https://github.com/BerriAI/litellm/pull/21145)
-- Add API base URLs for Dashscope (International and China/Beijing) - [PR #21083](https://github.com/BerriAI/litellm/pull/21083)
-- Fix `DEFAULT_NUM_WORKERS_LITELLM_PROXY` default (1, not 4) - [PR #21127](https://github.com/BerriAI/litellm/pull/21127)
-- Correct ElevenLabs support status in README - [PR #20643](https://github.com/BerriAI/litellm/pull/20643)
+- docs guide for 사용해 policies 추가 - [PR #20914](https://github.com/BerriAI/litellm/pull/20914)
+- native thinking param examples for Claude Opus 4.6 추가 - [PR #20799](https://github.com/BerriAI/litellm/pull/20799)
+- Claude Code MCP tutorial 수정 - [PR #21145](https://github.com/BerriAI/litellm/pull/21145)
+- API base URLs for Dashscope (International 및 China/Beijing) 추가 - [PR #21083](https://github.com/BerriAI/litellm/pull/21083)
+- `DEFAULT_NUM_WORKERS_LITELLM_PROXY` default (1, not 4) 수정 - [PR #21127](https://github.com/BerriAI/litellm/pull/21127)
+- ElevenLabs support status in README 수정 - [PR #20643](https://github.com/BerriAI/litellm/pull/20643)
 
 ---
 
-## New Contributors
+## 새 기여자
 * @iver56 made their first contribution in [PR #20643](https://github.com/BerriAI/litellm/pull/20643)
 * @eliasaronson made their first contribution in [PR #20666](https://github.com/BerriAI/litellm/pull/20666)
 * @NirantK made their first contribution in [PR #19656](https://github.com/BerriAI/litellm/pull/19656)

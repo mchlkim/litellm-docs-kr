@@ -108,7 +108,7 @@ pip install litellm==1.77.3
 - **[Volcengine](../../docs/providers/volcengine)**
     - 비활성화된 경우 thinking 파라미터 수정 - [PR #14569](https://github.com/BerriAI/litellm/pull/14569)
 - **[Cohere](../../docs/providers/cohere)**
-    - Generate API 지원 중단을 처리하고 기본값을 chat endpoints로 설정 - [PR #14676](https://github.com/BerriAI/litellm/pull/14676)
+    - API 지원 중단을 처리하고 기본값을 chat endpoints로 설정 생성 - [PR #14676](https://github.com/BerriAI/litellm/pull/14676)
 - **[TwelveLabs](../../docs/providers/twelvelabs)**
     - Marengo Embed 2.7 embedding 지원 추가 - [PR #14674](https://github.com/BerriAI/litellm/pull/14674)
 
@@ -134,7 +134,7 @@ pip install litellm==1.77.3
 
 ---
 
-## LLM API Endpoints
+## LLM API 엔드포인트
 
 #### 기능
 
@@ -142,7 +142,7 @@ pip install litellm==1.77.3
     - non-admin 사용자를 위한 cancel endpoint 지원 추가 - [PR #14594](https://github.com/BerriAI/litellm/pull/14594)
     - response session 처리와 s3 기반 cold storage 구성을 개선 - [PR #14534](https://github.com/BerriAI/litellm/pull/14534)
     - OpenAI 및 Azure /responses/cancel endpoint 지원 추가 - [PR #14561](https://github.com/BerriAI/litellm/pull/14561)
-- **General**
+- **일반**
     - 세부 정보가 포함된 rate limit 오류 메시지 개선 - [PR #14736](https://github.com/BerriAI/litellm/pull/14736)
     - spend log payload에 middle-truncation 적용 - [PR #14637](https://github.com/BerriAI/litellm/pull/14637)
 
@@ -153,7 +153,7 @@ pip install litellm==1.77.3
     - _get_tags_from_request_kwargs의 AttributeError 방지 - [PR #14735](https://github.com/BerriAI/litellm/pull/14735)
 - **[/responses](../../docs/response_api)**
     - 비용 계산 수정 - [PR #14675](https://github.com/BerriAI/litellm/pull/14675)
-- **General**
+- **일반**
     - rate limiter AttributeError 수정 - [PR #14609](https://github.com/BerriAI/litellm/pull/14609)
 
 ---
@@ -231,7 +231,7 @@ pip install litellm==1.77.3
 
 ---
 
-## 성능 / Loadbalancing / Reliability 개선
+## 성능 / 부하 분산 / 안정성 개선
 
 - `user` 필드 전송 시 **+500 RPS 성능 향상** - [PR #14616](https://github.com/BerriAI/litellm/pull/14616)
 - hot path에서 iscoroutine을 제거해 **+50 RPS** 개선 - [PR #14649](https://github.com/BerriAI/litellm/pull/14649)

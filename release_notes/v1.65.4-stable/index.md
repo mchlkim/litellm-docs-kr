@@ -77,31 +77,31 @@ v1.65.4-stable이 배포되었습니다. v1.65.0-stable 이후의 개선 사항�
 6. Google AI Studio - gemini/gemini-2.5-pro-preview-03-25를 모델 비용 맵에 추가 [PR](https://github.com/BerriAI/litellm/blob/52b35cd8093b9ad833987b24f494586a1e923209/model_prices_and_context_window.json#L4850)
 
 ## LLM 변환 {#llm-translation}
-1. Vertex AI - OpenAI json schema 변환에서 anyOf param 지원 [Get Started](https://docs.litellm.ai/docs/providers/vertex#json-schema)
-2. Anthropic - response_format + thinking param 지원(Anthropic API, Bedrock, Vertex 전반에서 동작) [Get Started](https://docs.litellm.ai/docs/reasoning_content)
+1. Vertex AI - OpenAI json schema 변환에서 anyOf param 지원 [시작하기](https://docs.litellm.ai/docs/providers/vertex#json-schema)
+2. Anthropic - response_format + thinking param 지원(Anthropic API, Bedrock, Vertex 전반에서 동작) [시작하기](https://docs.litellm.ai/docs/reasoning_content)
 3. Anthropic - thinking token이 지정되고 max tokens가 지정되지 않은 경우, Anthropic에 전달되는 max token이 thinking tokens보다 크도록 보장(Anthropic API, Bedrock, Vertex 전반에서 동작) [PR](https://github.com/BerriAI/litellm/pull/9594)
-4. Bedrock - latency optimized inference 지원 [Get Started](https://docs.litellm.ai/docs/providers/bedrock#usage---latency-optimized-inference)
-5. Sagemaker - 응답의 special tokens + multibyte character code 처리 [Get Started](https://docs.litellm.ai/docs/providers/aws_sagemaker)
-6. MCP - SSE MCP servers 사용 지원 추가 [Get Started](https://docs.litellm.ai/docs/mcp#usage)
-8. Anthropic - passthrough를 통해 Anthropic `/v1/messages`를 호출하는 새 `litellm.messages.create` 인터페이스 [Get Started](https://docs.litellm.ai/docs/anthropic_unified#usage)
-11. Anthropic - message param에서 ‘file’ content type 지원(Anthropic API, Bedrock, Vertex 전반에서 동작) [Get Started](https://docs.litellm.ai/docs/providers/anthropic#usage---pdf)
-12. Anthropic - openai 'reasoning_effort'를 anthropic 'thinking' param에 매핑(Anthropic API, Bedrock, Vertex 전반에서 동작) [Get Started](https://docs.litellm.ai/docs/providers/anthropic#usage---thinking--reasoning_content)
-13. Google AI Studio (Gemini) - [BETA] `/v1/files` 업로드 지원 [Get Started](../../docs/providers/google_ai_studio/files)
-14. Azure - o-series tool calling 수정 [Get Started](../../docs/providers/azure#tool-calling--function-calling)
+4. Bedrock - latency optimized inference 지원 [시작하기](https://docs.litellm.ai/docs/providers/bedrock#usage---latency-optimized-inference)
+5. Sagemaker - 응답의 special tokens + multibyte character code 처리 [시작하기](https://docs.litellm.ai/docs/providers/aws_sagemaker)
+6. MCP - SSE MCP servers 사용 지원 추가 [시작하기](https://docs.litellm.ai/docs/mcp#usage)
+8. Anthropic - passthrough를 통해 Anthropic `/v1/messages`를 호출하는 새 `litellm.messages.create` 인터페이스 [시작하기](https://docs.litellm.ai/docs/anthropic_unified#usage)
+11. Anthropic - message param에서 ‘file’ content type 지원(Anthropic API, Bedrock, Vertex 전반에서 동작) [시작하기](https://docs.litellm.ai/docs/providers/anthropic#usage---pdf)
+12. Anthropic - openai 'reasoning_effort'를 anthropic 'thinking' param에 매핑(Anthropic API, Bedrock, Vertex 전반에서 동작) [시작하기](https://docs.litellm.ai/docs/providers/anthropic#usage---thinking--reasoning_content)
+13. Google AI Studio (Gemini) - [BETA] `/v1/files` 업로드 지원 [시작하기](../../docs/providers/google_ai_studio/files)
+14. Azure - o-series tool calling 수정 [시작하기](../../docs/providers/azure#tool-calling--function-calling)
 15. Unified file id - [ALPHA] 동일한 file id로 여러 provider를 호출할 수 있도록 허용 [PR](https://github.com/BerriAI/litellm/pull/9718)
     - 실험적 기능이며 프로덕션 사용은 권장하지 않습니다.
     - 다음 주까지 프로덕션 준비가 된 구현을 제공할 계획입니다.
 16. Google AI Studio (Gemini) - logprobs 반환 [PR](https://github.com/BerriAI/litellm/pull/9713)
-17. Anthropic - Anthropic tool calls에 대한 prompt caching 지원 [Get Started](https://docs.litellm.ai/docs/completion/prompt_caching)
+17. Anthropic - Anthropic tool calls에 대한 prompt caching 지원 [시작하기](https://docs.litellm.ai/docs/completion/prompt_caching)
 18. OpenRouter - OpenRouter 호출에서 extra body unwrap 처리 [PR](https://github.com/BerriAI/litellm/pull/9747)
 19. VertexAI - credential caching 문제 수정 [PR](https://github.com/BerriAI/litellm/pull/9756)
 20. XAI - XAI에 대해 'name' param 필터링 [PR](https://github.com/BerriAI/litellm/pull/9761)
-21. Gemini - image generation output 지원 [Get Started](../../docs/providers/gemini#image-generation)
-22. Databricks - thinking + response_format을 사용하는 claude-3-7-sonnet 지원 [Get Started](../../docs/providers/databricks#usage---thinking--reasoning_content)
+21. Gemini - image generation output 지원 [시작하기](../../docs/providers/gemini#image-generation)
+22. Databricks - thinking + response_format을 사용하는 claude-3-7-sonnet 지원 [시작하기](../../docs/providers/databricks#usage---thinking--reasoning_content)
 
 ## 비용 추적 개선 사항 {#비용-추적-improvements}
 1. 안정성 수정 - 비용 계산을 위해 전송된 모델과 수신된 모델 확인 [PR](https://github.com/BerriAI/litellm/pull/9669)
-2. Vertex AI - Multimodal embedding 비용 추적 [Get Started](https://docs.litellm.ai/docs/providers/vertex#multi-modal-embeddings), [PR](https://github.com/BerriAI/litellm/pull/9623)
+2. Vertex AI - Multimodal embedding 비용 추적 [시작하기](https://docs.litellm.ai/docs/providers/vertex#multi-modal-embeddings), [PR](https://github.com/BerriAI/litellm/pull/9623)
 
 ## 관리 엔드포인트 / UI {#management-endpoints--ui}
 
@@ -129,14 +129,14 @@ v1.65.4-stable이 배포되었습니다. v1.65.0-stable 이후의 개선 사항�
 6. Request 로그 Tab
     - streaming에서 모든 provider에 걸쳐 reasoning_content token tracking 추가
 7. API 
-    - /user/daily/activity에서 key alias 반환 [Get Started](../../docs/proxy/cost_tracking#daily-spend-breakdown-api)
+    - /user/daily/activity에서 key alias 반환 [시작하기](../../docs/proxy/cost_tracking#daily-spend-breakdown-api)
 8. SSO
     - MSFT SSO에서 SSO 사용자를 팀에 할당할 수 있도록 허용 [PR](https://github.com/BerriAI/litellm/pull/9745)
 
 ## Logging / Guardrail 통합 {#logging--guardrail-integrations}
 
 1. Console 로그 - uncaught exceptions에 json formatting 추가 [PR](https://github.com/BerriAI/litellm/pull/9619)
-2. 가드레일 - virtual key 기반 policies에 AIM 가드레일 지원 [Get Started](../../docs/proxy/guardrails/aim_security)
+2. 가드레일 - virtual key 기반 policies에 AIM 가드레일 지원 [시작하기](../../docs/proxy/guardrails/aim_security)
 3. Logging - completion start time tracking 수정 [PR](https://github.com/BerriAI/litellm/pull/9688)
 4. Prometheus
     - Prometheus /metrics endpoints에 authentication 추가 허용 [PR](https://github.com/BerriAI/litellm/pull/9766)
@@ -151,7 +151,7 @@ v1.65.4-stable이 배포되었습니다. v1.65.0-stable 이후의 개선 사항�
     - PG 대신 Redis를 PodLock Manager에 사용(데드락이 발생하지 않도록 보장) [PR](https://github.com/BerriAI/litellm/pull/9715)
     - v2 DB Deadlock Reduction 아키텍처 - In-Memory Queue의 Max Size + Backpressure Mechanism 추가 [PR](https://github.com/BerriAI/litellm/pull/9759)
     
-2. Prisma Migrations [Get Started](../../docs/proxy/prod#9-use-prisma-migrate-deploy)
+2. Prisma Migrations [시작하기](../../docs/proxy/prod#9-use-prisma-migrate-deploy)
     - litellm proxy를 litellm의 prisma migration files에 연결
     - 새 `litellm-proxy-extras` sdk의 db schema updates 처리
 3. Redis - sync sentinel clients에 password 지원 [PR](https://github.com/BerriAI/litellm/pull/9622)

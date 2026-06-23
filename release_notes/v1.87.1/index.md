@@ -18,7 +18,7 @@ authors:
 hide_table_of_contents: false
 ---
 
-## Deploy this version
+## 이 버전 배포
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -43,15 +43,15 @@ pip install litellm==1.87.1
 </TabItem>
 </Tabs>
 
-`v1.87.1` is a patch release on top of [`v1.87.0`](/release_notes/v1.87.0/v1-87-0). It backports five staged fixes: Azure AD token refresh, batch and video model routing, org-scoped team key creation, and Vertex Claude effort handling. The duplicate passthrough cost-callback fix the other lines received is deliberately held back here, since 1.87.x branched separately and carries a different passthrough logging path where that guard does not exist.
+`v1.87.1` 는 다음 버전을 기반으로 한 패치 릴리스입니다: [`v1.87.0`](/release_notes/v1.87.0/v1-87-0). 이 릴리스는 다음 수정 사항을 백포트합니다: five staged fixes: Azure AD token refresh, batch 및 video model routing, org-scoped team key creation, 및 Vertex Claude effort handling. The duplicate passthrough cost-callback fix the other lines received is deliberately held back here, since 1.87.x branched separately 및 carries a different passthrough logging path where that guard does not exist.
 
-### What's Changed
+### 변경 사항
 
-- fix(azure): preserve AD token refresh in the v1 OpenAI client path - [PR #28627](https://github.com/BerriAI/litellm/pull/28627)
-- fix(proxy): map a stripped batch `body.model` back to the proxy alias so key access checks pass - [PR #29264](https://github.com/BerriAI/litellm/pull/29264)
-- fix(proxy): resolve managed video model ids through the router before auth, budget, and key checks - [PR #29545](https://github.com/BerriAI/litellm/pull/29545)
-- fix(key_generate): let team members create keys on org-scoped teams (regression since v1.84.0-rc.1) - [PR #29310](https://github.com/BerriAI/litellm/pull/29310)
-- fix(vertex): strip `output_config.effort` for Vertex Claude models that reject it, such as Haiku 4.5 - [PR #29585](https://github.com/BerriAI/litellm/pull/29585)
+- fix(azure): v1 OpenAI 클라이언트 경로에서 AD 토큰 갱신을 보존 - [PR #28627](https://github.com/BerriAI/litellm/pull/28627)
+- fix(proxy): 제거된 batch `body.model`을 proxy alias로 다시 매핑해 키 접근 검사가 통과되도록 수정 - [PR #29264](https://github.com/BerriAI/litellm/pull/29264)
+- fix(proxy): 인증, 예산, 키 검사 전에 관리형 비디오 모델 ID를 router를 통해 해석 - [PR #29545](https://github.com/BerriAI/litellm/pull/29545)
+- fix(key_generate): 팀 멤버가 org-scoped team에서 키를 만들 수 있게 수정(v1.84.0-rc.1 이후 회귀) - [PR #29310](https://github.com/BerriAI/litellm/pull/29310)
+- fix(vertex): Haiku 4.5처럼 이를 거부하는 Vertex Claude 모델에서 `output_config.effort` 제거 - [PR #29585](https://github.com/BerriAI/litellm/pull/29585)
 
 ## Full 변경 이력
 

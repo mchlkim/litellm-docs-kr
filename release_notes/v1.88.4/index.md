@@ -18,7 +18,7 @@ authors:
 hide_table_of_contents: false
 ---
 
-## Deploy this version
+## 이 버전 배포
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -43,15 +43,15 @@ pip install litellm==1.88.4
 </TabItem>
 </Tabs>
 
-`v1.88.4` is a patch release on top of [`v1.88.3`](/release_notes/v1.88.3/v1-88-3). It restores readable `ProxyException` messages, returns 400 instead of 500 when AIM guardrails block a request, caps Anthropic cache-control injection, and corrects Datadog batch splitting and a chat-completions flag leak.
+`v1.88.4` 는 다음 버전을 기반으로 한 패치 릴리스입니다: [`v1.88.3`](/release_notes/v1.88.3/v1-88-3). It restores readable `ProxyException` messages, returns 400 instead of 500 때 AIM guardrails block a request, caps Anthropic cache-control injection, 및 corrects Datadog batch splitting 및 a chat-completions flag leak.
 
-### What's Changed
+### 변경 사항
 
-- fix(proxy): populate Exception.args so str(ProxyException) returns message - [PR #29015](https://github.com/BerriAI/litellm/pull/29015)
+- fix(proxy): populate Exception.args 따라서 str(ProxyException) returns message - [PR #29015](https://github.com/BerriAI/litellm/pull/29015)
 - fix(datadog): split oversized batches on 413 instead of re-queueing forever - [PR #29444](https://github.com/BerriAI/litellm/pull/29444)
 - fix: stop use_chat_completions_api flag from leaking into provider request body - [PR #29447](https://github.com/BerriAI/litellm/pull/29447)
-- fix(integrations): cap Anthropic cache_control injection at 4 blocks - [PR #30480](https://github.com/BerriAI/litellm/pull/30480)
-- fix(guardrails): return 400 not 500 when AIM blocks a request - [PR #30573](https://github.com/BerriAI/litellm/pull/30573)
+- fix(integrations): Anthropic cache_control 삽입을 4개 블록으로 제한 - [PR #30480](https://github.com/BerriAI/litellm/pull/30480)
+- fix(guardrails): return 400 not 500 때 AIM blocks a request - [PR #30573](https://github.com/BerriAI/litellm/pull/30573)
 
 ## Full 변경 이력
 

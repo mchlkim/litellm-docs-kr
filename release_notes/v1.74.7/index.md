@@ -272,7 +272,7 @@ v1.74.7-stable에서는 UI에 사용자 일괄 편집 기능이 도입되었습�
     - S3 또는 GCS Bucket에서 custom logger python scripts를 읽을 수 있도록 허용 - [PR #12623](https://github.com/BerriAI/litellm/pull/12623)
 
 #### 버그 {#bugs-4}
-- **[General Logging](../../docs/proxy/logging)**
+- **[일반 Logging](../../docs/proxy/logging)**
     - cache_hits의 StandardLoggingPayload가 custom llm provider를 추적해야 함 - [PR #12652](https://github.com/BerriAI/litellm/pull/12652)
 - **[S3 Buckets](../../docs/proxy/logging#s3-buckets)**
     - guardrails와 함께 사용할 때 S3 v2 log uploader가 crash되는 문제 수정 - [PR #12733](https://github.com/BerriAI/litellm/pull/12733)

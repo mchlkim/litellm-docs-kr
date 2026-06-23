@@ -115,7 +115,7 @@ v1.66.0-stable이 공개되었습니다. 이번 릴리스의 주요 내용은 �
     1. 파라미터에서 `reasoning_effort`를 제거했습니다. [PR](https://github.com/BerriAI/litellm/pull/9811)
     2. Databricks 커스텀 엔드포인트 검사를 수정했습니다. [PR](https://github.com/BerriAI/litellm/pull/9925)
 
-- **General**
+- **일반**
     1. LLM이 reasoning을 지원하는지 추적하는 `litellm.supports_reasoning()` 유틸을 추가했습니다. [시작하기](https://docs.litellm.ai/docs/providers/anthropic#reasoning)
     2. Function Calling에서 message tool calls의 pydantic base model을 처리하고, `tools = []`를 처리하며, `meta.llama3-3-70b-instruct-v1:0`의 tool calls에서 fake streaming을 지원합니다. [PR](https://github.com/BerriAI/litellm/pull/9774)
     3. LiteLLM Proxy에서 client sdk를 통해 `thinking` 파라미터를 litellm proxy로 전달할 수 있게 했습니다. [PR](https://github.com/BerriAI/litellm/pull/9386)
@@ -129,7 +129,7 @@ v1.66.0-stable이 공개되었습니다. 이번 릴리스의 주요 내용은 �
     1. Claude Haiku 캐시 읽기 토큰당 가격을 수정했습니다. [PR](https://github.com/BerriAI/litellm/pull/9834)
     2. `base_model`을 사용하는 Claude 응답 비용 추적을 추가했습니다. [PR](https://github.com/BerriAI/litellm/pull/9897)
     3. Anthropic prompt caching 비용 계산을 수정하고 DB에 기록되는 메시지를 줄였습니다. [PR](https://github.com/BerriAI/litellm/pull/9838)
-- **General**
+- **일반**
     1. spend logs에 토큰 추적과 log usage 객체를 추가했습니다. [PR](https://github.com/BerriAI/litellm/pull/9843)
     2. 배포 단위 커스텀 가격 처리를 추가했습니다. [PR](https://github.com/BerriAI/litellm/pull/9855)
 

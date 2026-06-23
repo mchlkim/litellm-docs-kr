@@ -229,7 +229,7 @@ LiteLLM은 다음 엔터티와 작업에 대한 변경 사항을 추적합니다
 
 - **LLM API 수정**
     - **Anthropic**: file url's를 'file_id' parameter로 전달할 때 발생한 regression 수정 - [PR](https://github.com/BerriAI/litellm/pull/11387)
-    - **Vertex AI**: Description 및 Default에 대한 Vertex AI any_of 문제 수정 - [PR](https://github.com/BerriAI/litellm/issues/11383) 
+    - **Vertex AI**: 설명 및 Default에 대한 Vertex AI any_of 문제 수정 - [PR](https://github.com/BerriAI/litellm/issues/11383)
     - transcription model name mapping 수정 - [PR](https://github.com/BerriAI/litellm/pull/11333)
     - **Image Generation**: gpt-image-1 모델 응답의 usage field에 있는 None values 수정 - [PR](https://github.com/BerriAI/litellm/pull/11448)
     - **Responses API**: _transform_responses_api_content_to_chat_completion_content가 file content type을 지원하지 않는 문제 수정 - [PR](https://github.com/BerriAI/litellm/pull/11494)

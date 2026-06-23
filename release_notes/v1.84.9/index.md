@@ -18,7 +18,7 @@ authors:
 hide_table_of_contents: false
 ---
 
-## Deploy this version
+## 이 버전 배포
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -43,11 +43,11 @@ pip install litellm==1.84.9
 </TabItem>
 </Tabs>
 
-`v1.84.9` is a patch release on top of [`v1.84.8`](/release_notes/v1.84.8/v1-84-8). It caps Anthropic `cache_control` injection at the 4-block API limit so prompt-caching requests no longer fail when more blocks are eligible.
+`v1.84.9` 는 다음 버전을 기반으로 한 패치 릴리스입니다: [`v1.84.8`](/release_notes/v1.84.8/v1-84-8). It caps Anthropic `cache_control` injection at the 4-block API limit 따라서 prompt-caching requests no longer fail 때 more blocks are eligible.
 
-### What's Changed
+### 변경 사항
 
-- fix(integrations): cap Anthropic cache_control injection at 4 blocks - [PR #30480](https://github.com/BerriAI/litellm/pull/30480)
+- fix(integrations): Anthropic cache_control 삽입을 4개 블록으로 제한 - [PR #30480](https://github.com/BerriAI/litellm/pull/30480)
 
 ## Full 변경 이력
 

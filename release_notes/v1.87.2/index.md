@@ -18,7 +18,7 @@ authors:
 hide_table_of_contents: false
 ---
 
-## Deploy this version
+## 이 버전 배포
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -43,14 +43,14 @@ pip install litellm==1.87.2
 </TabItem>
 </Tabs>
 
-`v1.87.2` is a patch release on top of [`v1.87.1`](/release_notes/v1.87.1/v1-87-1). It adds Claude Fable 5, batch-file authorization, the CrowdStrike AIDR identity pair, and SigV4/IAM auth for the Bedrock Mantle Responses API route.
+`v1.87.2` 는 다음 버전을 기반으로 한 패치 릴리스입니다: [`v1.87.1`](/release_notes/v1.87.1/v1-87-1). 이 릴리스는 다음 항목을 추가합니다: Claude Fable 5, batch-file authorization, the CrowdStrike AIDR identity pair, 및 SigV4/IAM auth for the Bedrock Mantle Responses API route.
 
-### What's Changed
+### 변경 사항
 
-- feat: add Claude Fable 5 across Anthropic, Bedrock, Vertex AI, and Azure AI - [PR #30064](https://github.com/BerriAI/litellm/pull/30064)
-- fix(proxy): authorize batch files using upload `target_model_names` (LIT-3593) - [PR #30009](https://github.com/BerriAI/litellm/pull/30009)
-- feat(guardrails): capture CrowdStrike AIDR user and model metadata - [PR #29517](https://github.com/BerriAI/litellm/pull/29517)
-- fix(guardrails): read CrowdStrike AIDR identity from both metadata bags - [PR #29991](https://github.com/BerriAI/litellm/pull/29991)
+- feat: Anthropic, Bedrock, Vertex AI, Azure AI 전반에 Claude Fable 5 추가 - [PR #30064](https://github.com/BerriAI/litellm/pull/30064)
+- fix(proxy): 업로드된 `target_model_names`를 사용해 batch file을 인가 - [PR #30009](https://github.com/BerriAI/litellm/pull/30009)
+- feat(guardrails): CrowdStrike AIDR 사용자 및 모델 메타데이터 수집 - [PR #29517](https://github.com/BerriAI/litellm/pull/29517)
+- fix(guardrails): 두 metadata bag 모두에서 CrowdStrike AIDR identity를 읽도록 수정 - [PR #29991](https://github.com/BerriAI/litellm/pull/29991)
 - feat(bedrock_mantle): add SigV4/IAM auth to the Responses API route, with its prerequisite Mantle Responses route (#29490) - [PR #29788](https://github.com/BerriAI/litellm/pull/29788)
 
 ## Full 변경 이력

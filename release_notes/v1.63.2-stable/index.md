@@ -53,26 +53,26 @@ import Image from '@theme/IdealImage';
 
 <Image img={require('../../img/release_notes/anthropic_thinking.jpg')}/>
 
-1. Support `/openai/` passthrough for Assistant endpoints. [Get Started](https://docs.litellm.ai/docs/pass_through/openai_passthrough)
-2. Bedrock Claude - fix tool calling transformation on invoke route. [Get Started](../../docs/providers/bedrock#usage---function-calling--tool-calling)
-3. Bedrock Claude - response_format support for claude on invoke route. [Get Started](../../docs/providers/bedrock#usage---structured-output--json-mode)
-4. Bedrock - pass `description` if set in response_format. [Get Started](../../docs/providers/bedrock#usage---structured-output--json-mode)
+1. Support `/openai/` passthrough for Assistant endpoints. [시작하기](https://docs.litellm.ai/docs/pass_through/openai_passthrough)
+2. Bedrock Claude - fix tool calling transformation on invoke route. [시작하기](../../docs/providers/bedrock#usage---function-calling--tool-calling)
+3. Bedrock Claude - response_format support for claude on invoke route. [시작하기](../../docs/providers/bedrock#usage---structured-output--json-mode)
+4. Bedrock - pass `description` if set in response_format. [시작하기](../../docs/providers/bedrock#usage---structured-output--json-mode)
 5. Bedrock - Fix passing response_format: `{"type": "text"}`. [PR](https://github.com/BerriAI/litellm/commit/c84b489d5897755139aa7d4e9e54727ebe0fa540)
-6. OpenAI - Handle sending image_url as str to openai. [Get Started](https://docs.litellm.ai/docs/completion/vision)
-7. Deepseek - return 'reasoning_content' missing on streaming. [Get Started](https://docs.litellm.ai/docs/reasoning_content)
-8. 캐싱 - Support caching on reasoning content. [Get Started](https://docs.litellm.ai/docs/proxy/caching)
-9. Bedrock - handle thinking blocks in assistant message. [Get Started](https://docs.litellm.ai/docs/providers/bedrock#usage---thinking--reasoning-content)
-10. Anthropic - Return `signature` on streaming. [Get Started](https://docs.litellm.ai/docs/providers/bedrock#usage---thinking--reasoning-content)
+6. OpenAI - Handle sending image_url as str to openai. [시작하기](https://docs.litellm.ai/docs/completion/vision)
+7. Deepseek - return 'reasoning_content' missing on streaming. [시작하기](https://docs.litellm.ai/docs/reasoning_content)
+8. 캐싱 - Support caching on reasoning content. [시작하기](https://docs.litellm.ai/docs/proxy/caching)
+9. Bedrock - handle thinking blocks in assistant message. [시작하기](https://docs.litellm.ai/docs/providers/bedrock#usage---thinking--reasoning-content)
+10. Anthropic - Return `signature` on streaming. [시작하기](https://docs.litellm.ai/docs/providers/bedrock#usage---thinking--reasoning-content)
 - Note: We've also migrated from `signature_delta` to `signature`. [Read more](https://docs.litellm.ai/release_notes/v1.63.0)
-11. Support format param for specifying image type. [Get Started](../../docs/completion/vision#explicitly-specify-image-type)
-12. Anthropic - `/v1/messages` endpoint - `thinking` param support. [Get Started](../../docs/anthropic_unified)
+11. Support format param for specifying image type. [시작하기](../../docs/completion/vision#explicitly-specify-image-type)
+12. Anthropic - `/v1/messages` endpoint - `thinking` param support. [시작하기](../../docs/anthropic_unified)
 - 참고: [BETA] unified `/v1/messages` endpoint를 Anthropic API에서 바로 동작하도록 리팩터링합니다.
-13. Vertex AI - handle $id in response schema when calling vertex ai. [Get Started](https://docs.litellm.ai/docs/providers/vertex#json-schema)
+13. Vertex AI - handle $id in response schema 때 calling vertex ai. [시작하기](https://docs.litellm.ai/docs/providers/vertex#json-schema)
 
 ## 비용 추적 개선 {#cost-tracking-improvements}
 
-1. Batches API - Fix cost calculation to run on retrieve_batch. [Get Started](https://docs.litellm.ai/docs/batches)
-2. Batches API - Log batch models in spend logs / standard logging payload. [Get Started](../../docs/proxy/logging_spec#standardlogginghiddenparams)
+1. Batches API - Fix cost calculation to run on retrieve_batch. [시작하기](https://docs.litellm.ai/docs/batches)
+2. Batches API - Log batch models in spend logs / standard logging payload. [시작하기](../../docs/proxy/logging_spec#standardlogginghiddenparams)
 
 ## 관리 엔드포인트 / UI {#management-endpoints--ui}
 
@@ -92,18 +92,18 @@ import Image from '@theme/IdealImage';
 
 ## Logging / Guardrail 통합 {#logging--guardrail-integrations}
 
-1. Fix prometheus metrics w/ custom metrics, when keys containing team_id make requests. [PR](https://github.com/BerriAI/litellm/pull/8935)
+1. Fix prometheus metrics w/ custom metrics, 때 keys containing team_id make requests. [PR](https://github.com/BerriAI/litellm/pull/8935)
 
-## 성능 / Loadbalancing / Reliability 개선 {#performance--loadbalancing--reliability-improvements}
+## 성능 / 부하 분산 / 안정성 개선 {#performance--loadbalancing--reliability-improvements}
 
-1. Cooldowns - Support cooldowns on models called with client side credentials. [Get Started](https://docs.litellm.ai/docs/proxy/clientside_auth#pass-user-llm-api-keys--api-base)
-2. Tag-based Routing - ensures tag-based routing across all endpoints (`/embeddings`, `/image_generation`, etc.). [Get Started](https://docs.litellm.ai/docs/proxy/tag_routing)
+1. Cooldowns - Support cooldowns on models called with client side credentials. [시작하기](https://docs.litellm.ai/docs/proxy/clientside_auth#pass-user-llm-api-keys--api-base)
+2. Tag-based Routing - ensures tag-based routing across all endpoints (`/embeddings`, `/image_generation`, etc.). [시작하기](https://docs.litellm.ai/docs/proxy/tag_routing)
 
 ## 일반 Proxy 개선 {#general-proxy-improvements}
 
 1. request에 unknown model이 전달되면 BadRequestError 발생
 2. Azure OpenAI proxy route에서 model access restrictions 적용
-3. Reliability fix - text 내 emoji 처리로 orjson error 수정
+3. 안정성 fix - text 내 emoji 처리로 orjson error 수정
 4. Model Access Patch - auth checks 실행 시 litellm.anthropic_models를 덮어쓰지 않음
 5. docker image에서 timezone information 설정 지원
 

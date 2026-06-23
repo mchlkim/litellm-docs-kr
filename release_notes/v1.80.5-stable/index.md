@@ -95,7 +95,7 @@ response = client.chat.completions.create(
 
 ---
 
-### Performance – `/realtime` p99 latency 182배 감소
+### 성능 – `/realtime` p99 latency 182배 감소
 
 이번 update는 hot path의 redundant encoding을 제거하고 shared SSL context를 재사용하며, 거의 바뀌지 않는데 request마다 두 번 재생성되던 formatting string을 cache해 `/realtime` latency를 줄입니다.
 
@@ -165,7 +165,7 @@ response = client.chat.completions.create(
 
 #### 신규 Model 지원
 
-| Provider | Model | Context Window | Input($/1M tokens) | Output($/1M tokens) | 기능 |
+| Provider | Model | 컨텍스트 윈도우 | Input($/1M tokens) | Output($/1M tokens) | 기능 |
 | -------- | ----- | -------------- | ------------------- | -------------------- | -------- |
 | Azure | `azure/gpt-5.1` | 272K | $1.38 | $11.00 | `Reasoning`, `vision`, `PDF input`, `responses API` |
 | Azure | `azure/gpt-5.1-2025-11-13` | 272K | $1.38 | $11.00 | `Reasoning`, `vision`, `PDF input`, `responses API` |
@@ -245,20 +245,20 @@ response = client.chat.completions.create(
 - **[Cerebras](../../docs/providers/cerebras)**
     - Cerebras GPT-OSS-120B model name 수정 - [PR #16939](https://github.com/BerriAI/litellm/pull/16939)
 
-### Bug Fixes
+### 버그 수정
 
 - **[OpenAI](../../docs/providers/openai)**
     - 16863 수정: OpenAI responses에서 completions로 conversion - [PR #16864](https://github.com/BerriAI/litellm/pull/16864)
-    - "Make all gpt-5 and reasoning models to responses by default" revert - [PR #16849](https://github.com/BerriAI/litellm/pull/16849)
+    - "Make all gpt-5 및 reasoning models to responses by default" revert - [PR #16849](https://github.com/BerriAI/litellm/pull/16849)
 
-- **General**
+- **일반**
     - query param에서 custom_llm_provider 가져오기 - [PR #16731](https://github.com/BerriAI/litellm/pull/16731)
     - optional param mapping 수정 - [PR #16852](https://github.com/BerriAI/litellm/pull/16852)
     - litellm_params에 None check 추가 - [PR #16754](https://github.com/BerriAI/litellm/pull/16754)
 
 ---
 
-## LLM API Endpoints
+## LLM API 엔드포인트
 
 #### 기능
 
@@ -279,16 +279,16 @@ response = client.chat.completions.create(
     - vector store create issue 수정 - [PR #16804](https://github.com/BerriAI/litellm/pull/16804)
     - key access에서 team vector-store permission을 존중하도록 수정 - [PR #16639](https://github.com/BerriAI/litellm/pull/16639)
 
-- **[Audio Transcription](../../docs/audio_transcription)**
+- **[음성 전사](../../docs/audio_transcription)**
     - audio transcription cost tracking 수정 - [PR #16478](https://github.com/BerriAI/litellm/pull/16478)
     - audio/transcriptions에 누락된 shared_sessions 추가 - [PR #16858](https://github.com/BerriAI/litellm/pull/16858)
 
 - **[Video Generation API](../../docs/video_generation)**
     - videos tagging 수정 - [PR #16770](https://github.com/BerriAI/litellm/pull/16770)
 
-#### Bugs
+#### 버그
 
-- **General**
+- **일반**
     - custom deployment name을 사용하는 Responses API cost tracking - [PR #16778](https://github.com/BerriAI/litellm/pull/16778)
     - spend-logs에서 logged response string trim - [PR #16654](https://github.com/BerriAI/litellm/pull/16654)
 
@@ -327,20 +327,20 @@ response = client.chat.completions.create(
 - **사용법 & Analytics**
     - User Table에서 user ID partial match 허용 - [PR #16952](https://github.com/BerriAI/litellm/pull/16952)
 
-- **General UI**
+- **일반 UI**
     - API reference docs에서 base_url 설정 허용 - [PR #16674](https://github.com/BerriAI/litellm/pull/16674)
     - /public field가 server root path를 존중하도록 변경 - [PR #16930](https://github.com/BerriAI/litellm/pull/16930)
     - UI build 수정 - [PR #16702](https://github.com/BerriAI/litellm/pull/16702)
     - system preference 기반 automatic dark/light mode 활성화 - [PR #16748](https://github.com/BerriAI/litellm/pull/16748)
 
-#### Bugs
+#### 버그
 
 - **UI Fixes**
     - antd Notification Manager로 인한 flaky test 수정 - [PR #16740](https://github.com/BerriAI/litellm/pull/16740)
     - UI MCP Tool Test Regression 수정 - [PR #16695](https://github.com/BerriAI/litellm/pull/16695)
     - edit logging settings가 나타나지 않던 문제 수정 - [PR #16798](https://github.com/BerriAI/litellm/pull/16798)
     - request viewer에서 긴 request id를 truncate하는 CSS 추가 - [PR #16665](https://github.com/BerriAI/litellm/pull/16665)
-    - Add Model의 Azure Placeholder에서 azure/ prefix 제거 - [PR #16597](https://github.com/BerriAI/litellm/pull/16597)
+    - Model의 Azure Placeholder에서 azure/ prefix 제거 추가 - [PR #16597](https://github.com/BerriAI/litellm/pull/16597)
     - user/info return에서 UI Session Token 제거 - [PR #16851](https://github.com/BerriAI/litellm/pull/16851)
     - model tab에서 console log와 error 제거 - [PR #16455](https://github.com/BerriAI/litellm/pull/16455)
     - Backend와 맞도록 Bulk Invite User Role 변경 - [PR #16906](https://github.com/BerriAI/litellm/pull/16906)
@@ -361,9 +361,9 @@ response = client.chat.completions.create(
 
 ---
 
-## AI Integrations
+## AI 통합
 
-### Logging
+### 로깅
 
 - **[Arize Phoenix](../../docs/observability/arize_phoenix)**
     - Arize Phoenix logging 수정 - [PR #16301](https://github.com/BerriAI/litellm/pull/16301)
@@ -372,7 +372,7 @@ response = client.chat.completions.create(
 - **[Langfuse](../../docs/proxy/logging#langfuse)**
     - Langfuse에서 secret field filter 처리 - [PR #16842](https://github.com/BerriAI/litellm/pull/16842)
 
-- **General**
+- **일반**
     - Sensitive Data Masker에서 litellm_credential_name 제외(updated) - [PR #16958](https://github.com/BerriAI/litellm/pull/16958)
     - admin이 dynamic callback control을 disable할 수 있도록 허용 - [PR #16750](https://github.com/BerriAI/litellm/pull/16750)
 
@@ -388,7 +388,7 @@ response = client.chat.completions.create(
 - **[Grayswan Guardrail](../../docs/proxy/guardrails)**
     - flagged 상태에서 Grayswan guardrail passthrough 처리 - [PR #16891](https://github.com/BerriAI/litellm/pull/16891)
 
-- **General 가드레일**
+- **일반 가드레일**
     - prompt injection이 작동하지 않던 문제 수정 - [PR #16701](https://github.com/BerriAI/litellm/pull/16701)
 
 ### Prompt Management
@@ -423,9 +423,9 @@ response = client.chat.completions.create(
 
 ---
 
-## Performance / Load Balancing / Reliability 개선
+## 성능 / Load Balancing / 안정성 개선
 
-- **Realtime Endpoint Performance** - realtime endpoint performance를 저하하던 bottleneck 수정 - [PR #16670](https://github.com/BerriAI/litellm/pull/16670)
+- **Realtime Endpoint 성능** - realtime endpoint performance를 저하하던 bottleneck 수정 - [PR #16670](https://github.com/BerriAI/litellm/pull/16670)
 - **SSL Context 캐싱** - 과도한 memory allocation 방지를 위해 SSL context cache - [PR #16955](https://github.com/BerriAI/litellm/pull/16955)
 - **Cache Optimization** - cache cooldown key generation 수정 - [PR #16954](https://github.com/BerriAI/litellm/pull/16954)
 - **Router Cache** - cacheable prefix는 같지만 user message가 다른 request의 routing 수정 - [PR #16951](https://github.com/BerriAI/litellm/pull/16951)
@@ -436,16 +436,16 @@ response = client.chat.completions.create(
 
 ## 문서 업데이트
 
-- **Provider Documentation 업데이트**
+- **Provider 문서 업데이트**
     - benchmark comparison에 누락된 detail 추가 - [PR #16690](https://github.com/BerriAI/litellm/pull/16690)
     - anthropic pass-through endpoint 수정 - [PR #16883](https://github.com/BerriAI/litellm/pull/16883)
     - repo cleanup 및 AI docs 개선 - [PR #16775](https://github.com/BerriAI/litellm/pull/16775)
 
-- **API Documentation**
+- **API 문서**
     - OpenAI metadata 관련 docs 추가 - [PR #16872](https://github.com/BerriAI/litellm/pull/16872)
     - 모든 supported endpoint와 cost tracking으로 docs 업데이트 - [PR #16872](https://github.com/BerriAI/litellm/pull/16872)
 
-- **General Documentation 업데이트**
+- **일반 문서 업데이트**
     - Projects built on LiteLLM에 mini-swe-agent 추가 - [PR #16971](https://github.com/BerriAI/litellm/pull/16971)
 
 ---

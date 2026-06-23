@@ -135,7 +135,7 @@ pip install litellm==1.78.5
 - **[Bedrock](../../docs/providers/bedrock)**
     - signature 계산을 위한 header filtering 수정 - [PR #15590](https://github.com/BerriAI/litellm/pull/15590)
 
-- **General**
+- **일반**
     - `gpt-5-codex`에 native reasoning 및 streaming 지원 flag 추가 - [PR #15569](https://github.com/BerriAI/litellm/pull/15569)
 
 ---
@@ -167,7 +167,7 @@ pip install litellm==1.78.5
 
 #### 버그 {#bugs}
 
-- **General**
+- **일반**
     - 수정: object를 올바른 type으로 변환 - [PR #15634](https://github.com/BerriAI/litellm/pull/15634)
     - 버그 수정: metadata dict인 tag가 예외를 발생시키던 문제 수정 - [PR #15625](https://github.com/BerriAI/litellm/pull/15625)
     - `function_to_dict`에 type hint를 추가하고 오타 수정 - [PR #15580](https://github.com/BerriAI/litellm/pull/15580)
@@ -203,7 +203,7 @@ pip install litellm==1.78.5
 
 #### 가드레일 {#가드레일}
 
-- **General**
+- **일반**
     - `apply_guardrail` endpoint가 `ApplyGuardrailResponse` 대신 raw string을 반환하던 문제 수정 - [PR #15436](https://github.com/BerriAI/litellm/pull/15436)
     - 수정: database update 후 guardrail memory sync 보장 - [PR #15633](https://github.com/BerriAI/litellm/pull/15633)
     - 기능: image generation용 guardrail 추가 - [PR #15619](https://github.com/BerriAI/litellm/pull/15619)
@@ -214,7 +214,7 @@ pip install litellm==1.78.5
 
 #### Prompt Management {#prompt-management}
 
-- **General**
+- **일반**
     - `custom_prompt_management.md` code snippet 소규모 수정 - [PR #15544](https://github.com/BerriAI/litellm/pull/15544)
 
 ---
@@ -261,7 +261,7 @@ pip install litellm==1.78.5
     - 문서: benchmark result 업데이트 - [PR #15461](https://github.com/BerriAI/litellm/pull/15461)
     - 수정: benchmark docs에 누락된 context 추가 - [PR #15688](https://github.com/BerriAI/litellm/pull/15688)
 
-- **General**
+- **일반**
     - 몇 가지 오타 수정 - [PR #15267](https://github.com/BerriAI/litellm/pull/15267)
 
 ---

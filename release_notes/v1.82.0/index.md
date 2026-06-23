@@ -268,7 +268,7 @@ pip install litellm==1.82.0
 
 ## AI 통합 {#ai-integrations}
 
-### Logging
+### 로깅
 
 - **[DataDog](../../docs/proxy/logging#datadog)**
     - DataDog에서 metric을 trace하는 기능 추가 - [PR #22103](https://github.com/BerriAI/litellm/pull/22103)
@@ -361,7 +361,7 @@ pip install litellm==1.82.0
 
 ---
 
-## 성능 / Loadbalancing / Reliability 개선 {#performance-loadbalancing-reliability-improvements}
+## 성능 / 부하 분산 / 안정성 개선 {#performance-loadbalancing-reliability-improvements}
 
 **Streaming 및 hot-path**
 
@@ -462,7 +462,7 @@ pip install litellm==1.82.0
 * AI Integrations: 25
 * 비용 추적, Budgets 및 Rate Limiting: 10
 * MCP Gateway: 8
-* Performance / Loadbalancing / Reliability 개선: 22
+* 성능 / 부하 분산 / 안정성 개선: 22
 * Security: 3
 * 문서 업데이트: 14
 

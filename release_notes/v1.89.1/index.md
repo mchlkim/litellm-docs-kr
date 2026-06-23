@@ -18,7 +18,7 @@ authors:
 hide_table_of_contents: false
 ---
 
-## Deploy this version
+## 이 버전 배포
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -43,34 +43,34 @@ pip install litellm==1.89.1
 </TabItem>
 </Tabs>
 
-`v1.89.1` is a patch release on top of [`v1.89.0`](/release_notes/v1.89.0/v1-89-0). It brings the 1.84.8 database-resilience set onto the 1.89 line, hardens the MCP OAuth and credential paths, aligns the `/v1/model/info` and `/v2/model/info` surfaces, adds the budget-reservation toggle, and refreshes dependencies.
+`v1.89.1` 는 다음 버전을 기반으로 한 패치 릴리스입니다: [`v1.89.0`](/release_notes/v1.89.0/v1-89-0). 이 릴리스는 다음 항목을 반영합니다: the 1.84.8 database-resilience set onto the 1.89 line, hardens the MCP OAuth 및 credential paths, aligns the `/v1/model/info` 및 `/v2/model/info` surfaces, adds the budget-reservation toggle, 및 refreshes dependencies.
 
-### What's Changed
+### 변경 사항
 
-- fix(proxy): recover from cached-plan errors by reconnecting the Prisma client - [PR #29983](https://github.com/BerriAI/litellm/pull/29983)
-- feat(proxy): add option to disable server-side prepared statements for DB lookups - [PR #29984](https://github.com/BerriAI/litellm/pull/29984)
-- fix(proxy): return 5xx on DB infra errors during auth; reserve 401 for genuine auth failures - [PR #29986](https://github.com/BerriAI/litellm/pull/29986)
-- feat(proxy): add `disable_budget_reservation` general setting - [PR #29493](https://github.com/BerriAI/litellm/pull/29493)
-- fix(proxy): align `/v1/model/info` with router deployments - [PR #30025](https://github.com/BerriAI/litellm/pull/30025)
-- fix(proxy): populate `access_via_team_ids` on `/v1/model/info` - [PR #30274](https://github.com/BerriAI/litellm/pull/30274)
+- fix(proxy): Prisma client를 재연결해 cached-plan 오류에서 복구 - [PR #29983](https://github.com/BerriAI/litellm/pull/29983)
+- feat(proxy): DB 조회에서 서버 측 prepared statement를 비활성화하는 옵션 추가 - [PR #29984](https://github.com/BerriAI/litellm/pull/29984)
+- fix(proxy): 인증 중 DB 인프라 오류는 5xx로 반환하고, 실제 인증 실패에만 401 사용 - [PR #29986](https://github.com/BerriAI/litellm/pull/29986)
+- feat(proxy): `disable_budget_reservation` general setting 추가 - [PR #29493](https://github.com/BerriAI/litellm/pull/29493)
+- fix(proxy): `/v1/model/info`를 router deployment와 정렬 - [PR #30025](https://github.com/BerriAI/litellm/pull/30025)
+- fix(proxy): `/v1/model/info`에 `access_via_team_ids` 채우기 - [PR #30274](https://github.com/BerriAI/litellm/pull/30274)
 - feat(proxy): publish `/v2/model/info` in the Swagger OpenAPI spec - [PR #29900](https://github.com/BerriAI/litellm/pull/29900)
 - fix(proxy): return deprecated-key lookup result directly in the `get_data` combined view - [PR #30327](https://github.com/BerriAI/litellm/pull/30327)
 - fix(mcp): drop phantom 401 span on delegated OAuth2 tool calls - [PR #30494](https://github.com/BerriAI/litellm/pull/30494)
-- fix(mcp): drop orphaned per-user credential rows when an MCP server is deleted - [PR #30141](https://github.com/BerriAI/litellm/pull/30141)
+- fix(mcp): drop orphaned per-user credential rows 때 an MCP server is deleted - [PR #30141](https://github.com/BerriAI/litellm/pull/30141)
 - fix(mcp): allow team access-group grants in the OAuth authorize/token access check - [PR #30041](https://github.com/BerriAI/litellm/pull/30041)
-- fix(ui/mcp): reset OAuth state on create-server modal close so a prior server's token no longer leaks into the next add-server session - [PR #30000](https://github.com/BerriAI/litellm/pull/30000)
+- fix(ui/mcp): reset OAuth state on create-server modal close 따라서 a prior server's token no longer leaks into the next add-server session - [PR #30000](https://github.com/BerriAI/litellm/pull/30000)
 - fix(mcp): load MCP tool configuration tools via the OBO/passthrough-aware GET path - [PR #29960](https://github.com/BerriAI/litellm/pull/29960)
 - fix(mcp): let non-creator users OAuth into OBO-mode MCP servers from the Tools page - [PR #29867](https://github.com/BerriAI/litellm/pull/29867)
-- fix(passthrough): resolve costing model when body model is unknown - [PR #30160](https://github.com/BerriAI/litellm/pull/30160)
-- fix(passthrough): skip `[DONE]` sentinels and non-JSON SSE frames in Anthropic streaming logging - [PR #30202](https://github.com/BerriAI/litellm/pull/30202)
+- fix(passthrough): body model을 알 수 없을 때 비용 계산 모델 해석 - [PR #30160](https://github.com/BerriAI/litellm/pull/30160)
+- fix(passthrough): Anthropic streaming logging에서 `[DONE]` sentinel과 non-JSON SSE frame 건너뛰기 - [PR #30202](https://github.com/BerriAI/litellm/pull/30202)
 - fix(cost): resolve `completion_cost` AttributeError on streaming Anthropic web_search responses, including the `server_tool_use` type-coercion prerequisite - [PR #27346](https://github.com/BerriAI/litellm/pull/27346)
-- fix(proxy): authorize batch files using upload `target_model_names` - [PR #30009](https://github.com/BerriAI/litellm/pull/30009)
-- fix(proxy): atomic merge for team model aliases and `team.models` on BYOK create - [PR #29528](https://github.com/BerriAI/litellm/pull/29528)
+- fix(proxy): authorize batch files 사용해 upload `target_model_names` - [PR #30009](https://github.com/BerriAI/litellm/pull/30009)
+- fix(proxy): atomic merge for team model aliases 및 `team.models` on BYOK create - [PR #29528](https://github.com/BerriAI/litellm/pull/29528)
 - feat(datadog): add team-scoped Datadog callback support - [PR #29947](https://github.com/BerriAI/litellm/pull/29947)
 - feat(bedrock_mantle): add SigV4/IAM auth to the Responses API route - [PR #29788](https://github.com/BerriAI/litellm/pull/29788)
-- fix(guardrails): read CrowdStrike AIDR identity from both metadata bags - [PR #29991](https://github.com/BerriAI/litellm/pull/29991)
+- fix(guardrails): 두 metadata bag 모두에서 CrowdStrike AIDR identity를 읽도록 수정 - [PR #29991](https://github.com/BerriAI/litellm/pull/29991)
 - fix(slack): use the actual Slack return details for the `expires_in` default - [PR #29951](https://github.com/BerriAI/litellm/pull/29951)
-- chore(deps): bump vitest, brace-expansion, pypdf, and tornado - [PR #30220](https://github.com/BerriAI/litellm/pull/30220)
+- chore(deps): bump vitest, brace-expansion, pypdf, 및 tornado - [PR #30220](https://github.com/BerriAI/litellm/pull/30220)
 
 ## Full 변경 이력
 

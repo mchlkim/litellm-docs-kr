@@ -104,7 +104,7 @@ style={{ maxWidth: '900px', width: '100%' }}
 
 #### 신규 모델 지원 (새 모델 13개) {#new-model-support-13-new-models}
 
-| Provider | Model | Context Window | Input ($/1M tokens) | Output ($/1M tokens) |
+| Provider | Model | 컨텍스트 윈도우 | Input ($/1M tokens) | Output ($/1M tokens) |
 | -------- | ----- | -------------- | ------------------- | -------------------- |
 | Anthropic | `claude-opus-4-6` | 1M | $5.00 | $25.00 |
 | AWS Bedrock | `anthropic.claude-opus-4-6-v1` | 1M | $5.00 | $25.00 |
@@ -314,7 +314,7 @@ style={{ maxWidth: '900px', width: '100%' }}
 
 ---
 
-## 성능 / Loadbalancing / Reliability 개선 (14건) {#performance--loadbalancing--reliability-improvements-14-improvements}
+## 성능 / 부하 분산 / 안정성 개선 (14건) {#performance--loadbalancing--reliability-improvements-14-improvements}
 
 - **Prometheus CPU 약 40% 감소** - budget metrics 병렬화, caching bug 수정, CPU 사용량 감소 - [PR #20544](https://github.com/BerriAI/litellm/pull/20544)
 - **closed client 오류 방지** - httpx client caching을 되돌려 방지 - [PR #20025](https://github.com/BerriAI/litellm/pull/20025)
@@ -337,7 +337,7 @@ style={{ maxWidth: '900px', width: '100%' }}
 
 ### 스키마 업데이트 {#schema-updates}
 
-| Table | Change Type | Description | PR | Migration |
+| Table | Change Type | 설명 | PR | Migration |
 | ----- | ----------- | ----------- | -- | --------- |
 | `LiteLLM_TeamTable` | New Column | team-based guardrail isolation을 위한 `allow_team_guardrail_config` boolean field 추가 | [PR #20318](https://github.com/BerriAI/litellm/pull/20318) | [Migration](https://github.com/BerriAI/litellm/blob/main/litellm-proxy-extras/litellm_proxy_extras/migrations/20260205091235_allow_team_guardrail_config/migration.sql) |
 | `LiteLLM_DeletedTeamTable` | New Column | `allow_team_guardrail_config` boolean field 추가 | [PR #20318](https://github.com/BerriAI/litellm/pull/20318) | [Migration](https://github.com/BerriAI/litellm/blob/main/litellm-proxy-extras/litellm_proxy_extras/migrations/20260205091235_allow_team_guardrail_config/migration.sql) |

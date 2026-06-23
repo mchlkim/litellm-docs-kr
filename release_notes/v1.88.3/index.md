@@ -18,7 +18,7 @@ authors:
 hide_table_of_contents: false
 ---
 
-## Deploy this version
+## 이 버전 배포
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -43,12 +43,12 @@ pip install litellm==1.88.3
 </TabItem>
 </Tabs>
 
-`v1.88.3` is a patch release on top of [`v1.88.2`](/release_notes/v1.88.2/v1-88-2). It fixes two guardrail regressions: database-backed guardrails were being re-initialized on every poll, and model-level guardrails ran their pre-call hook more than once.
+`v1.88.3` 는 다음 버전을 기반으로 한 패치 릴리스입니다: [`v1.88.2`](/release_notes/v1.88.2/v1-88-2). 이 릴리스는 다음 문제를 수정합니다: two guardrail regressions: database-backed guardrails were being re-initialized on every poll, 및 model-level guardrails ran their pre-call hook more than once.
 
-### What's Changed
+### 변경 사항
 
-- fix(guardrails): stop re-initializing DB guardrails on every poll - [PR #30542](https://github.com/BerriAI/litellm/pull/30542)
-- fix(guardrails): run the `pre_call` hook once for model-level guardrails - [PR #30543](https://github.com/BerriAI/litellm/pull/30543)
+- fix(guardrails): 매 poll마다 DB guardrail을 다시 초기화하지 않도록 수정 - [PR #30542](https://github.com/BerriAI/litellm/pull/30542)
+- fix(guardrails): model-level guardrail에서 `pre_call` hook을 한 번만 실행 - [PR #30543](https://github.com/BerriAI/litellm/pull/30543)
 
 ## Full 변경 이력
 

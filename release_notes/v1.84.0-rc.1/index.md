@@ -55,7 +55,7 @@ pip install litellm==1.84.0rc1
 - **Two-worker Docker deployment에서 memory footprint가 약 700 MB 감소했습니다.** lazy-loaded feature router와 lazy-loaded front page를 사용합니다. lazy route의 첫 request에는 import cost가 발생하지만, 이후 request는 동일합니다.
 - **MCP OAuth + Azure Entra discovery 지원**, MCP tool name을 60자 제한 아래로 유지하기 위한 `opt-in short-ID tool prefix`, OAuth root-endpoint visibility가 explicit server-name lookup과 동일해졌습니다.
 - **Durable agent workflow run tracking**이 새 `/v1/workflows/runs` REST surface로 추가되었습니다. `LiteLLM_WorkflowRun` / `LiteLLM_WorkflowEvent` / `LiteLLM_WorkflowMessage` table이 backing합니다. Spend logs `session_id` join으로 별도 비용 없이 cost attribution을 할 수 있습니다.
-- **Routing Groups를 통한 per-model routing strategies.** 새 `router_settings.routing_groups` schema는 단일 router 안에서 `model_name` 목록을 자체 routing strategy(예: `gpt-4o`에는 `latency-based-routing`, 저렴한 model에는 `simple-shuffle`)에 binding합니다. `proxy_config.yaml` 또는 LiteLLM dashboard의 General Settings → Routing Groups에서 구성할 수 있으며, UI-managed group은 persist되고 YAML 값을 override합니다.
+- **Routing Groups를 통한 per-model routing strategies.** 새 `router_settings.routing_groups` schema는 단일 router 안에서 `model_name` 목록을 자체 routing strategy(예: `gpt-4o`에는 `latency-based-routing`, 저렴한 model에는 `simple-shuffle`)에 binding합니다. `proxy_config.yaml` 또는 LiteLLM dashboard의 일반 Settings → Routing Groups에서 구성할 수 있으며, UI-managed group은 persist되고 YAML 값을 override합니다.
 
 ---
 
@@ -143,7 +143,7 @@ pip install litellm==1.84.0rc1
 - **영향 대상:** provider key를 복구하기 위해 이 response의 `litellm_params`를 읽던 항목, 또는 `/vector_store/update`로 임의의 vector store를 변경하던 non-store-admin caller입니다.
 - **이전 동작 복구:** 없음.
 
-### Logging callbacks 및 key/team metadata {#logging-callbacks--keyteam-metadata}
+### 로깅 callbacks 및 key/team metadata {#logging-callbacks--keyteam-metadata}
 
 #### key/team metadata의 `os.environ/*` callback refs는 더 이상 resolve되지 않음 {#osenviron-callback-refs-in-keyteam-metadata-are-no-longer-resolved}
 - **변경 내용:** `convert_key_logging_metadata_to_callback()`은 더 이상 key/team metadata의 `os.environ/*` 값을 `get_secret()`으로 resolve하지 않습니다. 해당 값이 있는 기존 row는 request를 crash시키는 대신 request setup에서 조용히 무시됩니다. `add_team_based_callbacks_from_config()`의 trusted `config.yaml` team-callback env resolution은 변경되지 않았습니다. key/team logging metadata에서 새로 만드는 `AddTeamCallback`도 `os.environ/*` callback var를 거부합니다.
@@ -296,7 +296,7 @@ pip install litellm==1.84.0rc1
 - **Teams**
     - Team-level search-tool credentials: `LiteLLM_ObjectPermissionTable`에 새 `search_tools` array가 추가되었습니다. Per-key permission은 owning team의 subset인지 검증되며, team management 아래에 UI selector가 추가되었습니다. - [PR #26691](https://github.com/BerriAI/litellm/pull/26691)
 - **[Routing Groups](../../docs/proxy/ui/routing_groups)**
-    - 새 **General Settings → Routing Groups** page: `proxy_config.yaml`을 편집하지 않고 dashboard에서 per-model routing strategies를 create, edit, delete할 수 있습니다. UI-managed group은 persist되고 YAML에 정의된 값을 override합니다. Per-group state는 저장 시 rebuild됩니다. - [PR #27131](https://github.com/BerriAI/litellm/pull/27131)
+    - 새 **일반 Settings → Routing Groups** page: `proxy_config.yaml`을 편집하지 않고 dashboard에서 per-model routing strategies를 create, edit, delete할 수 있습니다. UI-managed group은 persist되고 YAML에 정의된 값을 override합니다. Per-group state는 저장 시 rebuild됩니다. - [PR #27131](https://github.com/BerriAI/litellm/pull/27131)
 - **Model Health**
     - Model health status page에 pagination control을 추가했습니다. - [PR #26826](https://github.com/BerriAI/litellm/pull/26826)
 - **CLI / Workers**
@@ -314,7 +314,7 @@ pip install litellm==1.84.0rc1
 - **MCP UI**
     - MCP server edit page의 Tool 설정 panel이 `POST /mcp-rest/test/tools/list`(temp-session preview, inline creds 필요)에서 `GET /mcp-rest/tools/list?server_id=...`(stored credentials)로 전환되었습니다. `api_key` / `bearer_token` / `basic` / `authorization` `auth_type`을 사용하는 saved server는 이제 "Unable to load tools — Failed to connect to MCP server." 없이 tool을 load합니다. - [PR #26002](https://github.com/BerriAI/litellm/pull/26002)
 - **Teams**
-    - `max_budget=NULL`인 per-member row는 더 이상 조용히 enforcement를 disable하지 않고 team-level enforcement로 fall through됩니다. - [PR #26809](https://github.com/BerriAI/litellm/pull/26809)
+    - `max_budget=NULL`인 per-member row는 더 이상 조용히 enforcement를 disable하지 않고 team-level enforcement로 fall 통해됩니다. - [PR #26809](https://github.com/BerriAI/litellm/pull/26809)
 - **Spend logs**
     - Spend-log error message에서 request data를 제거합니다. - [PR #26662](https://github.com/BerriAI/litellm/pull/26662)
 - **Vertex retrieve mock 테스트**
@@ -324,9 +324,9 @@ pip install litellm==1.84.0rc1
 
 ## AI 통합 {#ai-integrations}
 
-### Logging
+### 로깅
 
-- **General**
+- **일반**
     - Generic API logger batch send에 opt-in retry setting을 추가했습니다. 일시적인 `litellm.Timeout` / `httpx.ConnectTimeout` failure는 batch를 drop하지 않고 retry합니다. - [PR #26645](https://github.com/BerriAI/litellm/pull/26645)
     - Redis에 사용하는 GCP IAM token을 cache합니다. 기존에는 connection마다 재생성되었고, synchronous `google-auth` + `google-cloud-iam` call이 asyncio event loop를 freeze해 production에서 약 25초 `INCRBYFLOAT` Redis span을 유발했습니다. - [PR #26441](https://github.com/BerriAI/litellm/pull/26441)
     - Streaming hidden response cost를 backfill합니다. - [PR #26606](https://github.com/BerriAI/litellm/pull/26606)
@@ -349,7 +349,7 @@ pip install litellm==1.84.0rc1
 - **비용 계산 통합**
     - `success_handler` typed + dict branch가 이제 동일한 방식으로 cost를 계산합니다. - [PR #26629](https://github.com/BerriAI/litellm/pull/26629)
 - **Member별 null budget**
-    - `max_budget=NULL`인 per-member row는 team enforcement로 fall through됩니다. - [PR #26809](https://github.com/BerriAI/litellm/pull/26809)
+    - `max_budget=NULL`인 per-member row는 team enforcement로 fall 통해됩니다. - [PR #26809](https://github.com/BerriAI/litellm/pull/26809)
 - **Bedrock 1-hour cache write pricing 수정**
     - Claude 4.5 / 4.6 / 4.7 Global + US entry에 `cache_creation_input_token_cost_above_1hr`를 추가했습니다(기존에는 약 60% undercount). - [PR #26800](https://github.com/BerriAI/litellm/pull/26800)
 - **`gpt-5.5-pro` corrected pricing**

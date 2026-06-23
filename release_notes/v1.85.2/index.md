@@ -18,7 +18,7 @@ authors:
 hide_table_of_contents: false
 ---
 
-## Deploy this version
+## 이 버전 배포
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -43,17 +43,17 @@ pip install litellm==1.85.2
 </TabItem>
 </Tabs>
 
-`v1.85.2` is a patch release on top of [`v1.85.1`](/release_notes/v1.85.1/v1-85-1). It backports the path-handling hardening covered in the [host-header authentication bypass advisory](/blog/host-header-auth-bypass) and restores `npm` to the non-root Docker builder.
+`v1.85.2` 는 다음 버전을 기반으로 한 패치 릴리스입니다: [`v1.85.1`](/release_notes/v1.85.1/v1-85-1). 이 릴리스는 다음 수정 사항을 백포트합니다: the path-handling hardening covered in the [host-header authentication bypass advisory](/blog/host-header-auth-bypass) 및 restores `npm` to the non-root Docker builder.
 
-### Bug Fixes
+### 버그 수정
 
 - **Proxy auth / routing**
-    - Route the proxy's path-dependent call sites through `get_request_route()` so they all derive the request route from the ASGI scope rather than the `Host`-reconstructed URL - [PR #28547](https://github.com/BerriAI/litellm/pull/28547)
+    - the proxy's path-dependent call sites 통해 `get_request_route()` 따라서 they all derive the request route from the ASGI scope 대신 the `Host`-reconstructed URL 라우팅 - [PR #28547](https://github.com/BerriAI/litellm/pull/28547)
 
 ### Infrastructure
 
 - **Docker**
-    - Restore `npm` to the `Dockerfile.non_root` builder stage so `prisma-python` no longer falls back to a `nodeenv`-bootstrapped Node runtime - [PR #28519](https://github.com/BerriAI/litellm/pull/28519)
+    - Restore `npm` to the `Dockerfile.non_root` builder stage 따라서 `prisma-python` no longer falls back to a `nodeenv`-bootstrapped Node runtime - [PR #28519](https://github.com/BerriAI/litellm/pull/28519)
 
 ## Full 변경 이력
 

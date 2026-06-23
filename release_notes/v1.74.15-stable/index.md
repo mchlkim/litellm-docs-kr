@@ -83,7 +83,7 @@ pip install litellm==1.74.15.post2
 
 #### 신규 모델 지원 {#new-model-support}
 
-| Provider    | Model                                  | Context Window | Input ($/1M tokens) | Output ($/1M tokens) | 이미지당 비용 |
+| Provider    | Model                                  | 컨텍스트 윈도우 | Input ($/1M tokens) | Output ($/1M tokens) | 이미지당 비용 |
 | ----------- | -------------------------------------- | -------------- | ------------------- | -------------------- | -------------- |
 | OpenRouter | `openrouter/x-ai/grok-4` | 256k | $3 | $15 | N/A |
 | Google AI Studio | `gemini/imagen-4.0-generate-001` | N/A | N/A | N/A | $0.04 |
@@ -217,7 +217,7 @@ pip install litellm==1.74.15.post2
 
 ---
 
-## Performance / Loadbalancing / Reliability 개선 {#performance--loadbalancing--reliability-improvements}
+## 성능 / 부하 분산 / 안정성 개선 {#performance--loadbalancing--reliability-improvements}
 
 #### 기능 {#features-4}
 

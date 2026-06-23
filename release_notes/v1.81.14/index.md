@@ -96,7 +96,7 @@ Compliance Playground에서는 guardrail을 사전 구성된 eval dataset 또는
 
 ---
 
-## Performance & Reliability — 최대 13% 낮은 Latency
+## 성능 & 안정성 — 최대 13% 낮은 Latency
 
 <Image img={require('../../img/release_notes/v1_81_14_perf.png')} />
 
@@ -118,7 +118,7 @@ graph LR
     C -->|After| E["✅ Yes — connection returned to pool"]
 ```
 
-**Redis Connection Pool Reliability**
+**Redis Connection Pool 안정성**
 
 Redis 사용 안정성을 높이기 위해 별도 connection pool bug 4개를 수정했습니다. 가장 중요한 변경은 cache expiry 시 pool이 leak되던 문제이며, 다른 수정 사항은 [PR #21717](https://github.com/BerriAI/litellm/pull/21717)에 정리되어 있습니다.
 
@@ -151,7 +151,7 @@ graph LR
 
 #### 신규 Model 지원(13개 model)
 
-| Provider | Model | Context Window | Input($/1M tokens) | Output($/1M tokens) | 기능 |
+| Provider | Model | 컨텍스트 윈도우 | Input($/1M tokens) | Output($/1M tokens) | 기능 |
 | -------- | ----- | -------------- | ------------------- | -------------------- | -------- |
 | Anthropic | `claude-sonnet-4-6` | 200K | $3.00 | $15.00 | `reasoning`, `computer use`, `prompt caching`, `vision`, `PDF` 기능 |
 | Vertex AI | `vertex_ai/claude-opus-4-6@default` | 1M | $5.00 | $25.00 | `reasoning`, `computer use`, `prompt caching` 기능 |
@@ -222,14 +222,14 @@ graph LR
 - **[AU Anthropic](../../docs/providers/anthropic)**
     - `au.anthropic.claude-opus-4-6-v1` model ID 수정 - [PR #20731](https://github.com/BerriAI/litellm/pull/20731)
 
-- **General**
+- **일반**
     - reasoning 지원 기반 routing 추가. `thinking` param이 있을 때 reasoning 미지원 deployment는 건너뜁니다. - [PR #21302](https://github.com/BerriAI/litellm/pull/21302)
     - OpenAI와 Azure에 supported param으로 `stop` 추가 - [PR #21539](https://github.com/BerriAI/litellm/pull/21539)
     - `OPENAI_CHAT_COMPLETION_PARAMS`에 `store` 및 누락 param 추가 - [PR #21195](https://github.com/BerriAI/litellm/pull/21195), [PR #21360](https://github.com/BerriAI/litellm/pull/21360)
     - proxy response의 `provider_specific_fields` 보존 - [PR #21220](https://github.com/BerriAI/litellm/pull/21220)
     - default usage data configuration 추가 - [PR #21550](https://github.com/BerriAI/litellm/pull/21550)
 
-### Bug Fixes
+### 버그 수정
 
 - **[AWS Bedrock](../../docs/providers/bedrock)**
     - service_tier cost propagation 수정 - [PR #21172](https://github.com/BerriAI/litellm/pull/21172)
@@ -248,7 +248,7 @@ graph LR
 
 ---
 
-## LLM API Endpoints
+## LLM API 엔드포인트
 
 #### 기능
 
@@ -271,14 +271,14 @@ graph LR
     - search tool로 DuckDuckGo 추가 - [PR #21467](https://github.com/BerriAI/litellm/pull/21467)
     - websearch에서 proxy router를 통한 `pre_call_deployment_hook` 미실행 문제 수정 - [PR #21433](https://github.com/BerriAI/litellm/pull/21433)
 
-- **General**
+- **일반**
     - function calling 미지원 model에서 tool param 제외 - [PR #21244](https://github.com/BerriAI/litellm/pull/21244)
     - OpenAI chat completion param에 `store` 추가 - [PR #21195](https://github.com/BerriAI/litellm/pull/21195)
     - per-model reasoning configuration을 위한 config 기반 reasoning 지원 추가 - [PR #21663](https://github.com/BerriAI/litellm/pull/21663)
 
-#### Bugs
+#### 버그
 
-- **General**
+- **일반**
     - 여러 potential endpoint가 있는 model의 `api_base` resolution error 수정 - [PR #21658](https://github.com/BerriAI/litellm/pull/21658)
     - `query_raw`의 dict row에서 session grouping이 깨지는 문제 수정 - [PR #21435](https://github.com/BerriAI/litellm/pull/21435)
 
@@ -334,7 +334,7 @@ graph LR
     - general settings에 `forward_client_headers_to_llm_api` toggle 추가 - [PR #21776](https://github.com/BerriAI/litellm/pull/21776)
     - 매 request마다 발생하던 `is_premium()` debug log spam 수정 - [PR #20841](https://github.com/BerriAI/litellm/pull/20841)
 
-#### Bugs
+#### 버그
 
 - Spend 로그: cost calculation 수정 - [PR #21152](https://github.com/BerriAI/litellm/pull/21152)
 - 로그: table 미업데이트 및 pagination issue 수정 - [PR #21708](https://github.com/BerriAI/litellm/pull/21708)
@@ -347,9 +347,9 @@ graph LR
 
 ---
 
-## AI Integrations
+## AI 통합
 
-### Logging
+### 로깅
 
 - **[DataDog](../../docs/proxy/logging#datadog)**
     - logs, metrics, cost management에 `team` tag 추가 - [PR #21449](https://github.com/BerriAI/litellm/pull/21449)
@@ -362,7 +362,7 @@ graph LR
 - **[Langfuse](../../docs/proxy/logging#langfuse)**
     - Langfuse test isolation 개선(여러 stability fix) - [PR #21214](https://github.com/BerriAI/litellm/pull/21214)
 
-- **General**
+- **일반**
     - logging에서 cached response cost를 0으로 수정 - [PR #21816](https://github.com/BerriAI/litellm/pull/21816)
     - middleware와 logging bottleneck을 수정해 streaming proxy throughput 개선 - [PR #21501](https://github.com/BerriAI/litellm/pull/21501)
     - large base64 payload의 proxy overhead 감소 - [PR #21594](https://github.com/BerriAI/litellm/pull/21594)
@@ -437,7 +437,7 @@ graph LR
 
 ---
 
-## Performance / Load Balancing / Reliability 개선
+## 성능 / Load Balancing / 안정성 개선
 
 **Logging 및 callback overhead**
 
@@ -464,7 +464,7 @@ graph LR
 - non-alias `get_model_list` lookup에서 O(n) alias scan 방지 - [PR #21136](https://github.com/BerriAI/litellm/pull/21136)
 - multi-model cache thrash를 줄이기 위해 default LRU cache size 증가 - [PR #21139](https://github.com/BerriAI/litellm/pull/21139)
 - Router에서 `get_model_access_groups()` no-args result cache - [PR #20374](https://github.com/BerriAI/litellm/pull/20374)
-- Deployment affinity routing callback — session에 대해 같은 deployment로 routing - [PR #19143](https://github.com/BerriAI/litellm/pull/19143)
+- 배포 affinity routing callback — session에 대해 같은 deployment로 routing - [PR #19143](https://github.com/BerriAI/litellm/pull/19143)
 - Session-ID-based routing — session 내 consistent routing을 위해 `session_id` 사용 - [PR #21763](https://github.com/BerriAI/litellm/pull/21763)
 
 **Connection management 및 reliability**

@@ -361,7 +361,7 @@ AI Gateway의 내장 가드레일 시작 방법은 [여기](https://docs.litellm
     - mcp credentials를 db에 유지 - [PR #16308](https://github.com/BerriAI/litellm/pull/16308)
 
 
-## 성능 / Loadbalancing / Reliability 개선 {#performance-loadbalancing-reliability-improvements}
+## 성능 / 부하 분산 / 안정성 개선 {#performance-loadbalancing-reliability-improvements}
 
 - **Memory Leak 수정**
     - Pydantic 2.11+ deprecation warnings로 인한 메모리 누적 해결 - [PR #16110](https://github.com/BerriAI/litellm/pull/16110)

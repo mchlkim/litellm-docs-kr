@@ -72,7 +72,7 @@ Agent는 사용자와 동일한 팀 역할로 JWT를 사용해 LiteLLM에 인증
 
 #### 신규 모델 지원
 
-| Provider    | Model                                  | Context Window | Input ($/1M tokens) | Output ($/1M tokens) | 기능 |
+| Provider    | Model                                  | 컨텍스트 윈도우 | Input ($/1M tokens) | Output ($/1M tokens) | 기능 |
 | ----------- | -------------------------------------- | -------------- | ------------------- | -------------------- | -------- |
 | Azure AI | `azure_ai/FLUX-1.1-pro` | - | - | $40/image | 이미지 생성 |
 | Azure AI | `azure_ai/FLUX.1-Kontext-pro` | - | - | $40/image | 이미지 생성 |
@@ -116,7 +116,7 @@ Agent는 사용자와 동일한 팀 역할로 JWT를 사용해 LiteLLM에 인증
     - 'finish_reason' chunk indexing 일관화 - [PR #13560](https://github.com/BerriAI/litellm/pull/13560)
 ---
 
-## LLM API Endpoints
+## LLM API 엔드포인트
 
 #### 기능
 
@@ -200,7 +200,7 @@ Agent는 사용자와 동일한 팀 역할로 JWT를 사용해 LiteLLM에 인증
 
 ---
 
-## 성능 / Loadbalancing / Reliability 개선
+## 성능 / 부하 분산 / 안정성 개선
 
 #### 기능
 

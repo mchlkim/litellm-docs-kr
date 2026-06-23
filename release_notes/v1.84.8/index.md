@@ -18,7 +18,7 @@ authors:
 hide_table_of_contents: false
 ---
 
-## Deploy this version
+## 이 버전 배포
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -43,19 +43,19 @@ pip install litellm==1.84.8
 </TabItem>
 </Tabs>
 
-`v1.84.8` is a patch release on top of [`v1.84.7`](/release_notes/v1.84.7/v1-84-7). It backports a database-resilience set (Prisma reconnection, prepared-statement and timeout controls, 5xx on DB infra errors during auth) together with the complete grace-period key rotation fix, plus routing and streaming corrections.
+`v1.84.8` 는 다음 버전을 기반으로 한 패치 릴리스입니다: [`v1.84.7`](/release_notes/v1.84.7/v1-84-7). 이 릴리스는 다음 수정 사항을 백포트합니다: a database-resilience set (Prisma reconnection, prepared-statement 및 timeout controls, 5xx on DB infra errors during auth) 및 the complete grace-period key rotation fix, 추가로 routing 및 streaming corrections.
 
-### What's Changed
+### 변경 사항
 
-- fix(anthropic): correct streaming reasoning token usage - [PR #27319](https://github.com/BerriAI/litellm/pull/27319)
-- fix(proxy): grace-period key rotation deprecated-key lookup - [PR #27756](https://github.com/BerriAI/litellm/pull/27756)
-- fix(router): use forwarded model_id for native Azure container IDs - [PR #27921](https://github.com/BerriAI/litellm/pull/27921)
-- fix(proxy): recover from cached-plan errors by reconnecting the Prisma client - [PR #29983](https://github.com/BerriAI/litellm/pull/29983)
-- fix(proxy): expose Prisma idle/connect timeout and extra DB URL params - [PR #28395](https://github.com/BerriAI/litellm/pull/28395)
-- feat(proxy): add option to disable server-side prepared statements for DB lookups - [PR #29984](https://github.com/BerriAI/litellm/pull/29984)
-- fix(proxy): return 5xx on DB infra errors during auth - [PR #29986](https://github.com/BerriAI/litellm/pull/29986)
-- fix(passthrough): resolve costing model when body model is unknown - [PR #30160](https://github.com/BerriAI/litellm/pull/30160)
-- fix(proxy): return deprecated-key lookup result directly in get_data combined view - [PR #30327](https://github.com/BerriAI/litellm/pull/30327)
+- fix(anthropic): streaming reasoning token 사용량 계산 수정 - [PR #27319](https://github.com/BerriAI/litellm/pull/27319)
+- fix(proxy): grace-period key rotation의 deprecated-key 조회 수정 - [PR #27756](https://github.com/BerriAI/litellm/pull/27756)
+- fix(router): native Azure container ID에 전달된 model_id 사용 - [PR #27921](https://github.com/BerriAI/litellm/pull/27921)
+- fix(proxy): Prisma client를 재연결해 cached-plan 오류에서 복구 - [PR #29983](https://github.com/BerriAI/litellm/pull/29983)
+- fix(proxy): Prisma idle/connect timeout 및 추가 DB URL 파라미터 노출 - [PR #28395](https://github.com/BerriAI/litellm/pull/28395)
+- feat(proxy): DB 조회에서 서버 측 prepared statement를 비활성화하는 옵션 추가 - [PR #29984](https://github.com/BerriAI/litellm/pull/29984)
+- fix(proxy): 인증 중 DB 인프라 오류가 발생하면 5xx 반환 - [PR #29986](https://github.com/BerriAI/litellm/pull/29986)
+- fix(passthrough): body model을 알 수 없을 때 비용 계산 모델 해석 - [PR #30160](https://github.com/BerriAI/litellm/pull/30160)
+- fix(proxy): get_data combined view에서 deprecated-key 조회 결과를 직접 반환 - [PR #30327](https://github.com/BerriAI/litellm/pull/30327)
 
 ## Full 변경 이력
 

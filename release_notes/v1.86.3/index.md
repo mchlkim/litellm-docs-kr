@@ -18,7 +18,7 @@ authors:
 hide_table_of_contents: false
 ---
 
-## Deploy this version
+## 이 버전 배포
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -43,17 +43,17 @@ pip install litellm==1.86.3
 </TabItem>
 </Tabs>
 
-`v1.86.3` is a patch release on top of [`v1.86.2`](/release_notes/v1.86.2/v1-86-2). It closes the gap with the 1.84 and 1.85 lines: day-0 Gemini 3.5 Flash on Vertex AI and Google AI Studio with its paired Vertex tool-call fix, Redis spend-counter seeding, and the observability, budget, and flag-leak fixes.
+`v1.86.3` 는 다음 버전을 기반으로 한 패치 릴리스입니다: [`v1.86.2`](/release_notes/v1.86.2/v1-86-2). 이 릴리스는 다음 라인과의 차이를 줄입니다: the 1.84 및 1.85 lines: day-0 Gemini 3.5 Flash on Vertex AI 및 Google AI Studio with its paired Vertex tool-call fix, Redis spend-counter seeding, 및 the observability, budget, 및 flag-leak fixes.
 
-### What's Changed
+### 변경 사항
 
-- feat: day-0 support for Gemini 3.5 Flash on Vertex AI and Google AI Studio - [PR #28268](https://github.com/BerriAI/litellm/pull/28268)
-- fix(vertex): omit the function_call `id` on Gemini 3.5+ tool turns (pairs with #28268) - [PR #28324](https://github.com/BerriAI/litellm/pull/28324)
-- fix(spend): seed the Redis spend counter with `SET NX` so concurrent pods no longer double-seed - [PR #27854](https://github.com/BerriAI/litellm/pull/27854)
-- fix(logging): stop duplicate Claude Code traces, plus the `_build_passthrough_logging_result` helper - [PR #29311](https://github.com/BerriAI/litellm/pull/29311)
-- fix(proxy): normalize the Bearer prefix in the safe-hash helper - [PR #29343](https://github.com/BerriAI/litellm/pull/29343)
-- fix(budget): reset_budget writes only `{spend, budget_reset_at}` - [PR #29358](https://github.com/BerriAI/litellm/pull/29358)
-- fix(proxy): stop the `use_chat_completions_api` flag from leaking into the provider request body - [PR #29447](https://github.com/BerriAI/litellm/pull/29447)
+- feat: Vertex AI 및 Google AI Studio에서 Gemini 3.5 Flash day-0 지원 - [PR #28268](https://github.com/BerriAI/litellm/pull/28268)
+- fix(vertex): Gemini 3.5+ tool turn에서 function_call `id` 생략(#28268과 쌍) - [PR #28324](https://github.com/BerriAI/litellm/pull/28324)
+- fix(spend): `SET NX`로 Redis spend counter를 seed해 동시 pod가 중복 seed하지 않도록 수정 - [PR #27854](https://github.com/BerriAI/litellm/pull/27854)
+- fix(logging): Claude Code trace 중복 생성 및 `_build_passthrough_logging_result` helper 수정 - [PR #29311](https://github.com/BerriAI/litellm/pull/29311)
+- fix(proxy): safe-hash helper에서 Bearer prefix 정규화 - [PR #29343](https://github.com/BerriAI/litellm/pull/29343)
+- fix(budget): reset_budget이 `{spend, budget_reset_at}`만 기록하도록 수정 - [PR #29358](https://github.com/BerriAI/litellm/pull/29358)
+- fix(proxy): `use_chat_completions_api` flag가 provider request body로 유출되지 않도록 수정 - [PR #29447](https://github.com/BerriAI/litellm/pull/29447)
 
 ## Full 변경 이력
 

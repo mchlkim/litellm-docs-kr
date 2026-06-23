@@ -18,7 +18,7 @@ authors:
 hide_table_of_contents: false
 ---
 
-## Deploy this version
+## 이 버전 배포
 
 import Image from '@theme/IdealImage';
 import Tabs from '@theme/Tabs';
@@ -44,27 +44,27 @@ pip install litellm==1.87.0
 </TabItem>
 </Tabs>
 
-## Key Highlights
+## 주요 변경 사항
 
-- **OCI Generative AI as a first-class provider** — production-ready chat, embeddings, streaming, reasoning and tool use across Cohere Command-A, Meta Llama 3.1/3.2/3.3/4, xAI Grok 3/4, Google Gemini 2.5, and OpenAI GPT-5 hosted on OCI; full model-pricing catalog included.
-- **Gemini 3.5 Flash Day-0 support** — `gemini-3.5-flash` and `gemini-3.1-flash-lite` ship on Vertex AI, Google AI Studio, and OpenRouter with full pricing, function calling, web search, code execution, and managed-agents support.
-- **MCP UI for OAuth tool calls** — the dashboard now resolves tool list and tool call against OAuth-protected MCP servers directly, plus native MCP OAuth support for Cursor and clearer OAuth error messages.
-- **Codex CLI auth hardening** — JWT-derived team aliases and SSO form-URL flow for the OpenAI Codex CLI, plus allowlisted OIDC-claim persistence across the CLI SSO poll.
-- **Anthropic streaming hot-path perf** — ~90% lower TTFT overhead and higher sustained throughput on the proxy's Anthropic `/v1/messages` SSE path, measured on a real 4-pod deployment against both Anthropic and Bedrock Invoke (wire output is parity-tested); plus lazy-loaded response streaming for Bedrock SageMaker.
+- **OCI Generative AI as a first-class provider** — production-ready chat, embeddings, streaming, reasoning 및 tool use across Cohere Command-A, Meta Llama 3.1/3.2/3.3/4, xAI Grok 3/4, Google Gemini 2.5, 및 OpenAI GPT-5 hosted on OCI; full model-pricing catalog included.
+- **Gemini 3.5 Flash Day-0 support** — `gemini-3.5-flash` 및 `gemini-3.1-flash-lite` ship on Vertex AI, Google AI Studio, 및 OpenRouter with full pricing, function calling, web search, code execution, 및 managed-agents support.
+- **MCP UI for OAuth tool calls** — the dashboard now resolves tool list 및 tool call against OAuth-protected MCP servers directly, 추가로 native MCP OAuth support for Cursor 및 clearer OAuth error messages.
+- **Codex CLI auth hardening** — JWT-derived team aliases 및 SSO form-URL flow for the OpenAI Codex CLI, 추가로 allowlisted OIDC-claim persistence across the CLI SSO poll.
+- **Anthropic streaming hot-path perf** — ~90% lower TTFT overhead 및 higher sustained throughput on the proxy's Anthropic `/v1/messages` SSE path, measured on a real 4-pod deployment against both Anthropic 및 Bedrock Invoke (wire output is parity-tested); 추가로 lazy-loaded response streaming for Bedrock SageMaker.
 
-## New Providers and Endpoints
+## 새 프로바이더 및 엔드포인트
 
-### New Providers (1 new provider)
+### 새 프로바이더 (1 새 프로바이더)
 
-| Provider | Supported LiteLLM Endpoints | Description |
+| Provider | 지원 LiteLLM 엔드포인트 | 설명 |
 | --- | --- | --- |
-| [OCI Generative AI](https://docs.litellm.ai/docs/providers/oci) | `/v1/chat/completions`, `/v1/embeddings` | Official Oracle Cloud Infrastructure Generative AI integration. Production-ready support for chat, streaming, reasoning, tool calling, and embeddings across Cohere Command-A (incl. Reasoning + Vision), Meta Llama 3.1 / 3.2 / 3.3 / 4, xAI Grok 3 / 4, Google Gemini 2.5, and OpenAI GPT-5. Includes full model-pricing catalog. - [PR #28223](https://github.com/BerriAI/litellm/pull/28223) |
+| [OCI Generative AI](https://docs.litellm.ai/docs/providers/oci) | `/v1/chat/completions`, `/v1/embeddings` | Official Oracle Cloud Infrastructure Generative AI integration. Production-ready support for chat, streaming, reasoning, tool calling, 및 embeddings across Cohere Command-A (incl. Reasoning + Vision), Meta Llama 3.1 / 3.2 / 3.3 / 4, xAI Grok 3 / 4, Google Gemini 2.5, 및 OpenAI GPT-5. Includes full model-pricing catalog. - [PR #28223](https://github.com/BerriAI/litellm/pull/28223) |
 
 ## New 모델 / Updated 모델
 
-#### New Model Support (22 new models)
+#### 새 모델 지원 (22 새 모델)
 
-| Provider | Model | Context Window | Input ($/1M tokens) | Output ($/1M tokens) | Features |
+| Provider | Model | 컨텍스트 윈도우 | Input ($/1M tokens) | Output ($/1M tokens) | 기능 |
 | --- | --- | --- | --- | --- | --- |
 | Azure | `azure/speech/azure-stt` | — | $0.000278/sec | — | Audio transcription |
 | Fireworks AI | `fireworks_ai/glm-5p1` | 202,800 | $1.40 | $4.40 | Reasoning |
@@ -87,22 +87,22 @@ pip install litellm==1.87.0
 | Reducto | `reducto/parse-v3` | — | — | — | OCR |
 | Reducto | `reducto/parse-legacy` | — | — | — | OCR |
 
-Plus a Vertex / Anthropic `supports_output_config` flag flip on all `claude-opus-4-6`, `claude-opus-4-7`, and `claude-sonnet-4-6` regional variants, and an `oci/*` `supports_native_streaming` flip across Cohere, Gemini, Meta, and xAI catalog entries.
+Plus a Vertex / Anthropic `supports_output_config` flag flip on all `claude-opus-4-6`, `claude-opus-4-7`, 및 `claude-sonnet-4-6` regional variants, 및 an `oci/*` `supports_native_streaming` flip across Cohere, Gemini, Meta, 및 xAI catalog entries.
 
-#### Features
+#### 기능
 
 - **[Gemini](https://docs.litellm.ai/docs/providers/gemini)**
     - Day-0 support for `gemini-3.5-flash` - [PR #28268](https://github.com/BerriAI/litellm/pull/28268)
-    - Add `gemini-3.1-flash-lite` model cost map - [PR #28320](https://github.com/BerriAI/litellm/pull/28320)
+    - `gemini-3.1-flash-lite` model cost map 추가 - [PR #28320](https://github.com/BerriAI/litellm/pull/28320)
     - Additional `gemini-3.1-flash-lite` pricing entry - [PR #27933](https://github.com/BerriAI/litellm/pull/27933)
     - Gemini managed-agents support - [PR #28270](https://github.com/BerriAI/litellm/pull/28270)
 - **[Azure](https://docs.litellm.ai/docs/providers/azure)**
-    - Add Azure Speech STT config support - [PR #27482](https://github.com/BerriAI/litellm/pull/27482)
+    - Azure Speech STT config support 추가 - [PR #27482](https://github.com/BerriAI/litellm/pull/27482)
 - **[OpenRouter](https://docs.litellm.ai/docs/providers/openrouter)**
-    - Add Xiaomi MiMo-V2.5 and MiMo-V2.5-Pro model entries - [PR #27700](https://github.com/BerriAI/litellm/pull/27700)
-    - Add `openrouter/google/gemini-3.1-flash-lite` pricing entry - [PR #28280](https://github.com/BerriAI/litellm/pull/28280)
+    - Xiaomi MiMo-V2.5 및 MiMo-V2.5-Pro model entries 추가 - [PR #27700](https://github.com/BerriAI/litellm/pull/27700)
+    - `openrouter/google/gemini-3.1-flash-lite` pricing entry 추가 - [PR #28280](https://github.com/BerriAI/litellm/pull/28280)
 
-#### Bug Fixes
+#### 버그 수정
 
 - **[Vertex AI](https://docs.litellm.ai/docs/providers/vertex)**
     - Omit `function_call.id` on Vertex Gemini 3.5+ tool turns (the field is rejected by the new schema) - [PR #28324](https://github.com/BerriAI/litellm/pull/28324)
@@ -114,45 +114,45 @@ Plus a Vertex / Anthropic `supports_output_config` flag flip on all `claude-opus
 - **[SageMaker](https://docs.litellm.ai/docs/providers/sagemaker)**
     - Send the native Cohere embed payload to Cohere SageMaker endpoints - [PR #28613](https://github.com/BerriAI/litellm/pull/28613)
 - **[DeepSeek](https://docs.litellm.ai/docs/providers/deepseek)**
-    - Use the native `/anthropic/v1/messages` endpoint and sanitize tools - [PR #28200](https://github.com/BerriAI/litellm/pull/28200)
+    - the native `/anthropic/v1/messages` endpoint 및 sanitize tools 사용 - [PR #28200](https://github.com/BerriAI/litellm/pull/28200)
 - **[Azure](https://docs.litellm.ai/docs/providers/azure)**
-    - Decouple Azure OpenAI deployment ID from model name via `base_model` so GPT-5 model routing works on custom deployment names - [PR #28490](https://github.com/BerriAI/litellm/pull/28490)
+    - Decouple Azure OpenAI deployment ID from model name via `base_model` 따라서 GPT-5 model routing works on custom deployment names - [PR #28490](https://github.com/BerriAI/litellm/pull/28490)
     - Router: use the forwarded `model_id` for native Azure container IDs - [PR #27921](https://github.com/BerriAI/litellm/pull/27921)
 - **[vLLM](https://docs.litellm.ai/docs/providers/vllm)**
-    - Fix Anthropic tool-call transformation on vLLM deployments - [PR #28549](https://github.com/BerriAI/litellm/pull/28549)
+    - Anthropic tool-call transformation on vLLM deployments 수정 - [PR #28549](https://github.com/BerriAI/litellm/pull/28549)
 
-## LLM API Endpoints
+## LLM API 엔드포인트
 
-#### Features
+#### 기능
 
 - **[Interactions API](https://docs.litellm.ai/docs/interactions)**
-    - Migrate to the Google Interactions API steps schema (May 2026 revision) - [PR #28153](https://github.com/BerriAI/litellm/pull/28153)
+    - to the Google Interactions API steps schema (May 2026 revision) 마이그레이션 - [PR #28153](https://github.com/BerriAI/litellm/pull/28153)
 - **Google-native passthrough**
-    - Decode bytes and pass through SSE for Google-native `streamGenerateContent` (no more `b'...'` literals on the wire) - [PR #28213](https://github.com/BerriAI/litellm/pull/28213)
+    - Decode bytes 및 pass 통해 SSE for Google-native `streamGenerateContent` (no more `b'...'` literals on the wire) - [PR #28213](https://github.com/BerriAI/litellm/pull/28213)
 
-#### Bugs
+#### 버그
 
 - **[Responses API](https://docs.litellm.ai/docs/response_api)**
-    - Forward `timeout` on the completion-transformation path for Anthropic, Bedrock, and Vertex - [PR #28133](https://github.com/BerriAI/litellm/pull/28133)
+    - Forward `timeout` on the completion-transformation path for Anthropic, Bedrock, 및 Vertex - [PR #28133](https://github.com/BerriAI/litellm/pull/28133)
     - Accept dict-shape `reasoning_effort` from the Anthropic Responses bridge - [PR #28201](https://github.com/BerriAI/litellm/pull/28201)
     - Wrap `aresponses` streaming iterator for mid-stream router fallbacks - [PR #28215](https://github.com/BerriAI/litellm/pull/28215)
     - Unblock staging — mypy + coverage for `aresponses` streaming fallback - [PR #28318](https://github.com/BerriAI/litellm/pull/28318)
-    - Strip Anthropic `cache_control` from OpenAI Responses API requests - [PR #28431](https://github.com/BerriAI/litellm/pull/28431)
-    - Use the OpenAI `SSEDecoder` for Responses API streaming - [PR #28566](https://github.com/BerriAI/litellm/pull/28566)
+    - Anthropic `cache_control` from OpenAI Responses API requests 제거 - [PR #28431](https://github.com/BerriAI/litellm/pull/28431)
+    - the OpenAI `SSEDecoder` for Responses API streaming 사용 - [PR #28566](https://github.com/BerriAI/litellm/pull/28566)
     - Replay `openai/responses` bridge cache hits as chat streams - [PR #28158](https://github.com/BerriAI/litellm/pull/28158)
 - **[Interactions API](https://docs.litellm.ai/docs/interactions)**
     - Never drop streamed text deltas; always emit the terminal completion - [PR #28394](https://github.com/BerriAI/litellm/pull/28394)
 - **[Batch API](https://docs.litellm.ai/docs/batches)**
-    - Normalize batch file IDs before the `ManagedObjectTable` write - [PR #28339](https://github.com/BerriAI/litellm/pull/28339)
+    - Normalize batch file IDs 전에 the `ManagedObjectTable` write - [PR #28339](https://github.com/BerriAI/litellm/pull/28339)
 
-## Management Endpoints / UI
+## 관리 엔드포인트 / UI
 
-#### Features
+#### 기능
 
 - **모델 + Endpoints**
-    - Add a pause/resume Switch on the models table - [PR #28151](https://github.com/BerriAI/litellm/pull/28151)
+    - a pause/resume Switch on the models table 추가 - [PR #28151](https://github.com/BerriAI/litellm/pull/28151)
 - **Spend 로그**
-    - Consolidate filter state and extract components in the UI - [PR #25847](https://github.com/BerriAI/litellm/pull/25847)
+    - Consolidate filter state 및 extract components in the UI - [PR #25847](https://github.com/BerriAI/litellm/pull/25847)
 - **Playground**
     - Interactions API endpoint in the Playground with SSE streaming - [PR #28156](https://github.com/BerriAI/litellm/pull/28156)
 - **Passthrough Routes**
@@ -165,25 +165,25 @@ Plus a Vertex / Anthropic `supports_output_config` flag flip on all `claude-opus
 - **가상 키**
     - Encrypt `callback_vars` in key/team metadata at rest in the DB - [PR #27141](https://github.com/BerriAI/litellm/pull/27141)
 
-#### Bugs
+#### 버그
 
 - **Auth / Discovery**
-    - Hydrate wildcard discovery credentials so OIDC discovery works against wildcarded providers - [PR #28284](https://github.com/BerriAI/litellm/pull/28284)
+    - Hydrate wildcard discovery credentials 따라서 OIDC discovery works against wildcarded providers - [PR #28284](https://github.com/BerriAI/litellm/pull/28284)
 - **Spend 로그**
     - Restore the log-filter loading indicator - [PR #28282](https://github.com/BerriAI/litellm/pull/28282)
 - **End-User 로그**
-    - Fix end-user logs surfacing - [PR #27758](https://github.com/BerriAI/litellm/pull/27758)
+    - end-user logs surfacing 수정 - [PR #27758](https://github.com/BerriAI/litellm/pull/27758)
 
-## AI Integrations
+## AI 통합
 
-### Logging
+### 로깅
 
 - **[Prometheus](https://docs.litellm.ai/docs/proxy/logging#prometheus)**
-    - Emit per-token-type detail metrics — five sparse counters that break out `usage.prompt_tokens_details` / `usage.completion_tokens_details` fields providers already report (LIT-3220) - [PR #28372](https://github.com/BerriAI/litellm/pull/28372)
-    - Add `user_email` and `user_alias` labels to user budget metrics - [PR #28155](https://github.com/BerriAI/litellm/pull/28155)
+    - per-token-type detail metrics — five sparse counters that break out `usage.prompt_tokens_details` / `usage.completion_tokens_details` fields providers already report (LIT-3220) emit - [PR #28372](https://github.com/BerriAI/litellm/pull/28372)
+    - `user_email` 및 `user_alias` labels to user budget metrics 추가 - [PR #28155](https://github.com/BerriAI/litellm/pull/28155)
 - **[OpenTelemetry](https://docs.litellm.ai/docs/proxy/logging#opentelemetry)**
-    - Propagate `team_id` and `team_alias` to all child OTEL spans - [PR #28273](https://github.com/BerriAI/litellm/pull/28273)
-    - Emit a guardrail span on violations and surface status + categories - [PR #28364](https://github.com/BerriAI/litellm/pull/28364)
+    - Propagate `team_id` 및 `team_alias` to all child OTEL spans - [PR #28273](https://github.com/BerriAI/litellm/pull/28273)
+    - a guardrail span on violations 및 surface status + categories emit - [PR #28364](https://github.com/BerriAI/litellm/pull/28364)
     - Serialize `guardrail_response` to JSON in OTEL traces - [PR #28362](https://github.com/BerriAI/litellm/pull/28362)
     - Stamp `http.response.status_code` on all error responses - [PR #28405](https://github.com/BerriAI/litellm/pull/28405)
 
@@ -192,28 +192,28 @@ Plus a Vertex / Anthropic `supports_output_config` flag flip on all `claude-opus
 - **[Microsoft Purview DLP](https://docs.litellm.ai/docs/proxy/guardrails)**
     - New guardrail integration for Microsoft Purview DLP - [PR #24966](https://github.com/BerriAI/litellm/pull/24966)
 
-## 비용 추적, Budgets and Rate Limiting
+## 비용 추적, Budgets 및 Rate Limiting
 
 - **Spend Counter** — Seed the Redis counter via `SET NX` to prevent cross-pod double-seed on cold start - [PR #27854](https://github.com/BerriAI/litellm/pull/27854)
-- **Cost Tracking** — Recalculate cost after router retry failures so the logged cost reflects the actual attempt that succeeded - [PR #28476](https://github.com/BerriAI/litellm/pull/28476)
-- **Cost Tracking** — Treat `litellm_provider=None` as a wildcard in `_check_provider_match` so cost lookup works for catalog entries that omit the provider field - [PR #28523](https://github.com/BerriAI/litellm/pull/28523)
+- **Cost Tracking** — Recalculate cost 후 router retry failures 따라서 the logged cost reflects the actual attempt that succeeded - [PR #28476](https://github.com/BerriAI/litellm/pull/28476)
+- **Cost Tracking** — Treat `litellm_provider=None` as a wildcard in `_check_provider_match` 따라서 cost lookup works for catalog entries that omit the provider field - [PR #28523](https://github.com/BerriAI/litellm/pull/28523)
 
 ## MCP Gateway
 
-- **OAuth in the UI** — Add tool-call and tool-list support via the dashboard for OAuth-protected MCP servers - [PR #28454](https://github.com/BerriAI/litellm/pull/28454)
+- **OAuth in the UI** — Add tool-call 및 tool-list support via the dashboard for OAuth-protected MCP servers - [PR #28454](https://github.com/BerriAI/litellm/pull/28454)
 - **Cursor OAuth** — Allow native MCP OAuth support for Cursor - [PR #28327](https://github.com/BerriAI/litellm/pull/28327)
-- **Auth Resolution** — JWT on `tools/list` and REST `tools/call` server resolution - [PR #28227](https://github.com/BerriAI/litellm/pull/28227)
+- **Auth Resolution** — JWT on `tools/list` 및 REST `tools/call` server resolution - [PR #28227](https://github.com/BerriAI/litellm/pull/28227)
 - **Cold-Start Init** — Forward upstream `initialize` instructions on cold gateway init - [PR #28231](https://github.com/BerriAI/litellm/pull/28231)
-- **OAuth Errors** — Add `error_description` and hint to OAuth flow error responses - [PR #28471](https://github.com/BerriAI/litellm/pull/28471)
+- **OAuth Errors** — Add `error_description` 및 hint to OAuth flow error responses - [PR #28471](https://github.com/BerriAI/litellm/pull/28471)
 - **Inspector** — Trim whitespace from MCP inspector tool-call inputs - [PR #28203](https://github.com/BerriAI/litellm/pull/28203)
 
-## Performance / Loadbalancing / Reliability improvements
+## 성능 / 부하 분산 / 안정성 개선
 
-- **Anthropic `/v1/messages` streaming hot path** — cut per-request and per-chunk overhead on the proxy's Anthropic streaming path, with byte-identical wire output guaranteed by parity tests that diff the logged and billed payloads between the fast and legacy paths. Measured on a real 4-pod `m7i.xlarge` deployment (no HPA) streaming 256 `text_delta` chunks per request, against both Anthropic and Bedrock Invoke — **TTFT overhead ~90% lower** with **higher sustained throughput** (full numbers below) - [PR #28289](https://github.com/BerriAI/litellm/pull/28289)
-    - Skip work that's a no-op in the default config: the per-chunk Datadog span when tracing is off, the per-chunk streaming hook when no callback / guardrail / cost-injection is active, and the agentic post-processing wrapper when no callback overrides its hook (it otherwise buffers every chunk and rebuilds the response from SSE just to call hooks that all return `(False, {})`).
-    - Stop doing the same work twice per request: serialize the request body once and reuse it for the pre-call log and the wire, memoize the optional-params type-hint resolution (~80µs/request), and skip the redundant `strip_empty_text_blocks` scan when the async wrapper already sanitized.
-    - Cheaper end-of-stream reconstruction: collapse the homogeneous run of `content_block_delta` text events into a single equivalent SSE event before `stream_chunk_builder`, removing O(output-token) `ModelResponseStream` constructions; tool-use / thinking / citations streams fall back to the unchanged legacy path.
-    - Cheaper hot-path logging: gate debug f-string evaluation behind `isEnabledFor(DEBUG)`, hoist `cost_injection_active` out of the per-chunk loop, and drop one async-generator layer per chunk in `async_sse_data_generator`.
+- **Anthropic `/v1/messages` streaming hot path** — cut per-request 및 per-chunk overhead on the proxy's Anthropic streaming path, with byte-identical wire output guaranteed by parity tests that diff the logged 및 billed payloads between the fast 및 legacy paths. Measured on a real 4-pod `m7i.xlarge` deployment (no HPA) streaming 256 `text_delta` chunks per request, against both Anthropic 및 Bedrock Invoke — **TTFT overhead ~90% lower** with **higher sustained throughput** (full numbers below) - [PR #28289](https://github.com/BerriAI/litellm/pull/28289)
+    - Skip work that's a no-op in the default config: the per-chunk Datadog span 때 tracing is off, the per-chunk streaming hook 때 no callback / guardrail / cost-injection is active, 및 the agentic post-processing wrapper 때 no callback overrides its hook (it otherwise buffers every chunk 및 rebuilds the response from SSE just to call hooks that all return `(False, {})`).
+    - doing the same work twice per request: serialize the request body once 및 reuse it for the pre-call log 및 the wire, memoize the optional-params type-hint resolution (~80µs/request), 및 skip the redundant `strip_empty_text_blocks` scan 때 the async wrapper already sanitized. 중지
+    - Cheaper end-of-stream reconstruction: collapse the homogeneous run of `content_block_delta` text events into a single equivalent SSE event 전에 `stream_chunk_builder`, removing O(output-token) `ModelResponseStream` constructions; tool-use / thinking / citations streams fall back to the unchanged legacy path.
+    - Cheaper hot-path logging: gate debug f-string evaluation behind `isEnabledFor(DEBUG)`, hoist `cost_injection_active` out of the per-chunk loop, 및 drop one async-generator layer per chunk in `async_sse_data_generator`.
 
 *Anthropic `/v1/messages` streaming, 256 `text_delta` chunks/request — 4 pods on `m7i.xlarge` (4 vCPU / 16 GB), no HPA:*
 
@@ -224,49 +224,49 @@ Plus a Vertex / Anthropic `supports_output_config` flag flip on all `claude-opus
 
 - **Bedrock / SageMaker** — Switch to lazy loading for response streaming - [PR #28189](https://github.com/BerriAI/litellm/pull/28189)
 - **Granian ASGI** — Add Granian as a supported ASGI server for better throughput stability - [PR #26027](https://github.com/BerriAI/litellm/pull/26027)
-- **Prisma** — Expose Prisma idle/connect timeout + extra DB URL params so production deployments can tune connection pools - [PR #28395](https://github.com/BerriAI/litellm/pull/28395)
+- **Prisma** — Expose Prisma idle/connect timeout + extra DB URL params 따라서 production deployments can tune connection pools - [PR #28395](https://github.com/BerriAI/litellm/pull/28395)
 - **Proxy auth** — Strict media-type match for form bodies (defensive against ambiguous `Content-Type`) - [PR #27939](https://github.com/BerriAI/litellm/pull/27939)
-- **Proxy auth** — Carry the ASGI path into the WebSocket auth synthetic Request so auth resolves the right route - [PR #27940](https://github.com/BerriAI/litellm/pull/27940)
-- **Docker** — Restore `npm` to the non-root builder image so UI builds run there - [PR #28519](https://github.com/BerriAI/litellm/pull/28519)
+- **Proxy auth** — Carry the ASGI path into the WebSocket auth synthetic Request 따라서 auth resolves the right route - [PR #27940](https://github.com/BerriAI/litellm/pull/27940)
+- **Docker** — Restore `npm` to the non-root builder image 따라서 UI builds run there - [PR #28519](https://github.com/BerriAI/litellm/pull/28519)
 - **Helm** — Drop the `main-` prefix from the default image tag - [PR #28710](https://github.com/BerriAI/litellm/pull/28710)
 - **License check** — Read PEP 639 `license-expression` metadata in `check_licenses` - [PR #28529](https://github.com/BerriAI/litellm/pull/28529)
 
-## Documentation Updates
+## 문서 업데이트
 
-- Fix the incorrect `/v1/agents` request example - [PR #28131](https://github.com/BerriAI/litellm/pull/28131)
-- Fix misleading credential-passing examples in Gemini-agents GET/DELETE docstrings - [PR #28293](https://github.com/BerriAI/litellm/pull/28293)
+- the incorrect `/v1/agents` request example 수정 - [PR #28131](https://github.com/BerriAI/litellm/pull/28131)
+- misleading credential-passing examples in Gemini-agents GET/DELETE docstrings 수정 - [PR #28293](https://github.com/BerriAI/litellm/pull/28293)
 
-## General Proxy Improvements
+## 일반 Proxy 개선
 
 Testing, CI & build hardening:
 
-- Behavior-pinning harness + Key Tier-1 matrix (and tier-2/3 + team management endpoints + phase-4 payload matrix) - [PR #28321](https://github.com/BerriAI/litellm/pull/28321), [PR #28441](https://github.com/BerriAI/litellm/pull/28441), [PR #28620](https://github.com/BerriAI/litellm/pull/28620), [PR #28681](https://github.com/BerriAI/litellm/pull/28681)
+- Behavior-pinning harness + Key Tier-1 matrix (및 tier-2/3 + team management endpoints + phase-4 payload matrix) - [PR #28321](https://github.com/BerriAI/litellm/pull/28321), [PR #28441](https://github.com/BerriAI/litellm/pull/28441), [PR #28620](https://github.com/BerriAI/litellm/pull/28620), [PR #28681](https://github.com/BerriAI/litellm/pull/28681)
 - Stabilize image-edit VCR cassettes to stop live `gpt-image-1` spend - [PR #28110](https://github.com/BerriAI/litellm/pull/28110)
-- Migrate realtime + rerank tests off shut-down upstream models; replace `gpt-4o-audio-preview` with `gpt-audio-1.5`; expect `session.created` as xAI realtime initial event - [PR #28191](https://github.com/BerriAI/litellm/pull/28191), [PR #28281](https://github.com/BerriAI/litellm/pull/28281), [PR #28424](https://github.com/BerriAI/litellm/pull/28424)
+- realtime + rerank tests off shut-down upstream models; replace `gpt-4o-audio-preview` with `gpt-audio-1.5`; expect `session.created` as xAI realtime initial event 마이그레이션 - [PR #28191](https://github.com/BerriAI/litellm/pull/28191), [PR #28281](https://github.com/BerriAI/litellm/pull/28281), [PR #28424](https://github.com/BerriAI/litellm/pull/28424)
 - Harden the flaky proxy callback-leak detector - [PR #28195](https://github.com/BerriAI/litellm/pull/28195)
 - E2E runner migrated to `uv`; add an "All Proxy 모델" key test - [PR #28313](https://github.com/BerriAI/litellm/pull/28313)
 - UI-e2e: admin key creation with a specific proxy model; forward `LITELLM_LICENSE` to the UI e2e proxy - [PR #28365](https://github.com/BerriAI/litellm/pull/28365), [PR #28398](https://github.com/BerriAI/litellm/pull/28398)
 - Vertex AI grounding test tolerates transient 500; streaming test tolerates Vertex 429 wrapped in `MidStreamFallbackError` - [PR #28503](https://github.com/BerriAI/litellm/pull/28503), [PR #28669](https://github.com/BerriAI/litellm/pull/28669)
-- Bump black to 26.3.1 and reapply formatting; one-shot lint fix - [PR #28525](https://github.com/BerriAI/litellm/pull/28525), [PR #28639](https://github.com/BerriAI/litellm/pull/28639)
-- Allow `audio_transcription_config` in the model-prices schema - [PR #28708](https://github.com/BerriAI/litellm/pull/28708)
-- Remove the dead old Playwright e2e suite - [PR #28632](https://github.com/BerriAI/litellm/pull/28632)
+- black to 26.3.1 및 reapply formatting; one-shot lint fix 업데이트 - [PR #28525](https://github.com/BerriAI/litellm/pull/28525), [PR #28639](https://github.com/BerriAI/litellm/pull/28639)
+- `audio_transcription_config` in the model-prices schema 허용 - [PR #28708](https://github.com/BerriAI/litellm/pull/28708)
+- the dead old Playwright e2e suite 제거 - [PR #28632](https://github.com/BerriAI/litellm/pull/28632)
 - Routine dependency/CI bumps - [PR #28287](https://github.com/BerriAI/litellm/pull/28287), [PR #28524](https://github.com/BerriAI/litellm/pull/28524), [PR #28528](https://github.com/BerriAI/litellm/pull/28528), [PR #27665](https://github.com/BerriAI/litellm/pull/27665), [PR #28296](https://github.com/BerriAI/litellm/pull/28296), [PR #28303](https://github.com/BerriAI/litellm/pull/28303), [PR #28707](https://github.com/BerriAI/litellm/pull/28707)
 
-### PR roll-up by ownership area
+### 담당 영역별 PR 요약
 
 PRs by ownership area (total: 93)
   - Other (CI / tests / build hardening): 25
-  - 모델 & Providers (incl. new provider): 18
+  - 모델 & Providers (incl. 새 프로바이더): 18
   - UI / Auth & Management: 12
   - LLM API Endpoints: 11
-  - Performance: 9
+  - 성능: 9
   - Logging: 6
   - MCP: 6
   - Spend / Budgets / Rate Limits: 3
   - 문서: 2
   - 가드레일: 1
 
-## New Contributors
+## 새 기여자
 
 - @IshaMeera made their first contribution in [#28131](https://github.com/BerriAI/litellm/pull/28131)
 - @TorvaldUtne made their first contribution in [#27700](https://github.com/BerriAI/litellm/pull/27700)
@@ -281,15 +281,15 @@ PRs by ownership area (total: 93)
 
 ## 05/23/2026 (`v1.87.0`)
 
-* New Providers: 1
+* 새 프로바이더: 1
 * New 모델 / Updated 모델: 17
 * LLM API Endpoints: 11
 * Management Endpoints / UI: 12
 * AI Integrations (Logging / 가드레일 / Secret Managers): 7
-* 비용 추적, Budgets and Rate Limiting: 3
+* 비용 추적, Budgets 및 Rate Limiting: 3
 * MCP Gateway: 6
-* Performance / Loadbalancing / Reliability improvements: 9
-* General Proxy Improvements (testing / CI / build): 25
-* Documentation Updates: 2
+* 성능 / 부하 분산 / 안정성 improvements: 9
+* 일반 Proxy Improvements (testing / CI / build): 25
+* 문서 업데이트: 2
 
 Total: 93 PRs

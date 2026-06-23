@@ -89,7 +89,7 @@ pip install litellm==1.77.5
 
 #### 신규 모델 지원 {#new-model-support}
 
-| Provider | Model | Context Window | Input ($/1M tokens) | Output ($/1M tokens) | 기능 |
+| Provider | Model | 컨텍스트 윈도우 | Input ($/1M tokens) | Output ($/1M tokens) | 기능 |
 | -------- | ----- | -------------- | ------------------- | -------------------- | -------- |
 | Gemini | `gemini-2.5-flash-preview-09-2025` | 1M | $0.30 | $2.50 | 채팅, 추론, 비전, 오디오 |
 | Gemini | `gemini-2.5-flash-lite-preview-09-2025` | 1M | $0.10 | $0.40 | 채팅, 추론, 비전, 오디오 |
@@ -160,7 +160,7 @@ pip install litellm==1.77.5
 
 ---
 
-## LLM API Endpoints {#llm-api-endpoints}
+## LLM API 엔드포인트 {#llm-api-endpoints}
 
 #### 기능 {#features-1}
 
@@ -244,13 +244,13 @@ pip install litellm==1.77.5
 
 ---
 
-## Performance / Loadbalancing / Reliability 개선 {#performance--loadbalancing--reliability-improvements}
+## 성능 / 부하 분산 / 안정성 개선 {#performance--loadbalancing--reliability-improvements}
 
 - **Memory Leak Fix** - TTL이 설정된 경우 InMemoryCache가 무제한으로 커지던 문제를 수정했습니다 - [PR #14869](https://github.com/BerriAI/litellm/pull/14869)
-- **Cache Performance** - 수정: cache root cause를 수정했습니다 - [PR #14827](https://github.com/BerriAI/litellm/pull/14827)
+- **Cache 성능** - 수정: cache root cause를 수정했습니다 - [PR #14827](https://github.com/BerriAI/litellm/pull/14827)
 - **Concurrency Fix** - 많은 Python threads가 *sync* completions로 streaming을 사용할 때의 concurrency/scaling 문제를 수정했습니다 - [PR #14816](https://github.com/BerriAI/litellm/pull/14816)
-- **Performance Optimization** - 수정: get_deployment cost를 O(1)로 줄였습니다 - [PR #14967](https://github.com/BerriAI/litellm/pull/14967)
-- **Performance Optimization** - 수정: 느린 string operation을 제거했습니다 - [PR #14955](https://github.com/BerriAI/litellm/pull/14955)
+- **성능 Optimization** - 수정: get_deployment cost를 O(1)로 줄였습니다 - [PR #14967](https://github.com/BerriAI/litellm/pull/14967)
+- **성능 Optimization** - 수정: 느린 string operation을 제거했습니다 - [PR #14955](https://github.com/BerriAI/litellm/pull/14955)
 - **DB Connection Management** - 수정: DB connection state retries를 수정했습니다 - [PR #14925](https://github.com/BerriAI/litellm/pull/14925)
 
 
@@ -259,14 +259,14 @@ pip install litellm==1.77.5
 
 ## 문서 업데이트 {#documentation-updates}
 
-- **Provider Documentation** - provider_specific_params.md 문서를 수정했습니다 - [PR #14787](https://github.com/BerriAI/litellm/pull/14787)
+- **Provider 문서** - provider_specific_params.md 문서를 수정했습니다 - [PR #14787](https://github.com/BerriAI/litellm/pull/14787)
 - **Model References** - model references를 gemini-pro에서 gemini-2.5-pro로 업데이트했습니다 - [PR #14775](https://github.com/BerriAI/litellm/pull/14775)
 - **Letta Guide** - Letta Guide 문서를 추가했습니다 - [PR #14798](https://github.com/BerriAI/litellm/pull/14798)
 - **README** - README 문서를 더 명확하게 개선했습니다 - [PR #14860](https://github.com/BerriAI/litellm/pull/14860)
 - **Session Management** - session management availability 문서를 업데이트했습니다 - [PR #14914](https://github.com/BerriAI/litellm/pull/14914)
-- **Cost Documentation** - custom pricing의 추가 cost-related keys 문서를 추가했습니다 - [PR #14949](https://github.com/BerriAI/litellm/pull/14949)
+- **Cost 문서** - custom pricing의 추가 cost-related keys 문서를 추가했습니다 - [PR #14949](https://github.com/BerriAI/litellm/pull/14949)
 - **Azure Passthrough** - azure passthrough 문서를 추가했습니다 - [PR #14958](https://github.com/BerriAI/litellm/pull/14958)
-- **General Documentation** - 2025년 9월 문서 업데이트 - [PR #14769](https://github.com/BerriAI/litellm/pull/14769)
+- **일반 문서** - 2025년 9월 문서 업데이트 - [PR #14769](https://github.com/BerriAI/litellm/pull/14769)
     - 문서에서 endpoints와 mode 사이의 bridging을 명확히 했습니다.
     - 관련 가이드에 대안으로 Vertex AI Gemini API configuration을 추가했습니다.
     - Bedrock guardrails 문서에 AWS authentication 정보를 연결했습니다.
@@ -279,7 +279,7 @@ pip install litellm==1.77.5
     - 여러 문서에 전체 models list로 models.litellm.ai 참조를 추가했습니다.
     - async_post_call_success_hook code snippet을 추가했습니다.
     - callbacks management guide로 가는 깨진 링크를 제거하고, cookbooks 및 다른 관련 문서를 다시 포맷하고 연결했습니다.
-- **Documentation Corrections** - 2025년 9월 문서 업데이트를 수정했습니다 - [PR #14916](https://github.com/BerriAI/litellm/pull/14916)
+- **문서 Corrections** - 2025년 9월 문서 업데이트를 수정했습니다 - [PR #14916](https://github.com/BerriAI/litellm/pull/14916)
 
 ---
 

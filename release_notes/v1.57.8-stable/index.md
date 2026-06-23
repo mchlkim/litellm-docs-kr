@@ -76,7 +76,7 @@ custom metric을 기준으로 latency/spend/tokens 추적을 지원합니다. [�
 
 credentials 읽기와 LLM API key 쓰기를 지원합니다. [여기서 시작](https://docs.litellm.ai/docs/secret#hashicorp-vault)
 
-## Management Endpoints / UI 개선 사항 {#management-endpoints--ui-improvements}
+## 관리 엔드포인트 / UI 개선 사항 {#management-endpoints--ui-improvements}
 
 1. Proxy UI에서 조직 생성 및 조회, org admin 할당 지원
 2. key_alias로 key 삭제 지원

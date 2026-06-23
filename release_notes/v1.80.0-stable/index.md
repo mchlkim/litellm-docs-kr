@@ -50,7 +50,7 @@ pip install litellm==1.80.0
 - **GPT-5.1 제품군 지원** - OpenAI의 최신 GPT-5.1 및 GPT-5.1-Codex 모델을 Day-0 지원합니다.
 - **Prometheus OSS** - 이제 오픈 소스 버전에서도 Prometheus metrics를 사용할 수 있습니다.
 - **Vector Store Files API** - 전체 CRUD 작업을 갖춘 OpenAI 호환 Vector Store Files API를 완전 지원합니다.
-- **Embeddings Performance** - 공유 세션을 사용하는 router embeddings의 O(1) lookup 최적화가 적용되었습니다.
+- **Embeddings 성능** - 공유 세션을 사용하는 router embeddings의 O(1) lookup 최적화가 적용되었습니다.
 
 ---
 
@@ -190,7 +190,7 @@ curl --location 'http://localhost:4000/v1/vector_stores/vs_123/files' \
 
 #### 신규 모델 지원 {#new-model-support}
 
-| Provider | Model | Context Window | 입력 ($/1M tokens) | 출력 ($/1M tokens) | 기능 |
+| Provider | Model | 컨텍스트 윈도우 | 입력 ($/1M tokens) | 출력 ($/1M tokens) | 기능 |
 | -------- | ----- | -------------- | ------------------- | -------------------- | -------- |
 | OpenAI | `gpt-5.1` | 272K | $1.25 | $10.00 | `Reasoning`, `vision`, `PDF input`, `responses API` |
 | OpenAI | `gpt-5.1-2025-11-13` | 272K | $1.25 | $10.00 | `Reasoning`, `vision`, `PDF input`, `responses API` |
@@ -303,7 +303,7 @@ curl --location 'http://localhost:4000/v1/vector_stores/vs_123/files' \
 
 ---
 
-## LLM API Endpoints {#llm-api-endpoints}
+## LLM API 엔드포인트 {#llm-api-endpoints}
 
 #### 신규 Endpoints {#new-endpoints}
 
@@ -350,7 +350,7 @@ curl --location 'http://localhost:4000/v1/vector_stores/vs_123/files' \
 - **모델 + Endpoints**
     - UI - Edit Model에 LiteLLM Params 추가 - [PR #16496](https://github.com/BerriAI/litellm/pull/16496)
     - UI - Add Model에서 backend data 사용 - [PR #16664](https://github.com/BerriAI/litellm/pull/16664)
-    - UI - LLM Credentials에서 Description 필드 제거 - [PR #16608](https://github.com/BerriAI/litellm/pull/16608)
+    - UI - LLM Credentials에서 설명 필드 제거 - [PR #16608](https://github.com/BerriAI/litellm/pull/16608)
     - UI - 관리자 UI supported models/providers에 RunwayML 추가 - [PR #16606](https://github.com/BerriAI/litellm/pull/16606)
     - Infra - Add Model Fields를 Backend로 마이그레이션 - [PR #16620](https://github.com/BerriAI/litellm/pull/16620)
     - model access group 생성을 위한 API Endpoint 추가 - [PR #16663](https://github.com/BerriAI/litellm/pull/16663)
@@ -379,7 +379,7 @@ curl --location 'http://localhost:4000/v1/vector_stores/vs_123/files' \
 - **Health Check**
     - Health Check에 Langfuse OTEL 및 SQS 추가 - [PR #16514](https://github.com/BerriAI/litellm/pull/16514)
 
-- **General UI**
+- **일반 UI**
     - UI - table action columns 표시 정규화 - [PR #16657](https://github.com/BerriAI/litellm/pull/16657)
     - UI - Settings Pages의 Button Styles 및 Sizing 개선 - [PR #16600](https://github.com/BerriAI/litellm/pull/16600)
     - UI - SSO Modal 시각적 변경 - [PR #16554](https://github.com/BerriAI/litellm/pull/16554)
@@ -409,7 +409,7 @@ curl --location 'http://localhost:4000/v1/vector_stores/vs_123/files' \
 - **🆕 [Zscaler AI Guard](../../docs/proxy/guardrails/zscaler_ai_guard)**
     - security policy enforcement를 위한 Zscaler AI Guard hook 추가 - [PR #15691](https://github.com/BerriAI/litellm/pull/15691)
 
-#### Logging {#logging}
+#### 로깅 {#logging}
 
 - **[Langfuse](../../docs/proxy/logging#langfuse)**
     - validation errors를 방지하기 위해 null usage values 처리 수정 - [PR #16396](https://github.com/BerriAI/litellm/pull/16396)
@@ -454,12 +454,12 @@ curl --location 'http://localhost:4000/v1/vector_stores/vs_123/files' \
 
 ---
 
-## Performance / Loadbalancing / Reliability 개선 {#performance--loadbalancing--reliability-improvements}
+## 성능 / 부하 분산 / 안정성 개선 {#performance--loadbalancing--reliability-improvements}
 
-- **Embeddings Performance 개선**
+- **Embeddings 성능 개선**
     - embeddings에 router의 O(1) lookup 및 shared sessions 사용 - [PR #16344](https://github.com/BerriAI/litellm/pull/16344)
 
-- **Router Reliability**
+- **Router 안정성**
     - unknown models에 대한 default fallbacks 지원 - [PR #16419](https://github.com/BerriAI/litellm/pull/16419)
 
 - **Callback Management 개선**

@@ -222,7 +222,7 @@ LiteLLM은 이제 이미지가 포함된 Responses API 요청의 세션 관리�
 - **Teams(팀)**
     - user가 team에서 제거될 때 user - team membership 제거 - [PR #13433](https://github.com/BerriAI/litellm/pull/13433)
 - **Errors(오류)**
-    - Logging and Alerts page에서 network errors를 user에게 표시 - [PR #13427](https://github.com/BerriAI/litellm/pull/13427)
+    - Logging 및 Alerts page에서 network errors를 user에게 표시 - [PR #13427](https://github.com/BerriAI/litellm/pull/13427)
 - **Model Hub(모델 허브)**
     - base model이 설정된 경우 azure models의 pricing 표시 - [PR #13418](https://github.com/BerriAI/litellm/pull/13418)
 ---
