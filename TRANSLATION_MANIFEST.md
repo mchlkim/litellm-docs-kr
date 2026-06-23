@@ -1,8 +1,8 @@
 # LiteLLM Korean Localization Manifest
 
 - Source: https://github.com/BerriAI/litellm-docs
-- Localized content files scanned: 850
-- Files updated by localization pass: 77
+- Localized content files scanned: 891
+- Files updated by localization pass: 75
 - Binary/static assets: preserved from upstream.
 - Code blocks, API names, environment variables, paths, model IDs, and MDX component tags are intentionally preserved.
 - External SaaS widgets are disabled in `docusaurus.config.js`: Inkeep, Crisp, Google Analytics, and FeedbackRocket.
@@ -11,83 +11,81 @@
 
 ## Updated Files
 
-- `blog/claude_opus_4_8/index.md`
-- `blog/host_header_auth_bypass/index.md`
-- `blog/lap_internal_agent_30pct/index.md`
-- `blog/lite-harness-sdk/index.md`
-- `blog/litellm_rust_launch/index.md`
-- `blog/may_townhall_updates/index.md`
-- `docs/a2a.md`
-- `docs/a2a_agent_card.md`
-- `docs/a2a_invoking_agents.md`
-- `docs/claude_code_context_management.md`
+- `blog/claude_fable_5/index.md`
+- `blog/claude_opus_4_6/index.md`
+- `blog/claude_opus_4_7/index.md`
+- `blog/harnesses-are-the-new-llms/index.md`
+- `blog/june_townhall_announcement/index.md`
+- `blog/litellm_microsoft_assert/index.md`
+- `blog/stability/index.md`
+- `blog/valkey_semantic_caching/index.md`
+- `docs/caching/all_caches.md`
+- `docs/completion/prompt_compression.md`
+- `docs/completion/web_search.md`
+- `docs/data_security.md`
 - `docs/enterprise.md`
-- `docs/exception_mapping.md`
-- `docs/extras/contributing.md`
-- `docs/index.md`
+- `docs/extras/contributing_code.md`
+- `docs/guides/code_interpreter.md`
 - `docs/learn/enterprise_quickstart.md`
-- `docs/learn/index.md`
-- `docs/mcp.md`
-- `docs/mcp_aws_sigv4.md`
-- `docs/mcp_rest_api.md`
+- `docs/mcp_control.md`
+- `docs/observability/focus.md`
+- `docs/observability/mavvrik.md`
+- `docs/observability/newrelic.md`
 - `docs/observability/opentelemetry_integration.md`
 - `docs/observability/opentelemetry_v2.md`
-- `docs/observability/signoz.md`
-- `docs/observability/splunk_observability_cloud.md`
-- `docs/observability/sumologic_integration.md`
-- `docs/projects/Agent Lightning.md`
-- `docs/providers/azure/azure.md`
-- `docs/providers/azure/azure_anthropic.md`
-- `docs/providers/bedrock.md`
-- `docs/providers/google_ai_studio/realtime.md`
-- `docs/providers/langgraph.md`
-- `docs/providers/oci.md`
-- `docs/providers/vertex_realtime.md`
-- `docs/proxy/admin_ui_sso.md`
-- `docs/proxy/cli_sso.md`
+- `docs/observability/vantage.md`
+- `docs/providers/bedrock_mantle.md`
+- `docs/providers/empiriolabs.md`
+- `docs/providers/google_ai_studio/image_gen.md`
+- `docs/providers/inception.md`
+- `docs/providers/snowflake.md`
+- `docs/providers/tensormesh.md`
+- `docs/providers/vertex_image.md`
+- `docs/providers/xai_realtime.md`
+- `docs/proxy/auto_routing.md`
+- `docs/proxy/caching.md`
+- `docs/proxy/cli.md`
 - `docs/proxy/config_settings.md`
-- `docs/proxy/cost_tracking.md`
+- `docs/proxy/configs.md`
 - `docs/proxy/custom_auth.md`
-- `docs/proxy/db_info.md`
-- `docs/proxy/docker_image_security.md`
-- `docs/proxy/guardrails/cato_networks.md`
-- `docs/proxy/guardrails/guardrails_ai.md`
-- `docs/proxy/guardrails/panw_prisma_airs.md`
-- `docs/proxy/guardrails/policy_tags.md`
-- `docs/proxy/guardrails/quick_start.md`
-- `docs/proxy/guardrails/vigil_guard.md`
-- `docs/proxy/health_check_routing.md`
-- `docs/proxy/logging.md`
-- `docs/proxy/managed_batches.md`
-- `docs/proxy/passthrough_managed_ids.md`
+- `docs/proxy/email.md`
+- `docs/proxy/guardrails/sensitive_data_routing.md`
+- `docs/proxy/management_cli.md`
+- `docs/proxy/microservices_helm.md`
+- `docs/proxy/pass_through.md`
+- `docs/proxy/plugins.md`
 - `docs/proxy/prod.md`
-- `docs/proxy/self_serve.md`
-- `docs/proxy/spend_logs_deletion.md`
-- `docs/proxy/tag_budgets.md`
-- `docs/proxy/temporary_budget_increase.md`
-- `docs/proxy/token_auth.md`
-- `docs/proxy/ui_logs.md`
-- `docs/search/apiserpent.md`
+- `docs/proxy/users.md`
+- `docs/sandbox.md`
 - `docs/search/index.md`
-- `docs/troubleshoot/rollback.md`
-- `docs/tutorials/claude_code_prompt_cache_routing.md`
-- `docs/tutorials/github_copilot_integration.md`
-- `docs/tutorials/openweb_ui.md`
-- `release_notes/index.md`
-- `release_notes/v1.66.0-stable/index.md`
-- `release_notes/v1.73.0-stable/index.md`
-- `release_notes/v1.74.7/index.md`
-- `release_notes/v1.80.0-stable/index.md`
-- `release_notes/v1.82.3/index.md`
-- `release_notes/v1.83.3/index.md`
-- `release_notes/v1.84.2/index.md`
-- `release_notes/v1.84.3/index.md`
-- `release_notes/v1.84.4/index.md`
-- `release_notes/v1.85.2/index.md`
-- `release_notes/v1.86.0/index.md`
-- `release_notes/v1.86.1/index.md`
-- `release_notes/v1.86.2/index.md`
-- `release_notes/v1.87.0/index.md`
+- `docs/search/you_com.md`
+- `release_notes/v1.84.5/index.md`
+- `release_notes/v1.84.6/index.md`
+- `release_notes/v1.84.7/index.md`
+- `release_notes/v1.84.8/index.md`
+- `release_notes/v1.84.9/index.md`
+- `release_notes/v1.85.3/index.md`
+- `release_notes/v1.85.4/index.md`
+- `release_notes/v1.85.5/index.md`
+- `release_notes/v1.85.6/index.md`
+- `release_notes/v1.86.3/index.md`
+- `release_notes/v1.86.4/index.md`
+- `release_notes/v1.86.5/index.md`
+- `release_notes/v1.86.6/index.md`
+- `release_notes/v1.87.1/index.md`
+- `release_notes/v1.87.2/index.md`
+- `release_notes/v1.87.3/index.md`
+- `release_notes/v1.87.4/index.md`
+- `release_notes/v1.88.0/index.md`
+- `release_notes/v1.88.1/index.md`
+- `release_notes/v1.88.2/index.md`
+- `release_notes/v1.88.3/index.md`
+- `release_notes/v1.88.4/index.md`
+- `release_notes/v1.89.0/index.md`
+- `release_notes/v1.89.1/index.md`
+- `release_notes/v1.89.2/index.md`
+- `release_notes/v1.89.3/index.md`
+- `release_notes/v1.90.0rc1/index.md`
 
 ## Audit Notes
 

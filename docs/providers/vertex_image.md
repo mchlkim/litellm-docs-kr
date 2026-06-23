@@ -1,29 +1,29 @@
-# Vertex AI 이미지 생성 {#vertex-ai-image-generation}
+# Vertex AI Image Generation
 
-Vertex AI는 두 가지 유형의 이미지 생성을 지원합니다.
+Vertex AI supports two types of image generation:
 
-1. **Gemini Image Generation 모델** (Nano Banana 🍌) - `generateContent` API를 사용하는 대화형 이미지 생성
-2. **Imagen 모델** - `predict` API를 사용하는 기존 방식의 이미지 생성
+1. **Gemini Image Generation 모델** (Nano Banana 🍌) - Conversational image generation using `generateContent` API
+2. **Imagen 모델** - Traditional image generation using `predict` API
 
-| 속성 | 세부 정보 |
+| Property | Details |
 |----------|---------|
-| 설명 | Vertex AI Image Generation은 Gemini 이미지 생성 모델을 모두 지원합니다. |
-| LiteLLM의 Provider Route | `vertex_ai/` |
-| Provider 문서 | [Google Cloud Vertex AI Image Generation ↗](https://cloud.google.com/vertex-ai/docs/generative-ai/image/generate-images) |
+| Description | Vertex AI Image Generation supports both Gemini image generation models |
+| Provider Route on LiteLLM | `vertex_ai/` |
+| Provider Doc | [Google Cloud Vertex AI Image Generation ↗](https://cloud.google.com/vertex-ai/docs/generative-ai/image/generate-images) |
 | Gemini Image Generation 문서 | [Gemini Image Generation ↗](https://ai.google.dev/gemini-api/docs/image-generation) |
 
 ## 빠른 시작
 
 ### Gemini Image Generation 모델
 
-Gemini 이미지 생성 모델은 다음과 같은 기능으로 대화형 이미지 생성을 지원합니다.
-- 텍스트-이미지 생성
-- 이미지 편집(텍스트 + 이미지 → 이미지)
-- 멀티턴 이미지 개선
-- 고품질 텍스트 렌더링
-- 최대 4K 해상도(Gemini 3 Pro)
+Gemini image generation models support conversational image creation with features like:
+- Text-to-Image generation
+- Image editing (text + image → image)
+- Multi-turn image refinement
+- High-fidelity text rendering
+- Up to 4K resolution (Gemini 3 Pro)
 
-```python showLineNumbers title="Gemini 2.5 Flash 이미지"
+```python showLineNumbers title="Gemini 2.5 Flash Image"
 import litellm
 
 # Generate a single image
@@ -39,7 +39,7 @@ response = await litellm.aimage_generation(
 print(response.data[0].b64_json)  # Gemini returns base64 images
 ```
 
-```python showLineNumbers title="Gemini 3 Pro Image Preview(4K 출력)"
+```python showLineNumbers title="Gemini 3 Pro Image Preview (4K output)"
 import litellm
 
 # Generate high-resolution image
@@ -57,9 +57,52 @@ response = await litellm.aimage_generation(
 print(response.data[0].b64_json)
 ```
 
+### Google Search Grounding
+
+Gemini image models (e.g. `gemini-3.1-flash-image-preview`, `gemini-3-pro-image-preview`) support Google Search on `/v1/images/generations`. LiteLLM maps `web_search_options` or OpenAI-style `web_search` tools to Gemini's `googleSearch` tool on the underlying `generateContent` request.
+
+```python showLineNumbers title="Image generation with Google Search"
+import litellm
+
+response = await litellm.aimage_generation(
+    prompt="Generate an image of the latest iPhone design",
+    model="vertex_ai/gemini-3.1-flash-image-preview",
+    vertex_ai_project="your-project-id",
+    vertex_ai_location="us-central1",
+    web_search_options={},
+)
+
+print(response.data[0].b64_json)
+```
+
+```python showLineNumbers title="Using OpenAI-style web_search tool"
+import litellm
+
+response = await litellm.aimage_generation(
+    prompt="Generate an image of the latest iPhone design",
+    model="vertex_ai/gemini-3.1-flash-image-preview",
+    vertex_ai_project="your-project-id",
+    vertex_ai_location="us-central1",
+    tools=[{"type": "web_search"}],
+)
+```
+
+Via LiteLLM Proxy (`/v1/images/generations`):
+
+```bash showLineNumbers title="Proxy request with web_search_options"
+curl -X POST 'http://localhost:4000/v1/images/generations' \
+-H 'Content-Type: application/json' \
+-H 'Authorization: Bearer sk-1234' \
+-d '{
+    "model": "gemini-3.1-flash-image-preview",
+    "prompt": "Generate an image of the latest iPhone design",
+    "web_search_options": {}
+}'
+```
+
 ### Imagen 모델
 
-```python showLineNumbers title="Imagen 이미지 생성"
+```python showLineNumbers title="Imagen Image Generation"
 import litellm
 
 # Generate a single image
@@ -77,9 +120,9 @@ print(response.data[0].b64_json)  # Imagen also returns base64 images
 
 ### LiteLLM Proxy
 
-#### 1. config.yaml 구성하기 {#1-configure-your-configyaml}
+#### 1. Configure your config.yaml
 
-```yaml showLineNumbers title="Vertex AI Image Generation 구성"
+```yaml showLineNumbers title="Vertex AI Image Generation Configuration"
 model_list:
   - model_name: vertex-imagen
     litellm_params:
@@ -89,17 +132,17 @@ model_list:
       vertex_ai_credentials: "path/to/service-account.json"  # Optional if using environment auth
 ```
 
-#### 2. LiteLLM Proxy 서버 시작 {#2-start-litellm-proxy-server}
+#### 2. Start LiteLLM Proxy Server
 
-```bash title="LiteLLM Proxy 서버 시작"
+```bash title="Start LiteLLM Proxy Server"
 litellm --config /path/to/config.yaml
 
 # RUNNING on http://0.0.0.0:4000
 ```
 
-#### 3. OpenAI Python SDK로 요청 보내기 {#3-make-requests-with-openai-python-sdk}
+#### 3. Make requests with OpenAI Python SDK
 
-```python showLineNumbers title="Proxy를 통한 기본 이미지 생성"
+```python showLineNumbers title="Basic Image Generation via Proxy"
 from openai import OpenAI
 
 # Initialize client with your proxy URL
@@ -117,25 +160,27 @@ response = client.images.generate(
 print(response.data[0].url)
 ```
 
-## 지원되는 모델 {#supported-모델}
+## 지원 모델
 
 ### Gemini Image Generation 모델
 
-- `vertex_ai/gemini-2.5-flash-image` - 빠르고 효율적인 이미지 생성(1024px 해상도)
-- `vertex_ai/gemini-3-pro-image-preview` - 4K 출력, Google Search 그라운딩, thinking mode를 지원하는 고급 모델
-- `vertex_ai/gemini-2.0-flash-preview-image` - 미리보기 모델
-- `vertex_ai/gemini-2.5-flash-image-preview` - 미리보기 모델
+- `vertex_ai/gemini-2.5-flash-image` - Fast, efficient image generation (1024px resolution)
+- `vertex_ai/gemini-3.1-flash-image-preview` - Fast image generation with Google Search grounding
+- `vertex_ai/gemini-3-pro-image-preview` - Advanced model with 4K output, Google Search grounding, and thinking mode
+- `vertex_ai/gemini-2.0-flash-preview-image` - Preview model
+- `vertex_ai/gemini-2.5-flash-image-preview` - Preview model
 
 ### Imagen 모델
 
-- `vertex_ai/imagegeneration@006` - 레거시 Imagen 모델
-- `vertex_ai/imagen-4.0-generate-001` - 최신 Imagen 모델
-- `vertex_ai/imagen-3.0-generate-001` - Imagen 3.0 모델
+- `vertex_ai/imagegeneration@006` - Legacy Imagen model
+- `vertex_ai/imagen-4.0-generate-001` - Latest Imagen model
+- `vertex_ai/imagen-3.0-generate-001` - Imagen 3.0 model
 
 :::tip
 
-**모든 Vertex AI Image Generation 모델을 지원합니다. litellm 요청을 보낼 때 `model=vertex_ai/<any-model-on-vertex_ai>`를 접두사로 설정하기만 하면 됩니다.**
+**We support ALL Vertex AI Image Generation models, just set `model=vertex_ai/<any-model-on-vertex_ai>` as a prefix when sending litellm requests**
 
 :::
 
-지원되는 모델의 전체 최신 목록은 [https://models.litellm.ai/](https://models.litellm.ai/)에서 확인하세요.
+For the complete and up-to-date list of supported models, visit: [https://models.litellm.ai/](https://models.litellm.ai/)
+

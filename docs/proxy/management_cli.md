@@ -1,83 +1,89 @@
 # LiteLLM Proxy CLI
 
-`litellm-proxy` CLI는 LiteLLM proxy server를 관리하기 위한 command-line 도구입니다.
-모델, 자격 증명, API 키, 사용자 등을 관리하는 명령과 proxy server로 chat 및 HTTP 요청을 보내는 명령을 제공합니다.
+The `lite` CLI is a command-line tool for managing your LiteLLM proxy
+server. It provides commands for managing models, credentials, API keys, users,
+and more, as well as making chat and HTTP requests to the proxy server.
 
-| 기능                | 수행할 수 있는 작업                                 |
+| Feature                | What you can do                                 |
 |------------------------|-------------------------------------------------|
-| 모델 관리      | 모델을 나열, 추가, 업데이트, 삭제합니다.            |
-| 자격 증명 관리 | Provider 자격 증명을 관리합니다.                     |
-| 키 관리        | API 키를 생성, 나열, 삭제합니다.             |
-| 사용자 관리        | 사용자를 생성, 나열, 삭제합니다.                  |
-| Chat Completions       | chat completions를 실행합니다.                            |
-| HTTP 요청          | proxy server로 사용자 지정 HTTP 요청을 보냅니다.   |
+| 모델 Management      | List, add, update, and delete models            |
+| Credentials Management | Manage provider credentials                     |
+| Keys Management        | Generate, list, and delete API keys             |
+| User Management        | Create, list, and delete users                  |
+| Chat Completions       | Run chat completions                            |
+| HTTP Requests          | Make custom HTTP requests to the proxy server   |
 
 ## 빠른 시작
 
-1. **CLI 설치**
+1. **Install the CLI**
 
-   [uv](https://github.com/astral-sh/uv)가 설치되어 있다면 다음을 시도할 수 있습니다.
-
-   ```shell
-   uv tool install 'litellm[proxy]'
-   ```
-
-   정상 동작하면 다음과 비슷한 출력이 표시됩니다.
+   The `lite` client is a thin laptop install: it points at a LiteLLM proxy and runs your coding agents through it, with none of the proxy server runtime pulled in. The one-line installer needs only `curl`; it bootstraps [uv](https://github.com/astral-sh/uv) when it's missing and lets uv provision a compatible Python for you:
 
    ```shell
-   ...
-   Installed 2 executables: litellm, litellm-proxy
+   curl -fsSL https://raw.githubusercontent.com/BerriAI/litellm/main/scripts/install-cli.sh | sh
    ```
 
-   이제 터미널에서 `litellm-proxy`만 입력해 도구를 사용할 수 있습니다.
+   On macOS you can install it with Homebrew instead:
 
    ```shell
-   litellm-proxy
+   brew install BerriAI/litellm/lite
    ```
 
-2. **환경 변수 설정**
+   Already have uv and prefer to drive it yourself? Install the package directly:
+
+   ```shell
+   uv tool install 'litellm[cli]'
+   ```
+
+   Any of these gives you the `lite` command; if you already run a proxy server from `litellm[proxy]`, it ships there too. Start by typing it in your terminal:
+
+   ```shell
+   lite
+   ```
+
+2. **Set up environment variables**
 
    ```bash
    export LITELLM_PROXY_URL=http://localhost:4000
    export LITELLM_PROXY_API_KEY=sk-your-key
    ```
 
-   *(실제 proxy URL과 API 키로 바꾸세요.)*
+   *(Replace with your actual proxy URL and API key)*
 
-3. **첫 요청 실행(모델 목록 조회)**
+3. **Make your first request (list models)**
 
    ```bash
-   litellm-proxy models list
+   lite models list
    ```
 
-   CLI가 올바르게 설정되어 있으면 사용 가능한 모델 목록이나 표 형식 출력이 표시됩니다.
+   If the CLI is set up correctly, you should see a list of available models or a table output.
 
 4. **문제 해결**
 
-   - 오류가 표시되면 환경 변수와 proxy server 상태를 확인하세요.
+   - If you see an error, check your environment variables and proxy server status.
 
-## CLI로 인증
+## 인증 using CLI
 
-CLI를 사용해 LiteLLM Gateway에 인증할 수 있습니다. 많은 개발자에게 LiteLLM Gateway 셀프서비스 접근 권한을 제공하려는 경우에 유용합니다.
+You can use the CLI to authenticate to the LiteLLM Gateway. This is great if you're trying to give a large number of developers self-serve access to the LiteLLM Gateway.
 
 :::info
 
-자세한 가이드는 [CLI 인증](./cli_sso)을 참고하세요.
+For an indepth guide, see [CLI 인증](./cli_sso).
 
 :::
 
 ### 사전 준비
 
-:::warning[Beta Feature - 필수 환경 변수]
+:::warning[Beta Feature - Required Environment Variable]
 
-CLI SSO 인증은 현재 beta입니다. **LiteLLM Proxy를 시작할 때** 이 환경 변수를 설정해야 합니다.
+CLI SSO 인증 is currently in beta. You must set this environment variable **when starting up your LiteLLM Proxy**:
 
 ```bash
 export EXPERIMENTAL_UI_LOGIN="True"
 litellm --config config.yaml
 ```
 
-또는 proxy 시작 명령에 추가하세요.
+Or add it to your proxy startup command:
 
 ```bash
 EXPERIMENTAL_UI_LOGIN="True" litellm --config config.yaml
@@ -85,160 +91,160 @@ EXPERIMENTAL_UI_LOGIN="True" litellm --config config.yaml
 
 :::
 
-### 단계
+### Steps
 
-1. **proxy URL 설정**
+1. **Set up the proxy URL**
 
    ```bash
    export LITELLM_PROXY_URL=http://localhost:4000
    ```
 
-   *(실제 proxy URL로 바꾸세요.)*
+   *(Replace with your actual proxy URL)*
 
-2. **로그인**
-
-   ```bash
-   litellm-proxy login
-   ```
-
-   인증을 위해 브라우저 창이 열립니다. LiteLLM Proxy를 SSO provider에 연결했다면 SSO 자격 증명으로 로그인할 수 있습니다. 로그인 후 CLI로 LiteLLM Gateway에 요청을 보낼 수 있습니다.
-
-3. **인증 테스트**
+2. **Login**
 
    ```bash
-   litellm-proxy models list
+   lite login
    ```
 
-   이 명령은 사용자에게 허용된 모든 모델을 나열합니다.
+   This will open a browser window to authenticate. If you have connected LiteLLM Proxy to your SSO provider, you can login with your SSO credentials. Once logged in, you can use the CLI to make requests to the LiteLLM Gateway.
 
-## 주요 명령
+3. **Test your authentication**
 
-### 모델 관리
+   ```bash
+   lite models list
+   ```
 
-- proxy의 모델을 나열, 추가, 업데이트, 조회, 삭제합니다.
+   This will list all the models available to you.
+
+## Main Commands
+
+### 모델 Management
+
+- List, add, update, get, and delete models on the proxy.
 - 예제:
 
   ```bash
-  litellm-proxy models list
-  litellm-proxy models add gpt-4 \
+  lite models list
+  lite models add gpt-4 \
     --param api_key=sk-123 \
     --param max_tokens=2048
-  litellm-proxy models update <model-id> -p temperature=0.7
-  litellm-proxy models delete <model-id>
+  lite models update <model-id> -p temperature=0.7
+  lite models delete <model-id>
   ```
 
-  [사용 API(OpenAPI)](https://litellm-api.up.railway.app/#/model%20management)
+  [API used (OpenAPI)](https://litellm-api.up.railway.app/#/model%20management)
 
-### 자격 증명 관리
+### Credentials Management
 
-- LLM provider의 자격 증명을 나열, 생성, 조회, 삭제합니다.
+- List, create, get, and delete credentials for LLM providers.
 - 예제:
 
   ```bash
-  litellm-proxy credentials list
-  litellm-proxy credentials create azure-prod \
+  lite credentials list
+  lite credentials create azure-prod \
     --info='{"custom_llm_provider": "azure"}' \
     --values='{"api_key": "sk-123", "api_base": "https://prod.azure.openai.com"}'
-  litellm-proxy credentials get azure-cred
-  litellm-proxy credentials delete azure-cred
+  lite credentials get azure-cred
+  lite credentials delete azure-cred
   ```
 
-  [사용 API(OpenAPI)](https://litellm-api.up.railway.app/#/credential%20management)
+  [API used (OpenAPI)](https://litellm-api.up.railway.app/#/credential%20management)
 
-### 키 관리
+### Keys Management
 
-- API 키를 나열, 생성, 정보 조회, 삭제합니다.
+- List, generate, get info, and delete API keys.
 - 예제:
 
   ```bash
-  litellm-proxy keys list
-  litellm-proxy keys generate \
+  lite keys list
+  lite keys generate \
     --models=gpt-4 \
     --spend=100 \
     --duration=24h \
     --key-alias=my-key
-  litellm-proxy keys info --key sk-key1
-  litellm-proxy keys delete --keys sk-key1,sk-key2 --key-aliases alias1,alias2
+  lite keys info --key sk-key1
+  lite keys delete --keys sk-key1,sk-key2 --key-aliases alias1,alias2
   ```
 
-  [사용 API(OpenAPI)](https://litellm-api.up.railway.app/#/key%20management)
+  [API used (OpenAPI)](https://litellm-api.up.railway.app/#/key%20management)
 
-### 사용자 관리
+### User Management
 
-- 사용자를 나열, 생성, 정보 조회, 삭제합니다.
+- List, create, get info, and delete users.
 - 예제:
 
   ```bash
-  litellm-proxy users list
-  litellm-proxy users create \
+  lite users list
+  lite users create \
     --email=user@example.com \
     --role=internal_user \
     --alias="Alice" \
     --team=team1 \
     --max-budget=100.0
-  litellm-proxy users get --id <user-id>
-  litellm-proxy users delete <user-id>
+  lite users get --id <user-id>
+  lite users delete <user-id>
   ```
 
-  [사용 API(OpenAPI)](https://litellm-api.up.railway.app/#/Internal%20User%20management)
+  [API used (OpenAPI)](https://litellm-api.up.railway.app/#/Internal%20User%20management)
 
 ### Chat Completions
 
-- proxy server에 chat completions를 요청합니다.
+- Ask for chat completions from the proxy server.
 - 예제:
 
   ```bash
-  litellm-proxy chat completions gpt-4 -m "user:Hello, how are you?"
+  lite chat completions gpt-4 -m "user:Hello, how are you?"
   ```
 
-  [사용 API(OpenAPI)](https://litellm-api.up.railway.app/#/chat%2Fcompletions)
+  [API used (OpenAPI)](https://litellm-api.up.railway.app/#/chat%2Fcompletions)
 
-### 일반 HTTP 요청
+### General HTTP Requests
 
-- proxy server로 직접 HTTP 요청을 보냅니다.
+- Make direct HTTP requests to the proxy server.
 - 예제:
 
   ```bash
-  litellm-proxy http request \
+  lite http request \
     POST /chat/completions \
     --json '{"model": "gpt-4", "messages": [{"role": "user", "content": "Hello"}]}'
   ```
 
-  [전체 API(OpenAPI)](https://litellm-api.up.railway.app/#/)
+  [All APIs (OpenAPI)](https://litellm-api.up.railway.app/#/)
 
-## 환경 변수
+## Environment Variables
 
-- `LITELLM_PROXY_URL`: proxy server의 Base URL
-- `LITELLM_PROXY_API_KEY`: 인증용 API 키
+- `LITELLM_PROXY_URL`: Base URL of the proxy server
+- `LITELLM_PROXY_API_KEY`: API key for authentication
 
 ## 예제
 
-1. **모든 모델 나열:**
+1. **List all models:**
 
    ```bash
-   litellm-proxy models list
+   lite models list
    ```
 
-2. **새 모델 추가:**
+2. **Add a new model:**
 
    ```bash
-   litellm-proxy models add gpt-4 \
+   lite models add gpt-4 \
      --param api_key=sk-123 \
      --param max_tokens=2048
    ```
 
-3. **자격 증명 생성:**
+3. **Create a credential:**
 
    ```bash
-   litellm-proxy credentials create azure-prod \
+   lite credentials create azure-prod \
      --info='{"custom_llm_provider": "azure"}' \
      --values='{"api_key": "sk-123", "api_base": "https://prod.azure.openai.com"}'
    ```
 
-4. **API 키 생성:**
+4. **Generate an API key:**
 
    ```bash
-   litellm-proxy keys generate \
+   lite keys generate \
      --models=gpt-4 \
      --spend=100 \
      --duration=24h \
@@ -248,28 +254,28 @@ EXPERIMENTAL_UI_LOGIN="True" litellm --config config.yaml
 5. **Chat completion:**
 
    ```bash
-   litellm-proxy chat completions gpt-4 \
+   lite chat completions gpt-4 \
      -m "user:Write a story"
    ```
 
-6. **사용자 지정 HTTP 요청:**
+6. **Custom HTTP request:**
 
    ```bash
-   litellm-proxy http request \
+   lite http request \
      POST /chat/completions \
      --json '{"model": "gpt-4", "messages": [{"role": "user", "content": "Hello"}]}'
    ```
 
-## 오류 처리
+## Error Handling
 
-CLI는 다음 상황에서 오류 메시지를 표시합니다.
+The CLI will display error messages for:
 
-- server에 접근할 수 없음
-- 인증 실패
-- 잘못된 파라미터 또는 JSON
-- 존재하지 않는 모델/자격 증명
-- 기타 작업 실패
+- Server not accessible
+- 인증 failures
+- Invalid parameters or JSON
+- Nonexistent models/credentials
+- Any other operation failures
 
-자세한 디버깅 출력을 보려면 `--debug` 플래그를 사용하세요.
+Use the `--debug` flag for detailed debugging output.
 
-전체 명령 reference와 고급 사용법은 [CLI README](https://github.com/BerriAI/litellm/blob/main/litellm/proxy/client/cli/README.md)를 참고하세요.
+For full command reference and advanced usage, see the [CLI README](https://github.com/BerriAI/litellm/blob/main/litellm/proxy/client/cli/README.md).

@@ -1,64 +1,64 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# 웹 검색
+# Web Search
 
-litellm에서 웹 검색을 사용합니다.
+Use web search with litellm
 
-| 기능 | 세부 정보 |
+| Feature | Details |
 |---------|---------|
-| 지원 엔드포인트 | - `/chat/completions` <br/> - `/responses` |
+| 지원 엔드포인트 | - `/chat/completions` <br/> - `/responses` <br/> - `/images/generations` (Gemini image models only) |
 | 지원 프로바이더 | `openai`, `xai`, `vertex_ai`, `anthropic`, `gemini`, `perplexity` |
-| LiteLLM Cost Tracking | ✅ 지원 |
+| LiteLLM Cost Tracking | ✅ Supported |
 | LiteLLM Version | `v1.71.0+` |
 
-## 어떤 검색 엔진을 사용하나요?
+## Which Search Engine is Used?
 
-각 프로바이더는 자체 검색 백엔드를 사용합니다.
+Each provider uses their own search backend:
 
-| 프로바이더 | 검색 엔진 | 참고 |
+| Provider | Search Engine | 참고 |
 |----------|---------------|-------|
-| **OpenAI** (`gpt-5-search-api`, `gpt-4o-search-preview`, `gpt-4o-mini-search-preview`) | OpenAI 내부 검색 | 실시간 웹 데이터 |
-| **xAI** (`grok-3`) | xAI 검색 + X/Twitter | 실시간 소셜 미디어 데이터 |
-| **Google AI/Vertex** (`gemini-2.0-flash`) | **Google Search** | 실제 Google 검색 결과 사용 |
-| **Anthropic** (`claude-3-5-sonnet`) | Anthropic 웹 검색 | 실시간 웹 데이터 |
-| **Perplexity** | Perplexity 검색 엔진 | AI 기반 검색 및 추론 |
+| **OpenAI** (`gpt-5-search-api`, `gpt-4o-search-preview`, `gpt-4o-mini-search-preview`) | OpenAI's internal search | Real-time web data |
+| **xAI** (`grok-3`) | xAI's search + X/Twitter | Real-time social media data |
+| **Google AI/Vertex** (`gemini-2.0-flash`) | **Google Search** | Uses actual Google search results |
+| **Anthropic** (`claude-3-5-sonnet`) | Anthropic's web search | Real-time web data |
+| **Perplexity** | Perplexity's search engine | AI-powered search and reasoning |
 
-:::warning 중요: Search 모델만 `web_search_options`를 지원합니다
-OpenAI에서는 전용 검색 모델만 `web_search_options` 파라미터를 지원합니다.
+:::warning Important: Only Search 모델 Support `web_search_options`
+For OpenAI, only dedicated search models support the `web_search_options` parameter:
 - `gpt-4o-search-preview`
 - `gpt-4o-mini-search-preview`
 - `gpt-5-search-api`
 
-**`gpt-5`, `gpt-4.1`, `gpt-4o` 같은 일반 모델은 `web_search_options`를 지원하지 않습니다.**
+**Regular models like `gpt-5`, `gpt-4.1`, `gpt-4o` do not support `web_search_options`**
 :::
 
-:::tip `web_search_options` 파라미터는 선택 사항입니다
-검색 모델(`gpt-4o-search-preview` 등)은 `web_search_options` 파라미터가 없어도 **자동으로 웹을 검색**합니다.
+:::tip The `web_search_options` parameter is optional
+Search models (like `gpt-4o-search-preview`) **automatically search the web** even without the `web_search_options` parameter.
 
-다음이 필요할 때 `web_search_options`를 사용합니다.
-- `search_context_size` 조정(`"low"`, `"medium"`, `"high"`)
-- 지역화된 결과를 위한 `user_location` 지정
+Use `web_search_options` when you need to:
+- Adjust `search_context_size` (`"low"`, `"medium"`, `"high"`)
+- Specify `user_location` for localized results
 :::
 
 :::info
-**Anthropic Web Search 모델**: 웹 검색을 지원하는 Claude 모델: `claude-3-5-sonnet-latest`, `claude-3-5-sonnet-20241022`, `claude-3-5-haiku-latest`, `claude-3-5-haiku-20241022`, `claude-3-7-sonnet-20250219`
+**Anthropic Web Search 모델**: Claude models that support web search: `claude-3-5-sonnet-latest`, `claude-3-5-sonnet-20241022`, `claude-3-5-haiku-latest`, `claude-3-5-haiku-20241022`, `claude-3-7-sonnet-20250219`
 :::
 
-## OpenAI 웹 검색: 두 가지 방식
+## OpenAI Web Search: Two Approaches
 
-OpenAI는 엔드포인트와 모델에 따라 웹 검색을 사용하는 두 가지 방식을 제공합니다.
+OpenAI offers two distinct ways to use web search depending on the endpoint and model:
 
-| 방식 | 엔드포인트 | 모델 | 활성화 방법 |
+| Approach | Endpoint | 모델 | How to enable |
 |----------|----------|--------|---------------|
-| **Search 모델** | `/chat/completions` | `gpt-5-search-api`, `gpt-4o-search-preview`, `gpt-4o-mini-search-preview` | `web_search_options` 파라미터 전달 |
-| **Web Search Tool** | `/responses` | `gpt-5`, `gpt-4.1`, `gpt-4o` 및 기타 일반 모델 | `web_search_preview` 도구 전달 |
+| **Search 모델** | `/chat/completions` | `gpt-5-search-api`, `gpt-4o-search-preview`, `gpt-4o-mini-search-preview` | Pass `web_search_options` parameter |
+| **Web Search Tool** | `/responses` | `gpt-5`, `gpt-4.1`, `gpt-4o`, and other regular models | Pass `web_search_preview` tool |
 
-:::tip Search 모델은 자동으로 검색합니다
-`gpt-5-search-api` 같은 검색 모델은 `web_search_options` 파라미터가 없어도 **자동으로 웹을 검색**합니다. `search_context_size`(`"low"`, `"medium"`, `"high"`)를 설정하거나 지역화된 결과를 위해 `user_location`을 지정할 때 `web_search_options`를 사용하세요.
+:::tip Search models search automatically
+Search models like `gpt-5-search-api` **automatically search the web** even without the `web_search_options` parameter. Use `web_search_options` to set `search_context_size` (`"low"`, `"medium"`, `"high"`) or specify `user_location` for localized results.
 :::
 
-## `/chat/completions` (`litellm.completion`)
+## `/chat/completions` (litellm.completion)
 
 ### 빠른 시작
 
@@ -85,7 +85,7 @@ response = completion(
 </TabItem>
 <TabItem value="proxy" label="PROXY">
 
-1. config.yaml 설정
+1. Setup config.yaml
 
 ```yaml
 model_list:
@@ -132,7 +132,7 @@ model_list:
 litellm --config /path/to/config.yaml
 ```
 
-3. 테스트
+3. Test it!
 
 ```python showLineNumbers
 from openai import OpenAI
@@ -161,7 +161,7 @@ response = client.chat.completions.create(
 </TabItem>
 </Tabs>
 
-### Search context size 설정
+### Search context size
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -247,6 +247,20 @@ response = completion(
     }
 )
 ```
+
+**Gemini image generation (using web_search_options on `/images/generations`)**
+
+```python showLineNumbers
+from litellm import image_generation
+
+response = image_generation(
+    model="gemini/gemini-3.1-flash-image-preview",
+    prompt="Generate an image of the latest iPhone design",
+    web_search_options={},
+)
+```
+
+Works with `vertex_ai/gemini-3.1-flash-image-preview` and other Gemini image models. See [Vertex AI Image Generation](../providers/vertex_image.md) and [Google AI Studio Image Generation](../providers/google_ai_studio/image_gen.md).
 </TabItem>
 <TabItem value="proxy" label="PROXY">
 
@@ -280,10 +294,10 @@ response = client.chat.completions.create(
 
 ## `/responses` (litellm.responses)
 
-`gpt-5`, `gpt-4.1`, `gpt-4o` 같은 모델에서는 `web_search_preview` 도구를 사용합니다.
+Use the `web_search_preview` tool with models like `gpt-5`, `gpt-4.1`, `gpt-4o`, etc.
 
 :::info
-`gpt-5-search-api`, `gpt-4o-search-preview` 같은 검색 전용 모델은 `/responses` 엔드포인트를 지원하지 않습니다. 대신 `/chat/completions` + `web_search_options`로 사용하세요(위 섹션 참고).
+Search-dedicated models like `gpt-5-search-api` and `gpt-4o-search-preview` do **not** support the `/responses` endpoint. Use them with `/chat/completions` + `web_search_options` instead (see above).
 :::
 
 ### 빠른 시작
@@ -306,7 +320,7 @@ response = responses(
 </TabItem>
 <TabItem value="proxy" label="PROXY">
 
-1. config.yaml 설정
+1. Setup config.yaml
 
 ```yaml
 model_list:
@@ -327,7 +341,7 @@ model_list:
 litellm --config /path/to/config.yaml
 ```
 
-3. 테스트
+3. Test it!
 
 ```python showLineNumbers
 from openai import OpenAI
@@ -351,7 +365,7 @@ print(response.output_text)
 </TabItem>
 </Tabs>
 
-### Search context size 설정
+### Search context size
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -396,12 +410,12 @@ print(response.output_text)
 </TabItem>
 </Tabs>
 
-## config.yaml에서 웹 검색 설정
+## Configuring Web Search in config.yaml
 
-프록시 설정 파일에서 기본 웹 검색 옵션을 직접 지정할 수 있습니다.
+You can set default web search options directly in your proxy config file:
 
 <Tabs>
-<TabItem value="default" label="기본 웹 검색">
+<TabItem value="default" label="Default Web Search">
 
 ```yaml
 model_list:
@@ -413,8 +427,8 @@ model_list:
       web_search_options: {}  # Enables web search with default settings
 ```
 
-### 고급
-LiteLLM 라우터가 WebSearch를 지원하지 않는 모델을 선택적으로 제외하도록 설정할 수 있습니다. 예:
+### Advanced
+You can configure LiteLLM's router to optionally drop models that do not support WebSearch, for example
 ```yaml
   - model_name: gpt-4.1
     litellm_params:
@@ -427,10 +441,10 @@ LiteLLM 라우터가 WebSearch를 지원하지 않는 모델을 선택적으로 
     model_info:
       supports_web_search: False <---- KEY CHANGE!
 ```
-이 예제에서 LiteLLM은 일반 LLM 요청은 두 배포 모두로 라우팅하지만, WebSearch 요청은 OpenAI로만 라우팅합니다.
+In this example, LiteLLM will still route LLM requests to both deployments, but for WebSearch, will solely route to OpenAI.
 
 </TabItem>
-<TabItem value="custom" label="사용자 지정 검색 컨텍스트">
+<TabItem value="custom" label="Custom Search Context">
 
 ```yaml
 model_list:
@@ -463,14 +477,14 @@ model_list:
 </TabItem>
 </Tabs>
 
-**참고:** 설정 파일에 `web_search_options`를 지정하면 해당 모델로 들어오는 모든 요청에 적용됩니다. 사용자는 API 요청에서 `web_search_options`를 전달해 이 설정을 계속 덮어쓸 수 있습니다.
+**Note:** When `web_search_options` is set in the config, it applies to all requests to that model. Users can still override these settings by passing `web_search_options` in their API requests.
 
-## 모델의 웹 검색 지원 여부 확인
+## Checking if a model supports web search
 
 <Tabs>
 <TabItem label="SDK" value="sdk">
 
-`litellm.supports_web_search(model="model_name")`를 사용합니다. 모델이 웹 검색을 수행할 수 있으면 `True`를 반환합니다.
+Use `litellm.supports_web_search(model="model_name")` -> returns `True` if model can perform web searches
 
 ```python showLineNumbers
 # Check OpenAI models
@@ -493,7 +507,7 @@ assert litellm.supports_web_search(model="gemini/gemini-2.0-flash") == True
 
 <TabItem label="PROXY" value="proxy">
 
-1. config.yaml에 모델 정의
+1. Define models in config.yaml
 
 ```yaml
 model_list:
@@ -546,13 +560,13 @@ model_list:
       supports_web_search: True
 ```
 
-2. 프록시 서버 실행
+2. Run proxy server
 
 ```bash
 litellm --config config.yaml
 ```
 
-3. 모델의 웹 검색 지원 여부를 확인하려면 `/model_group/info` 호출
+3. Call `/model_group/info` to check if a model supports web search
 
 ```shell
 curl -X 'GET' \
@@ -561,7 +575,7 @@ curl -X 'GET' \
   -H 'x-api-key: sk-1234'
 ```
 
-예상 응답
+Expected Response 
 
 ```json showLineNumbers
 {
@@ -597,26 +611,26 @@ curl -X 'GET' \
 </TabItem>
 </Tabs>
 
-## 웹 검색 비용 추적
+## Web Search Cost Tracking
 
-LiteLLM은 프로바이더별 과금 모델에 따라 웹 검색 비용을 자동으로 추적합니다. 이 비용은 표준 토큰 기반 가격 위에 추가됩니다.
+LiteLLM tracks web search costs automatically based on provider-specific billing models. The cost is added on top of the standard token-based pricing.
 
-### 프로바이더별 웹 검색 과금 방식
+### How providers charge for web search
 
-| 프로바이더 | 과금 단위 | 동작 방식 |
+| Provider | Billing Unit | 동작 방식 |
 |----------|-------------|--------------|
-| **Gemini 3.x** (3-flash, 3-pro, 3.1-*) | 검색 쿼리별 | 각 내부 검색 쿼리가 개별 과금됩니다. 하나의 프롬프트가 여러 쿼리를 발생시킬 수 있습니다. |
-| **Gemini 2.x** (2.0-flash, 2.5-flash, 2.5-pro) | grounded 프롬프트별 | 내부적으로 실행된 쿼리 수와 관계없이 grounding을 사용하는 API 호출당 고정 비용이 부과됩니다. |
-| **OpenAI** (gpt-4o-search, gpt-5-search) | 검색 컨텍스트 크기별 | 비용은 `search_context_size`(`low`, `medium`, `high`)에 따라 달라집니다. |
-| **Anthropic** (웹 검색을 사용하는 Claude) | 검색 요청별 | 웹 검색 도구 호출마다 고정 비용이 부과됩니다. |
-| **Perplexity** (sonar, sonar-pro) | 검색 컨텍스트 크기별 | 비용은 `search_context_size`에 따라 달라집니다. |
+| **Gemini 3.x** (3-flash, 3-pro, 3.1-*) | Per search query | Each internal search query is billed individually. One prompt may trigger multiple queries. |
+| **Gemini 2.x** (2.0-flash, 2.5-flash, 2.5-pro) | Per grounded prompt | Flat fee per API call that uses grounding, regardless of how many queries are executed internally. |
+| **OpenAI** (gpt-4o-search, gpt-5-search) | Per search context size | Cost varies by `search_context_size` (`low`, `medium`, `high`). |
+| **Anthropic** (Claude with web search) | Per search request | Fixed cost per web search tool invocation. |
+| **Perplexity** (sonar, sonar-pro) | Per search context size | Cost varies by `search_context_size`. |
 
-### 가격 설정
+### Pricing configuration
 
-웹 검색 비용은 `model_prices_and_context_window.json`에서 두 필드로 정의됩니다.
+Web search costs are defined in `model_prices_and_context_window.json` using two fields:
 
-- **`search_context_cost_per_query`**: 과금 단위당 비용입니다(검색 컨텍스트 크기 티어별).
-- **`web_search_billing_unit`** *(Gemini 모델)*: `"per_query"`(각 검색 쿼리별 과금) 또는 `"per_prompt"`(기본값, 검색을 사용하는 API 호출당 고정 비용)입니다.
+- **`search_context_cost_per_query`**: the cost per billable unit (per search context size tier).
+- **`web_search_billing_unit`** *(on Gemini models)*: `"per_query"` (each search query is billed individually) or `"per_prompt"` (default — flat fee per API call that uses search).
 
 ```json
 {
@@ -639,10 +653,10 @@ LiteLLM은 프로바이더별 과금 모델에 따라 웹 검색 비용을 자�
 ```
 
 :::info
-`web_search_billing_unit`이 없는 모델은 기본적으로 `"per_prompt"`를 사용합니다. 모델이 내부 쿼리를 몇 개 실행했는지와 관계없이 웹 검색을 사용하는 API 호출당 한 번의 고정 비용이 부과됩니다.
+모델 without `web_search_billing_unit` default to `"per_prompt"` — one flat charge per API call that uses web search, regardless of how many internal queries the model executes.
 :::
 
-프록시 설정의 `model_info`를 사용해 이 값을 덮어쓸 수 있습니다.
+You can override these in your proxy config using `model_info`:
 
 ```yaml
 model_list:
@@ -657,14 +671,14 @@ model_list:
         search_context_size_high: 0.014
 ```
 
-### LiteLLM의 검색 사용량 추적 방식
+### How LiteLLM tracks search usage
 
-웹 검색 요청 수는 `usage.prompt_tokens_details.web_search_requests`에 저장됩니다. LiteLLM은 각 프로바이더 응답에서 이 값을 추출합니다.
+The number of web search requests is stored in `usage.prompt_tokens_details.web_search_requests`. LiteLLM extracts this from each provider's response:
 
-- **Gemini**: 응답의 `groundingMetadata.webSearchQueries`에서 추출합니다. Gemini 2.x는 프롬프트별 과금이므로 1로 제한합니다.
-- **OpenAI**: 사용량 메타데이터에 직접 보고됩니다.
-- **Anthropic**: `server_tool_use.web_search_requests`를 통해 보고됩니다.
-- **xAI**: 응답의 `num_sources_used`에서 매핑합니다.
+- **Gemini**: Extracted from `groundingMetadata.webSearchQueries` in the response. For Gemini 2.x, clamped to 1 (per-prompt billing).
+- **OpenAI**: Reported directly in the usage metadata.
+- **Anthropic**: Reported via `server_tool_use.web_search_requests`.
+- **xAI**: Mapped from `num_sources_used` in the response.
 
 ```python
 response = litellm.completion(

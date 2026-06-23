@@ -1,23 +1,23 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Amazon Bedrock Mantle 개요 {#amazon-bedrock-mantle}
+# Amazon Bedrock Mantle
 
-[Amazon Bedrock Mantle](https://docs.aws.amazon.com/bedrock/latest/userguide/bedrock-mantle.html)는 Bedrock 호스팅 모델에 **OpenAI 호환 API**를 제공하는 Amazon Bedrock의 분산 추론 엔진(Project Mantle)입니다.
+[Amazon Bedrock Mantle](https://docs.aws.amazon.com/bedrock/latest/userguide/bedrock-mantle.html) is Amazon Bedrock's distributed inference engine (Project Mantle) that exposes an **OpenAI-compatible API** for Bedrock-hosted models.
 
-이 공급자를 사용하면 OpenAI 가격이 아니라 정확한 **AWS Bedrock 가격**으로 Bedrock Mantle 모델을 호출할 수 있습니다.
+Use this provider to call Bedrock Mantle models with accurate **AWS Bedrock pricing** instead of OpenAI pricing.
 
 :::tip
 
-**모든 Bedrock Mantle 모델을 지원합니다. litellm 요청을 보낼 때 `model=bedrock_mantle/<model-id>`를 접두사로 설정하기만 하면 됩니다.**
+**We support ALL Bedrock Mantle models, just set `model=bedrock_mantle/<model-id>` as a prefix when sending litellm requests**
 
 :::
 
 ## Claude Mythos
 
-[Claude Mythos](https://docs.aws.amazon.com/bedrock/latest/userguide/model-card-anthropic-claude-mythos-preview.html)(`anthropic.claude-mythos-preview`)는 Bedrock Mantle에서 사용할 수 있으며, **1M 토큰 입력 컨텍스트**, 128K 출력, 추론, 비전, 도구 사용을 지원합니다.
+[Claude Mythos](https://docs.aws.amazon.com/bedrock/latest/userguide/model-card-anthropic-claude-mythos-preview.html) (`anthropic.claude-mythos-preview`) is available on Bedrock Mantle with **1M token input context**, 128K output, and support for reasoning, vision, and tool use.
 
-표준 AWS 자격 증명과 함께 `bedrock/mantle/` 라우트 접두사를 사용하세요.
+Use the `bedrock_mantle/` route prefix with standard AWS credentials.
 
 ### /messages
 
@@ -35,7 +35,7 @@ os.environ['AWS_REGION_NAME'] = "us-east-1"
 
 async def main():
     response = await litellm.anthropic_messages(
-        model="bedrock/mantle/anthropic.claude-mythos-preview",
+        model="bedrock_mantle/anthropic.claude-mythos-preview",
         max_tokens=1024,
         messages=[{"role": "user", "content": "Explain quantum entanglement simply."}],
     )
@@ -47,23 +47,23 @@ asyncio.run(main())
 </TabItem>
 <TabItem value="ai-gateway" label="AI Gateway">
 
-**1. config.yaml에 추가**
+**1. Add to config.yaml**
 
 ```yaml
 model_list:
   - model_name: claude-mythos
     litellm_params:
-      model: bedrock/mantle/anthropic.claude-mythos-preview
+      model: bedrock_mantle/anthropic.claude-mythos-preview
       aws_region_name: us-east-1
 ```
 
-**2. LiteLLM AI Gateway 시작**
+**2. Start LiteLLM AI Gateway**
 
 ```shell
 litellm --config /path/to/config.yaml
 ```
 
-**3. curl로 `/v1/messages` 호출**
+**3. Call `/v1/messages` via curl**
 
 ```bash
 curl -X POST http://0.0.0.0:4000/v1/messages \
@@ -95,7 +95,7 @@ os.environ['AWS_SECRET_ACCESS_KEY'] = "your-aws-secret-key"
 os.environ['AWS_REGION_NAME'] = "us-east-1"
 
 response = completion(
-    model="bedrock/mantle/anthropic.claude-mythos-preview",
+    model="bedrock_mantle/anthropic.claude-mythos-preview",
     messages=[{"role": "user", "content": "Explain quantum entanglement simply."}],
 )
 print(response)
@@ -104,23 +104,23 @@ print(response)
 </TabItem>
 <TabItem value="ai-gateway-chat" label="AI Gateway">
 
-**1. config.yaml에 추가**
+**1. Add to config.yaml**
 
 ```yaml
 model_list:
   - model_name: claude-mythos
     litellm_params:
-      model: bedrock/mantle/anthropic.claude-mythos-preview
+      model: bedrock_mantle/anthropic.claude-mythos-preview
       aws_region_name: us-east-1
 ```
 
-**2. LiteLLM AI Gateway 시작**
+**2. Start LiteLLM AI Gateway**
 
 ```shell
 litellm --config /path/to/config.yaml
 ```
 
-**3. curl로 `/v1/chat/completions` 호출**
+**3. Call `/v1/chat/completions` via curl**
 
 ```bash
 curl -X POST http://0.0.0.0:4000/v1/chat/completions \
@@ -137,7 +137,98 @@ curl -X POST http://0.0.0.0:4000/v1/chat/completions \
 </TabItem>
 </Tabs>
 
-## API 키 {#api-key}
+## OpenAI 모델 (GPT-5.4 / GPT-5.5)
+
+### /responses
+
+<Tabs>
+<TabItem value="sdk" label="SDK">
+
+```python
+import litellm
+import os
+
+os.environ['BEDROCK_MANTLE_API_KEY'] = "your-bedrock-api-key"
+os.environ['BEDROCK_MANTLE_REGION'] = "us-east-2"
+
+response = litellm.responses(
+    model="bedrock_mantle/openai.gpt-5.5",
+    input="Hello! How can you help me today?",
+)
+print(response)
+```
+
+#### Streaming
+
+```python
+import litellm
+import os
+
+os.environ['BEDROCK_MANTLE_API_KEY'] = "your-bedrock-api-key"
+
+response = litellm.responses(
+    model="bedrock_mantle/openai.gpt-5.5",
+    input="Tell me a three sentence bedtime story about a unicorn.",
+    stream=True,
+)
+
+for event in response:
+    print(event)
+```
+
+</TabItem>
+<TabItem value="ai-gateway" label="AI Gateway">
+
+**1. Add to config.yaml**
+
+```yaml
+model_list:
+  - model_name: gpt-5.5-mantle
+    litellm_params:
+      model: bedrock_mantle/openai.gpt-5.5
+      api_key: os.environ/BEDROCK_MANTLE_API_KEY
+      api_base: https://bedrock-mantle.us-east-2.api.aws/v1
+```
+
+**2. Start LiteLLM AI Gateway**
+
+```shell
+litellm --config /path/to/config.yaml
+```
+
+**3. Call `/v1/responses` via curl**
+
+```bash
+curl -X POST http://0.0.0.0:4000/v1/responses \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $LITELLM_API_KEY" \
+  -d '{
+    "model": "gpt-5.5-mantle",
+    "input": "Hello! How can you help me today?"
+  }'
+```
+
+**4. Or use the OpenAI SDK**
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="sk-1234",
+    base_url="http://0.0.0.0:4000",
+)
+
+response = client.responses.create(
+    model="gpt-5.5-mantle",
+    input="Hello! How can you help me today?",
+)
+print(response)
+```
+
+</TabItem>
+</Tabs>
+
+## API Key
 
 ```python
 # env variable
@@ -149,14 +240,16 @@ os.environ['BEDROCK_MANTLE_REGION'] = "us-east-1"  # or use AWS_REGION
 
 ## 지원 모델
 
-| 모델 | 컨텍스트 창 | 입력(1M 토큰당) | 출력(1M 토큰당) |
-|-------|---------------|----------------------|------------------------|
-| `openai.gpt-oss-120b` | 131K | $0.15 | $0.60 |
-| `openai.gpt-oss-20b` | 131K | $0.075 | $0.30 |
-| `openai.gpt-oss-safeguard-120b` | 131K | $0.15 | $0.60 |
-| `openai.gpt-oss-safeguard-20b` | 131K | $0.075 | $0.30 |
+| Model | Endpoint | Context Window | Input (per 1M tokens) | Output (per 1M tokens) |
+|-------|----------|---------------|----------------------|------------------------|
+| `openai.gpt-5.5` | `/responses` | 272K | $5.50 | $33.00 |
+| `openai.gpt-5.4` | `/responses` | 272K | $2.75 | $16.50 |
+| `openai.gpt-oss-120b` | `/chat/completions` | 131K | $0.15 | $0.60 |
+| `openai.gpt-oss-20b` | `/chat/completions` | 131K | $0.075 | $0.30 |
+| `openai.gpt-oss-safeguard-120b` | `/chat/completions` | 131K | $0.15 | $0.60 |
+| `openai.gpt-oss-safeguard-20b` | `/chat/completions` | 131K | $0.075 | $0.30 |
 
-## 샘플 사용법
+## Sample 사용법
 
 <Tabs>
 <TabItem value="sdk" label="SDK">
@@ -216,15 +309,15 @@ asyncio.run(main())
 </TabItem>
 </Tabs>
 
-## 리전 설정
+## Region 설정
 
-API 기본 URL은 `https://bedrock-mantle.{region}.api.aws/v1`입니다. 리전은 다음 순서로 결정됩니다.
+The API base URL is `https://bedrock-mantle.{region}.api.aws/v1`. Region is resolved in this order:
 
-1. `BEDROCK_MANTLE_REGION` 환경 변수
-2. `AWS_REGION` 환경 변수
-3. 기본값: `us-east-1`
+1. `BEDROCK_MANTLE_REGION` env var
+2. `AWS_REGION` env var
+3. Default: `us-east-1`
 
-**지원 리전:** `us-east-1`, `us-east-2`, `us-west-2`, `eu-west-1`, `eu-west-2`, `eu-central-1`, `eu-south-1`, `eu-north-1`, `ap-northeast-1`, `ap-south-1`, `ap-southeast-3`, `sa-east-1`
+**Supported regions:** `us-east-1`, `us-east-2`, `us-west-2`, `eu-west-1`, `eu-west-2`, `eu-central-1`, `eu-south-1`, `eu-north-1`, `ap-northeast-1`, `ap-south-1`, `ap-southeast-3`, `sa-east-1`
 
 ```python
 import os
@@ -238,12 +331,18 @@ response = completion(
 )
 ```
 
-## LiteLLM Proxy 사용법
+## 사용법 with LiteLLM Proxy
 
-### 1. config.yaml에 Bedrock Mantle 모델 설정 {#1-set-bedrock-mantle-models-on-configyaml}
+### 1. Set Bedrock Mantle models on config.yaml
 
 ```yaml
 model_list:
+  - model_name: gpt-5.5-mantle
+    litellm_params:
+      model: bedrock_mantle/openai.gpt-5.5
+      api_key: os.environ/BEDROCK_MANTLE_API_KEY
+      api_base: "https://bedrock-mantle.us-east-2.api.aws/v1"
+
   - model_name: gpt-oss-120b
     litellm_params:
       model: bedrock_mantle/openai.gpt-oss-120b
@@ -263,7 +362,7 @@ model_list:
 litellm --config /path/to/config.yaml
 ```
 
-### 3. 요청 전송 {#3-send-a-request}
+### 3. Send a request
 
 ```python
 import openai

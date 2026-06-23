@@ -10,11 +10,11 @@ LiteLLM ships new releases regularly with new provider support, performance impr
 
 ## 최신 릴리즈
 
-### [v1.87.0 — OCI Generative AI Provider, Gemini 3.5 Flash Day-0, MCP UI for OAuth Servers](/release_notes/v1.87.0/v1-87-0)
+### [v1.89.0 — Claude Fable 5, A2A Agent Providers & MCP Per-Server Controls](/release_notes/v1.89.0/v1-89-0)
 
-_May 23, 2026_
+_June 10, 2026_
 
-OCI Generative AI as a first-class provider (chat, embeddings, streaming, reasoning, tool use across Cohere, Llama, Grok, Gemini, and GPT-5 on OCI with full pricing catalog), Gemini 3.5 Flash and Gemini 3.1 Flash-Lite day-0 on Vertex AI / Google AI Studio / OpenRouter, MCP UI for OAuth-protected tool calls plus Cursor MCP OAuth, Codex CLI JWT team-alias and SSO form-URL auth hardening, and a hot-path Anthropic `/v1/messages` streaming rewrite with byte-identical wire output and ~90% lower TTFT overhead measured on a real 4-pod deployment.
+Claude Fable 5 across Anthropic, Bedrock, Azure AI, and Vertex at 1M context with adaptive thinking and computer use, two new A2A agent providers (watsonx Orchestrate and LangFlow with session bridging) plus OAuth M2M for Databricks Apps agents, MCP per-server environment variables and RPM rate limiting with OAuth passthrough and issuer-scoped JWT auth, OpenInference rendering parity for Arize/Phoenix, and three new search and transcription providers (APISerpent, You.com, Soniox).
 
 ---
 
@@ -22,6 +22,8 @@ OCI Generative AI as a first-class provider (chat, embeddings, streaming, reason
 
 | Version                             | Date         | Highlights                                                 |
 | ----------------------------------- | ------------ | ---------------------------------------------------------- |
+| [v1.89.0](/release_notes/v1.89.0/v1-89-0)   | Jun 10, 2026 | Claude Fable 5, A2A agent providers, MCP per-server controls |
+| [v1.88.0](/release_notes/v1.88.0/v1-88-0)   | Jun 4, 2026  | Claude Opus 4.8, MCP access-group authorization, typed OpenTelemetry |
 | [v1.87.0](/release_notes/v1.87.0/v1-87-0)   | May 23, 2026 | OCI Generative AI provider, Gemini 3.5 Flash day-0, MCP UI for OAuth servers |
 | [v1.86.0](/release_notes/v1.86.0/v1-86-0)   | May 16, 2026 | Weighted-Routing Failover, native Anthropic web-search citations, OTel-standard server spans |
 | [v1.85.1](/release_notes/v1.85.1/v1-85-1)   | May 20, 2026 | Patch — Gemini 3.5 Flash day-0 + cross-pod spend fix       |

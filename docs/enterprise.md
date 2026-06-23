@@ -100,15 +100,6 @@ LITELLM_LICENSE="eyJ..."
 
 Pricing depends on your deployment size — [get in touch](https://enterprise.litellm.ai/demo) to scope it.
 
-### Hosted LiteLLM Cloud
-
-We run the proxy; you focus on your product.
-
-- **Status**: GA — [live reliability](https://status.litellm.ai/)
-- **Scale**: Tested at 1k requests/second
-- **Compliance**: SOC 2 Type 2 and ISO 27001 certified
-- **Regions**: [Supported data regions](../docs/data_security#supported-data-regions-for-litellm-cloud)
-
 ---
 
 ## Professional Support
@@ -129,6 +120,18 @@ Included with every enterprise license: a dedicated Slack/Teams channel with our
 | **Security patches** | 72 hours |
 
 Custom SLAs available on request.
+
+---
+
+## Version support
+
+LiteLLM supports the four most recent stable minor lines. Each of those lines keeps getting patch releases; anything older reaches end of life and stops receiving updates. This policy takes effect Monday, June 29, 2026. As of mid-June 2026 the supported lines are 1.86, 1.87, 1.88, and 1.89, and the set rolls forward as new stable releases ship.
+
+**Why we are doing this.** LiteLLM ships fast, with a new minor line going out roughly every week. Patching lines well down the list meant carrying every fix forward onto every line we kept alive, a cost that grows with the number of lines we maintain rather than the number of fixes we make. Focusing on four lines lets us give each one more care.
+
+**동작 방식.** The window always holds the four most recent stable minor lines. When we promote a new line, the oldest one drops out and stops receiving releases. End of life is a clean cutoff; there is no separate long-term maintenance track. For any supported line, the recommended build is its latest patch. For rare, high-severity issues we will use our judgment and may act beyond the window when the situation calls for it.
+
+**What it means for you.** To check where you stand, take the latest stable line and count back four; if your version is older than that, plan an upgrade. The simplest path is to pin to a minor line, take its patches, and move onto a newer line before yours drops out.
 
 ---
 
@@ -497,6 +500,12 @@ The `hide_secrets` guardrail check did not run on this request because api key=s
 
 ## Content Moderation
 ### Content Moderation with LLM Guard
+
+:::info
+
+`llmguard_moderations` requires a LiteLLM 엔터프라이즈 license and the `litellm-enterprise` package. The OSS guardrail framework still supports custom guardrails and Presidio PII masking.
+
+:::
 
 Set the LLM Guard API Base in your environment
 

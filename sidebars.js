@@ -88,6 +88,7 @@ const sidebars = {
           "proxy/guardrails/pii_masking_v2",
           "proxy/guardrails/panw_prisma_airs",
           "proxy/guardrails/secret_detection",
+          "proxy/guardrails/sensitive_data_routing",
           "proxy/guardrails/custom_guardrail",
           "proxy/guardrails/custom_code_guardrail",
           "proxy/guardrails/prompt_injection",
@@ -292,6 +293,11 @@ const sidebars = {
               label: "speech()",
             },
             {
+              type: "doc",
+              id: "sandbox",
+              label: "acode_interpreter_tool()",
+            },
+            {
               type: "link",
               label: "전체 지원 엔드포인트 →",
               href: "https://docs.litellm.ai/docs/supported_endpoints",
@@ -416,6 +422,7 @@ const sidebars = {
                 "proxy/ui/ui_edit_logo",
                 "proxy/custom_sso",
                 "proxy/custom_root_ui",
+                "proxy/plugins",
                 "tutorials/scim_litellm",
               ]
             },
@@ -643,6 +650,19 @@ const sidebars = {
             "proxy/billing",
           ],
         },
+        {
+          type: "category",
+          label: "Cost Optimization",
+          items: [
+            "proxy/auto_routing",
+            "adaptive_router",
+            {
+              type: "link",
+              label: "Prompt Compression",
+              href: "/docs/completion/prompt_compression#server-side-callback-loop-v1messages",
+            },
+          ],
+        },
       ]
     },
     {
@@ -811,6 +831,7 @@ const sidebars = {
             "search/searxng",
             "search/linkup",
             "search/serper",
+            "search/you_com",
             "search/apiserpent",
           ]
         },
@@ -962,6 +983,7 @@ const sidebars = {
         "providers/deepseek",
         "providers/docker_model_runner",
         "providers/elevenlabs",
+        "providers/empiriolabs",
         "providers/fal_ai",
         "providers/featherless_ai",
         "providers/fireworks_ai",
@@ -984,6 +1006,7 @@ const sidebars = {
           ]
         },
         "providers/hyperbolic",
+        "providers/inception",
         "providers/infinity",
         "providers/jina_ai",
         "providers/lambda_ai",
@@ -1048,6 +1071,7 @@ const sidebars = {
         "providers/stability",
         "providers/synthetic",
         "providers/snowflake",
+        "providers/tensormesh",
         "providers/togetherai",
         "providers/topaz",
         "providers/triton-inference-server",
@@ -1138,7 +1162,6 @@ const sidebars = {
         "sdk_custom_pricing",
         "migration",
         "data_security",
-        "data_retention",
         "proxy/security_encryption_faq",
         "migration_policy",
         "load_test_advanced",
@@ -1282,6 +1305,11 @@ const learnSidebar = {
             "completion/web_fetch",
             "completion/computer_use",
             "guides/code_interpreter",
+            {
+              type: "doc",
+              id: "sandbox",
+              label: "Code Interpreter Sandbox Interception",
+            },
             "completion/anthropic_advisor_tool",
             "completion/message_sanitization",
           ],
@@ -1373,7 +1401,6 @@ const learnSidebar = {
           items: [
             "completion/mock_requests",
             "completion/reliable_completions",
-            "budget_manager",
           ],
         },
         {

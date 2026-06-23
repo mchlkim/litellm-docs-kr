@@ -1,32 +1,32 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# 예산, Rate Limit
+# Budgets, Rate Limits
 
-:::info **Budget 설정 옵션**
-**Personal budgets**: 개인 spend limit을 위해 `team_id` 없이 virtual key를 생성합니다.
+:::info **Budget Setup Options**
+**Personal budgets**: Create virtual keys without team_id for individual spending limits
 
-**Team budgets**: team의 shared budget을 사용하려면 virtual key에 `team_id`를 추가합니다.
+**Team budgets**: Add team_id to virtual keys to utilize a team's shared budget
 
-**Team member budgets**: team shared budget 안에서 개인 spend limit을 설정합니다.
+**Team member budgets**: Set individual spending limits within the team's shared budget
 
-**Agent budgets**: agent에 rate limit(tpm/rpm)과 session-level cap(iteration, dollar budget)을 설정합니다. [**이동**](#agents)
+**Agent budgets**: Set rate limits (tpm/rpm) and session-level caps (iterations, dollar budget) on agents [**Jump**](#agents)
 
-***key가 team에 속하면 사용자의 personal budget이 아니라 team budget이 적용됩니다.***
+***If a key belongs to a team, the team budget is applied, not the user's personal budget.***
 :::
 
-요구사항:
+Requirements:
 
-- Postgres database가 필요합니다. 예: [Supabase](https://supabase.com/), [Neon](https://neon.tech/) 등. [**Setup 보기**](./virtual_keys.md#setup)
+- Need to a postgres database (e.g. [Supabase](https://supabase.com/), [Neon](https://neon.tech/), etc) [**See Setup**](./virtual_keys.md#setup)
 
 
-## 예산 설정
+## Set Budgets
 
 ### Global Proxy
 
-proxy의 모든 call에 budget을 적용합니다.
+Apply a budget across all calls on the proxy
 
-**1단계. config.yaml 수정**
+**Step 1. Modify config.yaml**
 
 ```yaml
 general_settings:
@@ -38,13 +38,13 @@ litellm_settings:
   budget_duration: 30d # (str) frequency of reset - You can set duration as seconds ("30s"), minutes ("30m"), hours ("30h"), days ("30d").
 ```
 
-**2단계. proxy 시작**
+**Step 2. Start proxy**
 
 ```bash
 litellm /path/to/config.yaml
 ```
 
-**3단계. test call 전송**
+**Step 3. Send test call**
 
 ```bash
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -63,16 +63,16 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 
 ### Team
 
-가능한 작업:
-- Team에 budget 추가
+You can:
+- Add budgets to Teams
 
 :::info
 
-Team budget 설정 및 reset에 대한 단계별 tutorial입니다. API 또는 관리자 UI를 사용할 수 있습니다.
+**Step-by step tutorial on setting, resetting budgets on Teams here (API or using 관리자 UI)**
 
 
-#### **team에 budget 추가**
-```shell 
+#### **Add budgets to teams**
+```shell
 curl --location 'http://localhost:4000/team/new' \
 --header 'Authorization: Bearer <your-master-key>' \
 --header 'Content-Type: application/json' \
@@ -80,7 +80,7 @@ curl --location 'http://localhost:4000/team/new' \
   "team_alias": "my-new-team_4",
   "members_with_roles": [{"role": "admin", "user_id": "5c4a0aa3-a1e1-43dc-bd87-3c2da8382a3a"}],
   "rpm_limit": 99
-}' 
+}'
 ```
 
 [**See Swagger**](https://litellm-api.up.railway.app/#/team%20management/new_team_team_new_post)
@@ -111,9 +111,9 @@ curl --location 'http://localhost:4000/team/new' \
 }
 ```
 
-#### **team에 budget duration 추가**
+#### **Add budget duration to teams**
 
-`budget_duration`: 지정한 duration이 끝나면 budget이 reset됩니다. 설정하지 않으면 budget은 reset되지 않습니다. duration은 seconds("30s"), minutes("30m"), hours("30h"), days("30d")로 설정할 수 있습니다.
+`budget_duration`: Budget is reset at the end of specified duration. If not set, budget is never reset. You can set duration as seconds ("30s"), minutes ("30m"), hours ("30h"), days ("30d").
 
 ```
 curl 'http://0.0.0.0:4000/team/new' \
@@ -126,14 +126,14 @@ curl 'http://0.0.0.0:4000/team/new' \
 }'
 ```
 
-### Team Member
+### Team Members
 
-Team 안에서 user spend에 budget을 적용하고 싶을 때 사용합니다.
+Use this when you want to budget a users spend within a Team
 
 
-#### 1단계. User 생성
+#### Step 1. Create User
 
-`user_id=ishaan`인 user를 생성합니다.
+Create a user with `user_id=ishaan`
 
 ```shell
 curl --location 'http://0.0.0.0:4000/user/new' \
@@ -144,9 +144,9 @@ curl --location 'http://0.0.0.0:4000/user/new' \
 }'
 ```
 
-#### 2단계. 기존 Team에 User 추가 - `max_budget_in_team` 설정
+#### Step 2. Add User to an existing Team - set `max_budget_in_team`
 
-User를 team에 추가할 때 `max_budget_in_team`을 설정합니다. 1단계에서 설정한 동일한 `user_id`를 사용합니다.
+Set `max_budget_in_team` when adding a User to a team. We use the same `user_id` we set in Step 1
 
 ```shell
 curl -X POST 'http://0.0.0.0:4000/team/member_add' \
@@ -155,9 +155,9 @@ curl -X POST 'http://0.0.0.0:4000/team/member_add' \
 -d '{"team_id": "e8d1460f-846c-45d7-9b43-55f3cc52ac32", "max_budget_in_team": 0.000000000001, "member": {"role": "user", "user_id": "ishaan"}}'
 ```
 
-#### 3단계. 1단계의 Team member용 Key 생성
+#### Step 3. Create a Key for Team member from Step 1
 
-1단계의 `user_id=ishaan`을 설정합니다.
+Set `user_id=ishaan` from step 1
 
 ```shell
 curl --location 'http://0.0.0.0:4000/key/generate' \
@@ -168,16 +168,16 @@ curl --location 'http://0.0.0.0:4000/key/generate' \
         "team_id": "e8d1460f-846c-45d7-9b43-55f3cc52ac32"
 }'
 ```
-`/key/generate`의 response
+Response from `/key/generate`
 
-4단계에서는 이 response의 `key`를 사용합니다.
+We use the `key` from this response in Step 4
 ```shell
-{"key":"sk-RV-l2BJEZ_LYNChSx2EueQ", "models":[],"spend":0.0,"max_budget":null,"user_id":"ishaan","team_id":"e8d1460f-846c-45d7-9b43-55f3cc52ac32","max_parallel_requests":null,"metadata":{},"tpm_limit":null,"rpm_limit":null,"budget_duration":null,"allowed_cache_controls":[],"soft_budget":null,"key_alias":null,"duration":null,"aliases":{},"config":{},"permissions":{},"model_max_budget":{},"key_name":null,"expires":null,"token_id":null}% 
+{"key":"sk-RV-l2BJEZ_LYNChSx2EueQ", "models":[],"spend":0.0,"max_budget":null,"user_id":"ishaan","team_id":"e8d1460f-846c-45d7-9b43-55f3cc52ac32","max_parallel_requests":null,"metadata":{},"tpm_limit":null,"rpm_limit":null,"budget_duration":null,"allowed_cache_controls":[],"soft_budget":null,"key_alias":null,"duration":null,"aliases":{},"config":{},"permissions":{},"model_max_budget":{},"key_name":null,"expires":null,"token_id":null}%
 ```
 
-#### 4단계. Team member용 /chat/completions request 실행
+#### Step 4. Make /chat/completions requests for Team member
 
-이 request에는 3단계의 key를 사용합니다. 2~3회 request 후 `ExceededBudget: Crossed spend within team` error가 표시되어야 합니다.
+Use the key from step 3 for this request. After 2-3 requests expect to see The following error `ExceededBudget: Crossed spend within team`
 
 
 ```shell
@@ -198,33 +198,33 @@ curl --location 'http://localhost:4000/chat/completions' \
 
 ### Internal User
 
-internal user(key owner)가 proxy에서 수행할 수 있는 모든 call에 budget을 적용합니다.
+Apply a budget across all calls an internal user (key owner) can make on the proxy.
 
 :::info
 
-`team_id`가 설정된 key는 user의 personal budget 대신 team budget을 사용합니다.
+For keys, with a 'team_id' set, the team budget is used instead of the user's personal budget.
 
-team 안의 user에게 budget을 적용하려면 team member budget을 사용하세요.
+To apply a budget to a user within a team, use team member budgets.
 
 :::
 
-LiteLLM은 이를 위한 budget을 생성할 수 있도록 `/user/new` endpoint를 제공합니다.
+LiteLLM exposes a `/user/new` endpoint to create budgets for this.
 
 You can:
-- user에 budget 추가
-- spend reset을 위한 budget duration 추가
+- Add budgets to users [**Jump**](#add-budgets-to-users)
+- Add budget durations, to reset spend [**Jump**](#add-budget-duration-to-users)
 
-기본적으로 `max_budget`은 `null`로 설정되며 key에 대해 검사되지 않습니다.
+By default the `max_budget` is set to `null` and is not checked for keys
 
-#### **user에 budget 추가** {#add-budgets-to-internal-users}
-```shell 
+#### **Add budgets to users**
+```shell
 curl --location 'http://localhost:4000/user/new' \
 --header 'Authorization: Bearer <your-master-key>' \
 --header 'Content-Type: application/json' \
---data-raw '{"models": ["azure-models"], "max_budget": 0, "user_id": "krrish3@berri.ai"}' 
+--data-raw '{"models": ["azure-models"], "max_budget": 0, "user_id": "krrish3@berri.ai"}'
 ```
 
-[**Swagger 보기**](https://litellm-api.up.railway.app/#/user%20management/new_user_user_new_post)
+[**See Swagger**](https://litellm-api.up.railway.app/#/user%20management/new_user_user_new_post)
 
 **Sample Response**
 
@@ -237,9 +237,9 @@ curl --location 'http://localhost:4000/user/new' \
 }
 ```
 
-#### **user에 budget duration 추가** {#add-budget-duration-to-internal-users}
+#### **Add budget duration to users**
 
-`budget_duration`: 지정한 duration이 끝나면 budget이 reset됩니다. 설정하지 않으면 budget은 reset되지 않습니다. duration은 seconds("30s"), minutes("30m"), hours("30h"), days("30d")로 설정할 수 있습니다.
+`budget_duration`: Budget is reset at the end of specified duration. If not set, budget is never reset. You can set duration as seconds ("30s"), minutes ("30m"), hours ("30h"), days ("30d").
 
 ```
 curl 'http://0.0.0.0:4000/user/new' \
@@ -252,11 +252,11 @@ curl 'http://0.0.0.0:4000/user/new' \
 }'
 ```
 
-#### 기존 user용 새 key 생성
+#### Create new keys for existing user
 
-이제 해당 user_id(예: krrish3@berri.ai)로 `/key/generate`를 호출하면 됩니다.
-- **Budget Check**: 이 key에 대해 krrish3@berri.ai의 budget(예: $10)이 확인됩니다.
-- **비용 추적**: 이 key의 spend는 krrish3@berri.ai의 spend도 함께 업데이트합니다.
+Now you can just call `/key/generate` with that user_id (i.e. krrish3@berri.ai) and:
+- **Budget Check**: krrish3@berri.ai's budget (i.e. $10) will be checked for this key
+- **비용 추적**: spend for this key will update krrish3@berri.ai's spend as well
 
 ```bash
 curl --location 'http://0.0.0.0:4000/key/generate' \
@@ -267,20 +267,20 @@ curl --location 'http://0.0.0.0:4000/key/generate' \
 
 ### Virtual Key
 
-key에 budget을 적용합니다.
+Apply a budget on a key.
 
-가능한 작업:
-- key에 budget 추가
-- spend reset을 위한 budget duration 추가
+You can:
+- Add budgets to keys [**Jump**](#add-budgets-to-keys)
+- Add budget durations, to reset spend [**Jump**](#add-budget-duration-to-keys)
 
-**예상 동작**
-- key별 cost는 `LiteLLM_VerificationToken` table에 자동 입력됩니다.
-- key가 `max_budget`을 넘으면 request가 실패합니다.
-- duration이 설정되어 있으면 duration 끝에서 spend가 reset됩니다.
+**Expected Behaviour**
+- Costs Per key get auto-populated in `LiteLLM_VerificationToken` Table
+- After the key crosses it's `max_budget`, requests fail
+- If duration set, spend is reset at the end of the duration
 
-기본적으로 `max_budget`은 `null`로 설정되며 key에 대해 검사되지 않습니다.
+By default the `max_budget` is set to `null` and is not checked for keys
 
-#### **key에 budget 추가** {#add-budgets-to-virtual-keys}
+#### **Add budgets to keys**
 
 ```bash
 curl 'http://0.0.0.0:4000/key/generate' \
@@ -292,7 +292,7 @@ curl 'http://0.0.0.0:4000/key/generate' \
 }'
 ```
 
-key가 budget을 초과했을 때 `/chat/completions` 예제 request
+예제 Request to `/chat/completions` when key has crossed budget
 
 ```shell
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -311,16 +311,16 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 ```
 
 
-key가 budget을 초과했을 때 `/chat/completions`의 예상 response
+Expected Response from `/chat/completions` when key has crossed budget
 ```shell
 {
   "detail":"Authentication Error, ExceededTokenBudget: Current spend for token: 7.2e-05; Max Budget for Token: 2e-07"
-}   
+}
 ```
 
-#### **key에 budget duration 추가** {#add-budget-duration-to-virtual-keys}
+#### **Add budget duration to keys**
 
-`budget_duration`: 지정한 duration이 끝나면 budget이 reset됩니다. 설정하지 않으면 budget은 reset되지 않습니다. duration은 seconds("30s"), minutes("30m"), hours("30h"), days("30d")로 설정할 수 있습니다.
+`budget_duration`: Budget is reset at the end of specified duration. If not set, budget is never reset. You can set duration as seconds ("30s"), minutes ("30m"), hours ("30h"), days ("30d").
 
 ```
 curl 'http://0.0.0.0:4000/key/generate' \
@@ -333,27 +333,27 @@ curl 'http://0.0.0.0:4000/key/generate' \
 }'
 ```
 
-#### **key에 여러 budget window 설정**
+#### **Set multiple budget windows on a key**
 
-동일한 key에 서로 다른 시간 단위의 여러 concurrent budget limit을 적용합니다. 예를 들어 key를 **$10/day** 그리고 **$100/month**로 제한할 수 있습니다.
+Apply multiple concurrent budget limits at different time scales on the same key — for example, cap a key at **$10/day** AND **$100/month**.
 
-**언제 유용한가요?**
+**When is this useful?**
 
-단일 `budget_duration` window만으로는 하루의 비정상 사용량이 월 전체 예산을 소진하는 것을 막기 어렵습니다. 여러 budget window를 사용하면 다음이 가능합니다.
+A single `budget_duration` window can't prevent a bad day from burning your entire month. Multiple budget windows let you:
 
-- 정상적인 월간 spend는 허용하면서 하루 안의 급격한 usage spike를 차단합니다.
-- Claude Code rollout에 daily guardrail(`24h`)과 monthly ceiling(`30d`)을 함께 적용해 단일 heavy session이 한 달 budget을 모두 소진하지 않게 합니다.
-- bursty workload에 주간 cap 위로 세밀한 hourly limit을 계층화합니다.
+- Block a runaway usage spike within the day while still allowing normal monthly spend.
+- Give Claude Code rollouts a daily guardrail (`24h`) and a monthly ceiling (`30d`) so a single heavy session doesn't exhaust the whole month.
+- Layer fine-grained hourly limits for bursty workloads on top of a weekly cap.
 
 :::info
 
-key, team, user 전반에서 budget이 동작하는 방식은 [User Budget docs](https://docs.litellm.ai/docs/proxy/users)를 참고하세요.
+See [User Budget docs](https://docs.litellm.ai/docs/proxy/users) for more on how budgets work across keys, teams, and users.
 
 :::
 
-**API 사용**
+**Via API**
 
-`budget_limits`를 `{budget_duration, max_budget}` object 목록으로 전달합니다.
+Pass `budget_limits` as a list of `{budget_duration, max_budget}` objects:
 
 ```bash
 curl 'http://0.0.0.0:4000/key/generate' \
@@ -367,48 +367,48 @@ curl 'http://0.0.0.0:4000/key/generate' \
 }'
 ```
 
-각 window는 독립적으로 추적되며 자체 schedule에 따라 reset됩니다.
+Each window is tracked independently and resets on its own schedule:
 
-| `budget_duration` | reset 시점 |
+| `budget_duration` | Resets |
 |---|---|
-| `1h`  | 매시간 |
-| `24h` | 매일 UTC 자정 |
-| `7d`  | 매주 일요일 UTC 자정 |
-| `30d` | 매월 1일 UTC 자정 |
+| `1h`  | Every hour |
+| `24h` | Daily at midnight UTC |
+| `7d`  | Every Sunday at midnight UTC |
+| `30d` | 1st of every month at midnight UTC |
 
-**Dashboard 사용**
+**Via Dashboard**
 
-**가상 키 → Create Key → Optional Settings → Budget Windows**를 엽니다.
+Open **가상 키 → Create Key → Optional Settings → Budget Windows**.
 
 ![Step 1 - open key settings](https://colony-recorder.s3.amazonaws.com/files/2026-04-01/18930ba5-67c0-4031-afc0-57f37b4e59e4/ascreenshot_ef79d8a000bb41cdacf1bd9827732ee8_text_export.jpeg)
 
-**+ Add Budget Window**를 클릭해 행을 추가하고, 드롭다운에서 기간을 선택한 뒤 spend cap을 입력합니다.
+Click **+ Add Budget Window** to add a row, choose the period from the dropdown, and enter the spend cap.
 
 ![Step 2 - add a window](https://colony-recorder.s3.amazonaws.com/files/2026-04-01/5ae8c0b3-2d03-41ad-a63c-47b20c350dfe/ascreenshot_1a7dc6c7d65544f38fd8a65604674f22_text_export.jpeg)
 
-다른 기간에 대한 두 번째 행을 추가합니다. 예: daily $10 위에 monthly $100 추가.
+Add a second row for a different time period (e.g. monthly $100 on top of a daily $10).
 
 ![Step 3 - add second window](https://colony-recorder.s3.amazonaws.com/files/2026-04-01/cbded3a7-1086-4e20-8f0f-de154b76146c/ascreenshot_c51c18752c3b4f8b976d28799b2638b6_text_export.jpeg)
 
-각 window는 input 아래에 reset schedule을 표시하므로 spend가 언제 reset되는지 항상 명확히 알 수 있습니다.
+Each window shows the reset schedule below the input so it's always clear when spend resets.
 
 ![Step 4 - reset hints](https://colony-recorder.s3.amazonaws.com/files/2026-04-01/8754f121-1640-4892-9dd0-fd4a870418bf/ascreenshot_8079eb0df2194e8f99e5258ba4b3c082_text_export.jpeg)
 
 
-### ✨ Virtual Key(Model별) {#virtual-key-model-specific}
+### ✨ Virtual Key (Model Specific)
 
-key에 model별 budget을 적용합니다. 예:
-- `key = "sk-12345"`에서 `gpt-4o` budget은 기간 `1d` 동안 $0.0000001입니다.
-- `key = "sk-12345"`에서 `gpt-4o-mini` budget은 기간 `30d` 동안 $10입니다.
+Apply model specific budgets on a key. 예제:
+- Budget for `gpt-4o` is $0.0000001, for time period `1d` for `key = "sk-12345"`
+- Budget for `gpt-4o-mini` is $10, for time period `30d` for `key = "sk-12345"`
 
 :::info
 
-✨ 이 기능은 엔터프라이즈 전용입니다. [여기에서 엔터프라이즈 시작하기](https://www.litellm.ai/#pricing)
+✨ This is an 엔터프라이즈 only feature [Get Started with 엔터프라이즈 here](https://www.litellm.ai/#pricing)
 
 :::
 
 
-`model_max_budget` spec은 **[`Dict[str, GenericBudgetInfo]`](#genericbudgetinfo)**입니다.
+The spec for `model_max_budget` is **[`Dict[str, GenericBudgetInfo]`](#genericbudgetinfo)**
 
 ```bash
 curl 'http://0.0.0.0:4000/key/generate' \
@@ -420,14 +420,14 @@ curl 'http://0.0.0.0:4000/key/generate' \
 ```
 
 
-#### test request 실행
+#### Make a test request
 
-Virtual Key에서 `gpt-4o` budget을 넘기 때문에 첫 번째 request는 성공하고 두 번째 request는 실패해야 합니다.
+We expect the first request to succeed, and the second request to fail since we cross the budget for `gpt-4o` on the Virtual Key
 
 **[Langchain, OpenAI SDK 사용법 예제](../proxy/user_keys#request-format)**
 
 <Tabs>
-<TabItem label="성공하는 호출 " value = "allowed">
+<TabItem label="Successful Call " value = "allowed">
 
 ```shell
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -446,9 +446,9 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 ```
 
 </TabItem>
-<TabItem label="실패하는 호출" value = "not-allowed">
+<TabItem label="Unsuccessful call" value = "not-allowed">
 
-Virtual Key에서 `model=gpt-4o` budget을 넘기므로 이 request는 실패해야 합니다.
+Expect this to fail since since we cross the budget `model=gpt-4o` on the Virtual Key
 
 ```shell
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -466,7 +466,7 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 '
 ```
 
-실패 시 예상 response
+Expected response on failure
 
 ```json
 {
@@ -485,16 +485,16 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 
 ### Agents
 
-LiteLLM의 [Agent Gateway](../a2a.md)에 등록된 agent에 budget과 rate limit을 설정합니다. 다음을 제어할 수 있습니다.
-- **agent별 rate limit**: agent 자체의 `tpm_limit` 및 `rpm_limit`
-- **session별 rate limit**: session마다 적용되는 `session_tpm_limit` 및 `session_rpm_limit`
-- **session별 iteration cap**: agent `litellm_params`의 `max_iterations`
-- **session별 budget cap**: agent `litellm_params`의 `max_budget_per_session`
+Set budgets and rate limits on agents registered with LiteLLM's [Agent Gateway](../a2a.md). You can control:
+- **Per-agent rate limits**: `tpm_limit` and `rpm_limit` on the agent itself
+- **Per-session rate limits**: `session_tpm_limit` and `session_rpm_limit` applied per session
+- **Per-session iteration cap**: `max_iterations` in agent `litellm_params`
+- **Per-session budget cap**: `max_budget_per_session` in agent `litellm_params`
 
 <Tabs>
-<TabItem value="agent-rate-limits" label="Agent Rate Limit">
+<TabItem value="agent-rate-limits" label="Agent Rate Limits">
 
-모든 session 전체의 총 throughput을 제한하려면 agent에 `tpm_limit` 및 `rpm_limit`을 설정하세요.
+Set `tpm_limit` and `rpm_limit` on the agent to cap total throughput across all sessions.
 
 ```bash
 curl -X POST 'http://localhost:4000/v1/agents' \
@@ -514,9 +514,9 @@ curl -X POST 'http://localhost:4000/v1/agents' \
 ```
 
 </TabItem>
-<TabItem value="session-rate-limits" label="Session Rate Limit">
+<TabItem value="session-rate-limits" label="Session Rate Limits">
 
-개별 session별 throughput을 제한하려면 `session_tpm_limit` 및 `session_rpm_limit`을 설정하세요.
+Set `session_tpm_limit` and `session_rpm_limit` to cap throughput per individual session.
 
 ```bash
 curl -X POST 'http://localhost:4000/v1/agents' \
@@ -536,9 +536,9 @@ curl -X POST 'http://localhost:4000/v1/agents' \
 ```
 
 </TabItem>
-<TabItem value="session-budgets" label="Session Budget">
+<TabItem value="session-budgets" label="Session Budgets">
 
-개별 session을 제한하려면 agent `litellm_params`에 `max_iterations` 및 `max_budget_per_session`을 설정하세요. LiteLLM이 session별 call을 추적할 수 있도록 `require_trace_id_on_calls_by_agent`가 필요합니다.
+Set `max_iterations` and `max_budget_per_session` in agent `litellm_params` to cap individual sessions. Requires `require_trace_id_on_calls_by_agent` so LiteLLM can track calls per session.
 
 ```bash
 curl -X POST 'http://localhost:4000/v1/agents' \
@@ -560,16 +560,16 @@ curl -X POST 'http://localhost:4000/v1/agents' \
   }'
 ```
 
-session이 limit을 초과하면 request는 **429 Too Many Requests** response를 받습니다.
+When a session exceeds the limit, requests receive a **429 Too Many Requests** response.
 
-전체 세부 정보는 [Agent Iteration Budgets](../a2a_iteration_budgets) guide를 참고하세요.
+See the [Agent Iteration Budgets](../a2a_iteration_budgets) guide for full details.
 
 </TabItem>
 </Tabs>
 
 :::info
 
-기존 agent의 rate limit은 `PATCH /v1/agents/{agent_id}`로도 업데이트할 수 있습니다.
+You can also update rate limits on existing agents using `PATCH /v1/agents/{agent_id}`:
 
 ```bash
 curl -X PATCH 'http://localhost:4000/v1/agents/<agent_id>' \
@@ -588,10 +588,10 @@ curl -X PATCH 'http://localhost:4000/v1/agents/<agent_id>' \
 
 ### Customers
 
-모든 user마다 key를 만들 필요 없이 `/chat/completions`에 전달되는 `user`에 budget을 적용할 때 사용합니다.
+Use this to budget `user` passed to `/chat/completions`, **without needing to create a key for every user**
 
-**1단계. config.yaml 수정**
-`litellm.max_end_user_budget`를 정의합니다.
+**Step 1. Modify config.yaml**
+Define `litellm.max_end_user_budget`
 ```yaml
 general_settings:
   master_key: sk-1234
@@ -600,7 +600,7 @@ litellm_settings:
   max_end_user_budget: 0.0001 # budget for 'user' passed to /chat/completions
 ```
 
-2. /chat/completions call 실행, 'user' 전달 - 첫 call은 동작합니다.
+2. Make a /chat/completions call, pass 'user' - First call Works
 ```shell
 curl --location 'http://0.0.0.0:4000/chat/completions' \
         --header 'Content-Type: application/json' \
@@ -617,7 +617,7 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
         }'
 ```
 
-3. /chat/completions call 실행, 'user' 전달 - 'ishaan3'가 budget을 초과했으므로 call이 실패합니다.
+3. Make a /chat/completions call, pass 'user' - Call Fails, since 'ishaan3' over budget
 ```shell
 curl --location 'http://0.0.0.0:4000/chat/completions' \
         --header 'Content-Type: application/json' \
@@ -634,19 +634,19 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
         }'
 ```
 
-오류
+Error
 ```shell
-{"error":{"message":"Budget has been exceeded: User ishaan3 has exceeded their budget. Current spend: 0.0008869999999999999; Max Budget: 0.0001","type":"auth_error","param":"None","code":401}}%                
+{"error":{"message":"Budget has been exceeded: User ishaan3 has exceeded their budget. Current spend: 0.0008869999999999999; Max Budget: 0.0001","type":"auth_error","param":"None","code":401}}%
 ```
 
-## Budget Reset
+## Reset Budgets
 
-key/internal user/team/customer 전반의 budget을 reset합니다.
+Reset budgets across keys/internal users/teams/customers
 
-`budget_duration`: 지정한 duration이 끝나면 budget이 reset됩니다. 설정하지 않으면 budget은 reset되지 않습니다. duration은 seconds("30s"), minutes("30m"), hours("30h"), days("30d")로 설정할 수 있습니다.
+`budget_duration`: Budget is reset at the end of specified duration. If not set, budget is never reset. You can set duration as seconds ("30s"), minutes ("30m"), hours ("30h"), days ("30d").
 
 <Tabs>
-<TabItem value="users" label="Internal User">
+<TabItem value="users" label="Internal Users">
 
 ```bash
 curl 'http://0.0.0.0:4000/user/new' \
@@ -685,30 +685,45 @@ curl 'http://0.0.0.0:4000/team/new' \
 </TabItem>
 </Tabs>
 
-**참고:** 기본적으로 server는 DB call을 최소화하기 위해 10분마다 reset 여부를 확인합니다.
+**Note:** By default, the server checks for resets every 10 minutes, to minimize DB calls.
 
-이를 변경하려면 `proxy_budget_rescheduler_min_time`과 `proxy_budget_rescheduler_max_time`을 설정하세요.
+To change this, set `proxy_budget_rescheduler_min_time` and `proxy_budget_rescheduler_max_time`
 
-예: 1초마다 확인
+E.g.: Check every 1 seconds
 ```yaml
-general_settings: 
+general_settings:
   proxy_budget_rescheduler_min_time: 1
   proxy_budget_rescheduler_max_time: 1
 ```
 
-## Rate Limit 설정
+## Hard budget enforcement (fail closed)
 
-다음을 설정할 수 있습니다.
-- tpm limit(tokens per minute, 분당 토큰 수)
-- rpm limit(requests per minute, 분당 요청 수)
-- 최대 병렬 request 수
-- 특정 key 또는 team의 model별 rpm / tpm limit
+Budget checks read current spend from a cross-pod counter in Redis, which keeps enforcement fast and consistent across workers and replicas. The counter is the source of truth on the hot path, and the database is reconciled in the background. If Redis restarts and reloads an older snapshot, the counter can come back lower than the spend already recorded in the database; on the hot path that stale value is trusted, which can let a key keep spending past its `max_budget` until the counter is corrected.
 
-### TPM rate limit 유형 {#tpm-rate-limit-type-input-output-total}
+For deployments where a configured budget must be a hard ceiling even while Redis is degraded, set `fail_closed_budget_enforcement`:
 
-기본적으로 TPM(tokens per minute) rate limit은 **전체 token**(input + output)을 계산합니다. 대신 input token만 또는 output token만 계산하도록 설정할 수 있습니다.
+```yaml
+general_settings:
+  fail_closed_budget_enforcement: true
+```
 
-`config.yaml`에서 `token_rate_limit_type`을 설정합니다.
+With it enabled, every budgeted request validates spend against the authoritative database before being admitted (covering key, team, user, organization, end-user, tag, and per-window budgets), so a stale or missing Redis counter cannot under-report spend. The database read is coalesced and cached in-process for a few seconds, so the extra load is bounded to roughly one read per budgeted entity per cache window per worker rather than one read per request. If current spend can be verified against neither Redis nor the database, the request is rejected with a `503` instead of being admitted on an unverifiable budget.
+
+Leave the setting off (the default) to keep healthy under-budget traffic entirely off the database; in the default mode the counter is still cross-checked against the database whenever it reads below the caller's last-known recorded spend, which catches the common stale-counter case without a per-request database read.
+
+## Set Rate Limits
+
+You can set:
+- tpm limits (tokens per minute)
+- rpm limits (requests per minute)
+- max parallel requests
+- rpm / tpm limits per model for a given key or team
+
+### TPM Rate Limit Type (Input/Output/Total)
+
+By default, TPM (tokens per minute) rate limits count **total tokens** (input + output). You can configure this to count only input tokens or only output tokens instead.
+
+Set `token_rate_limit_type` in your `config.yaml`:
 
 ```yaml
 general_settings:
@@ -716,31 +731,31 @@ general_settings:
   token_rate_limit_type: "output"  # Options: "input", "output", "total" (default)
 ```
 
-| 값 | 설명 |
+| Value | Description |
 |-------|-------------|
-| `total` | 전체 token(prompt + completion)을 계산합니다. **기본 동작입니다.** |
-| `input` | prompt/input token만 계산합니다. |
-| `output` | completion/output token만 계산합니다. |
+| `total` | Count total tokens (prompt + completion). **Default behavior.** |
+| `input` | Count only prompt/input tokens |
+| `output` | Count only completion/output tokens |
 
-이 설정은 모든 TPM rate limit 검사(keys, users, teams 등)에 전역으로 적용됩니다.
+This setting applies globally to all TPM rate limit checks (keys, users, teams, etc.).
 
 
 <Tabs>
-<TabItem value="per-team" label="Team별">
+<TabItem value="per-team" label="Per Team">
 
-team의 여러 key에 걸쳐 rate limit을 유지하려면 `/team/new` 또는 `/team/update`를 사용합니다.
+Use `/team/new` or `/team/update`, to persist rate limits across multiple keys for a team.
 
 
 ```shell
 curl --location 'http://0.0.0.0:4000/team/new' \
 --header 'Authorization: Bearer sk-1234' \
 --header 'Content-Type: application/json' \
---data '{"team_id": "my-prod-team", "max_parallel_requests": 10, "tpm_limit": 20, "rpm_limit": 4}' 
+--data '{"team_id": "my-prod-team", "max_parallel_requests": 10, "tpm_limit": 20, "rpm_limit": 4}'
 ```
 
-[**Swagger 보기**](https://litellm-api.up.railway.app/#/team%20management/new_team_team_new_post)
+[**See Swagger**](https://litellm-api.up.railway.app/#/team%20management/new_team_team_new_post)
 
-**예상 response**
+**Expected Response**
 
 ```json
 {
@@ -751,13 +766,13 @@ curl --location 'http://0.0.0.0:4000/team/new' \
 ```
 
 </TabItem>
-<TabItem value="per-team-model" label="Team별 Model별">
+<TabItem value="per-team-model" label="Per Team Per Model">
 
-**team의 model별 rate limit 설정**
+**Set rate limits per model for a team**
 
-team에 속한 모든 key에 대해 model별 rate limit을 설정하려면 `model_rpm_limit`과 `model_tpm_limit`을 사용합니다. 이 limit은 team의 모든 key에 적용되며, key level에서 override하지 않는 한 key가 상속합니다.
+Use `model_rpm_limit` and `model_tpm_limit` to set rate limits per model for all keys belonging to a team. These limits apply across all keys in the team and are inherited by keys unless overridden at the key level.
 
-model 이름을 limit에 매핑하는 dictionary로 `model_rpm_limit`과 `model_tpm_limit`을 지정해 `/team/new` 또는 `/team/update`를 사용합니다.
+Use `/team/new` or `/team/update` with `model_rpm_limit` and `model_tpm_limit` as dictionaries mapping model names to their limits:
 
 ```shell
 curl --location 'http://0.0.0.0:4000/team/new' \
@@ -770,7 +785,7 @@ curl --location 'http://0.0.0.0:4000/team/new' \
 }'
 ```
 
-**기존 team에 model별 limit 적용:**
+**Update existing team with per-model limits:**
 
 ```shell
 curl --location 'http://0.0.0.0:4000/team/update' \
@@ -783,9 +798,9 @@ curl --location 'http://0.0.0.0:4000/team/update' \
 }'
 ```
 
-**대안: metadata 사용**
+**Alternative: Use metadata**
 
-`metadata` field를 통해 model별 limit을 전달할 수도 있습니다.
+You can also pass per-model limits via the `metadata` field:
 
 ```shell
 curl --location 'http://0.0.0.0:4000/team/update' \
@@ -800,28 +815,28 @@ curl --location 'http://0.0.0.0:4000/team/update' \
 }'
 ```
 
-**해석 순서:** key가 team에 속하면 rate limit은 **Key metadata > Key model_max_budget > Team metadata** 순서로 해석됩니다. key는 자체 `model_rpm_limit` 또는 `model_tpm_limit`으로 team level의 model별 limit을 override할 수 있습니다.
+**Resolution order:** When a key belongs to a team, rate limits are resolved as: **Key metadata > Key model_max_budget > Team metadata**. Keys can override team-level per-model limits with their own `model_rpm_limit` or `model_tpm_limit`.
 
-**검증:** `/chat/completions` request를 실행하고 response header `x-litellm-key-remaining-requests-{model}` 및 `x-litellm-key-remaining-tokens-{model}`에서 model별 limit을 확인합니다.
+**Verify:** Make a `/chat/completions` request and check response headers `x-litellm-key-remaining-requests-{model}` and `x-litellm-key-remaining-tokens-{model}` for the model-specific limits.
 
-[**Swagger 보기**](https://litellm-api.up.railway.app/#/team%20management/new_team_team_new_post)
+[**See Swagger**](https://litellm-api.up.railway.app/#/team%20management/new_team_team_new_post)
 
 </TabItem>
-<TabItem value="per-user" label="Internal User별">
+<TabItem value="per-user" label="Per Internal User">
 
-internal user의 여러 key에 걸쳐 rate limit을 유지하려면 `/user/new` 또는 `/user/update`를 사용합니다.
+Use `/user/new` or `/user/update`, to persist rate limits across multiple keys for internal users.
 
 
 ```shell
 curl --location 'http://0.0.0.0:4000/user/new' \
 --header 'Authorization: Bearer sk-1234' \
 --header 'Content-Type: application/json' \
---data '{"user_id": "krrish@berri.ai", "max_parallel_requests": 10, "tpm_limit": 20, "rpm_limit": 4}' 
+--data '{"user_id": "krrish@berri.ai", "max_parallel_requests": 10, "tpm_limit": 20, "rpm_limit": 4}'
 ```
 
-[**Swagger 보기**](https://litellm-api.up.railway.app/#/user%20management/new_user_user_new_post)
+[**See Swagger**](https://litellm-api.up.railway.app/#/user%20management/new_user_user_new_post)
 
-**예상 response**
+**Expected Response**
 
 ```json
 {
@@ -832,18 +847,18 @@ curl --location 'http://0.0.0.0:4000/user/new' \
 ```
 
 </TabItem>
-<TabItem value="per-key" label="Key별">
+<TabItem value="per-key" label="Per Key">
 
-해당 key에만 적용하려면 `/key/generate`를 사용합니다.
+Use `/key/generate`, if you want them for just that key.
 
 ```shell
 curl --location 'http://0.0.0.0:4000/key/generate' \
 --header 'Authorization: Bearer sk-1234' \
 --header 'Content-Type: application/json' \
---data '{"max_parallel_requests": 10, "tpm_limit": 20, "rpm_limit": 4}' 
+--data '{"max_parallel_requests": 10, "tpm_limit": 20, "rpm_limit": 4}'
 ```
 
-**예상 response**
+**Expected Response**
 
 ```json
 {
@@ -854,22 +869,22 @@ curl --location 'http://0.0.0.0:4000/key/generate' \
 ```
 
 </TabItem>
-<TabItem value="per-key-model" label="API Key별 Model별">
+<TabItem value="per-key-model" label="Per API Key Per model">
 
-**api key별 model별 rate limit 설정**
+**Set rate limits per model per api key**
 
-api key마다 model별 rate limit을 설정하려면 `model_rpm_limit`과 `model_tpm_limit`을 설정합니다.
+Set `model_rpm_limit` and `model_tpm_limit` to set rate limits per model per api key
 
-여기서 `gpt-4`는 [litellm config.yaml](configs.md)에 설정된 `model_name`입니다.
+Here `gpt-4` is the `model_name` set on the [litellm config.yaml](configs.md)
 
 ```shell
 curl --location 'http://0.0.0.0:4000/key/generate' \
 --header 'Authorization: Bearer sk-1234' \
 --header 'Content-Type: application/json' \
---data '{"model_rpm_limit": {"gpt-4": 2}, "model_tpm_limit": {"gpt-4":}}' 
+--data '{"model_rpm_limit": {"gpt-4": 2}, "model_tpm_limit": {"gpt-4":}}'
 ```
 
-**예상 response**
+**Expected Response**
 
 ```json
 {
@@ -878,9 +893,9 @@ curl --location 'http://0.0.0.0:4000/key/generate' \
 }
 ```
 
-**이 key의 Model Rate Limit이 올바르게 설정되었는지 확인**
+**Verify Model Rate Limits set correctly for this key**
 
-**/chat/completions request를 보내 `x-litellm-key-remaining-requests-gpt-4`가 반환되는지 확인**
+**Make /chat/completions request check if `x-litellm-key-remaining-requests-gpt-4` returned**
 
 ```shell
 curl -i http://localhost:4000/v1/chat/completions \
@@ -895,24 +910,24 @@ curl -i http://localhost:4000/v1/chat/completions \
 ```
 
 
-**예상 header**
+**Expected headers**
 
 ```shell
 x-litellm-key-remaining-requests-gpt-4: 1
 x-litellm-key-remaining-tokens-gpt-4: 179
 ```
 
-이 header는 다음을 의미합니다.
+These headers indicate:
 
-- key=`sk-ulGNRXWtv7M0lFnnsQk0wQ`에서 GPT-4 model에 남은 request 1개
-- key=`sk-ulGNRXWtv7M0lFnnsQk0wQ`에서 GPT-4 model에 남은 token 179개
+- 1 request remaining for the GPT-4 model for key=`sk-ulGNRXWtv7M0lFnnsQk0wQ`
+- 179 tokens remaining for the GPT-4 model for key=`sk-ulGNRXWtv7M0lFnnsQk0wQ`
 
 </TabItem>
-<TabItem value="per-agent" label="Agent별">
+<TabItem value="per-agent" label="Per Agent">
 
-[Agent Gateway](../a2a.md)에 등록된 agent에 rate limit을 설정합니다.
+Set rate limits on agents registered with the [Agent Gateway](../a2a.md).
 
-**Agent-level limit**은 모든 session 전체의 총 throughput을 제한합니다.
+**Agent-level limits** cap total throughput across all sessions:
 
 ```shell
 curl -X POST 'http://0.0.0.0:4000/v1/agents' \
@@ -921,7 +936,7 @@ curl -X POST 'http://0.0.0.0:4000/v1/agents' \
 --data '{"agent_name": "my-agent", "agent_card_params": {"name": "my-agent", "description": "My agent", "url": "http://my-agent:8080", "version": "1.0.0"}, "tpm_limit": 100000, "rpm_limit": 100}'
 ```
 
-**Session-level limit**은 개별 session별 throughput을 제한합니다.
+**Session-level limits** cap throughput per individual session:
 
 ```shell
 curl -X POST 'http://0.0.0.0:4000/v1/agents' \
@@ -930,22 +945,22 @@ curl -X POST 'http://0.0.0.0:4000/v1/agents' \
 --data '{"agent_name": "my-agent", "agent_card_params": {"name": "my-agent", "description": "My agent", "url": "http://my-agent:8080", "version": "1.0.0"}, "session_tpm_limit": 50000, "session_rpm_limit": 50}'
 ```
 
-`litellm_params`를 통해 session별 **max_iterations**(call count cap)와 **max_budget_per_session**(dollar cap)도 설정할 수 있습니다. 자세한 내용은 [Agent Iteration Budgets](../a2a_iteration_budgets)를 참고하세요.
+You can also set **max_iterations** (call count cap) and **max_budget_per_session** (dollar cap) per session via `litellm_params`. See [Agent Iteration Budgets](../a2a_iteration_budgets) for details.
 
 </TabItem>
-<TabItem value="per-end-user" label="Customer용">
+<TabItem value="per-end-user" label="For customers">
 
-:::info 
+:::info
 
-UI의 'Rate Limits' tab에서 customer용 budget id를 생성할 수도 있습니다.
+You can also create a budget id for a customer on the UI, under the 'Rate Limits' tab.
 
 :::
 
-모든 user마다 key를 만들 필요 없이 `/chat/completions`에 전달되는 `user`의 rate limit을 설정할 때 사용합니다.
+Use this to set rate limits for `user` passed to `/chat/completions`, without needing to create a key for every user
 
-#### 1단계. Budget 생성
+#### Step 1. Create Budget
 
-budget에 `tpm_limit`을 설정합니다. 필요한 경우 `rpm_limit`도 전달할 수 있습니다.
+Set a `tpm_limit` on the budget (You can also pass `rpm_limit` if needed)
 
 ```shell
 curl --location 'http://0.0.0.0:4000/budget/new' \
@@ -958,9 +973,9 @@ curl --location 'http://0.0.0.0:4000/budget/new' \
 ```
 
 
-#### 2단계. Budget이 있는 `Customer` 생성
+#### Step 2. Create `Customer` with Budget
 
-새 customer를 생성할 때 1단계의 `budget_id="free-tier"`를 사용합니다.
+We use `budget_id="free-tier"` from Step 1 when creating this new customers
 
 ```shell
 curl --location 'http://0.0.0.0:4000/customer/new' \
@@ -973,9 +988,9 @@ curl --location 'http://0.0.0.0:4000/customer/new' \
 ```
 
 
-#### 3단계. `/chat/completions` request에 `user_id` 전달
+#### Step 3. Pass `user_id` id in `/chat/completions` requests
 
-2단계의 `user_id`를 `user="palantir"`로 전달합니다.
+Pass the `user_id` from Step 2 as `user="palantir"`
 
 ```shell
 curl --location 'http://localhost:4000/chat/completions' \
@@ -997,18 +1012,18 @@ curl --location 'http://localhost:4000/chat/completions' \
 </TabItem>
 </Tabs>
 
-## 모든 internal user의 기본 budget 설정
+## Set default budget for ALL internal users
 
-key를 발급한 user의 기본 budget을 설정할 때 사용합니다.
+Use this to set a default budget for users who you give keys to.
 
-user가 [`user_role="internal_user"`](./self_serve.md#available-roles)를 가질 때 적용됩니다(`/user/new` 또는 `/user/update`로 설정).
+This will apply when a user has [`user_role="internal_user"`](./self_serve.md#available-roles) (set this via `/user/new` or `/user/update`).
 
-key에 team_id가 있으면 적용되지 않습니다. 이 경우 team budget이 적용됩니다. [개선 의견을 알려주세요!](https://github.com/BerriAI/litellm/issues)
+This will NOT apply if a key has a team_id (team budgets will apply then). [Tell us how we can improve this!](https://github.com/BerriAI/litellm/issues)
 
-1. config.yaml에서 max budget을 정의합니다.
+1. Define max budget in your config.yaml
 
 ```yaml
-model_list: 
+model_list:
   - model_name: "gpt-3.5-turbo"
     litellm_params:
       model: gpt-3.5-turbo
@@ -1019,7 +1034,7 @@ litellm_settings:
   internal_user_budget_duration: "1mo" # reset every month
 ```
 
-2. user용 key를 생성합니다.
+2. Create key for user
 
 ```bash
 curl -L -X POST 'http://0.0.0.0:4000/key/generate' \
@@ -1028,7 +1043,7 @@ curl -L -X POST 'http://0.0.0.0:4000/key/generate' \
 -d '{}'
 ```
 
-예상 response:
+Expected Response:
 
 ```bash
 {
@@ -1037,7 +1052,7 @@ curl -L -X POST 'http://0.0.0.0:4000/key/generate' \
 }
 ```
 
-3. 테스트합니다.
+3. Test it!
 
 ```bash
 curl -L -X POST 'http://0.0.0.0:4000/chat/completions' \
@@ -1049,7 +1064,7 @@ curl -L -X POST 'http://0.0.0.0:4000/chat/completions' \
 }'
 ```
 
-예상 response:
+Expected Response:
 
 ```bash
 {
@@ -1062,26 +1077,26 @@ curl -L -X POST 'http://0.0.0.0:4000/chat/completions' \
 }
 ```
 
-### 다중 인스턴스 rate limit {#multi-instance-rate-limiting}
+### Multi-instance rate limiting
 
 
-**중요 참고:**
-- **Rate limit은 proxy admin user에게 적용되지 않습니다.**
-- rate limit을 테스트할 때는 limit이 예상대로 강제되는지 확인할 수 있도록 internal user role(non-admin)을 사용하세요.
+**Important 참고:**
+- **Rate limits do not apply to proxy admin users.**
+- When testing rate limits, use internal user roles (non-admin) to ensure limits are enforced as expected.
 
-변경 사항:
-- 현재 request/token을 업데이트할 때 `async_set_cache` 대신 `async_increment`를 사용하도록 변경했습니다.
-- 모든 request마다 redis를 호출하지 않도록 in-memory cache를 0.01초마다 redis와 동기화합니다.
-- 테스트 결과 이전 구현보다 2배 빠르며, high-traffic(3개 instance에서 100 RPS)에서도 예상 실패 수와 실제 실패 수의 차이를 최대 10 request로 줄였습니다.
+Changes:
+- This moves to using async_increment instead of async_set_cache when updating current requests/tokens.
+- The in-memory cache is synced with redis every 0.01s, to avoid calling redis for every request.
+- In testing, this was found to be 2x faster than the previous implementation, and reduced drift between expected and actual fails to at most 10 requests at high-traffic (100 RPS across 3 instances).
 
 
-## 새 model 접근 권한 부여
+## Grant Access to new model
 
-model access group을 사용해 user에게 특정 model 접근 권한을 부여하고, 시간이 지나면서 새 model을 추가할 수 있습니다(예: mistral, llama-2 등).
+Use model access groups to give users access to select models, and add new ones to it over time (e.g. mistral, llama-2, etc.).
 
-`/key/generate`와 `/user/new`로 설정하는 것의 차이는 무엇인가요? `/user/new`에서 설정하면 해당 user에 대해 생성되는 여러 key에 걸쳐 유지됩니다.
+Difference between doing this with `/key/generate` vs. `/user/new`? If you do it on `/user/new` it'll persist across multiple keys generated for that user.
 
-**1단계. config.yaml에서 model과 access group 지정**
+**Step 1. Assign model, access group in config.yaml**
 
 ```yaml
 model_list:
@@ -1095,7 +1110,7 @@ model_list:
       access_groups: ["beta-models"] # 👈 Model Access Group
 ```
 
-**2단계. access group이 있는 key 생성**
+**Step 2. Create key with access group**
 
 ```bash
 curl --location 'http://localhost:4000/user/new' \
@@ -1106,9 +1121,9 @@ curl --location 'http://localhost:4000/user/new' \
 ```
 
 
-## 기존 internal user의 새 key 생성
+## Create new keys for existing internal user
 
-`/key/generate` request에 user_id만 포함하면 됩니다.
+Just include user_id in the `/key/generate` request.
 
 ```bash
 curl --location 'http://0.0.0.0:4000/key/generate' \
@@ -1118,11 +1133,11 @@ curl --location 'http://0.0.0.0:4000/key/generate' \
 ```
 
 
-## API 사양
+## API Specification
 
 ### `GenericBudgetInfo`
 
-time period와 limit이 있는 budget 정보를 정의하는 Pydantic model입니다.
+A Pydantic model that defines budget information with a time period and limit.
 
 ```python
 class GenericBudgetInfo(BaseModel):
@@ -1130,13 +1145,13 @@ class GenericBudgetInfo(BaseModel):
     time_period: str    # Duration string like "1d", "30d", etc.
 ```
 
-#### Field:
-- `budget_limit` (float): USD 기준 최대 budget 금액
-- `time_period` (str): budget의 time period를 지정하는 duration string. 지원 형식:
-  - 초: "30s"
-  - 분: "30m"
-  - 시간: "30h"
-  - 일: "30d"
+#### Fields:
+- `budget_limit` (float): The maximum budget amount in USD
+- `time_period` (str): Duration string specifying the time period for the budget. Supported formats:
+  - Seconds: "30s"
+  - Minutes: "30m"
+  - Hours: "30h"
+  - Days: "30d"
 
 #### 예제:
 ```json

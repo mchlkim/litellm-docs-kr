@@ -21,10 +21,6 @@ general_settings:
   proxy_batch_write_at: 60 # Batch write spend updates every 60s
   database_connection_pool_limit: 10 # connection pool limit per worker process. Total connections = limit × workers × instances. Calculate: MAX_DB_CONNECTIONS / (instances × workers). Default: 10.
 
-:::warning
-**Multiple instances:** If running multiple LiteLLM instances (e.g., Kubernetes pods), remember each instance multiplies your total connections. Example: 3 instances × 4 workers × 10 connections = 120 total connections.
-:::
-
   # OPTIONAL Best Practices
   disable_error_logs: True # turn off writing LLM Exceptions to DB
   allow_requests_on_db_unavailable: True # Only USE when running LiteLLM on your VPC. Allow requests to still be processed even if the DB is unavailable. We recommend doing this if you're running LiteLLM on VPC that cannot be accessed from the public internet.
@@ -34,6 +30,11 @@ litellm_settings:
   set_verbose: False      # Switch off Debug Logging, ensure your logs do not have any debugging on
   json_logs: true         # Get debug logs in json format
 ```
+:::warning Multiple instances
+
+If running multiple LiteLLM instances (e.g., Kubernetes pods), remember each instance multiplies your total connections. 예제: 3 instances × 4 workers × 10 connections = 120 total connections.
+
+:::
 
 Set slack webhook url in your env
 ```shell
@@ -47,7 +48,7 @@ export LITELLM_LOG="ERROR"
 
 :::info
 
-Need Help or want dedicated support ? Talk to a founder [here]: (https://enterprise.litellm.ai/demo)
+Need Help or want dedicated support ? Talk to a founder [here](https://enterprise.litellm.ai/demo).
 
 :::
 
@@ -78,13 +79,13 @@ targetMemoryUtilizationPercentage: 80
 
 ## 3. Choose your server: Uvicorn vs. Gunicorn
 
-LiteLLM Proxy runs on [Uvicorn](https://www.uvicorn.org/) by default. Passing `--run_gunicorn` instead starts [Gunicorn](https://docs.gunicorn.org/en/stable/) as a process manager that supervises [Uvicorn worker processes](https://www.uvicorn.org/deployment/#gunicorn) (`uvicorn.workers.UvicornWorker`). In both cases your application code still runs on Uvicorn; the difference is which process manages and recycles the workers.
+LiteLLM Proxy runs on [Uvicorn](https://uvicorn.dev/) by default. Passing `--run_gunicorn` instead starts [Gunicorn](https://gunicorn.org/) as a process manager that supervises [Uvicorn worker processes](https://uvicorn.dev/deployment/#gunicorn) (`uvicorn.workers.UvicornWorker`). In both cases your application code still runs on Uvicorn; the difference is which process manages and recycles the workers.
 
 | | Uvicorn (default) | Gunicorn (`--run_gunicorn`) |
 |---|---|---|
 | **When to use** | Recommended for almost all deployments, especially Kubernetes with one worker per pod. | Choose when you run **multiple workers in a single container** and want a mature process manager to supervise and recycle them. |
-| **Worker recycling** | Uvicorn's [`limit_max_requests`](https://www.uvicorn.org/settings/#resource-limits). | Gunicorn's [`max_requests`](https://docs.gunicorn.org/en/stable/settings.html#max-requests), the battle-tested mechanism Gunicorn has shipped for years. |
-| **Process supervision** | Uvicorn's built-in multiprocess manager. | Gunicorn's [arbiter](https://docs.gunicorn.org/en/stable/design.html), which restarts workers one at a time as they exit. |
+| **Worker recycling** | Uvicorn's [`limit_max_requests`](https://uvicorn.dev/settings/#resource-limits). | Gunicorn's [`max_requests`](https://gunicorn.org/reference/settings/#max_requests), the battle-tested mechanism Gunicorn has shipped for years. |
+| **Process supervision** | Uvicorn's built-in multiprocess manager. | Gunicorn's [arbiter](https://gunicorn.org/design/#arbiter), which restarts workers one at a time as they exit. |
 
 :::tip Recommendation
 
@@ -102,7 +103,7 @@ CMD ["--port", "4000", "--config", "./proxy_server_config.yaml", "--num_workers"
 
 ### 3b. Recycle workers with `--max_requests_before_restart`
 
-If you observe gradual memory growth under sustained load, recycle each worker after a fixed number of requests to bound memory usage. `--max_requests_before_restart` maps to Uvicorn's [`limit_max_requests`](https://www.uvicorn.org/settings/#resource-limits) (default server) and to Gunicorn's [`max_requests`](https://docs.gunicorn.org/en/stable/settings.html#max-requests) under `--run_gunicorn`. Configure it via CLI flag or environment variable:
+If you observe gradual memory growth under sustained load, recycle each worker after a fixed number of requests to bound memory usage. `--max_requests_before_restart` maps to Uvicorn's [`limit_max_requests`](https://uvicorn.dev/settings/#resource-limits) (default server) and to Gunicorn's [`max_requests`](https://gunicorn.org/reference/settings/#max_requests) under `--run_gunicorn`. Configure it via CLI flag or environment variable:
 
 ```shell
 # CLI
@@ -114,7 +115,7 @@ export MAX_REQUESTS_BEFORE_RESTART=10000
 
 :::tip
 
-When you run **multiple workers in one container** and rely on `--max_requests_before_restart`, prefer `--run_gunicorn`. Gunicorn's [`max_requests`](https://docs.gunicorn.org/en/stable/settings.html#max-requests) recycling is more mature than Uvicorn's, and its [arbiter](https://docs.gunicorn.org/en/stable/design.html) restarts workers one at a time so the pod keeps serving traffic while a worker is replaced.
+When you run **multiple workers in one container** and rely on `--max_requests_before_restart`, prefer `--run_gunicorn`. Gunicorn's [`max_requests`](https://gunicorn.org/reference/settings/#max_requests) recycling is more mature than Uvicorn's, and its [arbiter](https://gunicorn.org/design/#arbiter) restarts workers one at a time so the pod keeps serving traffic while a worker is replaced.
 
 :::
 
@@ -123,17 +124,24 @@ When you run **multiple workers in one container** and rely on `--max_requests_b
 CMD ["--port", "4000", "--config", "./proxy_server_config.yaml", "--num_workers", "4", "--run_gunicorn", "--max_requests_before_restart", "10000"]
 ```
 
+When several workers boot together and serve a similar amount of traffic, they reach the request threshold at almost the same time and recycle in lockstep, dropping a chunk of capacity at once. Add `--max_requests_before_restart_jitter` to offset each worker's threshold by a random amount in `[0, jitter]` so restarts stagger instead of synchronizing. It maps to Uvicorn's [`limit_max_requests_jitter`](https://uvicorn.dev/settings/#resource-limits) (requires `uvicorn>=0.41.0`) and Gunicorn's [`max_requests_jitter`](https://gunicorn.org/reference/settings/#max_requests_jitter), and has no effect without `--max_requests_before_restart`.
+
+```shell
+# Stagger recycling so workers don't all restart at once
+CMD ["--port", "4000", "--config", "./proxy_server_config.yaml", "--num_workers", "4", "--run_gunicorn", "--max_requests_before_restart", "10000", "--max_requests_before_restart_jitter", "1000"]
+```
+
 ### 3c. Keep restarts hitless
 
 A restart is "hitless" when in-flight requests finish before the process exits, so no client sees a dropped connection. Two cases matter in production:
 
-**Worker recycling (from `--max_requests_before_restart`).** Both servers stop accepting new connections on the recycled worker and let outstanding requests drain before it exits, then a replacement worker starts. Gunicorn additionally guarantees in-flight requests up to its [`graceful_timeout`](https://docs.gunicorn.org/en/stable/settings.html#graceful-timeout) (30s by default) on [`SIGTERM`](https://docs.gunicorn.org/en/stable/signals.html). With one worker per pod, recycling briefly reduces that pod's capacity, which is why we recommend scaling horizontally so the load balancer can route around it.
+**Worker recycling (from `--max_requests_before_restart`).** Both servers stop accepting new connections on the recycled worker and let outstanding requests drain before it exits, then a replacement worker starts. Gunicorn additionally guarantees in-flight requests up to its [`graceful_timeout`](https://gunicorn.org/reference/settings/#graceful_timeout) (30s by default) on [`SIGTERM`](https://gunicorn.org/signals/). With one worker per pod, recycling briefly reduces that pod's capacity, which is why we recommend scaling horizontally so the load balancer can route around it.
 
 **Rolling deploys and pod restarts (Kubernetes).** Make restarts hitless at the orchestration layer rather than relying on the server alone:
 
 - Use a [`RollingUpdate`](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) strategy (the Deployment default) so new pods become Ready before old pods are terminated.
 - Keep a [readiness probe](https://kubernetes.io/docs/concepts/configuration/liveness-readiness-startup-probes/) on `/health/readiness` so Kubernetes only sends traffic to pods that can serve it, and stops routing to a pod as soon as termination begins.
-- Set [`terminationGracePeriodSeconds`](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#pod-termination) to comfortably exceed your longest expected request (LiteLLM's request timeout defaults to 600s; see [Section 1](#1-use-this-configyaml)). On termination Kubernetes sends `SIGTERM`, and both Uvicorn and Gunicorn shut down [gracefully](https://www.uvicorn.org/deployment/) by draining in-flight requests before exiting.
+- Set [`terminationGracePeriodSeconds`](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#pod-termination) to comfortably exceed your longest expected request (LiteLLM's request timeout defaults to 600s; see [Section 1](#1-use-this-configyaml)). On termination Kubernetes sends `SIGTERM`, and both Uvicorn and Gunicorn shut down [gracefully](https://uvicorn.dev/deployment/) by draining in-flight requests before exiting.
 - Optionally add a small [`preStop` hook](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/#container-hooks) (for example `sleep 5`) to give the load balancer time to deregister the pod before the server begins shutting down, eliminating the brief window where traffic can still arrive at a terminating pod.
 
 ```yaml title="Kubernetes Deployment snippet for hitless rolling restarts"

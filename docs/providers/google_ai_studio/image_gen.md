@@ -1,22 +1,22 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Google AI Studio 이미지 생성 {#google-ai-studio-image-generation}
+# Google AI Studio Image Generation
 
-Google AI Studio는 Google의 Imagen 모델을 사용해 텍스트 설명에서 고품질 이미지를 생성하는 강력한 이미지 생성 기능을 제공합니다.
+Google AI Studio provides powerful image generation capabilities using Google's Imagen models to create high-quality images from text descriptions.
 
 ## 개요
 
-| 속성 | 세부 정보 |
+| Property | Details |
 |----------|---------|
-| 설명 | Google AI Studio Image Generation은 Google의 Imagen 모델을 사용해 텍스트 설명에서 고품질 이미지를 생성합니다. |
-| LiteLLM Provider 라우트 | `gemini/` |
-| Provider 문서 | [Google AI Studio Image Generation ↗](https://ai.google.dev/gemini-api/docs/imagen) |
-| 지원 작업 | [`/images/generations`](#image-generation) |
+| Description | Google AI Studio Image Generation uses Google's Imagen models to generate high-quality images from text descriptions. |
+| Provider Route on LiteLLM | `gemini/` |
+| Provider Doc | [Google AI Studio Image Generation ↗](https://ai.google.dev/gemini-api/docs/imagen) |
+| Supported Operations | [`/images/generations`](#image-generation) |
 
-## 설정 {#setup}
+## Setup
 
-### API 키 {#api-key}
+### API Key
 
 ```python showLineNumbers
 # Set your Google AI Studio API key
@@ -24,14 +24,14 @@ import os
 os.environ["GEMINI_API_KEY"] = "your-api-key-here"
 ```
 
-[Google AI Studio](https://aistudio.google.com/app/apikey)에서 API 키를 가져오세요.
+Get your API key from [Google AI Studio](https://aistudio.google.com/app/apikey).
 
-## 이미지 생성 {#image-generation}
+## Image Generation
 
 ### 사용법 - LiteLLM Python SDK
 
 <Tabs>
-<TabItem value="basic" label="기본 사용법">
+<TabItem value="basic" label="Basic Usage">
 
 ```python showLineNumbers title="Basic Image Generation"
 import litellm
@@ -51,7 +51,7 @@ print(response.data[0].url)
 
 </TabItem>
 
-<TabItem value="async" label="비동기 사용법">
+<TabItem value="async" label="Async Usage">
 
 ```python showLineNumbers title="Async Image Generation"
 import litellm
@@ -78,7 +78,7 @@ asyncio.run(generate_image())
 
 </TabItem>
 
-<TabItem value="advanced" label="고급 파라미터">
+<TabItem value="advanced" label="Advanced Parameters">
 
 ```python showLineNumbers title="Advanced Image Generation with Parameters"
 import litellm
@@ -106,7 +106,7 @@ for image in response.data:
 
 ### 사용법 - LiteLLM Proxy Server
 
-#### 1. config.yaml 구성 {#1-configure-your-configyaml}
+#### 1. Configure your config.yaml
 
 ```yaml showLineNumbers title="Google AI Studio Image Generation Configuration"
 model_list:
@@ -121,7 +121,7 @@ general_settings:
   master_key: sk-1234
 ```
 
-#### 2. LiteLLM Proxy Server 시작 {#2-start-litellm-proxy-server}
+#### 2. Start LiteLLM Proxy Server
 
 ```bash showLineNumbers title="Start LiteLLM Proxy Server"
 litellm --config /path/to/config.yaml
@@ -129,7 +129,7 @@ litellm --config /path/to/config.yaml
 # RUNNING on http://0.0.0.0:4000
 ```
 
-#### 3. OpenAI Python SDK로 요청 보내기 {#3-make-requests-with-openai-python-sdk}
+#### 3. Make requests with OpenAI Python SDK
 
 <Tabs>
 <TabItem value="openai-sdk" label="OpenAI SDK">
@@ -191,24 +191,58 @@ curl --location 'http://localhost:4000/v1/images/generations' \
 </TabItem>
 </Tabs>
 
+## Gemini Image 모델
+
+Gemini image models (e.g. `gemini-3.1-flash-image-preview`, `gemini-3-pro-image-preview`) use the `generateContent` API and return base64 images. They also support **Google Search grounding** on `/v1/images/generations`.
+
+```python showLineNumbers title="Gemini image generation with Google Search"
+import litellm
+import os
+
+os.environ["GEMINI_API_KEY"] = "your-api-key-here"
+
+response = litellm.image_generation(
+    model="gemini/gemini-3.1-flash-image-preview",
+    prompt="Generate an image of the latest iPhone design",
+    web_search_options={},
+)
+
+print(response.data[0].b64_json)
+```
+
+```bash showLineNumbers title="Proxy request with web_search_options"
+curl --location 'http://localhost:4000/v1/images/generations' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer sk-1234' \
+--data '{
+    "model": "gemini-3.1-flash-image-preview",
+    "prompt": "Generate an image of the latest iPhone design",
+    "web_search_options": {}
+}'
+```
+
+You can also pass `tools=[{"type": "web_search"}]` or native `tools=[{"googleSearch": {}}]`.
+
 ## 지원 파라미터
 
-Google AI Studio Image Generation은 다음 OpenAI 호환 파라미터를 지원합니다.
+Google AI Studio Image Generation supports the following OpenAI-compatible parameters:
 
-| 파라미터 | 타입 | 설명 | 기본값 | 예제 |
+| Parameter | Type | Description | Default | 예제 |
 |-----------|------|-------------|---------|---------|
-| `prompt` | string | 생성할 이미지의 텍스트 설명 | 필수 | `"A sunset over the ocean"` |
-| `model` | string | 생성에 사용할 모델 | 필수 | `"gemini/imagen-4.0-generate-001"` |
-| `n` | integer | 생성할 이미지 수 (1-4) | `1` | `2` |
-| `size` | string | 이미지 크기 | `"1024x1024"` | `"512x512"`, `"1024x1024"` |
+| `prompt` | string | Text description of the image to generate | Required | `"A sunset over the ocean"` |
+| `model` | string | The model to use for generation | Required | `"gemini/imagen-4.0-generate-001"` |
+| `n` | integer | Number of images to generate (1-4) | `1` | `2` |
+| `size` | string | Image dimensions | `"1024x1024"` | `"512x512"`, `"1024x1024"` |
+| `web_search_options` | object | Enable Google Search grounding (Gemini image models only) | - | `{}` |
+| `tools` | array | Pass `{"type": "web_search"}` or `{"googleSearch": {}}` (Gemini image models only) | - | `[{"type": "web_search"}]` |
 
-1. [Google AI Studio](https://aistudio.google.com/)에서 계정을 만듭니다.
-2. [API 키 섹션](https://aistudio.google.com/app/apikey)에서 API 키를 생성합니다.
-3. `GEMINI_API_KEY` 환경 변수를 설정합니다.
-4. LiteLLM을 사용해 이미지 생성을 시작합니다.
+1. Create an account at [Google AI Studio](https://aistudio.google.com/)
+2. Generate an API key from [API Keys section](https://aistudio.google.com/app/apikey)
+3. Set your `GEMINI_API_KEY` environment variable
+4. Start generating images using LiteLLM
 
-## 추가 리소스 {#additional-resources}
+## Additional Resources
 
-- [Google AI Studio 문서](https://ai.google.dev/gemini-api/docs)
+- [Google AI Studio Documentation](https://ai.google.dev/gemini-api/docs)
 - [Imagen Model 개요](https://ai.google.dev/gemini-api/docs/imagen)
-- [LiteLLM Image Generation 가이드](../../completion/image_generation)
+- [LiteLLM Image Generation Guide](../../completion/image_generation)

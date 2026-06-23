@@ -23,7 +23,7 @@ xAI realtime 모델을 포함한 설정 파일을 만듭니다.
 model_list:
   - model_name: grok-voice-agent
     litellm_params:
-      model: xai/grok-2-vision-1212
+      model: xai/grok-voice-latest
       api_key: os.environ/XAI_API_KEY
     model_info:
       mode: realtime
@@ -170,7 +170,7 @@ if __name__ == "__main__":
 ## 예상 출력 {#expected-output}
 
 ```
-✅ Connected: conversation.created
+✅ Connected: session.created
 Hello! Here's a joke for you: Why don't scientists trust atoms? 
 Because they make up everything!
 

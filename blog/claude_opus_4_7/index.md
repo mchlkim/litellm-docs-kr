@@ -1,12 +1,12 @@
 ---
 slug: claude_opus_4_7
-title: "출시 당일 지원: Claude Opus 4.7"
+title: "Day 0 Support: Claude Opus 4.7"
 date: 2026-04-16T10:00:00
 authors:
   - sameer
   - ishaan-alt
   - krrish
-description: "LiteLLM AI Gateway에서 Claude Opus 4.7을 출시 당일부터 Anthropic, Azure, Vertex AI, Bedrock 전반에 사용할 수 있습니다."
+description: "Day 0 support for Claude Opus 4.7 on LiteLLM AI Gateway - use across Anthropic, Azure, Vertex AI, and Bedrock."
 tags: [anthropic, claude, opus 4.7]
 hide_table_of_contents: false
 ---
@@ -14,11 +14,11 @@ hide_table_of_contents: false
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-LiteLLM은 [Claude Opus 4.7](https://www.anthropic.com/news/claude-opus-4-7)을 출시 당일부터 지원합니다. LiteLLM AI Gateway를 통해 Anthropic, Azure, Vertex AI, Bedrock 전반에서 같은 방식으로 사용할 수 있습니다.
+LiteLLM now supports [Claude Opus 4.7](https://www.anthropic.com/news/claude-opus-4-7) on Day 0. Use it across Anthropic, Azure, Vertex AI, and Bedrock through the LiteLLM AI Gateway.
 
 {/* truncate */}
 
-## Docker 이미지
+## Docker Image
 
 ```bash
 docker pull ghcr.io/berriai/litellm:litellm_stable_release_branch-v1.83.3-stable.opus-4.7
@@ -29,7 +29,7 @@ docker pull ghcr.io/berriai/litellm:litellm_stable_release_branch-v1.83.3-stable
 <Tabs>
 <TabItem value="proxy" label="LiteLLM Proxy">
 
-**1. config.yaml 설정**
+**1. Setup config.yaml**
 
 ```yaml
 model_list:
@@ -50,7 +50,7 @@ docker run -d \
   --config /app/config.yaml
 ```
 
-**3. 테스트**
+**3. Test it!**
 
 ```bash
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -75,7 +75,7 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 <Tabs>
 <TabItem value="proxy" label="LiteLLM Proxy">
 
-**1. config.yaml 설정**
+**1. Setup config.yaml**
 
 ```yaml
 model_list:
@@ -98,7 +98,7 @@ docker run -d \
   --config /app/config.yaml
 ```
 
-**3. 테스트**
+**3. Test it!**
 
 ```bash
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -123,7 +123,7 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 <Tabs>
 <TabItem value="proxy" label="LiteLLM Proxy">
 
-**1. config.yaml 설정**
+**1. Setup config.yaml**
 
 ```yaml
 model_list:
@@ -147,7 +147,7 @@ docker run -d \
   --config /app/config.yaml
 ```
 
-**3. 테스트**
+**3. Test it!**
 
 ```bash
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -172,7 +172,7 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 <Tabs>
 <TabItem value="proxy" label="LiteLLM Proxy">
 
-**1. config.yaml 설정**
+**1. Setup config.yaml**
 
 ```yaml
 model_list:
@@ -196,7 +196,7 @@ docker run -d \
   --config /app/config.yaml
 ```
 
-**3. 테스트**
+**3. Test it!**
 
 ```bash
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -216,18 +216,18 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 </TabItem>
 </Tabs>
 
-## 고급 기능
+## Advanced Features
 
 ### Adaptive Thinking
 
 :::note
-Claude Opus 4.7에서 `reasoning_effort`를 사용하면 모든 값(`low`, `medium`, `high`, `xhigh`)이 `thinking: {type: "adaptive"}`로 매핑됩니다. `type: "enabled"`와 명시적 thinking budget을 사용하려면 native `thinking` parameter를 직접 전달하세요.
+When using `reasoning_effort` with Claude Opus 4.7, all values (`low`, `medium`, `high`, `xhigh`, `max`) are mapped to `thinking: {type: "adaptive"}`. Opus 4.7 only supports adaptive thinking; explicit budgets via `thinking: {type: "enabled", budget_tokens: ...}` are rejected by the Anthropic API with a 400 error. To control thinking depth, pair adaptive thinking with `output_config.effort` (see [Effort Levels](#effort-levels) below) rather than a fixed budget.
 :::
 
 <Tabs>
 <TabItem value="completions" label="/chat/completions">
 
-LiteLLM은 `reasoning_effort` parameter를 통해 adaptive thinking을 지원합니다.
+LiteLLM supports adaptive thinking through the `reasoning_effort` parameter:
 
 ```bash
 curl --location 'http://0.0.0.0:4000/chat/completions' \
@@ -248,7 +248,7 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 </TabItem>
 <TabItem value="messages" label="/v1/messages">
 
-adaptive thinking mode를 켜려면 `thinking` parameter에 `type: "adaptive"`를 사용하세요.
+Use the `thinking` parameter with `type: "adaptive"` to enable adaptive thinking mode:
 
 ```bash
 curl --location 'http://0.0.0.0:4000/v1/messages' \
@@ -274,9 +274,9 @@ curl --location 'http://0.0.0.0:4000/v1/messages' \
 
 ### Effort Levels
 
-Claude Opus 4.7은 네 가지 effort level인 `low`, `medium`, `high`(기본값), `xhigh`를 지원합니다. 이를 통해 모델이 작업에 적용하는 추론 강도를 더 세밀하게 제어할 수 있습니다. effort level은 `output_config` parameter로 전달합니다.
+Claude Opus 4.7 supports five effort levels: `low`, `medium`, `high` (default), `xhigh`, and `max`. These give you finer-grained control over how much reasoning the model applies to a task. Pass the effort level via the `output_config` parameter.
 
-`xhigh`는 Opus 4.7에서 추가된 새 effort level이며 `high`보다 높은 단계입니다. `max` effort level은 Claude Opus 4.6 전용이므로 4.7에서는 사용할 수 없습니다.
+`xhigh` is a new effort level introduced with Opus 4.7 that sits above `high` and is the recommended starting point for coding and agentic work. `max` sits above `xhigh` for the absolute highest capability; reserve it for genuinely frontier problems, since on most workloads it adds significant token cost for relatively small quality gains.
 
 <Tabs>
 <TabItem value="completions" label="/chat/completions">
@@ -299,7 +299,7 @@ curl --location 'http://0.0.0.0:4000/chat/completions' \
 }'
 ```
 
-**OpenAI SDK 사용:**
+**Using OpenAI SDK:**
 
 ```python
 import openai
@@ -316,7 +316,7 @@ response = client.chat.completions.create(
 )
 ```
 
-**LiteLLM SDK 사용:**
+**Using LiteLLM SDK:**
 
 ```python
 from litellm import completion
@@ -328,7 +328,7 @@ response = completion(
 )
 ```
 
-모델 동작을 더 세밀하게 제어하려면 `reasoning_effort`와 `output_config`를 함께 사용할 수 있습니다.
+You can combine `reasoning_effort` with `output_config` for even more fine-grained control over the model's behavior.
 
 </TabItem>
 <TabItem value="messages" label="/v1/messages">
@@ -355,11 +355,12 @@ curl --location 'http://0.0.0.0:4000/v1/messages' \
 </TabItem>
 </Tabs>
 
-**Effort level 가이드:**
+**Effort level guide:**
 
-| Effort | 사용 시점 |
+| Effort | When to use |
 |--------|-------------|
-| `low` | 짧고 빠른 응답: 간단한 조회, 포맷팅, 분류 |
-| `medium` | 일반적인 Q&A와 가벼운 추론을 위한 균형 |
-| `high` (기본값) | 복잡한 추론, 코드 생성, 분석 |
-| `xhigh` | 다단계 수학, 깊은 리서치, 에이전트 계획처럼 가장 어려운 문제 |
+| `low` | Short, fast responses — simple lookups, formatting, classification |
+| `medium` | Balanced tradeoff for everyday Q&A and light reasoning |
+| `high` (default) | Complex reasoning, code generation, analysis |
+| `xhigh` | Hardest problems — multi-step math, deep research, agentic planning |
+

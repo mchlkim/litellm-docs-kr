@@ -1,20 +1,26 @@
 import Image from '@theme/IdealImage';
 
-# Code Interpreter {#code-interpreter}
+# Code Interpreter
 
-OpenAI의 Code Interpreter 도구를 사용해 안전한 샌드박스 환경에서 Python 코드를 실행합니다.
+Use OpenAI's Code Interpreter tool to execute Python code in a secure, sandboxed environment.
 
-| 기능 | 지원 여부 |
+| Feature | Supported |
 |---------|-----------|
-| `LiteLLM Python SDK` | ✅ |
-| `LiteLLM AI Gateway` | ✅ |
+| LiteLLM Python SDK | ✅ |
+| LiteLLM AI Gateway | ✅ |
 | 지원 프로바이더 | `openai` |
 
-## `LiteLLM AI Gateway`
+:::tip Route code interpreter to your own sandbox
+
+The proxy can intercept `code_interpreter` on `/v1/responses` and run the code in a configured sandbox (e2b today) instead of OpenAI's container, with no change to the client request. The response shape stays identical (`code_interpreter_call` next to `message`). See [Code Interpreter Sandbox Interception](/docs/sandbox#litellm-proxy-responses-api-code-interpreter-interceptor).
+
+:::
+
+## LiteLLM AI Gateway
 
 ### API (OpenAI SDK)
 
-OpenAI SDK가 LiteLLM Gateway를 바라보도록 설정해 사용합니다.
+Use the OpenAI SDK pointed at your LiteLLM Gateway:
 
 ```python showLineNumbers title="code_interpreter_gateway.py"
 from openai import OpenAI
@@ -33,7 +39,7 @@ response = client.responses.create(
 print(response)
 ```
 
-#### 스트리밍 {#streaming}
+#### Streaming
 
 ```python showLineNumbers title="code_interpreter_streaming.py"
 from openai import OpenAI
@@ -54,7 +60,7 @@ for event in stream:
     print(event)
 ```
 
-#### 생성된 파일 콘텐츠 가져오기 {#get-generated-file-content}
+#### Get Generated File Content
 
 ```python showLineNumbers title="get_file_content_gateway.py"
 from openai import OpenAI
@@ -91,26 +97,26 @@ for file in files.data:
 
 ### AI Gateway UI
 
-LiteLLM 관리자 UI에는 Code Interpreter 지원이 기본으로 포함되어 있습니다.
+The LiteLLM 관리자 UI includes built-in Code Interpreter support.
 
 <Image img={require('../../img/code_interp.png')} />
 
-**단계:**
+**Steps:**
 
-1. LiteLLM UI에서 **Playground**로 이동합니다.
-2. **OpenAI model**을 선택합니다. 예: `openai/gpt-4o`
-3. **Endpoint Type**에서 엔드포인트로 `/v1/responses`를 선택합니다.
-4. 왼쪽 패널에서 **Code Interpreter**를 켭니다.
-5. 코드 실행 또는 파일 생성을 요청하는 프롬프트를 전송합니다.
+1. Go to **Playground** in the LiteLLM UI
+2. Select an **OpenAI model** (e.g., `openai/gpt-4o`)
+3. Select `/v1/responses` as the endpoint under **Endpoint Type**
+4. Toggle **Code Interpreter** in the left panel
+5. Send a prompt requesting code execution or file generation
 
-UI에는 다음 항목이 표시됩니다.
-- 실행된 Python 코드(접기 가능)
-- 인라인으로 표시되는 생성 이미지
-- 파일 다운로드 링크(CSV 등)
+The UI will display:
+- Executed Python code (collapsible)
+- Generated images inline
+- Download links for files (CSVs, etc.)
 
-## `LiteLLM Python SDK`
+## LiteLLM Python SDK
 
-### Code Interpreter 실행 {#run-code-interpreter}
+### Run Code Interpreter
 
 ```python showLineNumbers title="code_interpreter.py"
 import litellm
@@ -124,9 +130,9 @@ response = litellm.responses(
 print(response)
 ```
 
-### 생성된 파일 콘텐츠 가져오기 {#get-generated-file-content-1}
+### Get Generated File Content
 
-Code Interpreter 실행이 끝나면 생성된 파일을 가져옵니다.
+After Code Interpreter runs, retrieve the generated files:
 
 ```python showLineNumbers title="get_file_content.py"
 import litellm
@@ -161,8 +167,8 @@ for file in files.data:
 ```
 
 
-## 관련 문서 {#related}
+## Related
 
-- [Containers API](/litellm-docs-kr/docs/containers) - 컨테이너 관리
-- [Container Files API](/litellm-docs-kr/docs/container_files) - 컨테이너 내 파일 관리
-- [OpenAI Code Interpreter 문서](https://platform.openai.com/docs/guides/tools-code-interpreter) - 공식 OpenAI 문서
+- [Containers API](/docs/containers) - Manage containers
+- [Container Files API](/docs/container_files) - Manage files within containers
+- [OpenAI Code Interpreter 문서](https://platform.openai.com/docs/guides/tools-code-interpreter) - Official OpenAI documentation
