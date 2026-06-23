@@ -132,7 +132,7 @@ curl -X POST http://localhost:4000/v1/chat/completions \
 
 ## Gemini 3+의 `reasoning_effort` 매핑
 
-| reasoning_effort | thinking_level | 
+| reasoning_effort | thinking_level |
 |------------------|----------------|
 | `minimal` | `minimal` |
 | `low` | `low` |

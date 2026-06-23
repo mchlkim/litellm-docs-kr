@@ -10,7 +10,7 @@ tags: [보안]
 hide_table_of_contents: false
 ---
 
-2026년 4월 15일, [OX Security](https://www.ox.security/blog/mcp-supply-chain-advisory-rce-vulnerabilities-across-the-ai-ecosystem/)는 **Anthropic MCP SDK의 stdio transport에서 발생하는 command injection**에 관한 권고문을 게시했습니다(`StdioServerParameters`가 전달받은 `command`를 실행하는 문제). 이 문제는 LiteLLM `v1.83.6-nightly`부터 수정되었습니다.
+2026년 4월 15일, [OX Security](https://www.ox.security/blog/mcp-supply-chain-advisory-rce-vulnerabilities-across-the-ai-ecosystem/)는 **Anthropic MCP SDK의 stdio transport에서 발생하는 명령 injection**에 관한 권고문을 게시했습니다(`StdioServerParameters`가 전달받은 `command`를 실행하는 문제). 이 문제는 LiteLLM `v1.83.6-nightly`부터 수정되었습니다.
 
 수정 사항은 [commit `7b7f304`](https://github.com/BerriAI/litellm/commit/7b7f304675)(PR [#25343](https://github.com/BerriAI/litellm/pull/25343))에 반영되었고, `v1.83.6-nightly` 이후 모든 릴리스에 포함되어 있습니다. `v1.83.7-stable`에도 포함됩니다.
 
@@ -30,10 +30,13 @@ OX Security 권고문에 따르면:
 
 구체적으로는 `transport: stdio`로 MCP server를 추가할 때 `command` field가 `StdioServerParameters`로 그대로 전달되어 proxy host에서 subprocess로 실행되었습니다. MCP server 생성 권한이 있는 인증된 사용자는 LiteLLM process 권한으로 임의의 command를 실행할 수 있었습니다.
 
-- **CVE:** [CVE-2026-30623](https://www.ox.security/blog/mcp-supply-chain-advisory-rce-vulnerabilities-across-the-ai-ecosystem/)
-- **심각도:** Critical
-- **인증 필요:** 예(인증된 RCE, 인증되지 않은 RCE 아님)
-- **영향받는 표면:**
+**CVE:** [CVE-2026-30623](https://www.ox.security/blog/mcp-supply-chain-advisory-rce-vulnerabilities-across-the-ai-ecosystem/)
+
+심각도: critical
+
+인증 필요: 예(인증된 RCE, 인증되지 않은 RCE 아님)
+
+영향받는 표면:
   - MCP server 생성/수정(`NewMCPServerRequest`, `UpdateMCPServerRequest`)
   - `/mcp-rest/test/connection` 및 `/mcp-rest/test/tools/list` preview endpoint
   - runtime에 config 또는 DB에서 재구성되는 server
@@ -81,6 +84,6 @@ Commit [`7b7f304`](https://github.com/BerriAI/litellm/commit/7b7f304675)는 네 
 
 ## 크레딧
 
-제보해 준 OX Security research team의 **Moshe Siman Tov Bustan**, **Mustafa Naamnih**, **Nir Zadok**에게 감사드립니다. 전체 cross-ecosystem writeup은 [여기](https://www.ox.security/blog/mcp-supply-chain-advisory-rce-vulnerabilities-across-the-ai-ecosystem/)에서 확인할 수 있습니다.
+제보해 준 OX Security 연구 팀의 Moshe Siman Tov Bustan, Mustafa Naamnih, Nir Zadok에게 감사드립니다. 전체 크로스-eco system writeup은 [여기](https://www.ox.security/blog/mcp-supply-chain-advisory-rce-vulnerabilities-across-the-ai-ecosystem/)에서 확인할 수 있습니다.
 
 LiteLLM에서 보안 문제를 발견하면 [버그 바운티 프로그램](https://github.com/BerriAI/litellm/security)을 통해 제보해 주세요.

@@ -40,8 +40,8 @@ LiteLLM은 이제 `gemini-embedding-2-preview`로 **멀티모달 임베딩**을 
 
 LiteLLM은 멀티모달 콘텐츠에 대해 세 가지 입력 형식을 받습니다.
 
-1. **Data URI** – Base64 인코딩 inline 데이터: `data:image/png;base64,<encoded_data>`
-2. **GCS URL** – Cloud Storage 경로(Vertex AI): `gs://bucket/path/to/file.png`
+1. **데이터 URI** – Base64 인코딩 인라인 데이터: `data:image/png;base64,<encoded_data>`
+2. **GCS URL** – 클라우드 저장소 경로(Vertex AI): `gs://bucket/path/to/file.png`
 3. **Gemini 파일 참조** – 미리 업로드된 파일(Gemini API): `files/abc123`
 
 ## 빠른 시작
@@ -201,4 +201,4 @@ embedding(
 )
 ```
 
-하나의 entity가 여러 모달리티를 가지는 멀티모달 retrieval에 유용합니다. 자세한 내용은 [임베딩 문서](/litellm-docs-kr/docs/embedding/supported_embedding#combined-multimodal-embeddings)를 참고하세요. Vertex AI에서는 모든 요청이 이미 하나의 결합 vector를 반환하므로 이 opt-in이 필요 없습니다.
+하나의 entity가 여러 모달리티를 가지는 멀티모달 검색에 유용합니다. 자세한 내용은 [임베딩 문서](/litellm-docs-kr/docs/embedding/supported_embedding#combined-multimodal-embeddings)를 참조하세요. Vertex AI에서는 모든 요청이 이미 하나의 결합 벡터를 반환하므로 이 옵인은 필요하지 않습니다.

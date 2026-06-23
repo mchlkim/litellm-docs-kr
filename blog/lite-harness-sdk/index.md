@@ -11,13 +11,13 @@ hide_table_of_contents: true
 ---
 
 
-Harnesses are the next frontier of vendor lock-in. LiteLLM was built to swap across model providers easily. However, as the models get saturated, the next area for competition becomes the harnesses and managed agents. To make it easy to go across vendors at the harness layer, we're launching the Lite-Harness SDK. This is a simple TypeScript+Python SDK which allows developers to change harnesses, like they change models.
+Harnesses는 벤더 락인의 다음 단계입니다. LiteLLM은 모델 제공업체를 쉽게 교체할 수 있도록 설계되었습니다. 그러나 모델이 포화 상태에 접어들면서 다음 경쟁 분야는 harnesses 및 관리형 에이전트가 됩니다. harness 레이어에서 제공업체를 쉽게 변경할 수 있도록 하기 위해 Lite-Harness SDK를 출시합니다. 이는 간단한 TypeScript+Python SDK이며, 개발자는 모델을 변경하는 것처럼 harness를 변경할 수 있습니다.
 
-It exposes harnesses in a unified Claude Agents SDK spec. This means that if you wrote your app with the Claude Agents SDK, and want to try another harness (Pi AI, Hermes, Codex, OpenCode), you can do so without rewriting your code.
+그것은 Claude Agents SDK 사양을 통합적으로 노출합니다. 이는 Claude Agents SDK로 앱을 작성했고, Pi AI, Hermes, Codex, OpenCode와 같은 다른 harness를 시도하고자 할 때 코드를 다시 작성하지 않고도 이를 수행할 수 있음을 의미합니다.
 
-Today, it supports 3 harnesses - Claude Code, Codex, and Pi AI. Please file an issue [here](https://github.com/LiteLLM-Labs/lite-harness/issues), if you want us to add another harness.
+오늘날, 우리는 Claude Code, Codex, 그리고 Pi AI라는 3가지 harness를 지원하고 있습니다. 다른 harness를 추가하고자 한다면 [here](https://github.com/LiteLLM-Labs/lite-harness/issues)에서 이슈를 생성해 주세요.
 
-Here's how it works:
+이것이 어떻게 작동하는지 보겠습니다:
 
 **TypeScript 예제**
 
@@ -65,18 +65,18 @@ async for message in query(
     print(message)
 ```
 
-## LiteLLM AI Gateway
+## LiteLLM AI 게이트웨이
 
-Lite-Harness supports proxy'ing harnesses via LiteLLM AI Gateway. This enables easy model swapping, cost controls and logging.
+Lite-Harness는 LiteLLM AI Gateway를 통해 harness를 프록시할 수 있습니다. 이는 쉽게 모델 교체, 비용 제어 및 로깅을 가능하게 합니다.
 
-Point Lite-Harness at your gateway by setting two environment variables:
+게이트웨이에서 Point Lite-Harness를 지정하려면 두 개의 환경 변수를 설정하세요:
 
 ```bash
 export LITELLM_API_BASE=https://litellm.your-company.com/v1
 export LITELLM_API_KEY=sk-litellm-...
 ```
 
-Then call as usual — every underlying model request routes through the gateway:
+그러면 일반적으로 호출하면 됩니다 — 모든 밑단 모델 요청은 게이트웨이를 통해 전달됩니다:
 
 ```python
 from lite_harness import query, AgentOptions
@@ -100,25 +100,25 @@ async for message in query(
 
 ---
 
-### Frequently Asked Questions
+### 자주 묻는 질문
 
-### Do I have to use the LiteLLM AI Gateway?
+### LiteLLM AI 게이트웨이를 사용해야 하나요?
 
-No. `lite-harness` works standalone — point it at provider APIs with native keys. AI Gateway integration is opt-in for teams that want central key management, budgets, fallbacks, and a single audit log across every model call.
+1. `lite-harness`는 독립적으로 작동하며, 네이티브 키를 사용해 제공업체 API에 연결할 수 있습니다. AI 게이트웨이 통합은 팀이 중앙 키 관리, 예산, 대체 옵션, 그리고 모든 모델 호출에 대한 단일 감사 로그를 원하는 경우에만 선택적으로 사용할 수 있습니다.
 
-### Does swapping harnesses change agent behavior?
+### 허브스를 교체하면 에이전트의 동작이 바뀝니까?
 
-Yes — that's the point. Each harness keeps its native loop, tool-calling semantics, and prompt format. `lite-harness` unifies how you *invoke* them, not how they run internally. Run the same prompt across all three to see which combo lands the task best.
+네 — 바로 그 점입니다. 각 허arness는 자체적인 루프, 도구 호출 의미, 프롬프트 형식을 유지합니다. `lite-harness`는 어떻게 실행되는지가 아니라, 어떻게 호출되는지를 통일합니다. 세 가지 모두에 동일한 프롬프트를 실행해 보세요. 어떤 조합이 작업을 가장 잘 수행하는지 확인해 보세요.
 
-### Is this ready for production?
+### 이 것이 생산용으로 준비되었나요?
 
-`lite-harness` is an early, experimental project. This is in public beta. Please join our [discord](https://discord.gg/Nkxw3rm3EE), to help design it to your preference.
+`lite-harness`는 초기 단계의 실험 프로젝트이며, 공개 베타 단계입니다. 저희 [discord](https://discord.gg/Nkxw3rm3EE)에 참여하여 선호하는 방식으로 설계하는 데 도움을 주세요.
 
-### Is this available in LiteLLM OSS?
+### LiteLLM OSS에 해당 기능은 제공되나요?
 
-Yes. `lite-harness` is MIT-licensed at [github.com/LiteLLM-Labs/lite-harness](https://github.com/LiteLLM-Labs/lite-harness). [LiteLLM 엔터프라이즈](https://litellm.ai/enterprise) adds SSO/SCIM, air-gapped deployment, 24/7 SLA, and advanced guardrails on top of the AI Gateway it pairs with.
+네. `lite-harness`은 [github.com/LiteLLM-Labs/lite-harness](https://github.com/LiteLLM-Labs/lite-harness)에서 MIT 라이선스로 제공됩니다. [LiteLLM 엔터프라이즈](https://litellm.ai/enterprise)는 AI Gateway와 결합하여 SSO, /SCIM, air-gapped 배포, 24/7 SLA, 그리고 고급 가드레일을 추가합니다.
 
-## Recommended Reading
+## 추천 읽기
 
 - [LiteLLM AI Gateway — full feature overview](https://docs.litellm.ai/docs/simple_proxy)
 - [LiteLLM Managed Agents Platform — Alpha](https://docs.litellm.ai/blog/agent-platform-alpha)

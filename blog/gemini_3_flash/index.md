@@ -59,7 +59,7 @@ Gemini 3 Flash는 `thinkingBudget` 대신 `thinkingLevel`로 더 세밀한 사�
 
 LiteLLM은 OpenAI의 `reasoning_effort` 파라미터를 Gemini의 `thinkingLevel`로 자동 매핑합니다. 따라서 코드를 바꾸지 않고도 익숙한 `reasoning_effort` 값(`minimal`, `low`, `medium`, `high`)을 그대로 사용할 수 있습니다.
 
-### 2. Thought Signatures
+### 2. 생각 서명
 
 `gemini-3-pro`와 마찬가지로 이 모델도 도구 호출용 thought signatures를 포함합니다. LiteLLM은 서명 추출과 삽입을 내부에서 처리합니다. [thought signatures 자세히 보기](../gemini_3/index.md#thought-signatures).
 
@@ -237,7 +237,7 @@ print(response)
 
 ## Gemini 3+용 `reasoning_effort` 매핑
 
-| reasoning_effort | thinking_level | 
+| reasoning_effort | thinking_level |
 |------------------|----------------|
 | `minimal` | `minimal` |
 | `low` | `low` |

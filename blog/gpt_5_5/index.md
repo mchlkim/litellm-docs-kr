@@ -18,7 +18,7 @@ LiteLLM은 이제 [GPT-5.5 및 GPT-5.5 Pro](https://openai.com/index/introducing
 
 {/* truncate */}
 
-GPT-5.5는 OpenAI가 소개한 가장 직관적이고 강력한 모델로, 에이전트형 코딩, computer use, 심층 리서치 워크플로에서 큰 개선을 제공합니다. OpenAI 설명에 따르면 GPT-5.4보다 더 적은 토큰으로 더 빠르고 선명한 추론을 수행합니다. GPT-5.5 Pro는 가장 까다로운 추론 작업을 대상으로 합니다.
+GPT-5.5는 OpenAI가 발표한 가장 직관적이고 강력한 모델로, 에이전트형 코딩, 컴퓨터 사용, 심층 리서치 워크플로우에서 큰 개선을 제공합니다. OpenAI에 따르면 GPT-5.4보다 더 적은 토큰으로 더 빠르고 선명한 추론을 수행합니다. GPT-5.5 Pro는 가장 까다로운 추론 작업을 대상으로 합니다.
 
 :::note
 **Docker image upgrade는 필요하지 않습니다.** GPT-5.5는 LiteLLM의 기존 `OpenAIGPT5Config`를 통해 라우팅되므로, 최근 버전이면 바로 동작합니다.

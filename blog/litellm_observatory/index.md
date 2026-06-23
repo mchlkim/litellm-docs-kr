@@ -48,14 +48,14 @@ Cannot send a request, as the client has been closed
 
 **수정 전(버그 있음):**
 
-| Provider | Requests | Success | Failures | Fail % |
+| 제공자 | 요청 수 | 성공 | 실패 | 실패 % |
 |----------|----------|---------|----------|--------|
 | OpenAI   | 720,000  | 432,000 | 288,000  | 40%    |
 | Azure    | 692,000  | 415,200 | 276,800  | 40%    |
 
 **수정 후:**
 
-| Provider | Requests   | Success   | Failures | Fail %  |
+| 제공자 | 요청 수 | 성공 | 실패 | 실패율 |
 |----------|------------|-----------|----------|---------|
 | OpenAI   | 1,200,000  | 1,199,988 | 12       | 0.001%  |
 | Azure    | 1,150,000  | 1,149,982 | 18       | 0.002%  |
@@ -100,9 +100,9 @@ Cannot send a request, as the client has been closed
 
 #### 사용하는 시점
 
-- **배포 전**: 새 LiteLLM version을 production으로 승격하기 전에 test 실행
+- **배포 전**: 새 LiteLLM version을 production으로 승격하기 전에 테스트 실행
 - **정기 검증**: regression을 조기에 잡기 위해 daily 또는 weekly run 예약
-- **Issue 조사**: deployment issue가 의심될 때 on demand로 test 실행
+- **Issue 조사**: deployment issue가 의심될 때 on demand로 테스트 실행
 - **장시간 실패 감지**: 짧은 smoke test로는 드러나지 않는 sustained load 하의 bug 식별
 
 

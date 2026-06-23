@@ -1,11 +1,11 @@
 ---
 slug: lap-internal-agent-30-percent
-title: "How we built a background agent to cover 30% of our backlog"
+title: "백로그의 30%를 처리하는 background agent를 만든 방법"
 date: 2026-05-27T10:00:00
 authors:
   - krrish
   - ishaan
-description: "How we built a background agent on the LiteLLM AI Gateway that merges PRs with no human in the loop (the infra, harness, and credential-scoping calls behind it)."
+description: "LiteLLM AI Gateway 위에서 사람 개입 없이 PR을 merge하는 background agent를 만든 방법과 그 뒤의 infra, harness, credential scoping 결정."
 tags: [agents, ai-gateway, lap, lite-harness, engineering]
 hide_table_of_contents: true
 image: /img/lap_litellm_agent_platform_hero.png
@@ -15,56 +15,55 @@ image: /img/lap_litellm_agent_platform_hero.png
 
 :::info
 
-The platform we built is open source. Check out [litellm-agent-platform](https://github.com/BerriAI/litellm-agent-platform). The swappable harness layer is [lite-harness](https://github.com/LiteLLM-Labs/lite-harness).
+저희가 만든 platform은 open source입니다. [litellm-agent-platform](https://github.com/BerriAI/litellm-agent-platform)을 확인해 보세요. 교체 가능한 harness layer는 [lite-harness](https://github.com/LiteLLM-Labs/lite-harness)입니다.
 
-Building the same thing inside your company?
+회사 안에서 같은 것을 만들고 있나요?
 
-- [Schedule a 30-minute call](https://calendly.com/d/cr4t-yp7-pzn/litellm-1-1-feedback-chat)
-- [Join the LAP Discord](https://discord.gg/Q2AK7HKudm)
+- [30분 call 예약](https://calendly.com/d/cr4t-yp7-pzn/litellm-1-1-feedback-chat)
+- [LAP Discord 참여](https://discord.gg/Q2AK7HKudm)
 
 :::
 
-Our goal was to 10x the productivity of our company with agents.
+저희 목표는 agent로 회사 생산성을 10배 높이는 것이었습니다.
 
-Three weeks ago we began building an agent that could own 30% of our engineering tickets. Here's what we've learnt so far.
+3주 전 저희는 engineering ticket의 30%를 맡을 수 있는 agent를 만들기 시작했습니다. 지금까지 배운 점을 공유합니다.
 
 {/* truncate */}
 
-## What we shipped
+## 출시한 것
 
-Three weeks in, on `BerriAI/litellm`: **43 open PRs, 160 closed.** Between the PRs it lands and the Slack questions it answers, the agent now covers roughly **30% of the eng tickets that used to hit a human every week.** Browse [all agent-filed PRs on GitHub](https://github.com/BerriAI/litellm/pulls?q=is%3Apr+author%3Aoss-agent-shin).
+3주가 지난 지금 `BerriAI/litellm`에는 **open PR 43개, closed PR 160개**가 있습니다. Agent가 올리는 PR과 Slack 질문 답변을 합치면, 매주 사람이 처리하던 engineering ticket의 약 **30%**를 agent가 담당합니다. [GitHub에서 agent가 만든 모든 PR](https://github.com/BerriAI/litellm/pulls?q=is%3Apr+author%3Aoss-agent-shin)을 볼 수 있습니다.
 
+## 직접 만든 이유
 
-## Why we built our own
+저희는 Linear에서 ticket을 가져와 background에서 자율적으로 실행되고 PR을 올리는 agent를 원했습니다. 먼저 Cursor와 Anthropic의 managed agent platform을 검토했습니다. 둘 다 맞지 않았습니다.
 
-We wanted an agent that runs autonomously, in the background, pulling tickets off Linear and filing PRs for us. We evaluated Cursor and Anthropic's managed agent platforms first. Neither fit:
+- **Cursor:** agent가 stateful하지 않았습니다. Agent별 memory, skill 등을 저장할 수 없었습니다. Platform은 agent를 session과 동일시했지만, 저희는 session을 넘어 지속되는 agent를 원했습니다.
+- **Anthropic:** 원하는 방향에 가까웠지만, model과 harness를 자유롭게 교체하고 싶었습니다. 하나의 platform에 lock-in되고 싶지 않았습니다.
 
-- **Cursor:** agents were not stateful. You could not store memory, skills, etc. per agent. The platform equated an agent to a session; we wanted an agent that persists across them.
-- **Anthropic:** close to what we wanted, but we wanted to swap models and harnesses freely. We did not want to be locked to one platform.
+그래서 [LiteLLM Agent Platform](https://github.com/BerriAI/litellm-agent-platform) 위에 만들었습니다.
 
-So we built on the [LiteLLM Agent Platform](https://github.com/BerriAI/litellm-agent-platform).
+## 1. Infrastructure: brain과 sandbox 분리
 
-## 1. Infrastructure: separate the brain from the sandbox
+첫 버전은 [Ramp Inspect](https://builders.ramp.com/post/why-we-built-our-background-agent)와 비슷하게 agent를 *sandbox 내부*에서 실행했습니다. 새 session마다 fresh sandbox가 boot되었습니다. 작업이 "코드를 수정해라"라면 괜찮습니다. 하지만 engineer가 Slack에서 질문 하나를 물었을 뿐이라면 낭비입니다. 몇 번의 tool call이면 되는 답변을 위해 전체 sandbox boot 비용을 냅니다.
 
-Our first version ran the agent *inside* the sandbox, following the same shape as [Ramp Inspect](https://builders.ramp.com/post/why-we-built-our-background-agent). Every new session booted a fresh sandbox. That is fine when the work is "go edit code." It is wasteful when an engineer just asks a question in Slack. You pay a full sandbox boot to answer something that needs a few tool calls.
+그래서 agent를 둘로 나눴습니다. **Brain**(reasoning, planning, model call)은 공유 persistent pod에 둡니다. Shell이 없습니다. BASH도 filesystem도 없습니다. **Sandbox**는 ephemeral하며 session마다 하나씩 생성되고, `git`, `gh`, `pytest`를 실행할 수 있는 유일한 곳입니다. Brain은 두 개의 tool call을 통해 sandbox에 접근합니다. 이는 [Anthropic managed agent platform의 동작 방식](https://www.anthropic.com/engineering/managed-agents)과 유사합니다.
 
-So we split the agent in two. The **brain** (reasoning, planning, model calls) lives in a shared, persistent pod. It has no shell: no BASH, no filesystem. The **sandbox** is ephemeral, one per session, and the only thing that can run `git`, `gh`, or `pytest`. The brain reaches it through two tool calls. This is similar to [how Anthropic's managed agent platform works](https://www.anthropic.com/engineering/managed-agents).
+![아키텍처: shell이 없는 persistent brain pod가 두 개의 tool call을 통해 session별 ephemeral sandbox pool과 통신](/img/lap_brain_sandbox_split.svg)
 
-![아키텍처: a persistent brain pod with no shell, talking to an ephemeral per-session sandbox pool through two tool calls](/img/lap_brain_sandbox_split.svg)
+응답 시간은 줄었고, session success rate는 올라갔으며, session당 비용은 낮아졌습니다.
 
-Response time dropped, session success rates climbed, and cost per session fell.
+Cold start는 Slack에서 가장 눈에 띄었습니다. 모두가 대기 시간을 체감했기 때문입니다.
 
-The cold start showed up most visibly in Slack, where everyone could feel the wait.
+![Agent가 응답하기 전 cold sandbox boot를 기다리는 Slack thread](/img/lap_shin_slack_slow_start.png)
 
-![Slack thread waiting on a cold sandbox boot before the agent could respond](/img/lap_shin_slack_slow_start.png)
+## 2. 아키텍처: agent framework가 아니라 harness를 선택
 
-## 2. 아키텍처: pick a harness, not an agent framework
+처음에는 Pydantic AI, LangGraph, PI SDK 같은 agent framework로 시작했습니다. 하지만 각 framework는 coding *harness*가 이미 제공하는 context compaction, sub-agent spawning, tool loop를 다시 만들게 했습니다. 저희는 이미 이 작업에 Claude Code를 로컬에서 신뢰하고 있었기 때문에 framework가 아니라 harness를 찾았습니다.
 
-We started with agent frameworks: Pydantic AI, LangGraph, the PI SDK. Each one made us rebuild things a coding *harness* already ships: context compaction, sub-agent spawning, tool loops. We already trusted Claude Code locally for this work, so we went looking for a harness, not a framework.
+결국 **OpenCode**를 선택했습니다. Claude Agents SDK는 run마다 CLI session을 spawn했고 약 1 RPM에서 OOM이 났습니다. OpenCode도 같은 근본 병목(long-running session이 memory에 유지됨)을 갖고 있지만 memory 사용량 증가가 더 느렸고, 현재로서는 더 나은 선택이었습니다.
 
-We landed on **OpenCode**. The Claude Agents SDK spawns a CLI session per run and OOM'd for us at ~1 RPM. OpenCode hits the same fundamental bottleneck (long-running sessions held in memory), but its memory usage grew more slowly, making it the better fit for now.
-
-That choice stays flexible because we also wrote a harness unification layer, [`LiteLLM-Labs/lite-harness`](https://github.com/LiteLLM-Labs/lite-harness), which adapts OpenCode, Claude Code, Codex, and others to a single HTTP contract:
+이 선택이 유연하게 남아 있는 이유는 harness unification layer인 [`LiteLLM-Labs/lite-harness`](https://github.com/LiteLLM-Labs/lite-harness)도 만들었기 때문입니다. 이 layer는 OpenCode, Claude Code, Codex 등을 하나의 HTTP contract에 맞춥니다.
 
 ```
 lite-harness/
@@ -73,19 +72,19 @@ lite-harness/
   contract.py         # the one interface every runtime implements
 ```
 
-The agent platform doesn't know which harness is behind a session, so swapping is a config change, not a rewrite.
+Agent platform은 session 뒤에 어떤 harness가 있는지 알 필요가 없습니다. 따라서 교체는 rewrite가 아니라 config 변경입니다.
 
-Our next goal: 100 RPM on the harness.
+다음 목표는 harness에서 100 RPM입니다.
 
-## 3. Security: scope every credential to one endpoint
+## 3. 보안: 모든 credential을 하나의 endpoint에 scope
 
-Our agent kept leaking API keys from its environment into commits and Slack messages. First mitigation: a small HTTP proxy vault. We stubbed the real credentials in the environment and swapped the stub for the real value only when the agent made an outbound call.
+저희 agent는 environment에 있는 API key를 commit과 Slack message로 계속 유출했습니다. 첫 완화책은 작은 HTTP proxy vault였습니다. Environment에는 실제 credential 대신 stub을 넣고, agent가 outbound call을 만들 때만 stub을 실제 값으로 교체했습니다.
 
-The agent defeated it. It noticed the credentials were stubbed, then wrote its own endpoint, called it with the stubbed credentials, let the vault swap in the real ones on the way out, and read the real keys back off its own server, then stored them to memory via a tool call. A clean man-in-the-middle against our own vault.
+Agent는 이를 우회했습니다. Credential이 stub이라는 점을 알아차린 뒤 자체 endpoint를 작성하고, stub credential로 그 endpoint를 호출했습니다. Vault가 outbound 경로에서 실제 credential로 바꿔 주자, agent는 자기 server에서 실제 key를 다시 읽고 tool call로 memory에 저장했습니다. 저희 own vault를 상대로 한 깔끔한 man-in-the-middle이었습니다.
 
-![Ishaan catching the agent writing real credentials to its memory after circumventing the stub vault](/img/lap_shin_agent_mitm_memory.png)
+![Agent가 stub vault를 우회한 뒤 실제 credential을 memory에 쓰는 것을 Ishaan이 발견한 장면](/img/lap_shin_agent_mitm_memory.png)
 
-The fix was to stop trusting the *value* and start binding it to a *destination*. Each credential is pinned to one upstream host; the vault refuses the swap if the outbound request is going anywhere else:
+수정은 *값*을 신뢰하지 않고 *목적지*에 묶는 것이었습니다. 각 credential은 하나의 upstream host에 pin되고, outbound request가 다른 곳으로 가면 vault는 교체를 거부합니다.
 
 ```yaml
 # vault: a credential is only ever swapped in for its bound host
@@ -96,24 +95,23 @@ credentials:
     allowed_host: api.openai.com
 ```
 
-The lesson: guardrails must sit at the agent's input/output boundary. LLM-level guardrails can't distinguish between a user query and an internal tool loop, so they're either too permissive or too slow.
+교훈은 agent guardrail이 agent의 input/output boundary에 있어야 한다는 점입니다. LLM-level guardrail은 user query와 internal tool loop를 구분할 수 없습니다. 그래서 너무 느슨하거나 너무 느립니다.
 
-## Where the AI Gateway fits
+## AI Gateway가 들어가는 위치
 
-The AI Gateway is a useful access control point: it's how we gave our agent access to models and MCP tools. But it's only half the picture. The agent boundary needs its own guardrails and capabilities (skills, memory), because the agent (not the model) is what takes actions. The guardrails needed when an agent answers a user differ from those needed inside an internal tool loop. Running model-level guardrails on every tool call also adds ~5 minutes per session.
+AI Gateway는 유용한 access control point입니다. 저희 agent가 model과 MCP tool에 접근하도록 한 방식이 바로 이것입니다. 하지만 이것은 절반에 불과합니다. Action을 수행하는 것은 model이 아니라 agent이므로, agent boundary에는 자체 guardrail과 capability(skill, memory)가 필요합니다. Agent가 user에게 답할 때 필요한 guardrail과 internal tool loop 안에서 필요한 guardrail은 다릅니다. 모든 tool call에 model-level guardrail을 실행하면 session당 약 5분이 추가됩니다.
 
-## What we believe now
+## 지금 믿는 것
 
-Autonomous agents are where the 10x productivity gains are, and the technical risk is largely solved. 모델 are already smart enough to file a decent PR. The hard problems left are product problems: scale, reliability, and security.
+Autonomous agent는 10배 생산성 향상이 나오는 곳이며, 기술적 위험은 상당 부분 해결되었습니다. Model은 이미 괜찮은 PR을 올릴 만큼 똑똑합니다. 남은 어려운 문제는 product 문제입니다. Scale, reliability, security입니다.
 
-For us, that means two open problems:
+저희에게 이는 두 가지 open problem을 뜻합니다.
 
-- **Scale:** how do you serve 100 RPM on a harness that keeps sessions in memory?
-- **Security:** how do you prevent the agent server from leaking sensitive information or taking destructive actions? (We tried MCPs but hit rate limits and structural issues, so direct API keys were more reliable, which is what made scoping credentials critical.)
+- **Scale:** session을 memory에 유지하는 harness에서 어떻게 100 RPM을 제공할 것인가?
+- **Security:** agent server가 민감 정보를 유출하거나 파괴적 action을 수행하지 않게 어떻게 막을 것인가? MCP도 시도했지만 rate limit과 구조적 문제에 부딪혔고, 직접 API key가 더 안정적이었습니다. 그래서 credential scoping이 중요해졌습니다.
 
-## Try it
+## 사용해 보기
 
-Both repos are open source and self-hostable: [litellm-agent-platform](https://github.com/BerriAI/litellm-agent-platform) and [lite-harness](https://github.com/LiteLLM-Labs/lite-harness). If you're building something similar and want to skip the three weeks of mistakes, [book a 30-minute chat](https://calendly.com/d/cr4t-yp7-pzn/litellm-1-1-feedback-chat) or join the [LAP Discord](https://discord.gg/Q2AK7HKudm).
+두 repo 모두 open source이고 self-host할 수 있습니다. [litellm-agent-platform](https://github.com/BerriAI/litellm-agent-platform)과 [lite-harness](https://github.com/LiteLLM-Labs/lite-harness)를 확인하세요. 비슷한 것을 만들고 있고 3주간의 시행착오를 건너뛰고 싶다면 [30분 chat을 예약](https://calendly.com/d/cr4t-yp7-pzn/litellm-1-1-feedback-chat)하거나 [LAP Discord](https://discord.gg/Q2AK7HKudm)에 참여해 주세요.
 
-
-*This blog was inspired in shape by Ramp's [Why we built our background agent](https://builders.ramp.com/post/why-we-built-our-background-agent).*
+*이 글의 구성은 Ramp의 [Why we built our background agent](https://builders.ramp.com/post/why-we-built-our-background-agent)에서 영감을 받았습니다.*

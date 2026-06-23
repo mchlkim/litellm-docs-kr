@@ -1,31 +1,31 @@
 ---
 slug: valkey_semantic_caching
-title: "Semantic 캐싱 on Valkey and AWS ElastiCache"
+title: "Valkey 및 AWS ElastiCache에서 Semantic Caching 지원"
 date: 2026-06-17T10:00:00
 authors:
   - yassin
-description: "LiteLLM now supports semantic prompt caching on Valkey clusters running the valkey-search module, including AWS ElastiCache for Valkey, with no RediSearch, Redis Stack, or Qdrant required."
+description: "LiteLLM은 이제 AWS ElastiCache for Valkey를 포함해 valkey-search module이 실행되는 Valkey cluster에서 semantic prompt caching을 지원합니다. RediSearch, Redis Stack, Qdrant는 필요하지 않습니다."
 tags: [caching, valkey, elasticache, semantic cache]
 hide_table_of_contents: false
 ---
 
-LiteLLM now supports semantic prompt caching on Valkey. If you run a Valkey cluster with the [valkey-search](https://github.com/valkey-io/valkey-search) module, including AWS ElastiCache for Valkey, you can point LiteLLM at it with `type: valkey-semantic` and get embedding-based cache hits without standing up Redis Stack or a separate vector database.
+LiteLLM은 이제 Valkey에서 semantic prompt caching을 지원합니다. AWS ElastiCache for Valkey를 포함해 [valkey-search](https://github.com/valkey-io/valkey-search) module이 있는 Valkey cluster를 운영 중이라면, `type: valkey-semantic`으로 LiteLLM을 연결해 Redis Stack이나 별도 vector database 없이 embedding 기반 cache hit를 사용할 수 있습니다.
 
 {/* truncate */}
 
-## Why this matters
+## 왜 중요한가요?
 
-Semantic caching stores responses by the meaning of a prompt rather than an exact string match, so a reworded request can still hit the cache and skip a paid model call. Until now LiteLLM's semantic cache was built on RedisVL, which depends on RediSearch's `FT.*` vector API. RediSearch is not available on Redis OSS or on ElastiCache for Redis OSS, which left teams standing up Redis Stack or Qdrant just to get semantic caching. With Redis moving to a source-available license, more teams are standing up Valkey instead, and ElastiCache for Valkey is a common managed target.
+Semantic caching은 prompt의 정확한 문자열 일치가 아니라 의미를 기준으로 응답을 저장합니다. 그래서 사용자가 같은 요청을 다르게 표현해도 cache에 hit되어 유료 model call을 건너뛸 수 있습니다. 지금까지 LiteLLM의 semantic cache는 RediSearch의 `FT.*` vector API에 의존하는 RedisVL 기반이었습니다. RediSearch는 Redis OSS 또는 ElastiCache for Redis OSS에서 사용할 수 없어, team들은 semantic caching만을 위해 Redis Stack이나 Qdrant를 별도로 띄워야 했습니다. Redis가 source-available license로 이동하면서 더 많은 team이 Valkey를 선택하고 있으며, ElastiCache for Valkey는 흔한 managed target입니다.
 
-Valkey ships vector search through the valkey-search module, and ElastiCache for Valkey exposes it. LiteLLM's new backend talks to valkey-search directly over the Redis protocol, so semantic caching on ElastiCache for Valkey works without RediSearch, Redis Stack, or Qdrant in the path.
+Valkey는 valkey-search module을 통해 vector search를 제공하고, ElastiCache for Valkey도 이를 노출합니다. LiteLLM의 새 backend는 Redis protocol을 통해 valkey-search와 직접 통신하므로, ElastiCache for Valkey에서 semantic caching을 사용할 때 경로에 RediSearch, Redis Stack, Qdrant가 필요하지 않습니다.
 
 ## 동작 방식
 
-The `valkey-semantic` backend builds its own vector index from the field types valkey-search supports, a tag field that isolates each cache key's scope and an HNSW vector field for the prompt embedding, then runs a KNN query at lookup time and returns the cached response when the cosine similarity clears your threshold. Prompt extraction, embedding generation, and response handling are shared with the existing Redis semantic cache, so behavior matches the Redis path including per-request scope isolation. Connections resolve from `VALKEY_HOST`, `VALKEY_PORT`, and `VALKEY_PASSWORD`, falling back to the `REDIS_*` equivalents, and passwordless clusters are supported for IAM or no-auth setups.
+`valkey-semantic` backend는 valkey-search가 지원하는 field type으로 자체 vector index를 만듭니다. 각 cache key의 scope를 분리하는 tag field와 prompt embedding용 HNSW vector field를 만들고, lookup 시 KNN query를 실행한 뒤 cosine similarity가 threshold를 넘으면 cached response를 반환합니다. Prompt 추출, embedding 생성, response 처리는 기존 Redis semantic cache와 공유하므로 per-request scope isolation을 포함해 Redis 경로와 같은 방식으로 동작합니다. 연결 정보는 `VALKEY_HOST`, `VALKEY_PORT`, `VALKEY_PASSWORD`에서 해석하고, 없으면 `REDIS_*` 대응 값으로 fallback합니다. IAM 또는 no-auth setup을 위한 passwordless cluster도 지원합니다.
 
-## Get started
+## 시작하기
 
-Add the cache to your `config.yaml`:
+`config.yaml`에 cache를 추가합니다.
 
 ```yaml
 litellm_settings:
@@ -38,10 +38,10 @@ litellm_settings:
     similarity_threshold: 0.8
 ```
 
-For ElastiCache with encryption in transit, pass a `rediss://` URL through `cache_params.redis_url` instead of host and port. To try valkey-search locally, the bundled image has the module ready:
+전송 중 암호화가 켜진 ElastiCache에서는 host와 port 대신 `cache_params.redis_url`을 통해 `rediss://` URL을 전달합니다. 로컬에서 valkey-search를 테스트하려면 module이 포함된 bundled image를 사용할 수 있습니다.
 
 ```shell
 docker run -d -p 6379:6379 valkey/valkey-bundle:8.1
 ```
 
-See the [caching docs](https://docs.litellm.ai/docs/proxy/caching) for the full setup, including the SDK usage and the parameter reference.
+SDK 사용법과 parameter reference를 포함한 전체 설정은 [caching docs](https://docs.litellm.ai/docs/proxy/caching)를 참고하세요.

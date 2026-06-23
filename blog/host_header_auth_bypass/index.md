@@ -1,70 +1,70 @@
 ---
 slug: host-header-auth-bypass
-title: "Fixed in 1.84.0+ - Version Update: 인증 Bypass via Host Header Injection (GHSA-4xpc-pv4p-pm3w)"
+title: "1.84.0+에서 수정됨 - 버전 업데이트: Host Header Injection을 통한 인증 우회 (GHSA-4xpc-pv4p-pm3w)"
 date: 2026-06-01T12:00:00
 authors:
   - krrish
   - ishaan-alt
   - yuneng
-description: "Disclosure of a Host-header authentication bypass in the LiteLLM proxy. Addressed in v1.84.0. Very limited deployments are potentially affected, and no LiteLLM Cloud customers were affected."
+description: "LiteLLM 프록시에서 호스트 헤더 인증 우회 취약점 공개. v1.84.0에서 해결되었습니다. 매우 제한적인 배포만이 영향을 받을 수 있으며, LiteLLM 클라우드 고객은 영향을 받지 않았습니다."
 tags: [security]
 hide_table_of_contents: false
 ---
 
-The update addressing this Host-header authentication bypass in the LiteLLM proxy shipped in `v1.84.0`, with follow-up path-handling hardening completed and backported across the maintained release lines in `v1.84.3`, `v1.85.2`, `v1.86.2`, and `v1.83.10-stable.patch.3`. The potential for bypass was limited to deployments with the three specific conditions below. The bypass was reported by Le The Thang (KCSC) and Kim Ngoc Chung (One Mount Group).
+호스트 헤더 인증 우회 문제를 해결하는 업데이트는 `v1.84.0`에 배포되었으며, 후속 경로 처리 강화는 `v1.84.3`, `v1.85.2`, `v1.86.2`, `v1.83.10-stable.patch.3`에서 유지 관리되는 릴리스 라인에 모두 되돌려졌습니다. 우회 가능성은 아래 세 가지 특정 조건이 모두 충족된 배포에 한정되었습니다. 이 우회 문제는 Le The Thang (KCSC)과 Kim Ngoc Chung (One Mount Group)이 보고했습니다.
 
-The conditions could allow unauthenticated access to protected management routes when the proxy listener was reachable with an arbitrary `Host` header.
+조건은 프록시 리스너가 임의의 `Host` 헤더로 접근할 수 있을 때 보호된 관리 라우트에 인증되지 않은 액세스를 허용할 수 있습니다.
 
-No LiteLLM Cloud customers were affected. The update was deployed across all LiteLLM Cloud environments - backported to the release lines in use - ahead of this publication.
+LiteLLM Cloud 고객은 아무도 영향을 받지 않았습니다. 이번 발표보다 앞서, 사용 중인 릴리스 라인에 해당 업데이트를 롤백하여 모든 LiteLLM Cloud 환경에 배포했습니다.
 
-* Addressed in: `v1.84.0`
-* Recommended: the latest release; follow-up path-handling hardening was backported in `v1.84.3`, `v1.85.2`, and `v1.86.2`
-* Action: upgrade to `v1.84.0` or later. No configuration change is required.
+* 해결됨: `v1.84.0`
+* 권장사항: 최신 버전; 후속 경로 처리 강화 기능은 `v1.84.3`, `v1.85.2`, 및 `v1.86.2`에서 롤백되었습니다.
+* 조치: `v1.84.0` 이상으로 업그레이드하십시오. 구성 변경은 필요하지 않습니다.
 
-더 보기 info on the advisory is here: https://github.com/BerriAI/litellm/security/advisories/GHSA-4xpc-pv4p-pm3w. CVE: https://www.cve.org/CVERecord?id=CVE-2026-48710.
+더 보기 조언 정보는 여기 있습니다: https://github.com/BerriAI/litellm/security/advisories/GHSA-4xpc-pv4p-pm3w. CVE: https://www.cve.org/CVERecord?id=CVE-2026-48710.
 
 {/* truncate */}
 
 ## TL;DR
 
-* A crafted `Host` header could make the proxy's auth gate evaluate a different route from the one it served, allowing potential unauthenticated access to protected management routes.
-* The update shipped in `v1.84.0`. Follow-up path-handling hardening was backported in `v1.84.3`, `v1.85.2`, and `v1.86.2`; upgrading to the latest release is recommended.
-* Potential bypass requires reaching the proxy listener with an arbitrary `Host` header. Fronting the proxy with infrastructure that validates or normalizes `Host` reduces potential for bypass depending on configuration, but is not a comprehensive substitute for upgrading.
-* No LiteLLM Cloud customers were affected.
+* 제작된 `Host` 헤더는 프록시의 인증 게이트가 제공한 라우트와 다른 라우트를 평가하게 만들 수 있으며, 보호된 관리 라우트에 대한 잠재적인 비인증 접근을 허용할 수 있습니다.
+* 이 수정은 `v1.84.0`에 배포되었습니다. 후속 경로 처리 강화는 `v1.84.3`, `v1.85.2`, 및 `v1.86.2`에 롤백되어 적용되었습니다; 최신 버전으로 업그레이드하는 것이 권장됩니다.
+* 잠재적인 우회에는 임의의 `Host` 헤더로 프록시 리스너에 도달해야 합니다. `Host`를 검증하거나 정규화하는 인프라로 프록시를 앞서는 것은 구성에 따라 우회 가능성의 감소에 도움이 될 수 있지만, 업그레이드 대체가 아닙니다.
+* 라이트LLM 클라우드 고객은 영향을 받지 않았습니다.
 
-## Summary
+## 요약
 
-The proxy's auth layer derived the effective route from `request.url.path` in `litellm/proxy/auth/auth_utils.py::get_request_route()`, which Starlette reconstructs from the `Host` header. A crafted `Host` header could therefore make the auth gate evaluate a different route from the one FastAPI actually dispatched, causing a protected management route to be treated as public.
+프록시의 인증 레이어는 `request.url.path`에서 `litellm/proxy/auth/auth_utils.py::get_request_route()`의 `Host` 헤더를 통해 Starlette가 재구성한 효과적인 라우트를 파생시켰습니다. 따라서 조작된 `Host` 헤더는 인증 게이트가 FastAPI가 실제로 분배한 라우트와 다른 라우트를 평가하게 만들 수 있으며, 이로 인해 보호된 관리 라우트가 공개 라우트로 간주될 수 있습니다.
 
-Potential bypass requires an actor to reach the proxy listener with an arbitrary `Host` header. Fronting the proxy with infrastructure that validates or normalizes the `Host` header reduces potential for bypass, though whether it fully blocks the bypass depends on the specific configuration. The LiteLLM Python SDK is not affected; only the proxy server is in limited scope.
+잠재적인 우회 방법은 악성 행위자가 임의의 `Host` 헤더로 프록시 리스너에 도달해야 합니다. `Host` 헤더를 검증하거나 정규화하는 인프라를 프록시 전에 배치하면 우회 가능성은 줄어들지만, 이 것이 완전히 우회를 차단하는지는 특정 구성에 따라 달라집니다. LiteLLM Python SDK는 영향을 받지 않으며, 오직 프록시 서버만 제한된 범위에 해당합니다.
 
-## Additional hardening
+## 추가 강화
 
-The primary update in `v1.84.0` addressed the reported potential for bypass by deriving the request route from the ASGI scope path rather than the `Host`-reconstructed URL. As additional follow-up, we audited every other location in the proxy that derived a route from the request URL and moved them onto the same hardened resolution. This closes the long tail of the potential for bypass and was backported across the maintained release lines in `v1.84.3`, `v1.85.2`, `v1.86.2`, and `v1.83.10-stable.patch.3`. We recommend upgrading to one of these releases for comprehensive mitigation.
+`v1.84.0`의 주요 업데이트는 보고된 우회 가능성 문제를 해결하기 위해 요청 경로를 ASGI 범위 경로에서 추출하는 대신 `Host`-재구성된 URL에서 도출하도록 변경했습니다. 추가적인 후속 조치로, 프록시에서 요청 URL를 기반으로 경로를 도출하는 다른 모든 위치를 검토하고, 동일한 강화된 해석으로 이동했습니다. 이는 우회 가능성의 장미 끝을 닫았으며, `v1.84.3`, `v1.85.2`, `v1.86.2`, `v1.83.10-stable.patch.3`에서 유지되는 릴리스 라인에 롤백되었습니다. 종합적인 보호를 위해 이러한 릴리스 중 하나로 업그레이드하는 것을 권장합니다.
 
-## Am I affected?
+## 영향을 받는가?
 
-You are potentially affected only if **all** of the following are true:
+당신은 다음이 모두 참인 경우에만 영향을 받을 수 있습니다:
 
-- You run the **LiteLLM proxy server** (not just the Python SDK).
-- You are on a version **earlier than `v1.84.0`**.
-- The proxy listener is reachable by untrusted clients.
+- **LiteLLM 프록시 서버**를 실행하고 있습니다(단순히 Python SDK만 실행하는 것이 아닙니다).
+- 사용 중인 버전이 **`v1.84.0`보다 이전 버전**입니다.
+- 프록시 리스너는 신뢰할 수 없는 클라이언트에 의해 접근 가능합니다.
 
-You are **not** remotely open to potential bypass if the proxy listener is not reachable by untrusted clients — for example, it is bound to a private network or sits behind a gateway that requires its own authentication.
+프록시 리스너가 신뢰할 수 없는 클라이언트에 의해 접근할 수 없는 경우, 즉 프록시 리스너가 사설 네트워크에 바인딩되어 있거나 게이트웨이 뒤에 위치하여 자체 인증이 필요한 경우, 당신은 **잠재적 우회**에 대해 원격으로 열려 있지 않습니다.
 
-Fronting the proxy with infrastructure that validates or normalizes the `Host` header (a CDN/WAF, a reverse proxy with `server_name` allowlists, or a host-based load balancer) reduces potential for bypass, but whether it fully mitigates against potential bypass depends on the configuration.
+프록시 전면에 `Host` 헤더를 검증하거나 정규화하는 인프라(예: CDN/WAF, `server_name` 허용 목록을 갖는 반전 프록시, 또는 호스트 기반 로드 밸런서)를 배치하면 우회 시도의 잠재적 위험을 줄일 수 있지만, 이 것이 완전히 우회를 방지하는지는 구성에 따라 달라집니다.
 
-## What to do
+## 무엇을 해야 할까요?
 
-1. Upgrade to `v1.84.0` or later. Upgrading to the latest release is recommended, which includes the follow-up hardening backported in `v1.84.3`, `v1.85.2`, and `v1.86.2`.
-2. If your proxy was reachable from an untrusted network on an affected version, rotate any API keys created during the exposure window and review your management audit logs for unexpected key, user, or settings changes.
+1. `v1.84.0` 이상으로 업그레이드하세요. 최신 버전으로 업그레이드하는 것이 권장되며, 이는 `v1.84.3`, `v1.85.2`, `v1.86.2`에서 제공하는 후속 보강 조치를 포함합니다.
+2. 영향을 받은 버전에서 프록시가 신뢰할 수 없는 네트워크에서 접근 가능했다면, 노출 기간 동안 생성된 모든 API 키를 회전시키고, 관리 감사 로그를 검토하여 예상치 못한 키, 사용자 또는 설정 변경 사항을 확인하세요.
 
-## Mitigations
+## 완화 방안
 
-If you cannot upgrade immediately, to better mitigate the potential for bypass, we recommend placing the proxy behind an upstream component that validates or normalizes the `Host` header before forwarding:
+즉시 업그레이드할 수 없는 경우, 우회 가능성의 위험을 더 잘 완화하기 위해, `Host` 헤더를 전달하기 전에 검증하거나 정규화하는 상류 구성 요소 뒤에 프록시를 배치하는 것이 권장됩니다.
 
-- a CDN or WAF (e.g. Cloudflare),
-- a reverse proxy with explicit `server_name` allowlists (nginx, Caddy, Traefik),
-- a cloud load balancer with host-based routing rules,
+- a CDN 또는 WAF (예: Cloudflare),
+- 명시적인 `server_name` 허용 목록을 갖는 반전 프록시(nginx, Caddy, Traefik),
+- 호스트 기반 라우팅 규칙을 지원하는 클라우드 로드 밸런서,
 
-or otherwise restrict network access to the proxy listener. Note this is a per-deployment property: a reverse proxy that forwards the client `Host` unchanged (e.g. nginx `proxy_set_header Host $host;`) may not comprehensively protect your use from this potential. Treat upgrading as the elimination of any potential for bypass and edge filtering only as a stopgap.
+또는 프록시 리스너에 대한 네트워크 액세스를 제한해야 합니다. 이는 배포별 속성입니다: 클라이언트의 `Host`를 그대로 전달하는 반전 프록시(예: nginx `proxy_set_header Host $host;`)는 이 잠재적 위협을 완전히 방지하지 못할 수 있습니다. 업그레이드를 통해 이 잠재적 위협을 제거하고, 엣지 필터링은 일시적인 대응 수단으로만 사용해야 합니다.

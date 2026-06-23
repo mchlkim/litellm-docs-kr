@@ -1,7 +1,6 @@
 ---
 slug: stability
-title: "June Stability Update: We're Making Stability a First-Class Citizen at
-LiteLLM"
+title: "6월 안정성 업데이트: LiteLLM에서 안정성을 1급 목표로 다룹니다"
 date: 2026-06-15T10:00:00
 authors:
   - ishaan-alt
@@ -11,43 +10,43 @@ tags: []
 hide_table_of_contents: false
 ---
 
-Over the past few months, we've heard our users report more bugs and regressions. We take that feedback seriously, and today we're sharing exactly what we're doing about it.
+지난 몇 달 동안 사용자들로부터 버그와 회귀가 늘었다는 피드백을 받았습니다. 저희는 이 피드백을 중요하게 받아들이고 있으며, 오늘은 이를 해결하기 위해 정확히 무엇을 하고 있는지 공유합니다.
 
-We're kicking off a stability sprint for LiteLLM with one bar in mind: 0 reported regressions by our next release on August 29th. The sprint has 2 goals:
+LiteLLM 안정성 스프린트를 시작합니다. 기준은 하나입니다. 8월 29일 다음 릴리스까지 보고된 회귀 0건을 목표로 합니다. 이번 스프린트에는 두 가지 목표가 있습니다.
 
-- Close 20 reported bugs in core functionality - [here](https://github.com/BerriAI/litellm/issues/30484)
-- Address the root cause of underlying bugs in 3 core components - MCP, Gateway, and UI
+- 핵심 기능에서 보고된 버그 20개 닫기 - [여기](https://github.com/BerriAI/litellm/issues/30484)
+- MCP, Gateway, UI 세 가지 핵심 컴포넌트에서 근본 원인 해결
 
-## What class of bugs are we driving down?
+## 어떤 종류의 버그를 줄이고 있나요?
 
-Over this sprint we're driving down 3 classes of bugs:
+이번 스프린트에서는 세 가지 종류의 버그를 줄입니다.
 
-- **MCP 인증:** View/List Tools did not consistently work across all our supported MCP auth methods.
-- **Gateway 인증:** Team IDs are not reliably on every request trace. As a result, some requests and budgets are not accurately tracked to a team.
-- **UI Forms:** Today when users hit save on a form, it can accidentally wipe out other fields on the form, across keys, teams, and users.
+- **MCP 인증:** View/List Tools가 지원하는 모든 MCP 인증 방식에서 일관되게 동작하지 않았습니다.
+- **Gateway 인증:** 모든 요청 trace에 Team ID가 안정적으로 붙지 않았습니다. 그 결과 일부 요청과 예산이 정확한 team에 귀속되지 않았습니다.
+- **UI Forms:** 사용자가 form에서 저장을 누를 때 key, team, user 전반에서 form의 다른 field가 의도치 않게 지워질 수 있었습니다.
 
-## MCP 인증: Consistent behavior across all MCP 인증 Methods
+## MCP 인증: 모든 MCP 인증 방식에서 일관된 동작
 
-Solution: We've identified that the root cause of bugs across MCPs is that we maintain 5 different code paths, one per authentication method. To fix this and restore connection reliability, we're refactoring this into one code path that resolves MCP credentials across all supported authentication methods. The result: tools list and call reliably, no matter which auth method you use.
+해결책: MCP 전반의 버그 근본 원인이 인증 방식마다 하나씩, 총 5개의 서로 다른 code path를 유지하는 데 있다는 점을 확인했습니다. 이를 해결하고 연결 안정성을 복구하기 위해, 지원되는 모든 인증 방식에서 MCP credential을 해석하는 하나의 code path로 refactor하고 있습니다. 결과적으로 어떤 인증 방식을 쓰든 tool list와 call이 안정적으로 동작합니다.
 
-## AI Gateway 인증: Spend is always attributed to the right team
+## AI Gateway 인증: 비용은 항상 올바른 team에 귀속
 
-Solution: We identified that the authentication layer makes 5+ DB lookups to resolve the exact key, user, team, and team member making a request. To fix this, we're resolving caller identity once, into a single record that every check and log reads from. This cuts identity lookups roughly in half, and means spend is always attributed to the team that made the request.
+해결책: 인증 계층이 요청을 보낸 정확한 key, user, team, team member를 해석하기 위해 5개 이상의 DB lookup을 수행한다는 점을 확인했습니다. 이를 해결하기 위해 caller identity를 한 번만 해석하고, 모든 check와 log가 같은 단일 record를 읽도록 바꾸고 있습니다. 이렇게 하면 identity lookup이 대략 절반으로 줄고, 비용은 항상 요청을 보낸 team에 귀속됩니다.
 
-## UI: Edits change only what you touched
+## UI: 수정한 항목만 바뀌도록
 
-Solution: One of the root causes of UI bugs on form save is that our data shapes across the frontend and backend are not consistent. To fix this, we're refactoring so frontend and backend types are 100% in sync and read from the same source of truth. The result: a save changes only the field you edited, nothing else.
+해결책: form 저장 시 발생하는 UI 버그의 근본 원인 중 하나는 frontend와 backend의 data shape이 일관되지 않다는 점입니다. 이를 해결하기 위해 frontend와 backend type이 100% 동기화되고 같은 source of truth를 읽도록 refactor하고 있습니다. 결과적으로 저장은 사용자가 수정한 field만 바꾸고, 다른 값은 건드리지 않습니다.
 
-## How you'll know it worked
+## 성공 여부를 어떻게 알 수 있나요?
 
-We'll report back at the August 29th release on exactly where each of these stands. You shouldn't have to take our word for it.
+8월 29일 릴리스에서 각 항목이 어디까지 진행됐는지 정확히 다시 보고하겠습니다. 저희 말을 그대로 믿으라고 요구하지 않겠습니다.
 
-## Why now
+## 왜 지금인가요?
 
-We've grown fast. And fast growth in a complex system means bugs accumulate if you're not deliberate about paying them down. This sprint is us being deliberate.
+저희는 빠르게 성장했습니다. 복잡한 시스템에서 빠른 성장은 의도적으로 갚아 나가지 않으면 버그가 쌓인다는 뜻입니다. 이번 스프린트는 그 빚을 의도적으로 줄이는 작업입니다.
 
-We're also being public about it because you deserve to know what's being fixed and when. Stability is infrastructure. We're treating it that way.
+또한 무엇이 언제 고쳐지는지 사용자들이 알아야 한다고 생각하기 때문에 공개적으로 진행합니다. 안정성은 인프라입니다. 저희는 그렇게 다루고 있습니다.
 
-## Want us to fix something?
+## 고쳤으면 하는 문제가 있나요?
 
-Every item above came from real user reports. If there's a bug affecting you that isn't on this list, comment on the [GitHub issue](https://github.com/BerriAI/litellm/issues/30484). We're actively triaging!
+위의 모든 항목은 실제 사용자 보고에서 나왔습니다. 이 목록에 없지만 영향을 받고 있는 버그가 있다면 [GitHub issue](https://github.com/BerriAI/litellm/issues/30484)에 댓글을 남겨 주세요. 적극적으로 triage하고 있습니다.

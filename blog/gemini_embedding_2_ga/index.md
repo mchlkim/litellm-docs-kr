@@ -36,8 +36,8 @@ LiteLLM은 이제 Gemini Embedding 2 GA를 완전히 지원합니다.
 
 LiteLLM은 멀티모달 콘텐츠에 대해 세 가지 입력 형식을 받습니다.
 
-1. **Data URI** – Base64 인코딩 inline 데이터: `data:image/png;base64,<encoded_data>`
-2. **GCS URL** – Cloud Storage 경로(Vertex AI): `gs://bucket/path/to/file.png`
+1. **데이터 URI** – Base64 인코딩 인라인 데이터: `data:image/png;base64,<encoded_data>`
+2. **GCS URL** – 클라우드 저장소 경로(Vertex AI): `gs://bucket/path/to/file.png`
 3. **Gemini 파일 참조** – 미리 업로드된 파일(Gemini API): `files/abc123`
 
 ## 빠른 시작

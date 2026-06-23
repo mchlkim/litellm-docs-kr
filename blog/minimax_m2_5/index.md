@@ -272,7 +272,7 @@ print(f"Cost: ${response._hidden_params.get('response_cost', 0)}")
 
 ## Streaming 지원
 
-### OpenAI API
+### 오픈아이 API
 
 ```python
 response = litellm.completion(

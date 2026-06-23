@@ -36,7 +36,7 @@ export function ConvergenceHero() {
           preserveAspectRatio="xMidYMid meet"
           style={{ display: 'block' }}
           role="img"
-          aria-label="Abstract curve bundle fanning in from the left, passing through two focal points, and fanning out on the right — representing many agent runtimes routed through a unified control plane to many consumers."
+          aria-label="왼쪽에서 여러 곡선이 모여 두 개의 초점을 지나 오른쪽으로 퍼지는 추상 곡선 다발입니다. 여러 agent runtime이 통합 제어 평면을 통해 여러 소비자에게 라우팅되는 모습을 나타냅니다."
         >
           {curves.map((c, i) => (
             <path
@@ -60,28 +60,28 @@ export function ConvergenceHero() {
 
 const ROWS = [
   {
-    label: 'Unified API',
-    sub: 'one interface, many backends',
-    model: { name: 'LiteLLM', desc: 'one API across 100+ models', open: false },
-    agent: { name: '?', desc: 'one API across agent runtimes', open: true },
+    label: '통합 API',
+    sub: '하나의 인터페이스, 여러 backend',
+    model: { name: 'LiteLLM', desc: '100개 이상 모델을 하나의 API로', open: false },
+    agent: { name: '?', desc: 'agent runtime 전반을 하나의 API로', open: true },
   },
   {
-    label: 'Managed cloud service',
-    sub: 'fully hosted, pay-per-use',
-    model: { name: 'Bedrock', desc: 'cloud model inference', open: false },
-    agent: { name: 'Claude Managed Agents', desc: 'cloud model + harness API', open: false },
+    label: '관리형 클라우드 서비스',
+    sub: '완전 호스팅, 사용량 기반 과금',
+    model: { name: 'Bedrock', desc: '클라우드 모델 추론', open: false },
+    agent: { name: 'Claude Managed Agents', desc: '클라우드 모델 + harness API', open: false },
   },
   {
-    label: 'Deployment platform',
-    sub: 'run open-source yourself',
-    model: { name: 'SageMaker', desc: 'deploy OSS models', open: false },
-    agent: { name: 'AgentCore · Vertex Agents', desc: 'deploy OSS harnesses', open: false },
+    label: '배포 플랫폼',
+    sub: '오픈소스를 직접 실행',
+    model: { name: 'SageMaker', desc: 'OSS 모델 배포', open: false },
+    agent: { name: 'AgentCore · Vertex Agents', desc: 'OSS harness 배포', open: false },
   },
   {
-    label: 'High-perf serving',
-    sub: 'throughput & latency engine',
-    model: { name: 'vLLM', desc: 'fast model serving', open: false },
-    agent: { name: '?', desc: 'fast harness serving', open: true },
+    label: '고성능 serving',
+    sub: '처리량과 지연 시간 엔진',
+    model: { name: 'vLLM', desc: '빠른 모델 serving', open: false },
+    agent: { name: '?', desc: '빠른 harness serving', open: true },
   },
 ];
 
@@ -173,13 +173,13 @@ export function StackComparison() {
       <div style={s.wrap}>
         <div />
         <div>
-          <div style={s.colHeader}>Model stack — today</div>
-          <div style={s.colSub}>calling models</div>
+          <div style={s.colHeader}>Model stack - 현재</div>
+          <div style={s.colSub}>모델 호출</div>
         </div>
         <div />
         <div>
-          <div style={s.colHeader}>Agent stack — future</div>
-          <div style={s.colSub}>calling harnesses</div>
+          <div style={s.colHeader}>Agent stack - 미래</div>
+          <div style={s.colSub}>harness 호출</div>
         </div>
 
         {ROWS.map((row, i) => (
@@ -204,16 +204,16 @@ export function StackComparison() {
       <div style={s.legend}>
         <div style={s.legendItem}>
           <div style={s.legendSwatch(true)} />
-          <span>open gap — no clear winner yet</span>
+          <span>열린 영역 - 아직 명확한 승자 없음</span>
         </div>
         <div style={s.legendItem}>
           <div style={s.legendSwatch(false)} />
-          <span>established / announced player</span>
+          <span>이미 자리 잡았거나 발표된 player</span>
         </div>
       </div>
 
       <figcaption style={s.caption}>
-        Each model-stack layer has a mirror in the agent stack. Dashed boxes mark open opportunities.
+        model stack의 각 계층은 agent stack에 대응되는 계층이 있습니다. 점선 박스는 열린 기회를 나타냅니다.
       </figcaption>
     </figure>
   );
